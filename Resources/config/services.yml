@@ -1,4 +1,8 @@
 parameters:
     ezpublish.twig.extension.content.class: Novactive\Bundle\eZExtraBundle\Twig\ContentExtension
+    novaezextra.content.manager.class: Novactive\Bundle\Core\Manager\eZ\Content
 
 services:
+    novactive.ezextra.content.manager:
+        class: %novaezextra.content.manager.class%
+        arguments: [@ezpublish.api.repository]
