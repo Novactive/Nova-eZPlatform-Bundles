@@ -1,6 +1,6 @@
 parameters:
     ezpublish.twig.extension.content.class: Novactive\Bundle\eZExtraBundle\Twig\ContentExtension
-    novaezextra.content.manager.class: Novactive\Bundle\Core\Manager\eZ\Content
+    novaezextra.content.manager.class: Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\Content
 
 services:
     novactive.ezextra.content.manager:

@@ -7,7 +7,7 @@
  * @copyright 2015 Novactive
  * @license   https://github.com/Novactive/NovaeZSEOBundle/blob/master/LICENSE MIT Licence
  */
-namespace Novactive\Bundle\Core\Manager\eZ;
+namespace Novactive\Bundle\eZExtraBundle\Core\Manager\eZ;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\ContentService;
