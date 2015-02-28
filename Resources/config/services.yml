@@ -1,0 +1,4 @@
+parameters:
+    ezpublish.twig.extension.content.class: Novactive\Bundle\eZExtraBundle\Twig\ContentExtension
+
+services:
