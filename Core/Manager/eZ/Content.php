@@ -198,10 +198,10 @@ class Content
     }
 
     /**
-     * CreateUpdate Sugar for try updateContent else createContent
+     * Create/Update Sugar for trying to update else to create
      *
-     * @param string  $contentTypeIdentifier Note used in case of 'update'
-     * @param integer $parentLocationId Note used in case of 'update'
+     * @param string  $contentTypeIdentifier
+     * @param integer $parentLocationId
      * @param array   $data
      * @param string  $remoteId
      * @param array   $options
@@ -214,20 +214,92 @@ class Content
         $parentLocationId,
         $data,
         $remoteId,
-        $options = [ ],
+        $options = [],
         $lang = 'eng-US'
-    ) {
+    )
+    {
         $options['remoteId'] = $remoteId;
         try
         {
             $content = $this->getContentService()->loadContentByRemoteId( $remoteId );
+            if ( ( array_key_exists( 'do_no_update', $options ) ) && ( $options['do_no_update'] == true ) )
+            {
+                return $content;
+            }
             $newContent = $this->updateContent( $content, $data, $lang );
+            if ( ( array_key_exists( 'callback_update', $options ) ) && ( is_callable( $options['callback_update'] ) ) )
+            {
+                $options['callback_update']( $newContent );
+            }
         }
         catch ( NotFoundException $e )
         {
             $newContent = $this->createContent( $contentTypeIdentifier, $parentLocationId, $data, $options, $lang );
+            if ( ( array_key_exists( 'callback_create', $options ) ) && ( is_callable( $options['callback_create'] ) ) )
+            {
+                $options['callback_create']( $newContent );
+            }
         }
 
         return $newContent;
+    }
+
+    /**
+     * Create/Update Sugar for trying to update else to create
+     *
+     * @param string  $contentTypeIdentifier
+     * @param integer $parentLocationId
+     * @param array   $data
+     * @param string  $remoteId
+     * @param array   $options
+     * @param string  $lang
+     *
+     * @return ValueContent
+     */
+    public function getCreateContent(
+        $contentTypeIdentifier,
+        $parentLocationId,
+        $data,
+        $remoteId,
+        $options = [],
+        $lang = 'eng-US'
+    )
+    {
+        $options['do_no_update'] = true;
+
+        return $this->createUpdateContent(
+            $contentTypeIdentifier,
+            $parentLocationId,
+            $data,
+            $remoteId,
+            $options,
+            $lang
+        );
+    }
+
+    /**
+     * Add Location(s) to the content
+     *
+     * @param ValueContent $content
+     * @param array        $destinationLocationIds
+     */
+    public function addLocation( ValueContent $content, $destinationLocationIds = [] )
+    {
+        $existingLocations    = $this->getLocationService()->loadLocations( $content->contentInfo );
+        $existingLocationsIds = [];
+        foreach ( $existingLocations as $existingLocation )
+        {
+            $existingLocationsIds[] = $existingLocation->parentLocationId;
+        }
+
+        foreach ( $destinationLocationIds as $destinationLocationId )
+        {
+            if ( !in_array( $destinationLocationId, $existingLocationsIds ) )
+            {
+                $locationCreateStruct = $this->getLocationService()->newLocationCreateStruct( $destinationLocationId );
+                $this->getLocationService()->createLocation( $content->contentInfo, $locationCreateStruct );
+            }
+        }
+
     }
 }

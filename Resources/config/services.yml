@@ -1,8 +1,14 @@
 parameters:
     ezpublish.twig.extension.content.class: Novactive\Bundle\eZExtraBundle\Twig\ContentExtension
     novaezextra.content.manager.class: Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\Content
+    novaezextra.tag.manager.class: Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\Tag
 
 services:
     novactive.ezextra.content.manager:
         class: %novaezextra.content.manager.class%
         arguments: [@ezpublish.api.repository]
+
+    novactive.ezextra.tag.manager:
+        class: %novaezextra.tag.manager.class%
+        arguments: [@ezpublish.api.service.tags]
+
