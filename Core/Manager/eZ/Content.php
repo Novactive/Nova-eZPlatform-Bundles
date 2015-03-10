@@ -19,6 +19,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Class Content
@@ -135,23 +136,17 @@ class Content
      *
      * @param ValueContent $content
      * @param array        $data
-     * @param array        $options
      * @param string       $lang
      *
      * @return ValueContent
      */
-    public function updateContent( ValueContent $content, $data, $options = [], $lang = 'eng-US' )
+    public function updateContent( ValueContent $content, $data, $lang = 'eng-US' )
     {
         $contentService = $this->getContentService();
 
         $contentDraft                             = $contentService->createContentDraft( $content->contentInfo );
         $contentUpdateStruct                      = $contentService->newContentUpdateStruct();
         $contentUpdateStruct->initialLanguageCode = $lang;
-
-        if ( !empty( $options['remoteId'] ) )
-        {
-            $contentUpdateStruct->remoteId = $options['remoteId'];
-        }
 
         $this->autoFillStruct(
             $this->getContentTypeService()->loadContentType( $content->contentInfo->contentTypeId ),
@@ -200,5 +195,39 @@ class Content
             $fieldValue = $data[$fieldName];
             $contentStruct->setField( $fieldName, $fieldValue );
         }
+    }
+
+    /**
+     * CreateUpdate Sugar for try updateContent else createContent
+     *
+     * @param string  $contentTypeIdentifier Note used in case of 'update'
+     * @param integer $parentLocationId Note used in case of 'update'
+     * @param array   $data
+     * @param string  $remoteId
+     * @param array   $options
+     * @param string  $lang
+     *
+     * @return ValueContent
+     */
+    public function createUpdateContent(
+        $contentTypeIdentifier,
+        $parentLocationId,
+        $data,
+        $remoteId,
+        $options = [ ],
+        $lang = 'eng-US'
+    ) {
+        $options['remoteId'] = $remoteId;
+        try
+        {
+            $content = $this->getContentService()->loadContentByRemoteId( $remoteId );
+            $newContent = $this->updateContent( $content, $data, $lang );
+        }
+        catch ( NotFoundException $e )
+        {
+            $newContent = $this->createContent( $contentTypeIdentifier, $parentLocationId, $data, $options, $lang );
+        }
+
+        return $newContent;
     }
 }
