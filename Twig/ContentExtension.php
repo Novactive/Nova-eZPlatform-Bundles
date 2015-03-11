@@ -65,9 +65,7 @@ class ContentExtension extends KernelContentExtension
      */
     public function contentByContentInfo( ContentInfo $contentInfo )
     {
-        $repository = $this->container->get( 'ezpublish.api.repository' );
-
-        return $repository->getContentService()->loadContentByContentInfo( $contentInfo );
+        return $this->repository->getContentService()->loadContentByContentInfo( $contentInfo );
     }
 
     /**
@@ -79,7 +77,7 @@ class ContentExtension extends KernelContentExtension
      */
     public function parentContentByContentInfo( ContentInfo $contentInfo )
     {
-        $repository     = $this->container->get( 'ezpublish.api.repository' );
+        $repository     = $this->repository;
         $location       = $repository->getLocationService()->loadLocation( $contentInfo->mainLocationId );
         $parentLocation = $repository->getLocationService()->loadLocation( $location->parentLocationId );
 
@@ -95,9 +93,7 @@ class ContentExtension extends KernelContentExtension
      */
     public function contentTypeByContent( Content $content )
     {
-        $repository = $this->container->get( 'ezpublish.api.repository' );
-
-        return $repository->getContentTypeService()->loadContentType( $content->contentInfo->contentTypeId );
+        return $this->repository->getContentTypeService()->loadContentType( $content->contentInfo->contentTypeId );
     }
 
     /**
@@ -109,9 +105,7 @@ class ContentExtension extends KernelContentExtension
      */
     public function locationByContent( Content $content )
     {
-        $repository = $this->container->get( 'ezpublish.api.repository' );
-
-        return $repository->getLocationService()->loadLocation( $content->contentInfo->mainLocationId );
+        return $this->repository->getLocationService()->loadLocation( $content->contentInfo->mainLocationId );
     }
 
     /**
@@ -123,9 +117,15 @@ class ContentExtension extends KernelContentExtension
      */
     public function relationFieldToContent( RelationValue $fieldValue )
     {
-        $repository = $this->container->get( 'ezpublish.api.repository' );
+        $content = $this->repository->getContentService()->loadContent( $fieldValue->destinationContentId );
+        $location = $repository->getLocationService()->loadLocation( $content->contentInfo->mainLocationId );
 
-        return $repository->getContentService()->loadContent( $fieldValue->destinationContentId );
+        if ( ( $location->invisible == 1 ) || ( $location->hidden == 1 ) )
+        {
+            return false;
+        }
+
+        return $content;
     }
 
     /**
@@ -137,7 +137,7 @@ class ContentExtension extends KernelContentExtension
      */
     public function relationsListFieldToContentList( RelationListValue $fieldValue )
     {
-        $repository = $this->container->get( 'ezpublish.api.repository' );
+        $repository = $this->repository;
         $list       = array();
         foreach ( $fieldValue->destinationContentIds as $id )
         {
