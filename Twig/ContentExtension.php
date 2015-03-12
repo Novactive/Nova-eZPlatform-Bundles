@@ -118,7 +118,7 @@ class ContentExtension extends KernelContentExtension
     public function relationFieldToContent( RelationValue $fieldValue )
     {
         $content = $this->repository->getContentService()->loadContent( $fieldValue->destinationContentId );
-        $location = $repository->getLocationService()->loadLocation( $content->contentInfo->mainLocationId );
+        $location = $this->repository->getLocationService()->loadLocation( $content->contentInfo->mainLocationId );
 
         if ( ( $location->invisible == 1 ) || ( $location->hidden == 1 ) )
         {

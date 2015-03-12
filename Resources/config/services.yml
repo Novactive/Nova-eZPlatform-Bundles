@@ -2,6 +2,9 @@ parameters:
     ezpublish.twig.extension.content.class: Novactive\Bundle\eZExtraBundle\Twig\ContentExtension
     novaezextra.content.manager.class: Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\Content
     novaezextra.tag.manager.class: Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\Tag
+    novaezextra.content.helper.class: Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Content
+    novaezextra.abstract.children.provider.class: Novactive\Bundle\eZExtraBundle\EventListener\Type
+    novaezextra.pre_content_view_listener.class: Novactive\Bundle\eZExtraBundle\EventListener\PreContentViewListener
 
 services:
     novactive.ezextra.content.manager:
@@ -12,3 +15,17 @@ services:
         class: %novaezextra.tag.manager.class%
         arguments: [@ezpublish.api.service.tags]
 
+    novactive.ezextra.content.helper:
+        class: %novaezextra.content.helper.class%
+        arguments: [@ezpublish.api.repository]
+
+    novactive.ezextra.pre_content_view_listener:
+        class: %novaezextra.pre_content_view_listener.class%
+        arguments: [@ezpublish.api.repository, @ezpublish.templating.global_helper]
+        tags:
+            - {name: kernel.event_listener, event: ezpublish.pre_content_view, method: onPreContentView}
+
+    novactive.ezextra.abstract.children.provider:
+        class: %novaezextra.abstract.children.provider.class%
+        abstract: true
+        arguments: [@ezpublish.api.repository, @novactive.ezextra.content.helper]

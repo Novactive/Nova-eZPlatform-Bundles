@@ -62,19 +62,23 @@ Go to : */_novaezextra/dev/test*
 
 ## Documentation
 
-### eznova_content_by_contentinfo( location.contentInfo )
+
+### Twig Helper
+
+
+#### eznova_content_by_contentinfo( location.contentInfo )
 
 ``` twig
 {% set content = eznova_content_by_contentinfo( location.contentInfo ) %}
 ```
 
-### eznova_contenttype_by_content( content )
+#### eznova_contenttype_by_content( content )
 
 ``` twig
 {% set contentType = eznova_contenttype_by_content( content ) %}
 ```
 
-### eznova_parentcontent_by_contentinfo( content )
+#### eznova_parentcontent_by_contentinfo( content )
 
 ``` twig
 {% set contentType = eznova_parentcontent_by_contentinfo( content ) %}
@@ -82,13 +86,13 @@ Go to : */_novaezextra/dev/test*
 
 > Note : you get the content of the parent on the main location
 
-### eznova_location_by_content( content )
+#### eznova_location_by_content( content )
 
 ``` twig
 {% set contentType = eznova_location_by_content( content ) %}
 ```
 
-### eznova_relation_field_to_content( fieldValue )
+#### eznova_relation_field_to_content( fieldValue )
 
 ``` twig
 {% set content = eznova_relation_field_to_content( ez_field_value( content, 'internal_link' ) ) %}
@@ -96,7 +100,7 @@ Go to : */_novaezextra/dev/test*
 
 > Note : return the direct linked content by the relation object FieldType
 
-### eznova_relationlist_field_to_content_list( fieldValue )
+#### eznova_relationlist_field_to_content_list( fieldValue )
 
 ``` twig
 {% set content = eznova_relationlist_field_to_content_list( ez_field_value( content, 'internal_links' ) ) %}
@@ -109,4 +113,59 @@ Go to : */_novaezextra/dev/test*
 ``` twig
 {{ render( controller( "eZNovaExtraBundle:Picture:alias", { "contentId": content.getField('picture').value.destinationContentId, "fieldIdentifier": "image", "alias": "large" })) }}
 ```
+
+### Content ( more Location ) Helper
+
+The goal was to mimic the old Fetch Content List
+
+    public function contentList( $parentLocationId, $typeIdentifiers = [], $sortClauses = [], $limit = null, $offset = 0 );
+    public function nextByAttribute( $locationId, $attributeIdentifier );
+    public function nextByPriority( $locationId )
+    public function previousByAttribute( $locationId, $attributeIdentifier )
+    public function previousByPriority( $locationId )
+    
+> Return an array of Result
+
+Usage:
+
+```twig
+    {% for child in children %}
+        <h2>{{ ez_field_value( child.content, "title" ) }}</h2>
+        {{ ez_render_field( child.content, "overview" ) }}
+        <a href="{{ path( "ez_urlalias", { "locationId" : child.content.contentInfo.mainLocationId } ) }}">{{ "Learn more" | trans() }}</a>
+    {% endfor %}
+```
+
+### Children Provider
+
+Simply inject the children ( and potentially other things on a view Full )
+
+Add your provider
+
+```yml
+project.home_page.children.provider:
+    class: Project\Bundle\GeneralBundle\ChildrenProvider\YOUCONTENTIDENTIFIERPROVIDERCLASS
+    parent: novactive.ezextra.abstract.children.provider
+    tags:
+        -  { name: novactive.ezextra.children.provider, contentTypeIdentifier: YOUCONTENTIDENTIFIER }
+```
+
+You class YOUCONTENTIDENTIFIERPROVIDERCLASS must extend Novactive\Bundle\eZExtraBundle\EventListener\Type
+
+Ex:
+
+```php
+namespace Yoochoose\Bundle\GeneralBundle\ChildrenProvider;
+use Novactive\Bundle\eZExtraBundle\EventListener\Type;
+use eZ\Publish\API\Repository\Values\Content\Query;
+class PersonalizationEngine extends Type
+{
+    public function getChildren( $viewParameters )
+    {
+        return $this->contentHelper->contentList( $this->location->id, [ 'article' ], array( new Query\SortClause\Location\Priority( Query::SORT_ASC ) ), 10);
+    }
+}
+```
+
+
 
