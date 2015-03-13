@@ -20,7 +20,7 @@ use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-
+use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 /**
  * Class Content
  */
@@ -119,6 +119,11 @@ class Content
             $contentCreateStruct->sectionId = $options['sectionId'];
         }
 
+        if ( !empty( $options['modified'] ) )
+        {
+            $contentCreateStruct->modificationDate = $options['modified'];
+        }
+
         $this->autoFillStruct(
             $this->getContentTypeService()->loadContentTypeByIdentifier( $contentTypeIdentifier ),
             $contentCreateStruct,
@@ -128,7 +133,7 @@ class Content
         $locationCreateStruct = $this->getLocationService()->newLocationCreateStruct( $parentLocationId );
         $draft                = $contentService->createContent( $contentCreateStruct, array( $locationCreateStruct ) );
 
-        return $this->publishVersion( $draft );
+        return $this->publishVersion( $draft, $options );
     }
 
     /**
@@ -136,14 +141,14 @@ class Content
      *
      * @param ValueContent $content
      * @param array        $data
+     * @param array        $options
      * @param string       $lang
      *
      * @return ValueContent
      */
-    public function updateContent( ValueContent $content, $data, $lang = 'eng-US' )
+    public function updateContent( ValueContent $content, $data, $options = [], $lang = 'eng-US' )
     {
         $contentService = $this->getContentService();
-
         $contentDraft                             = $contentService->createContentDraft( $content->contentInfo );
         $contentUpdateStruct                      = $contentService->newContentUpdateStruct();
         $contentUpdateStruct->initialLanguageCode = $lang;
@@ -156,19 +161,43 @@ class Content
 
         $contentDraft = $contentService->updateContent( $contentDraft->versionInfo, $contentUpdateStruct );
 
-        return $this->publishVersion( $contentDraft );
+        return $this->publishVersion( $contentDraft, $options );
     }
 
     /**
      * Publish a version wrapper
      *
      * @param ValueContent $draft
+     * @param array        $options
      *
      * @return ValueContent
      */
-    protected function publishVersion( ValueContent $draft )
+    protected function publishVersion( ValueContent $draft, $options = [] )
     {
         $content = $this->getContentService()->publishVersion( $draft->versionInfo );
+
+        if ( count( $options ) > 0 )
+        {
+            $doUpdate = false;
+            $contentService = $this->getContentService();
+            $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
+            if ( !empty( $options['created'] ) )
+            {
+                $metadataUpdate->publishedDate = $options['created'];
+                $doUpdate = true;
+            }
+            
+            if ( !empty( $options['modified'] ) )
+            {
+                $doUpdate = true;
+                $metadataUpdate->modificationDate = $options['modified'];
+            }
+
+            if ( $doUpdate === true )
+            {
+                $contentService->updateContentMetadata( $content->contentInfo, $metadataUpdate );
+            }
+        }
 
         return $content;
     }
@@ -226,7 +255,7 @@ class Content
             {
                 return $content;
             }
-            $newContent = $this->updateContent( $content, $data, $lang );
+            $newContent = $this->updateContent( $content, $data, $options, $lang );
             if ( ( array_key_exists( 'callback_update', $options ) ) && ( is_callable( $options['callback_update'] ) ) )
             {
                 $options['callback_update']( $newContent );
