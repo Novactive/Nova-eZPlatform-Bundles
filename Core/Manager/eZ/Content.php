@@ -184,15 +184,20 @@ class Content
             if ( !empty( $options['created'] ) )
             {
                 $metadataUpdate->publishedDate = $options['created'];
-                $doUpdate = true;
-            }
-            
-            if ( !empty( $options['modified'] ) )
-            {
-                $doUpdate = true;
-                $metadataUpdate->modificationDate = $options['modified'];
+                if ( $content->contentInfo->publishedDate->getTimestamp() != $metadataUpdate->publishedDate->getTimestamp() )
+                {
+                    $doUpdate = true;
+                }
             }
 
+            if ( !empty( $options['modified'] ) )
+            {
+                $metadataUpdate->modificationDate = $options['modified'];
+                if ( $content->contentInfo->modificationDate->getTimestamp() != $metadataUpdate->modificationDate->getTimestamp() )
+                {
+                    $doUpdate = true;
+                }
+            }
             if ( $doUpdate === true )
             {
                 $contentService->updateContentMetadata( $content->contentInfo, $metadataUpdate );
