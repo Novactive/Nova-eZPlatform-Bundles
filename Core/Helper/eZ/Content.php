@@ -62,7 +62,58 @@ class Content
     }
 
     /**
-     * Fetch Loc List
+     * Fetch Content (Location)
+     *
+     * @param integer $parentLocationId
+     * @param array   $typeIdentifiers
+     * @param array   $sortClauses
+     * @param null    $limit
+     * @param int     $offset
+     * @param string  $type
+     *
+     * @return Query
+     */
+    protected function fetchContentQuery(
+        $parentLocationId,
+        $typeIdentifiers = [],
+        $sortClauses = [],
+        $limit = null,
+        $offset = 0,
+        $type = 'list'
+    )
+    {
+        $query       = new Query();
+
+        $criterion = [];
+        if ( $type == 'list' )
+        {
+            $criterion[] = new Criterion\ParentLocationId( $parentLocationId );
+        }
+        if ( $type == 'tree' )
+        {
+            $location = $this->repository->getLocationService()->loadLocation( $parentLocationId );
+            $criterion[] = new Criterion\Subtree( $location->pathString );
+        }
+
+        $criterion[] = new Criterion\Visibility( Criterion\Visibility::VISIBLE );
+
+        if ( count( $typeIdentifiers ) > 0 )
+        {
+            $criterion[] = new Criterion\ContentTypeIdentifier( $typeIdentifiers );
+        }
+
+        $query->criterion = new Criterion\LogicalAnd( $criterion );
+        if ( !empty( $sortClauses ) )
+        {
+            $query->sortClauses = $sortClauses;
+        }
+        $query->limit  = $limit;
+        $query->offset = $offset;
+        return $query;
+    }
+
+    /**
+     * Fetch Content (location) List
      *
      * @param integer $parentLocationId
      * @param array   $typeIdentifiers
@@ -81,27 +132,33 @@ class Content
     )
     {
         $searchService = $this->repository->getSearchService();
-        $query         = new Query();
-
-        $criterion = [
-            new Criterion\ParentLocationId( $parentLocationId ),
-            new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
-        ];
-
-        if ( count( $typeIdentifiers ) > 0 )
-        {
-            $criterion[] = new Criterion\ContentTypeIdentifier( $typeIdentifiers );
-        }
-
-        $query->criterion = new Criterion\LogicalAnd( $criterion );
-        if ( !empty( $sortClauses ) )
-        {
-            $query->sortClauses = $sortClauses;
-        }
-        $query->limit  = $limit;
-        $query->offset = $offset;
+        $query = $this->fetchContentQuery( $parentLocationId, $typeIdentifiers, $sortClauses, $limit, $offset, 'list' );
         $results       = $searchService->findLocations( $query );
+        return $this->wrapResults( $results, $limit );
+    }
 
+    /**
+     * Fetch Content (location) Tree
+     *
+     * @param integer $parentLocationId
+     * @param array   $typeIdentifiers
+     * @param array   $sortClauses
+     * @param null    $limit
+     * @param int     $offset
+     *
+     * @return array
+     */
+    public function contentTree(
+        $parentLocationId,
+        $typeIdentifiers = [],
+        $sortClauses = [],
+        $limit = null,
+        $offset = 0
+    )
+    {
+        $searchService = $this->repository->getSearchService();
+        $query = $this->fetchContentQuery( $parentLocationId, $typeIdentifiers, $sortClauses, $limit, $offset, 'tree' );
+        $results       = $searchService->findLocations( $query );
         return $this->wrapResults( $results, $limit );
     }
 
