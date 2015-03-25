@@ -91,7 +91,7 @@ class PreContentViewListener
         $contentView = $event->getContentView();
         $identifier  = $contentView->getTemplateIdentifier();
         if ( is_string( $identifier ) && $contentView->hasParameter( 'location' ) &&
-             preg_match( "/:Full:/", $identifier )
+             ( preg_match( "/:Full:/i", $identifier ) || preg_match( "/:full\//i", $identifier ) )
         )
         {
             /** @var Location $location */
