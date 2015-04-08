@@ -5,6 +5,8 @@ parameters:
     novaezextra.content.helper.class: Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Content
     novaezextra.abstract.children.provider.class: Novactive\Bundle\eZExtraBundle\EventListener\Type
     novaezextra.pre_content_view_listener.class: Novactive\Bundle\eZExtraBundle\EventListener\PreContentViewListener
+    novactive.ezextra.form.type.search.simple.class: Novactive\Bundle\eZExtraBundle\Form\Type\SimpleSearch
+    novaezextra.search.helper.class: Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Search
 
 services:
     novactive.ezextra.content.manager:
@@ -19,6 +21,10 @@ services:
         class: %novaezextra.content.helper.class%
         arguments: [@ezpublish.api.repository]
 
+    novactive.ezextra.search.helper:
+        class: %novaezextra.search.helper.class%
+        arguments: [@ezpublish.api.repository, @ezpublish_legacy.kernel]
+
     novactive.ezextra.pre_content_view_listener:
         class: %novaezextra.pre_content_view_listener.class%
         arguments: [@ezpublish.api.repository, @ezpublish.templating.global_helper]
@@ -29,3 +35,8 @@ services:
         class: %novaezextra.abstract.children.provider.class%
         abstract: true
         arguments: [@ezpublish.api.repository, @novactive.ezextra.content.helper]
+
+    novactive.ezextra.form.type.search.simple:
+        class: %novactive.ezextra.form.type.search.simple.class%
+        tags:
+            - { name: form.type, alias: novactive_ezextra_simple_search }
