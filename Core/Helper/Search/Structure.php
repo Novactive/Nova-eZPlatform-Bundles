@@ -36,6 +36,13 @@ class Structure
     protected $filters;
 
     /**
+     * extendedFilters
+     *
+     * @var array
+     */
+    protected $extendedFilters;
+
+    /**
      * Facets
      *
      * @var array
@@ -88,13 +95,14 @@ class Structure
      */
     public function __construct()
     {
-        $this->limit      = 25;
-        $this->offset     = 0;
-        $this->spellCheck = true;
-        $this->clustering = [ 'clustering' => false ];
-        $this->sortOrder  = [ 'score' => 'desc' ];
-        $this->facets     = [];
-        $this->filters    = [];
+        $this->limit           = 25;
+        $this->offset          = 0;
+        $this->spellCheck      = true;
+        $this->clustering      = [ 'clustering' => false ];
+        $this->sortOrder       = [ 'score' => 'desc' ];
+        $this->facets          = [];
+        $this->filters         = [];
+        $this->extendedFilters = [];
     }
 
     /**
@@ -116,6 +124,11 @@ class Structure
             $ezfQuery['filter'] = $this->getFilters();
         }
 
+        if ( $this->getExtendedFilters() !== null )
+        {
+            $ezfQuery['extended_attribute_filter'] = $this->getExtendedFilters();
+        }
+
         if ( $this->getSubtree() !== null )
         {
             $ezfQuery['subtree_array'] = $this->getSubtree();
@@ -135,7 +148,6 @@ class Structure
         {
             $ezfQuery['spell_check'] = [ $this->getSpellCheck() ];
         }
-
         return $ezfQuery;
     }
 
@@ -212,6 +224,30 @@ class Structure
     }
 
     /**
+     * Get the extendedFilters
+     *
+     * @return array
+     */
+    public function getExtendedFilters()
+    {
+        return $this->extendedFilters;
+    }
+
+    /**
+     * Set the extendedFilters
+     *
+     * @param array $extendedFilters
+     *
+     * @return $this
+     */
+    public function setExtendedFilters( $extendedFilters )
+    {
+        $this->extendedFilters = $extendedFilters;
+
+        return $this;
+    }
+
+    /**
      * Add filter
      *
      * @param array $filters
@@ -220,6 +256,10 @@ class Structure
      */
     public function addFilters( $filters )
     {
+        if ( !is_array( $filters ) )
+        {
+            return $this;
+        }
         foreach ( $filters as $filter )
         {
             if ( !$this->hasFilter( $filter ) )

@@ -63,10 +63,8 @@ class Result implements \Iterator, \ArrayAccess
     {
         $this->resultTotalCount = 0;
         $this->seek             = 0;
-        $this->result           = [];
-        $this->facets           = [];
+        $this->results          = [];
         $this->resultLimit      = 0;
-        $this->hasMore          = true;
     }
 
     /**
