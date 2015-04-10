@@ -13,6 +13,7 @@ use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Repository;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Content as ContentHelper;
+use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Search as SearchHelper;
 
 /**
  * Class Type
@@ -49,6 +50,13 @@ abstract class Type
     protected $contentHelper;
 
     /**
+     * Search Helper
+     *
+     * @var SearchHelper
+     */
+    protected $searchHelper;
+
+    /**
      * Set the Content View
      *
      * @param ContentView $contentView
@@ -73,11 +81,13 @@ abstract class Type
      *
      * @param Repository    $repository
      * @param ContentHelper $contentHelper
+     * @param SearchHelper  $searchHelper
      */
-    public function __construct( Repository $repository, ContentHelper $contentHelper )
+    public function __construct( Repository $repository, ContentHelper $contentHelper, SearchHelper $searchHelper )
     {
         $this->repository    = $repository;
         $this->contentHelper = $contentHelper;
+        $this->searchHelper  = $searchHelper;
     }
 
     /**
