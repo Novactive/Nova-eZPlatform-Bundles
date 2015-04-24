@@ -2,14 +2,14 @@
 
 ## Installation
 
-### Step 1: Download eZNovaExtraBundle using composer
+### Step 1: Download Nova eZExtra Bundle using composer
 
-Add eZNovaExtraBundle in your composer.json: 
+Add NovaeZExtraBundle in your composer.json: 
 
 ``` js
 {
     "require": {
-        "novactive/novaezextrabundle": "dev-master"
+        "novactive/ezextrabundle": "dev-master"
     }
 }
 ```
@@ -17,7 +17,7 @@ Add eZNovaExtraBundle in your composer.json:
 Now tell composer to download the bundle by running the command:
 
 ``` bash
-$ composer.phar update novactive/novaezextrabundle
+$ composer.phar update novactive/ezextrabundle
 ```
 
 ### Step 2: Enable the bundle
@@ -31,7 +31,7 @@ $ composer.phar update novactive/novaezextrabundle
 public function registerBundles() {
     $bundles = array(
         // ...
-        new Novactive\Bundle\eZExtraBundle\NovaeZExtraBundle(),
+		new Novactive\Bundle\eZExtraBundle\NovaeZExtraBundle(),
     );
 }
 ```
@@ -114,7 +114,7 @@ Go to : */_novaezextra/dev/test*
 {{ render( controller( "eZNovaExtraBundle:Picture:alias", { "contentId": content.getField('picture').value.destinationContentId, "fieldIdentifier": "image", "alias": "large" })) }}
 ```
 
-### Content ( more Location ) Helper
+### Content/Location Helper
 
 The goal was to mimic the old Fetch Content List
 
@@ -135,6 +135,86 @@ Usage:
         <a href="{{ path( "ez_urlalias", { "locationId" : child.content.contentInfo.mainLocationId } ) }}">{{ "Learn more" | trans() }}</a>
     {% endfor %}
 ```
+
+
+### Search Helper
+
+#### Content/Location Search Helper
+
+```php
+        $searchStructure = new SearchStructure();
+        $contentTypeService = $this->getRepository()->getContentTypeService();
+        $searchStructure
+            ->setLimit( 10 )
+            ->setFacets( $this->getSearchFacets() )
+            ->setContentTypesIds(
+                [
+                    $contentTypeService->loadContentTypeByIdentifier( 'identifier1' )->id,
+                    $contentTypeService->loadContentTypeByIdentifier( 'identifier2' )->id
+                ]
+            )
+            ->setPage( $page );
+            
+        $results = $this->get( 'novactive.ezextra.search.helper' )->search( $searchStructure );
+```
+
+> Return an array of Result
+
+#### Paginator
+
+Witht the search you can also use the Paginator
+
+```php
+
+            $adapter    = new SearchAdapter( $this->get( 'novactive.ezextra.search.helper' ), $searchStructure );
+            $pagerFanta = new Pagerfanta( $adapter );
+            $pagerFanta->setMaxPerPage( $searchStructure->getLimit() );
+            $pagerFanta->setCurrentPage( $page );
+```
+
+#### Search Form
+
+The bundle provide you a simple way to integrate the SearchStructure in a Symfony Form
+
+```php
+        $pagerFanta = null;
+        $searchStructure = new SearchStructure();
+        $contentTypeService = $this->getRepository()->getContentTypeService();
+        $searchStructure
+            ->setLimit( 10 )
+            ->setFacets( $this->getSearchFacets() )
+            ->setContentTypesIds(
+                [
+                    $contentTypeService->loadContentTypeByIdentifier( 'identifier' )->id
+                ]
+            )
+            ->setPage( $page );
+
+        $form = $this->get( 'form.factory' )->createNamed( '', 'novactive_ezextra_simple_search', $searchStructure );
+        $form->handleRequest( $request );
+        if ( $option !== null )
+        {
+            $searchStructure->addFilters( [ "attr_options_lk:\"{$option}\"" ] );
+        }
+
+        if ( $form->isValid() )
+        {
+            $adapter    = new SearchAdapter( $this->get( 'novactive.ezextra.search.helper' ), $searchStructure );
+            $pagerFanta = new Pagerfanta( $adapter );
+            $pagerFanta->setMaxPerPage( $searchStructure->getLimit() );
+            $pagerFanta->setCurrentPage( $page );
+        }
+
+        return [
+            'form' => $form->createView(),
+            'pager' => $pagerFanta,
+            'searchStructure' => $searchStructure,
+            'option' => $option
+        ];
+    }
+
+```
+
 
 ### Children Provider
 
