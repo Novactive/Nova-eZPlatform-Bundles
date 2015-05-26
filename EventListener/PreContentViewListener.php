@@ -73,7 +73,7 @@ class PreContentViewListener
      */
     public function getType( $contentTypeIdentifier )
     {
-        if ( array_key_exists( $contentTypeIdentifier, $this->types ) )
+        if ( is_array( $this->types ) && array_key_exists( $contentTypeIdentifier, $this->types ) )
         {
             return $this->types[$contentTypeIdentifier];
         }
