@@ -12,7 +12,7 @@ namespace Novactive\Bundle\eZExtraBundle\Core\Helper\eZ;
 /**
  * Class Result
  */
-class Result implements \Iterator, \ArrayAccess
+class Result implements \Iterator, \ArrayAccess, \Countable
 {
     /**
      * Seek position
