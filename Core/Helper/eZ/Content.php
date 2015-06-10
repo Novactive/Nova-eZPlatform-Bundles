@@ -45,7 +45,7 @@ class Content
      * @param mixed   $results
      * @param integer $limit
      *
-     * @return Result[]
+     * @return Result
      */
     protected function wrapResults( $results, $limit )
     {
@@ -121,7 +121,7 @@ class Content
      * @param null    $limit
      * @param int     $offset
      *
-     * @return array
+     * @return Result
      */
     public function contentList(
         $parentLocationId,
@@ -146,7 +146,7 @@ class Content
      * @param null    $limit
      * @param int     $offset
      *
-     * @return array
+     * @return Result
      */
     public function contentTree(
         $parentLocationId,
@@ -168,7 +168,7 @@ class Content
      * @param integer $locationId
      * @param string  $attributeIdentifier
      *
-     * @return Result[]
+     * @return Result
      */
     public function nextByAttribute( $locationId, $attributeIdentifier )
     {
@@ -180,7 +180,7 @@ class Content
      *
      * @param integer $locationId
      *
-     * @return Result[]
+     * @return Result
      */
     public function nextByPriority( $locationId )
     {
@@ -193,7 +193,7 @@ class Content
      * @param integer $locationId
      * @param string  $attributeIdentifier
      *
-     * @return Result[]
+     * @return Result
      */
     public function previousByAttribute( $locationId, $attributeIdentifier )
     {
@@ -205,7 +205,7 @@ class Content
      *
      * @param integer $locationId
      *
-     * @return Result[]
+     * @return Result
      */
     public function previousByPriority( $locationId )
     {
@@ -220,7 +220,7 @@ class Content
      * @param integer     $order
      * @param string|null $attributeIdentifier
      *
-     * @return Result[]
+     * @return Result
      */
     protected function getBy( $locationId, $operator, $order, $attributeIdentifier = null )
     {
