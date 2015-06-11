@@ -92,6 +92,12 @@ Go to : */_novaezextra/dev/test*
 {% set contentType = eznova_location_by_content( content ) %}
 ```
 
+#### eznova_location_by_locationId( locationId )
+
+``` twig
+{% set contentType = eznova_location_by_locationId( locationId ) %}
+```
+
 #### eznova_relation_field_to_content( fieldValue )
 
 ``` twig
