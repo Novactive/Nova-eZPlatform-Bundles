@@ -167,10 +167,11 @@ class Content
      *
      * @param integer $locationId
      * @param string  $attributeIdentifier
+     * @param string  $locale
      *
      * @return Result[]
      */
-    public function nextByAttribute( $locationId, $attributeIdentifier )
+    public function nextByAttribute( $locationId, $attributeIdentifier, $locale = "en-US" )
     {
         return $this->getBy( $locationId, Criterion\Operator::GTE, Query::SORT_ASC, $attributeIdentifier );
     }
@@ -192,12 +193,13 @@ class Content
      *
      * @param integer $locationId
      * @param string  $attributeIdentifier
+     * @param string  $locale
      *
      * @return Result[]
      */
-    public function previousByAttribute( $locationId, $attributeIdentifier )
+    public function previousByAttribute( $locationId, $attributeIdentifier, $locale = "en-US" )
     {
-        return $this->getBy( $locationId, Criterion\Operator::LTE, Query::SORT_DESC, $attributeIdentifier );
+        return $this->getBy( $locationId, Criterion\Operator::LTE, Query::SORT_DESC, $attributeIdentifier, $locale );
     }
 
     /**
@@ -219,10 +221,11 @@ class Content
      * @param integer     $operator
      * @param integer     $order
      * @param string|null $attributeIdentifier
+     * @param string  $locale
      *
      * @return Result[]
      */
-    protected function getBy( $locationId, $operator, $order, $attributeIdentifier = null )
+    protected function getBy( $locationId, $operator, $order, $attributeIdentifier = null, $locale = "en-US" )
     {
         $contentService     = $this->repository->getContentService();
         $locationService    = $this->repository->getLocationService();
@@ -263,7 +266,7 @@ class Content
                 ]
             );
             $query->sortClauses = array(
-                new SortClause\Field( $locationContentType->identifier, $attributeIdentifier, $order )
+                new SortClause\Field( $locationContentType->identifier, $attributeIdentifier, $order, $locale )
             );
         }
         else

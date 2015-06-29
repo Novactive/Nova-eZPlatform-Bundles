@@ -51,9 +51,6 @@ class ContentExtension extends KernelContentExtension
                 ),
                 'eznova_relationlist_field_to_content_list' => new Twig_Function_Method(
                     $this, 'relationsListFieldToContentList'
-                ),
-                'eznova_location_by_location_id' => new Twig_Function_Method(
-                    $this, 'locationByLocationId'
                 )
             )
         );
@@ -129,18 +126,6 @@ class ContentExtension extends KernelContentExtension
         }
 
         return $content;
-    }
-
-    /**
-     * Location id to Location
-     *
-     * @param integer $locationId
-     *
-     * @return Location
-     */
-    public function locationByLocationId( $locationId )
-    {
-        return $this->repository->getLocationService()->loadLocation( $locationId );
     }
 
     /**
