@@ -221,7 +221,7 @@ class Content
      * @param integer     $operator
      * @param integer     $order
      * @param string|null $attributeIdentifier
-     * @param string  $locale
+     * @param string      $locale
      *
      * @return Result[]
      */
