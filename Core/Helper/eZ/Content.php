@@ -67,6 +67,7 @@ class Content
      * @param integer $parentLocationId
      * @param array   $typeIdentifiers
      * @param array   $sortClauses
+     * @param array   $additionnalCriterions
      * @param null    $limit
      * @param int     $offset
      * @param string  $type
@@ -77,6 +78,7 @@ class Content
         $parentLocationId,
         $typeIdentifiers = [],
         $sortClauses = [],
+        $additionnalCriterions = [],
         $limit = null,
         $offset = 0,
         $type = 'list'
@@ -102,6 +104,11 @@ class Content
             $criterion[] = new Criterion\ContentTypeIdentifier( $typeIdentifiers );
         }
 
+        if ( !empty( $additionnalCriterions ) )
+        {
+            $criterion = array_merge( $criterion, $additionnalCriterions );
+        }
+
         $query->criterion = new Criterion\LogicalAnd( $criterion );
         if ( !empty( $sortClauses ) )
         {
@@ -118,6 +125,7 @@ class Content
      * @param integer $parentLocationId
      * @param array   $typeIdentifiers
      * @param array   $sortClauses
+     * @param array   $additionnalCriterions
      * @param null    $limit
      * @param int     $offset
      *
@@ -126,13 +134,14 @@ class Content
     public function contentList(
         $parentLocationId,
         $typeIdentifiers = [],
+        $additionnalCriterions = [],
         $sortClauses = [],
         $limit = null,
         $offset = 0
     )
     {
         $searchService = $this->repository->getSearchService();
-        $query = $this->fetchContentQuery( $parentLocationId, $typeIdentifiers, $sortClauses, $limit, $offset, 'list' );
+        $query = $this->fetchContentQuery( $parentLocationId, $typeIdentifiers, $sortClauses, $additionnalCriterions, $limit, $offset, 'list' );
         $results       = $searchService->findLocations( $query );
         return $this->wrapResults( $results, $limit );
     }
@@ -143,6 +152,7 @@ class Content
      * @param integer $parentLocationId
      * @param array   $typeIdentifiers
      * @param array   $sortClauses
+     * @param array   $additionnalCriterions
      * @param null    $limit
      * @param int     $offset
      *
@@ -151,13 +161,14 @@ class Content
     public function contentTree(
         $parentLocationId,
         $typeIdentifiers = [],
+        $additionnalCriterions = [],
         $sortClauses = [],
         $limit = null,
         $offset = 0
     )
     {
         $searchService = $this->repository->getSearchService();
-        $query = $this->fetchContentQuery( $parentLocationId, $typeIdentifiers, $sortClauses, $limit, $offset, 'tree' );
+        $query = $this->fetchContentQuery( $parentLocationId, $typeIdentifiers, $sortClauses, $additionnalCriterions, $limit, $offset, 'tree' );
         $results       = $searchService->findLocations( $query );
         return $this->wrapResults( $results, $limit );
     }
