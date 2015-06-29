@@ -171,7 +171,7 @@ class Content
      *
      * @return Result[]
      */
-    public function nextByAttribute( $locationId, $attributeIdentifier, $locale = "en-US" )
+    public function nextByAttribute( $locationId, $attributeIdentifier, $locale = "eng-US" )
     {
         return $this->getBy( $locationId, Criterion\Operator::GTE, Query::SORT_ASC, $attributeIdentifier );
     }
@@ -197,7 +197,7 @@ class Content
      *
      * @return Result[]
      */
-    public function previousByAttribute( $locationId, $attributeIdentifier, $locale = "en-US" )
+    public function previousByAttribute( $locationId, $attributeIdentifier, $locale = "eng-US" )
     {
         return $this->getBy( $locationId, Criterion\Operator::LTE, Query::SORT_DESC, $attributeIdentifier, $locale );
     }
@@ -225,7 +225,7 @@ class Content
      *
      * @return Result[]
      */
-    protected function getBy( $locationId, $operator, $order, $attributeIdentifier = null, $locale = "en-US" )
+    protected function getBy( $locationId, $operator, $order, $attributeIdentifier = null, $locale = "eng-US" )
     {
         $contentService     = $this->repository->getContentService();
         $locationService    = $this->repository->getLocationService();
