@@ -178,13 +178,14 @@ class Content
      *
      * @param integer $locationId
      * @param string  $attributeIdentifier
+     * @param array   $additionnalCriterions
      * @param string  $locale
      *
      * @return Result[]
      */
-    public function nextByAttribute( $locationId, $attributeIdentifier, $locale = "eng-US" )
+    public function nextByAttribute( $locationId, $attributeIdentifier, $additionnalCriterions = [], $locale = "eng-US" )
     {
-        return $this->getBy( $locationId, Criterion\Operator::GTE, Query::SORT_ASC, $attributeIdentifier, $locale );
+        return $this->getBy( $locationId, Criterion\Operator::GTE, Query::SORT_ASC, $attributeIdentifier, $additionnalCriterions, $locale );
     }
 
     /**
@@ -204,13 +205,14 @@ class Content
      *
      * @param integer $locationId
      * @param string  $attributeIdentifier
+     * @param array   $additionnalCriterions
      * @param string  $locale
      *
      * @return Result[]
      */
-    public function previousByAttribute( $locationId, $attributeIdentifier, $locale = "eng-US" )
+    public function previousByAttribute( $locationId, $attributeIdentifier, $additionnalCriterions = [], $locale = "eng-US" )
     {
-        return $this->getBy( $locationId, Criterion\Operator::LTE, Query::SORT_DESC, $attributeIdentifier, $locale );
+        return $this->getBy( $locationId, Criterion\Operator::LTE, Query::SORT_DESC, $attributeIdentifier, $additionnalCriterions, $locale );
     }
 
     /**
@@ -232,11 +234,12 @@ class Content
      * @param integer     $operator
      * @param integer     $order
      * @param string|null $attributeIdentifier
+     * @param array       $additionnalCriterions
      * @param string      $locale
      *
      * @return Result[]
      */
-    protected function getBy( $locationId, $operator, $order, $attributeIdentifier = null, $locale = "eng-US" )
+    protected function getBy( $locationId, $operator, $order, $attributeIdentifier = null, $additionnalCriterions = [], $locale = "eng-US" )
     {
         $contentService     = $this->repository->getContentService();
         $locationService    = $this->repository->getLocationService();
@@ -268,14 +271,16 @@ class Content
                     $valueSortFieldValue = $valueSortFieldValue->value->getTimestamp();
                 }
             }
-            $query->criterion   = new Criterion\LogicalAnd(
-                [
-                    $sameTypeCriterion,
-                    $sameParentLocationCriterion,
-                    $notSameLocation,
-                    new Criterion\Field( $attributeIdentifier, $operator, $valueSortFieldValue ),
-                ]
-            );
+
+            $criterion[] = $sameTypeCriterion;
+            $criterion[] = $sameParentLocationCriterion;
+            $criterion[] = $notSameLocation;
+            $criterion[] = new Criterion\Field( $attributeIdentifier, $operator, $valueSortFieldValue );
+
+            $criterion = array_merge( $criterion, $additionnalCriterions );
+
+            $query->criterion   = new Criterion\LogicalAnd( $criterion );
+
             $query->sortClauses = array(
                 new SortClause\Field( $locationContentType->identifier, $attributeIdentifier, $order, $locale )
             );
