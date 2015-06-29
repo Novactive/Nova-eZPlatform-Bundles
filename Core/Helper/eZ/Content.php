@@ -173,7 +173,7 @@ class Content
      */
     public function nextByAttribute( $locationId, $attributeIdentifier, $locale = "eng-US" )
     {
-        return $this->getBy( $locationId, Criterion\Operator::GTE, Query::SORT_ASC, $attributeIdentifier );
+        return $this->getBy( $locationId, Criterion\Operator::GTE, Query::SORT_ASC, $attributeIdentifier, $locale );
     }
 
     /**
