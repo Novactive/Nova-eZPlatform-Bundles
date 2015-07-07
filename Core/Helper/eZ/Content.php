@@ -45,7 +45,7 @@ class Content
      * @param mixed   $results
      * @param integer $limit
      *
-     * @return Result[]
+     * @return Result
      */
     protected function wrapResults( $results, $limit )
     {
@@ -129,7 +129,7 @@ class Content
      * @param int     $offset
      * @param array   $additionnalCriterions
      *
-     * @return Result[]
+     * @return Result
      */
     public function contentList(
         $parentLocationId,
@@ -156,7 +156,7 @@ class Content
      * @param int     $offset
      * @param array   $additionnalCriterions
      *
-     * @return Result[]
+     * @return Result
      */
     public function contentTree(
         $parentLocationId,
@@ -181,7 +181,7 @@ class Content
      * @param string  $locale
      * @param array   $additionnalCriterions
      *
-     * @return Result[]
+     * @return Result
      */
     public function nextByAttribute( $locationId, $attributeIdentifier, $locale = "eng-US", $additionnalCriterions = [] )
     {
@@ -194,7 +194,7 @@ class Content
      * @param integer $locationId
      * @param array   $additionnalCriterions
      *
-     * @return Result[]
+     * @return Result
      */
     public function nextByPriority( $locationId, $additionnalCriterions = [] )
     {
@@ -209,7 +209,7 @@ class Content
      * @param array   $additionnalCriterions
      * @param string  $locale
      *
-     * @return Result[]
+     * @return Result
      */
     public function previousByAttribute( $locationId, $attributeIdentifier, $locale = "eng-US", $additionnalCriterions = [] )
     {
@@ -222,7 +222,7 @@ class Content
      * @param integer $locationId
      * @param array   $additionnalCriterions
      *
-     * @return Result[]
+     * @return Result
      */
     public function previousByPriority( $locationId, $additionnalCriterions = [] )
     {
@@ -239,7 +239,7 @@ class Content
      * @param array       $additionnalCriterions
      * @param string      $locale
      *
-     * @return Result[]
+     * @return Result
      */
     protected function getBy( $locationId, $operator, $order, $attributeIdentifier = null, $additionnalCriterions = [], $locale = "eng-US" )
     {
