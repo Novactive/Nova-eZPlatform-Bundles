@@ -118,11 +118,12 @@ Go to : */_novaezextra/dev/test*
 
 The goal was to mimic the old Fetch Content List
 
-    public function contentList( $parentLocationId, $typeIdentifiers = [], $sortClauses = [], $limit = null, $offset = 0 );
-    public function nextByAttribute( $locationId, $attributeIdentifier );
-    public function nextByPriority( $locationId )
-    public function previousByAttribute( $locationId, $attributeIdentifier )
-    public function previousByPriority( $locationId )
+    public function contentTree( $parentLocationId, $typeIdentifiers = [], $sortClauses = [], $limit = null, $offset = 0, $additionnalCriterion );
+    public function contentList( $parentLocationId, $typeIdentifiers = [], $sortClauses = [], $limit = null, $offset = 0, $additionnalCriterion );
+    public function nextByAttribute( $locationId, $attributeIdentifier, $locale, $additionnalCriterions = [] );
+    public function nextByPriority( $locationId, $aditionnalCriterions = [] )
+    public function previousByAttribute( $locationId, $attributeIdentifier, $locale, $additionnalCriterion = [] )
+    public function previousByPriority( $locationId, $additionnalCriterion = [] )
     
 > Return an array of Result
 

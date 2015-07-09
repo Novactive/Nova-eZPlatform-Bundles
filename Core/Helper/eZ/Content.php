@@ -67,6 +67,7 @@ class Content
      * @param integer $parentLocationId
      * @param array   $typeIdentifiers
      * @param array   $sortClauses
+     * @param array   $additionnalCriterions
      * @param null    $limit
      * @param int     $offset
      * @param string  $type
@@ -77,6 +78,7 @@ class Content
         $parentLocationId,
         $typeIdentifiers = [],
         $sortClauses = [],
+        $additionnalCriterions = [],
         $limit = null,
         $offset = 0,
         $type = 'list'
@@ -102,6 +104,11 @@ class Content
             $criterion[] = new Criterion\ContentTypeIdentifier( $typeIdentifiers );
         }
 
+        if ( !empty( $additionnalCriterions ) )
+        {
+            $criterion = array_merge( $criterion, $additionnalCriterions );
+        }
+
         $query->criterion = new Criterion\LogicalAnd( $criterion );
         if ( !empty( $sortClauses ) )
         {
@@ -120,6 +127,7 @@ class Content
      * @param array   $sortClauses
      * @param null    $limit
      * @param int     $offset
+     * @param array   $additionnalCriterions
      *
      * @return Result
      */
@@ -128,11 +136,12 @@ class Content
         $typeIdentifiers = [],
         $sortClauses = [],
         $limit = null,
-        $offset = 0
+        $offset = 0,
+        $additionnalCriterions = []
     )
     {
         $searchService = $this->repository->getSearchService();
-        $query = $this->fetchContentQuery( $parentLocationId, $typeIdentifiers, $sortClauses, $limit, $offset, 'list' );
+        $query = $this->fetchContentQuery( $parentLocationId, $typeIdentifiers, $sortClauses, $additionnalCriterions, $limit, $offset, 'list' );
         $results       = $searchService->findLocations( $query );
         return $this->wrapResults( $results, $limit );
     }
@@ -145,6 +154,7 @@ class Content
      * @param array   $sortClauses
      * @param null    $limit
      * @param int     $offset
+     * @param array   $additionnalCriterions
      *
      * @return Result
      */
@@ -153,11 +163,12 @@ class Content
         $typeIdentifiers = [],
         $sortClauses = [],
         $limit = null,
-        $offset = 0
+        $offset = 0,
+        $additionnalCriterions = []
     )
     {
         $searchService = $this->repository->getSearchService();
-        $query = $this->fetchContentQuery( $parentLocationId, $typeIdentifiers, $sortClauses, $limit, $offset, 'tree' );
+        $query = $this->fetchContentQuery( $parentLocationId, $typeIdentifiers, $sortClauses, $additionnalCriterions, $limit, $offset, 'tree' );
         $results       = $searchService->findLocations( $query );
         return $this->wrapResults( $results, $limit );
     }
@@ -167,24 +178,27 @@ class Content
      *
      * @param integer $locationId
      * @param string  $attributeIdentifier
+     * @param string  $locale
+     * @param array   $additionnalCriterions
      *
      * @return Result
      */
-    public function nextByAttribute( $locationId, $attributeIdentifier )
+    public function nextByAttribute( $locationId, $attributeIdentifier, $locale = "eng-US", $additionnalCriterions = [] )
     {
-        return $this->getBy( $locationId, Criterion\Operator::GTE, Query::SORT_ASC, $attributeIdentifier );
+        return $this->getBy( $locationId, Criterion\Operator::GTE, Query::SORT_ASC, $attributeIdentifier, $additionnalCriterions, $locale );
     }
 
     /**
      * Next By Priority ( ASC SORT )
      *
      * @param integer $locationId
+     * @param array   $additionnalCriterions
      *
      * @return Result
      */
-    public function nextByPriority( $locationId )
+    public function nextByPriority( $locationId, $additionnalCriterions = [] )
     {
-        return $this->getBy( $locationId, Criterion\Operator::GTE, Query::SORT_ASC );
+        return $this->getBy( $locationId, Criterion\Operator::GTE, Query::SORT_ASC, $additionnalCriterions );
     }
 
     /**
@@ -192,24 +206,27 @@ class Content
      *
      * @param integer $locationId
      * @param string  $attributeIdentifier
+     * @param array   $additionnalCriterions
+     * @param string  $locale
      *
      * @return Result
      */
-    public function previousByAttribute( $locationId, $attributeIdentifier )
+    public function previousByAttribute( $locationId, $attributeIdentifier, $locale = "eng-US", $additionnalCriterions = [] )
     {
-        return $this->getBy( $locationId, Criterion\Operator::LTE, Query::SORT_DESC, $attributeIdentifier );
+        return $this->getBy( $locationId, Criterion\Operator::LTE, Query::SORT_DESC, $attributeIdentifier, $additionnalCriterions, $locale );
     }
 
     /**
      * Previous By Priority ( DESC SORT )
      *
      * @param integer $locationId
+     * @param array   $additionnalCriterions
      *
      * @return Result
      */
-    public function previousByPriority( $locationId )
+    public function previousByPriority( $locationId, $additionnalCriterions = [] )
     {
-        return $this->getBy( $locationId, Criterion\Operator::LTE, Query::SORT_DESC );
+        return $this->getBy( $locationId, Criterion\Operator::LTE, Query::SORT_DESC, $additionnalCriterions );
     }
 
     /**
@@ -219,10 +236,12 @@ class Content
      * @param integer     $operator
      * @param integer     $order
      * @param string|null $attributeIdentifier
+     * @param array       $additionnalCriterions
+     * @param string      $locale
      *
      * @return Result
      */
-    protected function getBy( $locationId, $operator, $order, $attributeIdentifier = null )
+    protected function getBy( $locationId, $operator, $order, $attributeIdentifier = null, $additionnalCriterions = [], $locale = "eng-US" )
     {
         $contentService     = $this->repository->getContentService();
         $locationService    = $this->repository->getLocationService();
@@ -237,6 +256,11 @@ class Content
         $notSameLocation             = new Criterion\LogicalNot(
             new Criterion\LocationId( $location->id )
         );
+
+        $criterion[] = $sameTypeCriterion;
+        $criterion[] = $sameParentLocationCriterion;
+        $criterion[] = $notSameLocation;
+
         $query                       = new Query();
 
         if ( $attributeIdentifier != null )
@@ -254,31 +278,20 @@ class Content
                     $valueSortFieldValue = $valueSortFieldValue->value->getTimestamp();
                 }
             }
-            $query->criterion   = new Criterion\LogicalAnd(
-                [
-                    $sameTypeCriterion,
-                    $sameParentLocationCriterion,
-                    $notSameLocation,
-                    new Criterion\Field( $attributeIdentifier, $operator, $valueSortFieldValue ),
-                ]
-            );
-            $query->sortClauses = array(
-                new SortClause\Field( $locationContentType->identifier, $attributeIdentifier, $order )
-            );
+
+            $criterion[]  = new Criterion\Field( $attributeIdentifier, $operator, $valueSortFieldValue );
+            $sortClause[] = new SortClause\Field( $locationContentType->identifier, $attributeIdentifier, $order, $locale );
         }
         else
         {
-            // by Priority
-            $query->criterion   = new Criterion\LogicalAnd(
-                [
-                    $sameTypeCriterion,
-                    $sameParentLocationCriterion,
-                    $notSameLocation,
-                    new Criterion\Location\Priority( $operator, $location->priority ),
-                ]
-            );
-            $query->sortClauses = array( new SortClause\Location\Priority( $order ) );
+            $criterion[] = new Criterion\Location\Priority( $operator, $location->priority );
+            $sortClause[] = new SortClause\Location\Priority( $order );
         }
+
+        $criterion = array_merge( $criterion, $additionnalCriterions );
+        $query->criterion   = new Criterion\LogicalAnd( $criterion );
+
+        $query->sortClauses = $sortClause;
         $query->limit = 1;
         $result       = $searchService->findLocations( $query );
 
