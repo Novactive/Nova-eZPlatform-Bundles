@@ -13,7 +13,7 @@ use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\Core\MVC\Legacy\Templating\GlobalHelper;
+use eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper;
 
 /**
  * Class PreContentViewListener
