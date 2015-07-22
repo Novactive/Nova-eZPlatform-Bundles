@@ -198,7 +198,7 @@ class Content
      */
     public function nextByPriority( $locationId, $additionnalCriterions = [] )
     {
-        return $this->getBy( $locationId, Criterion\Operator::GTE, Query::SORT_ASC, $additionnalCriterions );
+        return $this->getBy( $locationId, Criterion\Operator::GTE, Query::SORT_ASC, null, $additionnalCriterions );
     }
 
     /**
@@ -226,7 +226,7 @@ class Content
      */
     public function previousByPriority( $locationId, $additionnalCriterions = [] )
     {
-        return $this->getBy( $locationId, Criterion\Operator::LTE, Query::SORT_DESC, $additionnalCriterions );
+        return $this->getBy( $locationId, Criterion\Operator::LTE, Query::SORT_DESC, null, $additionnalCriterions );
     }
 
     /**

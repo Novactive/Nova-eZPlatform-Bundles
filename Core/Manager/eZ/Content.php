@@ -131,6 +131,12 @@ class Content
         );
 
         $locationCreateStruct = $this->getLocationService()->newLocationCreateStruct( $parentLocationId );
+
+        if ( !empty( $options['priority'] ) )
+        {
+            $locationCreateStruct->priority = $options['priority'];
+        }
+
         $draft                = $contentService->createContent( $contentCreateStruct, array( $locationCreateStruct ) );
 
         return $this->publishVersion( $draft, $options );
