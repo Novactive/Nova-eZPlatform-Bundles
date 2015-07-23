@@ -279,7 +279,7 @@ class Content
     }
 
     /**
-     * Create/Update Sugar for trying to update else to create
+     * Get + Create (no update) Sugar for trying to update else to create
      *
      * @param string  $contentTypeIdentifier
      * @param integer $parentLocationId

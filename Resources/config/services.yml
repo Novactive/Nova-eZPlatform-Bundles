@@ -1,6 +1,7 @@
 parameters:
     ezpublish.twig.extension.content.class: Novactive\Bundle\eZExtraBundle\Twig\ContentExtension
     novaezextra.content.manager.class: Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\Content
+    novaezextra.content_type.manager.class: Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\ContentType
     novaezextra.tag.manager.class: Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\Tag
     novaezextra.content.helper.class: Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Content
     novaezextra.abstract.children.provider.class: Novactive\Bundle\eZExtraBundle\EventListener\Type
@@ -11,6 +12,10 @@ parameters:
 services:
     novactive.ezextra.content.manager:
         class: %novaezextra.content.manager.class%
+        arguments: [@ezpublish.api.repository]
+
+    novactive.ezextra.content_type.manager:
+        class: %novaezextra.content_type.manager.class%
         arguments: [@ezpublish.api.repository]
 
     novactive.ezextra.tag.manager:
