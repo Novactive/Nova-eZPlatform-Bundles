@@ -21,6 +21,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
+use eZ\Publish\Core\FieldType\FieldSettings;
 
 /**
  * Class ContentType
@@ -276,6 +277,52 @@ class ContentType
             $definition['descriptions'] = [ $lang => $definition['descriptions'] ];
         }
         $struct->descriptions = $definition['descriptions'];
+
+        if ( $definition['settings'] )
+        {
+            $settings = [];
+            $lines    = explode( "\n", $definition['settings'] );
+            foreach ( $lines as $line )
+            {
+                preg_match( "/(\\s*)([a-zA-Z]*)(\\s*):(\\s*)\\[([^\\[\\]]*)\\](\\s*)/uisx", $line, $matches );
+                $key   = trim( $matches[2] );
+                $value = explode( ",", trim( $matches[5] ) );
+                if ( $key != '' )
+                {
+                    $settings[$key] = $value;
+                }
+            }
+            $this->fillExtraSettings( $struct, $settings, $definition['type'], $lang );
+        }
+    }
+
+    /**
+     * Fill the Extra Struct according to the Public API
+     *
+     * @param FieldDefinitionCreateStruct|FieldDefinitionUpdateStruct $struct
+     * @param array                                                   $definition
+     * @param string                                                  $lang
+     */
+    protected function fillExtraSettings( $struct, $settings, $fieldTypeIdentifier, $lang )
+    {
+        if ( $fieldTypeIdentifier == "ezselection" )
+        {
+            if ( $list = $settings['List'] ) {
+                $struct->fieldSettings = [
+                    'isMultiple' => false,
+                    'options' => $list
+                ];
+            }
+        }
+
+        if ( $fieldTypeIdentifier == "ezobjectrelationlist" )
+        {
+            if ( $to = $settings['To'] ) {
+                $struct->fieldSettings = [
+                    'selectionContentTypes' => $to
+                ];
+            }
+        }
     }
 
     /**
