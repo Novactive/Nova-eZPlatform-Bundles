@@ -100,5 +100,8 @@ abstract class Type
      *
      * @return mixed
      */
-    abstract public function getChildren( $viewParameters );
+    public function getChildren( $viewParameters )
+    {
+        //Implement your own logic
+    }
 }
