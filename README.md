@@ -221,7 +221,7 @@ The bundle provide you a simple way to integrate the SearchStructure in a Symfon
 
 Simply inject the children ( and potentially other things on a view Full )
 
-Add your provider
+Add your provider in a folder of your bundle
 
 ```yml
 project.home_page.children.provider:
@@ -233,6 +233,9 @@ project.home_page.children.provider:
 
 You class YOUCONTENTIDENTIFIERPROVIDERCLASS must extend Novactive\Bundle\eZExtraBundle\EventListener\Type
 
+After you need to create a method for each view you display if you want to get children in your template
+The goal is to have children on each view.
+
 Ex:
 
 ```php
@@ -241,9 +244,15 @@ use Novactive\Bundle\eZExtraBundle\EventListener\Type;
 use eZ\Publish\API\Repository\Values\Content\Query;
 class PersonalizationEngine extends Type
 {
+    //its also use as default to get the full view children
     public function getChildren( $viewParameters )
     {
         return $this->contentHelper->contentList( $this->location->id, [ 'article' ], array( new Query\SortClause\Location\Priority( Query::SORT_ASC ) ), 10);
+    }
+    
+    public function getLineChildren( $viewParameters )
+    {
+        ...
     }
 }
 ```

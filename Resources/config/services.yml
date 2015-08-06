@@ -32,7 +32,7 @@ services:
 
     novactive.ezextra.pre_content_view_listener:
         class: %novaezextra.pre_content_view_listener.class%
-        arguments: [@ezpublish.api.repository, @ezpublish.templating.global_helper]
+        arguments: [@ezpublish.api.repository, @ezpublish.templating.global_helper, @request_stack]
         tags:
             - {name: kernel.event_listener, event: ezpublish.pre_content_view, method: onPreContentView}
 

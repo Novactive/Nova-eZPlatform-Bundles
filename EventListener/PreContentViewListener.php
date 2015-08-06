@@ -11,6 +11,7 @@ namespace Novactive\Bundle\eZExtraBundle\EventListener;
 
 use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper;
@@ -41,16 +42,19 @@ class PreContentViewListener
      */
     protected $types;
 
+    protected $requestStack;
+
     /**
      * Constructor
      *
      * @param Repository   $repository
      * @param GlobalHelper $gHelper
      */
-    public function __construct( Repository $repository, GlobalHelper $gHelper )
+    public function __construct( Repository $repository, GlobalHelper $gHelper, RequestStack $requestStack )
     {
         $this->repository           = $repository;
         $this->templateGlobalHelper = $gHelper;
+        $this->requestStack         = $requestStack;
     }
 
     /**
@@ -89,11 +93,10 @@ class PreContentViewListener
     public function onPreContentView( PreContentViewEvent $event )
     {
         $contentView = $event->getContentView();
-        $identifier  = $contentView->getTemplateIdentifier();
-        if ( is_string( $identifier ) && $contentView->hasParameter( 'location' ) &&
-             ( preg_match( "/:Full:/i", $identifier )
-               || preg_match( "/:full\//i", $identifier ) )
-        )
+
+        $viewType = $this->requestStack->getCurrentRequest()->attributes->get('viewType');
+
+        if ( is_string( $viewType ) && $contentView->hasParameter( 'location' ) )
         {
             /** @var Location $location */
             $location = $contentView->getParameter( 'location' );
@@ -110,8 +113,24 @@ class PreContentViewListener
             {
                 $type->setContentView( $contentView );
                 $type->setLocation( $location );
-                $children = $type->getChildren( $this->templateGlobalHelper->getViewParameters() );
-                $contentView->addParameters( [ 'children' => $children ] );
+
+                $children = null;
+
+                $method = "get".ucfirst($viewType)."Children";
+
+                if ( method_exists( $type, $method ) )
+                {
+                    $children = $type->$method( $this->templateGlobalHelper->getViewParameters() );
+                }
+                elseif( $viewType == 'full' && method_exists($type, 'getChildren') )
+                {
+                    $children = $type->getChildren( $this->templateGlobalHelper->getViewParameters() );
+                }
+
+                if ( $children != null )
+                {
+                    $contentView->addParameters( [ 'children' => $children ] );
+                }
             }
         }
     }

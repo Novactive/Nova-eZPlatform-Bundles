@@ -93,6 +93,9 @@ abstract class Type
     /**
      * Get the Children
      *
+     * @deprecated Now use dynamic children instead.
+     *             Example : for full view children build a method getFullChildren
+     *
      * @param array $viewParameters
      *
      * @return mixed
