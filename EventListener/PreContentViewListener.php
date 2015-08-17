@@ -42,6 +42,11 @@ class PreContentViewListener
      */
     protected $types;
 
+    /**
+     * The request
+     *
+     * @var RequestStack
+     */
     protected $requestStack;
 
     /**
@@ -49,6 +54,7 @@ class PreContentViewListener
      *
      * @param Repository   $repository
      * @param GlobalHelper $gHelper
+     * @param RequestStack $requestStack
      */
     public function __construct( Repository $repository, GlobalHelper $gHelper, RequestStack $requestStack )
     {
@@ -94,7 +100,7 @@ class PreContentViewListener
     {
         $contentView = $event->getContentView();
 
-        $viewType = $this->requestStack->getCurrentRequest()->attributes->get('viewType');
+        $viewType = $this->requestStack->getCurrentRequest()->attributes->get( 'viewType' );
 
         if ( is_string( $viewType ) && $contentView->hasParameter( 'location' ) )
         {
@@ -114,23 +120,20 @@ class PreContentViewListener
                 $type->setContentView( $contentView );
                 $type->setLocation( $location );
 
-                $children = null;
+                $children = [];
 
-                $method = "get".ucfirst($viewType)."Children";
+                $method = "get" . ucfirst( $viewType ) . "Children";
 
                 if ( method_exists( $type, $method ) )
                 {
                     $children = $type->$method( $this->templateGlobalHelper->getViewParameters() );
                 }
-                elseif( $viewType == 'full' && method_exists($type, 'getChildren') )
+                elseif ( $viewType == 'full' && method_exists( $type, 'getChildren' ) )
                 {
                     $children = $type->getChildren( $this->templateGlobalHelper->getViewParameters() );
                 }
 
-                if ( $children != null )
-                {
-                    $contentView->addParameters( [ 'children' => $children ] );
-                }
+                $contentView->addParameters( ['children' => $children] );
             }
         }
     }
