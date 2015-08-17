@@ -93,9 +93,16 @@ abstract class Type
     /**
      * Get the Children
      *
+     * @deprecated Now use dynamic children instead.
+     *             Example : for full view children build a method getFullChildren
+     *
      * @param array $viewParameters
      *
      * @return mixed
+     * @throws \Exception
      */
-    abstract public function getChildren( $viewParameters );
+    public function getChildren( $viewParameters )
+    {
+        throw new \Exception( "Deprecated, if used, must be reimplemented in the subclass" );
+    }
 }
