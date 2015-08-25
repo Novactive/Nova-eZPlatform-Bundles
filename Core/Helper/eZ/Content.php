@@ -109,12 +109,20 @@ class Content
             $criterion = array_merge( $criterion, $additionnalCriterions );
         }
 
-        $query->criterion = new Criterion\LogicalAnd( $criterion );
+        if ( property_exists( $query, 'query' ) ) {
+            $query->query = new Criterion\LogicalAnd( $criterion );
+        } else {
+            $query->criterion = new Criterion\LogicalAnd( $criterion );
+        }
+
         if ( !empty( $sortClauses ) )
         {
             $query->sortClauses = $sortClauses;
         }
-        $query->limit  = $limit;
+        if ( $limit != null )
+        {
+            $query->limit  = $limit;
+        }
         $query->offset = $offset;
         return $query;
     }
@@ -289,7 +297,12 @@ class Content
         }
 
         $criterion = array_merge( $criterion, $additionnalCriterions );
-        $query->criterion   = new Criterion\LogicalAnd( $criterion );
+        if ( property_exists( $query, 'query' ) ) {
+            $query->query   = new Criterion\LogicalAnd( $criterion );
+        } else {
+            $query->criterion   = new Criterion\LogicalAnd( $criterion );
+        }
+
 
         $query->sortClauses = $sortClause;
         $query->limit = 1;
