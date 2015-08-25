@@ -56,7 +56,7 @@ class Content
         {
             $location = $hit->valueObject;
             $content  = $this->repository->getContentService()->loadContentByContentInfo( $location->contentInfo );
-            $contentResults->addResult( [ 'content' => $content, 'location' => $location ] );
+            $contentResults->addResult( new Wrapper( $content, $location ) );
         }
         return $contentResults;
     }

@@ -80,10 +80,12 @@ class Search
         $searchResults = $searchResults['results'];
         foreach ( $searchResults as $result )
         {
-            $item             = array();
-            $item['content']  = $this->repository->getContentService()->loadContent( $result->ContentObject->ID );
-            $item['location'] = $this->repository->getLocationService()->loadLocation( $result->NodeID );
-            $contentResults->addResult( $item );
+            $contentResults->addResult(
+                new Wrapper(
+                    $this->repository->getContentService()->loadContent( $result->ContentObject->ID ),
+                    $this->repository->getLocationService()->loadLocation( $result->NodeID )
+                )
+            );
         }
 
         return $contentResults;
