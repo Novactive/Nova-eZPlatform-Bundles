@@ -122,7 +122,7 @@ class PreContentViewListener
 
                 $children = [];
 
-                $method = "get" . ucfirst( $viewType ) . "Children";
+                $method = "get" . preg_replace( '/(?:^|_)(.?)/e', "strtoupper('$1')", $viewType ) . "Children";
 
                 if ( method_exists( $type, $method ) )
                 {
