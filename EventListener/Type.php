@@ -98,11 +98,10 @@ abstract class Type
      *
      * @param array $viewParameters
      *
-     * @return mixed
-     * @throws \Exception
+     * @return array
      */
     public function getChildren( $viewParameters )
     {
-        throw new \Exception( "Deprecated, if used, must be reimplemented in the subclass" );
+        return [];
     }
 }
