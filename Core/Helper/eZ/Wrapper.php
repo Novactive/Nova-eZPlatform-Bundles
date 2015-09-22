@@ -35,15 +35,42 @@ class Wrapper implements \ArrayAccess
     public $location;
 
     /**
+     * Extra Data
+     *
+     * @var mixed
+     */
+    protected $extraData;
+
+    /**
      * Constructor
      *
      * @param ValueContent  $content
      * @param ValueLocation $location
+     * @param mixed         $extraData
      */
-    public function __construct( ValueContent $content, ValueLocation $location )
+    public function __construct( ValueContent $content, ValueLocation $location, $extraData = null )
     {
-        $this->content  = $content;
-        $this->location = $location;
+        $this->content   = $content;
+        $this->location  = $location;
+        $this->extraData = $extraData;
+    }
+
+    /**
+     * Has Extra
+     */
+    public function hasExtraData()
+    {
+        return $this->extraData !== null;
+    }
+
+    /**
+     * Get the ExtraData
+     *
+     * @return mixed
+     */
+    public function getExtraData()
+    {
+        return $this->extraData;
     }
 
     /**

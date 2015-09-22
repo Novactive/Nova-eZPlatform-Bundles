@@ -91,6 +91,20 @@ class Structure
     protected $clustering;
 
     /**
+     * AsObjects
+     *
+     * @var bool
+     */
+    protected $asObjects;
+
+    /**
+     * fieldsToReturn
+     *
+     * @var array
+     */
+    protected $fieldsToReturn;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -102,7 +116,10 @@ class Structure
         $this->sortOrder       = [ 'score' => 'desc' ];
         $this->facets          = [];
         $this->filters         = [];
+        $this->contentTypesIds = [];
         $this->extendedFilters = [];
+        $this->asObjects       = true; // like in eZ by default
+        $this->fieldsToReturn  = [];
     }
 
     /**
@@ -113,41 +130,44 @@ class Structure
     public function geteZLegacyFindQuery()
     {
         $ezfQuery            = [];
-        $ezfQuery['query']   = $this->getQuery();
-        $ezfQuery['limit']   = $this->getLimit();
-        $ezfQuery['offset']  = $this->getOffset();
+        $ezfQuery['query'] = $this->getQuery();
+        $ezfQuery['limit'] = $this->getLimit();
+        $ezfQuery['offset'] = $this->getOffset();
         $ezfQuery['sort_by'] = $this->getSortOrder();
+        $ezfQuery['as_objects'] = $this->getAsObjects();
+        $ezfQuery['spell_check'] = [ $this->getSpellCheck() ];
         $ezfQuery['search_result_clustering'] = $this->getClustering();
 
-        if ( $this->getFilters() !== null )
+        if ( count( $this->getFilters() ) > 0 )
         {
             $ezfQuery['filter'] = $this->getFilters();
         }
 
-        if ( $this->getExtendedFilters() !== null )
+        if ( count( $this->getExtendedFilters() ) > 0 )
         {
             $ezfQuery['extended_attribute_filter'] = $this->getExtendedFilters();
         }
 
-        if ( $this->getSubtree() !== null )
+        if ( count( $this->getSubtree() ) > 0 )
         {
             $ezfQuery['subtree_array'] = $this->getSubtree();
         }
 
-        if ( $this->getContentTypesIds() !== null )
+        if ( count( $this->getContentTypesIds() ) > 0 )
         {
             $ezfQuery['class_id'] = $this->getContentTypesIds();
         }
 
-        if ( $this->getFacets() !== null )
+        if ( count( $this->getFacets() ) > 0 )
         {
             $ezfQuery['facet'] = $this->getFacets();
         }
 
-        if ( $this->getSpellCheck() !== null )
+        if ( count( $this->getFieldsToReturn() ) > 0 )
         {
-            $ezfQuery['spell_check'] = [ $this->getSpellCheck() ];
+            $ezfQuery['fields_to_return'] = $this->getFieldsToReturn();
         }
+
         return $ezfQuery;
     }
 
@@ -508,5 +528,54 @@ class Structure
         }
 
         return $filtersNamed;
+    }
+
+    /**
+     * Get the AsObjects
+     *
+     * @return array
+     */
+    public function getAsObjects()
+    {
+        return $this->asObjects;
+    }
+
+    /**
+     * Set the AsObjects
+     *
+     * @param boolean $asObjects asObjects
+     *
+     * @return $this
+     */
+    public function setAsObjects( $asObjects )
+    {
+        $this->asObjects = $asObjects;
+
+        return $this;
+    }
+
+    /**
+     * Get the FieldsToReturn
+     *
+     * @return array
+     */
+    public function getFieldsToReturn()
+    {
+        return $this->fieldsToReturn;
+    }
+
+    /**
+     * Set the FieldsToReturn
+     *
+     * @param array $fieldsToReturn fieldsToReturn
+     *
+     * @return $this
+     */
+    public function setFieldsToReturn( $fieldsToReturn )
+    {
+        $this->setAsObjects( false );
+        $this->fieldsToReturn = $fieldsToReturn;
+
+        return $this;
     }
 }

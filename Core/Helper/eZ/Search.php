@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\Core\MVC\Legacy\Kernel;
 use eZFunctionHandler;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\Search\Structure;
+use eZFindResultNode;
 
 /**
  * Class Search
@@ -78,14 +79,28 @@ class Search
         $contentResults->setResultLimit( $structure->getLimit() );
         $contentResults->setExtras( $searchResults['extras'] );
         $searchResults = $searchResults['results'];
+        $extra = null;
         foreach ( $searchResults as $result )
         {
+            if ( $result instanceof eZFindResultNode ) {
+                $contentId = $result->ContentObject->ID;
+                $locationId = $result->NodeID;
+            }
+            else
+            {
+                $contentId = $result['id'];
+                $locationId = $result['main_node_id'];
+                $extra = $result;
+            }
+
             $contentResults->addResult(
                 new Wrapper(
-                    $this->repository->getContentService()->loadContent( $result->ContentObject->ID ),
-                    $this->repository->getLocationService()->loadLocation( $result->NodeID )
+                    $this->repository->getContentService()->loadContent( $contentId ),
+                    $this->repository->getLocationService()->loadLocation( $locationId ),
+                    $extra
                 )
             );
+
         }
 
         return $contentResults;
