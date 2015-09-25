@@ -9,7 +9,6 @@
  */
 namespace Novactive\Bundle\eZExtraBundle\Core\Helper\eZ;
 
-use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\Core\MVC\Legacy\Kernel;
 use eZFunctionHandler;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\Search\Structure;
@@ -21,11 +20,11 @@ use eZFindResultNode;
 class Search
 {
     /**
-     * Repository eZ Publish
+     * WrapperFactory
      *
-     * @var RepositoryInterface
+     * @var WrapperFactory
      */
-    protected $repository;
+    protected $wrapperFactory;
 
     /**
      * Legacy Kernel Closure
@@ -37,13 +36,13 @@ class Search
     /**
      * Constructor
      *
-     * @param RepositoryInterface $repository
+     * @param WrapperFactory $wrapperFactory
      * @param \Closure            $kernel
      */
-    public function __construct( RepositoryInterface $repository, \Closure $kernel )
+    public function __construct( WrapperFactory $wrapperFactory, \Closure $kernel )
     {
-        $this->repository   = $repository;
-        $this->legacyKernel = $kernel;
+        $this->wrapperFactory = $wrapperFactory;
+        $this->legacyKernel   = $kernel;
     }
 
     /**
@@ -92,18 +91,9 @@ class Search
                 $locationId = $result['main_node_id'];
                 $extra = $result;
             }
-
-            $contentResults->addResult(
-                new Wrapper(
-                    $this->repository->getContentService()->loadContent( $contentId ),
-                    $this->repository->getLocationService()->loadLocation( $locationId ),
-                    $extra
-                )
-            );
-
+            $contentResults->addResult( $this->wrapperFactory->create( $contentId, $locationId, $extra ) );
         }
 
         return $contentResults;
     }
-
 }

@@ -8,8 +8,14 @@ parameters:
     novaezextra.pre_content_view_listener.class: Novactive\Bundle\eZExtraBundle\EventListener\PreContentViewListener
     novactive.ezextra.form.type.search.simple.class: Novactive\Bundle\eZExtraBundle\Form\Type\SimpleSearch
     novaezextra.search.helper.class: Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Search
+    novactive.ezextra.wrapper.factory.class: Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\WrapperFactory
 
 services:
+
+    novactive.ezextra.wrapper.factory:
+        class: %novactive.ezextra.wrapper.factory.class%
+        arguments: [@ezpublish.api.repository]
+
     novactive.ezextra.content.manager:
         class: %novaezextra.content.manager.class%
         arguments: [@ezpublish.api.repository]
@@ -24,11 +30,11 @@ services:
 
     novactive.ezextra.content.helper:
         class: %novaezextra.content.helper.class%
-        arguments: [@ezpublish.api.repository]
+        arguments: [@ezpublish.api.repository, @novactive.ezextra.wrapper.factory]
 
     novactive.ezextra.search.helper:
         class: %novaezextra.search.helper.class%
-        arguments: [@ezpublish.api.repository, @ezpublish_legacy.kernel]
+        arguments: [@novactive.ezextra.wrapper.factory, @ezpublish_legacy.kernel]
 
     novactive.ezextra.pre_content_view_listener:
         class: %novaezextra.pre_content_view_listener.class%

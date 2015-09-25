@@ -30,13 +30,22 @@ class Content
     protected $repository;
 
     /**
+     * WrapperFactory
+     *
+     * @var WrapperFactory
+     */
+    protected $wrapperFactory;
+
+    /**
      * Constructor
      *
      * @param RepositoryInterface $repository
+     * @param WrapperFactory $wrapperFactory
      */
-    public function __construct( RepositoryInterface $repository )
+    public function __construct( RepositoryInterface $repository, WrapperFactory $wrapperFactory )
     {
         $this->repository = $repository;
+        $this->wrapperFactory = $wrapperFactory;
     }
 
     /**
@@ -54,9 +63,7 @@ class Content
         $contentResults->setResultLimit( $limit );
         foreach ( $results->searchHits as $hit )
         {
-            $location = $hit->valueObject;
-            $content  = $this->repository->getContentService()->loadContentByContentInfo( $location->contentInfo );
-            $contentResults->addResult( new Wrapper( $content, $location ) );
+            $contentResults->addResult( $this->wrapperFactory->createByLocation( $hit->valueObject ) );
         }
         return $contentResults;
     }
