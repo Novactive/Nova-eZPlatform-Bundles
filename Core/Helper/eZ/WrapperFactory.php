@@ -42,11 +42,11 @@ class WrapperFactory
      *
      * @param ValueContent|integer  $contentId
      * @param ValueLocation|integer $locationId
-     * @param mixed            $extra
+     * @param mixed                 $extra
      *
      * @return Wrapper
      */
-    public function create( $contentId, $locationId, $extra = null  )
+    public function create( $contentId, $locationId, $extra = null )
     {
         $wrapper = new Wrapper( $contentId, $locationId, $extra );
 
@@ -68,6 +68,20 @@ class WrapperFactory
     }
 
     /**
+     * CreateByLocationID
+     *
+     * @param integer $locationId
+     *
+     * @return Wrapper
+     */
+    public function createByLocationId( $locationId )
+    {
+        $wrapper = new Wrapper( null, $locationId );
+
+        return $wrapper->setRepository( $this->repository );
+    }
+
+    /**
      * CreateByContent
      *
      * @param ValueContent $content
@@ -76,7 +90,7 @@ class WrapperFactory
      */
     public function createByContent( ValueContent $content )
     {
-        $wrapper = new Wrapper( $content, $content->contentInfo->id );
+        $wrapper = new Wrapper( $content, $content->contentInfo->mainLocationId );
 
         return $wrapper->setRepository( $this->repository );
     }
@@ -94,19 +108,4 @@ class WrapperFactory
 
         return $wrapper->setRepository( $this->repository );
     }
-
-    /**
-     * CreateByContentId
-     *
-     * @param integer $contentId
-     *
-     * @return Wrapper
-     */
-    public function createByLocationId( $contentId )
-    {
-        $wrapper = new Wrapper( $contentId );
-
-        return $wrapper->setRepository( $this->repository );
-    }
-
 }
