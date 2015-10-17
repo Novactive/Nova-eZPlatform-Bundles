@@ -100,12 +100,26 @@ class PreContentViewListener
     {
         $contentView = $event->getContentView();
 
-        $viewType = $this->requestStack->getCurrentRequest()->attributes->get( 'viewType' );
-
-        if ( is_string( $viewType ) && $contentView->hasParameter( 'location' ) )
+        // BackwardCompatibility
+        /**
+         * @var \eZ\Publish\Core\MVC\Symfony\View\ContentView $contentView
+         */
+        if ( !method_exists( $contentView, "getViewType" ) )
         {
-            /** @var Location $location */
-            $location = $contentView->getParameter( 'location' );
+            $viewType = $this->requestStack->getCurrentRequest()->attributes->get( 'viewType' );
+
+            $location = $contentView->hasParameter( 'location' ) ? $contentView->getParameter( 'location' ) : null;
+            $content  = $contentView->hasParameter( 'content' )  ? $contentView->getParameter( 'content' )  : null;
+        }
+        else
+        {
+            $viewType = $contentView->getViewType();
+            $location = $contentView->getLocation();
+            $content  = $contentView->getContent();
+        }
+
+        if ( is_string( $viewType ) && $location instanceof Location )
+        {
             if ( $location->invisible == 1 or $location->hidden == 1 )
             {
                 throw new NotFoundHttpException( "Page not found" );
@@ -119,6 +133,7 @@ class PreContentViewListener
             {
                 $type->setContentView( $contentView );
                 $type->setLocation( $location );
+                $type->setContent( $content );
 
                 $children = [];
 

@@ -11,6 +11,7 @@ namespace Novactive\Bundle\eZExtraBundle\EventListener;
 
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Repository;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Content as ContentHelper;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Search as SearchHelper;
@@ -34,6 +35,13 @@ abstract class Type
      * @var Location
      */
     protected $location;
+
+    /**
+     * The Content
+     *
+     * @var Content
+     */
+    protected $content;
 
     /**
      * Repository eZ
@@ -74,6 +82,16 @@ abstract class Type
     public function setLocation( Location $location )
     {
         $this->location = $location;
+    }
+
+    /**
+     * Set the Content
+     *
+     * @param Content $content
+     */
+    public function setContent( Content $content )
+    {
+        $this->content = $content;
     }
 
     /**
