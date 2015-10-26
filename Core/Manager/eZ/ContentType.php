@@ -284,9 +284,16 @@ class ContentType
             $lines    = explode( "\n", $definition['settings'] );
             foreach ( $lines as $line )
             {
-                preg_match( "/(\\s*)([a-zA-Z]*)(\\s*):(\\s*)\\[([^\\[\\]]*)\\](\\s*)/uisx", $line, $matches );
+                preg_match( "/(\\s*)([a-zA-Z]*)(\\s*):(\\s*)\\[?([^\\[\\]]*)\\]?(\\s*)/uisx", $line, $matches );
                 $key   = trim( $matches[2] );
                 $value = explode( ",", trim( $matches[5] ) );
+                array_walk(
+                    $value,
+                    function ( &$value, &$key )
+                    {
+                        $value =  trim( $value );
+                    }
+                );
                 if ( $key != '' )
                 {
                     $settings[$key] = $value;
@@ -307,9 +314,13 @@ class ContentType
     {
         if ( $fieldTypeIdentifier == "ezselection" )
         {
+            $isMultiple = false;
+            if ($isM = $settings['Multiple']) {
+                $isMultiple = $isM[0] == "Y" ? true : false;
+            }
             if ( $list = $settings['List'] ) {
                 $struct->fieldSettings = [
-                    'isMultiple' => false,
+                    'isMultiple' => $isMultiple,
                     'options' => $list
                 ];
             }
