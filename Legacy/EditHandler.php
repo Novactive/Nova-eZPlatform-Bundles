@@ -60,7 +60,7 @@ abstract class EditHandler extends \eZContentObjectEditHandler
                 } else {
                     $service->create( $object );
                 }
-            } catch( Exception $e ) {
+            } catch( \Exception $e ) {
                 //@todo: LOG exception
             }
         }
