@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Values\Content\Content as ValueContent;
-use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType as eZContentType;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
@@ -216,11 +216,11 @@ class Content
     /**
      * Autofill the Struct with the available field in $data
      *
-     * @param ContentType $contentType
+     * @param eZContentType $contentType
      * @param ValueObject $contentStruct
      * @param array       $data
      */
-    protected function autoFillStruct( ContentType $contentType, ValueObject $contentStruct, $data )
+    protected function autoFillStruct( eZContentType $contentType, ValueObject $contentStruct, $data )
     {
         /** @var ContentUpdateStruct|ContentUpdateStruct $contentStruct */
 
