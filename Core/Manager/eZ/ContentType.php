@@ -315,10 +315,10 @@ class ContentType
         if ( $fieldTypeIdentifier == "ezselection" )
         {
             $isMultiple = false;
-            if ($isM = $settings['Multiple']) {
+            if ( isset( $settings['Multiple'] ) &&  ( $isM = $settings['Multiple'] ) ) {
                 $isMultiple = $isM[0] == "Y" ? true : false;
             }
-            if ( $list = $settings['List'] ) {
+            if ( isset( $settings['List'] ) && ( $list = $settings['List'] ) ) {
                 $struct->fieldSettings = [
                     'isMultiple' => $isMultiple,
                     'options' => $list
