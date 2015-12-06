@@ -45,7 +45,7 @@ services:
     novactive.ezextra.abstract.children.provider:
         class: %novaezextra.abstract.children.provider.class%
         abstract: true
-        arguments: [@ezpublish.api.repository, @novactive.ezextra.content.helper, @novactive.ezextra.search.helper]
+        arguments: [@ezpublish.api.repository, @novactive.ezextra.content.helper, @novactive.ezextra.search.helper, @ezpublish.config.resolver]
 
     novactive.ezextra.form.type.search.simple:
         class: %novactive.ezextra.form.type.search.simple.class%
