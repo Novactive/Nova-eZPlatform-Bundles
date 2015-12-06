@@ -124,6 +124,11 @@ class Content
             $contentCreateStruct->modificationDate = $options['modified'];
         }
 
+        if ( !empty( $options['alwaysAvailable'] ) )
+        {
+            $contentCreateStruct->alwaysAvailable = $options['alwaysAvailable'];
+        }
+
         $this->autoFillStruct(
             $this->getContentTypeService()->loadContentTypeByIdentifier( $contentTypeIdentifier ),
             $contentCreateStruct,
