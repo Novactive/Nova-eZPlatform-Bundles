@@ -81,7 +81,7 @@ class Content
      *
      * @return Query
      */
-    protected function fetchContentQuery(
+    public function fetchContentQuery(
         $parentLocationId,
         $typeIdentifiers = [],
         $sortClauses = [],
