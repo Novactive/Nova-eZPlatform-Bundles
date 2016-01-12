@@ -5,7 +5,7 @@
  * @package   Novactive\Bundle\eZExtraBundle
  * @author    Novactive <dir.tech@novactive.com>
  * @copyright 2015 Novactive
- * @license   https://github.com/Novactive/NovaeZSEOBundle/blob/master/LICENSE MIT Licence
+ * @license   https://github.com/Novactive/NovaeZExtraBundle/blob/master/LICENSE MIT Licence
  */
 namespace Novactive\Bundle\eZExtraBundle\Controller;
 
@@ -24,11 +24,12 @@ class PictureController extends Controller
      * @param integer $contentId
      * @param string  $fieldIdentifier
      * @param string  $alias
+     * @param array  $options
      *
      * @return array
      * @Template
      */
-    public function aliasAction( $contentId, $fieldIdentifier, $alias )
+    public function aliasAction( $contentId, $fieldIdentifier, $alias, $options = [] )
     {
         $repository = $this->getRepository();
         try
@@ -36,7 +37,7 @@ class PictureController extends Controller
             $contentService = $repository->getContentService();
             $content        = $contentService->loadContent( $contentId );
 
-            return [ "picture" => $content, "fieldIdentifier" => $fieldIdentifier, "alias" => $alias ];
+            return [ "picture" => $content, "fieldIdentifier" => $fieldIdentifier, "alias" => $alias, "options" => $options ];
         }
         catch ( \Exception $e )
         {
@@ -46,4 +47,5 @@ class PictureController extends Controller
             return $r;
         }
     }
+
 }

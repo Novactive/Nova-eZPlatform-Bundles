@@ -5,7 +5,7 @@
  * @package   Novactive\Bundle\eZExtraBundle
  * @author    Novactive <dir.tech@novactive.com>
  * @copyright 2015 Novactive
- * @license   https://github.com/Novactive/NovaeZSEOBundle/blob/master/LICENSE MIT Licence
+ * @license   https://github.com/Novactive/NovaeZExtraBundle/blob/master/LICENSE MIT Licence
  */
 namespace Novactive\Bundle\eZExtraBundle\EventListener;
 
@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Repository;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Content as ContentHelper;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Search as SearchHelper;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver as ConfigResolver;
 
 /**
  * Class Type
@@ -65,6 +66,13 @@ abstract class Type
     protected $searchHelper;
 
     /**
+     * Config resolver
+     *
+     * @var ConfigResolver
+     */
+    protected $configResolver;
+
+    /**
      * Set the Content View
      *
      * @param ContentView $contentView
@@ -97,15 +105,17 @@ abstract class Type
     /**
      * Constructor
      *
-     * @param Repository    $repository
-     * @param ContentHelper $contentHelper
-     * @param SearchHelper  $searchHelper
+     * @param Repository      $repository
+     * @param ContentHelper   $contentHelper
+     * @param SearchHelper    $searchHelper
+     * @param ConfigResolver  $configResolver
      */
-    public function __construct( Repository $repository, ContentHelper $contentHelper, SearchHelper $searchHelper )
+    public function __construct( Repository $repository, ContentHelper $contentHelper, SearchHelper $searchHelper, ConfigResolver $configResolver )
     {
-        $this->repository    = $repository;
-        $this->contentHelper = $contentHelper;
-        $this->searchHelper  = $searchHelper;
+        $this->repository      = $repository;
+        $this->contentHelper   = $contentHelper;
+        $this->searchHelper    = $searchHelper;
+        $this->configResolver  = $configResolver;
     }
 
     /**
