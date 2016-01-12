@@ -17,7 +17,8 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "phpoffice/phpexcel": "~1.8"
     },
     "require-dev": {
         "phpmd/phpmd": "2.*",

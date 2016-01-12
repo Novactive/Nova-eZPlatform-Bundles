@@ -22,7 +22,6 @@ use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
 use eZ\Publish\Core\FieldType\FieldSettings;
-
 /**
  * Class ContentType
  */
@@ -328,10 +327,33 @@ class ContentType
 
         if ( $fieldTypeIdentifier == "ezobjectrelationlist" )
         {
-            if ( $to = $settings['To'] ) {
-                $struct->fieldSettings = [
-                    'selectionContentTypes' => $to
-                ];
+            if ($to = $settings['To']) {
+                $struct->fieldSettings['selectionContentTypes'] = $to;
+            }
+            if ($defaultLocation = $settings['DefaultLocation']) {
+                // just the first is used
+                if ($alias = $defaultLocation[0]) {
+                    try {
+                        $urlAlias = $this->getRepository()->getURLAliasService()->lookup($alias);
+                        $struct->fieldSettings['selectionDefaultLocation'] = $urlAlias->destination;
+                    } catch (NotFoundException $e) {
+                        // do nothing then
+                    }
+                }
+            }
+        }
+        if ( $fieldTypeIdentifier == "ezobjectrelation" )
+        {
+            if ($defaultLocation = $settings['DefaultLocation']) {
+                // just the first is used
+                if ($alias = $defaultLocation[0]) {
+                    try {
+                        $urlAlias = $this->getRepository()->getURLAliasService()->lookup($alias);
+                        $struct->fieldSettings['selectionRoot'] = $urlAlias->destination;
+                    } catch (NotFoundException $e) {
+                        // do nothing then
+                    }
+                }
             }
         }
     }
