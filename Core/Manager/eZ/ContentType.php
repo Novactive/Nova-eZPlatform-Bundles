@@ -330,7 +330,7 @@ class ContentType
             if ($to = $settings['To']) {
                 $struct->fieldSettings['selectionContentTypes'] = $to;
             }
-            if ($defaultLocation = $settings['DefaultLocation']) {
+            if (isset($settings['DefaultLocation']) && ($defaultLocation = $settings['DefaultLocation'])) {
                 // just the first is used
                 if ($alias = $defaultLocation[0]) {
                     try {
@@ -344,12 +344,13 @@ class ContentType
         }
         if ( $fieldTypeIdentifier == "ezobjectrelation" )
         {
-            if ($defaultLocation = $settings['DefaultLocation']) {
+            if (isset($settings['DefaultLocation']) && ($defaultLocation = $settings['DefaultLocation'])) {
                 // just the first is used
                 if ($alias = $defaultLocation[0]) {
                     try {
                         $urlAlias = $this->getRepository()->getURLAliasService()->lookup($alias);
                         $struct->fieldSettings['selectionRoot'] = $urlAlias->destination;
+                        $struct->fieldSettings['selectionMethod'] = 0;
                     } catch (NotFoundException $e) {
                         // do nothing then
                     }
