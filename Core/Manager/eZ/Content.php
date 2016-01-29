@@ -185,6 +185,14 @@ class Content
      */
     protected function publishVersion( ValueContent $draft, $options = [] )
     {
+        if ( ( array_key_exists( 'callback_before_publish', $options ) ) && ( is_callable( $options['callback_before_publish'] ) ) )
+        {
+            $contentService = $this->getContentService();
+            $contentUpdateStruct = $contentService->newContentUpdateStruct();
+            $options['callback_before_publish']( $draft, $contentUpdateStruct );
+            $draft = $contentService->updateContent( $draft->versionInfo, $contentUpdateStruct );
+        }
+
         $content = $this->getContentService()->publishVersion( $draft->versionInfo );
 
         if ( count( $options ) > 0 )
