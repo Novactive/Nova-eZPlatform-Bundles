@@ -23,6 +23,15 @@ Today it handles 3 versions:
 * Desktop: default choice
 * Retina: devicePixelRatio > 1,
 
+Then it is really interesting to understand that only the good version will be loaded in the browser.
+The Lazy loading is based on the view port too, if an image is not visible on the screen it will be pre-loaded and loaded on the scroll action.
+
+It means:
+
+* it reduces drastically the size and the load time of the page by not loading the non visible images
+* when an image is loaded, it ensures that is the adapted one.
+
+
 ```twig
         {{ ez_render_field(content, 'image', {
             parameters: {
