@@ -11,13 +11,38 @@ Novactive eZ Responsive Images is a lightweight eZ Publish 5.x|6.x bundle for Re
 
 ##  Install
 
+### Usage and main feature
+
+By default this bundle will use [picturefill](https://github.com/scottjehl/picturefill) to load the good version of the your Variation.
+
+You can also decided to lazy load the image, the bundle uses in this case [unveil.js](https://github.com/luis-almeida/unveil) to load the good version of the your Variation.
+
+Today it handles 3 versions:
+
+* Mobile: viewport width < 640px
+* Desktop: default choice
+* Retina: devicePixelRatio > 1,
+
+```twig
+        {{ ez_render_field(content, 'image', {
+            parameters: {
+                alias: 'blog_post_line_home',
+                class: 'img-responsive img-rounded',
+                unveiled: true,
+            }
+        }) }}
+```
+
+> Unveiled means "Lazy Loading"
+> Read below, you will need 2 more aliases for each current alias that you have.
+
 ### Use Composer
 
-Add the following to your composer.json and run `php composer.phar update novactive/ezresponsiveimagesbundle` to refresh dependencies:
+Add the following to your composer.json and run `php composer.phar require novactive/ezresponsiveimagesbundle` to refresh dependencies:
 
 ```json
 "require": {
-    "novactive/ezresponsiveimagesbundle": "dev-master",
+    "novactive/ezresponsiveimagesbundle": "dev-master"
 }
 ```
 
