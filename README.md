@@ -13,9 +13,9 @@ Novactive eZ Responsive Images is a lightweight eZ Publish 5.x|6.x bundle for Re
 
 ### Usage and main feature
 
-By default this bundle will use [picturefill](https://github.com/scottjehl/picturefill) to load the good version of the your Variation.
+By default this bundle will use [picturefill](https://github.com/scottjehl/picturefill) to load the good version of the your variations.
 
-You can also decided to lazy load the image, the bundle uses in this case [unveil.js](https://github.com/luis-almeida/unveil) to load the good version of the your Variation.
+You can also decide to lazy load the images, in this case the bundle uses [unveil.js](https://github.com/luis-almeida/unveil) to load the good version of the variation alias name.
 
 Today it handles 3 versions:
 
@@ -34,6 +34,7 @@ Today it handles 3 versions:
 ```
 
 > Unveiled means "Lazy Loading"
+
 > Read below, you will need 2 more aliases for each current alias that you have.
 
 ### Use Composer
@@ -66,7 +67,7 @@ public function registerBundles()
 }
 ```
 
-### Create the _mobile and _retian Alias Name
+### Create the _mobile and _retina Alias Name
 
 The bundle requires that you create 2 more alias for each alias you are using. Ex:
 
