@@ -344,13 +344,18 @@ class ContentType
         }
         if ( $fieldTypeIdentifier == "ezobjectrelation" )
         {
+            if(isset($settings['BrowseMode']) && (strpos(strtolower(implode('', $settings['BrowseMode'])), 'dropdownlist') !== false)){
+                $struct->fieldSettings['selectionMethod'] = 1;
+            }else{
+                $struct->fieldSettings['selectionMethod'] = 0;
+            }
+
             if (isset($settings['DefaultLocation']) && ($defaultLocation = $settings['DefaultLocation'])) {
                 // just the first is used
                 if ($alias = $defaultLocation[0]) {
                     try {
                         $urlAlias = $this->getRepository()->getURLAliasService()->lookup($alias);
                         $struct->fieldSettings['selectionRoot'] = $urlAlias->destination;
-                        $struct->fieldSettings['selectionMethod'] = 0;
                     } catch (NotFoundException $e) {
                         // do nothing then
                     }
