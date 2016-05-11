@@ -126,11 +126,10 @@ class Content
         {
             $query->sortClauses = $sortClauses;
         }
-        if ( $limit != null )
-        {
-            $query->limit  = $limit;
-        }
+
+        $query->limit  = $limit === null ? PHP_INT_MAX : $limit;
         $query->offset = $offset;
+
         return $query;
     }
 
