@@ -46,6 +46,11 @@ class CreateContentTypesCommand extends ContainerAwareCommand
                 'file',
                 InputArgument::REQUIRED,
                 'XLSX File to import'
+            )
+            ->addArgument(
+            'tr',
+            InputArgument::REQUIRED,
+            'Language of contentType (eng-GB, fre-FR...)'
             );
     }
 
@@ -60,6 +65,7 @@ class CreateContentTypesCommand extends ContainerAwareCommand
 
             return false;
         }
+        $translation = $input->getArgument('tr');
 
         $oPHPExcel = PHPExcel_IOFactory::load($filepath);
         if (!$oPHPExcel) {
@@ -78,7 +84,7 @@ class CreateContentTypesCommand extends ContainerAwareCommand
             $output->writeln($oWorksheet->getTitle());
 
             // Mapping
-            $lang                     = "eng-GB";
+            $lang                     = $translation;
             $contentTypeName          = $oWorksheet->getCell("B2")->getValue();
             $contentTypeIdentifier    = $oWorksheet->getCell("B3")->getValue();
             $contentTypeDescription   = $oWorksheet->getCell("B4")->getValue();
