@@ -46,6 +46,11 @@ class CreateContentTypesCommand extends ContainerAwareCommand
                 'file',
                 InputArgument::REQUIRED,
                 'XLSX File to import'
+            )
+            ->addArgument(
+                'tr',
+                InputArgument::OPTIONAL,
+                'Translation of contentType (eng-GB, fre-FR...)'
             );
     }
 
@@ -54,6 +59,12 @@ class CreateContentTypesCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $translation = $input->getArgument('tr');
+        $translationHelper = $this->getContainer()->get( 'ezpublish.translation_helper' );
+        $availableLanguage = $translationHelper->getAvailableLanguages();
+        if ( is_null($translation) || !in_array($translation,$availableLanguage) )
+            $translation = "eng-GB";
+
         $filepath = $input->getArgument('file');
         if (!file_exists($filepath)) {
             $output->writeln("<error>{$filepath} not found.</error>");
@@ -78,7 +89,8 @@ class CreateContentTypesCommand extends ContainerAwareCommand
             $output->writeln($oWorksheet->getTitle());
 
             // Mapping
-            $lang                     = "eng-GB";
+
+            $lang                     = $translation;
             $contentTypeName          = $oWorksheet->getCell("B2")->getValue();
             $contentTypeIdentifier    = $oWorksheet->getCell("B3")->getValue();
             $contentTypeDescription   = $oWorksheet->getCell("B4")->getValue();
