@@ -51,6 +51,11 @@ class CreateContentTypesCommand extends ContainerAwareCommand
                 'tr',
                 InputArgument::OPTIONAL,
                 'Translation of contentType (eng-GB, fre-FR...)'
+            )
+            ->addArgument(
+                'content_type_group_identifier',
+                InputArgument::OPTIONAL,
+                'Content type group identifier (Content, Contenu, Custom group...)'
             );
     }
 
@@ -160,11 +165,22 @@ class CreateContentTypesCommand extends ContainerAwareCommand
                     $contentTypeFieldDefinitionsData[] = $contentTypeFieldsData;
                 }
             }
-
+            $contentTypeGroupIdentifierParam = $input->getArgument('content_type_group_identifier');
+            $contentTypeGroups = $contentTypeManager->getContentTypeService()->loadContentTypeGroups();
+            $contentTypeGroupIdentifier = null;
+            foreach ($contentTypeGroups as $contentTypeGroup)
+            {
+                if ( !is_null($contentTypeGroupIdentifierParam) && $contentTypeGroup->attribute('identifier') == $contentTypeGroupIdentifierParam )
+                {
+                    $contentTypeGroupIdentifier = $contentTypeGroupIdentifierParam;
+                    break;
+                }
+            }
+            $contentTypeGroupIdentifier = (!is_null($contentTypeGroupIdentifier)?$contentTypeGroupIdentifier:$contentTypeGroups[0]->attribute('identifier'));
             try {
                 $contentTypeManager->createUpdateContentType(
                     $contentTypeIdentifier,
-                    'Content',
+                    $contentTypeGroupIdentifier,
                     $contentTypeData,
                     $contentTypeFieldDefinitionsData,
                     [ ],
