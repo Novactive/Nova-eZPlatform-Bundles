@@ -26,13 +26,32 @@ class Tag
     protected $eZTagsService;
 
     /**
+     * @var int
+     */
+    protected $eZTagsVersion;
+
+    /**
      * Constructor
      *
      * @param TagsService $service
      */
-    public function __construct( TagsService $service )
+    public function __construct(TagsService $service)
     {
         $this->eZTagsService = $service;
+        $this->eZTagsVersion = 1;
+        if (method_exists('Netgen\TagsBundle\API\Repository\Values\Tags\TagCreateStruct', 'setKeyword')) {
+            $this->eZTagsVersion = 2;
+        }
+    }
+
+    /**
+     * Is it eZ Tags 2
+     *
+     * @return bool
+     */
+    protected function iseZTagsV2()
+    {
+        return $this->eZTagsVersion == 2;
     }
 
     /**
@@ -51,18 +70,25 @@ class Tag
      * @param integer $parentTagId
      * @param string  $name
      * @param array   $options
+     * @param string  $lang
      *
      * @return Tag
      */
-    public function createTag( $parentTagId, $name, $options = [] )
+    public function createTag($parentTagId, $name, $options = [], $lang = 'eng-US')
     {
-        $tagStruct = $this->eZTagsService->newTagCreateStruct( $parentTagId, $name );
-        if ( !empty( $options['remoteId'] ) )
-        {
+        if ($this->iseZTagsV2()) {
+            $tagStruct                   = $this->eZTagsService->newTagCreateStruct($parentTagId, $lang);
+            $tagStruct->mainLanguageCode = $lang;
+            $tagStruct->setKeyword($name);
+        } else {
+            $tagStruct = $this->eZTagsService->newTagCreateStruct($parentTagId, $name);
+        }
+
+        if (!empty($options['remoteId'])) {
             $tagStruct->remoteId = $options['remoteId'];
         }
 
-        return $this->eZTagsService->createTag( $tagStruct );
+        return $this->eZTagsService->createTag($tagStruct);
     }
 
     /**
@@ -70,15 +96,19 @@ class Tag
      *
      * @param TagValue $tag
      * @param string   $name
+     * @param string   $lang
      *
      * @return TagValue
      */
-    public function updateTag( TagValue $tag, $name )
+    public function updateTag(TagValue $tag, $name, $lang = 'eng-US')
     {
-        $tagUpdateStruct          = $this->eZTagsService->newTagUpdateStruct();
-        $tagUpdateStruct->keyword = $name;
-
-        $this->eZTagsService->updateTag( $tag, $tagUpdateStruct );
+        $tagUpdateStruct = $this->eZTagsService->newTagUpdateStruct();
+        if ($this->iseZTagsV2()) {
+            $tagUpdateStruct->setKeyword($name, $lang);
+        } else {
+            $tagUpdateStruct->keyword = $name;
+        }
+        $this->eZTagsService->updateTag($tag, $tagUpdateStruct);
 
         return $tag;
     }
@@ -90,31 +120,26 @@ class Tag
      * @param string  $name
      * @param string  $remoteId
      * @param array   $options
+     * @param string  $lang
      *
      * @return TagValue
      */
-    public function createUpdateTag( $parentTagId, $name, $remoteId, $options = [] )
+    public function createUpdateTag($parentTagId, $name, $remoteId, $options = [], $lang = 'eng-US')
     {
         $options['remoteId'] = $remoteId;
-        try
-        {
-            $tag = $this->eZTagsService->loadTagByRemoteId( $remoteId );
-            if ( array_key_exists( 'do_no_update', $options ) && ( $options['do_no_update'] == true ) )
-            {
+        try {
+            $tag = $this->eZTagsService->loadTagByRemoteId($remoteId);
+            if (array_key_exists('do_no_update', $options) && ($options['do_no_update'] == true)) {
                 return $tag;
             }
-            $newTag = $this->updateTag( $tag, $name );
-            if ( ( array_key_exists( 'callback_update', $options ) ) && ( is_callable( $options['callback_update'] ) ) )
-            {
-                $options['callback_update']( $newTag );
+            $newTag = $this->updateTag($tag, $name, $lang);
+            if ((array_key_exists('callback_update', $options)) && (is_callable($options['callback_update']))) {
+                $options['callback_update']($newTag);
             }
-        }
-        catch ( NotFoundException $e )
-        {
-            $newTag = $this->createTag( $parentTagId, $name, $options );
-            if ( ( array_key_exists( 'callback_create', $options ) ) && ( is_callable( $options['callback_create'] ) ) )
-            {
-                $options['callback_create']( $newTag );
+        } catch (NotFoundException $e) {
+            $newTag = $this->createTag($parentTagId, $name, $options, $lang);
+            if ((array_key_exists('callback_create', $options)) && (is_callable($options['callback_create']))) {
+                $options['callback_create']($newTag);
             }
         }
 
@@ -128,13 +153,14 @@ class Tag
      * @param string  $name
      * @param string  $remoteId
      * @param array   $options
+     * @param string  $lang
      *
      * @return TagValue
      */
-    public function getCreateTag( $parentTagId, $name, $remoteId, $options = [] )
+    public function getCreateTag($parentTagId, $name, $remoteId, $options = [], $lang = 'eng-US')
     {
         $options['do_no_update'] = true;
 
-        return $this->createUpdateTag( $parentTagId, $name, $remoteId, $options );
+        return $this->createUpdateTag($parentTagId, $name, $remoteId, $options, $lang);
     }
 }
