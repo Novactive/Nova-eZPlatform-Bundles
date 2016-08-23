@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper;
-
+use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 /**
  * Class PreContentViewListener
  */
@@ -100,9 +100,10 @@ class PreContentViewListener
     {
         $contentView = $event->getContentView();
 
+        $location = $content = null;
         // BackwardCompatibility
         /**
-         * @var \eZ\Publish\Core\MVC\Symfony\View\ContentView $contentView
+         * @var ContentView $contentView
          */
         if ( !method_exists( $contentView, "getViewType" ) )
         {
@@ -114,8 +115,11 @@ class PreContentViewListener
         else
         {
             $viewType = $contentView->getViewType();
-            $location = $contentView->getLocation();
-            $content  = $contentView->getContent();
+            if ($contentView instanceof ContentView)
+            {
+                $location = $contentView->getLocation();
+                $content  = $contentView->getContent();
+            }
         }
 
         if ( is_string( $viewType ) && $location instanceof Location )
