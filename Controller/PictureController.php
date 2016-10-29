@@ -24,25 +24,24 @@ class PictureController extends Controller
      * @param integer $contentId
      * @param string  $fieldIdentifier
      * @param string  $alias
-     * @param array  $options
+     * @param array   $options
      *
-     * @return array
+     * @return array|Response
      * @Template
      */
-    public function aliasAction( $contentId, $fieldIdentifier, $alias, $options = [] )
+    public function aliasAction($contentId, $fieldIdentifier, $alias, $options = [])
     {
         $repository = $this->getRepository();
-        try
-        {
+        try {
             $contentService = $repository->getContentService();
-            $content        = $contentService->loadContent( $contentId );
+            $content        = $contentService->loadContent($contentId);
 
-            return [ "picture" => $content, "fieldIdentifier" => $fieldIdentifier, "alias" => $alias, "options" => $options ];
-        }
-        catch ( \Exception $e )
-        {
+            return [
+                "picture" => $content, "fieldIdentifier" => $fieldIdentifier, "alias" => $alias, "options" => $options
+            ];
+        } catch (\Exception $e) {
             $r = new Response();
-            $r->setContent( "Object $contentId doesn't exist ($fieldIdentifier, $alias)" );
+            $r->setContent("Object $contentId doesn't exist ($fieldIdentifier, $alias)");
 
             return $r;
         }

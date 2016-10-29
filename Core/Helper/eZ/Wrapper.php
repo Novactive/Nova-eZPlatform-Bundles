@@ -74,30 +74,26 @@ class Wrapper implements \ArrayAccess
      * @param ValueLocation|integer $location
      * @param mixed                 $extraData
      */
-    public function __construct( $contentId = null, $locationId = null, $extraData = null )
+    public function __construct($contentId = null, $locationId = null, $extraData = null)
     {
-        if ( $contentId == null && $locationId == null )
-        {
-            throw new Exception( "NovaExtraWrapper: you must provide at least contentId or locationId" );
+        if ($contentId == null && $locationId == null) {
+            throw new Exception("NovaExtraWrapper: you must provide at least contentId or locationId");
         }
 
         $this->contentId  = $contentId;
         $this->locationId = $locationId;
 
         // Ensure the backward compatibility
-        if ( $contentId instanceof ValueContent )
-        {
+        if ($contentId instanceof ValueContent) {
             $this->contentId = $contentId->id;
             $this->content   = $contentId;
-            if ( $locationId === null )
-            {
+            if ($locationId === null) {
                 $this->locationId = $contentId->contentInfo->mainLocationId;
             }
         }
-        if ( $locationId instanceof ValueLocation )
-        {
+        if ($locationId instanceof ValueLocation) {
             $this->locationId = $locationId->id;
-            $this->contentId = $locationId->contentInfo->id;
+            $this->contentId  = $locationId->contentInfo->id;
             $this->location   = $locationId;
         }
         $this->extraData = $extraData;
@@ -110,7 +106,7 @@ class Wrapper implements \ArrayAccess
      *
      * @return $this
      */
-    public function setRepository( Repository $repository )
+    public function setRepository(Repository $repository)
     {
         $this->repository = $repository;
 
@@ -132,7 +128,7 @@ class Wrapper implements \ArrayAccess
      *
      * @return $this
      */
-    public function setExtraData( $data )
+    public function setExtraData($data)
     {
         $this->extraData = $data;
 
@@ -176,18 +172,14 @@ class Wrapper implements \ArrayAccess
      */
     public function getLocation()
     {
-        if ( $this->location instanceof ValueLocation )
-        {
+        if ($this->location instanceof ValueLocation) {
             return $this->location;
         }
-        if ( $this->locationId == null && $this->contentId > 0 )
-        {
+        if ($this->locationId == null && $this->contentId > 0) {
             $this->location = $this->repository->getLocationService()->loadLocation(
                 $this->getContent()->contentInfo->mainLocationId
             );
-        }
-        else
-        {
+        } else {
             $this->location = $this->repository->getLocationService()->loadLocation(
                 $this->locationId
             );
@@ -203,21 +195,16 @@ class Wrapper implements \ArrayAccess
      */
     public function getContent()
     {
-        if ( $this->content instanceof ValueContent )
-        {
+        if ($this->content instanceof ValueContent) {
             return $this->content;
         }
-        if ( !$this->content instanceof ValueContent )
-        {
-            if ( $this->contentId == null && $this->locationId > 0 )
-            {
+        if (!$this->content instanceof ValueContent) {
+            if ($this->contentId == null && $this->locationId > 0) {
                 $this->content = $this->repository->getContentService()->loadContent(
                     $this->getLocation()->contentInfo->id
                 );
-            }
-            else
-            {
-                $this->content = $this->repository->getContentService()->loadContent( $this->contentId );
+            } else {
+                $this->content = $this->repository->getContentService()->loadContent($this->contentId);
             }
         }
 
@@ -232,18 +219,17 @@ class Wrapper implements \ArrayAccess
      * @return ValueContent|ValueLocation
      * @throws PropertyNotFoundException
      */
-    public function __get( $name )
+    public function __get($name)
     {
-        switch( $name )
-        {
-        case "content":
-            return $this->getContent();
-            break;
-        case "location":
-            return $this->getLocation();
-            break;
+        switch ($name) {
+            case "content":
+                return $this->getContent();
+                break;
+            case "location":
+                return $this->getLocation();
+                break;
         }
-        throw new PropertyNotFoundException( "Can't find property: " . __CLASS__ . "->{$name}" );
+        throw new PropertyNotFoundException("Can't find property: ".__CLASS__."->{$name}");
     }
 
     /**
@@ -254,26 +240,25 @@ class Wrapper implements \ArrayAccess
      *
      * @throws PropertyReadOnlyException
      */
-    public function __set( $name, $value )
+    public function __set($name, $value)
     {
-        throw new PropertyReadOnlyException( "Can't set property: " . __CLASS__ . "->{$name}" );
+        throw new PropertyReadOnlyException("Can't set property: ".__CLASS__."->{$name}");
     }
 
     /**
      * {@inheritdoc}
      */
-    public function offsetExists( $offset )
+    public function offsetExists($offset)
     {
-        return property_exists( $this, $offset );
+        return property_exists($this, $offset);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function offsetGet( $offset )
+    public function offsetGet($offset)
     {
-        if ( property_exists( $this, $offset ) )
-        {
+        if (property_exists($this, $offset)) {
             return $this->$offset();
         }
     }
@@ -281,16 +266,16 @@ class Wrapper implements \ArrayAccess
     /**
      * {@inheritdoc}
      */
-    public function offsetSet( $offset, $value )
+    public function offsetSet($offset, $value)
     {
-        throw new PropertyReadOnlyException( "Can't set property: " . __CLASS__ . "[{$offset}]" );
+        throw new PropertyReadOnlyException("Can't set property: ".__CLASS__."[{$offset}]");
     }
 
     /**
      * {@inheritdoc}
      */
-    public function offsetUnset( $offset )
+    public function offsetUnset($offset)
     {
-        throw new PropertyReadOnlyException( "Can't unset property: " . __CLASS__ . "[{$offset}]" );
+        throw new PropertyReadOnlyException("Can't unset property: ".__CLASS__."[{$offset}]");
     }
 }

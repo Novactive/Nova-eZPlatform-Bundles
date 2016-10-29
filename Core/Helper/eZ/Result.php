@@ -74,7 +74,7 @@ class Result implements \Iterator, \ArrayAccess, \Countable
      *
      * @return $this
      */
-    public function setResultTotalCount( $resultCount )
+    public function setResultTotalCount($resultCount)
     {
         $this->resultTotalCount = $resultCount;
 
@@ -98,7 +98,7 @@ class Result implements \Iterator, \ArrayAccess, \Countable
      *
      * @return $this
      */
-    public function setResults( $results )
+    public function setResults($results)
     {
         $this->results = $results;
 
@@ -112,7 +112,7 @@ class Result implements \Iterator, \ArrayAccess, \Countable
      *
      * @return $this
      */
-    public function addResult( $result )
+    public function addResult($result)
     {
         $this->results[] = $result;
 
@@ -126,7 +126,7 @@ class Result implements \Iterator, \ArrayAccess, \Countable
      *
      * @return $this
      */
-    public function setExtras( $extras )
+    public function setExtras($extras)
     {
         $this->extras = $extras;
 
@@ -160,7 +160,7 @@ class Result implements \Iterator, \ArrayAccess, \Countable
      *
      * @return $this
      */
-    public function setResultLimit( $resultLimit )
+    public function setResultLimit($resultLimit)
     {
         $this->resultLimit = $resultLimit;
 
@@ -184,7 +184,7 @@ class Result implements \Iterator, \ArrayAccess, \Countable
      *
      * @return $this
      */
-    public function setResultOffset( $resultOffset )
+    public function setResultOffset($resultOffset)
     {
         $this->resultOffset = $resultOffset;
 
@@ -209,9 +209,9 @@ class Result implements \Iterator, \ArrayAccess, \Countable
     public function hasMore()
     {
         return (
-            ( ( $this->getResultLimit() == 0 ) && ( $this->count() < $this->getResultTotalCount() ) ) ||
-            ( ( $this->getResultLimit() > 0 ) && ( $this->count() == $this->getResultLimit() ) &&
-              ( $this->getResultLimit() < $this->getResultTotalCount() ) )
+            (($this->getResultLimit() == 0) && ($this->count() < $this->getResultTotalCount())) ||
+            (($this->getResultLimit() > 0) && ($this->count() == $this->getResultLimit()) &&
+             ($this->getResultLimit() < $this->getResultTotalCount()))
         );
 
     }
@@ -223,7 +223,7 @@ class Result implements \Iterator, \ArrayAccess, \Countable
      */
     public function getResultOffsetPage()
     {
-        return intval( ceil( $this->getResultOffset() / $this->getResultLimit() ) ) + 1;
+        return intval(ceil($this->getResultOffset() / $this->getResultLimit())) + 1;
 
     }
 
@@ -254,7 +254,7 @@ class Result implements \Iterator, \ArrayAccess, \Countable
      */
     public function getLastPage()
     {
-        return max( 1, intval( ceil( $this->getResultTotalCount() / $this->getResultLimit() ) ) );
+        return max(1, intval(ceil($this->getResultTotalCount() / $this->getResultLimit())));
     }
 
     /**
@@ -264,7 +264,7 @@ class Result implements \Iterator, \ArrayAccess, \Countable
      */
     public function count()
     {
-        return count( $this->results );
+        return count($this->results);
     }
 
     /**
@@ -313,7 +313,7 @@ class Result implements \Iterator, \ArrayAccess, \Countable
      */
     public function valid()
     {
-        return isset( $this->results[$this->seek] );
+        return isset($this->results[$this->seek]);
     }
 
     /**
@@ -332,6 +332,7 @@ class Result implements \Iterator, \ArrayAccess, \Countable
      * Whether a offset exists
      *
      * @link http://php.net/manual/en/arrayaccess.offsetexists.php
+     *
      * @param mixed $offset <p>
      *                      An offset to check for.
      *                      </p>
@@ -341,30 +342,32 @@ class Result implements \Iterator, \ArrayAccess, \Countable
      *                      <p>
      *                      The return value will be casted to boolean if non-boolean was returned.
      */
-    public function offsetExists( $offset )
+    public function offsetExists($offset)
     {
-        return isset( $this->results[$offset] );
+        return isset($this->results[$offset]);
     }
 
     /**
      * Offset to retrieve
      *
      * @link http://php.net/manual/en/arrayaccess.offsetget.php
+     *
      * @param mixed $offset <p>
      *                      The offset to retrieve.
      *                      </p>
      *
      * @return mixed Can return all value types.
      */
-    public function offsetGet( $offset )
+    public function offsetGet($offset)
     {
-        return isset( $this->results[$offset] ) ? $this->results[$offset] : null;
+        return isset($this->results[$offset]) ? $this->results[$offset] : null;
     }
 
     /**
      * Offset to set
      *
      * @link http://php.net/manual/en/arrayaccess.offsetset.php
+     *
      * @param mixed $offset <p>
      *                      The offset to assign the value to.
      *                      </p>
@@ -374,14 +377,11 @@ class Result implements \Iterator, \ArrayAccess, \Countable
      *
      * @return void
      */
-    public function offsetSet( $offset, $value )
+    public function offsetSet($offset, $value)
     {
-        if ( is_null( $offset ) )
-        {
+        if (is_null($offset)) {
             $this->results[] = $value;
-        }
-        else
-        {
+        } else {
             $this->results[$offset] = $value;
         }
     }
@@ -390,14 +390,15 @@ class Result implements \Iterator, \ArrayAccess, \Countable
      * Offset to unset
      *
      * @link http://php.net/manual/en/arrayaccess.offsetunset.php
+     *
      * @param mixed $offset <p>
      *                      The offset to unset.
      *                      </p>
      *
      * @return void
      */
-    public function offsetUnset( $offset )
+    public function offsetUnset($offset)
     {
-        unset( $this->results[$offset] );
+        unset($this->results[$offset]);
     }
 }

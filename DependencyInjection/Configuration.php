@@ -25,7 +25,8 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $treeBuilder->root( 'novae_zextra' );
+        $treeBuilder->root('novae_zextra');
+
         return $treeBuilder;
     }
 }

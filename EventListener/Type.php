@@ -14,8 +14,9 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Repository;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Content as ContentHelper;
-use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Search as SearchHelper;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver as ConfigResolver;
+use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\WrapperFactory;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 
 /**
  * Class Type
@@ -59,13 +60,6 @@ abstract class Type
     protected $contentHelper;
 
     /**
-     * Search Helper
-     *
-     * @var SearchHelper
-     */
-    protected $searchHelper;
-
-    /**
      * Config resolver
      *
      * @var ConfigResolver
@@ -73,11 +67,18 @@ abstract class Type
     protected $configResolver;
 
     /**
+     * WrapperFactory.
+     *
+     * @var WrapperFactory
+     */
+    protected $wrapperFactory;
+
+    /**
      * Set the Content View
      *
      * @param ContentView $contentView
      */
-    public function setContentView( ContentView $contentView )
+    public function setContentView(ContentView $contentView)
     {
         $this->contentView = $contentView;
     }
@@ -87,7 +88,7 @@ abstract class Type
      *
      * @param Location $location
      */
-    public function setLocation( Location $location )
+    public function setLocation(Location $location)
     {
         $this->location = $location;
     }
@@ -97,25 +98,65 @@ abstract class Type
      *
      * @param Content $content
      */
-    public function setContent( Content $content )
+    public function setContent(Content $content)
     {
         $this->content = $content;
     }
 
     /**
-     * Constructor
+     * Set the WrapperFactory.
      *
-     * @param Repository      $repository
-     * @param ContentHelper   $contentHelper
-     * @param SearchHelper    $searchHelper
-     * @param ConfigResolver  $configResolver
+     * @param WrapperFactory $wrapperFactory wrapperFactory
+     *
+     * @return $this
      */
-    public function __construct( Repository $repository, ContentHelper $contentHelper, SearchHelper $searchHelper, ConfigResolver $configResolver )
+    public function setWrapperFactory($wrapperFactory)
     {
-        $this->repository      = $repository;
-        $this->contentHelper   = $contentHelper;
-        $this->searchHelper    = $searchHelper;
-        $this->configResolver  = $configResolver;
+        $this->wrapperFactory = $wrapperFactory;
+
+        return $this;
+    }
+
+    /**
+     * Set the Repository
+     *
+     * @param Repository $repository repository
+     *
+     * @return $this
+     */
+    public function setRepository($repository)
+    {
+        $this->repository = $repository;
+
+        return $this;
+    }
+
+    /**
+     * Set the ContentHelper
+     *
+     * @param ContentHelper $contentHelper contentHelper
+     *
+     * @return $this
+     */
+    public function setContentHelper($contentHelper)
+    {
+        $this->contentHelper = $contentHelper;
+
+        return $this;
+    }
+
+    /**
+     * Set the ConfigResolver
+     *
+     * @param ConfigResolver $configResolver configResolver
+     *
+     * @return $this
+     */
+    public function setConfigResolver($configResolver)
+    {
+        $this->configResolver = $configResolver;
+
+        return $this;
     }
 
     /**
@@ -124,11 +165,13 @@ abstract class Type
      * @deprecated Now use dynamic children instead.
      *             Example : for full view children build a method getFullChildren
      *
-     * @param array $viewParameters
+     * @param array      $viewParameters
+     *
+     * @param SiteAccess $siteAccess
      *
      * @return array
      */
-    public function getChildren( $viewParameters )
+    public function getChildren($viewParameters, SiteAccess $siteAccess = null)
     {
         return [];
     }

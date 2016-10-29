@@ -2,12 +2,9 @@ parameters:
     ezpublish.twig.extension.content.class: Novactive\Bundle\eZExtraBundle\Twig\ContentExtension
     novaezextra.content.manager.class: Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\Content
     novaezextra.content_type.manager.class: Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\ContentType
-    novaezextra.tag.manager.class: Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\Tag
     novaezextra.content.helper.class: Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Content
     novaezextra.abstract.children.provider.class: Novactive\Bundle\eZExtraBundle\EventListener\Type
     novaezextra.pre_content_view_listener.class: Novactive\Bundle\eZExtraBundle\EventListener\PreContentViewListener
-    novactive.ezextra.form.type.search.simple.class: Novactive\Bundle\eZExtraBundle\Form\Type\SimpleSearch
-    novaezextra.search.helper.class: Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Search
     novactive.ezextra.wrapper.factory.class: Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\WrapperFactory
 
 services:
@@ -24,30 +21,22 @@ services:
         class: %novaezextra.content_type.manager.class%
         arguments: [@ezpublish.api.repository]
 
-    novactive.ezextra.tag.manager:
-        class: %novaezextra.tag.manager.class%
-        arguments: [@ezpublish.api.service.tags]
-
     novactive.ezextra.content.helper:
         class: %novaezextra.content.helper.class%
         arguments: [@ezpublish.api.repository, @novactive.ezextra.wrapper.factory]
 
-    novactive.ezextra.search.helper:
-        class: %novaezextra.search.helper.class%
-        arguments: [@novactive.ezextra.wrapper.factory, @ezpublish_legacy.kernel]
-
     novactive.ezextra.pre_content_view_listener:
         class: %novaezextra.pre_content_view_listener.class%
-        arguments: [@ezpublish.api.repository, @ezpublish.templating.global_helper, @request_stack]
+        arguments: [@ezpublish.api.repository, @ezpublish.templating.global_helper]
         tags:
             - {name: kernel.event_listener, event: ezpublish.pre_content_view, method: onPreContentView}
 
     novactive.ezextra.abstract.children.provider:
         class: %novaezextra.abstract.children.provider.class%
         abstract: true
-        arguments: [@ezpublish.api.repository, @novactive.ezextra.content.helper, @novactive.ezextra.search.helper, @ezpublish.config.resolver]
+        calls:
+            - [setRepository, ["@ezpublish.api.repository"]]
+            - [setContentHelper, ["@novactive.ezextra.content.helper"]]
+            - [setWrapperFactory, ["@novactive.ezextra.wrapper.factory"]]
+            - [setConfigResolver, ["@ezpublish.config.resolver"]]
 
-    novactive.ezextra.form.type.search.simple:
-        class: %novactive.ezextra.form.type.search.simple.class%
-        tags:
-            - { name: form.type, alias: novactive_ezextra_simple_search }

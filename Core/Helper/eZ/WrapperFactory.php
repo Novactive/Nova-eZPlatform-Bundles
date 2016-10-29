@@ -32,7 +32,7 @@ class WrapperFactory
      *
      * @param Repository $eZRepo
      */
-    public function __construct( Repository $eZRepo )
+    public function __construct(Repository $eZRepo)
     {
         $this->repository = $eZRepo;
     }
@@ -46,11 +46,11 @@ class WrapperFactory
      *
      * @return Wrapper
      */
-    public function create( $contentId, $locationId, $extra = null )
+    public function create($contentId, $locationId, $extra = null)
     {
-        $wrapper = new Wrapper( $contentId, $locationId, $extra );
+        $wrapper = new Wrapper($contentId, $locationId, $extra);
 
-        return $wrapper->setRepository( $this->repository );
+        return $wrapper->setRepository($this->repository);
     }
 
     /**
@@ -60,11 +60,11 @@ class WrapperFactory
      *
      * @return Wrapper
      */
-    public function createByLocation( ValueLocation $location )
+    public function createByLocation(ValueLocation $location)
     {
-        $wrapper = new Wrapper( $location->contentInfo->id, $location );
+        $wrapper = new Wrapper($location->contentInfo->id, $location);
 
-        return $wrapper->setRepository( $this->repository );
+        return $wrapper->setRepository($this->repository);
     }
 
     /**
@@ -74,11 +74,11 @@ class WrapperFactory
      *
      * @return Wrapper
      */
-    public function createByLocationId( $locationId )
+    public function createByLocationId($locationId)
     {
-        $wrapper = new Wrapper( null, $locationId );
+        $wrapper = new Wrapper(null, $locationId);
 
-        return $wrapper->setRepository( $this->repository );
+        return $wrapper->setRepository($this->repository);
     }
 
     /**
@@ -88,11 +88,11 @@ class WrapperFactory
      *
      * @return Wrapper
      */
-    public function createByContent( ValueContent $content )
+    public function createByContent(ValueContent $content)
     {
-        $wrapper = new Wrapper( $content, $content->contentInfo->mainLocationId );
+        $wrapper = new Wrapper($content, $content->contentInfo->mainLocationId);
 
-        return $wrapper->setRepository( $this->repository );
+        return $wrapper->setRepository($this->repository);
     }
 
     /**
@@ -102,10 +102,10 @@ class WrapperFactory
      *
      * @return Wrapper
      */
-    public function createByContentId( $contentId )
+    public function createByContentId($contentId)
     {
-        $wrapper = new Wrapper( $contentId );
+        $wrapper = new Wrapper($contentId);
 
-        return $wrapper->setRepository( $this->repository );
+        return $wrapper->setRepository($this->repository);
     }
 }

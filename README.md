@@ -137,86 +137,6 @@ Usage:
     {% endfor %}
 ```
 
-
-### Search Helper
-
-#### Content/Location Search Helper
-
-```php
-        $searchStructure = new SearchStructure();
-        $contentTypeService = $this->getRepository()->getContentTypeService();
-        $searchStructure
-            ->setLimit( 10 )
-            ->setFacets( $this->getSearchFacets() )
-            ->setContentTypesIds(
-                [
-                    $contentTypeService->loadContentTypeByIdentifier( 'identifier1' )->id,
-                    $contentTypeService->loadContentTypeByIdentifier( 'identifier2' )->id
-                ]
-            )
-            ->setPage( $page );
-            
-        $results = $this->get( 'novactive.ezextra.search.helper' )->search( $searchStructure );
-```
-
-> Return an array of Result
-
-#### Paginator
-
-Witht the search you can also use the Paginator
-
-```php
-
-            $adapter    = new SearchAdapter( $this->get( 'novactive.ezextra.search.helper' ), $searchStructure );
-            $pagerFanta = new Pagerfanta( $adapter );
-            $pagerFanta->setMaxPerPage( $searchStructure->getLimit() );
-            $pagerFanta->setCurrentPage( $page );
-```
-
-#### Search Form
-
-The bundle provide you a simple way to integrate the SearchStructure in a Symfony Form
-
-```php
-        $pagerFanta = null;
-        $searchStructure = new SearchStructure();
-        $contentTypeService = $this->getRepository()->getContentTypeService();
-        $searchStructure
-            ->setLimit( 10 )
-            ->setFacets( $this->getSearchFacets() )
-            ->setContentTypesIds(
-                [
-                    $contentTypeService->loadContentTypeByIdentifier( 'identifier' )->id
-                ]
-            )
-            ->setPage( $page );
-
-        $form = $this->get( 'form.factory' )->createNamed( '', 'novactive_ezextra_simple_search', $searchStructure );
-        $form->handleRequest( $request );
-        if ( $option !== null )
-        {
-            $searchStructure->addFilters( [ "attr_options_lk:\"{$option}\"" ] );
-        }
-
-        if ( $form->isValid() )
-        {
-            $adapter    = new SearchAdapter( $this->get( 'novactive.ezextra.search.helper' ), $searchStructure );
-            $pagerFanta = new Pagerfanta( $adapter );
-            $pagerFanta->setMaxPerPage( $searchStructure->getLimit() );
-            $pagerFanta->setCurrentPage( $page );
-        }
-
-        return [
-            'form' => $form->createView(),
-            'pager' => $pagerFanta,
-            'searchStructure' => $searchStructure,
-            'option' => $option
-        ];
-    }
-
-```
-
-
 ### Children Provider
 
 Simply inject the children ( and potentially other things on a view Full )
@@ -245,7 +165,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 class PersonalizationEngine extends Type
 {
     //its also use as default to get the full view children
-    public function getChildren( $viewParameters )
+    public function getChildren($viewParameters, SiteAccess $siteAccess = null)
     {
         return $this->contentHelper->contentList( $this->location->id, [ 'article' ], array( new Query\SortClause\Location\Priority( Query::SORT_ASC ) ), 10);
     }

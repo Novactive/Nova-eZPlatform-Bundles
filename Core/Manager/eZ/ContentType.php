@@ -22,6 +22,7 @@ use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
 use eZ\Publish\Core\FieldType\FieldSettings;
+
 /**
  * Class ContentType
  */
@@ -39,7 +40,7 @@ class ContentType
      *
      * @param Repository $api
      */
-    public function __construct( Repository $api )
+    public function __construct(Repository $api)
     {
         $this->eZPublishRepository = $api;
     }
@@ -80,7 +81,7 @@ class ContentType
      */
     public function sudoRoot()
     {
-        $this->eZPublishRepository->setCurrentUser( $this->eZPublishRepository->getUserService()->loadUser( 14 ) );
+        $this->eZPublishRepository->setCurrentUser($this->eZPublishRepository->getUserService()->loadUser(14));
     }
 
     /**
@@ -98,22 +99,21 @@ class ContentType
         $contentTypeGroupIdentifier,
         $contentTypeData,
         $contentTypeFieldDefinitionsData,
-        $options = [ ],
+        $options = [],
         $lang = 'eng-US'
     ) {
         $contentTypeService      = $this->getContentTypeService();
-        $contentTypeGroup        = $contentTypeService->loadContentTypeGroupByIdentifier( $contentTypeGroupIdentifier );
-        $contentTypeCreateStruct = $contentTypeService->newContentTypeCreateStruct( $contentTypeIdentifier );
+        $contentTypeGroup        = $contentTypeService->loadContentTypeGroupByIdentifier($contentTypeGroupIdentifier);
+        $contentTypeCreateStruct = $contentTypeService->newContentTypeCreateStruct($contentTypeIdentifier);
 
-        if ( !empty( $options['remoteId'] ) )
-        {
+        if (!empty($options['remoteId'])) {
             $contentTypeCreateStruct->remoteId = $options['remoteId'];
         }
 
-        $this->fillContentTypeStruct( $contentTypeCreateStruct, $contentTypeData, $lang );
-        $this->createFieldDefinitions( $contentTypeCreateStruct, $contentTypeFieldDefinitionsData, $lang );
-        $contentTypeDraft = $contentTypeService->createContentType( $contentTypeCreateStruct, [ $contentTypeGroup ] );
-        $this->publishContentType( $contentTypeDraft );
+        $this->fillContentTypeStruct($contentTypeCreateStruct, $contentTypeData, $lang);
+        $this->createFieldDefinitions($contentTypeCreateStruct, $contentTypeFieldDefinitionsData, $lang);
+        $contentTypeDraft = $contentTypeService->createContentType($contentTypeCreateStruct, [$contentTypeGroup]);
+        $this->publishContentType($contentTypeDraft);
     }
 
     /**
@@ -134,23 +134,20 @@ class ContentType
     ) {
         $contentTypeService = $this->getContentTypeService();
 
-        try
-        {
-            $contentTypeDraft = $contentTypeService->createContentTypeDraft( $contentType );
-        }
-        catch( BadStateException $e )
-        {
-            $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $contentType->id );
+        try {
+            $contentTypeDraft = $contentTypeService->createContentTypeDraft($contentType);
+        } catch (BadStateException $e) {
+            $contentTypeDraft = $contentTypeService->loadContentTypeDraft($contentType->id);
         }
         $contentTypeUpdateStruct = $contentTypeService->newContentTypeUpdateStruct();
-        $this->fillContentTypeStruct( $contentTypeUpdateStruct, $contentTypeData, $lang );
+        $this->fillContentTypeStruct($contentTypeUpdateStruct, $contentTypeData, $lang);
         $this->updateFieldDefinitions(
             $contentTypeDraft,
             $contentTypeFieldDefinitionsData,
             $lang
         );
-        $contentTypeService->updateContentTypeDraft( $contentTypeDraft, $contentTypeUpdateStruct );
-        $this->publishContentType( $contentTypeDraft );
+        $contentTypeService->updateContentTypeDraft($contentTypeDraft, $contentTypeUpdateStruct);
+        $this->publishContentType($contentTypeDraft);
     }
 
 
@@ -161,22 +158,20 @@ class ContentType
      * @param array                                           $contentTypeData
      * @param string                                          $lang
      */
-    protected function fillContentTypeStruct( $struct, $contentTypeData, $lang )
+    protected function fillContentTypeStruct($struct, $contentTypeData, $lang)
     {
         $struct->mainLanguageCode = $lang;
         $struct->nameSchema       = $contentTypeData['nameSchema'];
         $struct->isContainer      = $contentTypeData['isContainer'];
         $struct->urlAliasSchema   = $contentTypeData['urlAliasSchema'];
 
-        if ( !is_array( $contentTypeData['names'] ) )
-        {
-            $contentTypeData['names'] = [ $lang => $contentTypeData['names'] ];
+        if (!is_array($contentTypeData['names'])) {
+            $contentTypeData['names'] = [$lang => $contentTypeData['names']];
         }
         $struct->names = $contentTypeData['names'];
 
-        if ( !is_array( $contentTypeData['descriptions'] ) )
-        {
-            $contentTypeData['descriptions'] = [ $lang => $contentTypeData['descriptions'] ];
+        if (!is_array($contentTypeData['descriptions'])) {
+            $contentTypeData['descriptions'] = [$lang => $contentTypeData['descriptions']];
         }
         $struct->descriptions = $contentTypeData['descriptions'];
     }
@@ -194,14 +189,13 @@ class ContentType
         $lang
     ) {
         $contentTypeService = $this->getContentTypeService();
-        foreach ( $contentTypeFieldDefinitionsData as $definition )
-        {
+        foreach ($contentTypeFieldDefinitionsData as $definition) {
             $fieldCreateStruct = $contentTypeService->newFieldDefinitionCreateStruct(
                 $definition['identifier'],
                 $definition['type']
             );
-            $this->fillFieldDefinitionStruct( $fieldCreateStruct, $definition, $lang );
-            $contentTypeCreateStruct->addFieldDefinition( $fieldCreateStruct );
+            $this->fillFieldDefinitionStruct($fieldCreateStruct, $definition, $lang);
+            $contentTypeCreateStruct->addFieldDefinition($fieldCreateStruct);
         }
     }
 
@@ -220,33 +214,31 @@ class ContentType
         $contentTypeService = $this->getContentTypeService();
 
         $remainingFieldDefinitions = [];
-        foreach( $contentTypeDraft->fieldDefinitions as $fieldDefinition ) {
+        foreach ($contentTypeDraft->fieldDefinitions as $fieldDefinition) {
             $remainingFieldDefinitions[$fieldDefinition->identifier] = 'existing';
         }
-        foreach ( $contentTypeFieldDefinitionsData as $definition )
-        {
-            $fieldDefinition = $contentTypeDraft->getFieldDefinition( $definition['identifier'] );
-            if ( $fieldDefinition instanceof FieldDefinition )
-            {
+        foreach ($contentTypeFieldDefinitionsData as $definition) {
+            $fieldDefinition = $contentTypeDraft->getFieldDefinition($definition['identifier']);
+            if ($fieldDefinition instanceof FieldDefinition) {
                 $fieldUpdateStruct = $contentTypeService->newFieldDefinitionUpdateStruct();
-                $this->fillFieldDefinitionStruct( $fieldUpdateStruct, $definition, $lang );
-                $contentTypeService->updateFieldDefinition( $contentTypeDraft, $fieldDefinition, $fieldUpdateStruct );
-            }
-            else
-            {
+                $this->fillFieldDefinitionStruct($fieldUpdateStruct, $definition, $lang);
+                $contentTypeService->updateFieldDefinition($contentTypeDraft, $fieldDefinition, $fieldUpdateStruct);
+            } else {
                 $fieldCreateStruct = $contentTypeService->newFieldDefinitionCreateStruct(
                     $definition['identifier'],
                     $definition['type']
                 );
-                $this->fillFieldDefinitionStruct( $fieldCreateStruct, $definition, $lang );
-                $contentTypeService->addFieldDefinition( $contentTypeDraft, $fieldCreateStruct );
+                $this->fillFieldDefinitionStruct($fieldCreateStruct, $definition, $lang);
+                $contentTypeService->addFieldDefinition($contentTypeDraft, $fieldCreateStruct);
             }
             unset($remainingFieldDefinitions[$definition['identifier']]);
         }
         // delete the remaining
-        foreach ( $remainingFieldDefinitions as $fieldDefinitionIdentifier => $v )
-        {
-            $contentTypeService->removeFieldDefinition($contentTypeDraft,$contentTypeDraft->getFieldDefinition( $fieldDefinitionIdentifier ) );
+        foreach ($remainingFieldDefinitions as $fieldDefinitionIdentifier => $v) {
+            $contentTypeService->removeFieldDefinition(
+                $contentTypeDraft,
+                $contentTypeDraft->getFieldDefinition($fieldDefinitionIdentifier)
+            );
         }
     }
 
@@ -254,10 +246,10 @@ class ContentType
      * Fill the Struct according to the Public API
      *
      * @param FieldDefinitionCreateStruct|FieldDefinitionUpdateStruct $struct
-     * @param array                       $definition
-     * @param string                      $lang
+     * @param array                                                   $definition
+     * @param string                                                  $lang
      */
-    protected function fillFieldDefinitionStruct( $struct, $definition, $lang )
+    protected function fillFieldDefinitionStruct($struct, $definition, $lang)
     {
         $struct->fieldGroup     = $definition['fieldGroup'];
         $struct->position       = $definition['position'];
@@ -265,40 +257,34 @@ class ContentType
         $struct->isRequired     = $definition['isRequired'];
         $struct->isSearchable   = $definition['isSearchable'];
 
-        if ( !is_array( $definition['names'] ) )
-        {
-            $definition['names'] = [ $lang => $definition['names'] ];
+        if (!is_array($definition['names'])) {
+            $definition['names'] = [$lang => $definition['names']];
         }
         $struct->names = $definition['names'];
 
-        if ( !is_array( $definition['descriptions'] ) )
-        {
-            $definition['descriptions'] = [ $lang => $definition['descriptions'] ];
+        if (!is_array($definition['descriptions'])) {
+            $definition['descriptions'] = [$lang => $definition['descriptions']];
         }
         $struct->descriptions = $definition['descriptions'];
 
-        if ( $definition['settings'] )
-        {
+        if ($definition['settings']) {
             $settings = [];
-            $lines    = explode( "\n", $definition['settings'] );
-            foreach ( $lines as $line )
-            {
-                preg_match( "/(\\s*)([a-zA-Z]*)(\\s*):(\\s*)\\[?([^\\[\\]]*)\\]?(\\s*)/uisx", $line, $matches );
-                $key   = trim( $matches[2] );
-                $value = explode( ",", trim( $matches[5] ) );
+            $lines    = explode("\n", $definition['settings']);
+            foreach ($lines as $line) {
+                preg_match("/(\\s*)([a-zA-Z]*)(\\s*):(\\s*)\\[?([^\\[\\]]*)\\]?(\\s*)/uisx", $line, $matches);
+                $key   = trim($matches[2]);
+                $value = explode(",", trim($matches[5]));
                 array_walk(
                     $value,
-                    function ( &$value, &$key )
-                    {
-                        $value =  trim( $value );
+                    function (&$value, &$key) {
+                        $value = trim($value);
                     }
                 );
-                if ( $key != '' )
-                {
+                if ($key != '') {
                     $settings[$key] = $value;
                 }
             }
-            $this->fillExtraSettings( $struct, $settings, $definition['type'], $lang );
+            $this->fillExtraSettings($struct, $settings, $definition['type'], $lang);
         }
     }
 
@@ -309,24 +295,22 @@ class ContentType
      * @param array                                                   $definition
      * @param string                                                  $lang
      */
-    protected function fillExtraSettings( $struct, $settings, $fieldTypeIdentifier, $lang )
+    protected function fillExtraSettings($struct, $settings, $fieldTypeIdentifier, $lang)
     {
-        if ( $fieldTypeIdentifier == "ezselection" )
-        {
+        if ($fieldTypeIdentifier == "ezselection") {
             $isMultiple = false;
-            if ( isset( $settings['Multiple'] ) &&  ( $isM = $settings['Multiple'] ) ) {
+            if (isset($settings['Multiple']) && ($isM = $settings['Multiple'])) {
                 $isMultiple = $isM[0] == "Y" ? true : false;
             }
-            if ( isset( $settings['List'] ) && ( $list = $settings['List'] ) ) {
+            if (isset($settings['List']) && ($list = $settings['List'])) {
                 $struct->fieldSettings = [
                     'isMultiple' => $isMultiple,
-                    'options' => $list
+                    'options'    => $list
                 ];
             }
         }
 
-        if ( $fieldTypeIdentifier == "ezobjectrelationlist" )
-        {
+        if ($fieldTypeIdentifier == "ezobjectrelationlist") {
             if ($to = $settings['To']) {
                 $struct->fieldSettings['selectionContentTypes'] = $to;
             }
@@ -334,7 +318,8 @@ class ContentType
                 // just the first is used
                 if ($alias = $defaultLocation[0]) {
                     try {
-                        $urlAlias = $this->getRepository()->getURLAliasService()->lookup($alias);
+                        $urlAlias                                          = $this->getRepository()->getURLAliasService(
+                        )->lookup($alias);
                         $struct->fieldSettings['selectionDefaultLocation'] = $urlAlias->destination;
                     } catch (NotFoundException $e) {
                         // do nothing then
@@ -342,11 +327,12 @@ class ContentType
                 }
             }
         }
-        if ( $fieldTypeIdentifier == "ezobjectrelation" )
-        {
-            if(isset($settings['BrowseMode']) && (strpos(strtolower(implode('', $settings['BrowseMode'])), 'dropdownlist') !== false)){
+        if ($fieldTypeIdentifier == "ezobjectrelation") {
+            if (isset($settings['BrowseMode']) &&
+                (strpos(strtolower(implode('', $settings['BrowseMode'])), 'dropdownlist') !== false)
+            ) {
                 $struct->fieldSettings['selectionMethod'] = 1;
-            }else{
+            } else {
                 $struct->fieldSettings['selectionMethod'] = 0;
             }
 
@@ -354,7 +340,9 @@ class ContentType
                 // just the first is used
                 if ($alias = $defaultLocation[0]) {
                     try {
-                        $urlAlias = $this->getRepository()->getURLAliasService()->lookup($alias);
+                        $urlAlias                               = $this->getRepository()->getURLAliasService()->lookup(
+                            $alias
+                        );
                         $struct->fieldSettings['selectionRoot'] = $urlAlias->destination;
                     } catch (NotFoundException $e) {
                         // do nothing then
@@ -369,9 +357,9 @@ class ContentType
      *
      * @param ContentTypeDraft $contentTypeDraft
      */
-    public function publishContentType( ContentTypeDraft $contentTypeDraft )
+    public function publishContentType(ContentTypeDraft $contentTypeDraft)
     {
-        $this->getContentTypeService()->publishContentTypeDraft( $contentTypeDraft );
+        $this->getContentTypeService()->publishContentTypeDraft($contentTypeDraft);
     }
 
 
@@ -390,16 +378,14 @@ class ContentType
         $contentTypeGroupIdentifier,
         $contentTypeData,
         $contentTypeFieldDefinitionsData,
-        $options = [ ],
+        $options = [],
         $lang = 'eng-US'
     ) {
         $contentTypeService = $this->getContentTypeService();
 
-        try
-        {
-            $contentType = $contentTypeService->loadContentTypeByIdentifier( $contentTypeIdentifier );
-            if ( ( array_key_exists( 'do_no_update', $options ) ) && ( $options['do_no_update'] == true ) )
-            {
+        try {
+            $contentType = $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
+            if ((array_key_exists('do_no_update', $options)) && ($options['do_no_update'] == true)) {
                 return;
             }
             $this->updateContentType(
@@ -409,13 +395,10 @@ class ContentType
                 $options,
                 $lang
             );
-            if ( ( array_key_exists( 'callback_update', $options ) ) && ( is_callable( $options['callback_update'] ) ) )
-            {
-                $options['callback_update']( $contentType );
+            if ((array_key_exists('callback_update', $options)) && (is_callable($options['callback_update']))) {
+                $options['callback_update']($contentType);
             }
-        }
-        catch( NotFoundException $e )
-        {
+        } catch (NotFoundException $e) {
             $this->createContentType(
                 $contentTypeIdentifier,
                 $contentTypeGroupIdentifier,
@@ -424,10 +407,9 @@ class ContentType
                 $options,
                 $lang
             );
-            if ( ( array_key_exists( 'callback_create', $options ) ) && ( is_callable( $options['callback_create'] ) ) )
-            {
+            if ((array_key_exists('callback_create', $options)) && (is_callable($options['callback_create']))) {
                 $options['callback_create'](
-                    $contentTypeService->loadContentTypeByIdentifier( $contentTypeIdentifier )
+                    $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier)
                 );
             }
         }
@@ -450,7 +432,7 @@ class ContentType
         $contentTypeGroupIdentifier,
         $contentTypeData,
         $contentTypeFieldDefinitionsData,
-        $options = [ ],
+        $options = [],
         $lang = 'eng-US'
     ) {
         $options['do_no_update'] = true;
@@ -464,6 +446,6 @@ class ContentType
             $lang
         );
 
-        return $contentTypeService->loadContentTypeByIdentifier( $contentTypeIdentifier );
+        return $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
     }
 }

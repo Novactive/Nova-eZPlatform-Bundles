@@ -23,10 +23,9 @@ class ChildrenProviderPass implements CompilerPassInterface
      *
      * @param ContainerBuilder $container
      */
-    public function process( ContainerBuilder $container )
+    public function process(ContainerBuilder $container)
     {
-        if ( !$container->has( 'novactive.ezextra.pre_content_view_listener' ) )
-        {
+        if (!$container->has('novactive.ezextra.pre_content_view_listener')) {
             return;
         }
 
@@ -37,13 +36,11 @@ class ChildrenProviderPass implements CompilerPassInterface
         $taggedServices = $container->findTaggedServiceIds(
             'novactive.ezextra.children.provider'
         );
-        foreach ( $taggedServices as $id => $tags )
-        {
-            foreach ( $tags as $attributes )
-            {
+        foreach ($taggedServices as $id => $tags) {
+            foreach ($tags as $attributes) {
                 $definition->addMethodCall(
                     'addManagedType',
-                    array( new Reference( $id ), $attributes["contentTypeIdentifier"] )
+                    [new Reference($id), $attributes["contentTypeIdentifier"]]
                 );
             }
         }

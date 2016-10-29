@@ -28,7 +28,7 @@ class CheckController extends Controller
     public function testAction()
     {
         $response = new Response();
-        $response->setContent( "Novactive eZ Publish 5 Extra Bundle" );
+        $response->setContent("Novactive eZ Platform Extra Bundle");
 
         return $response;
     }

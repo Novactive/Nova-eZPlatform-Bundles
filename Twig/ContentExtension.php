@@ -33,7 +33,7 @@ class ContentExtension extends KernelContentExtension
     {
         return array_merge(
             parent::getFunctions(),
-            array(
+            array (
                 'eznova_content_by_contentinfo'             => new Twig_Function_Method(
                     $this, 'contentByContentInfo'
                 ),
@@ -63,9 +63,9 @@ class ContentExtension extends KernelContentExtension
      *
      * @return Content
      */
-    public function contentByContentInfo( ContentInfo $contentInfo )
+    public function contentByContentInfo(ContentInfo $contentInfo)
     {
-        return $this->repository->getContentService()->loadContentByContentInfo( $contentInfo );
+        return $this->repository->getContentService()->loadContentByContentInfo($contentInfo);
     }
 
     /**
@@ -75,13 +75,13 @@ class ContentExtension extends KernelContentExtension
      *
      * @return Content
      */
-    public function parentContentByContentInfo( ContentInfo $contentInfo )
+    public function parentContentByContentInfo(ContentInfo $contentInfo)
     {
         $repository     = $this->repository;
-        $location       = $repository->getLocationService()->loadLocation( $contentInfo->mainLocationId );
-        $parentLocation = $repository->getLocationService()->loadLocation( $location->parentLocationId );
+        $location       = $repository->getLocationService()->loadLocation($contentInfo->mainLocationId);
+        $parentLocation = $repository->getLocationService()->loadLocation($location->parentLocationId);
 
-        return $this->contentByContentInfo( $parentLocation->contentInfo );
+        return $this->contentByContentInfo($parentLocation->contentInfo);
     }
 
     /**
@@ -91,9 +91,9 @@ class ContentExtension extends KernelContentExtension
      *
      * @return ContentType
      */
-    public function contentTypeByContent( Content $content )
+    public function contentTypeByContent(Content $content)
     {
-        return $this->repository->getContentTypeService()->loadContentType( $content->contentInfo->contentTypeId );
+        return $this->repository->getContentTypeService()->loadContentType($content->contentInfo->contentTypeId);
     }
 
     /**
@@ -103,9 +103,9 @@ class ContentExtension extends KernelContentExtension
      *
      * @return mixed
      */
-    public function locationByContent( Content $content )
+    public function locationByContent(Content $content)
     {
-        return $this->repository->getLocationService()->loadLocation( $content->contentInfo->mainLocationId );
+        return $this->repository->getLocationService()->loadLocation($content->contentInfo->mainLocationId);
     }
 
     /**
@@ -115,13 +115,12 @@ class ContentExtension extends KernelContentExtension
      *
      * @return Content
      */
-    public function relationFieldToContent( RelationValue $fieldValue )
+    public function relationFieldToContent(RelationValue $fieldValue)
     {
-        $content = $this->repository->getContentService()->loadContent( $fieldValue->destinationContentId );
-        $location = $this->repository->getLocationService()->loadLocation( $content->contentInfo->mainLocationId );
+        $content  = $this->repository->getContentService()->loadContent($fieldValue->destinationContentId);
+        $location = $this->repository->getLocationService()->loadLocation($content->contentInfo->mainLocationId);
 
-        if ( ( $location->invisible == 1 ) || ( $location->hidden == 1 ) )
-        {
+        if (($location->invisible == 1) || ($location->hidden == 1)) {
             return false;
         }
 
@@ -135,25 +134,20 @@ class ContentExtension extends KernelContentExtension
      *
      * @return array
      */
-    public function relationsListFieldToContentList( RelationListValue $fieldValue )
+    public function relationsListFieldToContentList(RelationListValue $fieldValue)
     {
         $repository = $this->repository;
-        $list       = array();
-        foreach ( $fieldValue->destinationContentIds as $id )
-        {
-            try
-            {
-                $content  = $repository->getContentService()->loadContent( $id );
-                $location = $repository->getLocationService()->loadLocation( $content->contentInfo->mainLocationId );
+        $list       = array ();
+        foreach ($fieldValue->destinationContentIds as $id) {
+            try {
+                $content  = $repository->getContentService()->loadContent($id);
+                $location = $repository->getLocationService()->loadLocation($content->contentInfo->mainLocationId);
 
-                if ( $location->invisible == 1 or $location->hidden == 1 )
-                {
+                if ($location->invisible == 1 or $location->hidden == 1) {
                     continue;
                 }
                 $list[] = $content;
-            }
-            catch ( \Exception $ex )
-            {
+            } catch (\Exception $ex) {
                 //return empty
             }
         }

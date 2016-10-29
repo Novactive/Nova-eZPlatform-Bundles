@@ -64,11 +64,12 @@ class CreateContentTypesCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $translation = $input->getArgument('tr');
-        $translationHelper = $this->getContainer()->get( 'ezpublish.translation_helper' );
+        $translation       = $input->getArgument('tr');
+        $translationHelper = $this->getContainer()->get('ezpublish.translation_helper');
         $availableLanguage = $translationHelper->getAvailableLanguages();
-        if ( is_null($translation) || !in_array($translation,$availableLanguage) )
+        if (is_null($translation) || !in_array($translation, $availableLanguage)) {
             $translation = "eng-GB";
+        }
 
         $filepath = $input->getArgument('file');
         if (!file_exists($filepath)) {
@@ -87,7 +88,7 @@ class CreateContentTypesCommand extends ContainerAwareCommand
         $contentTypeManager = $this->getContainer()->get("novactive.ezextra.content_type.manager");
 
         foreach ($oPHPExcel->getWorksheetIterator() as $oWorksheet) {
-            $excludedTemplatesSheets = [ "ContentType Template", "FieldTypes" ];
+            $excludedTemplatesSheets = ["ContentType Template", "FieldTypes"];
             if (in_array($oWorksheet->getTitle(), $excludedTemplatesSheets)) {
                 continue;
             }
@@ -113,21 +114,21 @@ class CreateContentTypesCommand extends ContainerAwareCommand
                 'names'          => $contentTypeName,
                 'descriptions'   => $contentTypeDescription,
             ];
-            $contentTypeFieldDefinitionsData = [ ];
+            $contentTypeFieldDefinitionsData = [];
             foreach ($oWorksheet->getRowIterator() as $row) {
                 $rowIndex        = $row->getRowIndex();
                 $fieldIdentifier = $oWorksheet->getCell("B{$rowIndex}")->getValue();
                 if (($rowIndex) >= 11 && ($fieldIdentifier != '')) {
                     $cellIterator = $row->getCellIterator();
                     $cellIterator->setIterateOnlyExistingCells(false); // Loop all cells, even if it is not set
-                    $contentTypeFieldsData = [ ];
+                    $contentTypeFieldsData = [];
                     foreach ($cellIterator as $cell) {
                         /** @var PHPExcel_Cell $cell */
                         if (!is_null($cell)) {
                             $cellValue = trim($cell->getValue());
                             switch ($cell->getColumn()) {
                                 case "A":
-                                    $contentTypeFieldsData['names'] = [ $lang => $cellValue ];
+                                    $contentTypeFieldsData['names'] = [$lang => $cellValue];
                                     break;
                                 case "B":
                                     $contentTypeFieldsData['identifier'] = $cellValue;
@@ -139,7 +140,7 @@ class CreateContentTypesCommand extends ContainerAwareCommand
                                     if (!$cellValue) {
                                         $cellValue = "";
                                     }
-                                    $contentTypeFieldsData['descriptions'] = [ $lang => $cellValue ];
+                                    $contentTypeFieldsData['descriptions'] = [$lang => $cellValue];
                                     break;
                                 case "E":
                                     $contentTypeFieldsData['isRequired'] = $cellValue == "yes" ? true : false;
@@ -166,24 +167,26 @@ class CreateContentTypesCommand extends ContainerAwareCommand
                 }
             }
             $contentTypeGroupIdentifierParam = $input->getArgument('content_type_group_identifier');
-            $contentTypeGroups = $contentTypeManager->getContentTypeService()->loadContentTypeGroups();
-            $contentTypeGroupIdentifier = null;
-            foreach ($contentTypeGroups as $contentTypeGroup)
-            {
-                if ( !is_null($contentTypeGroupIdentifierParam) && $contentTypeGroup->attribute('identifier') == $contentTypeGroupIdentifierParam )
-                {
+            $contentTypeGroups               = $contentTypeManager->getContentTypeService()->loadContentTypeGroups();
+            $contentTypeGroupIdentifier      = null;
+            foreach ($contentTypeGroups as $contentTypeGroup) {
+                if (!is_null($contentTypeGroupIdentifierParam) &&
+                    $contentTypeGroup->attribute('identifier') == $contentTypeGroupIdentifierParam
+                ) {
                     $contentTypeGroupIdentifier = $contentTypeGroupIdentifierParam;
                     break;
                 }
             }
-            $contentTypeGroupIdentifier = (!is_null($contentTypeGroupIdentifier)?$contentTypeGroupIdentifier:$contentTypeGroups[0]->attribute('identifier'));
+            $contentTypeGroupIdentifier = (!is_null(
+                $contentTypeGroupIdentifier
+            ) ? $contentTypeGroupIdentifier : $contentTypeGroups[0]->attribute('identifier'));
             try {
                 $contentTypeManager->createUpdateContentType(
                     $contentTypeIdentifier,
                     $contentTypeGroupIdentifier,
                     $contentTypeData,
                     $contentTypeFieldDefinitionsData,
-                    [ ],
+                    [],
                     $lang
                 );
             } catch (ContentTypeFieldDefinitionValidationException $e) {

@@ -21,6 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
+
 /**
  * Class Content
  */
@@ -38,7 +39,7 @@ class Content
      *
      * @param Repository $api
      */
-    public function __construct( Repository $api )
+    public function __construct(Repository $api)
     {
         $this->eZPublishRepository = $api;
     }
@@ -89,7 +90,7 @@ class Content
      */
     public function sudoRoot()
     {
-        $this->eZPublishRepository->setCurrentUser( $this->eZPublishRepository->getUserService()->loadUser( 14 ) );
+        $this->eZPublishRepository->setCurrentUser($this->eZPublishRepository->getUserService()->loadUser(14));
     }
 
     /**
@@ -103,48 +104,43 @@ class Content
      *
      * @return ValueContent
      */
-    public function createContent( $contentTypeIdentifier, $parentLocationId, $data, $options = [], $lang = 'eng-US' )
+    public function createContent($contentTypeIdentifier, $parentLocationId, $data, $options = [], $lang = 'eng-US')
     {
         $contentService      = $this->getContentService();
-        $contentType         = $this->getContentTypeService()->loadContentTypeByIdentifier( $contentTypeIdentifier );
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, $lang );
+        $contentType         = $this->getContentTypeService()->loadContentTypeByIdentifier($contentTypeIdentifier);
+        $contentCreateStruct = $contentService->newContentCreateStruct($contentType, $lang);
 
-        if ( !empty( $options['remoteId'] ) )
-        {
+        if (!empty($options['remoteId'])) {
             $contentCreateStruct->remoteId = $options['remoteId'];
         }
 
-        if ( !empty( $options['sectionId'] ) )
-        {
+        if (!empty($options['sectionId'])) {
             $contentCreateStruct->sectionId = $options['sectionId'];
         }
 
-        if ( !empty( $options['modified'] ) )
-        {
+        if (!empty($options['modified'])) {
             $contentCreateStruct->modificationDate = $options['modified'];
         }
 
-        if ( !empty( $options['alwaysAvailable'] ) )
-        {
+        if (!empty($options['alwaysAvailable'])) {
             $contentCreateStruct->alwaysAvailable = $options['alwaysAvailable'];
         }
 
         $this->autoFillStruct(
-            $this->getContentTypeService()->loadContentTypeByIdentifier( $contentTypeIdentifier ),
+            $this->getContentTypeService()->loadContentTypeByIdentifier($contentTypeIdentifier),
             $contentCreateStruct,
             $data
         );
 
-        $locationCreateStruct = $this->getLocationService()->newLocationCreateStruct( $parentLocationId );
+        $locationCreateStruct = $this->getLocationService()->newLocationCreateStruct($parentLocationId);
 
-        if ( !empty( $options['priority'] ) )
-        {
+        if (!empty($options['priority'])) {
             $locationCreateStruct->priority = $options['priority'];
         }
 
-        $draft                = $contentService->createContent( $contentCreateStruct, array( $locationCreateStruct ) );
+        $draft = $contentService->createContent($contentCreateStruct, array ($locationCreateStruct));
 
-        return $this->publishVersion( $draft, $options );
+        return $this->publishVersion($draft, $options);
     }
 
     /**
@@ -157,22 +153,22 @@ class Content
      *
      * @return ValueContent
      */
-    public function updateContent( ValueContent $content, $data, $options = [], $lang = 'eng-US' )
+    public function updateContent(ValueContent $content, $data, $options = [], $lang = 'eng-US')
     {
-        $contentService = $this->getContentService();
-        $contentDraft                             = $contentService->createContentDraft( $content->contentInfo );
+        $contentService                           = $this->getContentService();
+        $contentDraft                             = $contentService->createContentDraft($content->contentInfo);
         $contentUpdateStruct                      = $contentService->newContentUpdateStruct();
         $contentUpdateStruct->initialLanguageCode = $lang;
 
         $this->autoFillStruct(
-            $this->getContentTypeService()->loadContentType( $content->contentInfo->contentTypeId ),
+            $this->getContentTypeService()->loadContentType($content->contentInfo->contentTypeId),
             $contentUpdateStruct,
             $data
         );
 
-        $contentDraft = $contentService->updateContent( $contentDraft->versionInfo, $contentUpdateStruct );
+        $contentDraft = $contentService->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
 
-        return $this->publishVersion( $contentDraft, $options );
+        return $this->publishVersion($contentDraft, $options);
     }
 
     /**
@@ -183,43 +179,42 @@ class Content
      *
      * @return ValueContent
      */
-    protected function publishVersion( ValueContent $draft, $options = [] )
+    protected function publishVersion(ValueContent $draft, $options = [])
     {
-        if ( ( array_key_exists( 'callback_before_publish', $options ) ) && ( is_callable( $options['callback_before_publish'] ) ) )
-        {
-            $contentService = $this->getContentService();
+        if ((array_key_exists('callback_before_publish', $options)) &&
+            (is_callable($options['callback_before_publish']))
+        ) {
+            $contentService      = $this->getContentService();
             $contentUpdateStruct = $contentService->newContentUpdateStruct();
-            $options['callback_before_publish']( $draft, $contentUpdateStruct );
-            $draft = $contentService->updateContent( $draft->versionInfo, $contentUpdateStruct );
+            $options['callback_before_publish']($draft, $contentUpdateStruct);
+            $draft = $contentService->updateContent($draft->versionInfo, $contentUpdateStruct);
         }
 
-        $content = $this->getContentService()->publishVersion( $draft->versionInfo );
+        $content = $this->getContentService()->publishVersion($draft->versionInfo);
 
-        if ( count( $options ) > 0 )
-        {
-            $doUpdate = false;
+        if (count($options) > 0) {
+            $doUpdate       = false;
             $contentService = $this->getContentService();
             $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
-            if ( !empty( $options['created'] ) )
-            {
+            if (!empty($options['created'])) {
                 $metadataUpdate->publishedDate = $options['created'];
-                if ( $content->contentInfo->publishedDate->getTimestamp() != $metadataUpdate->publishedDate->getTimestamp() )
-                {
+                if ($content->contentInfo->publishedDate->getTimestamp() !=
+                    $metadataUpdate->publishedDate->getTimestamp()
+                ) {
                     $doUpdate = true;
                 }
             }
 
-            if ( !empty( $options['modified'] ) )
-            {
+            if (!empty($options['modified'])) {
                 $metadataUpdate->modificationDate = $options['modified'];
-                if ( $content->contentInfo->modificationDate->getTimestamp() != $metadataUpdate->modificationDate->getTimestamp() )
-                {
+                if ($content->contentInfo->modificationDate->getTimestamp() !=
+                    $metadataUpdate->modificationDate->getTimestamp()
+                ) {
                     $doUpdate = true;
                 }
             }
-            if ( $doUpdate === true )
-            {
-                $contentService->updateContentMetadata( $content->contentInfo, $metadataUpdate );
+            if ($doUpdate === true) {
+                $contentService->updateContentMetadata($content->contentInfo, $metadataUpdate);
             }
         }
 
@@ -230,23 +225,21 @@ class Content
      * Autofill the Struct with the available field in $data
      *
      * @param eZContentType $contentType
-     * @param ValueObject $contentStruct
-     * @param array       $data
+     * @param ValueObject   $contentStruct
+     * @param array         $data
      */
-    protected function autoFillStruct( eZContentType $contentType, ValueObject $contentStruct, $data )
+    protected function autoFillStruct(eZContentType $contentType, ValueObject $contentStruct, $data)
     {
         /** @var ContentUpdateStruct|ContentUpdateStruct $contentStruct */
 
-        foreach ( $contentType->getFieldDefinitions() as $field )
-        {
+        foreach ($contentType->getFieldDefinitions() as $field) {
             /** @var FieldDefinition $field */
             $fieldName = $field->identifier;
-            if ( !array_key_exists( $fieldName, $data ) )
-            {
+            if (!array_key_exists($fieldName, $data)) {
                 continue;
             }
             $fieldValue = $data[$fieldName];
-            $contentStruct->setField( $fieldName, $fieldValue );
+            $contentStruct->setField($fieldName, $fieldValue);
         }
     }
 
@@ -269,28 +262,21 @@ class Content
         $remoteId,
         $options = [],
         $lang = 'eng-US'
-    )
-    {
+    ) {
         $options['remoteId'] = $remoteId;
-        try
-        {
-            $content = $this->getContentService()->loadContentByRemoteId( $remoteId );
-            if ( ( array_key_exists( 'do_no_update', $options ) ) && ( $options['do_no_update'] == true ) )
-            {
+        try {
+            $content = $this->getContentService()->loadContentByRemoteId($remoteId);
+            if ((array_key_exists('do_no_update', $options)) && ($options['do_no_update'] == true)) {
                 return $content;
             }
-            $newContent = $this->updateContent( $content, $data, $options, $lang );
-            if ( ( array_key_exists( 'callback_update', $options ) ) && ( is_callable( $options['callback_update'] ) ) )
-            {
-                $options['callback_update']( $newContent );
+            $newContent = $this->updateContent($content, $data, $options, $lang);
+            if ((array_key_exists('callback_update', $options)) && (is_callable($options['callback_update']))) {
+                $options['callback_update']($newContent);
             }
-        }
-        catch ( NotFoundException $e )
-        {
-            $newContent = $this->createContent( $contentTypeIdentifier, $parentLocationId, $data, $options, $lang );
-            if ( ( array_key_exists( 'callback_create', $options ) ) && ( is_callable( $options['callback_create'] ) ) )
-            {
-                $options['callback_create']( $newContent );
+        } catch (NotFoundException $e) {
+            $newContent = $this->createContent($contentTypeIdentifier, $parentLocationId, $data, $options, $lang);
+            if ((array_key_exists('callback_create', $options)) && (is_callable($options['callback_create']))) {
+                $options['callback_create']($newContent);
             }
         }
 
@@ -316,8 +302,7 @@ class Content
         $remoteId,
         $options = [],
         $lang = 'eng-US'
-    )
-    {
+    ) {
         $options['do_no_update'] = true;
 
         return $this->createUpdateContent(
@@ -336,21 +321,18 @@ class Content
      * @param ValueContent $content
      * @param array        $destinationLocationIds
      */
-    public function addLocation( ValueContent $content, $destinationLocationIds = [] )
+    public function addLocation(ValueContent $content, $destinationLocationIds = [])
     {
-        $existingLocations    = $this->getLocationService()->loadLocations( $content->contentInfo );
+        $existingLocations    = $this->getLocationService()->loadLocations($content->contentInfo);
         $existingLocationsIds = [];
-        foreach ( $existingLocations as $existingLocation )
-        {
+        foreach ($existingLocations as $existingLocation) {
             $existingLocationsIds[] = $existingLocation->parentLocationId;
         }
 
-        foreach ( $destinationLocationIds as $destinationLocationId )
-        {
-            if ( !in_array( $destinationLocationId, $existingLocationsIds ) )
-            {
-                $locationCreateStruct = $this->getLocationService()->newLocationCreateStruct( $destinationLocationId );
-                $this->getLocationService()->createLocation( $content->contentInfo, $locationCreateStruct );
+        foreach ($destinationLocationIds as $destinationLocationId) {
+            if (!in_array($destinationLocationId, $existingLocationsIds)) {
+                $locationCreateStruct = $this->getLocationService()->newLocationCreateStruct($destinationLocationId);
+                $this->getLocationService()->createLocation($content->contentInfo, $locationCreateStruct);
             }
         }
 
