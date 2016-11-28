@@ -25,5 +25,10 @@
         "psr-4": {
             "Novactive\\Bundle\\eZResponsiveImagesBundle\\": ""
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
     }
 }
