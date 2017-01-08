@@ -48,14 +48,9 @@ It means:
 
 ### Use Composer
 
-Add the following to your composer.json and run `php composer.phar require novactive/ezresponsiveimagesbundle` to refresh dependencies:
-
-```json
-"require": {
-    "novactive/ezresponsiveimagesbundle": "dev-master"
-}
+``` bash
+$ php composer.phar require novactive/ezresponsiveimagesbundle
 ```
-
 
 ### Register the bundle
 
