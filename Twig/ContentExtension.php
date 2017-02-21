@@ -113,14 +113,19 @@ class ContentExtension extends KernelContentExtension
      *
      * @param RelationValue $fieldValue
      *
-     * @return Content
+     * @return Content|false
      */
     public function relationFieldToContent(RelationValue $fieldValue)
     {
-        $content  = $this->repository->getContentService()->loadContent($fieldValue->destinationContentId);
-        $location = $this->repository->getLocationService()->loadLocation($content->contentInfo->mainLocationId);
+        try {
 
-        if (($location->invisible == 1) || ($location->hidden == 1)) {
+            $content  = $this->repository->getContentService()->loadContent($fieldValue->destinationContentId);
+            $location = $this->repository->getLocationService()->loadLocation($content->contentInfo->mainLocationId);
+
+            if (($location->invisible == 1) || ($location->hidden == 1)) {
+                return false;
+            }
+        } catch (\eZ\Publish\API\Repository\Exceptions\NotFoundException $e) {
             return false;
         }
 

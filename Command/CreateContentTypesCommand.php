@@ -12,11 +12,8 @@ namespace Novactive\Bundle\eZExtraBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use DateTime;
 use PHPExcel_IOFactory;
 use PHPExcel_Cell;
 use eZ\Publish\Core\Base\Exceptions\ContentTypeFieldDefinitionValidationException;
@@ -42,16 +39,8 @@ class CreateContentTypesCommand extends ContainerAwareCommand
         $this
             ->setName('novaezextra:contenttypes:create')
             ->setDescription('Create/Update the Content Types from an Excel Content Type Model')
-            ->addArgument(
-                'file',
-                InputArgument::REQUIRED,
-                'XLSX File to import'
-            )
-            ->addArgument(
-                'tr',
-                InputArgument::OPTIONAL,
-                'Translation of contentType (eng-GB, fre-FR...)'
-            )
+            ->addArgument('file', InputArgument::REQUIRED, 'XLSX File to import')
+            ->addArgument('tr', InputArgument::OPTIONAL, 'Translation of contentType (eng-GB, fre-FR...)')
             ->addArgument(
                 'content_type_group_identifier',
                 InputArgument::OPTIONAL,

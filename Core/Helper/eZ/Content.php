@@ -338,7 +338,6 @@ class Content
             $query->criterion = new Criterion\LogicalAnd($criterion);
         }
 
-
         $query->sortClauses = $sortClause;
         $query->limit       = 1;
         $result             = $searchService->findLocations($query);

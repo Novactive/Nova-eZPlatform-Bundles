@@ -150,7 +150,6 @@ class ContentType
         $this->publishContentType($contentTypeDraft);
     }
 
-
     /**
      * Fill the Struct according to the Public API
      *
@@ -361,7 +360,6 @@ class ContentType
     {
         $this->getContentTypeService()->publishContentTypeDraft($contentTypeDraft);
     }
-
 
     /**
      * Create/Update Sugar for trying to update else to create
