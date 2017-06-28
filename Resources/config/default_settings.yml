@@ -1,0 +1,15 @@
+parameters:
+    nova_ezcloudinary.default.authentification:
+        cloud_name: demo
+        api_key: "P L O P I X"
+        api_secret: "42"
+
+    nova_ezcloudinary.default:
+        cloudinary_fecth_proxy:
+            host: ~
+            port: ~
+        cloudinary_variations:
+            optimized_medium:
+                ezreference_varation: medium
+                filters:
+                    fetch_format: 'auto'

@@ -1,0 +1,14 @@
+services:
+    novactive.ezcloudinary.twig_extension:
+        class: Novactive\Bundle\eZCloudinaryBundle\Twig\Extension
+        arguments: ["@novactive.ezcloudinary.alias.generator"]
+        public: false
+        tags:
+            - { name: twig.extension }
+
+    novactive.ezcloudinary.alias.generator:
+        class: Novactive\Bundle\eZCloudinaryBundle\Core\AliasGenerator
+        arguments:
+            - "@ezpublish.fieldtype.ezimage.variation_service"
+            - "@ezpublish.config.resolver"
+            - "%nova_ezcloudinary.authentification%"
