@@ -72,7 +72,7 @@ class AliasGenerator implements VariationService
         $eZVariationName     = $variationName;
 
         if (array_key_exists($variationName, $cloudinaryVariationsList)) {
-            $eZVariationName     = $cloudinaryVariationsList[$variationName]['ezreference_varation'];
+            $eZVariationName     = $cloudinaryVariationsList[$variationName]['ezreference_variation'];
             $cloudinaryCompliant = true;
             if (!array_key_exists($eZVariationName, $eZVariationsList)) {
                 $eZVariationName = 'original';

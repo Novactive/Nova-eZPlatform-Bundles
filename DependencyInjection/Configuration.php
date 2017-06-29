@@ -44,7 +44,7 @@ class Configuration extends SiteAccessConfiguration
                      ->arrayNode( 'cloudinary_variations' )
                         ->prototype('array')
                             ->children()
-                                ->scalarNode('ezreference_varation')->defaultNull()->end()
+                                ->scalarNode('ezreference_variation')->defaultNull()->end()
                                 ->arrayNode( 'filters' )
                                     ->prototype('variable')
 

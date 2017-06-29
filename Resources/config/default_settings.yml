@@ -10,6 +10,6 @@ parameters:
             port: ~
         cloudinary_variations:
             optimized_medium:
-                ezreference_varation: medium
+                ezreference_variation: medium
                 filters:
                     fetch_format: 'auto'

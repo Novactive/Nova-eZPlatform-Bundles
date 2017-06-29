@@ -62,7 +62,7 @@ system:
     default:
         cloudinary_variations:
             simpletest1:
-                ezreference_varation: 'Native eZ Variation Name, ~ means original'
+                ezreference_variation: 'Native eZ Variation Name, ~ means original'
                 filters: # look at the documentation on Cloudinary
                     width: 200
                     height: 200
@@ -70,7 +70,7 @@ system:
                     radius: 'max'
                     effect: 'sepia'
             simpletest2: # look at the documentation on Cloudinary
-                ezreference_varation: 'medium' # Cloudinary manipulation are going to be base on the medium alias
+                ezreference_variation: 'medium' # Cloudinary manipulation are going to be base on the medium alias
                 filters: # look at the documentation on Cloudinary
                     transformation:
                         width: 300
