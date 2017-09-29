@@ -13,7 +13,7 @@ Images stay on your servers but the SRC is adapted to make Cloudinary rendering/
 
 ### Use Composer
 
-Add the following to your composer.json and run `php composer.phar update novactive/ezseobundle` to refresh dependencies:
+Add the following to your composer.json and run `composer require novactive/ezcloudinarybundle` to refresh dependencies:
 
 ```json
 # composer.json
@@ -121,7 +121,7 @@ system:
 ```
 
 > you can do your own tunnel, here, but `ngrok` is really good at it
- 
+
 License
 -------
 
