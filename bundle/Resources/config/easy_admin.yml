@@ -1,0 +1,8 @@
+design:
+    brand_color: '#ff9900'
+    color_scheme: 'light'
+entities:
+    User:
+        class: Novactive\Bundle\eZMailingBundle\Entity\User
+        templates:
+            layout: "@NovaeZMailing/Admin/Layout/pagelayout_easyadmin.html.twig"

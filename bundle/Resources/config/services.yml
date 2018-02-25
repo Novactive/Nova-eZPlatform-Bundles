@@ -1,0 +1,38 @@
+parameters:
+
+services:
+    _defaults:
+        autowire: true
+        public: false
+
+    Novactive\Bundle\eZMailingBundle\Command\:
+        resource: '../../Command/*'
+        tags: ["console.command"]
+
+    Novactive\Bundle\eZMailingBundle\Controller\:
+        resource: '../../Controller'
+        tags: ['controller.service_arguments']
+
+    Novactive\Bundle\eZMailingBundle\Menu\Builder:
+        arguments: ["@knp_menu.factory"]
+
+    novaezmailing.menu.main:
+        class: Knp\Menu\MenuItem
+        factory: 'Novactive\Bundle\eZMailingBundle\Menu\Builder:createAdminMenu'
+        arguments: ["@request_stack"]
+        tags:
+            - { name: knp_menu.menu, alias: novaezmailing.menu.admin }
+
+    # Doctrine
+    Novactive\Bundle\eZMailingBundle\DataFixtures\:
+        resource: '../../DataFixtures'
+        tags: ['doctrine.fixture.orm']
+
+    gedmo.listener.timestampable:
+        class: Gedmo\Timestampable\TimestampableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]
+
+

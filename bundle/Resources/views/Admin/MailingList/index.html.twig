@@ -1,0 +1,34 @@
+{% extends "@NovaeZMailing/Admin/Layout/pagelayout.html.twig" %}
+
+{% block novezmailing_title %}Mailing Lists{% endblock %}
+
+{% block content %}
+    <table class="js-dataTable table table-hover table-sm"
+           data-paging="false"
+           data-ordering="false"
+           data-info="false"
+    >
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Updated</th>
+            <th>Created</th>
+            <th>Registrations Count</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in items %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td><a href="{{ path('novaezmailing_mailinglist_show', {'mailingList':item.id}) }}">{{ item.name }}</a>
+                </td>
+                <td>{{ item.created|localizeddate }}</td>
+                <td>{{ item.updated|localizeddate }}</td>
+                <td>{{ item.registrations|length }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+{% endblock %}
