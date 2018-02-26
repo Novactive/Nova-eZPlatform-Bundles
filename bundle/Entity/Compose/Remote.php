@@ -36,7 +36,7 @@ trait Remote
      * @var int
      * @ORM\Column(name="OBJ_remote_status", type="smallint", nullable=true)
      */
-    private $status;
+    private $remoteStatus;
 
     /**
      * @return string
@@ -81,19 +81,19 @@ trait Remote
     /**
      * @return int
      */
-    public function getStatus(): ?int
+    public function getRemoteStatus(): int
     {
-        return $this->status;
+        return $this->remoteStatus;
     }
 
     /**
-     * @param int $status
+     * @param int $remoteStatus
      *
      * @return Remote
      */
-    public function setStatus(int $status): self
+    public function setRemoteStatus(int $remoteStatus): self
     {
-        $this->status = $status;
+        $this->remoteStatus = $remoteStatus;
 
         return $this;
     }

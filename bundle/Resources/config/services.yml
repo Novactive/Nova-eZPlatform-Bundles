@@ -6,12 +6,16 @@ services:
         public: false
 
     Novactive\Bundle\eZMailingBundle\Command\:
-        resource: '../../Command/*'
+        resource: '../../Command'
         tags: ["console.command"]
 
     Novactive\Bundle\eZMailingBundle\Controller\:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
+
+
+    Novactive\Bundle\eZMailingBundle\Core\Provider\:
+        resource: '../../Core/Provider'
 
     Novactive\Bundle\eZMailingBundle\Menu\Builder:
         arguments: ["@knp_menu.factory"]
@@ -22,6 +26,14 @@ services:
         arguments: ["@request_stack"]
         tags:
             - { name: knp_menu.menu, alias: novaezmailing.menu.admin }
+
+    Novactive\Bundle\eZMailingBundle\Listener\EntityContentLink:
+        tags:
+            - { name: doctrine.orm.entity_listener }
+
+    # Twig
+    Novactive\Bundle\eZMailingBundle\Twig\Extension:
+        tags: ['twig.extension']
 
     # Doctrine
     Novactive\Bundle\eZMailingBundle\DataFixtures\:

@@ -14,14 +14,13 @@ namespace Novactive\Bundle\eZMailingBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Novactive\Bundle\eZMailingBundle\Entity\JSON\Name;
 
 /**
  * Class MailingList.
  *
  * @ORM\Table(name="novaezmailing_mailing_list")
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Novactive\Bundle\eZMailingBundle\Repository\MailingList")
  */
 class MailingList
 {
@@ -38,7 +37,7 @@ class MailingList
 
     /**
      * @var array
-     * @ORM\Column(name="ML_name", type="json", length=255, nullable=false)
+     * @ORM\Column(name="ML_names", type="array", nullable=false)
      */
     private $names;
 

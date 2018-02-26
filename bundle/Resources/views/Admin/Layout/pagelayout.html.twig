@@ -1,28 +1,36 @@
 {% set content = block('content') %}
 {% set novezmailing_title = block('novezmailing_title')|default('') %}
 {% embed '@EzPlatformAdminUi/layout.html.twig' %}
-    {% block stylesheets %}
-        {{ parent() }}
-        {% stylesheets filter='scssphp,cssrewrite'
-            'bundles/novaezmailing/admin/css/datatables.min.css' %}
-            <link rel="stylesheet" href="{{ asset_url }}"/>
-        {% endstylesheets %}
+    {#{% block stylesheets %}#}
+        {#{{ parent() }}#}
+        {#{% stylesheets filter='scssphp,cssrewrite'#}
+        {#%}#}
+            {#<link rel="stylesheet" href="{{ asset_url }}"/>#}
+        {#{% endstylesheets %}#}
 
-    {% endblock %}
+    {#{% endblock %}#}
 
     {% block javascripts %}
         {{ parent() }}
-        {% javascripts 'bundles/novaezmailing/admin/js/datatables.min.js' %}
+        {% javascripts
+            'bundles/novaezmailing/admin/js/jquery.autocomplete.min.js'
+            'bundles/novaezmailing/admin/js/jquery.peity.min.js'
+        %}
             <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
     {% endblock %}
 
     {% block content %}
-        <div class="novaezmailing-app row">
+        <div class="novaezmailing-app row" data-search-endpoint="{{ path('novaezmailing_dashboard_search_autocomplete') }}">
             <div class="container-fluid">
                 {% include "NovaeZMailingBundle:Admin/Layout:header.html.twig" with { title: novezmailing_title } only %}
                 <div class="content row">
                     <div class="col-2 sidebar">
+                        <h2>Campaigns</h2>
+
+
+
+                        <h2>Administration</h2>
                         {{ knp_menu_render('novaezmailing.menu.admin') }}
                     </div>
                     <div class="col-10 innercontent">

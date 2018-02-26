@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * Class Registration.
@@ -26,7 +25,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  */
 class Registration
 {
-    use TimestampableEntity;
+    use Compose\Metadata;
 
     /**
      * @var int

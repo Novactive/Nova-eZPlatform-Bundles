@@ -14,8 +14,12 @@ namespace Novactive\Bundle\eZMailingBundle\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Faker;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
 
+/**
+ * Class MailingListFixtures.
+ */
 class MailingListFixtures extends Fixture
 {
     const FIXTURE_COUNT_MAILINGLIST = 10;
@@ -25,13 +29,14 @@ class MailingListFixtures extends Fixture
      */
     public function load(ObjectManager $manager): void
     {
+        $faker = Faker\Factory::create();
         for ($i = 1; $i <= self::FIXTURE_COUNT_MAILINGLIST; ++$i) {
             $mailingList = new MailingList();
             $mailingList->setNames(
                 [
-                    'fre-FR' => "Ma List {$i}",
-                    'eng-GB' => "My GB List {$i}",
-                    'eng-US' => "My US List {$i}",
+                    'fre-FR' => $faker->unique()->sentence(6).'( FR )',
+                    'eng-GB' => $faker->unique()->sentence(6).'( GB )',
+                    'eng-US' => $faker->unique()->sentence(6).'( US )',
                 ]
             );
             $manager->persist($mailingList);

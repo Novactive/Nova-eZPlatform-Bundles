@@ -48,7 +48,5 @@ class InstallCommand extends Command
         ];
         $arrayInput = new ArrayInput($arguments);
         $command->run($arrayInput, $output);
-
-        $io->title('Update the Content Repository and Add/Update the Campaign Content Type');
     }
 }

@@ -3,7 +3,16 @@
 {% block novezmailing_title %}{{ item.name }}{% endblock %}
 
 {% block content %}
-
-    {{ dump(item) }}
+    {% include "NovaeZMailingBundle:Admin/Common/List:usersFilterer.html.twig" with {
+        route: "novaezmailing_mailinglist_show",
+        limit: pager.maxPerPage,
+        currentStatus: currentStatus,
+        statuses: statuses,
+        extraParams: {mailingList: item.id}
+    } only %}
+    {% include "NovaeZMailingBundle:Admin/Common/List:users.html.twig" with {items:pager.currentPageResults,currentMailingList: item, withRegistrations: false} only %}
+    <div class="pagerfanta">
+        {{ pagerfanta(pager, 'twitter_bootstrap4') }}
+    </div>
 {% endblock %}
 

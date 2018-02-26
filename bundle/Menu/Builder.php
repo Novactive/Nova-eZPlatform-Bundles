@@ -41,9 +41,25 @@ class Builder
      */
     public function createAdminMenu(RequestStack $requestStack): ItemInterface
     {
-        $menu = $this->factory->createItem('root');
-        $menu->addChild('mailinglists', ['route' => 'novaezmailing_mailinglist_index', 'label' => 'Mailing Lists']);
-        $menu->addChild('users', ['route' => 'novaezmailing_user_index', 'label' => 'Users']);
+        $request      = $requestStack->getMasterRequest();
+        $route        = null !== $request ? $request->attributes->get('_route') : null;
+        $mailingRoute = 'novaezmailing_mailinglist';
+        $userRoute    = 'novaezmailing_user';
+
+        $menu  = $this->factory->createItem('root');
+        $child = $menu->addChild(
+            'mailinglists',
+            ['route' => "{$mailingRoute}_index", 'label' => 'Mailing Lists']
+        );
+
+        if (substr($route, 0, \strlen($mailingRoute)) === $mailingRoute) {
+            $child->setCurrent(true);
+        }
+
+        $child = $menu->addChild('users', ['route' => "{$userRoute}_index", 'label' => 'Users']);
+        if (substr($route, 0, \strlen($userRoute)) === $userRoute) {
+            $child->setCurrent(true);
+        }
 
         return $menu;
     }

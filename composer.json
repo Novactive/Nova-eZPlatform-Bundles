@@ -23,7 +23,6 @@
     "require": {
         "php": "^7.2",
         "nesbot/carbon": "^1.22",
-        "dunglas/doctrine-json-odm": "^0.1.1",
         "gedmo/doctrine-extensions": "^2.4"
     },
     "require-dev": {

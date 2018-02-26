@@ -1,6 +1,10 @@
 
 .novaezmailing-app {
 
+    h1, h2, h3, h4, h5, h6 {
+        color: rgba(51, 51, 51, .9);
+    }
+
     a[data-toggle="popover"] {
         cursor: pointer;
     }
@@ -11,14 +15,53 @@
             display: block;
             padding-top: 35px;
         }
+        .novaezmailing-search {
+            padding-top: 35px;
+        }
     }
     .sidebar {
+        li.current {
+            a {
+                font-weight: bold;
+                color: #F05A22;
+            }
+        }
     }
     .innercontent {
 
     }
     footer {
-        background: #0f74a8;
+        p {
+            font-size: 0.75em;
+            color: #ddd;
+            text-align: center;
+            width: 100%;
+        }
     }
 }
 
+.autocomplete-suggestions {
+    border: 1px solid #999;
+    background: #FFF;
+    overflow: auto;
+    .autocomplete-suggestion {
+        padding: 2px 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        cursor: pointer;
+    }
+    .autocomplete-selected {
+        background: #F0F0F0;
+    }
+    .autocomplete-suggestions strong {
+        font-weight: normal;
+        color: #3399FF;
+    }
+    .autocomplete-group {
+        padding: 2px 5px;
+    }
+    .autocomplete-group strong {
+        display: block;
+        border-bottom: 1px solid #000;
+    }
+}

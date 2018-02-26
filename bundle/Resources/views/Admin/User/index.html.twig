@@ -3,57 +3,11 @@
 {% block novezmailing_title %}Users{% endblock %}
 
 {% block content %}
-    <table class="js-dataTable table table-striped table-hover table-sm"
-           data-info="false"
-           data-paging-type="full_numbers"
-           data-page-length="5"
-           data-length-change="false"
-    >
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Email</th>
-            <th>Country</th>
-            <th>Origin</th>
-            <th>Updated</th>
-            <th>Created</th>
-            <th>Registrations</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for item in items %}
-            <tr>
-                <td>{{ item.id }}</td>
-                <td><a data-toggle="popover"
-                       title="{{ item.gender }} {{ item.firstname }} {{ item.lastName }}"
-                       data-content="
-                            {% if item.birthDate is not empty %}<p><strong>Birth date</strong>: {{ item.birthDate|localizeddate|default('') }}</p>{% endif %}
-                            {% if item.phone is not empty %}<p><strong>Phone</strong>: {{ item.phone }}</p>{% endif %}
-                            {% if item.zipcode is not empty or item.city is not empty or item.city is not empty or state is not empty %}<p><strong>Location</strong>:{{ item.zipcode }} {{ item.city }} {{ item.state }}</p>{% endif %}
-                            {% if item.jobTitle is not empty or item.company is not empty %}<p><strong>Job</strong>: {{ item.jobTitle }} {{ item.company }}</p>{% endif %}
-                            "
-                       data-html="true"
-                       data-trigger="hover"
-
-                    >{{ item.email }}</a></td>
-                <td>{{ item.country }}</td>
-                <td>{{ item.origin }}</td>
-                <td>{{ item.updated|localizeddate }}</td>
-                <td>{{ item.created|localizeddate }}</td>
-                <td>
-                    <div class="list-group">
-                        {% for registration in item.registrations %}
-                            <a href="{{ path('novaezmailing_mailinglist_show',{mailingList:registration.mailinglist.id}) }}"
-                               class="list-group-item list-group-item-action"
-                            >
-                                {{ registration.mailinglist.name }}
-                            </a>
-                        {% endfor %}
-
-                    </div>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {% include "NovaeZMailingBundle:Admin/Common/List:usersFilterer.html.twig" with {
+        route: "novaezmailing_user_index",
+        limit: pager.maxPerPage,
+        currentStatus: currentStatus,
+        statuses: statuses
+    } only %}
+    {% include "NovaeZMailingBundle:Admin/Common/List:users.html.twig" with {items:pager.currentPageResults} only %}
 {% endblock %}

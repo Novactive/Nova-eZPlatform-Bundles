@@ -34,11 +34,64 @@ class User
     use Compose\Remote;
 
     /**
+     * In the BD, weird fallback status (should not exist).
+     */
+    const IN_BASE = 0;
+
+    /**
+     * Did not confirmed the confirmation email.
+     */
+    const PENDING = 10;
+
+    /**
+     * Did not confirmed the confirmation email.
+     */
+    const CONFIRMED = 20;
+
+    /**
+     * Flag as SOFT BOUNCE.
+     */
+    const SOFT_BOUNCE = 30;
+
+    /**
+     * Flag as HARD BOUNCE.
+     */
+    const HARD_BOUNCE = 40;
+
+    /**
+     * Was blacklisted.
+     */
+    const BLACKLISTED = 666;
+
+    /**
+     * Statuses.
+     */
+    const STATUSES = [
+        self::PENDING     => 'pending',
+        self::CONFIRMED   => 'confirmed',
+        self::SOFT_BOUNCE => 'soft_bounce',
+        self::HARD_BOUNCE => 'hard_bounce',
+        self::BLACKLISTED => 'blacklisted',
+    ];
+
+    /**
+     * Styles.
+     */
+    const STATUSES_STYLE = [
+        self::PENDING     => 'dark',
+        self::CONFIRMED   => 'success',
+        self::SOFT_BOUNCE => 'warning',
+        self::HARD_BOUNCE => 'danger',
+        self::BLACKLISTED => 'info',
+    ];
+
+    /**
      * User constructor.
      */
     public function __construct()
     {
         $this->registrations = new ArrayCollection();
+        $this->restricted    = false;
     }
 
     /**
@@ -129,6 +182,18 @@ class User
     private $origin;
 
     /**
+     * @var int
+     * @ORM\Column(name="USER_status", type="smallint", nullable=false)
+     */
+    private $status;
+
+    /**
+     * @var bool
+     * @ORM\Column(name="USER_restricted", type="boolean", nullable=false)
+     */
+    private $restricted;
+
+    /**
      * @var Registration[]
      * @ORM\OneToMany(targetEntity="Novactive\Bundle\eZMailingBundle\Entity\Registration", mappedBy="user",
      *                                                                                     cascade={"persist","remove"},
@@ -160,7 +225,7 @@ class User
     /**
      * @return string
      */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -180,7 +245,7 @@ class User
     /**
      * @return string
      */
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
@@ -200,7 +265,7 @@ class User
     /**
      * @return string
      */
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
@@ -220,7 +285,7 @@ class User
     /**
      * @return string
      */
-    public function getGender(): string
+    public function getGender(): ?string
     {
         return $this->gender;
     }
@@ -240,7 +305,7 @@ class User
     /**
      * @return DateTime
      */
-    public function getBirthDate(): DateTime
+    public function getBirthDate(): ?DateTime
     {
         return $this->birthDate;
     }
@@ -260,7 +325,7 @@ class User
     /**
      * @return string
      */
-    public function getPhone(): string
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
@@ -280,7 +345,7 @@ class User
     /**
      * @return string
      */
-    public function getZipcode(): string
+    public function getZipcode(): ?string
     {
         return $this->zipcode;
     }
@@ -300,7 +365,7 @@ class User
     /**
      * @return string
      */
-    public function getCity(): string
+    public function getCity(): ?string
     {
         return $this->city;
     }
@@ -320,7 +385,7 @@ class User
     /**
      * @return string
      */
-    public function getState(): string
+    public function getState(): ?string
     {
         return $this->state;
     }
@@ -340,7 +405,7 @@ class User
     /**
      * @return string
      */
-    public function getCountry(): string
+    public function getCountry(): ?string
     {
         return $this->country;
     }
@@ -360,7 +425,7 @@ class User
     /**
      * @return string
      */
-    public function getJobTitle(): string
+    public function getJobTitle(): ?string
     {
         return $this->jobTitle;
     }
@@ -380,7 +445,7 @@ class User
     /**
      * @return string
      */
-    public function getCompany(): string
+    public function getCompany(): ?string
     {
         return $this->company;
     }
@@ -413,6 +478,46 @@ class User
     public function setOrigin(string $origin): self
     {
         $this->origin = $origin;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param int $status
+     *
+     * @return User
+     */
+    public function setStatus(int $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRestricted(): bool
+    {
+        return $this->restricted;
+    }
+
+    /**
+     * @param bool $restricted
+     *
+     * @return User
+     */
+    public function setRestricted(bool $restricted): self
+    {
+        $this->restricted = $restricted;
 
         return $this;
     }
@@ -464,5 +569,45 @@ class User
         $this->registrations->add($registration);
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isConfirmed(): bool
+    {
+        return self::CONFIRMED === $this->status;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPending(): bool
+    {
+        return self::PENDING === $this->status;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBlacklisted(): bool
+    {
+        return self::BLACKLISTED === $this->status;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSoftBounce(): bool
+    {
+        return self::SOFT_BOUNCE === $this->status;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHardBounce(): bool
+    {
+        return self::HARD_BOUNCE === $this->status;
     }
 }

@@ -10,8 +10,13 @@
  */
 declare(strict_types=1);
 
-namespace Novactive\Bundle\eZMailingBundle\Core;
+namespace Novactive\Bundle\eZMailingBundle\Repository;
 
-class Test
+use Doctrine\ORM\EntityRepository;
+
+/**
+ * Class Campaign.
+ */
+class Campaign extends EntityRepository
 {
 }

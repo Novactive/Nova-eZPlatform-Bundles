@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
 use Doctrine\ORM\EntityManager;
+use Novactive\Bundle\eZMailingBundle\Core\Provider\User as UserProvider;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -25,6 +26,33 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class MailingListController
 {
     /**
+     * @Route("/show/{mailingList}/{status}/{page}/{limit}", name="novaezmailing_mailinglist_show",
+     *                                              defaults={"page":1, "limit":10, "status":"all"})
+     * @Template()
+     *
+     * @return array
+     */
+    public function showAction(
+        MailingList $mailingList,
+        UserProvider $provider,
+        string $status = 'all',
+        int $page = 1,
+        int $limit = 10
+    ): array {
+        $filers = [
+            'mailingLists' => [$mailingList],
+            'status'       => 'all' === $status ? null : (int) $status,
+        ];
+
+        return [
+            'pager'         => $provider->getPagerFilters($filers, $page, $limit),
+            'item'          => $mailingList,
+            'statuses'      => $provider->getStatusesData($filers),
+            'currentStatus' => $status,
+        ];
+    }
+
+    /**
      * @Route("", name="novaezmailing_mailinglist_index")
      * @Template()
      *
@@ -35,18 +63,5 @@ class MailingListController
         $repo = $entityManager->getRepository(MailingList::class);
 
         return ['items' => $repo->findAll()];
-    }
-
-    /**
-     * @Route("/show/{mailingList}", name="novaezmailing_mailinglist_show")
-     * @Template()
-     *
-     * @return array
-     */
-    public function showAction(MailingList $mailingList): array
-    {
-        return [
-            'item' => $mailingList,
-        ];
     }
 }
