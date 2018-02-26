@@ -6,7 +6,7 @@
  *
  * @author    Novactive <s.morel@novactive.com>
  * @copyright 2018 Novactive
- * @license   https://github.com/Novactive/eZMailingBundle/blob/master/LICENSE MIT Licence
+ * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
 
 namespace Novactive\Bundle\eZMailingBundle\DependencyInjection;
