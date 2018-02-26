@@ -1,0 +1,125 @@
+.novaezmailing-app .sidebar .campaigns {
+    /* CSS Tree menu styles */
+    ul {
+        padding: 0 0 0 30px;
+        width: 300px;
+
+        li {
+            position: relative;
+            margin-left: -15px;
+            list-style: none;
+
+            input {
+                position: absolute;
+                left: 0;
+                margin-left: 0;
+                opacity: 0;
+                z-index: 2;
+                cursor: pointer;
+                height: 1em;
+                width: 1em;
+                top: 0;
+            }
+
+            input + ul {
+                background: url(../images/toggle-small-expand.png) 40px 0 no-repeat;
+                margin: -27px 0 0 -44px;
+                height: 21px;
+            }
+
+            input + ul > li {
+                display: none;
+                margin-left: -14px !important;
+                padding-left: 1px;
+            }
+
+            label {
+                background-repeat: no-repeat;
+                background-position: 15px 4px;
+                cursor: pointer;
+                display: block;
+                padding-left: 37px;
+            }
+
+            input:checked + ul {
+                background: url(../images/toggle-small.png) 40px 5px no-repeat;
+                margin: -32px 0 0 -44px;
+                padding: 1.563em 0 0 80px;
+                height: auto;
+            }
+
+            input:checked + ul > li {
+                display: block;
+                margin: 0 0 0.125em;
+            }
+
+            input:checked + ul > li:last-child {
+                margin: 0 0 0.063em;
+            }
+        }
+
+        li.leaf {
+            margin-left: -13px !important;
+            a {
+                background-position: 0 3px;
+                background-repeat: no-repeat;
+                padding-left: 21px;
+                text-decoration: none;
+                display: block;
+            }
+        }
+
+        li label {
+            background-image: url(../images/campaign.png);
+        }
+        li.aborted a {
+            background-image: url(../images/aborted.png);
+        }
+        li.archived a {
+            background-image: url(../images/archived.png);
+        }
+        li.sent a {
+            background-image: url(../images/sent.png);
+        }
+        li.processing a {
+            background-image: url(../images/processing.png);
+        }
+        li.pending a {
+            background-image: url(../images/pending.png);
+        }
+        li.draft a {
+            background-image: url(../images/draft.png);
+        }
+        li.subscriptions a {
+            background-image: url(../images/subscriptions.png);
+        }
+    }
+
+    ul.kcode {
+        li label {
+            background-image: url(../images/kcode/campaign.png);
+        }
+        li.aborted a {
+            background-image: url(../images/kcode/aborted.png);
+        }
+        li.archived a {
+            background-image: url(../images/kcode/archived.png);
+        }
+        li.sent a {
+            background-image: url(../images/kcode/sent.png);
+        }
+        li.processing a {
+            background-image: url(../images/kcode/processing.png);
+        }
+        li.pending a {
+            background-image: url(../images/kcode/pending.png);
+        }
+        li.draft a {
+            background-image: url(../images/kcode/draft.png);
+        }
+        li.subscriptions a {
+            background-image: url(../images/kcode/subscriptions.png);
+        }
+    }
+
+}

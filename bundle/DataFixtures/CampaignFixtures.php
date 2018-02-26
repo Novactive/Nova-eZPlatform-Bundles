@@ -56,6 +56,13 @@ class CampaignFixtures extends Fixture implements DependentFixtureInterface
             $nbMailings = $faker->numberBetween(1, 10);
             for ($k = 0; $k < $nbMailings; ++$k) {
                 $mailing = new Mailing();
+                $mailing->setNames(
+                    [
+                        'fre-FR' => "MAILING {$k}( FR )",
+                        'eng-GB' => "MAILING {$k}( GB )",
+                        'eng-US' => "MAILING {$k}( US )",
+                    ]
+                );
                 $mailing->setStatus($faker->randomElement(array_keys(Mailing::STATUSES)));
                 $mailing->setRecurring($faker->boolean());
                 $mailing->setHoursOfDay([$faker->numberBetween(0, 23)]);

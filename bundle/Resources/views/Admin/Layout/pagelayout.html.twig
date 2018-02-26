@@ -1,21 +1,20 @@
 {% set content = block('content') %}
 {% set novezmailing_title = block('novezmailing_title')|default('') %}
 {% embed '@EzPlatformAdminUi/layout.html.twig' %}
-    {#{% block stylesheets %}#}
-        {#{{ parent() }}#}
-        {#{% stylesheets filter='scssphp,cssrewrite'#}
-        {#%}#}
-            {#<link rel="stylesheet" href="{{ asset_url }}"/>#}
-        {#{% endstylesheets %}#}
+    {% block stylesheets %}
+        {{ parent() }}
+        {% stylesheets filter='scssphp,cssrewrite'
+            'bundles/novaezmailing/admin/css/tree.scss' %}
+            <link rel="stylesheet" href="{{ asset_url }}"/>
+        {% endstylesheets %}
 
-    {#{% endblock %}#}
+    {% endblock %}
 
     {% block javascripts %}
         {{ parent() }}
         {% javascripts
             'bundles/novaezmailing/admin/js/jquery.autocomplete.min.js'
-            'bundles/novaezmailing/admin/js/jquery.peity.min.js'
-        %}
+            'bundles/novaezmailing/admin/js/jquery.peity.min.js' %}
             <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
     {% endblock %}
@@ -27,9 +26,9 @@
                 <div class="content row">
                     <div class="col-2 sidebar">
                         <h2>Campaigns</h2>
-
-
-
+                        <div class="campaigns">
+                            {{ knp_menu_render('novaezmailing.menu.campaigns', {template:"@NovaeZMailing/Admin/Common/menu.html.twig"}) }}
+                        </div>
                         <h2>Administration</h2>
                         {{ knp_menu_render('novaezmailing.menu.admin') }}
                     </div>

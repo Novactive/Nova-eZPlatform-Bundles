@@ -26,6 +26,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Campaign implements eZ\ContentInterface
 {
     use Compose\Metadata;
+    use Compose\Names;
     use eZ\Content;
 
     /**
@@ -35,12 +36,6 @@ class Campaign implements eZ\ContentInterface
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @var array
-     * @ORM\Column(name="CAMP_names", type="array", nullable=false)
-     */
-    private $names;
 
     /**
      * @var string
@@ -109,26 +104,6 @@ class Campaign implements eZ\ContentInterface
     public function setId(int $id): self
     {
         $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getNames(): array
-    {
-        return $this->names;
-    }
-
-    /**
-     * @param array $names
-     *
-     * @return Campaign
-     */
-    public function setNames(array $names): self
-    {
-        $this->names = $names;
 
         return $this;
     }
@@ -255,9 +230,9 @@ class Campaign implements eZ\ContentInterface
     }
 
     /**
-     * @return Mailing[]
+     * @return ArrayCollection|Mailing[]
      */
-    public function getMailings(): array
+    public function getMailings()
     {
         return $this->mailings;
     }

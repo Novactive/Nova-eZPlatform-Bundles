@@ -26,6 +26,7 @@ class MailingList
 {
     use Compose\Remote;
     use Compose\Metadata;
+    use Compose\Names;
 
     /**
      * @var int
@@ -34,12 +35,6 @@ class MailingList
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @var array
-     * @ORM\Column(name="ML_names", type="array", nullable=false)
-     */
-    private $names;
 
     /**
      * @var Registration[]
@@ -77,40 +72,6 @@ class MailingList
         $this->id = $id;
 
         return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getNames(): array
-    {
-        return $this->names;
-    }
-
-    /**
-     * @param array $names
-     *
-     * @return MailingList
-     */
-    public function setNames(array $names): self
-    {
-        $this->names = $names;
-
-        return $this;
-    }
-
-    /**
-     * @param null|string $lang
-     *
-     * @return string
-     */
-    public function getName(?string $lang = null): string
-    {
-        if (null === $lang || !isset($this->names[$lang])) {
-            return array_values($this->names)[0];
-        }
-
-        return $this->names[$lang];
     }
 
     /**

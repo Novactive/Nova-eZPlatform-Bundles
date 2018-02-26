@@ -26,6 +26,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Mailing implements eZ\ContentInterface
 {
     use Compose\Metadata;
+    use Compose\Names;
     use eZ\Content;
 
     /**

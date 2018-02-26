@@ -27,6 +27,13 @@ services:
         tags:
             - { name: knp_menu.menu, alias: novaezmailing.menu.admin }
 
+    novaezmailing.menu.campaigns:
+        class: Knp\Menu\MenuItem
+        factory: 'Novactive\Bundle\eZMailingBundle\Menu\Builder:createCampaignMenu'
+        arguments: ["@request_stack", "@doctrine.orm.entity_manager"]
+        tags:
+            - { name: knp_menu.menu, alias: novaezmailing.menu.campaigns }
+
     Novactive\Bundle\eZMailingBundle\Listener\EntityContentLink:
         tags:
             - { name: doctrine.orm.entity_listener }

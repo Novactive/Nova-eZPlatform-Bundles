@@ -12,8 +12,11 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Menu;
 
+use Doctrine\ORM\EntityManager;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
+use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
+use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -59,6 +62,56 @@ class Builder
         $child = $menu->addChild('users', ['route' => "{$userRoute}_index", 'label' => 'Users']);
         if (substr($route, 0, \strlen($userRoute)) === $userRoute) {
             $child->setCurrent(true);
+        }
+
+        return $menu;
+    }
+
+    /**
+     * @param RequestStack $requestStack
+     *
+     * @return ItemInterface
+     */
+    public function createCampaignMenu(RequestStack $requestStack, EntityManager $entityManager): ItemInterface
+    {
+        $request = $requestStack->getMasterRequest();
+        $route   = null !== $request ? $request->attributes->get('_route') : null;
+        $menu    = $this->factory->createItem('root');
+        $repo    = $entityManager->getRepository(Campaign::class);
+
+        $campaigns = $repo->findAll();
+
+        $mailingStatuses = Mailing::STATUSES;
+        foreach ($campaigns as $campaign) {
+            $child = $menu->addChild("camp_{$campaign->getId()}", ['label' => $campaign->getName()]);
+            $child->addChild(
+                "camp_{$campaign->getId()}_subsciptions",
+                [
+                    'route'           => 'novaezmailing_campaign_subscriptions',
+                    'routeParameters' => ['campaign' => $campaign->getId()],
+                    'label'           => 'Subscriptions',
+                    'attributes'      => [
+                        'class' => 'leaf subscriptions',
+                    ],
+                ]
+            );
+
+            foreach ($mailingStatuses as $statusId => $statusKey) {
+                $child->addChild(
+                    "mailing_status_{$statusId}",
+                    [
+                        'route'           => 'novaezmailing_campaign_mailings',
+                        'routeParameters' => [
+                            'campaign' => $campaign->getId(),
+                            'status'   => $statusId,
+                        ],
+                        'label'           => $statusKey,
+                        'attributes'      => [
+                            'class' => "leaf {$statusKey}",
+                        ],
+                    ]
+                );
+            }
         }
 
         return $menu;
