@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
-use Novactive\Bundle\eZMailingBundle\Core\Provider\User as UserProvider;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -25,29 +24,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class MailingController
 {
     /**
-     * @Route("/show/{mailing}/{status}/{page}/{limit}", name="novaezmailing_mailing_show",
-     *                                              defaults={"page":1, "limit":10, "status":"all"})
+     * @Route("/show/{mailing}", name="novaezmailing_mailing_show")
      * @Template()
      *
      * @return array
      */
-    public function showAction(
-        Mailing $mailing,
-        UserProvider $provider,
-        string $status = 'all',
-        int $page = 1,
-        int $limit = 10
-    ): array {
-//        $filers = [
-//            'mailingLists' => [$mailing],
-//            'status'       => 'all' === $status ? null : (int) $status,
-//        ];
-
+    public function showAction(Mailing $mailing): array
+    {
         return [
-//            'pager'         => $provider->getPagerFilters($filers, $page, $limit),
-//            'item'          => $mailingList,
-//            'statuses'      => $provider->getStatusesData($filers),
-//            'currentStatus' => $status,
+            'item' => $mailing,
         ];
     }
 }

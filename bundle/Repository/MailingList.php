@@ -12,9 +12,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Novactive\Bundle\eZMailingBundle\Entity\MailingList as MailingListEntity;
 
 /**
  * Class MailingList.
@@ -22,28 +20,11 @@ use Novactive\Bundle\eZMailingBundle\Entity\MailingList as MailingListEntity;
 class MailingList extends EntityRepository
 {
     /**
-     * @param array $filters
-     *
-     * @return MailingListEntity[]
+     * {@inheritdoc}
      */
-    public function findByFilters(array $filters = []): array
+    protected function getAlias(): string
     {
-        $qb = $this->createQueryBuilderForFilters($filters);
-
-        return $qb->getQuery()->getResult();
-    }
-
-    /**
-     * @param array $filters
-     *
-     * @return int
-     */
-    public function countByFilters(array $filters = []): int
-    {
-        $qb = $this->createQueryBuilderForFilters($filters);
-        $qb->select($qb->expr()->count('ml.id'));
-
-        return (int) $qb->getQuery()->getSingleScalarResult();
+        return 'ml';
     }
 
     /**
@@ -53,7 +34,7 @@ class MailingList extends EntityRepository
      */
     public function createQueryBuilderForFilters(array $filters = []): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('ml')->select('ml');
+        $qb = parent::createQueryBuilderForFilters($filters);
         if (isset($filters['query'])) {
             $query = $filters['query'];
             $qb->andWhere(

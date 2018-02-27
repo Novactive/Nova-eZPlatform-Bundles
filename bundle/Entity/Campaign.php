@@ -68,6 +68,7 @@ class Campaign implements eZ\ContentInterface
      *      joinColumns={@ORM\JoinColumn(name="ML_id", referencedColumnName="CAMP_id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="CAMP_id", referencedColumnName="ML_id")}
      *      )
+     * @ORM\OrderBy({"created" = "ASC"})
      */
     private $mailingLists;
 
@@ -189,9 +190,9 @@ class Campaign implements eZ\ContentInterface
     }
 
     /**
-     * @return MailingList[]
+     * @return MailingList[]|ArrayCollection
      */
-    public function getMailingLists(): MailingList
+    public function getMailingLists()
     {
         return $this->mailingLists;
     }

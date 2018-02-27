@@ -36,9 +36,9 @@ class CampaignFixtures extends Fixture implements DependentFixtureInterface
             $campaign = new Campaign();
             $campaign->setNames(
                 [
-                    'fre-FR' => "CAMPAIGN {$i}( FR )",
-                    'eng-GB' => "CAMPAIGN {$i}( GB )",
-                    'eng-US' => "CAMPAIGN {$i}( US )",
+                    'fre-FR' => $faker->words(2, true),
+                    'eng-GB' => $faker->words(2, true),
+                    'eng-US' => $faker->words(2, true),
                 ]
             );
             $campaign->setReportEmail($faker->email);
@@ -58,9 +58,9 @@ class CampaignFixtures extends Fixture implements DependentFixtureInterface
                 $mailing = new Mailing();
                 $mailing->setNames(
                     [
-                        'fre-FR' => "MAILING {$k}( FR )",
-                        'eng-GB' => "MAILING {$k}( GB )",
-                        'eng-US' => "MAILING {$k}( US )",
+                        'fre-FR' => $faker->words(2, true),
+                        'eng-GB' => $faker->words(2, true),
+                        'eng-US' => $faker->words(2, true),
                     ]
                 );
                 $mailing->setStatus($faker->randomElement(array_keys(Mailing::STATUSES)));

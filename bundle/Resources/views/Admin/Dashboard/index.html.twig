@@ -1,10 +1,17 @@
 {% extends "@NovaeZMailing/Admin/Layout/pagelayout.html.twig" %}
 
-
+{% block novezmailing_breadcrumb %}
+    <ol class="breadcrumb px-4">
+        <li class="breadcrumb-item active">
+            Nova eZ Mailing
+        </li>
+    </ol>
+{% endblock %}
 {% block novezmailing_title %}Dashboard{% endblock %}
+{% block novezmailing_subtitle %}Quick overview{% endblock %}
 
 {% block content %}
 
-    PLOP
+    Dashboard
 
 {% endblock %}

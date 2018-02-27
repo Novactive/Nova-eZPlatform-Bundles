@@ -38,6 +38,7 @@ class MailingList
 
     /**
      * @var Registration[]
+     * @ORM\OrderBy({"created" = "ASC"})
      * @ORM\OneToMany(targetEntity="\Novactive\Bundle\eZMailingBundle\Entity\Registration", mappedBy="mailingList",
      *                                                                                      cascade={"persist","remove"},
      *                                                                                      orphanRemoval=true,

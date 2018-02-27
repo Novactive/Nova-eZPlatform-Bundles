@@ -1,5 +1,7 @@
 {% set content = block('content') %}
-{% set novezmailing_title = block('novezmailing_title')|default('') %}
+{% set novezmailing_title = block('novezmailing_title') %}
+{% set novezmailing_subtitle = block('novezmailing_subtitle') %}
+{% set novezmailing_breadcrumb = block('novezmailing_breadcrumb') %}
 {% embed '@EzPlatformAdminUi/layout.html.twig' %}
     {% block stylesheets %}
         {{ parent() }}
@@ -22,7 +24,7 @@
     {% block content %}
         <div class="novaezmailing-app row" data-search-endpoint="{{ path('novaezmailing_dashboard_search_autocomplete') }}">
             <div class="container-fluid">
-                {% include "NovaeZMailingBundle:Admin/Layout:header.html.twig" with { title: novezmailing_title } only %}
+                {% include "NovaeZMailingBundle:Admin/Layout:header.html.twig" with { title: novezmailing_title, subTitle: novezmailing_subtitle, breadcrumb: novezmailing_breadcrumb } only %}
                 <div class="content row">
                     <div class="col-2 sidebar">
                         <h2>Campaigns</h2>

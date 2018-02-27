@@ -53,15 +53,22 @@
             {% endif %}
             {% if withRegistrations %}
                 <td>
-                    <div class="list-group">
+                    <table class="table table-striped table-hover table-sm">
+                        <tr>
+                            <th class="text-center">Mailing List</th>
+                            <th>Updated</th>
+                            <th>Created</th>
+                        </tr>
                         {% for registration in item.registrations %}
-                            <a href="{{ path('novaezmailing_mailinglist_show',{mailingList:registration.mailinglist.id}) }}"
-                               class="list-group-item list-group-item-action"
-                            >
-                                {{ registration.mailinglist.name }}
-                            </a>
+                            <tr>
+                                <td>
+                                    <a href="{{ path('novaezmailing_mailinglist_show',{mailingList:registration.mailinglist.id}) }}">{{ registration.mailinglist.name }}</a>
+                                </td>
+                                <td>{{ registration.updated|localizeddate }}</td>
+                                <td>{{ registration.created|localizeddate }}</td>
+                            </tr>
                         {% endfor %}
-                    </div>
+                    </table>
                 </td>
             {% endif %}
         </tr>

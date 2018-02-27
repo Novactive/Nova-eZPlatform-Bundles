@@ -13,7 +13,6 @@ services:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
 
-
     Novactive\Bundle\eZMailingBundle\Core\Provider\:
         resource: '../../Core/Provider'
 

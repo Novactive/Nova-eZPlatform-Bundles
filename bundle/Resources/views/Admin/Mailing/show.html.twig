@@ -1,7 +1,15 @@
 {% extends '@NovaeZMailing/Admin/Layout/pagelayout.html.twig' %}
 
+{% block novezmailing_breadcrumb %}
+    <ol class="breadcrumb px-4">
+        <li class="breadcrumb-item"><a href="{{ path("novaezmailing_dashboard_index") }}">Nova eZ Mailing</a></li>
+        <li class="breadcrumb-item">Campaigns</li>
+        <li class="breadcrumb-item">{{ item.campaign.name }}</li>
+        <li class="breadcrumb-item active">{{ item.name }}</li>
+    </ol>
+{% endblock %}
 {% block novezmailing_title %}{{ item.name }}{% endblock %}
-
+{% block novezmailing_subtitle %}Mailing{% endblock %}
 {% block content %}
    plop
 {% endblock %}

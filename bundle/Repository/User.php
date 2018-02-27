@@ -12,10 +12,9 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
-use Novactive\Bundle\eZMailingBundle\Entity\User as UserEntity;
+use Novactive\Bundle\eZMailingBundle\Entity\Campaign as CampaignEntity;
 
 /**
  * Class User.
@@ -23,28 +22,11 @@ use Novactive\Bundle\eZMailingBundle\Entity\User as UserEntity;
 class User extends EntityRepository
 {
     /**
-     * @param array $filters
-     *
-     * @return UserEntity[]
+     * {@inheritdoc}
      */
-    public function findByFilters(array $filters = []): array
+    protected function getAlias(): string
     {
-        $qb = $this->createQueryBuilderForFilters($filters);
-
-        return $qb->getQuery()->getResult();
-    }
-
-    /**
-     * @param array $filters
-     *
-     * @return int
-     */
-    public function countByFilters(array $filters = []): int
-    {
-        $qb = $this->createQueryBuilderForFilters($filters);
-        $qb->select($qb->expr()->count('u.id'));
-
-        return (int) $qb->getQuery()->getSingleScalarResult();
+        return 'u';
     }
 
     /**
@@ -54,18 +36,27 @@ class User extends EntityRepository
      */
     public function createQueryBuilderForFilters(array $filters = []): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('u')->select('u');
+        $qb = parent::createQueryBuilderForFilters($filters);
         $qb->where($qb->expr()->eq('u.restricted', ':restricted'))->setParameter('restricted', false);
 
+        $mailingLists = null;
+        if (isset($filters['campaign'])) {
+            /** @var CampaignEntity $campaign */
+            $campaign     = $filters['campaign'];
+            $mailingLists = $campaign->getMailingLists();
+        }
         if (isset($filters['mailingLists'])) {
+            $mailingLists = $filters['mailingLists'];
+        }
+        if (null !== $mailingLists) {
             $qb
                 ->innerJoin(
                     'u.registrations',
                     'reg',
                     Join::WITH,
-                    $qb->expr()->in('reg.mailingList', ':mailinglists')
+                    $qb->expr()->in('reg.mailingList', ':mailingLists')
                 )
-                ->setParameter('mailinglists', $filters['mailingLists']);
+                ->setParameter('mailingLists', $mailingLists);
         }
 
         if (isset($filters['status'])) {

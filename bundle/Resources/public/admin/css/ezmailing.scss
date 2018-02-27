@@ -1,7 +1,10 @@
+$eZDarkBackground: #555555;
+$eZMediumBackground: #E5E3E3;
+$eZLightBackground: #F5F5F5;
 
 .novaezmailing-app {
 
-    h1, h2, h3, h4, h5, h6 {
+    h1, h2, h3 {
         color: rgba(51, 51, 51, .9);
     }
 
@@ -10,16 +13,20 @@
     }
 
     header {
-        h1 {
-            height: 100%;
-            display: block;
-            padding-top: 35px;
+        .ez-header-container {
+            background: $eZMediumBackground;
         }
+        border-bottom: 2px solid $eZMediumBackground;
         .novaezmailing-search {
             padding-top: 35px;
         }
+        input[type="search"] {
+            background: #fff;
+            color: #000;
+        }
     }
     .sidebar {
+        padding-top: 5px;
         li.current {
             a {
                 font-weight: bold;
@@ -28,6 +35,31 @@
         }
     }
     .innercontent {
+        padding-left: 0;
+        padding-right: 0;
+        .novaezmailing-tabs-content {
+            padding: 10px;
+            border: 2px solid #E5E3E3;
+            border-top: none;
+            max-height: 400px;
+            height: 400px;
+            overflow: auto;
+        }
+        .novaezmailing-ez-content-view {
+
+            .container {
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 0;
+            }
+            .ez-raw-content-title, .ez-fieldgroup-name {
+                display: none !important;
+            }
+
+            .ez-fieldgroup .ez-content-field {
+                padding: 0;
+            }
+        }
 
     }
     footer {

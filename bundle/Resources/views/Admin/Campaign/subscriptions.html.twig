@@ -1,10 +1,29 @@
 {% extends '@NovaeZMailing/Admin/Layout/pagelayout.html.twig' %}
 
+{% block novezmailing_breadcrumb %}
+    <ol class="breadcrumb px-4">
+        <li class="breadcrumb-item"><a href="{{ path("novaezmailing_dashboard_index") }}">Nova eZ Mailing</a></li>
+        <li class="breadcrumb-item">Campaigns</li>
+        <li class="breadcrumb-item">{{ item.name }}</li>
+        <li class="breadcrumb-item active">Subscriptions</li>
+    </ol>
+{% endblock %}
+{% block novezmailing_title %}<img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/campaign.png") }}" class="nova-icon" /> {{ item.name }}{% endblock %}
+{% block novezmailing_subtitle %}Campaign{% endblock %}
+
 {% block content %}
-plop
+    {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\CampaignController::campaignTabsAction", {campaign: item.id})) }}
+    <br />
+    <h2><img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/subscriptions.png") }}" class="nova-icon" /> Subscriptions</h2>
+    {% include "NovaeZMailingBundle:Admin/Common/List:usersFilterer.html.twig" with {
+        route: "novaezmailing_campaign_subscriptions",
+        limit: pager.maxPerPage,
+        currentStatus: currentStatus,
+        statuses: statuses,
+        extraParams: {campaign: item.id}
+    } only %}
+    {% include "NovaeZMailingBundle:Admin/Common/List:users.html.twig" with {items:pager.currentPageResults, withRegistrations: true} only %}
+    <div class="pagerfanta">
+        {{ pagerfanta(pager, 'twitter_bootstrap4') }}
+    </div>
 {% endblock %}
-
-{% block novezmailing_title %}
-
-{% endblock %}
-

@@ -17,6 +17,7 @@ use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
+use Novactive\Bundle\eZMailingBundle\Entity\User;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -79,17 +80,27 @@ class Builder
         $menu    = $this->factory->createItem('root');
         $repo    = $entityManager->getRepository(Campaign::class);
 
-        $campaigns = $repo->findAll();
-
+        $campaigns       = $repo->findAll();
         $mailingStatuses = Mailing::STATUSES;
+
+        $userRepo    = $entityManager->getRepository(User::class);
+        $mailingRepo = $entityManager->getRepository(Mailing::class);
         foreach ($campaigns as $campaign) {
-            $child = $menu->addChild("camp_{$campaign->getId()}", ['label' => $campaign->getName()]);
+            $child = $menu->addChild(
+                "camp_{$campaign->getId()}",
+                [
+                    'label' => $campaign->getName(),
+                ]
+            );
+
+            $count = $userRepo->countByFilters(['campaign' => $campaign]);
+
             $child->addChild(
                 "camp_{$campaign->getId()}_subsciptions",
                 [
                     'route'           => 'novaezmailing_campaign_subscriptions',
                     'routeParameters' => ['campaign' => $campaign->getId()],
-                    'label'           => 'Subscriptions',
+                    'label'           => 'Subscriptions'." ({$count})",
                     'attributes'      => [
                         'class' => 'leaf subscriptions',
                     ],
@@ -97,6 +108,12 @@ class Builder
             );
 
             foreach ($mailingStatuses as $statusId => $statusKey) {
+                $count = $mailingRepo->countByFilters(
+                    [
+                        'campaign' => $campaign,
+                        'status'   => $statusId,
+                    ]
+                );
                 $child->addChild(
                     "mailing_status_{$statusId}",
                     [
@@ -105,7 +122,7 @@ class Builder
                             'campaign' => $campaign->getId(),
                             'status'   => $statusId,
                         ],
-                        'label'           => $statusKey,
+                        'label'           => $statusKey." ({$count})",
                         'attributes'      => [
                             'class' => "leaf {$statusKey}",
                         ],

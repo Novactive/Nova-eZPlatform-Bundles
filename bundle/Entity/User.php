@@ -195,6 +195,7 @@ class User
 
     /**
      * @var Registration[]
+     * @ORM\OrderBy({"created" = "ASC"})
      * @ORM\OneToMany(targetEntity="Novactive\Bundle\eZMailingBundle\Entity\Registration", mappedBy="user",
      *                                                                                     cascade={"persist","remove"},
      *                                                                                     orphanRemoval=true

@@ -1,6 +1,13 @@
 {% extends "@NovaeZMailing/Admin/Layout/pagelayout.html.twig" %}
 
+{% block novezmailing_breadcrumb %}
+    <ol class="breadcrumb px-4">
+        <li class="breadcrumb-item"><a href="{{ path("novaezmailing_dashboard_index") }}">Nova eZ Mailing</a></li>
+        <li class="breadcrumb-item active">Users</li>
+    </ol>
+{% endblock %}
 {% block novezmailing_title %}Users{% endblock %}
+{% block novezmailing_subtitle %}{{ pager.nbResults }} entries{% endblock %}
 
 {% block content %}
     {% include "NovaeZMailingBundle:Admin/Common/List:usersFilterer.html.twig" with {

@@ -22,7 +22,7 @@
             }
 
             input + ul {
-                background: url(../images/toggle-small-expand.png) 40px 0 no-repeat;
+                background: url(../images/16x16/toggle-small-expand.png) 40px 0 no-repeat;
                 margin: -27px 0 0 -44px;
                 height: 21px;
             }
@@ -42,7 +42,7 @@
             }
 
             input:checked + ul {
-                background: url(../images/toggle-small.png) 40px 5px no-repeat;
+                background: url(../images/16x16/toggle-small.png) 40px 5px no-repeat;
                 margin: -32px 0 0 -44px;
                 padding: 1.563em 0 0 80px;
                 height: auto;
@@ -70,55 +70,55 @@
         }
 
         li label {
-            background-image: url(../images/campaign.png);
+            background-image: url(../images/16x16/campaign.png);
         }
         li.aborted a {
-            background-image: url(../images/aborted.png);
+            background-image: url(../images/16x16/aborted.png);
         }
         li.archived a {
-            background-image: url(../images/archived.png);
+            background-image: url(../images/16x16/archived.png);
         }
         li.sent a {
-            background-image: url(../images/sent.png);
+            background-image: url(../images/16x16/sent.png);
         }
         li.processing a {
-            background-image: url(../images/processing.png);
+            background-image: url(../images/16x16/processing.png);
         }
         li.pending a {
-            background-image: url(../images/pending.png);
+            background-image: url(../images/16x16/pending.png);
         }
         li.draft a {
-            background-image: url(../images/draft.png);
+            background-image: url(../images/16x16/draft.png);
         }
         li.subscriptions a {
-            background-image: url(../images/subscriptions.png);
+            background-image: url(../images/16x16/subscriptions.png);
         }
     }
 
     ul.kcode {
         li label {
-            background-image: url(../images/kcode/campaign.png);
+            background-image: url(../images/kcode/16x16/campaign.png);
         }
         li.aborted a {
-            background-image: url(../images/kcode/aborted.png);
+            background-image: url(../images/kcode/16x16/aborted.png);
         }
         li.archived a {
-            background-image: url(../images/kcode/archived.png);
+            background-image: url(../images/kcode/16x16/archived.png);
         }
         li.sent a {
-            background-image: url(../images/kcode/sent.png);
+            background-image: url(../images/kcode/16x16/sent.png);
         }
         li.processing a {
-            background-image: url(../images/kcode/processing.png);
+            background-image: url(../images/kcode/16x16/processing.png);
         }
         li.pending a {
-            background-image: url(../images/kcode/pending.png);
+            background-image: url(../images/kcode/16x16/pending.png);
         }
         li.draft a {
-            background-image: url(../images/kcode/draft.png);
+            background-image: url(../images/kcode/16x16/draft.png);
         }
         li.subscriptions a {
-            background-image: url(../images/kcode/subscriptions.png);
+            background-image: url(../images/kcode/16x16/subscriptions.png);
         }
     }
 

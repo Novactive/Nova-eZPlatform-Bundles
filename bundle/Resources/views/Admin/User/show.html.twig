@@ -1,6 +1,17 @@
 {% extends '@NovaeZMailing/Admin/Layout/pagelayout.html.twig' %}
 {% set statusKeys = constant('Novactive\\Bundle\\eZMailingBundle\\Entity\\User::STATUSES') %}
 {% set styles = constant('Novactive\\Bundle\\eZMailingBundle\\Entity\\User::STATUSES_STYLE') %}
+
+{% block novezmailing_breadcrumb %}
+    <ol class="breadcrumb px-4">
+        <li class="breadcrumb-item"><a href="{{ path("novaezmailing_dashboard_index") }}">Nova eZ Mailing</a></li>
+        <li class="breadcrumb-item"><a href="{{ path("novaezmailing_user_index") }}">Users</a></li>
+        <li class="breadcrumb-item active">{{ item.gender }} {{ item.firstName }} {{ item.lastname }}</li>
+    </ol>
+{% endblock %}
+{% block novezmailing_title %}{{ item.gender }} {{ item.firstName }} {{ item.lastname }}{% endblock %}
+{% block novezmailing_subtitle %}{{ item.email }}{% endblock %}
+
 {% block content %}
     <div class="row">
         <div class="col-md-6">
@@ -86,6 +97,3 @@
         </div>
     </div>
 {% endblock %}
-
-{% block novezmailing_title %} {{ item.gender }} {{ item.firstName }} {{ item.lastname }}{% endblock %}
-

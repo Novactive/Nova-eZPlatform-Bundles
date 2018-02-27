@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
 use Doctrine\ORM\EntityManager;
-use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -33,12 +32,7 @@ class DashboardController
      */
     public function indexAction(EntityManager $entityManager): array
     {
-        $repo     = $entityManager->getRepository(Campaign::class);
-        $campaign = $repo->findOneById(106);
-
-        dump($campaign);
-
-        return ['test' => 'coucou'];
+        return [];
     }
 
     /**
