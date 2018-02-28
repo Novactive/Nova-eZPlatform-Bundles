@@ -62,7 +62,7 @@ class Mailing implements eZ\ContentInterface
     /**
      * Statuses.
      */
-    const STATUSES = [
+    const   STATUSES = [
         self::DRAFT      => 'draft',
         self::PENDING    => 'pending',
         self::PROCESSING => 'processing',

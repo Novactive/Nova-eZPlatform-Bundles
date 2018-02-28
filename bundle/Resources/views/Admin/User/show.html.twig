@@ -40,7 +40,7 @@
                 </tr>
                 <tr>
                     <th>Birth date</th>
-                    <td>{{ item.birthDate|localizeddate }}</td>
+                    <td>{{ item.birthDate|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
                 </tr>
                 <tr>
                     <th>Phone</th>
@@ -89,8 +89,8 @@
                         <td>
                             <a href="{{ path('novaezmailing_mailinglist_show', {mailingList: registration.mailingList.id }) }}">{{ registration.mailingList.name }}</a>
                         </td>
-                        <td>{{ registration.updated|localizeddate }}</td>
-                        <td>{{ registration.created|localizeddate }}</td>
+                        <td>{{ registration.updated|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                        <td>{{ registration.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
                     </tr>
                 {% endfor %}
             </table>

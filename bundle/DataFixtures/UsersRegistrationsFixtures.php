@@ -16,6 +16,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Faker;
+use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
 use Novactive\Bundle\eZMailingBundle\Entity\Registration;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
 
@@ -44,6 +45,7 @@ class UsersRegistrationsFixtures extends Fixture implements DependentFixtureInte
                 ->setPhone($faker->phoneNumber)
                 ->setState($faker->state)
                 ->setZipcode($faker->postcode)
+                ->setConfirmationToken($faker->boolean(30) ? uniqid("token", true) : null)
                 ->setStatus($faker->randomElement(array_keys(User::STATUSES)))
                 ->setOrigin($faker->randomElement(['site', 'import']));
 
@@ -51,7 +53,10 @@ class UsersRegistrationsFixtures extends Fixture implements DependentFixtureInte
             for ($j = 0; $j <= $nbRegistrations; ++$j) {
                 $registration     = new Registration();
                 $mailingListIndex = $faker->numberBetween(1, MailingListFixtures::FIXTURE_COUNT_MAILINGLIST);
-                $registration->setMailingList($this->getReference("mailing-list-{$mailingListIndex}"));
+                $mailingList      = $this->getReference("mailing-list-{$mailingListIndex}");
+                /** @var MailingList $mailingList */
+                $registration->setMailingList($mailingList);
+                $registration->setApproved($mailingList->isWithApproval() ? $faker->boolean : true);
                 $user->addRegistration($registration);
             }
             $manager->persist($user);

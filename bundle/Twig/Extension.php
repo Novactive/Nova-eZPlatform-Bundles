@@ -17,7 +17,7 @@ use Symfony\Component\Intl\Intl;
 /**
  * Class Extension.
  */
-class Extension extends \Twig_Extension
+class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
 {
     /**
      * {@inheritdoc}
@@ -31,6 +31,21 @@ class Extension extends \Twig_Extension
                     return Intl::getRegionBundle()->getCountryName($value);
                 }
             ),
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getGlobals(): array
+    {
+        return [
+            'novaezmailing' => [
+                'dateformat' => [
+                    'date' => 'short',
+                    'time' => 'short',
+                ]
+            ]
         ];
     }
 }

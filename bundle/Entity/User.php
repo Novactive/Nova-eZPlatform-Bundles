@@ -17,6 +17,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * Class User.
@@ -201,7 +202,13 @@ class User
      *                                                                                     orphanRemoval=true
      * )
      */
-    protected $registrations;
+    private $registrations;
+
+    /**
+     * @var string
+     * @ORM\Column(name="USER_confirmation_token", type="string", length=255, nullable=true)
+     */
+    private $confirmationToken;
 
     /**
      * @return int
@@ -532,6 +539,28 @@ class User
     }
 
     /**
+     * @return ArrayCollection|Registration[]
+     */
+    public function getApprovedRegistrations()
+    {
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->eq('approved', true));
+
+        return $this->registrations->matching($criteria);
+    }
+
+    /**
+     * @return ArrayCollection|Registration[]
+     */
+    public function getPendingRegistrations()
+    {
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->eq('approved', true));
+
+        return $this->registrations->matching($criteria);
+    }
+
+    /**
      * @param Registration[] $registrations
      *
      * @return MailingList
@@ -610,5 +639,25 @@ class User
     public function isHardBounce(): bool
     {
         return self::HARD_BOUNCE === $this->status;
+    }
+
+    /**
+     * @return string
+     */
+    public function getConfirmationToken(): string
+    {
+        return $this->confirmationToken;
+    }
+
+    /**
+     * @param string $confirmationToken
+     *
+     * @return User
+     */
+    public function setConfirmationToken(?string $confirmationToken = null): self
+    {
+        $this->confirmationToken = $confirmationToken;
+
+        return $this;
     }
 }

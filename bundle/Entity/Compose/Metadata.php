@@ -26,14 +26,14 @@ trait Metadata
      * @ORM\Column(name="OBJ_created", type="datetime")
      * @Gedmo\Timestampable(on="create")
      */
-    protected $created;
+    private $created;
 
     /**
      * @var DateTime
      * @ORM\Column(name="OBJ_updated", type="datetime")
      * @Gedmo\Timestampable(on="update")
      */
-    protected $updated;
+    private $updated;
 
     /**
      * @return DateTime

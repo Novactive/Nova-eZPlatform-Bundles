@@ -48,11 +48,18 @@ class MailingList
     private $registrations;
 
     /**
+     * @var bool
+     * @ORM\Column(name="ML_approved", type="boolean", nullable=false)
+     */
+    private $withApproval;
+
+    /**
      * MailingList constructor.
      */
     public function __construct()
     {
         $this->registrations = new ArrayCollection();
+        $this->withApproval  = false;
     }
 
     /**
@@ -96,6 +103,26 @@ class MailingList
             }
         }
         $this->registrations = $registrations;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isWithApproval(): bool
+    {
+        return $this->withApproval;
+    }
+
+    /**
+     * @param bool $withApproval
+     *
+     * @return MailingList
+     */
+    public function setWithApproval(bool $withApproval): self
+    {
+        $this->withApproval = $withApproval;
 
         return $this;
     }

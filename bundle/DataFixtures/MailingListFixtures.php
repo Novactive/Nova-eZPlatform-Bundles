@@ -39,6 +39,7 @@ class MailingListFixtures extends Fixture
                     'eng-US' => $faker->unique()->sentence(6).'( US )',
                 ]
             );
+            $mailingList->setWithApproval($faker->boolean(60));
             $manager->persist($mailingList);
             $this->addReference("mailing-list-{$i}", $mailingList);
         }

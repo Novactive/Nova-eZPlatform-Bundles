@@ -15,6 +15,7 @@
         <tr>
             <th class="text-center">ID</th>
             <th>Name</th>
+            <th class="text-center">Approbation</th>
             <th class="text-center">Updated</th>
             <th class="text-center">Created</th>
             <th class="text-center">Registrations Count</th>
@@ -26,8 +27,9 @@
                 <td class="text-center">{{ item.id }}</td>
                 <td><a href="{{ path('novaezmailing_mailinglist_show', {'mailingList':item.id}) }}">{{ item.name }}</a>
                 </td>
-                <td class="text-center">{{ item.created|localizeddate }}</td>
-                <td class="text-center">{{ item.updated|localizeddate }}</td>
+                <td class="text-center">{{ item.withApproval ? "yes" : "no" }}</td>
+                <td class="text-center">{{ item.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                <td class="text-center">{{ item.updated|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
                 <td class="text-center">{{ item.registrations|length }}</td>
             </tr>
         {% endfor %}

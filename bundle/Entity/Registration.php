@@ -50,6 +50,20 @@ class Registration
     private $user;
 
     /**
+     * @var bool
+     * @ORM\Column(name="REG_approved", type="boolean", nullable=false)
+     */
+    private $approved;
+
+    /**
+     * Registration constructor.
+     */
+    public function __construct()
+    {
+        $this->approved = false;
+    }
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -105,6 +119,26 @@ class Registration
     public function setUser(User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isApproved(): bool
+    {
+        return $this->approved;
+    }
+
+    /**
+     * @param bool $approved
+     *
+     * @return Registration
+     */
+    public function setApproved(bool $approved): self
+    {
+        $this->approved = $approved;
 
         return $this;
     }
