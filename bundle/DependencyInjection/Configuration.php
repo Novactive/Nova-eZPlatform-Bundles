@@ -29,6 +29,10 @@ class Configuration extends SiteAccessAware\Configuration
         $rootNode    = $treeBuilder->root('nova_ezmailing');
         $systemNode  = $this->generateScopeBaseNode($rootNode);
 
+        $systemNode
+            ->scalarNode('simple_mailer')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('mailing_mailer')->isRequired()->cannotBeEmpty()->end();
+
         return $treeBuilder;
     }
 }

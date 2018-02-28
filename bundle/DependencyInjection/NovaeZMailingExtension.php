@@ -13,17 +13,14 @@ namespace Novactive\Bundle\eZMailingBundle\DependencyInjection;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ConfigurationProcessor;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class NovaeZMailingExtension.
  */
-class NovaeZMailingExtension extends Extension implements PrependExtensionInterface
+class NovaeZMailingExtension extends Extension
 {
     /**
      * {@inheritdoc}
@@ -50,16 +47,7 @@ class NovaeZMailingExtension extends Extension implements PrependExtensionInterf
         $container->setParameter('assetic.bundles', $asseticBundles);
 
         $processor = new ConfigurationProcessor($container, $this->getAlias());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function prepend(ContainerBuilder $container): void
-    {
-        $easyAdminConfigFile = __DIR__.'/../Resources/config/easy_admin.yml';
-        $easyAdminConfig     = Yaml::parse(file_get_contents($easyAdminConfigFile));
-        $container->prependExtensionConfig('easy_admin', $easyAdminConfig);
-        $container->addResource(new FileResource($easyAdminConfigFile));
+        $processor->mapSetting('simple_mailer', $config);
+        $processor->mapSetting('mailing_mailer', $config);
     }
 }

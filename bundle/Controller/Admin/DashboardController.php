@@ -13,6 +13,8 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
 use Doctrine\ORM\EntityManager;
+use Novactive\Bundle\eZMailingBundle\Core\Mailer\Mailing;
+use Novactive\Bundle\eZMailingBundle\Core\Mailer\Simple;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -30,8 +32,10 @@ class DashboardController
      *
      * @return Response
      */
-    public function indexAction(EntityManager $entityManager): array
+    public function indexAction(Simple $simpleMailer, Mailing $mailingMailer): array
     {
+        dump($simpleMailer);
+        dump($mailingMailer);
         return [];
     }
 

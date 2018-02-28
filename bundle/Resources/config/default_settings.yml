@@ -1,1 +1,3 @@
 parameters:
+    nova_ezmailing.default.simple_mailer: ~
+    nova_ezmailing.default.mailing_mailer: ~
