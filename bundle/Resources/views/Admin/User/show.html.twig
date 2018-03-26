@@ -74,6 +74,14 @@
                     <th>Origin</th>
                     <td>{{ item.origin }}</td>
                 </tr>
+                <tr>
+                    <th>Updated</th>
+                    <td>{{ item.updated|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                </tr>
+                <tr>
+                    <th>Created</th>
+                    <td>{{ item.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                </tr>
             </table>
         </div>
         <div class="col-md-6">

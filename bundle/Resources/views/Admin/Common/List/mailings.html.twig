@@ -3,6 +3,8 @@
     <tr>
         <th>Name</th>
         <th>Status</th>
+        <th class="text-center">Updated</th>
+        <th class="text-center">Created</th>
     </tr>
     {% for item in items %}
         <tr>
@@ -12,6 +14,8 @@
             <td>
                 <img src="{{ asset("/bundles/novaezmailing/admin/images/16x16/"~statusKeys[item.status])~".png" }}" class="nova-icon"/> {{ statusKeys[item.status] }}
             </td>
+            <td class="text-center">{{ item.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+            <td class="text-center">{{ item.updated|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
         </tr>
 
     {% endfor %}

@@ -8,7 +8,6 @@ RESTORE=$(shell echo "\033[0m")
 # Variables
 PHP_BIN := php
 COMPOSER := composer
-SRCS := src
 CURRENT_DIR := $(shell pwd)
 PLANTUMLJAR := $(CURRENT_DIR)/plantuml.jar
 .DEFAULT_GOAL := list

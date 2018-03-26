@@ -1,0 +1,5 @@
+nova_ezmailing:
+    system:
+        default:
+            simple_mailer: "swiftmailer.mailer.default"
+            mailing_mailer: "swiftmailer.mailer.default"

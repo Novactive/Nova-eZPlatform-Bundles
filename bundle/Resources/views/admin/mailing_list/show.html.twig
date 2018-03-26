@@ -11,7 +11,7 @@
 {% block novezmailing_subtitle %}Mailing List{% endblock %}
 
 {% block content %}
-    {% include "NovaeZMailingBundle:Admin/Common/List:usersFilterer.html.twig" with {
+    {% include "NovaeZMailingBundle:Admin/Common/List:users_filterer.html.twig" with {
         route: "novaezmailing_mailinglist_show",
         limit: pager.maxPerPage,
         currentStatus: currentStatus,

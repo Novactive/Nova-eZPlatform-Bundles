@@ -48,6 +48,12 @@ class MailingList
     private $registrations;
 
     /**
+     * @var array
+     * @ORM\Column(name="ML_siteaccess_limit", type="array", nullable=true)
+     */
+    private $siteaccessLimit;
+
+    /**
      * @var bool
      * @ORM\Column(name="ML_approved", type="boolean", nullable=false)
      */
@@ -123,6 +129,26 @@ class MailingList
     public function setWithApproval(bool $withApproval): self
     {
         $this->withApproval = $withApproval;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSiteaccessLimit(): array
+    {
+        return $this->siteaccessLimit;
+    }
+
+    /**
+     * @param array $siteaccessLimit
+     *
+     * @return MailingList
+     */
+    public function setSiteaccessLimit(array $siteaccessLimit): self
+    {
+        $this->siteaccessLimit = $siteaccessLimit;
 
         return $this;
     }

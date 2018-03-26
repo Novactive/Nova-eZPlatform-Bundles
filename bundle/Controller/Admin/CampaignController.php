@@ -29,7 +29,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class CampaignController
 {
     /**
-     * @Template
+     * @Template()
      *
      * @return array
      */

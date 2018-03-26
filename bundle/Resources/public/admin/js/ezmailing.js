@@ -46,13 +46,16 @@ $(function () {
             kkeys = [];
         }
     });
-    $('.novaezmailing-search > input[type="search"]').autocomplete({
-        serviceUrl: $app.data('search-endpoint'),
-        minChars: 3,
-        onSelect: function (suggestion) {
-            location.href = suggestion.data;
-        }
-    });
+    var $searchNovaeZMailing = $('.novaezmailing-search > input[type="search"]');
+    if ($searchNovaeZMailing.length > 0) {
+        $('.novaezmailing-search > input[type="search"]').autocomplete({
+            serviceUrl: $app.data('search-endpoint'),
+            minChars: 3,
+            onSelect: function (suggestion) {
+                location.href = suggestion.data;
+            }
+        });
+    }
     // Approbation
     $(".novaezmailing-registration-approbation button", $app).click(function () {
             var $button = $(this);

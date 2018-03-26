@@ -15,7 +15,7 @@
     {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\CampaignController::campaignTabsAction", {campaign: item.id})) }}
     <br />
     <h2><img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/subscriptions.png") }}" class="nova-icon" /> Subscriptions</h2>
-    {% include "NovaeZMailingBundle:Admin/Common/List:usersFilterer.html.twig" with {
+    {% include "NovaeZMailingBundle:Admin/Common/List:users_filterer.html.twig" with {
         route: "novaezmailing_campaign_subscriptions",
         limit: pager.maxPerPage,
         currentStatus: currentStatus,

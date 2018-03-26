@@ -34,8 +34,6 @@ class DashboardController
      */
     public function indexAction(Simple $simpleMailer, Mailing $mailingMailer): array
     {
-        dump($simpleMailer);
-        dump($mailingMailer);
         return [];
     }
 

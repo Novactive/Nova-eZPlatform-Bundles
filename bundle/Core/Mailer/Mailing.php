@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Mailer;
 
-use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Swift_Message;
+use Novactive\Bundle\eZMailingBundle\Entity\Mailing as MailingEntity;
 
 /**
  * Class Mailing
@@ -34,10 +34,24 @@ class Mailing extends Mailer
     public function __construct(Simple $simpleMailer)
     {
         $this->simpleMailer = $simpleMailer;
+
+        // get the modifier to track and replace
     }
 
-    public function sendCampaign(Campaign $campaign)
+
+
+
+    public function sendMailing(MailingEntity $mailing)
     {
+
+        // send the report begin message
+
+
+        // send the mailing
+
+
+        // send the report end message
+
 
     }
 

@@ -1,0 +1,4 @@
+_novaezmailing_bundle:
+    resource: "@NovaeZMailingBundle/Controller"
+    type:     annotation
+    prefix:   /novaezmailing

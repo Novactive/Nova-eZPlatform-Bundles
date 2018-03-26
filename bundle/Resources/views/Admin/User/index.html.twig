@@ -10,7 +10,7 @@
 {% block novezmailing_subtitle %}{{ pager.nbResults }} entries{% endblock %}
 
 {% block content %}
-    {% include "NovaeZMailingBundle:Admin/Common/List:usersFilterer.html.twig" with {
+    {% include "NovaeZMailingBundle:Admin/Common/List:users_filterer.html.twig" with {
         route: "novaezmailing_user_index",
         limit: pager.maxPerPage,
         currentStatus: currentStatus,

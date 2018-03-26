@@ -2,11 +2,10 @@
 {% set withStatus = withStatus is defined ? withStatus : true %}
 {% set statusKeys = constant('Novactive\\Bundle\\eZMailingBundle\\Entity\\User::STATUSES') %}
 {% set styles = constant('Novactive\\Bundle\\eZMailingBundle\\Entity\\User::STATUSES_STYLE') %}
-{% import "@NovaeZMailing/Admin/Common/registrationApprobationButton.html.twig" as ApprobationButton %}
+{% import "@NovaeZMailing/Admin/Common/registration_approbation_button.html.twig" as ApprobationButton %}
 <table class="table table-striped table-hover table-sm">
     <thead>
     <tr>
-        <th class="text-center">ID</th>
         <th>Email</th>
         {% if withStatus %}
             <th>Status</th>
@@ -16,9 +15,7 @@
         {% if currentMailingList is defined and currentMailingList.withApproval %}
             <th class="text-center">Approbation</th>
         {% endif %}
-        <th class="text-center">Updated</th>
-        <th class="text-center">Created</th>
-
+        <th class="text-center">Last update</th>
         {% if withRegistrations %}
             <th class="text-center">Registrations</th>
         {% endif %}
@@ -27,7 +24,6 @@
     <tbody>
     {% for item in items %}
         <tr>
-            <td class="text-center">{{ item.id }}</td>
             <td><a href="{{ path('novaezmailing_user_show', {user:item.id}) }}" data-toggle="popover"
                    title="{{ item.gender }} {{ item.firstname }} {{ item.lastName }}"
                    data-content="
@@ -35,6 +31,7 @@
                         {% if item.phone is not empty %}<p><strong>Phone</strong>: {{ item.phone }}</p>{% endif %}
                         {% if item.zipcode is not empty or item.city is not empty or item.city is not empty or state is not empty %}<p><strong>Location</strong>:{{ item.zipcode }} {{ item.city }} {{ item.state }}</p>{% endif %}
                         {% if item.jobTitle is not empty or item.company is not empty %}<p><strong>Job</strong>: {{ item.jobTitle }} {{ item.company }}</p>{% endif %}
+                        <p><strong>Created: </strong> {{ item.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</p>
                    "
                    data-html="true"
                    data-trigger="hover"
@@ -51,12 +48,10 @@
                             <td class="text-center">{{ ApprobationButton.show(registration) }}</td>
                         {% endif %}
                         <td class="text-center">{{ registration.updated|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
-                        <td class="text-center">{{ registration.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
                     {% endif %}
                 {% endfor %}
             {% else %}
                 <td class="text-center">{{ item.updated|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
-                <td class="text-center">{{ item.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
             {% endif %}
             {% if withRegistrations %}
                 <td>
@@ -64,8 +59,7 @@
                         <tr>
                             <th class="text-center">Mailing List</th>
                             <th align="center">Approbation</th>
-                            <th align="center">Updated</th>
-                            <th align="center">Created</th>
+                            <th align="center">Last&nbsp;update</th>
                         </tr>
                         {% for registration in item.registrations %}
                             <tr>
@@ -74,7 +68,6 @@
                                 </td>
                                 <td align="center">{{ ApprobationButton.show(registration) }}</td>
                                 <td align="center">{{ registration.updated|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
-                                <td align="center">{{ registration.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
                             </tr>
                         {% endfor %}
                     </table>

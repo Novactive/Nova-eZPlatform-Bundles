@@ -43,6 +43,14 @@
                     <th>Content</th>
                     <td>{{ ez_content_name(item.content) }}</td>
                 </tr>
+                <tr>
+                    <th>Updated</th>
+                    <td>{{ item.updated|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                </tr>
+                <tr>
+                    <th>Created</th>
+                    <td>{{ item.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                </tr>
             </table>
         </div>
         <div class="novaezmailing-ez-content-view tab-pane" role="tabpanel" id="novaezmailing-content-preview">
