@@ -16,8 +16,8 @@ web:
             expires: 600
 disk: 2048
 mounts:
-    "/ezplatform/var/cache": "shared:files/cache"
-    "/ezplatform/var/logs": "shared:files/logs"
+    "/ezplatform/var/cache": "local:files/cache"
+    "/ezplatform/var/logs": "local:files/logs"
     "/ezplatform/web/var": "shared:files/files"
     "/ezplatform/var/sessions": "shared:files/sessions"
 hooks:
