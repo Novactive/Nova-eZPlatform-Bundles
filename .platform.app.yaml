@@ -1,3 +1,4 @@
+# Install an eZ Platform
 name: app
 type: php:7.2
 build:
@@ -23,22 +24,11 @@ mounts:
 hooks:
     build: |
         set -e
-        composer create-project ezsystems/ezplatform --prefer-dist --no-progress --no-interaction
+        composer create-project ezsystems/ezplatform --prefer-dist --no-progress --no-interaction --no-scripts
+        curl -o tests/platform.sh/wrap.php https://raw.githubusercontent.com/Plopix/symfony-bundle-app-wrapper/master/wrap-bundle.php
+        WRAP_ROOT_DIR=./ezplatform php tests/platform.sh/wrap.php
         cd ezplatform
-        composer require nesbot/carbon gedmo/doctrine-extensions doctrine/doctrine-fixtures-bundle fzaninotto/faker
-        cd ..
-        rm ezplatform/web/app_dev.php
-        mv tests/platform.sh/AppKernel.php ezplatform/app/AppKernel.php
-        cat tests/platform.sh/configs.yaml >> ezplatform/app/config/config.yml
-        cat tests/platform.sh/routes.yaml >> ezplatform/app/config/routing.yml
-        mkdir -p ezplatform/src/Novactive/Bundle
-        mv bundle ezplatform/src/Novactive/Bundle/eZMailingBundle
-        # cheat the autoloader - we should be able to do better
-        mv ezplatform/vendor/autoload.php ezplatform/vendor/autoload_orig.php
-        mv tests/platform.sh/autoload.php ezplatform/vendor/autoload.php
-        cd ezplatform
-        bin/console assets:install
-
+        composer update --lock
     deploy: |
         set -e
         cd ezplatform
