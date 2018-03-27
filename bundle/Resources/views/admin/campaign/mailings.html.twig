@@ -1,4 +1,4 @@
-{% extends '@NovaeZMailing/Admin/Layout/pagelayout.html.twig' %}
+{% extends '@NovaeZMailing/admin/layout/pagelayout.html.twig' %}
 
 {% set statusKeys = constant('Novactive\\Bundle\\eZMailingBundle\\Entity\\Mailing::STATUSES') %}
 
@@ -19,5 +19,5 @@
     <h2>
         <img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/"~statusKeys[status])~".png" }}" class="nova-icon" /> Mailings
     </h2>
-    {% include "@NovaeZMailing/Admin/Common/List/mailings.html.twig" with { items: children} only %}
+    {% include "@NovaeZMailing/admin/common/list/mailings.html.twig" with { items: children} only %}
 {% endblock %}

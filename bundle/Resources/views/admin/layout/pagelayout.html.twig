@@ -24,7 +24,7 @@
     {% block content %}
         <div class="novaezmailing-app row" data-search-endpoint="{{ path('novaezmailing_dashboard_search_autocomplete') }}">
             <div class="container-fluid">
-                {% include "NovaeZMailingBundle:Admin/Layout:header.html.twig" with { title: novezmailing_title, subTitle: novezmailing_subtitle, breadcrumb: novezmailing_breadcrumb } only %}
+                {% include "@NovaeZMailing/admin/layout/header.html.twig" with { title: novezmailing_title, subTitle: novezmailing_subtitle, breadcrumb: novezmailing_breadcrumb } only %}
                 <div class="content row">
                     <div class="col-2 sidebar">
                         <h2>Campaigns</h2>
@@ -38,7 +38,7 @@
                         {{ content|raw }}
                     </div>
                 </div>
-                {% include "NovaeZMailingBundle:Admin/Layout:footer.html.twig" with {} only %}
+                {% include "@NovaeZMailing/admin/layout/footer.html.twig" with {} only %}
             </div>
         </div>
     {% endblock %}

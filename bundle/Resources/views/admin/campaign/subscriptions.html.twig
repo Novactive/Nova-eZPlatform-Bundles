@@ -1,4 +1,4 @@
-{% extends '@NovaeZMailing/Admin/Layout/pagelayout.html.twig' %}
+{% extends '@NovaeZMailing/admin/layout/pagelayout.html.twig' %}
 
 {% block novezmailing_breadcrumb %}
     <ol class="breadcrumb px-4">
@@ -15,14 +15,14 @@
     {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\CampaignController::campaignTabsAction", {campaign: item.id})) }}
     <br />
     <h2><img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/subscriptions.png") }}" class="nova-icon" /> Subscriptions</h2>
-    {% include "NovaeZMailingBundle:Admin/Common/List:usersFilterer.html.twig" with {
+    {% include "@NovaeZMailing/admin/common/list/users_filterer.html.twig" with {
         route: "novaezmailing_campaign_subscriptions",
         limit: pager.maxPerPage,
         currentStatus: currentStatus,
         statuses: statuses,
         extraParams: {campaign: item.id}
     } only %}
-    {% include "NovaeZMailingBundle:Admin/Common/List:users.html.twig" with {items:pager.currentPageResults, withRegistrations: true} only %}
+    {% include "@NovaeZMailing/admin/common/list/users.html.twig" with {items:pager.currentPageResults, withRegistrations: true} only %}
     <div class="pagerfanta">
         {{ pagerfanta(pager, 'twitter_bootstrap4') }}
     </div>

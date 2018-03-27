@@ -1,4 +1,4 @@
-{% extends '@NovaeZMailing/Admin/Layout/pagelayout.html.twig' %}
+{% extends '@NovaeZMailing/admin/layout/pagelayout.html.twig' %}
 
 {% block novezmailing_breadcrumb %}
     <ol class="breadcrumb px-4">
@@ -11,14 +11,14 @@
 {% block novezmailing_subtitle %}Mailing List{% endblock %}
 
 {% block content %}
-    {% include "NovaeZMailingBundle:Admin/Common/List:usersFilterer.html.twig" with {
+    {% include "@NovaeZMailing/admin/common/list/users_filterer.html.twig" with {
         route: "novaezmailing_mailinglist_show",
         limit: pager.maxPerPage,
         currentStatus: currentStatus,
         statuses: statuses,
         extraParams: {mailingList: item.id}
     } only %}
-    {% include "NovaeZMailingBundle:Admin/Common/List:users.html.twig" with {items:pager.currentPageResults,currentMailingList: item, withRegistrations: false} only %}
+    {% include "@NovaeZMailing/admin/common/list/users.html.twig" with {items:pager.currentPageResults,currentMailingList: item, withRegistrations: false} only %}
     <div class="pagerfanta">
         {{ pagerfanta(pager, 'twitter_bootstrap4') }}
     </div>

@@ -1,4 +1,4 @@
-{% extends "@NovaeZMailing/Admin/Layout/pagelayout.html.twig" %}
+{% extends "@NovaeZMailing/admin/layout/pagelayout.html.twig" %}
 
 {% block novezmailing_breadcrumb %}
     <ol class="breadcrumb px-4">
@@ -10,11 +10,11 @@
 {% block novezmailing_subtitle %}{{ pager.nbResults }} entries{% endblock %}
 
 {% block content %}
-    {% include "NovaeZMailingBundle:Admin/Common/List:usersFilterer.html.twig" with {
+    {% include "@NovaeZMailing/admin/common/list/users_filterer.html.twig" with {
         route: "novaezmailing_user_index",
         limit: pager.maxPerPage,
         currentStatus: currentStatus,
         statuses: statuses
     } only %}
-    {% include "NovaeZMailingBundle:Admin/Common/List:users.html.twig" with {items:pager.currentPageResults} only %}
+    {% include "@NovaeZMailing/admin/common/list/users.html.twig" with {items:pager.currentPageResults} only %}
 {% endblock %}
