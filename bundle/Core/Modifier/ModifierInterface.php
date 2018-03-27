@@ -15,11 +15,10 @@ namespace Novactive\Bundle\eZMailingBundle\Core\Modifier;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 
 /**
- * Interface ModifierInterface
+ * Interface ModifierInterface.
  */
 interface ModifierInterface
 {
-
     /**
      * @param Mailing $mailing
      * @param string  $html
@@ -28,5 +27,4 @@ interface ModifierInterface
      * @return string
      */
     public function modify(Mailing $mailing, string $html, array $options = []): string;
-
 }

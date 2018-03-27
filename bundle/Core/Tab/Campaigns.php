@@ -16,9 +16,9 @@ use EzSystems\EzPlatformAdminUi\Tab\AbstractTab;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign as CampaignEntity;
 
 /**
- * Class Campaign
+ * Class Campaigns.
  */
-class Campaign extends AbstractTab
+class Campaigns extends AbstractTab
 {
     /**
      * @var CampaignEntity[]
@@ -38,8 +38,8 @@ class Campaign extends AbstractTab
      */
     public function getName(): string
     {
-        return /** @Desc("Nova eZ Mailing - Campaign Tab") */
-            $this->translator->trans('campaign.tab.name', [], 'ezmailing');
+        return /* @Desc("Nova eZ Mailing - Campaigns Tab") */
+            $this->translator->transChoice('campaigns.tab.name', count($this->campaigns), [], 'ezmailing');
     }
 
     /**
@@ -47,11 +47,16 @@ class Campaign extends AbstractTab
      */
     public function renderView(array $parameters): string
     {
-        return "PLOP";
+        return $this->twig->render(
+            '@NovaeZMailing/admin/tabs/campaigns.html.twig',
+            [
+                'items' => $this->campaigns,
+            ]
+        );
     }
 
     /**
-     * Set the Campaigns
+     * Set the Campaigns.
      *
      * @param CampaignEntity[] $campaigns campaigns
      *

@@ -1,0 +1,15 @@
+<p>This content is part of the {{ items|length }} mailings.</p>
+{% set statusKeys = constant('Novactive\\Bundle\\eZMailingBundle\\Entity\\Mailing::STATUSES') %}
+
+{% for item in items %}
+    <div class="ez-table-header">
+        <div class="ez-table-header__headline">
+            <img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/"~statusKeys[item.status])~".png" }}" class="nova-icon" />
+
+            {{ item.campaign.name }} > {{ item.name }}
+        </div>
+    </div>
+    <div>
+        Todo: Add information about the mailing
+    </div>
+{% endfor %}

@@ -1,7 +1,7 @@
 <?php
 
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 class AppKernel extends Kernel
 {
@@ -53,7 +53,7 @@ class AppKernel extends Kernel
             case 'behat':
                 $bundles[] = new EzSystems\BehatBundle\EzSystemsBehatBundle();
                 $bundles[] = new EzSystems\PlatformBehatBundle\EzPlatformBehatBundle();
-            // No break, test also needs dev bundles
+            // no break, test also needs dev bundles
             case 'dev':
                 $bundles[] = new eZ\Bundle\EzPublishDebugBundle\EzPublishDebugBundle();
                 $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
@@ -75,28 +75,28 @@ class AppKernel extends Kernel
     public function getCacheDir()
     {
         if (!empty($_SERVER['SYMFONY_TMP_DIR'])) {
-            return rtrim($_SERVER['SYMFONY_TMP_DIR'], '/') . '/var/cache/' . $this->getEnvironment();
+            return rtrim($_SERVER['SYMFONY_TMP_DIR'], '/').'/var/cache/'.$this->getEnvironment();
         }
 
         // On platform.sh place each deployment cache in own folder to rather cleanup old cache async
-        if ($this->getEnvironment() === 'prod' && ($platformTreeId = getenv('PLATFORM_TREE_ID'))) {
-            return dirname(__DIR__) . '/var/cache/prod/' . $platformTreeId;
+        if ('prod' === $this->getEnvironment() && ($platformTreeId = getenv('PLATFORM_TREE_ID'))) {
+            return dirname(__DIR__).'/var/cache/prod/'.$platformTreeId;
         }
 
-        return dirname(__DIR__) . '/var/cache/' . $this->getEnvironment();
+        return dirname(__DIR__).'/var/cache/'.$this->getEnvironment();
     }
 
     public function getLogDir()
     {
         if (!empty($_SERVER['SYMFONY_TMP_DIR'])) {
-            return rtrim($_SERVER['SYMFONY_TMP_DIR'], '/') . '/var/logs';
+            return rtrim($_SERVER['SYMFONY_TMP_DIR'], '/').'/var/logs';
         }
 
-        return dirname(__DIR__) . '/var/logs';
+        return dirname(__DIR__).'/var/logs';
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load($this->getRootDir() . '/config/config_' . $this->getEnvironment() . '.yml');
+        $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
     }
 }

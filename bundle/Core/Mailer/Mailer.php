@@ -15,11 +15,10 @@ namespace Novactive\Bundle\eZMailingBundle\Core\Mailer;
 use Swift_Mailer;
 
 /**
- * Class Mailer
+ * Class Mailer.
  */
 class Mailer
 {
-
     /**
      * @var Swift_Mailer
      */

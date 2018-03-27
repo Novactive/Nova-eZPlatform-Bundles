@@ -16,18 +16,17 @@ use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 /**
- * Class TrackController
+ * Class TrackController.
+ *
  * @Route("/t")
  */
 class TrackController
 {
-
     /**
      * @Route("/continue/{id}/{salt}/{url}", name="novaezmailing_t_continue")
      */
     public function continueAction(Mailing $mailing, string $salt, string $url)
     {
-
     }
 
     /**
@@ -35,6 +34,5 @@ class TrackController
      */
     public function readAction(Mailing $mailing, $salt)
     {
-
     }
 }

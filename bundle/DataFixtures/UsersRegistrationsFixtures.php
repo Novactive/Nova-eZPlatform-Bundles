@@ -45,7 +45,7 @@ class UsersRegistrationsFixtures extends Fixture implements DependentFixtureInte
                 ->setPhone($faker->phoneNumber)
                 ->setState($faker->state)
                 ->setZipcode($faker->postcode)
-                ->setConfirmationToken($faker->boolean(30) ? uniqid("token", true) : null)
+                ->setConfirmationToken($faker->boolean(30) ? uniqid('token', true) : null)
                 ->setStatus($faker->randomElement(array_keys(User::STATUSES)))
                 ->setOrigin($faker->randomElement(['site', 'import']));
 
@@ -54,7 +54,7 @@ class UsersRegistrationsFixtures extends Fixture implements DependentFixtureInte
                 $registration     = new Registration();
                 $mailingListIndex = $faker->numberBetween(1, MailingListFixtures::FIXTURE_COUNT_MAILINGLIST);
                 $mailingList      = $this->getReference("mailing-list-{$mailingListIndex}");
-                /** @var MailingList $mailingList */
+                /* @var MailingList $mailingList */
                 $registration->setMailingList($mailingList);
                 $registration->setApproved($mailingList->isWithApproval() ? $faker->boolean : true);
                 $user->addRegistration($registration);

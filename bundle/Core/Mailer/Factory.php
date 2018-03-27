@@ -16,7 +16,7 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Psr\Container\ContainerInterface;
 
 /**
- * Class Factory
+ * Class Factory.
  */
 class Factory
 {
@@ -26,7 +26,6 @@ class Factory
     private $configResolver;
 
     /** @var ContainerInterface */
-
     private $container;
 
     /**
@@ -49,14 +48,14 @@ class Factory
     public function get(string $mailerDef): Mailer
     {
         $mailer = $this->container->get((string) $this->configResolver->getParameter($mailerDef, 'nova_ezmailing'));
-        /** @var \Swift_Mailer $mailer */
-        if ($mailerDef === 'simple_mailer') {
+        /* @var \Swift_Mailer $mailer */
+        if ('simple_mailer' === $mailerDef) {
             return (new Simple())->setMailer($mailer);
         }
-        if ($mailerDef === 'mailing_mailer') {
+        if ('mailing_mailer' === $mailerDef) {
             return (new Mailing($this->container->get(Simple::class)))->setMailer($mailer);
         }
 
-        throw new \RuntimeException("Mailers are not correctly defined.");
+        throw new \RuntimeException('Mailers are not correctly defined.');
     }
 }

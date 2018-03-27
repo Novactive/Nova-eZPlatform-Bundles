@@ -44,8 +44,8 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
                 'dateformat' => [
                     'date' => 'short',
                     'time' => 'short',
-                ]
-            ]
+                ],
+            ],
         ];
     }
 }

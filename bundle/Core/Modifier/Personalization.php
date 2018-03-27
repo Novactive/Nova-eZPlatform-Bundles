@@ -13,20 +13,14 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Core;
 
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\RouterInterface;
 
 /**
- * Class Tracking
+ * Class Tracking.
  */
 class Personalization
 {
-    /**
-     * {@inheritdoc}
-     */
     public function modify(Mailing $mailing, string $html, array $options = []): string
     {
         return $html;
     }
-
 }

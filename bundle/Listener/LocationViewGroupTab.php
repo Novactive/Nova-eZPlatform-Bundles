@@ -16,10 +16,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use EzSystems\EzPlatformAdminUi\Tab\Event\TabGroupEvent;
 use EzSystems\EzPlatformAdminUi\Tab\TabRegistry;
-use Novactive\Bundle\eZMailingBundle\Core\Tab\Campaign as CampaignTab;
+use Novactive\Bundle\eZMailingBundle\Core\Tab\Campaigns as CampaignsTab;
+use Novactive\Bundle\eZMailingBundle\Core\Tab\Mailings as MailingsTab;
 
 /**
- * Class CampaignTab
+ * Class CampaignTab.
  */
 class LocationViewGroupTab
 {
@@ -29,9 +30,14 @@ class LocationViewGroupTab
     private $tabRegistry;
 
     /**
-     * @var CampaignTab
+     * @var CampaignsTab
      */
-    private $campaignTab;
+    private $campaignsTab;
+
+    /**
+     * @var MailingsTab
+     */
+    private $mailingsTab;
 
     /**
      * @var EntityManagerInterface
@@ -42,16 +48,19 @@ class LocationViewGroupTab
      * LocationViewGroupTab constructor.
      *
      * @param TabRegistry            $tabRegistry
-     * @param CampaignTab            $campaignTab
+     * @param CampaignsTab           $campaignsTab
+     * @param MailingsTab            $mailingsTab
      * @param EntityManagerInterface $entityManager
      */
     public function __construct(
         TabRegistry $tabRegistry,
-        CampaignTab $campaignTab,
+        CampaignsTab $campaignsTab,
+        MailingsTab $mailingsTab,
         EntityManagerInterface $entityManager
     ) {
         $this->tabRegistry   = $tabRegistry;
-        $this->campaignTab   = $campaignTab;
+        $this->campaignsTab  = $campaignsTab;
+        $this->mailingsTab   = $mailingsTab;
         $this->entityManager = $entityManager;
     }
 
@@ -66,14 +75,21 @@ class LocationViewGroupTab
         }
 
         $parameters = $event->getParameters();
-        $content    = $parameters['content'];
         /** @var Content $content */
-        $campaignRepo = $this->entityManager->getRepository("NovaeZMailingBundle:Campaign");
-        $campaigns = $campaignRepo->findBy(['contentId' => $content->id]);
+        $content = $parameters['content'];
 
+        $campaignRepo = $this->entityManager->getRepository('NovaeZMailingBundle:Campaign');
+        $campaigns    = $campaignRepo->findBy(['contentId' => $content->id]);
         if ($campaigns) {
-            $this->campaignTab->setCampaigns($campaigns);
-            $this->tabRegistry->addTab($this->campaignTab, 'location-view');
+            $this->campaignsTab->setCampaigns($campaigns);
+            $this->tabRegistry->addTab($this->campaignsTab, 'location-view');
+        }
+
+        $mailingRepo = $this->entityManager->getRepository('NovaeZMailingBundle:Mailing');
+        $mailings    = $mailingRepo->findBy(['contentId' => $content->id]);
+        if ($mailings) {
+            $this->mailingsTab->setMailings($mailings);
+            $this->tabRegistry->addTab($this->mailingsTab, 'location-view');
         }
     }
 }

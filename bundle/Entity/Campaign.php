@@ -239,10 +239,10 @@ class Campaign implements eZ\ContentInterface
     }
 
     /**
- * @param Mailing[] $mailings
- *
- * @return Campaign
- */
+     * @param Mailing[] $mailings
+     *
+     * @return Campaign
+     */
     public function setMailings(array $mailings): self
     {
         foreach ($mailings as $mailing) {

@@ -1,9 +1,13 @@
 {% set statusKeys = constant('Novactive\\Bundle\\eZMailingBundle\\Entity\\Mailing::STATUSES') %}
+{% set withTitle = withTitle is defined ? withTitle : true %}
 <table class="table table-striped table-hover table-sm">
-    <tr>
-        <th>Name</th>
-        <th>Status</th>
-    </tr>
+    {% if withTitle %}
+        <tr>
+            <th>Name</th>
+            <th>Status</th>
+            <th>&nbsp;</th>
+        </tr>
+    {% endif %}
     {% for item in items %}
         <tr>
             <td>
@@ -12,6 +16,9 @@
             <td>
                 <img src="{{ asset("/bundles/novaezmailing/admin/images/16x16/"~statusKeys[item.status])~".png" }}" class="nova-icon"/> {{ statusKeys[item.status] }}
             </td>
+            <th>
+                <a href="#">edit</a>
+            </th>
         </tr>
 
     {% endfor %}

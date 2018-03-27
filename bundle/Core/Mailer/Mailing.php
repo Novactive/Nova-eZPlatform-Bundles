@@ -12,15 +12,13 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Mailer;
 
-use Swift_Message;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing as MailingEntity;
 
 /**
- * Class Mailing
+ * Class Mailing.
  */
 class Mailing extends Mailer
 {
-
     /**
      * @var Simple
      */
@@ -38,21 +36,12 @@ class Mailing extends Mailer
         // get the modifier to track and replace
     }
 
-
-
-
     public function sendMailing(MailingEntity $mailing)
     {
-
         // send the report begin message
-
 
         // send the mailing
 
-
         // send the report end message
-
-
     }
-
 }

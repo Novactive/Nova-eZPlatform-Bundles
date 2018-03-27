@@ -28,5 +28,8 @@ services:
         tags:
             - { name: kernel.event_listener, event: "ezplatform.tab.group.pre_render", method: "onTabGroupPreRender" }
 
-    Novactive\Bundle\eZMailingBundle\Core\Tab\Campaign:
+    Novactive\Bundle\eZMailingBundle\Core\Tab\Campaigns:
+        parent: EzSystems\EzPlatformAdminUi\Tab\AbstractTab
+
+    Novactive\Bundle\eZMailingBundle\Core\Tab\Mailings:
         parent: EzSystems\EzPlatformAdminUi\Tab\AbstractTab

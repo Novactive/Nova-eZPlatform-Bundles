@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
- * Class Tracking
+ * Class Tracking.
  */
 class Tracking
 {
@@ -36,30 +36,27 @@ class Tracking
         $this->router = $router;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function modify(Mailing $mailing, string $html, array $options = []): string
     {
         $uniqId = uniqid('novaezmailing-', true);
 
         $readUrl    = $this->router->generate(
-            "novaezmailing_t_read",
+            'novaezmailing_t_read',
             ['id' => $mailing->getId(), 'salt' => $uniqId],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
         $readMarker = "<img src=\"{$readUrl}\" width=\"1\" height=\"1\" />";
-        $html       = str_replace("</body>", "{$readMarker}</body>", $html);
+        $html       = str_replace('</body>', "{$readMarker}</body>", $html);
 
         return preg_replace_callback(
             '/<a(.[^>]*)href="http(s)?(.[^"]*)"/uimx',
             function ($aInput) use ($mailing, $uniqId) {
                 $continueUrl = $this->router->generate(
-                    "novaezmailing_t_continue",
+                    'novaezmailing_t_continue',
                     [
                         'id'   => $mailing->getId(),
                         'salt' => $uniqId,
-                        'url'  => base64_encode($aInput[2].$aInput[3])
+                        'url'  => base64_encode($aInput[2].$aInput[3]),
                     ],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 );
@@ -69,5 +66,4 @@ class Tracking
             $html
         );
     }
-
 }

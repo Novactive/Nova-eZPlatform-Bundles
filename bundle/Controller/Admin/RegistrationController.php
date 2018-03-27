@@ -44,7 +44,7 @@ class RegistrationController
         $token = $request->request->get('token');
         if (!$request->isXmlHttpRequest() || null === $token ||
             !$csrfTokenManager->isTokenValid(new CsrfToken($registration->getId(), $token))) {
-            throw new AccessDeniedHttpException("Not Allowed");
+            throw new AccessDeniedHttpException('Not Allowed');
         }
         $registration->setApproved(true);
         $entityManager->persist($registration);
@@ -67,7 +67,7 @@ class RegistrationController
         $token = $request->request->get('token');
         if (!$request->isXmlHttpRequest() || null === $token ||
             !$csrfTokenManager->isTokenValid(new CsrfToken($registration->getId(), $token))) {
-            throw new AccessDeniedHttpException("Not Allowed");
+            throw new AccessDeniedHttpException('Not Allowed');
         }
 
         $registration->setApproved(false);
@@ -75,7 +75,5 @@ class RegistrationController
         $entityManager->flush();
 
         return new JsonResponse(['token' => $csrfTokenManager->getToken($registration->getId())->getValue()]);
-
     }
-
 }

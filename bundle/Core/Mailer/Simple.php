@@ -15,13 +15,11 @@ namespace Novactive\Bundle\eZMailingBundle\Core\Mailer;
 use Swift_Message;
 
 /**
- * Class Simple
+ * Class Simple.
  */
 class Simple extends Mailer
 {
-
     public function send(Swift_Message $message)
     {
-
     }
 }
