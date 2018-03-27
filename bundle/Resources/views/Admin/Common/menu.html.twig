@@ -1,7 +1,0 @@
-{% extends 'knp_menu.html.twig' %}
-
-
-{% block spanElement %}{% import 'knp_menu.html.twig' as knp_menu %}
-    <label{{ knp_menu.attributes(item.labelAttributes) }} for="tree-{{ item.name }}">{{ block('label') }}</label>
-    <input id="tree-{{ item.name }}" type="checkbox" {% if 'current_ancestor' in classes %} checked {% endif %}/>
-{% endblock %}
