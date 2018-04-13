@@ -499,6 +499,22 @@ class User
     }
 
     /**
+     * @return string
+     */
+    public function getStatusKey(): string
+    {
+        return self::STATUSES[$this->status];
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatusStyle(): string
+    {
+        return self::STATUSES_STYLE[$this->status];
+    }
+
+    /**
      * @param int $status
      *
      * @return User
@@ -590,6 +606,8 @@ class User
 
         if ($this->registrations->exists(
             function ($key, Registration $element) use ($registration) {
+                $key; //tricks phpmd
+
                 return $element->getMailingList()->getId() === $registration->getMailingList()->getId();
             }
         )) {

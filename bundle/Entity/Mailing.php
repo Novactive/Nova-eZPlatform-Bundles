@@ -12,8 +12,10 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Entity;
 
+use Carbon\Carbon;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Novactive\Bundle\eZMailingBundle\Core\Utils\Clock;
 
 /**
  * Class Mailing.
@@ -99,7 +101,7 @@ class Mailing implements eZ\ContentInterface
 
     /**
      * @var array
-     * @ORM\Column(name="MAIL_hours_of_day", type="array", nullable=true)
+     * @ORM\Column(name="MAIL_hours_of_day", type="array", nullable=false)
      */
     private $hoursOfDay;
 
@@ -117,6 +119,12 @@ class Mailing implements eZ\ContentInterface
 
     /**
      * @var array
+     * @ORM\Column(name="MAIL_days_of_year", type="array", nullable=true)
+     */
+    private $daysOfYear;
+
+    /**
+     * @var array
      * @ORM\Column(name="MAIL_weeks_of_month", type="array", nullable=true)
      */
     private $weeksOfMonth;
@@ -125,7 +133,7 @@ class Mailing implements eZ\ContentInterface
      * @var array
      * @ORM\Column(name="MAIL_months_of_year", type="array", nullable=true)
      */
-    private $monthOfYear;
+    private $monthsOfYear;
 
     /**
      * @var array
@@ -145,7 +153,14 @@ class Mailing implements eZ\ContentInterface
      */
     public function __construct()
     {
-        $this->recurring = false;
+        $this->recurring    = false;
+        $this->hoursOfDay   = [];
+        $this->daysOfWeek   = [];
+        $this->daysOfMonth  = [];
+        $this->daysOfYear   = [];
+        $this->weeksOfMonth = [];
+        $this->monthsOfYear = [];
+        $this->weeksOfYear  = [];
     }
 
     /**
@@ -177,6 +192,14 @@ class Mailing implements eZ\ContentInterface
     }
 
     /**
+     * @return string
+     */
+    public function getStatusKey(): string
+    {
+        return self::STATUSES[$this->status];
+    }
+
+    /**
      * @param int $status
      *
      * @return Mailing
@@ -191,7 +214,7 @@ class Mailing implements eZ\ContentInterface
     /**
      * @return DateTime
      */
-    public function getLastSent(): DateTime
+    public function getLastSent(): ?DateTime
     {
         return $this->lastSent;
     }
@@ -291,6 +314,26 @@ class Mailing implements eZ\ContentInterface
     /**
      * @return array
      */
+    public function getDaysOfYear(): array
+    {
+        return $this->daysOfYear;
+    }
+
+    /**
+     * @param array $daysOfYear
+     *
+     * @return Mailing
+     */
+    public function setDaysOfYear(array $daysOfYear): self
+    {
+        $this->daysOfYear = $daysOfYear;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
     public function getWeeksOfMonth(): array
     {
         return $this->weeksOfMonth;
@@ -311,19 +354,19 @@ class Mailing implements eZ\ContentInterface
     /**
      * @return array
      */
-    public function getMonthOfYear(): array
+    public function getMonthsOfYear(): array
     {
-        return $this->monthOfYear;
+        return $this->monthsOfYear;
     }
 
     /**
-     * @param array $monthOfYear
+     * @param array $monthsOfYear
      *
      * @return Mailing
      */
-    public function setMonthOfYear(array $monthOfYear): self
+    public function setMonthsOfYear(array $monthsOfYear): self
     {
-        $this->monthOfYear = $monthOfYear;
+        $this->monthsOfYear = $monthsOfYear;
 
         return $this;
     }
@@ -366,5 +409,69 @@ class Mailing implements eZ\ContentInterface
         $this->campaign = $campaign;
 
         return $this;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function nextTick(): ?DateTime
+    {
+        try {
+            $clock = new Clock(Carbon::now());
+
+            return $clock->nextTick($this);
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasBeenSent(): bool
+    {
+        return
+            (false === $this->isRecurring() && self::SENT === $this->status) ||
+            (true === $this->isRecurring() && null !== $this->lastSent);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPending(): bool
+    {
+        return self::PENDING === $this->status;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDraft(): bool
+    {
+        return self::DRAFT === $this->status;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isArchived(): bool
+    {
+        return self::ARCHIVED === $this->status;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAborted(): bool
+    {
+        return self::ABORTED === $this->status;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProcessing(): bool
+    {
+        return self::PROCESSING === $this->status;
     }
 }

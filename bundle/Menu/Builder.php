@@ -75,10 +75,8 @@ class Builder
      */
     public function createCampaignMenu(RequestStack $requestStack, EntityManager $entityManager): ItemInterface
     {
-        $request = $requestStack->getMasterRequest();
-        $route   = null !== $request ? $request->attributes->get('_route') : null;
-        $menu    = $this->factory->createItem('root');
-        $repo    = $entityManager->getRepository(Campaign::class);
+        $menu = $this->factory->createItem('root');
+        $repo = $entityManager->getRepository(Campaign::class);
 
         $campaigns       = $repo->findAll();
         $mailingStatuses = Mailing::STATUSES;

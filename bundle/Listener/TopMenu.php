@@ -21,8 +21,7 @@ class TopMenu
 {
     public function onMenuConfigure(ConfigureMenuEvent $event): void
     {
-        $menu    = $event->getMenu();
-        $options = $event->getOptions(); // options passed from the context (i.e. Content item in Content View)
+        $menu = $event->getMenu();
         $menu->addChild(
             'eznovamailing',
             [

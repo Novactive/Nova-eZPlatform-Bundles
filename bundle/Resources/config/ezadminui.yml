@@ -4,8 +4,7 @@ services:
          parent: EzSystems\EzPlatformAdminUi\Component\TwigComponent
          public: false
          arguments:
-             - "@twig"
-             - "@@NovaeZMailing/ezadminui/stylesheets.html.twig"
+            $template: "@@NovaeZMailing/ezadminui/stylesheets.html.twig"
          tags:
              - { name: ezplatform.admin_ui.component, group: 'stylesheet-head' }
 
@@ -13,11 +12,9 @@ services:
          parent: EzSystems\EzPlatformAdminUi\Component\TwigComponent
          public: false
          arguments:
-             - "@twig"
-             - "@@NovaeZMailing/ezadminui/javascripts.html.twig"
+             $template: "@@NovaeZMailing/ezadminui/javascripts.html.twig"
          tags:
              - { name: ezplatform.admin_ui.component, group: 'script-body' }
-
 
     Novactive\Bundle\eZMailingBundle\Listener\TopMenu:
         tags:

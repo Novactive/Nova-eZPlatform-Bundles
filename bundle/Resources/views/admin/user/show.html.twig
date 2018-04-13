@@ -1,6 +1,4 @@
 {% extends '@NovaeZMailing/Admin/Layout/pagelayout.html.twig' %}
-{% set statusKeys = constant('Novactive\\Bundle\\eZMailingBundle\\Entity\\User::STATUSES') %}
-{% set styles = constant('Novactive\\Bundle\\eZMailingBundle\\Entity\\User::STATUSES_STYLE') %}
 
 {% block novezmailing_breadcrumb %}
     <ol class="breadcrumb px-4">
@@ -24,7 +22,7 @@
                 <tr>
                     <th>Email</th>
                     <td>{{ item.email }} -
-                        <span class="badge badge-{{ styles[item.status] }}">{{ statusKeys[item.status] }}</span></td>
+                        <span class="badge badge-{{ item.statusStyle }}">{{ item.statusKey }}</span></td>
                 </tr>
                 <tr>
                     <th>First Name</th>

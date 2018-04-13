@@ -27,6 +27,9 @@ codeclean: ## Coding Standard checks
 	$(PHP_BIN) ./vendor/bin/phpmd bundle text .cs/md_ruleset.xml
 	$(PHP_BIN) ./vendor/bin/phpmd tests text .cs/md_ruleset.xml
 
+.PHONY: tests
+tests: ## Run the testsBundle/bundle/Menu/Builder.php
+	$(PHP_BIN) ./vendor/bin/phpunit ./tests --exclude-group behat
 
 .PHONY: install
 install: ## Install vendors

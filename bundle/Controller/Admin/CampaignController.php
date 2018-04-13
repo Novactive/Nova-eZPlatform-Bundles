@@ -35,24 +35,26 @@ class CampaignController
      */
     public function campaignTabsAction(Campaign $campaign, Repository $repository, ContentTab $contentTab): array
     {
-        $content     = $campaign->getContent();
-        $location    = $repository->getLocationService()->loadLocation(
-            $campaign->getContent()->contentInfo->mainLocationId
-        );
-        $contentType = $repository->getContentTypeService()->loadContentType(
-            $campaign->getContent()->contentInfo->contentTypeId
-        );
-        $preview     = $contentTab->renderView(
-            [
-                'content'     => $content,
-                'location'    => $location,
-                'contentType' => $contentType,
-            ]
-        );
+        $content = $campaign->getContent();
+        if (null !== $content) {
+            $location    = $repository->getLocationService()->loadLocation(
+                $content->contentInfo->mainLocationId
+            );
+            $contentType = $repository->getContentTypeService()->loadContentType(
+                $content->contentInfo->contentTypeId
+            );
+            $preview     = $contentTab->renderView(
+                [
+                    'content'     => $content,
+                    'location'    => $location,
+                    'contentType' => $contentType,
+                ]
+            );
+        }
 
         return [
             'item'    => $campaign,
-            'preview' => $preview,
+            'preview' => $preview ?? null,
         ];
     }
 

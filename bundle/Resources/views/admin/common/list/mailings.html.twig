@@ -1,4 +1,3 @@
-{% set statusKeys = constant('Novactive\\Bundle\\eZMailingBundle\\Entity\\Mailing::STATUSES') %}
 {% set withTitle = withTitle is defined ? withTitle : true %}
 <table class="table table-striped table-hover table-sm">
     {% if withTitle %}
@@ -14,7 +13,7 @@
                 <a href="{{ path('novaezmailing_mailing_show', {mailing:item.id}) }}">{{ item.name }}</a>
             </td>
             <td>
-                <img src="{{ asset("/bundles/novaezmailing/admin/images/16x16/"~statusKeys[item.status])~".png" }}" class="nova-icon"/> {{ statusKeys[item.status] }}
+                <img src="{{ asset("/bundles/novaezmailing/admin/images/16x16/"~item.statusKey~".png") }}" class="nova-icon"/> {{ item.statusKey }}
             </td>
             <th>
                 <a href="#">edit</a>

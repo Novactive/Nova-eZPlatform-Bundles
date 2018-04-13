@@ -1,7 +1,5 @@
 {% set withRegistrations = withRegistrations is defined ? withRegistrations : true %}
 {% set withStatus = withStatus is defined ? withStatus : true %}
-{% set statusKeys = constant('Novactive\\Bundle\\eZMailingBundle\\Entity\\User::STATUSES') %}
-{% set styles = constant('Novactive\\Bundle\\eZMailingBundle\\Entity\\User::STATUSES_STYLE') %}
 {% import "@NovaeZMailing/admin/common/registration_approbation_button.html.twig" as ApprobationButton %}
 <table class="table table-striped table-hover table-sm">
     <thead>
@@ -16,10 +14,11 @@
         {% if currentMailingList is defined and currentMailingList.withApproval %}
             <th class="text-center">Approbation</th>
         {% endif %}
-        <th class="text-center">Updated</th>
-        <th class="text-center">Created</th>
 
-        {% if withRegistrations %}
+        {% if not withRegistrations %}
+            <th class="text-center">Updated</th>
+            <th class="text-center">Created</th>
+        {% else %}
             <th class="text-center">Registrations</th>
         {% endif %}
     </tr>
@@ -40,7 +39,7 @@
                    data-trigger="hover"
                 >{{ item.email }}</a></td>
             {% if withStatus %}
-                <td><span class="badge badge-{{ styles[item.status] }}">{{ statusKeys[item.status] }}</span></td>
+                <td><span class="badge badge-{{ item.statusStyle }}">{{ item.statusKey }}</span></td>
             {% endif %}
             <td class="text-center">{{ item.country|country_name }}</td>
             <td class="text-center">{{ item.origin }}</td>
@@ -54,7 +53,7 @@
                         <td class="text-center">{{ registration.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
                     {% endif %}
                 {% endfor %}
-            {% else %}
+            {% elseif not withRegistrations %}
                 <td class="text-center">{{ item.updated|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
                 <td class="text-center">{{ item.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
             {% endif %}

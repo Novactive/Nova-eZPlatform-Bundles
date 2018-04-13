@@ -1,25 +1,25 @@
 <div class="campaign-content">
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" href="#novaezmailing-campaign-preview" data-toggle="tab" role="tab">Campaign</a>
+            <a class="nav-link active" href="#novaezmailing-campaign-preview" data-toggle="tab" role="tab">Mailing</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#novaezmailing-content-preview" data-toggle="tab" role="tab">Associated eZ Content</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#novaezmailing-mailings-preview" data-toggle="tab" role="tab">Mailings</a>
+            <a class="nav-link" href="#novaezmailing-mailings-preview" data-toggle="tab" role="tab">Campaign</a>
         </li>
     </ul>
     <div class="novaezmailing-tabs-content tab-content">
         <div class="novaezmailing-ez-campaign-view tab-pane active" role="tabpanel" id="novaezmailing-campaign-preview">
-            {% include "@NovaeZMailing/admin/campaign/details.html.twig" with { item: item} only %}
+            {% include "@NovaeZMailing/admin/mailing/details.html.twig" with { item: item} only %}
         </div>
         <div class="novaezmailing-ez-content-view tab-pane" role="tabpanel" id="novaezmailing-content-preview">
             {{ preview|raw }}
         </div>
 
         <div class="novaezmailing-ez-mailings-view tab-pane" role="tabpanel" id="novaezmailing-mailings-preview">
-            {% include "@NovaeZMailing/admin/common/list/mailings.html.twig" with { items: item.mailings} only %}
+            {% include "@NovaeZMailing/admin/campaign/details.html.twig" with { item: item.campaign} only %}
         </div>
     </div>
 </div>

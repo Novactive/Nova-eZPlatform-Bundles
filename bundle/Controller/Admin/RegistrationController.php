@@ -58,7 +58,7 @@ class RegistrationController
      *
      * @return JsonResponse
      */
-    public function debyAction(
+    public function denyAction(
         Request $request,
         CsrfTokenManagerInterface $csrfTokenManager,
         EntityManager $entityManager,

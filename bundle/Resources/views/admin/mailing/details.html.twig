@@ -1,0 +1,84 @@
+<table class="table table-striped table-hover table-sm">
+    <tr>
+        <th>Name</th>
+        <td>{{ item.name }}</td>
+    </tr>
+    <tr>
+        <th>Status</th>
+        <td>
+            <img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/"~item.statusKey~".png") }}" class="nova-icon"/>
+            {{ item.statusKey }}
+        </td>
+    </tr>
+
+    {% set nextTick = item.nextTick %}
+    {% if item.hasBeenSent %}
+        <tr>
+            <th>Last sent date</th>
+            <td>
+                {{ item.lastSent|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}
+            </td>
+        </tr>
+    {% endif %}
+    <tr>
+        <th>
+            {% if item.recurring %}
+                Frequency
+            {% else %}
+                Rules
+            {% endif %}
+        </th>
+        <td>
+            <table class="table table-striped table-hover table-sm">
+                <tr>
+                    <th class="text-center">Hours of the Day</th>
+                    <th class="text-center">Days of the Week</th>
+                    <th class="text-center">Days of the Month</th>
+                    <th class="text-center">Weeks of the Month</th>
+                    <th class="text-center">Months of the Year</th>
+                    <th class="text-center">Weeks of the Year</th>
+                </tr>
+                <tr>
+                    <td class="text-center">{{ item.hoursOfDay|join(',')|default("*") }}</td>
+                    <td class="text-center">{{ item.daysOfWeek|join(',')|default("*") }}</td>
+                    <td class="text-center">{{ item.daysOfMonth|join(',')|default("*") }}</td>
+                    <td class="text-center">{{ item.weeksOfMonth|join(',')|default("*") }}</td>
+                    <td class="text-center">{{ item.monthsOfYear|join(',')|default("*") }}</td>
+                    <td class="text-center">{{ item.weeksOfYear|join(',')|default("*") }}</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    {% if not (item.isAborted or item.isArchived or item.isProcessing) %}
+        {% if item.recurring %}
+            <tr>
+                <th>Next Sending date</th>
+                <td>
+                    {% if nextTick is not null %}
+                        {{ nextTick|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}
+                    {% else %}
+                        n/a
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <th>Sending date</th>
+                <td>
+                    {% if nextTick is not null %}
+                        {{ nextTick|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}
+                    {% else %}
+                        n/a
+                    {% endif %}
+                </td>
+            </tr>
+        {% endif %}
+    {% endif %}
+    {% if item.isProcessing %}
+        <tr>
+            <th>Sending date</th>
+            <td>Currently in progress...</td>
+        </tr>
+
+    {% endif %}
+</table>

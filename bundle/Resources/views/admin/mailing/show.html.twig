@@ -11,6 +11,9 @@
 {% block novezmailing_title %}{{ item.name }}{% endblock %}
 {% block novezmailing_subtitle %}Mailing{% endblock %}
 {% block content %}
-   plop
+    {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\MailingController::mailingTabsAction", {mailing: item.id})) }}
+    <br />
+
+    <div class="js-children" data-location-id="2"></div>
 {% endblock %}
 
