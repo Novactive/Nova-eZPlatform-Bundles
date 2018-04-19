@@ -14,6 +14,7 @@ namespace Novactive\Bundle\eZMailingBundle\Entity\eZ;
 
 use Doctrine\ORM\Mapping as ORM;
 use eZ\Publish\API\Repository\Values\Content\Content as eZContent;
+use eZ\Publish\API\Repository\Values\Content\Location as eZLocation;
 
 /**
  * Trait Content.
@@ -22,9 +23,9 @@ trait Content
 {
     /**
      * @var int
-     * @ORM\Column(name="EZ_contentId", type="integer", nullable=true)
+     * @ORM\Column(name="EZ_locationId", type="integer", nullable=true)
      */
-    private $contentId;
+    private $locationId;
 
     /**
      * @var eZContent
@@ -32,22 +33,9 @@ trait Content
     private $content;
 
     /**
-     * {@inheritdoc}
+     * @var eZLocation
      */
-    public function getContentId(): int
-    {
-        return $this->contentId;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setContentId(int $contentId): ContentInterface
-    {
-        $this->contentId = $contentId;
-
-        return $this;
-    }
+    private $location;
 
     /**
      * {@inheritdoc}
@@ -63,6 +51,42 @@ trait Content
     public function setContent(eZContent $content): ContentInterface
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLocationId(): int
+    {
+        return $this->locationId;
+    }
+
+    /**
+     * @param int $locationId
+     */
+    public function setLocationId(int $locationId): ContentInterface
+    {
+        $this->locationId = $locationId;
+
+        return $this;
+    }
+
+    /**
+     * @return eZLocation
+     */
+    public function getLocation(): eZLocation
+    {
+        return $this->location;
+    }
+
+    /**
+     * @param eZLocation $location
+     */
+    public function setLocation(eZLocation $location): ContentInterface
+    {
+        $this->location = $location;
 
         return $this;
     }

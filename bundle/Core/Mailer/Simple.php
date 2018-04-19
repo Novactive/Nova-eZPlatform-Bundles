@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Mailer;
 
+use Novactive\Bundle\eZMailingBundle\Core\Provider\MessageContent;
+use Novactive\Bundle\eZMailingBundle\Entity\Mailing as MailingEntity;
 use Swift_Message;
 
 /**
@@ -19,7 +21,46 @@ use Swift_Message;
  */
 class Simple extends Mailer
 {
-    public function send(Swift_Message $message)
+    /**
+     * @var MessageContent
+     */
+    private $messageProvider;
+
+    /**
+     * Simple constructor.
+     *
+     * @param MessageContent $messageProvider
+     */
+    public function __construct(MessageContent $messageProvider)
     {
+        $this->messageProvider = $messageProvider;
+    }
+
+    /**
+     * @param MailingEntity $mailing
+     */
+    public function sendStartSendingMailingMessage(MailingEntity $mailing): void
+    {
+        $message = $this->messageProvider->getStartSendingMailing($mailing);
+        $this->sendMessage($message);
+    }
+
+    /**
+     * @param MailingEntity $mailing
+     */
+    public function sendStopSendingMailingMessage(MailingEntity $mailing): void
+    {
+        $message = $this->messageProvider->getStopSendingMailing($mailing);
+        $this->sendMessage($message);
+    }
+
+    /**
+     * @param Swift_Message $message
+     *
+     * @return int
+     */
+    private function sendMessage(Swift_Message $message): int
+    {
+        return $this->mailer->send($message);
     }
 }

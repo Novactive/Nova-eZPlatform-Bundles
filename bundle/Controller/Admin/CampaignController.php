@@ -37,16 +37,13 @@ class CampaignController
     {
         $content = $campaign->getContent();
         if (null !== $content) {
-            $location    = $repository->getLocationService()->loadLocation(
-                $content->contentInfo->mainLocationId
-            );
             $contentType = $repository->getContentTypeService()->loadContentType(
                 $content->contentInfo->contentTypeId
             );
             $preview     = $contentTab->renderView(
                 [
                     'content'     => $content,
-                    'location'    => $location,
+                    'location'    => $campaign->getLocation(),
                     'contentType' => $contentType,
                 ]
             );

@@ -16,6 +16,13 @@ services:
     Novactive\Bundle\eZMailingBundle\Core\Provider\:
         resource: '../../Core/Provider'
 
+    Novactive\Bundle\eZMailingBundle\Core\Modifier\:
+        resource: '../../Core/Modifier'
+        tags: [novaezmailing.content.modifier]
+
+    Novactive\Bundle\eZMailingBundle\Core\Provider\MailingContent:
+        arguments: [!tagged novaezmailing.content.modifier]
+
     Novactive\Bundle\eZMailingBundle\Menu\Builder:
         arguments: ["@knp_menu.factory"]
 
@@ -47,7 +54,6 @@ services:
     Novactive\Bundle\eZMailingBundle\Core\Mailer\Mailing:
         factory: 'Novactive\Bundle\eZMailingBundle\Core\Mailer\Factory:get'
         arguments: ['mailing_mailer']
-
 
     # Twig
     Novactive\Bundle\eZMailingBundle\Twig\Extension:

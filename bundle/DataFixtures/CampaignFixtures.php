@@ -44,7 +44,7 @@ class CampaignFixtures extends Fixture implements DependentFixtureInterface
             $campaign->setReportEmail($faker->email);
             $campaign->setSenderEmail($faker->email);
             $campaign->setSenderName($faker->name);
-            $campaign->setContentId(1);
+            $campaign->setLocationId(2);
             // create MailingLists
             $nbDestinations = $faker->numberBetween(0, MailingListFixtures::FIXTURE_COUNT_MAILINGLIST);
             for ($j = 0; $j <= $nbDestinations; ++$j) {
@@ -67,7 +67,7 @@ class CampaignFixtures extends Fixture implements DependentFixtureInterface
                 $mailing->setRecurring($faker->boolean());
                 $mailing->setHoursOfDay([$faker->numberBetween(0, 23)]);
                 $mailing->setDaysOfMonth([$faker->numberBetween(0, 31)]);
-                $mailing->setContentId(1);
+                $mailing->setLocationId(2);
                 $campaign->addMailing($mailing);
             }
 

@@ -13,6 +13,8 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Core\Mailer;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Novactive\Bundle\eZMailingBundle\Core\Provider\MailingContent;
+use Novactive\Bundle\eZMailingBundle\Core\Provider\MessageContent;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -25,19 +27,39 @@ class Factory
      */
     private $configResolver;
 
-    /** @var ContainerInterface */
+    /**
+     * @var ContainerInterface
+     */
     private $container;
+
+    /**
+     * @var MessageContent
+     */
+    private $messageContentProvider;
+
+    /**
+     * @var MailingContent
+     */
+    private $mailingContentProvider;
 
     /**
      * Factory constructor.
      *
      * @param ConfigResolverInterface $configResolver
-     * @param ContainerInterface      $container¬
+     * @param ContainerInterface      $container
+     * @param MessageContent          $messageContentProvider
+     * @param MailingContent          $mailingContentProvider
      */
-    public function __construct(ConfigResolverInterface $configResolver, ContainerInterface $container)
-    {
-        $this->configResolver = $configResolver;
-        $this->container      = $container;
+    public function __construct(
+        ConfigResolverInterface $configResolver,
+        ContainerInterface $container,
+        MessageContent $messageContentProvider,
+        MailingContent $mailingContentProvider
+    ) {
+        $this->configResolver         = $configResolver;
+        $this->container              = $container;
+        $this->messageContentProvider = $messageContentProvider;
+        $this->mailingContentProvider = $mailingContentProvider;
     }
 
     /**
@@ -50,10 +72,12 @@ class Factory
         $mailer = $this->container->get((string) $this->configResolver->getParameter($mailerDef, 'nova_ezmailing'));
         /* @var \Swift_Mailer $mailer */
         if ('simple_mailer' === $mailerDef) {
-            return (new Simple())->setMailer($mailer);
+            return (new Simple($this->messageContentProvider))->setMailer($mailer);
         }
         if ('mailing_mailer' === $mailerDef) {
-            return (new Mailing($this->container->get(Simple::class)))->setMailer($mailer);
+            return (new Mailing($this->container->get(Simple::class), $this->mailingContentProvider))->setMailer(
+                $mailer
+            );
         }
 
         throw new \RuntimeException('Mailers are not correctly defined.');

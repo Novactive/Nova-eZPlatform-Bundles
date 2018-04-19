@@ -1,0 +1,13 @@
+_novaezmailing_bundle:
+    resource: "@NovaeZMailingBundle/Controller"
+    type:     annotation
+    prefix:   /novaezmailing
+
+_novaezmailing_ez_content_view:
+    path: /novamailing/view/{locationId}/{contentId}
+    defaults:
+        _controller: ez_content:viewAction
+        viewType: novaezmailingfull
+        layout: true
+    options:
+        expose: true

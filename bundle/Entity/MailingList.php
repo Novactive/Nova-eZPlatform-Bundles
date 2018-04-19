@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -94,6 +95,17 @@ class MailingList
     public function getRegistrations()
     {
         return $this->registrations;
+    }
+
+    /**
+     * @return ArrayCollection|Registration[]
+     */
+    public function getApprovedRegistrations()
+    {
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->eq('approved', true));
+
+        return $this->registrations->matching($criteria);
     }
 
     /**

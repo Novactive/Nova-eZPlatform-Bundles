@@ -13,14 +13,17 @@ namespace Novactive\Bundle\eZMailingBundle\DependencyInjection;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ConfigurationProcessor;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class NovaeZMailingExtension.
  */
-class NovaeZMailingExtension extends Extension
+class NovaeZMailingExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * {@inheritdoc}
@@ -49,5 +52,18 @@ class NovaeZMailingExtension extends Extension
         $processor = new ConfigurationProcessor($container, $this->getAlias());
         $processor->mapSetting('simple_mailer', $config);
         $processor->mapSetting('mailing_mailer', $config);
+    }
+
+    /**
+     * Loads configuration.
+     *
+     * @param ContainerBuilder $container
+     */
+    public function prepend(ContainerBuilder $container): void
+    {
+        $configFile = __DIR__.'/../Resources/config/views.yml';
+        $config     = Yaml::parse(file_get_contents($configFile));
+        $container->prependExtensionConfig('ezpublish', $config);
+        $container->addResource(new FileResource($configFile));
     }
 }

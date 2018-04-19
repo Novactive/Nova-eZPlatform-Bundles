@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Listener;
 
 use Doctrine\ORM\EntityManagerInterface;
-use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use EzSystems\EzPlatformAdminUi\Tab\Event\TabGroupEvent;
 use EzSystems\EzPlatformAdminUi\Tab\TabRegistry;
 use Novactive\Bundle\eZMailingBundle\Core\Tab\Campaigns as CampaignsTab;
@@ -75,18 +75,18 @@ class LocationViewGroupTab
         }
 
         $parameters = $event->getParameters();
-        /** @var Content $content */
-        $content = $parameters['content'];
+        /** @var Location $location */
+        $location = $parameters['location'];
 
         $campaignRepo = $this->entityManager->getRepository('NovaeZMailingBundle:Campaign');
-        $campaigns    = $campaignRepo->findBy(['contentId' => $content->id]);
+        $campaigns    = $campaignRepo->findBy(['locationId' => $location->id]);
         if ($campaigns) {
             $this->campaignsTab->setCampaigns($campaigns);
             $this->tabRegistry->addTab($this->campaignsTab, 'location-view');
         }
 
         $mailingRepo = $this->entityManager->getRepository('NovaeZMailingBundle:Mailing');
-        $mailings    = $mailingRepo->findBy(['contentId' => $content->id]);
+        $mailings    = $mailingRepo->findBy(['locationId' => $location->id]);
         if ($mailings) {
             $this->mailingsTab->setMailings($mailings);
             $this->tabRegistry->addTab($this->mailingsTab, 'location-view');

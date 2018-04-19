@@ -1,0 +1,30 @@
+{% extends "@NovaeZMailing/eZViews/mailing_base.html.twig" %}
+
+{% block preheader_message %}
+    PRE HEADER MESAGE
+{% endblock %}
+
+{% block body %}
+    <p>You are using the generic 'novaezmailingfull' view.</p>
+
+    <p>Please define a "view" that works in your project</p>
+
+    <p>Example for a folder: </p>
+
+    <pre>
+content_view:
+    novaezmailingfull:
+        folder:
+            template: novaezmailingfull\folder.html.twig
+            match:
+                Identifier\ContentType: [folder]
+</pre>
+{% endblock %}
+
+{% block footer %}
+    FOOTER
+{% endblock %}
+
+{% block unsubscribe %}
+    unsubscribe.com
+{% endblock %}

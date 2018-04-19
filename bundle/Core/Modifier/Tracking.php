@@ -10,7 +10,7 @@
  */
 declare(strict_types=1);
 
-namespace Novactive\Bundle\eZMailingBundle\Core;
+namespace Novactive\Bundle\eZMailingBundle\Core\Modifier;
 
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;

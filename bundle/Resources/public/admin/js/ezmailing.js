@@ -66,7 +66,6 @@ $(function () {
         }), udwContainer);
     });
 
-    /* @todo: check with eZ and finish
     var token = document.querySelector('meta[name="CSRF-Token"]').content;
     var siteaccess = document.querySelector('meta[name="SiteAccess"]').content;
     var jschildren = $(".js-children:first").get(0);
@@ -81,7 +80,6 @@ $(function () {
         },
         restInfo: {token: token, siteaccess: siteaccess}
     }), jschildren);
-    */
 
     // doc
     var kkeys = [], code = "38,38,40,40,37,39,37,39,66,65";

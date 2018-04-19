@@ -11,20 +11,28 @@
 
 
     
-    _novaezmailing_bundle:
-        resource: "@NovaeZMailingBundle/Controller"
-        type:     annotation
-        prefix:   /novaezmailing
+_novaezmailing_routes:
+    resource: '@NovaeZMailingBundle/Resources/config/routing.yml'
+
+
+// Nova eZ Mailing
+new Novactive\Bundle\eZMailingBundle\NovaeZMailingBundle()
 
 
 
-    // Nova eZ Mailing
-    new Novactive\Bundle\eZMailingBundle\NovaeZMailingBundle()
+nova_ezmailing:
+    system:
+        default:
+            simple_mailer: "swiftmailer.mailer.myfirst_mailer"
+            mailing_mailer: "swiftmailer.mailer.mysecond_mailer"
 
 
-
-    nova_ezmailing:
-        system:
-            default:
-                simple_mailer: "swiftmailer.mailer.myfirst_mailer"
-                mailing_mailer: "swiftmailer.mailer.mysecond_mailer"
+ezpublish:
+    system:
+        default:
+            content_view:
+                novaezmailingfull:
+                    folder:
+                        template: yourtemplatepath
+                        match:
+                            Identifier\ContentType: [a_content_type]

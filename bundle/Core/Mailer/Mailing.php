@@ -12,7 +12,10 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Mailer;
 
+use Novactive\Bundle\eZMailingBundle\Core\Provider\MailingContent;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing as MailingEntity;
+use Novactive\Bundle\eZMailingBundle\Entity\User;
+use Swift_Message;
 
 /**
  * Class Mailing.
@@ -25,23 +28,54 @@ class Mailing extends Mailer
     private $simpleMailer;
 
     /**
+     * @var MailingContent
+     */
+    private $contentProvider;
+
+    /**
      * Mailing constructor.
      *
-     * @param Simple $simpleMailer
+     * @param Simple         $simpleMailer
+     * @param MailingContent $contentProvider
      */
-    public function __construct(Simple $simpleMailer)
+    public function __construct(Simple $simpleMailer, MailingContent $contentProvider)
     {
-        $this->simpleMailer = $simpleMailer;
-
-        // get the modifier to track and replace
+        $this->simpleMailer    = $simpleMailer;
+        $this->contentProvider = $contentProvider;
     }
 
-    public function sendMailing(MailingEntity $mailing)
+    /**
+     * @param MailingEntity $mailing
+     */
+    public function sendMailing(MailingEntity $mailing, string $forceRecipient = null): void
     {
-        // send the report begin message
+        $this->simpleMailer->sendStartSendingMailingMessage($mailing);
+        $this->contentProvider->preFetchContent($mailing);
 
-        // send the mailing
+        if ($forceRecipient) {
+            $fakeUser = new User();
+            $fakeUser->setEmail($forceRecipient);
+            $contentMessage = $this->contentProvider->getContentMailing($mailing, $fakeUser);
+            $this->sendMessage($contentMessage);
+        } else {
+            $campaign = $mailing->getCampaign();
+            foreach ($campaign->getMailingLists() as $mailingList) {
+                foreach ($mailingList->getApprovedRegistrations() as $registration) {
+                    $contentMessage = $this->contentProvider->getContentMailing($mailing, $registration->getUser());
+                    $this->sendMessage($contentMessage);
+                }
+            }
+        }
+        $this->simpleMailer->sendStopSendingMailingMessage($mailing);
+    }
 
-        // send the report end message
+    /**
+     * @param Swift_Message $message
+     *
+     * @return int
+     */
+    private function sendMessage(Swift_Message $message): int
+    {
+        return $this->mailer->send($message);
     }
 }

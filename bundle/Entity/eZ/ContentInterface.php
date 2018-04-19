@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Entity\eZ;
 
 use eZ\Publish\API\Repository\Values\Content\Content as eZContent;
+use eZ\Publish\API\Repository\Values\Content\Location as eZLocation;
 
 /**
  * Interface ContentInterface.
@@ -22,14 +23,14 @@ interface ContentInterface
     /**
      * @return int
      */
-    public function getContentId(): int;
+    public function getLocationId(): int;
 
     /**
-     * @param int $contentId
+     * @param int $locationId
      *
      * @return ContentInterface
      */
-    public function setContentId(int $contentId): ContentInterface;
+    public function setLocationId(int $locationId): ContentInterface;
 
     /**
      * @return eZContent
@@ -42,4 +43,14 @@ interface ContentInterface
      * @return ContentInterface
      */
     public function setContent(eZContent $content): ContentInterface;
+
+    /**
+     * @return eZLocation
+     */
+    public function getLocation(): eZLocation;
+
+    /**
+     * @param eZLocation $location
+     */
+    public function setLocation(eZLocation $location): ContentInterface;
 }

@@ -46,16 +46,13 @@ class MailingController
     public function mailingTabsAction(Mailing $mailing, Repository $repository, ContentTab $contentTab): array
     {
         $content     = $mailing->getContent();
-        $location    = $repository->getLocationService()->loadLocation(
-            $content->contentInfo->mainLocationId
-        );
         $contentType = $repository->getContentTypeService()->loadContentType(
             $content->contentInfo->contentTypeId
         );
         $preview     = $contentTab->renderView(
             [
                 'content'     => $content,
-                'location'    => $location,
+                'location'    => $mailing->getLocation(),
                 'contentType' => $contentType,
             ]
         );

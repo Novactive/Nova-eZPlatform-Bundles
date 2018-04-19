@@ -14,6 +14,6 @@
     {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\MailingController::mailingTabsAction", {mailing: item.id})) }}
     <br />
 
-    <div class="js-children" data-location-id="2"></div>
+    <div class="js-children" data-location-id="{{ item.locationId }}"></div>
 {% endblock %}
 
