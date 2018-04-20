@@ -14,6 +14,7 @@ namespace Novactive\Bundle\eZMailingBundle\Entity;
 
 use Carbon\Carbon;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Novactive\Bundle\eZMailingBundle\Core\Utils\Clock;
 
@@ -149,11 +150,19 @@ class Mailing implements eZ\ContentInterface
     private $campaign;
 
     /**
+     * @var StatHit[]
+     * @ORM\OneToMany(targetEntity="Novactive\Bundle\eZMailingBundle\Entity\StatHit", mappedBy="mailing",
+     *                                                                                cascade={"persist","remove"})
+     */
+    private $statHits;
+
+    /**
      * Mailing constructor.
      */
     public function __construct()
     {
         $this->recurring    = false;
+        $this->statHits     = new ArrayCollection();
         $this->hoursOfDay   = [];
         $this->daysOfWeek   = [];
         $this->daysOfMonth  = [];
@@ -473,5 +482,41 @@ class Mailing implements eZ\ContentInterface
     public function isProcessing(): bool
     {
         return self::PROCESSING === $this->status;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStatHits()
+    {
+        return $this->statHits;
+    }
+
+    /**
+     * @param StatHit $hit
+     *
+     * @return $this
+     */
+    public function addStatHit(StatHit $hit): self
+    {
+        if ($this->statHits->contains($hit)) {
+            return $this;
+        }
+        $this->statHits->add($hit);
+        $hit->setMailing($this);
+
+        return $this;
+    }
+
+    /**
+     * @param StatHit[] $statHits
+     *
+     * @return $this
+     */
+    public function setStatHits(array $statHits): self
+    {
+        $this->statHits = $statHits;
+
+        return $this;
     }
 }

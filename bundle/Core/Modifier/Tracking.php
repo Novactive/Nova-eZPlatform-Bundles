@@ -19,7 +19,7 @@ use Symfony\Component\Routing\RouterInterface;
 /**
  * Class Tracking.
  */
-class Tracking
+class Tracking implements ModifierInterface
 {
     /**
      * @var
@@ -36,17 +36,20 @@ class Tracking
         $this->router = $router;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function modify(Mailing $mailing, string $html, array $options = []): string
     {
-        $uniqId = uniqid('novaezmailing-', true);
-
+        $uniqId     = uniqid('novaezmailing-', true);
         $readUrl    = $this->router->generate(
             'novaezmailing_t_read',
             ['id' => $mailing->getId(), 'salt' => $uniqId],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
         $readMarker = "<img src=\"{$readUrl}\" width=\"1\" height=\"1\" />";
-        $html       = str_replace('</body>', "{$readMarker}</body>", $html);
+
+        $html = str_replace('</body>', "{$readMarker}</body>", $html);
 
         return preg_replace_callback(
             '/<a(.[^>]*)href="http(s)?(.[^"]*)"/uimx',
@@ -56,7 +59,7 @@ class Tracking
                     [
                         'id'   => $mailing->getId(),
                         'salt' => $uniqId,
-                        'url'  => base64_encode($aInput[2].$aInput[3]),
+                        'url'  => base64_encode('http'.trim($aInput[1]).trim($aInput[2]).trim($aInput[3])),
                     ],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 );

@@ -8,7 +8,8 @@
         <li class="breadcrumb-item active">{{ item.name }}</li>
     </ol>
 {% endblock %}
-{% block novezmailing_title %}{{ item.name }}{% endblock %}
+{% block novezmailing_title %}<img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/"~item.statusKey~".png") }}" class="nova-icon"/> {{ item.name }}{% endblock %}
+
 {% block novezmailing_subtitle %}Mailing{% endblock %}
 {% block content %}
     {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\MailingController::mailingTabsAction", {mailing: item.id})) }}

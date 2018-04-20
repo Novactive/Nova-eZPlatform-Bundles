@@ -584,11 +584,8 @@ class User
     public function setRegistrations(array $registrations): self
     {
         foreach ($registrations as $registration) {
-            if (!$registration instanceof Registration) {
-                throw new \RuntimeException(sprintf('Provided Registration is not a %s', Registration::class));
-            }
+            $this->addRegistration($registration);
         }
-        $this->registrations = $registrations;
 
         return $this;
     }

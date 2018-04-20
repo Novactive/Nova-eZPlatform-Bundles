@@ -205,11 +205,8 @@ class Campaign implements eZ\ContentInterface
     public function setMailingLists(array $mailingLists): self
     {
         foreach ($mailingLists as $mailingList) {
-            if (!$mailingList instanceof MailingList) {
-                throw new \RuntimeException(sprintf('Provided MailingList is not a %s', MailingList::class));
-            }
+            $this->addMailingList($mailingList);
         }
-        $this->mailingLists = $mailingLists;
 
         return $this;
     }
@@ -246,9 +243,7 @@ class Campaign implements eZ\ContentInterface
     public function setMailings(array $mailings): self
     {
         foreach ($mailings as $mailing) {
-            if (!$mailing instanceof Mailing) {
-                throw new \RuntimeException(sprintf('Provided MailingList is not a %s', Mailing::class));
-            }
+            $this->addMailing($mailing);
         }
 
         $this->mailings = $mailings;

@@ -16,6 +16,10 @@ use Novactive\Bundle\eZMailingBundle\Core\Modifier\ModifierInterface;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Novactive\Bundle\eZMailingBundle\Entity\User as UserEntity;
 use Swift_Message;
+use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpKernel\Client;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Class MailingContent.
@@ -33,13 +37,25 @@ class MailingContent
     protected $modifiers;
 
     /**
+     * @var HttpKernelInterface
+     */
+    protected $httpKernel;
+
+    /**
+     * @var RouterInterface
+     */
+    protected $router;
+
+    /**
      * MailingContent constructor.
      *
      * @param ModifierInterface[] $modifiers
      */
-    public function __construct(iterable $modifiers)
+    public function __construct(iterable $modifiers, HttpKernelInterface $httpKernel, RouterInterface $router)
     {
-        $this->modifiers = $modifiers;
+        $this->modifiers  = $modifiers;
+        $this->httpKernel = $httpKernel;
+        $this->router     = $router;
     }
 
     /**
@@ -47,7 +63,32 @@ class MailingContent
      */
     public function preFetchContent(Mailing $mailing): void
     {
-        $this->nativeContent[$mailing->getLocationId()] = 'plop';
+        $client  = new Client($this->httpKernel);
+        $crawler = $client->request(
+            '/GET',
+            $this->router->generate(
+                '_novaezmailing_ez_content_view',
+                [
+                    'locationId' => $mailing->getLocation()->id,
+                    'contentId'  => $mailing->getContent()->id,
+                ]
+            )
+        );
+        $crawler->filter('body div.sf-toolbar, script, style[nonce]')->each(
+            function (Crawler $crawler) {
+                foreach ($crawler as $node) {
+                    $node->parentNode->removeChild($node);
+                }
+            }
+        );
+        $crawler->filter('body div.sf-toolbar, script, style[nonce]')->each(
+            function (Crawler $crawler) {
+                foreach ($crawler as $node) {
+                    $node->parentNode->removeChild($node);
+                }
+            }
+        );
+        $this->nativeContent[$mailing->getLocationId()] = $crawler->html();
     }
 
     /**
