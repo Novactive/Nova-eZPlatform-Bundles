@@ -56,7 +56,26 @@ class Registration extends EntityRepository
                 $mailingLists
             );
         }
+        if (isset($filters['isApproved'])) {
+            $qb->andWhere($qb->expr()->in('reg.approved', ':approved'))->setParameter(
+                'approved',
+                $filters['isApproved']
+            );
+        }
 
         return $qb;
+    }
+
+    /**
+     * @param Mailing[] $mailings
+     *
+     * @return array
+     */
+    public function getApprovedCount($mailings): int
+    {
+        $qb = $this->createQueryBuilderForFilters(['mailings' => $mailings, 'isApproved' => true]);
+        $qb->select($qb->expr()->count($this->getAlias().'.id').' as nb');
+
+        return (int) $qb->getQuery()->getSingleResult()['nb'];
     }
 }

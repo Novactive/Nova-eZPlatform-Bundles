@@ -13,7 +13,9 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use EzSystems\EzPlatformAdminUi\Tab\LocationView\ContentTab;
+use EzSystems\EzPlatformAdminUi\UI\Module\Subitems\ContentViewParameterSupplier;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -31,10 +33,15 @@ class MailingController
      *
      * @return array
      */
-    public function showAction(Mailing $mailing): array
+    public function showAction(Mailing $mailing, ContentViewParameterSupplier $contentViewParameterSupplier): array
     {
+        $contentView = new ContentView();
+        $contentView->setLocation($mailing->getLocation());
+        $contentViewParameterSupplier->supply($contentView);
+
         return [
-            'item' => $mailing,
+            'item'            => $mailing,
+            'subitems_module' => $contentView->getParameter('subitems_module'),
         ];
     }
 

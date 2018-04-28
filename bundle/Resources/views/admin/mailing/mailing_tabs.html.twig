@@ -26,7 +26,22 @@
         </div>
 
         <div class="novaezmailing-ez-mailings-view tab-pane" role="tabpanel" id="novaezmailing-mailings-stats">
-            DISPLAY SOME STATS
+            <div style="width: 600px; height: 300px; float: left">
+                {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\ChartController::browserChart", {mailingId: item.id })) }}
+            </div>
+            <div style="width: 600px; height: 300px; float: left">
+                {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\ChartController::osChart", {mailingId: item.id })) }}
+            </div>
+            <div style="width: 600px; height: 300px; float: left">
+                {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\ChartController::urlChart", {mailingId: item.id })) }}
+            </div>
+            <div style="width: 600px; height: 300px; float: left">
+                {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\ChartController::openedChart", {mailingId: item.id })) }}
+            </div>
+
+
+
+
         </div>
 
     </div>

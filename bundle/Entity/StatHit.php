@@ -44,7 +44,7 @@ class StatHit
     /**
      * @var Mailing
      *
-     * @ORM\ManyToOne(targetEntity="Novactive\Bundle\eZMailingBundle\Entity\Mailing", inversedBy="stathits")
+     * @ORM\ManyToOne(targetEntity="Novactive\Bundle\eZMailingBundle\Entity\Mailing", inversedBy="statHits")
      * @ORM\JoinColumn(name="MAIL_id", referencedColumnName="MAIL_id")
      */
     private $mailing;

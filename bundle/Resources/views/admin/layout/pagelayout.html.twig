@@ -3,24 +3,6 @@
 {% set novezmailing_subtitle = block('novezmailing_subtitle') %}
 {% set novezmailing_breadcrumb = block('novezmailing_breadcrumb') %}
 {% embed '@EzPlatformAdminUi/layout.html.twig' %}
-    {% block stylesheets %}
-        {{ parent() }}
-        {% stylesheets filter='scssphp,cssrewrite'
-            'bundles/novaezmailing/admin/css/tree.scss' %}
-            <link rel="stylesheet" href="{{ asset_url }}"/>
-        {% endstylesheets %}
-
-    {% endblock %}
-
-    {% block javascripts %}
-        {{ parent() }}
-        {% javascripts
-            'bundles/novaezmailing/admin/js/jquery.autocomplete.min.js'
-            'bundles/novaezmailing/admin/js/jquery.peity.min.js' %}
-            <script src="{{ asset_url }}"></script>
-        {% endjavascripts %}
-    {% endblock %}
-
     {% block content %}
         <div class="novaezmailing-app row" data-search-endpoint="{{ path('novaezmailing_dashboard_search_autocomplete') }}">
             <div class="container-fluid">

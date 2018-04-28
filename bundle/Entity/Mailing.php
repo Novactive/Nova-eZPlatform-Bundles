@@ -15,6 +15,7 @@ namespace Novactive\Bundle\eZMailingBundle\Entity;
 use Carbon\Carbon;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Novactive\Bundle\eZMailingBundle\Core\Utils\Clock;
 
@@ -519,4 +520,16 @@ class Mailing implements eZ\ContentInterface
 
         return $this;
     }
+
+//
+//    /**
+//     * @return ArrayCollection|Registration[]
+//     */
+//    public function getApprovedRegistrations()
+//    {
+//        $criteria = Criteria::create();
+//        $criteria->where(Criteria::expr()->eq('approved', true));
+//
+//        return $this->statHits->matching($criteria);
+//    }
 }
