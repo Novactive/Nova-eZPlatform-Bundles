@@ -1,0 +1,3 @@
+#private_access:
+#    path:     /private_access
+#    defaults: { _controller: MCPrivateContentAccessBundle:PrivateAccess:privateAccess }

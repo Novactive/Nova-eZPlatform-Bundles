@@ -1,0 +1,27 @@
+parameters:
+  mc.private.content.sites_extensions.class: MC\Bundle\PrivateContentAccessBundle\Custom\PrivateContentTab
+
+services:
+  mc.private.content.sites_extensions:
+    class: "%mc.private.content.sites_extensions.class%"
+    autowire: true
+    autoconfigure: true
+    public: false
+    tags:
+      - { name: ezplatform.tab, group: location-view }
+#    arguments:
+#      - '@service_container'
+
+  mc_privateaccess.controller.form:
+    public: true
+    class: MC\Bundle\PrivateContentAccessBundle\Controller\PrivateAccessController
+    arguments:
+      - '@templating'
+      - '@ezpublish.api.service.search'
+      - '@ezpublish.api.service.content'
+      - '$languages$'
+
+  private_access_form.types.custom_form:
+    class: MC\Bundle\PrivateContentAccessBundle\Form
+    tags:
+      - { name: form.type, alias: 'private_access_form' }
