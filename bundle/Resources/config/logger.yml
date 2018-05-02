@@ -1,0 +1,14 @@
+---
+# Monolog configuration
+channels: ['novaezmailing']
+handlers:
+    novaezmailing:
+        # log when email, push or sms are sent
+        level: debug
+        type: stream
+        path: '%kernel.logs_dir%/novaezmailing.log'
+        channels: ['novaezmailing']
+    novaezmailingconsole:
+            type:   console
+            process_psr_3_messages: false
+            channels: ['novaezmailing']

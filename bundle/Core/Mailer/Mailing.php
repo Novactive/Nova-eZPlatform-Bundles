@@ -15,6 +15,7 @@ namespace Novactive\Bundle\eZMailingBundle\Core\Mailer;
 use Novactive\Bundle\eZMailingBundle\Core\Provider\MailingContent;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing as MailingEntity;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
+use Psr\Log\LoggerInterface;
 use Swift_Message;
 
 /**
@@ -33,15 +34,22 @@ class Mailing extends Mailer
     private $contentProvider;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Mailing constructor.
      *
-     * @param Simple         $simpleMailer
-     * @param MailingContent $contentProvider
+     * @param Simple          $simpleMailer
+     * @param MailingContent  $contentProvider
+     * @param LoggerInterface $logger
      */
-    public function __construct(Simple $simpleMailer, MailingContent $contentProvider)
+    public function __construct(Simple $simpleMailer, MailingContent $contentProvider, LoggerInterface $logger)
     {
         $this->simpleMailer    = $simpleMailer;
         $this->contentProvider = $contentProvider;
+        $this->logger          = $logger;
     }
 
     /**
@@ -56,15 +64,20 @@ class Mailing extends Mailer
             $fakeUser = new User();
             $fakeUser->setEmail($forceRecipient);
             $contentMessage = $this->contentProvider->getContentMailing($mailing, $fakeUser);
+            $this->logger->debug("Mailing Mailer sends {$contentMessage->getSubject()}.");
             $this->sendMessage($contentMessage);
         } else {
             $campaign = $mailing->getCampaign();
+            $this->logger->debug("Mailing Mailer sends Mailing {$mailing->getName()}");
+            $recipientCounts = 0;
             foreach ($campaign->getMailingLists() as $mailingList) {
                 foreach ($mailingList->getApprovedRegistrations() as $registration) {
                     $contentMessage = $this->contentProvider->getContentMailing($mailing, $registration->getUser());
                     $this->sendMessage($contentMessage);
+                    ++$recipientCounts;
                 }
             }
+            $this->logger->debug("Mailing {$mailing->getName()} induced {$recipientCounts} emails sent.");
         }
         $this->simpleMailer->sendStopSendingMailingMessage($mailing);
     }

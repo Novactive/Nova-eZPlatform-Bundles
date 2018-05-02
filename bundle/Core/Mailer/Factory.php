@@ -16,6 +16,7 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Novactive\Bundle\eZMailingBundle\Core\Provider\MailingContent;
 use Novactive\Bundle\eZMailingBundle\Core\Provider\MessageContent;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Factory.
@@ -43,23 +44,31 @@ class Factory
     private $mailingContentProvider;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Factory constructor.
      *
      * @param ConfigResolverInterface $configResolver
      * @param ContainerInterface      $container
      * @param MessageContent          $messageContentProvider
      * @param MailingContent          $mailingContentProvider
+     * @param LoggerInterface         $logger
      */
     public function __construct(
         ConfigResolverInterface $configResolver,
         ContainerInterface $container,
         MessageContent $messageContentProvider,
-        MailingContent $mailingContentProvider
+        MailingContent $mailingContentProvider,
+        LoggerInterface $logger
     ) {
         $this->configResolver         = $configResolver;
         $this->container              = $container;
         $this->messageContentProvider = $messageContentProvider;
         $this->mailingContentProvider = $mailingContentProvider;
+        $this->logger                 = $logger;
     }
 
     /**
@@ -72,12 +81,12 @@ class Factory
         $mailer = $this->container->get((string) $this->configResolver->getParameter($mailerDef, 'nova_ezmailing'));
         /* @var \Swift_Mailer $mailer */
         if ('simple_mailer' === $mailerDef) {
-            return (new Simple($this->messageContentProvider))->setMailer($mailer);
+            return (new Simple($this->messageContentProvider, $this->logger))->setMailer($mailer);
         }
         if ('mailing_mailer' === $mailerDef) {
-            return (new Mailing($this->container->get(Simple::class), $this->mailingContentProvider))->setMailer(
-                $mailer
-            );
+            $mailing = new Mailing($this->container->get(Simple::class), $this->mailingContentProvider, $this->logger);
+
+            return $mailing->setMailer($mailer);
         }
 
         throw new \RuntimeException('Mailers are not correctly defined.');

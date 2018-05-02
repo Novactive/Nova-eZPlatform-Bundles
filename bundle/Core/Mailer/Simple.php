@@ -14,6 +14,7 @@ namespace Novactive\Bundle\eZMailingBundle\Core\Mailer;
 
 use Novactive\Bundle\eZMailingBundle\Core\Provider\MessageContent;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing as MailingEntity;
+use Psr\Log\LoggerInterface;
 use Swift_Message;
 
 /**
@@ -27,13 +28,20 @@ class Simple extends Mailer
     private $messageProvider;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Simple constructor.
      *
-     * @param MessageContent $messageProvider
+     * @param MessageContent  $messageProvider
+     * @param LoggerInterface $logger
      */
-    public function __construct(MessageContent $messageProvider)
+    public function __construct(MessageContent $messageProvider, LoggerInterface $logger)
     {
         $this->messageProvider = $messageProvider;
+        $this->logger          = $logger;
     }
 
     /**
@@ -61,6 +69,8 @@ class Simple extends Mailer
      */
     private function sendMessage(Swift_Message $message): int
     {
+        $this->logger->debug("Simple Mailer sends {$message->getSubject()}.");
+
         return $this->mailer->send($message);
     }
 }

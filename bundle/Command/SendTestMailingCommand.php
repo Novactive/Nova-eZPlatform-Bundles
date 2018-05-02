@@ -12,9 +12,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Command;
 
-use Doctrine\ORM\EntityManager;
-use Novactive\Bundle\eZMailingBundle\Core\Mailer\Mailing as MailingMailer;
-use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
+use Novactive\Bundle\eZMailingBundle\Core\Processor\TestMailing;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -27,26 +25,19 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class SendTestMailingCommand extends Command
 {
     /**
-     * @var EntityManager
+     * @var TestMailing
      */
-    protected $entityManager;
-
-    /**
-     * @var MailingMailer
-     */
-    protected $mailingMailer;
+    private $processor;
 
     /**
      * SendTestMailingCommand constructor.
      *
-     * @param EntityManager $entityManager
-     * @param MailingMailer $mailingMailer
+     * @param TestMailing $processor
      */
-    public function __construct(EntityManager $entityManager, MailingMailer $mailingMailer)
+    public function __construct(TestMailing $processor)
     {
         parent::__construct();
-        $this->entityManager = $entityManager;
-        $this->mailingMailer = $mailingMailer;
+        $this->processor = $processor;
     }
 
     /**
@@ -67,14 +58,13 @@ class SendTestMailingCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $io = new SymfonyStyle($input, $output);
-
-        /** @var Mailing $mailing */
-        $mailing        = $this->entityManager->getRepository('NovaeZMailingBundle:Mailing')->findOneById(
-            $input->getArgument('mailingId')
-        );
+        $io             = new SymfonyStyle($input, $output);
+        $mailingId      = (int) $input->getArgument('mailingId');
         $recipientEmail = $input->getArgument('recipient');
-        $io->title("Sending Mailing: {$mailing->getName()} to {$recipientEmail}");
-        $this->mailingMailer->sendMailing($mailing, $recipientEmail);
+        $io->title('Sending a Mailing for test');
+        $io->writeln("Mailing ID: <comment>{$mailingId}</comment>");
+        $io->writeln("To: <comment>{$recipientEmail}</comment>");
+        $this->processor->execute($mailingId, $recipientEmail);
+        $io->success('Done.');
     }
 }

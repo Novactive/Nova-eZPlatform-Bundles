@@ -4,6 +4,8 @@ services:
     _defaults:
         autowire: true
         public: false
+        bind:
+            $logger: "@monolog.logger.novaezmailing"
 
     Novactive\Bundle\eZMailingBundle\Command\:
         resource: '../../Command'
@@ -15,6 +17,9 @@ services:
 
     Novactive\Bundle\eZMailingBundle\Core\Provider\:
         resource: '../../Core/Provider'
+
+    Novactive\Bundle\eZMailingBundle\Core\Processor\:
+        resource: '../../Core/Processor'
 
     Novactive\Bundle\eZMailingBundle\Core\Modifier\:
         resource: '../../Core/Modifier'
