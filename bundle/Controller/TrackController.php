@@ -14,7 +14,6 @@ namespace Novactive\Bundle\eZMailingBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
 use Novactive\Bundle\eZMailingBundle\Core\Utils\Browser;
-use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Novactive\Bundle\eZMailingBundle\Entity\StatHit;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -32,47 +31,48 @@ class TrackController
     const PIXEL_CONTENT_TYPE = 'image/gif';
 
     /**
-     * @Route("/continue/{id}/{salt}/{url}", name="novaezmailing_t_continue")
+     * @Route("/continue/{salt}/{broadcastId}/{url}", name="novaezmailing_t_continue")
      */
     public function continueAction(
-        Mailing $mailing,
         string $salt,
+        int $broadcastId,
         string $url,
         EntityManager $entityManager,
         Request $request
     ): RedirectResponse {
-        $browser = new Browser($request->headers->get('User-Agent'));
-        $stat    = new StatHit();
-
+        $broadcast  = $entityManager->getRepository('NovaeZMailingBundle:Broadcast')->findOneByid($broadcastId);
+        $browser    = new Browser($request->headers->get('User-Agent'));
+        $stat       = new StatHit();
         $decodedUrl = base64_decode($url);
         $stat->setOsName($browser->getPlatform());
         $stat->setBrowserName($browser->getName());
         $stat->setUserKey($salt);
         $stat->setUrl($decodedUrl);
-        $mailing->addStatHit($stat);
-        $entityManager->persist($mailing);
+        $stat->setBroadcast($broadcast);
+        $entityManager->persist($stat);
         $entityManager->flush();
 
         return new RedirectResponse($decodedUrl);
     }
 
     /**
-     * @Route("/read/{id}/{salt}", name="novaezmailing_t_read")
+     * @Route("/read/{salt}/{broadcastId}", name="novaezmailing_t_read")
      */
     public function readAction(
-        Mailing $mailing,
         string $salt,
+        int $broadcastId,
         EntityManager $entityManager,
         Request $request
     ): Response {
-        $browser = new Browser($request->headers->get('User-Agent'));
-        $stat    = new StatHit();
+        $broadcast = $entityManager->getRepository('NovaeZMailingBundle:Broadcast')->findOneByid($broadcastId);
+        $browser   = new Browser($request->headers->get('User-Agent'));
+        $stat      = new StatHit();
         $stat->setOsName($browser->getPlatform());
         $stat->setBrowserName($browser->getName());
         $stat->setUserKey($salt);
         $stat->setUrl('-');
-        $mailing->addStatHit($stat);
-        $entityManager->persist($mailing);
+        $stat->setBroadcast($broadcast);
+        $entityManager->persist($stat);
         $entityManager->flush();
 
         $response = new Response(base64_decode(self::PIXEL_CONTENT));

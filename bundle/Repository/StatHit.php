@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Repository;
 
 use Doctrine\ORM\QueryBuilder;
+use Novactive\Bundle\eZMailingBundle\Entity\Broadcast as BroadcastEntity;
 
 /**
  * Class StatHit.
@@ -35,13 +36,13 @@ class StatHit extends EntityRepository
     public function createQueryBuilderForFilters(array $filters = []): QueryBuilder
     {
         $qb = parent::createQueryBuilderForFilters($filters);
-        if (isset($filters['mailings'])) {
-            $mailings = $filters['mailings'];
+        if (isset($filters['broadcasts'])) {
+            $broadcasts = $filters['broadcasts'];
         }
-        if (null !== $mailings) {
-            $qb->andWhere($qb->expr()->in('stathit.mailing', ':mailings'))->setParameter(
-                'mailings',
-                $mailings
+        if (null !== $broadcasts) {
+            $qb->andWhere($qb->expr()->in('stathit.broadcast', ':broadcasts'))->setParameter(
+                'broadcasts',
+                $broadcasts
             );
         }
 
@@ -49,13 +50,13 @@ class StatHit extends EntityRepository
     }
 
     /**
-     * @param Mailing[] $mailings
+     * @param BroadcastEntity[] $broadcasts
      *
      * @return array
      */
-    public function getBrowserMapCount($mailings): array
+    public function getBrowserMapCount($broadcasts): array
     {
-        $qb = $this->createQueryBuilderForFilters(['mailings' => $mailings]);
+        $qb = $this->createQueryBuilderForFilters(['broadcasts' => $broadcasts]);
         $qb->select($qb->expr()->count($this->getAlias().'.id').' as nb', $this->getAlias().'.browserName');
         $qb->groupBy($this->getAlias().'.userKey', $this->getAlias().'.browserName');
         $results       = $qb->getQuery()->getArrayResult();
@@ -69,13 +70,13 @@ class StatHit extends EntityRepository
     }
 
     /**
-     * @param Mailing[] $mailings
+     * @param BroadcastEntity[] $broadcasts
      *
      * @return array
      */
-    public function getOSMapCount($mailings): array
+    public function getOSMapCount($broadcasts): array
     {
-        $qb = $this->createQueryBuilderForFilters(['mailings' => $mailings]);
+        $qb = $this->createQueryBuilderForFilters(['broadcasts' => $broadcasts]);
         $qb->select($qb->expr()->count($this->getAlias().'.id').' as nb', $this->getAlias().'.osName');
         $qb->groupBy($this->getAlias().'.userKey', $this->getAlias().'.osName');
         $results       = $qb->getQuery()->getArrayResult();
@@ -89,13 +90,13 @@ class StatHit extends EntityRepository
     }
 
     /**
-     * @param Mailing[] $mailings
+     * @param BroadcastEntity[] $broadcasts
      *
      * @return array
      */
-    public function getURLMapCount($mailings): array
+    public function getURLMapCount($broadcasts): array
     {
-        $qb = $this->createQueryBuilderForFilters(['mailings' => $mailings]);
+        $qb = $this->createQueryBuilderForFilters(['broadcasts' => $broadcasts]);
         $qb->select($qb->expr()->count($this->getAlias().'.id').' as nb', $this->getAlias().'.url');
         $qb->andWhere($qb->expr()->notIn($this->getAlias().'.url', ':url'))->setParameter('url', '-');
         $qb->groupBy($this->getAlias().'.userKey', $this->getAlias().'.url');
@@ -110,13 +111,13 @@ class StatHit extends EntityRepository
     }
 
     /**
-     * @param Mailing[] $mailings
+     * @param BroadcastEntity[] $broadcasts
      *
      * @return array
      */
-    public function getOpenedCount($mailings): int
+    public function getOpenedCount($broadcasts): int
     {
-        $qb = $this->createQueryBuilderForFilters(['mailings' => $mailings]);
+        $qb = $this->createQueryBuilderForFilters(['broadcasts' => $broadcasts]);
         $qb->select($qb->expr()->count($this->getAlias().'.id').' as nb');
         $qb->andWhere($qb->expr()->eq($this->getAlias().'.url', ':url'))->setParameter('url', '-');
         $qb->groupBy($this->getAlias().'.userKey');

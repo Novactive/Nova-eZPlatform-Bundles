@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Mailer;
 
+use Novactive\Bundle\eZMailingBundle\Core\Provider\Broadcast;
 use Novactive\Bundle\eZMailingBundle\Core\Provider\MailingContent;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing as MailingEntity;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
@@ -34,6 +35,11 @@ class Mailing extends Mailer
     private $contentProvider;
 
     /**
+     * @var Broadcast
+     */
+    private $broadcastProvider;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -44,12 +50,18 @@ class Mailing extends Mailer
      * @param Simple          $simpleMailer
      * @param MailingContent  $contentProvider
      * @param LoggerInterface $logger
+     * @param Broadcast       $broadcastProvider
      */
-    public function __construct(Simple $simpleMailer, MailingContent $contentProvider, LoggerInterface $logger)
-    {
-        $this->simpleMailer    = $simpleMailer;
-        $this->contentProvider = $contentProvider;
-        $this->logger          = $logger;
+    public function __construct(
+        Simple $simpleMailer,
+        MailingContent $contentProvider,
+        LoggerInterface $logger,
+        Broadcast $broadcastProvider
+    ) {
+        $this->simpleMailer      = $simpleMailer;
+        $this->contentProvider   = $contentProvider;
+        $this->logger            = $logger;
+        $this->broadcastProvider = $broadcastProvider;
     }
 
     /**
@@ -57,13 +69,14 @@ class Mailing extends Mailer
      */
     public function sendMailing(MailingEntity $mailing, string $forceRecipient = null): void
     {
-        $this->simpleMailer->sendStartSendingMailingMessage($mailing);
-        $this->contentProvider->preFetchContent($mailing);
+        $nativeHtml = $this->contentProvider->preFetchContent($mailing);
+        $broadcast  = $this->broadcastProvider->start($mailing, $nativeHtml);
 
+        $this->simpleMailer->sendStartSendingMailingMessage($mailing);
         if ($forceRecipient) {
             $fakeUser = new User();
             $fakeUser->setEmail($forceRecipient);
-            $contentMessage = $this->contentProvider->getContentMailing($mailing, $fakeUser);
+            $contentMessage = $this->contentProvider->getContentMailing($mailing, $fakeUser, $broadcast);
             $this->logger->debug("Mailing Mailer sends {$contentMessage->getSubject()}.");
             $this->sendMessage($contentMessage);
         } else {
@@ -72,14 +85,26 @@ class Mailing extends Mailer
             $recipientCounts = 0;
             foreach ($campaign->getMailingLists() as $mailingList) {
                 foreach ($mailingList->getApprovedRegistrations() as $registration) {
-                    $contentMessage = $this->contentProvider->getContentMailing($mailing, $registration->getUser());
+                    $contentMessage = $this->contentProvider->getContentMailing(
+                        $mailing,
+                        $registration->getUser(),
+                        $broadcast
+                    );
                     $this->sendMessage($contentMessage);
                     ++$recipientCounts;
+
+                    if (0 === $recipientCounts % 10) {
+                        $broadcast->setEmailSentCount($recipientCounts);
+                        $this->broadcastProvider->store($broadcast);
+                    }
                 }
+                $this->broadcastProvider->store($broadcast);
             }
+            $this->broadcastProvider->store($broadcast);
             $this->logger->debug("Mailing {$mailing->getName()} induced {$recipientCounts} emails sent.");
         }
         $this->simpleMailer->sendStopSendingMailingMessage($mailing);
+        $this->broadcastProvider->end($broadcast);
     }
 
     /**

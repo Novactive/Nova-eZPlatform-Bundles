@@ -18,6 +18,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class Campaign.
  *
+ * A Campaign contains generic information shared between the Mailings it contains.
+ * It owns also a Link to a eZ Content that is going to be injected in the template.
+ *
  * @ORM\Table(name="novaezmailing_campaign")
  *
  * @ORM\Entity(repositoryClass="Novactive\Bundle\eZMailingBundle\Repository\Campaign")

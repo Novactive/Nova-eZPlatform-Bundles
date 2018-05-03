@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Modifier;
 
+use Novactive\Bundle\eZMailingBundle\Entity\Broadcast;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -41,10 +42,15 @@ class Tracking implements ModifierInterface
      */
     public function modify(Mailing $mailing, string $html, array $options = []): string
     {
+        /** @var Broadcast $broadcast */
+        $broadcast  = $options['broadcast'];
         $uniqId     = uniqid('novaezmailing-', true);
         $readUrl    = $this->router->generate(
             'novaezmailing_t_read',
-            ['id' => $mailing->getId(), 'salt' => $uniqId],
+            [
+                'salt'        => $uniqId,
+                'broadcastId' => $broadcast->getId(),
+            ],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
         $readMarker = "<img src=\"{$readUrl}\" width=\"1\" height=\"1\" />";
@@ -53,13 +59,13 @@ class Tracking implements ModifierInterface
 
         return preg_replace_callback(
             '/<a(.[^>]*)href="http(s)?(.[^"]*)"/uimx',
-            function ($aInput) use ($mailing, $uniqId) {
+            function ($aInput) use ($mailing, $uniqId, $broadcast) {
                 $continueUrl = $this->router->generate(
                     'novaezmailing_t_continue',
                     [
-                        'id'   => $mailing->getId(),
-                        'salt' => $uniqId,
-                        'url'  => base64_encode('http'.trim($aInput[1]).trim($aInput[2]).trim($aInput[3])),
+                        'salt'        => $uniqId,
+                        'broadcastId' => $broadcast->getId(),
+                        'url'         => base64_encode('http'.trim($aInput[1]).trim($aInput[2]).trim($aInput[3])),
                     ],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 );

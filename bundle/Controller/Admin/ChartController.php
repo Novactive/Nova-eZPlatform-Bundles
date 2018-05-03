@@ -14,8 +14,7 @@ namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
 use Doctrine\ORM\EntityManager;
 use Novactive\Bundle\eZMailingBundle\Core\Utils\ChartDataBuilder;
-use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
-use Novactive\Bundle\eZMailingBundle\Entity\Registration;
+use Novactive\Bundle\eZMailingBundle\Entity\Broadcast;
 use Novactive\Bundle\eZMailingBundle\Entity\StatHit;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
@@ -25,19 +24,20 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class ChartController
 {
     /**
-     * @param int           $mailingId
+     * @param int           $broadcastId
      * @param EntityManager $entityManager
      *
      * @Template("NovaeZMailingBundle:admin/chart:generic.html.twig")
      *
      * @return array
      */
-    public function browserChart(int $mailingId, EntityManager $entityManager): array
+    public function browserChart(int $broadcastId, EntityManager $entityManager): array
     {
-        $mailingRepo = $entityManager->getRepository(Mailing::class);
-        $mailing     = $mailingRepo->findOneById($mailingId);
-        $hitRepo     = $entityManager->getRepository(StatHit::class);
-        $data        = $hitRepo->getBrowserMapCount([$mailing]);
+        $repo = $entityManager->getRepository(Broadcast::class);
+        /** @var Broadcast $item */
+        $item    = $repo->findOneById($broadcastId);
+        $hitRepo = $entityManager->getRepository(StatHit::class);
+        $data    = $hitRepo->getBrowserMapCount([$item]);
 
         $chartBuilder = new ChartDataBuilder('Browser Repartition', 'doughnut');
         $chartBuilder->addDataSet(array_values($data), array_keys($data));
@@ -46,19 +46,21 @@ class ChartController
     }
 
     /**
-     * @param int           $mailingId
+     * @param int           $broadcastId
      * @param EntityManager $entityManager
      *
      * @Template("NovaeZMailingBundle:admin/chart:generic.html.twig")
      *
      * @return array
      */
-    public function osChart(int $mailingId, EntityManager $entityManager): array
+    public function osChart(int $broadcastId, EntityManager $entityManager): array
     {
-        $mailingRepo = $entityManager->getRepository(Mailing::class);
-        $mailing     = $mailingRepo->findOneById($mailingId);
-        $hitRepo     = $entityManager->getRepository(StatHit::class);
-        $data        = $hitRepo->getOSMapCount([$mailing]);
+        $repo = $entityManager->getRepository(Broadcast::class);
+        /** @var Broadcast $item */
+        $item    = $repo->findOneById($broadcastId);
+        $hitRepo = $entityManager->getRepository(StatHit::class);
+
+        $data = $hitRepo->getOSMapCount([$item]);
 
         $chartBuilder = new ChartDataBuilder('OS Repartition', 'doughnut');
         $chartBuilder->addDataSet(array_values($data), array_keys($data));
@@ -67,19 +69,21 @@ class ChartController
     }
 
     /**
-     * @param int           $mailingId
+     * @param int           $broadcastId
      * @param EntityManager $entityManager
      *
      * @Template("NovaeZMailingBundle:admin/chart:generic.html.twig")
      *
      * @return array
      */
-    public function urlChart(int $mailingId, EntityManager $entityManager): array
+    public function urlChart(int $broadcastId, EntityManager $entityManager): array
     {
-        $mailingRepo = $entityManager->getRepository(Mailing::class);
-        $mailing     = $mailingRepo->findOneById($mailingId);
-        $hitRepo     = $entityManager->getRepository(StatHit::class);
-        $data        = $hitRepo->getURLMapCount([$mailing]);
+        $repo = $entityManager->getRepository(Broadcast::class);
+        /** @var Broadcast $item */
+        $item    = $repo->findOneById($broadcastId);
+        $hitRepo = $entityManager->getRepository(StatHit::class);
+
+        $data = $hitRepo->getURLMapCount([$item]);
 
         $chartBuilder = new ChartDataBuilder('URLs Clicked Repartition', 'pie');
         $chartBuilder->addDataSet(array_values($data), array_keys($data));
@@ -88,24 +92,24 @@ class ChartController
     }
 
     /**
-     * @param int           $mailingId
+     * @param int           $broadcastId
      * @param EntityManager $entityManager
      *
      * @Template("NovaeZMailingBundle:admin/chart:generic.html.twig")
      *
      * @return array
      */
-    public function openedChart(int $mailingId, EntityManager $entityManager): array
+    public function openedChart(int $broadcastId, EntityManager $entityManager): array
     {
-        $mailingRepo                = $entityManager->getRepository(Mailing::class);
-        $registrationRepo           = $entityManager->getRepository(Registration::class);
-        $mailing                    = $mailingRepo->findOneById($mailingId);
-        $hitRepo                    = $entityManager->getRepository(StatHit::class);
-        $openedCount                = $hitRepo->getOpenedCount([[$mailing]]);
-        $approvedRegistrationtCount = $registrationRepo->getApprovedCount([$mailing]);
-        $data                       = [
+        $repo = $entityManager->getRepository(Broadcast::class);
+        /** @var Broadcast $item */
+        $item           = $repo->findOneById($broadcastId);
+        $hitRepo        = $entityManager->getRepository(StatHit::class);
+        $openedCount    = $hitRepo->getOpenedCount([[$item]]);
+        $broadcastCount = $item->getEmailSentCount();
+        $data           = [
             'Opened'     => $openedCount,
-            'Not Opened' => $approvedRegistrationtCount - $openedCount,
+            'Not Opened' => $broadcastCount - $openedCount,
         ];
 
         $chartBuilder = new ChartDataBuilder('Opened emails', 'pie');

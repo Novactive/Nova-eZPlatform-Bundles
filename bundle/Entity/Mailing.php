@@ -15,7 +15,6 @@ namespace Novactive\Bundle\eZMailingBundle\Entity;
 use Carbon\Carbon;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Novactive\Bundle\eZMailingBundle\Core\Utils\Clock;
 
@@ -90,12 +89,6 @@ class Mailing implements eZ\ContentInterface
     private $status;
 
     /**
-     * @var DateTime
-     * @ORM\Column(name="MAIL_last_sent", type="datetime", nullable=true)
-     */
-    private $lastSent;
-
-    /**
      * @var bool
      * @ORM\Column(name="MAIL_recurring", type="boolean", nullable=false)
      */
@@ -151,11 +144,11 @@ class Mailing implements eZ\ContentInterface
     private $campaign;
 
     /**
-     * @var StatHit[]
-     * @ORM\OneToMany(targetEntity="Novactive\Bundle\eZMailingBundle\Entity\StatHit", mappedBy="mailing",
-     *                                                                                cascade={"persist","remove"})
+     * @var Broadcast[]
+     * @ORM\OneToMany(targetEntity="Novactive\Bundle\eZMailingBundle\Entity\Broadcast", mappedBy="mailing",
+     *                                                                                  cascade={"persist","remove"})
      */
-    private $statHits;
+    private $broadcasts;
 
     /**
      * Mailing constructor.
@@ -164,6 +157,7 @@ class Mailing implements eZ\ContentInterface
     {
         $this->recurring    = false;
         $this->statHits     = new ArrayCollection();
+        $this->broadcasts   = new ArrayCollection();
         $this->hoursOfDay   = [];
         $this->daysOfWeek   = [];
         $this->daysOfMonth  = [];
@@ -226,19 +220,18 @@ class Mailing implements eZ\ContentInterface
      */
     public function getLastSent(): ?DateTime
     {
-        return $this->lastSent;
-    }
+        if (0 == $this->broadcasts->count()) {
+            return null;
+        }
+        $lastSent = Carbon::now();
+        foreach ($this->broadcasts as $broadcast) {
+            /** @var Broadcast $broadcast */
+            if ($lastSent->getTimestamp() < $broadcast->getStarted()->getTimestamp()) {
+                $lastSent = $broadcast->getStarted();
+            }
+        }
 
-    /**
-     * @param DateTime $lastSent
-     *
-     * @return Mailing
-     */
-    public function setLastSent(DateTime $lastSent): self
-    {
-        $this->lastSent = $lastSent;
-
-        return $this;
+        return $lastSent;
     }
 
     /**
@@ -442,7 +435,7 @@ class Mailing implements eZ\ContentInterface
     {
         return
             (false === $this->isRecurring() && self::SENT === $this->status) ||
-            (true === $this->isRecurring() && null !== $this->lastSent);
+            (true === $this->isRecurring() && null !== $this->getLastSent());
     }
 
     /**
@@ -488,48 +481,36 @@ class Mailing implements eZ\ContentInterface
     /**
      * @return mixed
      */
-    public function getStatHits()
+    public function getBroadcasts()
     {
-        return $this->statHits;
+        return $this->broadcasts;
     }
 
     /**
-     * @param StatHit $hit
+     * @param Broadcast[] $broadcasts
      *
      * @return $this
      */
-    public function addStatHit(StatHit $hit): self
+    public function setBroadcasts(array $broadcasts): self
     {
-        if ($this->statHits->contains($hit)) {
+        $this->broadcasts = $broadcasts;
+
+        return $this;
+    }
+
+    /**
+     * @param Broadcast $broadcast
+     *
+     * @return $this
+     */
+    public function addBroadcast(Broadcast $broadcast): self
+    {
+        if ($this->broadcasts->contains($broadcast)) {
             return $this;
         }
-        $this->statHits->add($hit);
-        $hit->setMailing($this);
+        $this->broadcasts->add($broadcast);
+        $broadcast->setMailing($this);
 
         return $this;
     }
-
-    /**
-     * @param StatHit[] $statHits
-     *
-     * @return $this
-     */
-    public function setStatHits(array $statHits): self
-    {
-        $this->statHits = $statHits;
-
-        return $this;
-    }
-
-//
-//    /**
-//     * @return ArrayCollection|Registration[]
-//     */
-//    public function getApprovedRegistrations()
-//    {
-//        $criteria = Criteria::create();
-//        $criteria->where(Criteria::expr()->eq('approved', true));
-//
-//        return $this->statHits->matching($criteria);
-//    }
 }

@@ -42,14 +42,6 @@ class StatHit
     private $url;
 
     /**
-     * @var Mailing
-     *
-     * @ORM\ManyToOne(targetEntity="Novactive\Bundle\eZMailingBundle\Entity\Mailing", inversedBy="statHits")
-     * @ORM\JoinColumn(name="MAIL_id", referencedColumnName="MAIL_id")
-     */
-    private $mailing;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="STHIT_user_key", type="string", nullable=false)
@@ -69,6 +61,13 @@ class StatHit
      * @ORM\Column(name="STHIT_browser_name", type="string", nullable=true)
      */
     private $browserName;
+
+    /**
+     * @var Broadcast
+     * @ORM\ManyToOne(targetEntity="Novactive\Bundle\eZMailingBundle\Entity\Broadcast")
+     * @ORM\JoinColumn(name="BDCST_id", referencedColumnName="BDCST_id")
+     */
+    private $broadcast;
 
     /**
      * @return int
@@ -106,26 +105,6 @@ class StatHit
     public function setUrl(string $url): self
     {
         $this->url = $url;
-
-        return $this;
-    }
-
-    /**
-     * @return Mailing
-     */
-    public function getMailing(): Mailing
-    {
-        return $this->mailing;
-    }
-
-    /**
-     * @param Mailing $mailing
-     *
-     * @return $this
-     */
-    public function setMailing(Mailing $mailing): self
-    {
-        $this->mailing = $mailing;
 
         return $this;
     }
@@ -186,6 +165,26 @@ class StatHit
     public function setBrowserName(string $browserName): self
     {
         $this->browserName = $browserName;
+
+        return $this;
+    }
+
+    /**
+     * @return Broadcast
+     */
+    public function getBroadcast(): Broadcast
+    {
+        return $this->broadcast;
+    }
+
+    /**
+     * @param Broadcast $broadcast
+     *
+     * @return $this
+     */
+    public function setBroadcast(Broadcast $broadcast): self
+    {
+        $this->broadcast = $broadcast;
 
         return $this;
     }

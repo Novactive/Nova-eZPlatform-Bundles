@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Core\Provider;
 
 use Novactive\Bundle\eZMailingBundle\Core\Modifier\ModifierInterface;
+use Novactive\Bundle\eZMailingBundle\Entity\Broadcast as BroadcastEntity;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Novactive\Bundle\eZMailingBundle\Entity\User as UserEntity;
 use Swift_Message;
@@ -60,8 +61,10 @@ class MailingContent
 
     /**
      * @param Mailing $mailing
+     *
+     * @return string
      */
-    public function preFetchContent(Mailing $mailing): void
+    public function preFetchContent(Mailing $mailing): string
     {
         $client  = new Client($this->httpKernel);
         $crawler = $client->request(
@@ -89,6 +92,8 @@ class MailingContent
             }
         );
         $this->nativeContent[$mailing->getLocationId()] = $crawler->html();
+
+        return $this->nativeContent[$mailing->getLocationId()];
     }
 
     /**
@@ -106,13 +111,20 @@ class MailingContent
     }
 
     /**
+     * @param Mailing         $mailing
+     * @param UserEntity      $recipient
+     * @param BroadcastEntity $broadcast
+     *
      * @return Swift_Message
      */
-    public function getContentMailing(Mailing $mailing, UserEntity $recipient): Swift_Message
-    {
+    public function getContentMailing(
+        Mailing $mailing,
+        UserEntity $recipient,
+        BroadcastEntity $broadcast
+    ): Swift_Message {
         $html = $this->getNativeContent($mailing);
         foreach ($this->modifiers as $modifier) {
-            $html = $modifier->modify($mailing, $html);
+            $html = $modifier->modify($mailing, $html, ['broadcast' => $broadcast]);
         }
         $message = new Swift_Message('subject');
         $message->setBody($html);

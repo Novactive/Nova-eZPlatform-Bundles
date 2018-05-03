@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Core\Mailer;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Novactive\Bundle\eZMailingBundle\Core\Provider\Broadcast;
 use Novactive\Bundle\eZMailingBundle\Core\Provider\MailingContent;
 use Novactive\Bundle\eZMailingBundle\Core\Provider\MessageContent;
 use Psr\Container\ContainerInterface;
@@ -49,6 +50,11 @@ class Factory
     private $logger;
 
     /**
+     * @var Broadcast
+     */
+    private $broadcastProvider;
+
+    /**
      * Factory constructor.
      *
      * @param ConfigResolverInterface $configResolver
@@ -56,19 +62,22 @@ class Factory
      * @param MessageContent          $messageContentProvider
      * @param MailingContent          $mailingContentProvider
      * @param LoggerInterface         $logger
+     * @param Broadcast               $broadcastProvider
      */
     public function __construct(
         ConfigResolverInterface $configResolver,
         ContainerInterface $container,
         MessageContent $messageContentProvider,
         MailingContent $mailingContentProvider,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        Broadcast $broadcastProvider
     ) {
         $this->configResolver         = $configResolver;
         $this->container              = $container;
         $this->messageContentProvider = $messageContentProvider;
         $this->mailingContentProvider = $mailingContentProvider;
         $this->logger                 = $logger;
+        $this->broadcastProvider      = $broadcastProvider;
     }
 
     /**
@@ -84,7 +93,12 @@ class Factory
             return (new Simple($this->messageContentProvider, $this->logger))->setMailer($mailer);
         }
         if ('mailing_mailer' === $mailerDef) {
-            $mailing = new Mailing($this->container->get(Simple::class), $this->mailingContentProvider, $this->logger);
+            $mailing = new Mailing(
+                $this->container->get(Simple::class),
+                $this->mailingContentProvider,
+                $this->logger,
+                $this->broadcastProvider
+            );
 
             return $mailing->setMailer($mailer);
         }
