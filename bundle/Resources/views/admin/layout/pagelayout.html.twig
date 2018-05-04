@@ -2,6 +2,8 @@
 {% set novezmailing_title = block('novezmailing_title') %}
 {% set novezmailing_subtitle = block('novezmailing_subtitle') %}
 {% set novezmailing_breadcrumb = block('novezmailing_breadcrumb') %}
+{% set rightbar = block('rightbar') ?? '' %}
+
 {% embed '@EzPlatformAdminUi/layout.html.twig' %}
     {% block content %}
         <div class="novaezmailing-app row" data-search-endpoint="{{ path('novaezmailing_dashboard_search_autocomplete') }}">
@@ -16,9 +18,18 @@
                         <h2>Administration</h2>
                         {{ knp_menu_render('novaezmailing.menu.admin') }}
                     </div>
-                    <div class="col-10 innercontent">
-                        {{ content|raw }}
-                    </div>
+                    {% if rightbar is empty %}
+                        <div class="col-10 innercontent">
+                            {{ content|raw }}
+                        </div>
+                    {% else %}
+                        <div class="col-9 innercontent">
+                            {{ content|raw }}
+                        </div>
+                        <div class="col-1 ez-context-menu">
+                            {{ rightbar|raw }}
+                        </div>
+                    {% endif %}
                 </div>
                 {% include "@NovaeZMailing/admin/layout/footer.html.twig" with {} only %}
             </div>

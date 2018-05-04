@@ -65,7 +65,6 @@ $eZLightBackground: #F5F5F5;
             }
         }
 
-
         .novaezmailing-registration-approbation {
             button:not([disabled]) {
                 cursor: pointer;
@@ -75,6 +74,26 @@ $eZLightBackground: #F5F5F5;
     }
     .novaezmailing-broadcast-charts-group {
         clear: both;
+    }
+
+    .ez-context-menu {
+        padding-top: 30px;
+    }
+
+    form {
+        .form-check {
+            .form-check-label {
+                display: inline-block;
+            }
+        }
+
+        fieldset.form-group legend {
+            font-weight: 700;
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 0;
+            margin-top: 20px;
+        }
     }
 
     footer {

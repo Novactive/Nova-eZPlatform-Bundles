@@ -69,4 +69,17 @@ class MailingController
             'preview' => $preview,
         ];
     }
+
+    /**
+     * @Route("/edit/{mailing}", name="novaezmailing_mailing_edit")
+     * @Template()
+     *
+     * @return array
+     */
+    public function editAction(Mailing $mailing): array
+    {
+        return [
+            'item' => $mailing,
+        ];
+    }
 }

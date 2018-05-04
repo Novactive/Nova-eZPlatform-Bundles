@@ -45,6 +45,12 @@ services:
         tags:
             - { name: knp_menu.menu, alias: novaezmailing.menu.campaigns }
 
+    novaezmailing.menu.save_cancel:
+        class: Knp\Menu\MenuItem
+        factory: 'Novactive\Bundle\eZMailingBundle\Menu\Builder:createSaveCancelMenu'
+        tags:
+            - { name: knp_menu.menu, alias: novaezmailing.menu.save_cancel }
+
     Novactive\Bundle\eZMailingBundle\Listener\EntityContentLink:
         tags:
             - { name: doctrine.orm.entity_listener }

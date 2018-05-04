@@ -1,0 +1,21 @@
+{% extends '@NovaeZMailing/admin/layout/pagelayout.html.twig' %}
+
+{% block novezmailing_breadcrumb %}
+    <ol class="breadcrumb px-4">
+        <li class="breadcrumb-item"><a href="{{ path("novaezmailing_dashboard_index") }}">Nova eZ Mailing</a></li>
+        <li class="breadcrumb-item">Campaigns</li>
+        <li class="breadcrumb-item">{{ item.campaign.name }}</li>
+        <li class="breadcrumb-item active">{{ item.name }}</li>
+    </ol>
+{% endblock %}
+{% block novezmailing_title %}
+    <img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/"~item.statusKey~".png") }}" class="nova-icon"/> {{ item.name }}{% endblock %}
+
+{% block novezmailing_subtitle %}Edition{% endblock %}
+{% block content %}
+    PLOP
+{% endblock %}
+{% block rightbar %}
+    {% set content_create_sidebar_right = knp_menu_get('novaezmailing.menu.save_cancel', [], {}) %}
+    {{ knp_menu_render(content_create_sidebar_right, {'template': '@EzPlatformAdminUi/parts/menu/sidebar_right.html.twig'}) }}
+{% endblock %}

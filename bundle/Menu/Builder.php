@@ -131,4 +131,33 @@ class Builder
 
         return $menu;
     }
+
+    /**
+     * @return ItemInterface
+     */
+    public function createSaveCancelMenu(): ItemInterface
+    {
+        $menu = $this->factory->createItem('root');
+        $menu->addChild(
+            'novaezmailing_save',
+            [
+                'label'  => 'Save',
+                'extras' => [
+                    'icon' => 'save',
+                ],
+            ]
+        );
+
+        $menu->addChild(
+            'novaezmailing_cancel',
+            [
+                'label'  => 'Cancel',
+                'extras' => [
+                    'icon' => 'circle-close',
+                ],
+            ]
+        );
+
+        return $menu;
+    }
 }

@@ -18,8 +18,13 @@ use EzSystems\EzPlatformAdminUi\Tab\LocationView\ContentTab;
 use Novactive\Bundle\eZMailingBundle\Core\Provider\User as UserProvider;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
+use Novactive\Bundle\eZMailingBundle\Form\CampaignType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Class CampaignController.
@@ -102,6 +107,37 @@ class CampaignController
             'item'     => $campaign,
             'status'   => $status,
             'children' => $results,
+        ];
+    }
+
+    /**
+     * @Route("/edit/{campaign}", name="novaezmailing_campaign_edit")
+     * @Template()
+     *
+     * @return array|RedirectResponse
+     */
+    public function editAction(
+        Campaign $campaign,
+        Request $request,
+        RouterInterface $router,
+        EntityManager $entityManager,
+        FormFactoryInterface $formFactory
+    ) {
+        $form = $formFactory->create(CampaignType::class, $campaign);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($campaign);
+            $entityManager->flush();
+
+            return new RedirectResponse(
+                $router->generate('novaezmailing_campaign_subscriptions', ['campaign' => $campaign->getId()])
+            );
+        }
+
+        return [
+            'item' => $campaign,
+            'form' => $form->createView(),
         ];
     }
 }
