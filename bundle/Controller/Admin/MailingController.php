@@ -12,13 +12,21 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
+use Doctrine\ORM\EntityManager;
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use EzSystems\EzPlatformAdminUi\Tab\LocationView\ContentTab;
 use EzSystems\EzPlatformAdminUi\UI\Module\Subitems\ContentViewParameterSupplier;
+use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
+use Novactive\Bundle\eZMailingBundle\Form\MailingType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Class MailingController.
@@ -72,14 +80,42 @@ class MailingController
 
     /**
      * @Route("/edit/{mailing}", name="novaezmailing_mailing_edit")
+     * @Route("/create/{campaign}", name="novaezmailing_mailing_create")
      * @Template()
      *
-     * @return array
+     * @return array|RedirectResponse
      */
-    public function editAction(Mailing $mailing): array
-    {
+    public function editAction(
+        ?Mailing $mailing,
+        ?Campaign $campaign,
+        Request $request,
+        RouterInterface $router,
+        FormFactoryInterface $formFactory,
+        EntityManager $entityManager,
+        TranslationHelper $translationHelper
+    ) {
+        if (null === $mailing) {
+            $mailing = new Mailing();
+            $mailing->setStatus(Mailing::DRAFT);
+            $mailing->setCampaign($campaign);
+            $languages = $translationHelper->getAvailableLanguages();
+            $mailing->setNames(array_combine($languages, array_pad([], count($languages), '')));
+        }
+        $form = $formFactory->create(MailingType::class, $mailing);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($mailing);
+            $entityManager->flush();
+
+            return new RedirectResponse(
+                $router->generate('novaezmailing_mailing_show', ['mailing' => $mailing->getId()])
+            );
+        }
+
         return [
             'item' => $mailing,
+            'form' => $form->createView(),
         ];
     }
 }

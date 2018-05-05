@@ -23,7 +23,7 @@ interface ContentInterface
     /**
      * @return int
      */
-    public function getLocationId(): int;
+    public function getLocationId(): ?int;
 
     /**
      * @param int $locationId
@@ -35,7 +35,7 @@ interface ContentInterface
     /**
      * @return eZContent
      */
-    public function getContent(): eZContent;
+    public function getContent(): ?eZContent;
 
     /**
      * @param eZContent $content
@@ -47,7 +47,7 @@ interface ContentInterface
     /**
      * @return eZLocation
      */
-    public function getLocation(): eZLocation;
+    public function getLocation(): ?eZLocation;
 
     /**
      * @param eZLocation $location

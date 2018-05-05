@@ -14,6 +14,7 @@ namespace Novactive\Bundle\eZMailingBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class Campaign.
@@ -42,18 +43,23 @@ class Campaign implements eZ\ContentInterface
 
     /**
      * @var string
+     * @Assert\NotBlank()
      * @ORM\Column(name="CAMP_sender_name", type="string", length=255, nullable=false)
      */
     private $senderName;
 
     /**
      * @var string
+     * @Assert\NotBlank()
+     * @Assert\Email()
      * @ORM\Column(name="CAMP_sender_email", type="string", length=255, nullable=false)
      */
     private $senderEmail;
 
     /**
      * @var string
+     * @Assert\NotBlank()
+     * @Assert\Email()
      * @ORM\Column(name="CAMP_report_email", type="string", length=255, nullable=false)
      */
     private $reportEmail;
@@ -115,7 +121,7 @@ class Campaign implements eZ\ContentInterface
     /**
      * @return string
      */
-    public function getSenderName(): string
+    public function getSenderName(): ?string
     {
         return $this->senderName;
     }
@@ -135,7 +141,7 @@ class Campaign implements eZ\ContentInterface
     /**
      * @return string
      */
-    public function getSenderEmail(): string
+    public function getSenderEmail(): ?string
     {
         return $this->senderEmail;
     }
@@ -155,7 +161,7 @@ class Campaign implements eZ\ContentInterface
     /**
      * @return string
      */
-    public function getReportEmail(): string
+    public function getReportEmail(): ?string
     {
         return $this->reportEmail;
     }

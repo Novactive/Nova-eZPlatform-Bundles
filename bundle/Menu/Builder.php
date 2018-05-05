@@ -151,8 +151,9 @@ class Builder
         $menu->addChild(
             'novaezmailing_cancel',
             [
-                'label'  => 'Cancel',
-                'extras' => [
+                'label'      => 'Cancel',
+                'attributes' => ['class' => 'btn-danger'],
+                'extras'     => [
                     'icon' => 'circle-close',
                 ],
             ]

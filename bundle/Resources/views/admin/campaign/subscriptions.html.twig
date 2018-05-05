@@ -8,22 +8,27 @@
         <li class="breadcrumb-item active">Subscriptions</li>
     </ol>
 {% endblock %}
-{% block novezmailing_title %}<img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/campaign.png") }}" class="nova-icon" /> {{ item.name }}{% endblock %}
+{% block novezmailing_title %}
+    <img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/campaign.png") }}" class="nova-icon" /> {{ item.name }}{% endblock %}
 {% block novezmailing_subtitle %}Campaign{% endblock %}
 
 {% block content %}
     {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\CampaignController::campaignTabsAction", {campaign: item.id})) }}
-    <br />
-    <h2><img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/subscriptions.png") }}" class="nova-icon" /> Subscriptions</h2>
-    {% include "@NovaeZMailing/admin/common/list/users_filterer.html.twig" with {
-        route: "novaezmailing_campaign_subscriptions",
-        limit: pager.maxPerPage,
-        currentStatus: currentStatus,
-        statuses: statuses,
-        extraParams: {campaign: item.id}
-    } only %}
-    {% include "@NovaeZMailing/admin/common/list/users.html.twig" with {items:pager.currentPageResults, withRegistrations: true} only %}
-    <div class="pagerfanta">
-        {{ pagerfanta(pager, 'twitter_bootstrap4') }}
-    </div>
+
+    {% if pager.nbResults > 0 %}
+        <h2>
+            <img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/subscriptions.png") }}" class="nova-icon"/> Subscriptions
+        </h2>
+        {% include "@NovaeZMailing/admin/common/list/users_filterer.html.twig" with {
+            route: "novaezmailing_campaign_subscriptions",
+            limit: pager.maxPerPage,
+            currentStatus: currentStatus,
+            statuses: statuses,
+            extraParams: {campaign: item.id}
+        } only %}
+        {% include "@NovaeZMailing/admin/common/list/users.html.twig" with {items:pager.currentPageResults, withRegistrations: true} only %}
+        <div class="pagerfanta">
+            {{ pagerfanta(pager, 'twitter_bootstrap4') }}
+        </div>
+    {% endif %}
 {% endblock %}

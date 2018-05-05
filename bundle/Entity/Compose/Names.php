@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Entity\Compose;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * Trait Names.
  */
@@ -19,6 +21,7 @@ trait Names
 {
     /**
      * @var array
+     * @Assert\NotBlank()
      * @ORM\Column(name="OBJ_names", type="array", nullable=false)
      */
     private $names;
@@ -26,7 +29,7 @@ trait Names
     /**
      * @return array
      */
-    public function getNames(): array
+    public function getNames(): ?array
     {
         return $this->names;
     }
@@ -48,8 +51,11 @@ trait Names
      *
      * @return string
      */
-    public function getName(?string $lang = null): string
+    public function getName(?string $lang = null): ?string
     {
+        if (null === $this->names) {
+            return null;
+        }
         if (null === $lang || !isset($this->names[$lang])) {
             return array_values($this->names)[0];
         }

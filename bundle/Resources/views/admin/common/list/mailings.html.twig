@@ -16,7 +16,16 @@
                 <img src="{{ asset("/bundles/novaezmailing/admin/images/16x16/"~item.statusKey~".png") }}" class="nova-icon"/> {{ item.statusKey }}
             </td>
             <th>
-                <a href="#">edit</a>
+                <a href="{{ path('novaezmailing_mailing_edit', {mailing: item.id}) }}" class="edit-button">
+                    <svg class="ez-icon">
+                        <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#edit"></use>
+                    </svg>
+                </a>
+                <a href="#" onclick="javascript:alert('@todo')" class="trash-button">
+                    <svg class="ez-icon">
+                        <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#trash"></use>
+                    </svg>
+                </a>
             </th>
         </tr>
 

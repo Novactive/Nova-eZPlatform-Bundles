@@ -41,9 +41,11 @@ class EntityContentLink
     /** @PostLoad */
     public function postLoadHandler(ContentInterface $entity, LifecycleEventArgs $event): void
     {
-        $location = $this->repository->getLocationService()->loadLocation($entity->getLocationId());
-        $content  = $this->repository->getContentService()->loadContentByContentInfo($location->contentInfo);
-        $entity->setLocation($location);
-        $entity->setContent($content);
+        if (null !== $entity->getLocationId()) {
+            $location = $this->repository->getLocationService()->loadLocation($entity->getLocationId());
+            $content  = $this->repository->getContentService()->loadContentByContentInfo($location->contentInfo);
+            $entity->setLocation($location);
+            $entity->setContent($content);
+        }
     }
 }

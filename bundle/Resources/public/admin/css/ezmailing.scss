@@ -87,6 +87,11 @@ $eZLightBackground: #F5F5F5;
             }
         }
 
+        .form-group {
+            .d-block {
+                display: inline !important;
+            }
+        }
         fieldset.form-group legend {
             font-weight: 700;
             font-size: 14px;
@@ -94,6 +99,33 @@ $eZLightBackground: #F5F5F5;
             margin-bottom: 0;
             margin-top: 20px;
         }
+
+    }
+    .item-tabs-content {
+        padding-bottom: 35px;
+    }
+    .novaezmailing-button-actions {
+        padding: 5px;
+        float: right;
+        clear: both;
+        a {
+            svg {
+                fill: #fff;
+            }
+            span {
+                color: #fff;
+                margin-top: 7px;
+                padding-left: 5px;
+                display: block;
+                float: right;
+            }
+        }
+    }
+
+    .edit-button svg, .trash-button svg {
+        fill: #f15a10;
+        width: 20px;
+        height: 20px;
     }
 
     footer {

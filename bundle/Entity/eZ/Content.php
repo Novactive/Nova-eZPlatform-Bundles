@@ -40,7 +40,7 @@ trait Content
     /**
      * {@inheritdoc}
      */
-    public function getContent(): eZContent
+    public function getContent(): ?eZContent
     {
         return $this->content;
     }
@@ -58,7 +58,7 @@ trait Content
     /**
      * @return int
      */
-    public function getLocationId(): int
+    public function getLocationId(): ?int
     {
         return $this->locationId;
     }
@@ -76,7 +76,7 @@ trait Content
     /**
      * @return eZLocation
      */
-    public function getLocation(): eZLocation
+    public function getLocation(): ?eZLocation
     {
         return $this->location;
     }

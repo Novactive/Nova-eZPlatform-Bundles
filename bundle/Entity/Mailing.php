@@ -17,6 +17,8 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Novactive\Bundle\eZMailingBundle\Core\Utils\Clock;
+use Novactive\Bundle\eZMailingBundle\Validator\Constraints as NovaEzMailingAssert;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class Mailing.
@@ -84,6 +86,7 @@ class Mailing implements eZ\ContentInterface
 
     /**
      * @var int
+     * @Assert\NotBlank()
      * @ORM\Column(name="MAIL_status", type="smallint", nullable=false)
      */
     private $status;
@@ -96,42 +99,49 @@ class Mailing implements eZ\ContentInterface
 
     /**
      * @var array
+     * @NovaEzMailingAssert\ArrayRange(min=0,max=24)
      * @ORM\Column(name="MAIL_hours_of_day", type="array", nullable=false)
      */
     private $hoursOfDay;
 
     /**
      * @var array
+     * @NovaEzMailingAssert\ArrayRange(min=1,max=7)
      * @ORM\Column(name="MAIL_days_of_week", type="array", nullable=true)
      */
     private $daysOfWeek;
 
     /**
      * @var array
+     * @NovaEzMailingAssert\ArrayRange(min=1,max=31)
      * @ORM\Column(name="MAIL_days_of_month", type="array", nullable=true)
      */
     private $daysOfMonth;
 
     /**
      * @var array
+     * @NovaEzMailingAssert\ArrayRange(min=1,max=365)
      * @ORM\Column(name="MAIL_days_of_year", type="array", nullable=true)
      */
     private $daysOfYear;
 
     /**
      * @var array
+     * @NovaEzMailingAssert\ArrayRange(min=1,max=5)
      * @ORM\Column(name="MAIL_weeks_of_month", type="array", nullable=true)
      */
     private $weeksOfMonth;
 
     /**
      * @var array
+     * @NovaEzMailingAssert\ArrayRange(min=1,max=12)
      * @ORM\Column(name="MAIL_months_of_year", type="array", nullable=true)
      */
     private $monthsOfYear;
 
     /**
      * @var array
+     * @NovaEzMailingAssert\ArrayRange(min=1,max=53)
      * @ORM\Column(name="MAIL_weeks_of_year", type="array", nullable=true)
      */
     private $weeksOfYear;

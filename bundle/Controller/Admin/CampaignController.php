@@ -14,6 +14,7 @@ namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
 use Doctrine\ORM\EntityManager;
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\Helper\TranslationHelper;
 use EzSystems\EzPlatformAdminUi\Tab\LocationView\ContentTab;
 use Novactive\Bundle\eZMailingBundle\Core\Provider\User as UserProvider;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
@@ -112,17 +113,25 @@ class CampaignController
 
     /**
      * @Route("/edit/{campaign}", name="novaezmailing_campaign_edit")
+     * @Route("/create", name="novaezmailing_campaign_create")
      * @Template()
      *
      * @return array|RedirectResponse
      */
     public function editAction(
-        Campaign $campaign,
+        ?Campaign $campaign,
         Request $request,
         RouterInterface $router,
         EntityManager $entityManager,
-        FormFactoryInterface $formFactory
+        FormFactoryInterface $formFactory,
+        TranslationHelper $translationHelper
     ) {
+        if (null === $campaign) {
+            $campaign  = new Campaign();
+            $languages = $translationHelper->getAvailableLanguages();
+            $campaign->setNames(array_combine($languages, array_pad([], count($languages), '')));
+        }
+
         $form = $formFactory->create(CampaignType::class, $campaign);
         $form->handleRequest($request);
 

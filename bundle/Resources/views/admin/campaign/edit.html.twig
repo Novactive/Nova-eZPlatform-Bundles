@@ -9,9 +9,7 @@
 {% block _campaign_locationId_row %}
     <label class="form-control-label">Location</label>
     {{ form_widget(form) }}
-    {% if value > 0 %}
-        <p id="{{ id }}_name">{{ ez_content_name(form.parent.vars.value.content) }}</p>
-    {% endif %}
+    <p id="{{ id }}_name">{% if value > 0 %}{{ ez_content_name(form.parent.vars.value.content) }}{% endif %}</p>
     <button data-target-id="#{{ id }}"
             data-target-name="#{{ id }}_name"
             type="button"
@@ -33,7 +31,7 @@
 {% block novezmailing_subtitle %}Edition{% endblock %}
 {% block content %}
     {{ form_start(form, {attr: {class:'col-11', novaezmailing:'mainform'}}) }}
-    {{ form_widget(form) }}
+    {{ form(form) }}
     {{ form_end(form) }}
 {% endblock %}
 {% block rightbar %}
