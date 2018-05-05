@@ -63,7 +63,7 @@ class CampaignFixtures extends Fixture implements DependentFixtureInterface
                         'eng-US' => $faker->words(2, true),
                     ]
                 );
-                $mailing->setStatus($faker->randomElement(array_keys(Mailing::STATUSES)));
+                $mailing->setStatus($faker->randomElement(Mailing::STATUSES));
                 $mailing->setRecurring($faker->boolean());
                 $mailing->setHoursOfDay([$faker->numberBetween(0, 23)]);
                 $mailing->setDaysOfMonth([$faker->numberBetween(0, 31)]);

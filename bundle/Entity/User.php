@@ -42,37 +42,37 @@ class User
     /**
      * Did not confirmed the confirmation email.
      */
-    const PENDING = 10;
+    const PENDING = 'pending';
 
     /**
      * Did not confirmed the confirmation email.
      */
-    const CONFIRMED = 20;
+    const CONFIRMED = 'confirmed';
 
     /**
      * Flag as SOFT BOUNCE.
      */
-    const SOFT_BOUNCE = 30;
+    const SOFT_BOUNCE = 'soft_bounce';
 
     /**
      * Flag as HARD BOUNCE.
      */
-    const HARD_BOUNCE = 40;
+    const HARD_BOUNCE = 'hard_bounce';
 
     /**
      * Was blacklisted.
      */
-    const BLACKLISTED = 666;
+    const BLACKLISTED = 'blacklisted';
 
     /**
      * Statuses.
      */
     const STATUSES = [
-        self::PENDING     => 'pending',
-        self::CONFIRMED   => 'confirmed',
-        self::SOFT_BOUNCE => 'soft_bounce',
-        self::HARD_BOUNCE => 'hard_bounce',
-        self::BLACKLISTED => 'blacklisted',
+        self::PENDING,
+        self::CONFIRMED,
+        self::SOFT_BOUNCE,
+        self::HARD_BOUNCE,
+        self::BLACKLISTED,
     ];
 
     /**
@@ -183,8 +183,8 @@ class User
     private $origin;
 
     /**
-     * @var int
-     * @ORM\Column(name="USER_status", type="smallint", nullable=false)
+     * @var string
+     * @ORM\Column(name="USER_status", type="string", nullable=false)
      */
     private $status;
 
@@ -491,19 +491,11 @@ class User
     }
 
     /**
-     * @return int
-     */
-    public function getStatus(): int
-    {
-        return $this->status;
-    }
-
-    /**
      * @return string
      */
-    public function getStatusKey(): string
+    public function getStatus(): string
     {
-        return self::STATUSES[$this->status];
+        return $this->status;
     }
 
     /**
@@ -515,11 +507,11 @@ class User
     }
 
     /**
-     * @param int $status
+     * @param string $status
      *
      * @return User
      */
-    public function setStatus(int $status): self
+    public function setStatus(string $status): self
     {
         $this->status = $status;
 

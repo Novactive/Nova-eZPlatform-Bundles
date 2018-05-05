@@ -15,8 +15,6 @@ var eZMailingContentSelectionModule = function () {
                 startingLocationId: startingLocationId,
                 restInfo: {token: token, siteaccess: siteaccess},
                 onConfirm: function (response) {
-                    console.log(response[0].id);
-                    console.log(response[0].ContentInfo.Content.Name);
                     $(targetSelector).val(response[0].id);
                     $(targetSelectorName).text(response[0].ContentInfo.Content.Name);
                     ReactDOM.unmountComponentAtNode(udwContainer);

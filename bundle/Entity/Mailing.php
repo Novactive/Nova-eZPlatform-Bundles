@@ -37,43 +37,43 @@ class Mailing implements eZ\ContentInterface
     /**
      * Just created.
      */
-    const DRAFT = 0;
+    const DRAFT = 'draft';
 
     /**
      * Ready to be sent.
      */
-    const PENDING = 10;
+    const PENDING = 'pending';
 
     /**
      * Currently Processing.
      */
-    const PROCESSING = 20;
+    const PROCESSING = 'processing';
 
     /**
      * Sent, Processing over.
      */
-    const SENT = 30;
+    const SENT = 'sent';
 
     /**
      * Aborted.
      */
-    const ABORTED = 40;
+    const ABORTED = 'aborted';
 
     /**
      * Archived.
      */
-    const ARCHIVED = 50;
+    const ARCHIVED = 'archived';
 
     /**
      * Statuses.
      */
-    const   STATUSES = [
-        self::DRAFT      => 'draft',
-        self::PENDING    => 'pending',
-        self::PROCESSING => 'processing',
-        self::SENT       => 'sent',
-        self::ABORTED    => 'aborted',
-        self::ARCHIVED   => 'archived',
+    const STATUSES = [
+        self::DRAFT,
+        self::PENDING,
+        self::PROCESSING,
+        self::SENT,
+        self::ABORTED,
+        self::ARCHIVED,
     ];
 
     /**
@@ -85,9 +85,9 @@ class Mailing implements eZ\ContentInterface
     private $id;
 
     /**
-     * @var int
+     * @var string
      * @Assert\NotBlank()
-     * @ORM\Column(name="MAIL_status", type="smallint", nullable=false)
+     * @ORM\Column(name="MAIL_status", type="string", nullable=false)
      */
     private $status;
 
@@ -198,27 +198,19 @@ class Mailing implements eZ\ContentInterface
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getStatus(): int
+    public function getStatus(): string
     {
         return $this->status;
     }
 
     /**
-     * @return string
-     */
-    public function getStatusKey(): string
-    {
-        return self::STATUSES[$this->status];
-    }
-
-    /**
-     * @param int $status
+     * @param string $status
      *
      * @return Mailing
      */
-    public function setStatus(int $status): self
+    public function setStatus(string $status): self
     {
         $this->status = $status;
 
@@ -417,7 +409,7 @@ class Mailing implements eZ\ContentInterface
      *
      * @return Mailing
      */
-    public function setCampaign(Campaign $campaign): self
+    public function setCampaign(?Campaign $campaign): self
     {
         $this->campaign = $campaign;
 

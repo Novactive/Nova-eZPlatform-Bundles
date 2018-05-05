@@ -60,7 +60,7 @@ class User extends EntityRepository
         }
 
         if (isset($filters['status'])) {
-            $qb->andWhere($qb->expr()->in('u.status', $filters['status']));
+            $qb->andWhere($qb->expr()->in('u.status', ':statuses'))->setParameter('statuses', $filters['status']);
         }
 
         if (isset($filters['query'])) {

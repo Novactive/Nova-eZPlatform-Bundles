@@ -106,9 +106,7 @@ $eZLightBackground: #F5F5F5;
     }
     .novaezmailing-button-actions {
         padding: 5px;
-        float: right;
-        clear: both;
-        a {
+        a, button {
             svg {
                 fill: #fff;
             }
@@ -122,7 +120,7 @@ $eZLightBackground: #F5F5F5;
         }
     }
 
-    .edit-button svg, .trash-button svg {
+    .edit-button svg {
         fill: #f15a10;
         width: 20px;
         height: 20px;
@@ -136,6 +134,18 @@ $eZLightBackground: #F5F5F5;
             text-align: center;
             width: 100%;
         }
+    }
+}
+
+.novaezmailing-ez-mailings-view {
+    .edit-button svg {
+        fill: #f15a10;
+        width: 20px;
+        height: 20px;
+    }
+
+    .edit-button.disabled svg {
+        fill: #ccc;
     }
 }
 

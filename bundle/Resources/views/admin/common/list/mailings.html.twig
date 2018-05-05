@@ -13,19 +13,22 @@
                 <a href="{{ path('novaezmailing_mailing_show', {mailing:item.id}) }}">{{ item.name }}</a>
             </td>
             <td>
-                <img src="{{ asset("/bundles/novaezmailing/admin/images/16x16/"~item.statusKey~".png") }}" class="nova-icon"/> {{ item.statusKey }}
+                <img src="{{ asset("/bundles/novaezmailing/admin/images/16x16/"~item.status~".png") }}" class="nova-icon"/> {{ item.status }}
             </td>
             <th>
-                <a href="{{ path('novaezmailing_mailing_edit', {mailing: item.id}) }}" class="edit-button">
-                    <svg class="ez-icon">
-                        <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#edit"></use>
-                    </svg>
-                </a>
-                <a href="#" onclick="javascript:alert('@todo')" class="trash-button">
-                    <svg class="ez-icon">
-                        <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#trash"></use>
-                    </svg>
-                </a>
+                {% if workflow_can(item,'edit') %}
+                    <a href="{{ path('novaezmailing_mailing_edit', {mailing: item.id}) }}" class="edit-button">
+                        <svg class="ez-icon">
+                            <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#edit"></use>
+                        </svg>
+                    </a>
+                {% else %}
+                    <a href="#" class="edit-button disabled">
+                        <svg class="ez-icon">
+                            <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#edit"></use>
+                        </svg>
+                    </a>
+                {% endif %}
             </th>
         </tr>
 

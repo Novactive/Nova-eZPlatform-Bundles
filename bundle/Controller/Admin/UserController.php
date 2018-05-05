@@ -51,13 +51,13 @@ class UserController
      */
     public function indexAction(UserProvider $provider, string $status = 'all', int $page = 1, int $limit = 10): array
     {
-        $filers = [
-            'status' => 'all' === $status ? null : (int) $status,
+        $filters = [
+            'status' => 'all' === $status ? null : $status,
         ];
 
         return [
-            'pager'         => $provider->getPagerFilters($filers, $page, $limit),
-            'statuses'      => $provider->getStatusesData($filers),
+            'pager'         => $provider->getPagerFilters($filters, $page, $limit),
+            'statuses'      => $provider->getStatusesData($filters),
             'currentStatus' => $status,
         ];
     }

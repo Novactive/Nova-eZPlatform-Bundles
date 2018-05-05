@@ -43,7 +43,7 @@ class Mailing extends EntityRepository
         }
 
         if (isset($filters['status'])) {
-            $qb->andWhere($qb->expr()->in('mail.status', $filters['status']));
+            $qb->andWhere($qb->expr()->in('mail.status', ':statuses'))->setParameter('statuses', $filters['status']);
         }
 
         return $qb;

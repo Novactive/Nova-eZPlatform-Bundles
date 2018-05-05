@@ -51,14 +51,21 @@ services:
         tags:
             - { name: knp_menu.menu, alias: novaezmailing.menu.save_cancel }
 
+    Novactive\Bundle\eZMailingBundle\Core\AjaxGuard: ~
+
     Novactive\Bundle\eZMailingBundle\Listener\EntityContentLink:
-        tags:
+       tags:
             - { name: doctrine.orm.entity_listener }
+
+    Novactive\Bundle\eZMailingBundle\Listener\MailingWorkflow:
+        tags:
+            - { name: kernel.event_listener, event: workflow.mailing.leave }
 
     # Mailers
     Novactive\Bundle\eZMailingBundle\Core\Mailer\Factory: ~
 
     Novactive\Bundle\eZMailingBundle\Core\Mailer\Simple:
+        public: true
         factory: 'Novactive\Bundle\eZMailingBundle\Core\Mailer\Factory:get'
         arguments: ['simple_mailer']
 

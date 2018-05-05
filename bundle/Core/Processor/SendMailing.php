@@ -17,6 +17,7 @@ use Doctrine\ORM\EntityManager;
 use Novactive\Bundle\eZMailingBundle\Core\Mailer\Mailing as MailingMailer;
 use Novactive\Bundle\eZMailingBundle\Core\Utils\Clock;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
+use Symfony\Component\Workflow\Registry;
 
 /**
  * Class SendMailing.
@@ -34,15 +35,22 @@ class SendMailing extends Processor
     private $mailingMailer;
 
     /**
+     * @var Registry
+     */
+    private $workflows;
+
+    /**
      * SendMailingCommand constructor.
      *
      * @param EntityManager $entityManager
      * @param MailingMailer $mailingMailer
+     * @param Registry      $workflows
      */
-    public function __construct(EntityManager $entityManager, MailingMailer $mailingMailer)
+    public function __construct(EntityManager $entityManager, MailingMailer $mailingMailer, Registry $workflows)
     {
         $this->entityManager = $entityManager;
         $this->mailingMailer = $mailingMailer;
+        $this->workflows     = $workflows;
     }
 
     /**
@@ -58,11 +66,30 @@ class SendMailing extends Processor
             /** @var Mailing $mailing */
             if ($clock->match($mailing)) {
                 ++$matched;
-                $this->logger->info("{$mailing->getName()} has been matched pending and rending to send.");
-                $this->mailingMailer->sendMailing($mailing);
+                $this->logger->notice("{$mailing->getName()} has been matched pending and rending to send.");
+                if (null !== $mailing->getLastSent() &&
+                    $mailing->getLastSent()->format('Y-m-d-H') === date('Y-m-d-H')) {
+                    //Security here, if is has been sent during this current hour already, do nothing
+                    $this->logger->debug(
+                        "{$mailing->getName()} has been matched and IGNORED. It has been sent during this hour already."
+                    );
+                    continue;
+                }
+
+                $workflow = $this->workflows->get($mailing);
+                if ($workflow->can($mailing, 'process')) {
+                    $workflow->apply($mailing, 'process');
+                    $this->entityManager->flush();
+                    $this->mailingMailer->sendMailing($mailing);
+                    $workflow->apply($mailing, 'finish');
+                    if ($mailing->isRecurring()) {
+                        $workflow->apply($mailing, 'reloop');
+                    }
+                    $this->entityManager->flush();
+                }
                 ++$sent;
             }
         }
-        $this->logger->info("{$matched} matched mailings induced {$sent} sendings.");
+        $this->logger->notice("{$matched} matched mailings induced {$sent} sendings.");
     }
 }

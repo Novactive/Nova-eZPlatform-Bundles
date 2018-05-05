@@ -105,24 +105,24 @@ class Builder
                 ]
             );
 
-            foreach ($mailingStatuses as $statusId => $statusKey) {
+            foreach ($mailingStatuses as $status) {
                 $count = $mailingRepo->countByFilters(
                     [
                         'campaign' => $campaign,
-                        'status'   => $statusId,
+                        'status'   => $status,
                     ]
                 );
                 $child->addChild(
-                    "mailing_status_{$statusId}",
+                    "mailing_status_{$status}",
                     [
                         'route'           => 'novaezmailing_campaign_mailings',
                         'routeParameters' => [
                             'campaign' => $campaign->getId(),
-                            'status'   => $statusId,
+                            'status'   => $status,
                         ],
-                        'label'           => $statusKey." ({$count})",
+                        'label'           => $status." ({$count})",
                         'attributes'      => [
-                            'class' => "leaf {$statusKey}",
+                            'class' => "leaf {$status}",
                         ],
                     ]
                 );

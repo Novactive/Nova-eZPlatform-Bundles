@@ -62,11 +62,10 @@ class User
         unset($filters['status']);
         $repo  = $this->entityManager->getRepository(UserEntity::class);
         $total = 0;
-        foreach (UserEntity::STATUSES as $statusId => $statusKey) {
-            $statusKey; //tricks phpmd
-            $statuses[$statusId] = $repo->countByFilters($filters + ['status' => $statusId]);
+        foreach (UserEntity::STATUSES as $status) {
+            $statuses[$status] = $repo->countByFilters($filters + ['status' => $status]);
 
-            $total += $statuses[$statusId];
+            $total += $statuses[$status];
         }
 
         return ['count' => $total, 'results' => $statuses];

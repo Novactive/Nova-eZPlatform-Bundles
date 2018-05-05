@@ -23,10 +23,6 @@ var eZMailingSubItemsModule = function () {
             return total;
         }, {});
 
-        console.log(subitemsList);
-        console.log(items);
-        console.log(contentTypes);
-        console.log(contentTypesMap);
         ReactDOM.render(React.createElement(eZ.modules.SubItems, {
             parentLocationId: $container.data('location'),
             limit: $container.data('limit'),
@@ -34,8 +30,10 @@ var eZMailingSubItemsModule = function () {
             contentTypesMap: contentTypesMap,
             totalCount: subitemsList.ChildrenCount,
             handleEditItem: function (content) {
-                console.log("handleEditItem");
-                console.log(content);
+                var contentId = content._id;
+                var versionNumber = content.CurrentVersion.Version.VersionInfo.versionNo;
+                var langCode = content.mainLanguageCode;
+                alert("/admin/content/edit/draft/" + contentId + "/" + versionNumber + "/" + langCode);
             },
             generateLink: function (locationId) {
                 return window.Routing.generate('_ezpublishLocation', {locationId: locationId});

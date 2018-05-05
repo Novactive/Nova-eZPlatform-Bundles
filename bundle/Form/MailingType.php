@@ -36,7 +36,7 @@ class MailingType extends AbstractType
             return implode(',', $array);
         };
         $fromString = function ($string) {
-            return array_unique(explode(',', $string));
+            return array_unique(null !== $string ? explode(',', $string) : []);
         };
 
         $builder

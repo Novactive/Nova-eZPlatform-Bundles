@@ -77,11 +77,11 @@ class Mailing extends Mailer
             $fakeUser = new User();
             $fakeUser->setEmail($forceRecipient);
             $contentMessage = $this->contentProvider->getContentMailing($mailing, $fakeUser, $broadcast);
-            $this->logger->debug("Mailing Mailer sends {$contentMessage->getSubject()}.");
+            $this->logger->debug("Mailing Mailer starts to test {$contentMessage->getSubject()}.");
             $this->sendMessage($contentMessage);
         } else {
             $campaign = $mailing->getCampaign();
-            $this->logger->debug("Mailing Mailer sends Mailing {$mailing->getName()}");
+            $this->logger->notice("Mailing Mailer starts to send Mailing {$mailing->getName()}");
             $recipientCounts = 0;
             foreach ($campaign->getMailingLists() as $mailingList) {
                 foreach ($mailingList->getApprovedRegistrations() as $registration) {
@@ -101,7 +101,7 @@ class Mailing extends Mailer
                 $this->broadcastProvider->store($broadcast);
             }
             $this->broadcastProvider->store($broadcast);
-            $this->logger->debug("Mailing {$mailing->getName()} induced {$recipientCounts} emails sent.");
+            $this->logger->notice("Mailing {$mailing->getName()} induced {$recipientCounts} emails sent.");
         }
         $this->simpleMailer->sendStopSendingMailingMessage($mailing);
         $this->broadcastProvider->end($broadcast);

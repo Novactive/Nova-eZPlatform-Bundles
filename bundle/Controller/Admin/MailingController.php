@@ -24,9 +24,12 @@ use Novactive\Bundle\eZMailingBundle\Form\MailingType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Workflow\Registry;
 
 /**
  * Class MailingController.
@@ -92,6 +95,7 @@ class MailingController
         RouterInterface $router,
         FormFactoryInterface $formFactory,
         EntityManager $entityManager,
+        Registry $workflows,
         TranslationHelper $translationHelper
     ) {
         if (null === $mailing) {
@@ -101,10 +105,17 @@ class MailingController
             $languages = $translationHelper->getAvailableLanguages();
             $mailing->setNames(array_combine($languages, array_pad([], count($languages), '')));
         }
+
+        $machine = $workflows->get($mailing);
+        if (!$machine->can($mailing, 'edit')) {
+            throw new AccessDeniedHttpException('Not Allowed');
+        }
+
         $form = $formFactory->create(MailingType::class, $mailing);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $machine->apply($mailing, 'edit');
             $entityManager->persist($mailing);
             $entityManager->flush();
 
@@ -117,5 +128,27 @@ class MailingController
             'item' => $mailing,
             'form' => $form->createView(),
         ];
+    }
+
+    /**
+     * @Route("/confirm/{mailing}", name="novaezmailing_mailing_confirm")
+     * @Route("/archive/{mailing}", name="novaezmailing_mailing_archive")
+     * @Route("/abort/{mailing}",   name="novaezmailing_mailing_cancel")
+     *
+     * @return JsonResponse
+     */
+    public function confirmAction(
+        Request $request,
+        Mailing $mailing,
+        RouterInterface $router,
+        EntityManager $entityManager,
+        Registry $workflows
+    ): RedirectResponse {
+        $action  = substr($request->get('_route'), \strlen('novaezmailing_mailing_'));
+        $machine = $workflows->get($mailing);
+        $machine->apply($mailing, $action);
+        $entityManager->flush();
+
+        return new RedirectResponse($router->generate('novaezmailing_mailing_show', ['mailing' => $mailing->getId()]));
     }
 }

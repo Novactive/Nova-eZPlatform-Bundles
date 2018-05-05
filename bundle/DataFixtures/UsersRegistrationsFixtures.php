@@ -46,7 +46,7 @@ class UsersRegistrationsFixtures extends Fixture implements DependentFixtureInte
                 ->setState($faker->state)
                 ->setZipcode($faker->postcode)
                 ->setConfirmationToken($faker->boolean(30) ? uniqid('token', true) : null)
-                ->setStatus($faker->randomElement(array_keys(User::STATUSES)))
+                ->setStatus($faker->randomElement(User::STATUSES))
                 ->setOrigin($faker->randomElement(['site', 'import']));
 
             $nbRegistrations = $faker->numberBetween(0, MailingListFixtures::FIXTURE_COUNT_MAILINGLIST);

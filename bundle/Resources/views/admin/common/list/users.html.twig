@@ -39,7 +39,7 @@
                    data-trigger="hover"
                 >{{ item.email }}</a></td>
             {% if withStatus %}
-                <td><span class="badge badge-{{ item.statusStyle }}">{{ item.statusKey }}</span></td>
+                <td><span class="badge badge-{{ item.statusStyle }}">{{ item.status }}</span></td>
             {% endif %}
             <td class="text-center">{{ item.country|country_name }}</td>
             <td class="text-center">{{ item.origin }}</td>

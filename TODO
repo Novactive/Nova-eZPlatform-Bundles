@@ -1,9 +1,12 @@
 ===
 
 - import/export XLS => 7h
-- gestion inscription/desinscription (email validation etc.) => 10h
-- permissions
 
+
+
+- gestion inscription/desinscription (email validation etc.) => 10h
+
+- permissions campaign over sitaccess
 
 - bounce => xx hours
 - tests de ouf

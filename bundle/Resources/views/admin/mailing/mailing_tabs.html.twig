@@ -47,6 +47,33 @@
             {% endfor %}
 
         </div>
-
+    </div>
+    <div class="novaezmailing-button-actions float-right">
+        <a type="button" {% if workflow_can(item,'edit') %} href="{{ path("novaezmailing_mailing_edit", {mailing: item.id}) }}" {% else %} disabled {% endif %} class="btn btn-sm btn-secondary">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#edit"></use>
+            </svg>
+            <span>Edit this Mailing</span>
+        </a>
+        <a type="button" {% if workflow_can(item,'archive') %} href="{{ path("novaezmailing_mailing_archive", {mailing: item.id}) }}" {% else %} disabled {% endif %} class="btn btn-sm btn-warning">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#move"></use>
+            </svg>
+            <span>Archived this Mailing </span>
+        </a>
+        <a type="button" {% if workflow_can(item,'cancel') %} href="{{ path("novaezmailing_mailing_cancel", {mailing: item.id}) }}" {% else %} disabled {% endif %} class="btn btn-sm btn-danger">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#trash"></use>
+            </svg>
+            <span>Aborted this Mailing </span>
+        </a>
+    </div>
+    <div class="novaezmailing-button-actions float-left">
+        <a type="button" {% if workflow_can(item,'confirm') %} href="{{ path("novaezmailing_mailing_confirm", {mailing: item.id}) }}" {% else %}disabled {% endif %} class="btn btn-sm btn-success">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#publish"></use>
+            </svg>
+            <span>Confirm this Mailing </span>
+        </a>
     </div>
 </div>

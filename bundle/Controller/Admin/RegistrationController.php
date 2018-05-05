@@ -12,15 +12,12 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
-use Doctrine\ORM\EntityManager;
+use Novactive\Bundle\eZMailingBundle\Core\AjaxGuard;
 use Novactive\Bundle\eZMailingBundle\Entity\Registration;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * Class RegistrationController.
@@ -37,20 +34,20 @@ class RegistrationController
      */
     public function acceptAction(
         Request $request,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        EntityManager $entityManager,
+        AjaxGuard $ajaxGuard,
         Registration $registration
     ): JsonResponse {
-        $token = $request->request->get('token');
-        if (!$request->isXmlHttpRequest() || null === $token ||
-            !$csrfTokenManager->isTokenValid(new CsrfToken($registration->getId(), $token))) {
-            throw new AccessDeniedHttpException('Not Allowed');
-        }
-        $registration->setApproved(true);
-        $entityManager->persist($registration);
-        $entityManager->flush();
+        $token = $ajaxGuard->execute(
+            $request,
+            $registration,
+            function (Registration $registration) {
+                $registration->setApproved(true);
 
-        return new JsonResponse(['token' => $csrfTokenManager->getToken($registration->getId())->getValue()]);
+                return [];
+            }
+        );
+
+        return new JsonResponse(['token' => $token]);
     }
 
     /**
@@ -60,20 +57,19 @@ class RegistrationController
      */
     public function denyAction(
         Request $request,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        EntityManager $entityManager,
+        AjaxGuard $ajaxGuard,
         Registration $registration
     ): JsonResponse {
-        $token = $request->request->get('token');
-        if (!$request->isXmlHttpRequest() || null === $token ||
-            !$csrfTokenManager->isTokenValid(new CsrfToken($registration->getId(), $token))) {
-            throw new AccessDeniedHttpException('Not Allowed');
-        }
+        $results = $ajaxGuard->execute(
+            $request,
+            $registration,
+            function (Registration $registration) {
+                $registration->setApproved(false);
 
-        $registration->setApproved(false);
-        $entityManager->persist($registration);
-        $entityManager->flush();
+                return [];
+            }
+        );
 
-        return new JsonResponse(['token' => $csrfTokenManager->getToken($registration->getId())->getValue()]);
+        return new JsonResponse($results);
     }
 }

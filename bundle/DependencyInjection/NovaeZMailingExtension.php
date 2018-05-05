@@ -72,8 +72,8 @@ class NovaeZMailingExtension extends Extension implements PrependExtensionInterf
         $container->addResource(new FileResource($loggerFile));
 
         $workflowFile = __DIR__.'/../Resources/config/workflow.yml';
-        $config     = Yaml::parse(file_get_contents($loggerFile));
-        $container->prependExtensionConfig('monolog', $config);
-        $container->addResource(new FileResource($loggerFile));
+        $config       = Yaml::parse(file_get_contents($workflowFile));
+        $container->prependExtensionConfig('framework', $config);
+        $container->addResource(new FileResource($workflowFile));
     }
 }
