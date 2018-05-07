@@ -12,10 +12,12 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Form;
 
+use EzSystems\EzPlatformAdminUi\Siteaccess\SiteaccessResolver;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -29,10 +31,29 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class CampaignType extends AbstractType
 {
     /**
+     * @var SiteaccessResolver
+     */
+    private $siteAccessResolver;
+
+    /**
+     * CampaignType constructor.
+     *
+     * @param SiteaccessResolver $siteAccessResolver
+     */
+    public function __construct(SiteaccessResolver $siteAccessResolver)
+    {
+        $this->siteAccessResolver = $siteAccessResolver;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $siteaccess = array_combine(
+            array_values($this->siteAccessResolver->getSiteaccesses()),
+            array_values($this->siteAccessResolver->getSiteaccesses())
+        );
         $builder
             ->add(
                 'names',
@@ -49,6 +70,15 @@ class CampaignType extends AbstractType
             ->add('senderEmail', EmailType::class, ['required' => true])
             ->add('reportEmail', EmailType::class, ['required' => true])
             ->add('locationId', HiddenType::class)
+            ->add(
+                'siteaccessLimit',
+                ChoiceType::class,
+                [
+                    'expanded' => true,
+                    'multiple' => true,
+                    'choices'  => $siteaccess,
+                ]
+            )
             ->add(
                 'mailingLists',
                 EntityType::class,

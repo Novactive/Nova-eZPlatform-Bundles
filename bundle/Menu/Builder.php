@@ -18,7 +18,9 @@ use Knp\Menu\ItemInterface;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
+use Novactive\Bundle\eZMailingBundle\Security\Voter\Campaign as CampaignVoter;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * Class Builder.
@@ -31,11 +33,20 @@ class Builder
     private $factory;
 
     /**
-     * @param FactoryInterface $factory
+     * @var AuthorizationCheckerInterface
      */
-    public function __construct(FactoryInterface $factory)
+    private $authorizationChecker;
+
+    /**
+     * Builder constructor.
+     *
+     * @param FactoryInterface              $factory
+     * @param AuthorizationCheckerInterface $authorizationChecker
+     */
+    public function __construct(FactoryInterface $factory, AuthorizationCheckerInterface $authorizationChecker)
     {
-        $this->factory = $factory;
+        $this->factory              = $factory;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**
@@ -84,6 +95,9 @@ class Builder
         $userRepo    = $entityManager->getRepository(User::class);
         $mailingRepo = $entityManager->getRepository(Mailing::class);
         foreach ($campaigns as $campaign) {
+            if (!$this->authorizationChecker->isGranted([CampaignVoter::VIEW], $campaign)) {
+                continue;
+            }
             $child = $menu->addChild(
                 "camp_{$campaign->getId()}",
                 [

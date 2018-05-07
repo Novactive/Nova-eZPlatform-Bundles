@@ -22,6 +22,7 @@ use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Novactive\Bundle\eZMailingBundle\Form\MailingType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -41,6 +42,7 @@ class MailingController
     /**
      * @Route("/show/{mailing}", name="novaezmailing_mailing_show")
      * @Template()
+     * @Security("is_granted('view', mailing)")
      *
      * @return array
      */
@@ -58,6 +60,7 @@ class MailingController
 
     /**
      * @Template()
+     * @Security("is_granted('view', mailing)")
      *
      * @return array
      */
@@ -85,6 +88,7 @@ class MailingController
      * @Route("/edit/{mailing}", name="novaezmailing_mailing_edit")
      * @Route("/create/{campaign}", name="novaezmailing_mailing_create")
      * @Template()
+     * @Security("is_granted('edit', mailing)")
      *
      * @return array|RedirectResponse
      */
@@ -134,6 +138,7 @@ class MailingController
      * @Route("/confirm/{mailing}", name="novaezmailing_mailing_confirm")
      * @Route("/archive/{mailing}", name="novaezmailing_mailing_archive")
      * @Route("/abort/{mailing}",   name="novaezmailing_mailing_cancel")
+     * @Security("is_granted('view', mailing)")
      *
      * @return JsonResponse
      */

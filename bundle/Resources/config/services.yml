@@ -11,6 +11,14 @@ services:
         resource: '../../Command'
         tags: ["console.command"]
 
+    Novactive\Bundle\eZMailingBundle\Form\:
+        resource: '../../Form'
+        tags: ["form.type"]
+
+    Novactive\Bundle\eZMailingBundle\Security\Voter\:
+        resource: '../../Security/Voter'
+        tags: ["security.voter"]
+
     Novactive\Bundle\eZMailingBundle\Controller\:
         resource: '../../Controller'
         tags: ['controller.service_arguments']

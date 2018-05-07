@@ -11,6 +11,20 @@
         <th>Report Email</th>
         <td>{{ item.reportEmail }}</td>
     </tr>
+    {% if item.siteaccessLimit|length > 0 %}
+        <tr>
+            <th>Siteaccess limit</th>
+            <td>
+                <div class="list-group">
+                    {% for sa in item.siteaccessLimit %}
+                        <a class="list-group-item list-group-item-action">
+                            {{ sa }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </td>
+        </tr>
+    {% endif %}
     <tr>
         <th>Mailing Lists</th>
         <td>

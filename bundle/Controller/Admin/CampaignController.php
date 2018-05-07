@@ -21,6 +21,7 @@ use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Novactive\Bundle\eZMailingBundle\Form\CampaignType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -36,6 +37,7 @@ class CampaignController
 {
     /**
      * @Template()
+     * @Security("is_granted('view', campaign)")
      *
      * @return array
      */
@@ -65,6 +67,7 @@ class CampaignController
      * @Route("/show/subscriptions/{campaign}/{status}/{page}/{limit}", name="novaezmailing_campaign_subscriptions",
      *                                              defaults={"page":1, "limit":10, "status":"all"})
      * @Template()
+     * @Security("is_granted('view', campaign)")
      *
      * @return array
      */
@@ -91,6 +94,7 @@ class CampaignController
     /**
      * @Route("/show/mailings/{campaign}/{status}", name="novaezmailing_campaign_mailings")
      * @Template()
+     * @Security("is_granted('view', campaign)")
      *
      * @return array
      */
@@ -114,6 +118,7 @@ class CampaignController
     /**
      * @Route("/edit/{campaign}", name="novaezmailing_campaign_edit")
      * @Route("/create", name="novaezmailing_campaign_create")
+     * @Security("is_granted('edit', campaign)")
      * @Template()
      *
      * @return array|RedirectResponse
