@@ -62,6 +62,6 @@ class Mailing extends Voter
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
         /* @var MailingEntity $subject */
-        return $this->decisionManager->decide($token, $attribute, $subject->getCampaign());
+        return $this->decisionManager->decide($token, [$attribute], $subject->getCampaign());
     }
 }
