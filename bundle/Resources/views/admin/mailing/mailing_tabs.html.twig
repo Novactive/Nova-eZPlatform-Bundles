@@ -9,9 +9,14 @@
         <li class="nav-item">
             <a class="nav-link" href="#novaezmailing-mailings-preview" data-toggle="tab" role="tab">Campaign</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#novaezmailing-mailings-stats" data-toggle="tab" role="tab">Stats</a>
-        </li>
+        {% if item.broadcasts|length > 0 %}
+            <li class="nav-item">
+                <a class="nav-link" href="#novaezmailing-mailings-broadcasts" data-toggle="tab" role="tab">Broadcasts</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#novaezmailing-mailings-stats" data-toggle="tab" role="tab">Stats</a>
+            </li>
+        {% endif %}
     </ul>
     <div class="novaezmailing-tabs-content tab-content">
         <div class="novaezmailing-ez-campaign-view tab-pane active" role="tabpanel" id="novaezmailing-campaign-preview">
@@ -24,29 +29,32 @@
         <div class="novaezmailing-ez-mailings-view tab-pane" role="tabpanel" id="novaezmailing-mailings-preview">
             {% include "@NovaeZMailing/admin/campaign/details.html.twig" with { item: item.campaign} only %}
         </div>
-
-        <div class="novaezmailing-ez-mailings-view tab-pane" role="tabpanel" id="novaezmailing-mailings-stats">
+        {% if item.broadcasts|length > 0 %}
+            <div class="novaezmailing-ez-mailings-view tab-pane" role="tabpanel" id="novaezmailing-mailings-broadcasts">
+                {% include "@NovaeZMailing/admin/common/list/broadcasts.html.twig" with { items: item.broadcasts} only %}
+            </div>
             {% for broadcast in item.broadcasts %}
-                <div class="novaezmailing-broadcast-charts-group">
-                    <h3>Broadcasted on {{ broadcast.started|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</h3>
-                    <hr/>
-                    <div style="width: 600px; height: 300px; float: left">
-                        {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\ChartController::browserChart", {broadcastId: broadcast.id })) }}
+                <div class="novaezmailing-ez-mailings-view tab-pane" role="tabpanel" id="novaezmailing-mailings-stats">
+                    <div class="novaezmailing-broadcast-charts-group">
+                        <h3>Broadcasted on {{ broadcast.started|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</h3>
+                        <hr/>
+                        <div style="width: 600px; height: 300px; float: left">
+                            {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\ChartController::browserChart", {broadcastId: broadcast.id })) }}
+                        </div>
+                        <div style="width: 600px; height: 300px; float: left">
+                            {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\ChartController::osChart", {broadcastId: broadcast.id })) }}
+                        </div>
+                        <div style="width: 600px; height: 300px; float: left">
+                            {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\ChartController::urlChart", {broadcastId: broadcast.id })) }}
+                        </div>
+                        <div style="width: 600px; height: 300px; float: left">
+                            {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\ChartController::openedChart", {broadcastId: broadcast.id })) }}
+                        </div>
+                        <hr/>
                     </div>
-                    <div style="width: 600px; height: 300px; float: left">
-                        {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\ChartController::osChart", {broadcastId: broadcast.id })) }}
-                    </div>
-                    <div style="width: 600px; height: 300px; float: left">
-                        {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\ChartController::urlChart", {broadcastId: broadcast.id })) }}
-                    </div>
-                    <div style="width: 600px; height: 300px; float: left">
-                        {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\ChartController::openedChart", {broadcastId: broadcast.id })) }}
-                    </div>
-                    <hr/>
                 </div>
             {% endfor %}
-
-        </div>
+        {% endif %}
     </div>
     <div class="novaezmailing-button-actions float-right">
         <a type="button" {% if workflow_can(item,'edit') %} href="{{ path("novaezmailing_mailing_edit", {mailing: item.id}) }}" {% else %} disabled {% endif %} class="btn btn-sm btn-secondary">
