@@ -29,26 +29,15 @@ git clone git@github.com:Novactive/NovaeZMailingBundle.git
 cd NovaeZMailingBundle
 ```
 
-Change the parameters:
-
-```yaml
-# app/config/parameters.yml
-    env(DATABASE_DRIVER): pdo_mysql
-    env(DATABASE_HOST): 127.0.0.1
-    env(DATABASE_PORT): 3337
-    env(DATABASE_NAME): ezplatform
-    env(DATABASE_USER): root
-    env(DATABASE_PASSWORD): ezplatform
-```
-
 And then run
 
 ```bash
 composer create-project ezsystems/ezplatform --prefer-dist --no-progress --no-interaction --no-scripts
 curl -o tests/platform.sh/wrap.php https://raw.githubusercontent.com/Plopix/symfony-bundle-app-wrapper/master/wrap-bundle.php
-WRAP_APP_DIR=./ezplatform php tests/platform.sh/wrap.php
+WRAP_APP_DIR=./ezplatform WRAP_BUNDLE_DIR=./ php tests/platform.sh/wrap.php
 cd ezplatform
 composer update --lock
+bin/console doctrine:database:create
 bin/console ezplatform:install clean
 bin/console novaezmailing:install
 bin/console doctrine:fixtures:load --no-interaction
