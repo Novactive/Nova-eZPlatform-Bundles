@@ -1,0 +1,20 @@
+{% extends '@NovaeZMailing/admin/layout/pagelayout.html.twig' %}
+
+{% block novezmailing_breadcrumb %}
+    <ol class="breadcrumb px-4">
+        <li class="breadcrumb-item"><a href="{{ path("novaezmailing_dashboard_index") }}">Nova eZ Mailing</a></li>
+        <li class="breadcrumb-item active">Import</li>
+    </ol>
+{% endblock %}
+{% block novezmailing_title %}Import user{% endblock %}
+{% block novezmailing_subtitle %}{% endblock %}
+
+{% block content %}
+    {{ form_start(form, {attr: {class:'col-11', novaezmailing: 'mainform'}}) }}
+    {{ form(form) }}
+    {{ form_end(form) }}
+{% endblock %}
+{% block rightbar %}
+    {% set content_create_sidebar_right = knp_menu_get('novaezmailing.menu.save_cancel', [], {}) %}
+    {{ knp_menu_render(content_create_sidebar_right, {'template': '@EzPlatformAdminUi/parts/menu/sidebar_right.html.twig'}) }}
+{% endblock %}
