@@ -85,11 +85,12 @@ class Mailing extends Mailer
             $recipientCounts = 0;
             foreach ($campaign->getMailingLists() as $mailingList) {
                 foreach ($mailingList->getApprovedRegistrations() as $registration) {
-                    $contentMessage = $this->contentProvider->getContentMailing(
-                        $mailing,
-                        $registration->getUser(),
-                        $broadcast
-                    );
+                    $user = $registration->getUser();
+                    // send only to confirm and soft bounce
+                    if (!$user->isConfirmed() && !$user->isSoftBounce()) {
+                        continue;
+                    }
+                    $contentMessage = $this->contentProvider->getContentMailing($mailing, $user, $broadcast);
                     $this->sendMessage($contentMessage);
                     ++$recipientCounts;
 

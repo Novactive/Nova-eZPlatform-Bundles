@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
@@ -25,7 +25,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -90,6 +89,15 @@ class MailingController
      * @Template()
      * @Security("is_granted('edit', mailing)")
      *
+     * @param Mailing|null           $mailing
+     * @param Campaign|null          $campaign
+     * @param Request                $request
+     * @param RouterInterface        $router
+     * @param FormFactoryInterface   $formFactory
+     * @param EntityManagerInterface $entityManager
+     * @param Registry               $workflows
+     * @param TranslationHelper      $translationHelper
+     *
      * @return array|RedirectResponse
      */
     public function editAction(
@@ -98,7 +106,7 @@ class MailingController
         Request $request,
         RouterInterface $router,
         FormFactoryInterface $formFactory,
-        EntityManager $entityManager,
+        EntityManagerInterface $entityManager,
         Registry $workflows,
         TranslationHelper $translationHelper
     ) {
@@ -140,13 +148,19 @@ class MailingController
      * @Route("/abort/{mailing}",   name="novaezmailing_mailing_cancel")
      * @Security("is_granted('view', mailing)")
      *
-     * @return JsonResponse
+     * @param Request                $request
+     * @param Mailing                $mailing
+     * @param RouterInterface        $router
+     * @param EntityManagerInterface $entityManager
+     * @param Registry               $workflows
+     *
+     * @return RedirectResponse
      */
     public function confirmAction(
         Request $request,
         Mailing $mailing,
         RouterInterface $router,
-        EntityManager $entityManager,
+        EntityManagerInterface $entityManager,
         Registry $workflows
     ): RedirectResponse {
         $action  = substr($request->get('_route'), \strlen('novaezmailing_mailing_'));

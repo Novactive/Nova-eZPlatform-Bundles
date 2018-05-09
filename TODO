@@ -2,11 +2,15 @@
 
 - import/export XLS => 7h
 
-
+- inject the campaign object dans la view
 
 - gestion inscription/desinscription (email validation etc.) => 10h
 
-- permissions campaign over sitaccess
+
+
+add/edit mailinglist
+
+
 
 - bounce => xx hours
 - tests de ouf

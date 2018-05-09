@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -41,12 +41,16 @@ class DashboardController
     /**
      * @Route("/search/autocomplete", name="novaezmailing_dashboard_search_autocomplete")
      *
+     * @param Request                $request
+     * @param RouterInterface        $router
+     * @param EntityManagerInterface $entityManager
+     *
      * @return JsonResponse
      */
     public function autocompleteSearchAction(
         Request $request,
         RouterInterface $router,
-        EntityManager $entityManager
+        EntityManagerInterface $entityManager
     ): JsonResponse {
         if (!$request->isXmlHttpRequest()) {
             return new JsonResponse('Not Authorized', 403);

@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Core\Provider;
 
 use Carbon\Carbon;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZMailingBundle\Entity\Broadcast as BroadcastEntity;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 
@@ -23,16 +23,16 @@ use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 class Broadcast
 {
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     private $entityManager;
 
     /**
      * Broadcast constructor.
      *
-     * @param EntityManager $entityManager
+     * @param EntityManagerInterface $entityManager
      */
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
     }

@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Menu;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
@@ -80,11 +80,12 @@ class Builder
     }
 
     /**
-     * @param RequestStack $requestStack
+     * @param RequestStack           $requestStack
+     * @param EntityManagerInterface $entityManager
      *
      * @return ItemInterface
      */
-    public function createCampaignMenu(RequestStack $requestStack, EntityManager $entityManager): ItemInterface
+    public function createCampaignMenu(RequestStack $requestStack, EntityManagerInterface $entityManager): ItemInterface
     {
         $menu = $this->factory->createItem('root');
         $repo = $entityManager->getRepository(Campaign::class);

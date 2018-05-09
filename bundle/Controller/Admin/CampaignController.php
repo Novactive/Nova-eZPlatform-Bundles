@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use EzSystems\EzPlatformAdminUi\Tab\LocationView\ContentTab;
@@ -96,9 +96,13 @@ class CampaignController
      * @Template()
      * @Security("is_granted('view', campaign)")
      *
+     * @param Campaign               $campaign
+     * @param EntityManagerInterface $entityManager
+     * @param string                 $status
+     *
      * @return array
      */
-    public function mailingsAction(Campaign $campaign, EntityManager $entityManager, string $status): array
+    public function mailingsAction(Campaign $campaign, EntityManagerInterface $entityManager, string $status): array
     {
         $repo    = $entityManager->getRepository(Mailing::class);
         $results = $repo->findByFilters(
@@ -121,13 +125,20 @@ class CampaignController
      * @Security("is_granted('edit', campaign)")
      * @Template()
      *
+     * @param Campaign|null          $campaign
+     * @param Request                $request
+     * @param RouterInterface        $router
+     * @param EntityManagerInterface $entityManager
+     * @param FormFactoryInterface   $formFactory
+     * @param TranslationHelper      $translationHelper
+     *
      * @return array|RedirectResponse
      */
     public function editAction(
         ?Campaign $campaign,
         Request $request,
         RouterInterface $router,
-        EntityManager $entityManager,
+        EntityManagerInterface $entityManager,
         FormFactoryInterface $formFactory,
         TranslationHelper $translationHelper
     ) {

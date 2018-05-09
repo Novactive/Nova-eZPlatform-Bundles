@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Core;
 
 use Doctrine\Common\Persistence\Proxy;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Csrf\CsrfToken;
@@ -30,7 +30,7 @@ class AjaxGuard
     private $csrfTokenManager;
 
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     private $entityManager;
 
@@ -38,9 +38,9 @@ class AjaxGuard
      * AjaxGuard constructor.
      *
      * @param CsrfTokenManagerInterface $csrfTokenManager
-     * @param EntityManager             $entityManager
+     * @param EntityManagerInterface    $entityManager
      */
-    public function __construct(CsrfTokenManagerInterface $csrfTokenManager, EntityManager $entityManager)
+    public function __construct(CsrfTokenManagerInterface $csrfTokenManager, EntityManagerInterface $entityManager)
     {
         $this->csrfTokenManager = $csrfTokenManager;
         $this->entityManager    = $entityManager;

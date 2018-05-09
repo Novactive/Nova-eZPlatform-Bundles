@@ -1,0 +1,13 @@
+{% extends pagelayout %}
+
+{% block content %}
+    {% if form is defined %}
+        {{ form_start(form) }}
+        {{ form_row(form.user) }}
+        {{ form_row(form.mailingLists) }}
+        <input type="submit" value="Register" name="Register"/>
+        {{ form_end(form) }}
+    {% else %}
+        <p>You are going to receive an email to confirm your registration.</p>
+    {% endif %}
+{% endblock %}

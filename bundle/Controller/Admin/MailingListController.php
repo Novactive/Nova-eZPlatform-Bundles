@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZMailingBundle\Core\Provider\User as UserProvider;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -56,9 +56,11 @@ class MailingListController
      * @Route("", name="novaezmailing_mailinglist_index")
      * @Template()
      *
+     * @param EntityManagerInterface $entityManager
+     *
      * @return array
      */
-    public function indexAction(EntityManager $entityManager): array
+    public function indexAction(EntityManagerInterface $entityManager): array
     {
         $repo = $entityManager->getRepository(MailingList::class);
 

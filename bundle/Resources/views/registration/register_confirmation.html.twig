@@ -1,0 +1,10 @@
+{% extends pagelayout %}
+
+{% block content %}
+
+    {% if isConfirmed %}
+        <p>Registration Confirmed.</p>
+    {% else %}
+        <p>This url is not valid anymore, your registration was not confirmed.</p>
+    {% endif %}
+{% endblock %}

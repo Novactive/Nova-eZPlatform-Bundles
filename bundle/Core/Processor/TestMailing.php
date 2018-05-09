@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Processor;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZMailingBundle\Core\Mailer\Mailing as MailingMailer;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 
@@ -22,7 +22,7 @@ use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 class TestMailing extends Processor
 {
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     private $entityManager;
 
@@ -34,10 +34,10 @@ class TestMailing extends Processor
     /**
      * SendMailingCommand constructor.
      *
-     * @param EntityManager $entityManager
-     * @param MailingMailer $mailingMailer
+     * @param EntityManagerInterface $entityManager
+     * @param MailingMailer          $mailingMailer
      */
-    public function __construct(EntityManager $entityManager, MailingMailer $mailingMailer)
+    public function __construct(EntityManagerInterface $entityManager, MailingMailer $mailingMailer)
     {
         $this->entityManager = $entityManager;
         $this->mailingMailer = $mailingMailer;

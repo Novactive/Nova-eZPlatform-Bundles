@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Core\Processor;
 
 use Carbon\Carbon;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZMailingBundle\Core\Mailer\Mailing as MailingMailer;
 use Novactive\Bundle\eZMailingBundle\Core\Utils\Clock;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
@@ -25,7 +25,7 @@ use Symfony\Component\Workflow\Registry;
 class SendMailing extends Processor
 {
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     private $entityManager;
 
@@ -42,12 +42,15 @@ class SendMailing extends Processor
     /**
      * SendMailingCommand constructor.
      *
-     * @param EntityManager $entityManager
-     * @param MailingMailer $mailingMailer
-     * @param Registry      $workflows
+     * @param EntityManagerInterface $entityManager
+     * @param MailingMailer          $mailingMailer
+     * @param Registry               $workflows
      */
-    public function __construct(EntityManager $entityManager, MailingMailer $mailingMailer, Registry $workflows)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        MailingMailer $mailingMailer,
+        Registry $workflows
+    ) {
         $this->entityManager = $entityManager;
         $this->mailingMailer = $mailingMailer;
         $this->workflows     = $workflows;

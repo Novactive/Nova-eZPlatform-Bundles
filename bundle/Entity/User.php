@@ -45,7 +45,7 @@ class User
     const PENDING = 'pending';
 
     /**
-     * Did not confirmed the confirmation email.
+     * Did confirme the confirmation email.
      */
     const CONFIRMED = 'confirmed';
 
@@ -203,12 +203,6 @@ class User
      * )
      */
     private $registrations;
-
-    /**
-     * @var string
-     * @ORM\Column(name="USER_confirmation_token", type="string", length=255, nullable=true)
-     */
-    private $confirmationToken;
 
     /**
      * @return int
@@ -646,25 +640,5 @@ class User
     public function isHardBounce(): bool
     {
         return self::HARD_BOUNCE === $this->status;
-    }
-
-    /**
-     * @return string
-     */
-    public function getConfirmationToken(): string
-    {
-        return $this->confirmationToken;
-    }
-
-    /**
-     * @param string $confirmationToken
-     *
-     * @return User
-     */
-    public function setConfirmationToken(?string $confirmationToken = null): self
-    {
-        $this->confirmationToken = $confirmationToken;
-
-        return $this;
     }
 }

@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZMailingBundle\Core\Utils\ChartDataBuilder;
 use Novactive\Bundle\eZMailingBundle\Entity\Broadcast;
 use Novactive\Bundle\eZMailingBundle\Entity\StatHit;
@@ -24,14 +24,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class ChartController
 {
     /**
-     * @param int           $broadcastId
-     * @param EntityManager $entityManager
+     * @param int                    $broadcastId
+     * @param EntityManagerInterface $entityManager
      *
      * @Template("NovaeZMailingBundle:admin/chart:generic.html.twig")
      *
      * @return array
      */
-    public function browserChart(int $broadcastId, EntityManager $entityManager): array
+    public function browserChart(int $broadcastId, EntityManagerInterface $entityManager): array
     {
         $repo = $entityManager->getRepository(Broadcast::class);
         /** @var Broadcast $item */
@@ -46,14 +46,14 @@ class ChartController
     }
 
     /**
-     * @param int           $broadcastId
-     * @param EntityManager $entityManager
+     * @param int                    $broadcastId
+     * @param EntityManagerInterface $entityManager
      *
      * @Template("NovaeZMailingBundle:admin/chart:generic.html.twig")
      *
      * @return array
      */
-    public function osChart(int $broadcastId, EntityManager $entityManager): array
+    public function osChart(int $broadcastId, EntityManagerInterface $entityManager): array
     {
         $repo = $entityManager->getRepository(Broadcast::class);
         /** @var Broadcast $item */
@@ -69,14 +69,14 @@ class ChartController
     }
 
     /**
-     * @param int           $broadcastId
-     * @param EntityManager $entityManager
+     * @param int                    $broadcastId
+     * @param EntityManagerInterface $entityManager
      *
      * @Template("NovaeZMailingBundle:admin/chart:generic.html.twig")
      *
      * @return array
      */
-    public function urlChart(int $broadcastId, EntityManager $entityManager): array
+    public function urlChart(int $broadcastId, EntityManagerInterface $entityManager): array
     {
         $repo = $entityManager->getRepository(Broadcast::class);
         /** @var Broadcast $item */
@@ -92,14 +92,14 @@ class ChartController
     }
 
     /**
-     * @param int           $broadcastId
-     * @param EntityManager $entityManager
+     * @param int                    $broadcastId
+     * @param EntityManagerInterface $entityManager
      *
      * @Template("NovaeZMailingBundle:admin/chart:generic.html.twig")
      *
      * @return array
      */
-    public function openedChart(int $broadcastId, EntityManager $entityManager): array
+    public function openedChart(int $broadcastId, EntityManagerInterface $entityManager): array
     {
         $repo = $entityManager->getRepository(Broadcast::class);
         /** @var Broadcast $item */

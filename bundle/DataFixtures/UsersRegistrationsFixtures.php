@@ -45,7 +45,6 @@ class UsersRegistrationsFixtures extends Fixture implements DependentFixtureInte
                 ->setPhone($faker->phoneNumber)
                 ->setState($faker->state)
                 ->setZipcode($faker->postcode)
-                ->setConfirmationToken($faker->boolean(30) ? uniqid('token', true) : null)
                 ->setStatus($faker->randomElement(User::STATUSES))
                 ->setOrigin($faker->randomElement(['site', 'import']));
 

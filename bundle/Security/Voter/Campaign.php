@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Security\Voter;
 
 use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\Core\MVC\Symfony\Security\User;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign as CampaignEntity;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -71,10 +70,6 @@ class Campaign extends Voter
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
-        if (!$user instanceof User) {
-            return false;
-        }
-
         /* @var CampaignEntity $subject */
         switch ($attribute) {
             case self::VIEW:
@@ -88,11 +83,11 @@ class Campaign extends Voter
 
     /**
      * @param CampaignEntity $subject
-     * @param User           $user
+     * @param mixed          $user
      *
      * @return bool
      */
-    private function canView(CampaignEntity $subject, User $user): bool
+    private function canView(CampaignEntity $subject, $user): bool
     {
         $siteaccessLimist = $subject->getSiteaccessLimit();
         // if no limit then we vote OK
@@ -110,11 +105,11 @@ class Campaign extends Voter
 
     /**
      * @param CampaignEntity $subject
-     * @param User           $user
+     * @param mixed          $user
      *
      * @return bool
      */
-    private function canEdit(CampaignEntity $subject, User $user): bool
+    private function canEdit(CampaignEntity $subject, $user): bool
     {
         return $this->canView($subject, $user);
     }

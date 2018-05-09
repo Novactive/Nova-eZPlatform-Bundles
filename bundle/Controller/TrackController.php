@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZMailingBundle\Core\Utils\Browser;
 use Novactive\Bundle\eZMailingBundle\Entity\StatHit;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -32,12 +32,20 @@ class TrackController
 
     /**
      * @Route("/continue/{salt}/{broadcastId}/{url}", name="novaezmailing_t_continue")
+     *
+     * @param string                 $salt
+     * @param int                    $broadcastId
+     * @param string                 $url
+     * @param EntityManagerInterface $entityManager
+     * @param Request                $request
+     *
+     * @return RedirectResponse
      */
     public function continueAction(
         string $salt,
         int $broadcastId,
         string $url,
-        EntityManager $entityManager,
+        EntityManagerInterface $entityManager,
         Request $request
     ): RedirectResponse {
         $broadcast  = $entityManager->getRepository('NovaeZMailingBundle:Broadcast')->findOneByid($broadcastId);
@@ -57,11 +65,18 @@ class TrackController
 
     /**
      * @Route("/read/{salt}/{broadcastId}", name="novaezmailing_t_read")
+     *
+     * @param string                 $salt
+     * @param int                    $broadcastId
+     * @param EntityManagerInterface $entityManager
+     * @param Request                $request
+     *
+     * @return Response
      */
     public function readAction(
         string $salt,
         int $broadcastId,
-        EntityManager $entityManager,
+        EntityManagerInterface $entityManager,
         Request $request
     ): Response {
         $broadcast = $entityManager->getRepository('NovaeZMailingBundle:Broadcast')->findOneByid($broadcastId);
