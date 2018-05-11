@@ -74,6 +74,7 @@ class MailingContent
                 [
                     'locationId' => $mailing->getLocation()->id,
                     'contentId'  => $mailing->getContent()->id,
+                    'mailingId'  => $mailing->getId(),
                 ]
             )
         );

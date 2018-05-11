@@ -15,7 +15,7 @@
             <td>
                 <img src="{{ asset("/bundles/novaezmailing/admin/images/16x16/"~item.status~".png") }}" class="nova-icon"/> {{ item.status }}
             </td>
-            <th>
+            <td>
                 {% if workflow_can(item,'edit') %}
                     <a href="{{ path('novaezmailing_mailing_edit', {mailing: item.id}) }}" class="edit-button">
                         <svg class="ez-icon">
@@ -29,7 +29,12 @@
                         </svg>
                     </a>
                 {% endif %}
-            </th>
+                <a href="{{ path('_novaezmailing_ez_content_view', { locationId: item.location.id, contentId: item.content.id, mailingId: item.id }) }}" class="edit-button">
+                    <svg class="ez-icon">
+                        <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#view"></use>
+                    </svg>
+                </a>
+            </td>
         </tr>
 
     {% endfor %}

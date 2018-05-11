@@ -2,11 +2,7 @@
 
 - import/export XLS => 7h
 
-- inject the campaign object dans la view
-
 - gestion inscription/desinscription (email validation etc.) => 10h
-
-
 
 add/edit mailinglist
 

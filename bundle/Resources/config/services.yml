@@ -69,6 +69,10 @@ services:
         tags:
             - { name: kernel.event_listener, event: workflow.mailing.leave }
 
+    Novactive\Bundle\eZMailingBundle\Listener\PreContentView:
+        tags:
+            - { name: kernel.event_listener, event: ezpublish.pre_content_view, method: onPreContentView }
+
     # Mailers
     Novactive\Bundle\eZMailingBundle\Core\Mailer\Factory: ~
 
