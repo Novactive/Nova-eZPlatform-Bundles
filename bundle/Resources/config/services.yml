@@ -101,4 +101,7 @@ services:
         calls:
             - [ setAnnotationReader, [ "@annotation_reader" ] ]
 
-
+    # Import
+    novaezmailing.import.importer:
+        class: Novactive\Bundle\eZMailingBundle\Core\Import\Importer
+        arguments: ["@doctrine.orm.entity_manager"]

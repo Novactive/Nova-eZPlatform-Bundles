@@ -33,7 +33,7 @@
                    data-content="
                         {% if item.birthDate is not empty %}<p><strong>Birth date</strong>: {{ item.birthDate|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date)|default('') }}</p>{% endif %}
                         {% if item.phone is not empty %}<p><strong>Phone</strong>: {{ item.phone }}</p>{% endif %}
-                        {% if item.zipcode is not empty or item.city is not empty or item.city is not empty or state is not empty %}<p><strong>Location</strong>:{{ item.zipcode }} {{ item.city }} {{ item.state }}</p>{% endif %}
+                        {% if item.zipcode is not empty or item.city is not empty or item.city is not empty or item.state is not empty %}<p><strong>Location</strong>:{{ item.zipcode }} {{ item.city }} {{ item.state }}</p>{% endif %}
                         {% if item.jobTitle is not empty or item.company is not empty %}<p><strong>Job</strong>: {{ item.jobTitle }} {{ item.company }}</p>{% endif %}
                    "
                    data-html="true"

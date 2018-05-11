@@ -1,21 +1,24 @@
 <?php
+/**
+ * NovaeZMailingBundle Bundle.
+ *
+ * @package   Novactive\Bundle\eZMailingBundle
+ *
+ * @author    Novactive <j.canat@novactive.com>
+ * @copyright 2018 Novactive
+ * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
+ */
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
-use Doctrine\ORM\EntityManager;
-use eZ\Publish\Core\Helper\TranslationHelper;
-use Novactive\Bundle\eZMailingBundle\Entity\User;
+use Novactive\Bundle\eZMailingBundle\Core\Import\Importer;
 use Novactive\Bundle\eZMailingBundle\Form\ImportType;
-use PhpOffice\PhpSpreadsheet\IOFactory;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\Form\Form;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Class UserController.
@@ -24,132 +27,51 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class ImportController
 {
+
     /**
      * @Route("/user", name="novaezmailing_import_user")
      * @Template("@NovaeZMailing/admin/import/user.html.twig")
      * @param Request $request
-     * @param RouterInterface $router
-     * @param EntityManager $entityManager
      * @param FormFactoryInterface $formFactory
-     * @param TranslationHelper $translationHelper
+     * @param Importer $importer
      * @return array
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      */
     public function userAction(
         Request $request,
-        RouterInterface $router,
-        EntityManager $entityManager,
         FormFactoryInterface $formFactory,
-        TranslationHelper $translationHelper
+        Importer $importer
     )
     {
         $form = $formFactory->create(ImportType::class, null);
         $form->handleRequest($request);
+        $count = 0;
 
-        if( $form->isSubmitted() && $form->isValid() ) {
+        if( $form->isSubmitted() ) {
             /** @var UploadedFile $file */
             $file = $form->get('file')->getData();
-            $spreadsheet = IOFactory::load($file->getPathname());
-            $worksheet = $spreadsheet->getActiveSheet();
-            $rows = [];
-            $headers  = [];
-            foreach($worksheet->getRowIterator() as $row) {
-                $cells = [];
-                $cellIterator = $row->getCellIterator();
-                $cellIterator->setIterateOnlyExistingCells(false);
-                foreach($cellIterator as $cell) {
-                    $cells[] = $cell->getValue();
-                }
-                if(count($headers) == 0) {
-                    $headers = $cells;
-                } else {
-                    $rows[] = array_combine($headers, $cells);
-                }
-            }
-            foreach($rows as $row) {
-                /** @var Form $form */
-                $errors = $this->checkUserData($entityManager, $form, $row);
+            $form = $importer->checkFileExtension($form, $file);
 
-                if( !$errors  ) {
-                    $user = new User();
-                    $email = isset($row['email']) ? filter_var($row['email'], FILTER_SANITIZE_EMAIL) : '' ;
-                    $user->setEmail($email);
-                    $user->setFirstName(isset($row['firstName']) ? $row['firstName'] : '');
-                    $user->setLastName(isset($row['lastName']) ? $row['lastName'] : '');
-                    $user->setGender(isset($row['gender']) ? $row['gender'] : '');
-                    $dob = new \DateTime(isset($row['birthDate']) ? $row['birthDate'] : '' );
-                    $user->setBirthDate($dob);
-                    $user->setPhone(isset($row['phone']) ? $row['phone'] : '');
-                    $user->setCity(isset($row['city']) ? $row['city'] : '');
-                    $user->setState(isset($row['state']) ? $row['state'] : '');
-                    $user->setOrigin(isset($row['origin']) ? $row['origin'] : '');
-                    $user->setStatus(isset($row['status']) ? $row['status'] : '');
-                    $user->setRestricted(isset($row['restricted']) ? (bool)$row['restricted'] : false);
-                    $user->setConfirmationToken(isset($row['confirmationToken']) ? $row['confirmationToken'] : '');
-
-                    $entityManager->persist($user);
-                    $entityManager->flush();
+            if( $form->isValid() ) {
+                $rows = $importer->getRawData($file);
+                foreach ($rows as $row) {
+                    $errors = $importer->checkUserData($form, $row);
+                    if ( !$errors ) {
+                        $user = $importer->createUser($row);
+                        if( $user->getId() > 0 ) {
+                            ++$count;
+                        }
+                    }
                 }
             }
         }
+
         return [
-            'item' => null,
+            'count' => $count,
             'form' => $form->createView()
         ];
-    }
-
-    /**
-     * @param EntityManager $entityManager
-     * @param Form $form
-     * @param array $data
-     * @return bool
-     */
-    public function checkUserData(EntityManager $entityManager, Form $form, array $data) : bool
-    {
-        $errors = [];
-        $statuses = User::STATUSES;
-        $email = isset($data['email']) ? $data['email'] : '';
-        $isError = false;
-        if(strlen($email) == 0 ) {
-            $isError = true;
-            $errors[] = 'The email is empty ';
-            $form->addError(new FormError('The email is empty '));
-        } elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $isError = true;
-            $errors[] = 'The email "'.$email.'" is invalid';
-            $form->addError(new FormError('The email "'.$email.'" is invalid'));
-        } else {
-            $repo = $entityManager->getRepository(User::class);
-            if ($repo->isAlreadyExist($email)) {
-                $isError = true;
-                $errors[] = 'This email ' . $email . ' is already used.';
-                $form->addError(new FormError('This email ' . $email . ' is already used.'));
-            }
-        }
-        $origin = isset($data['origin']) ? $data['origin'] : '';
-        if( empty($origin) ) {
-            $isError = true;
-            $errors[] = 'For the user of '. $email . ', the origin field is mandatory';
-            $form->addError( new FormError('For the user of '. $email . ', the origin field is mandatory'));
-        }
-        $status = isset($data['status']) ? $data['status'] : '';
-        if( empty($status) ) {
-            $isError = true;
-            $errors[] = 'For the user of  '. $email . ', the status field is mandatory';
-            $form->addError( new FormError('For the user of  '. $email . ', the status field is mandatory'));
-        } elseif( !in_array($status, $statuses) ) {
-            $isError = true;
-            $errors[] = 'For the user of '. $email. ', the status ' .$status. ' is invalid';
-            $form->addError(new FormError('For the user of '. $email. ', the status "' .$status. '" is invalid') );
-        }
-        $restricted = isset($data['restricted']) ? (bool)$data['restricted'] : null;
-        if( is_null($restricted) ) {
-            $isError = true;
-            $errors[] = 'For the user of '. $email . ', the restricted field is mandatory';
-            $form->addError( new FormError('For the user of '. $email . ', the restricted field is mandatory'));
-        }
-
-        return $isError;
     }
 }

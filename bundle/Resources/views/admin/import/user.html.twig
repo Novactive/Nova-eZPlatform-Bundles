@@ -10,6 +10,11 @@
 {% block novezmailing_subtitle %}{% endblock %}
 
 {% block content %}
+    {% if count is defined and count > 0 %}
+    <div class="success">
+        {{ count }} user(s) imported
+    </div>
+    {% endif %}
     {{ form_start(form, {attr: {class:'col-11', novaezmailing: 'mainform'}}) }}
     {{ form(form) }}
     {{ form_end(form) }}
