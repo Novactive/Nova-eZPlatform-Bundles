@@ -1,6 +1,7 @@
 {% set withRegistrations = withRegistrations is defined ? withRegistrations : true %}
 {% set withStatus = withStatus is defined ? withStatus : true %}
 {% import "@NovaeZMailing/admin/common/registration_approbation_button.html.twig" as ApprobationButton %}
+
 <table class="table table-striped table-hover table-sm">
     <thead>
     <tr>
@@ -59,24 +60,28 @@
             {% endif %}
             {% if withRegistrations %}
                 <td>
-                    <table class="table table-striped table-hover table-sm">
-                        <tr>
-                            <th class="text-center">Mailing List</th>
-                            <th align="center">Approbation</th>
-                            <th align="center">Updated</th>
-                            <th align="center">Created</th>
-                        </tr>
-                        {% for registration in item.registrations %}
+                    {% if item.registrations|length > 0 %}
+                        <table class="table table-striped table-hover table-sm">
                             <tr>
-                                <td>
-                                    <a href="{{ path('novaezmailing_mailinglist_show',{mailingList:registration.mailinglist.id}) }}">{{ registration.mailinglist.name }}</a>
-                                </td>
-                                <td align="center">{{ ApprobationButton.show(registration) }}</td>
-                                <td align="center">{{ registration.updated|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
-                                <td align="center">{{ registration.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                                <th class="text-center">Mailing List</th>
+                                <th align="center">Approbation</th>
+                                <th align="center">Updated</th>
+                                <th align="center">Created</th>
                             </tr>
-                        {% endfor %}
-                    </table>
+                            {% for registration in item.registrations %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ path('novaezmailing_mailinglist_show',{mailingList:registration.mailinglist.id}) }}">{{ registration.mailinglist.name }}</a>
+                                    </td>
+                                    <td align="center">{{ ApprobationButton.show(registration) }}</td>
+                                    <td align="center">{{ registration.updated|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                                    <td align="center">{{ registration.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% else %}
+                        No registrations.
+                    {% endif %}
                 </td>
             {% endif %}
         </tr>

@@ -12,25 +12,41 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Command;
 
+use Novactive\Bundle\eZMailingBundle\Core\Registrar;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Class InstallCommand.
+ * Class CleanupCommand.
  */
-class InstallCommand extends Command
+class CleanupCommand extends Command
 {
+    /**
+     * @var Registrar
+     */
+    private $registrar;
+
+    /**
+     * CleanupCommand constructor.
+     *
+     * @param Registrar $entityManager
+     */
+    public function __construct(Registrar $registrar)
+    {
+        parent::__construct();
+        $this->registrar = $registrar;
+    }
+
     /**
      * {@inheritdoc}
      */
     protected function configure(): void
     {
         $this
-            ->setName('novaezmailing:install')
-            ->setDescription('Install what necessary in the DB');
+            ->setName('novaezmailing:cleanup')
+            ->setDescription('Clean expired items');
     }
 
     /**
@@ -39,16 +55,8 @@ class InstallCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-        $io->title('Update the Database with Custom Nova eZ Mailing Table');
-        $command    = $this->getApplication()->find('doctrine:schema:update');
-        $arguments  = [
-            'command'    => 'doctrine:schema:update',
-            '--dump-sql' => true,
-            '--force'    => true,
-        ];
-        $arrayInput = new ArrayInput($arguments);
-        $command->run($arrayInput, $output);
-
+        $io->title('Remove the expired ConfirmationToken');
+        $this->registrar->cleanup();
         $io->success('Done.');
     }
 }

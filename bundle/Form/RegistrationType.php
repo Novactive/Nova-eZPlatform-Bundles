@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Form;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Novactive\Bundle\eZMailingBundle\Core\DataHandler\Registration;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -21,7 +20,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
@@ -87,18 +85,6 @@ class RegistrationType extends AbstractType
                         ]
                     );
             }
-        );
-    }
-
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults(
-            [
-                'data_class' => Registration::class,
-            ]
         );
     }
 }

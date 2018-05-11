@@ -14,9 +14,11 @@ namespace Novactive\Bundle\eZMailingBundle\Core;
 
 use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Novactive\Bundle\eZMailingBundle\Core\DataHandler\Registration;
+use Novactive\Bundle\eZMailingBundle\Core\DataHandler\Unregistration;
 use Novactive\Bundle\eZMailingBundle\Entity\ConfirmationToken;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
 use Novactive\Bundle\eZMailingBundle\Entity\Registration as RegistrationEntity;
@@ -74,8 +76,43 @@ class Registrar
             $this->entityManager->flush();
         }
 
+        $this->createConfirmationToken(ConfirmationToken::REGISTER, $fetchUser, $registration->getMailingLists());
+
+        //@todo: send the email to get confirmation
+    }
+
+    /**
+     * @param Unregistration $unregistration
+     */
+    public function askForUnregisterConfirmation(Unregistration $unregistration): bool
+    {
+        $user = $unregistration->getUser();
+        if (null === $user) {
+            throw new RuntimeException('User cannot be empty.');
+        }
+        $userRepo  = $this->entityManager->getRepository(User::class);
+        $fetchUser = $userRepo->findOneByEmail($user->getEmail());
+
+        if (!$fetchUser instanceof User) {
+            return false;
+        }
+
+        $this->createConfirmationToken(ConfirmationToken::UNREGISTER, $fetchUser, $unregistration->getMailingLists());
+
+        //@todo: send the email to get confirmation
+
+        return true;
+    }
+
+    /**
+     * @param string          $action
+     * @param User            $user
+     * @param ArrayCollection $mailingLists
+     */
+    private function createConfirmationToken(string $action, User $user, ArrayCollection $mailingLists): void
+    {
         /** @var ArrayCollection $mailingListIds */
-        $mailingListIds = $registration->getMailingLists()->map(
+        $mailingListIds = $mailingLists->map(
             function (MailingList $mailingList) {
                 return $mailingList->getId();
             }
@@ -84,15 +121,13 @@ class Registrar
         $confirmationToken = new ConfirmationToken();
         $confirmationToken->setPayload(
             [
-                'action'         => ConfirmationToken::REGISTER,
-                'userId'         => $fetchUser->getId(),
+                'action'         => $action,
+                'userId'         => $user->getId(),
                 'mailingListIds' => $mailingListIds->toArray(),
             ]
         );
         $this->entityManager->persist($confirmationToken);
         $this->entityManager->flush();
-
-        //@todo: send the email to get confirmation
     }
 
     /**
@@ -107,7 +142,7 @@ class Registrar
         }
 
         ['action' => $action, 'userId' => $userId, 'mailingListIds' => $mailingListIds] = $token->getPayload();
-        if ('register' !== $action) {
+        if (!\in_array($action, [ConfirmationToken::REGISTER, ConfirmationToken::UNREGISTER])) {
             return false;
         }
         $mailingListRepo = $this->entityManager->getRepository(MailingList::class);
@@ -116,25 +151,54 @@ class Registrar
         if (!$user instanceof User) {
             return false;
         }
+
         foreach ($mailingListIds as $id) {
             $mailingList = $mailingListRepo->findOneById($id);
             if (!$mailingList instanceof MailingList) {
                 continue;
             }
-            $registration = new RegistrationEntity();
-            $registration->setApproved(!$mailingList->isWithApproval());
-            $registration->setMailingList($mailingList);
-            $user->addRegistration($registration);
+
+            if (ConfirmationToken::REGISTER == $action) {
+                $registration = new RegistrationEntity();
+                $registration->setApproved(!$mailingList->isWithApproval());
+                $registration->setMailingList($mailingList);
+                $user->addRegistration($registration);
+            }
+
+            if (ConfirmationToken::UNREGISTER == $action) {
+                $currentRegistrations = $user->getRegistrations();
+                foreach ($currentRegistrations as $registration) {
+                    if ($registration->getMailingList()->getId() === $id) {
+                        $user->removeRegistration($registration);
+                    }
+                }
+            }
         }
 
+        // in any case we can confirm the email here
         if ($user->isPending()) {
             $user->setStatus(User::CONFIRMED);
         }
 
         $this->entityManager->remove($token);
-
         $this->entityManager->flush();
 
         return true;
+    }
+
+    /**
+     * Clean the ConfirmationToken expired records.
+     */
+    public function cleanup(): void
+    {
+        $repo     = $this->entityManager->getRepository(ConfirmationToken::class);
+        $criteria = new Criteria();
+        $criteria->where(Criteria::expr()->lt('created', Carbon::now()->subHours(static::TOKEN_EXPIRATION_HOURS)));
+        $results = $repo->matching($criteria);
+
+        foreach ($results as $result) {
+            $this->entityManager->remove($result);
+        }
+        $this->entityManager->flush();
     }
 }

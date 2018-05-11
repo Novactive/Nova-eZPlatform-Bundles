@@ -603,6 +603,18 @@ class User
     }
 
     /**
+     * @param Registration $registration
+     *
+     * @return User
+     */
+    public function removeRegistration(Registration $registration): self
+    {
+        $this->registrations->removeElement($registration);
+
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function isConfirmed(): bool

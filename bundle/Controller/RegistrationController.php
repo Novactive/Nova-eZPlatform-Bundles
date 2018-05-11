@@ -14,6 +14,7 @@ namespace Novactive\Bundle\eZMailingBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
 use Novactive\Bundle\eZMailingBundle\Core\DataHandler\Registration;
+use Novactive\Bundle\eZMailingBundle\Core\DataHandler\Unregistration;
 use Novactive\Bundle\eZMailingBundle\Core\Registrar;
 use Novactive\Bundle\eZMailingBundle\Entity\ConfirmationToken;
 use Novactive\Bundle\eZMailingBundle\Form\RegistrationType;
@@ -106,13 +107,54 @@ class RegistrationController
         ];
     }
 
-    public function unregisterAction(): array
+    /**
+     * @Route("/unregister", name="novaezmailing_registration_remove")
+     *
+     * @Template()
+     *
+     * @param Request              $request
+     * @param FormFactoryInterface $formFactory
+     *
+     * @return array
+     */
+    public function unregisterAction(Request $request, FormFactoryInterface $formFactory): array
     {
-        return [];
+        $params = [
+            'pagelayout' => $this->getPagelayout(),
+            'title'      => 'Unregister to Mailing Lists',
+        ];
+
+        $unregistration = new Unregistration();
+
+        $form = $formFactory->create(RegistrationType::class, $unregistration);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($this->registrar->askForUnregisterConfirmation($unregistration)) {
+                return $params;
+            }
+        }
+
+        $params += [
+            'form' => $form->createView(),
+        ];
+
+        return $params;
     }
 
-    public function unregisterConfirmationAction(): array
+    /**
+     * @Route("/unregister/confirm/{id}", name="novaezmailing_unregistration_confirm")
+     *
+     * @Template()
+     *
+     * @return array
+     */
+    public function unregisterConfirmationAction(ConfirmationToken $token): array
     {
-        return [];
+        return [
+            'pagelayout'  => $this->getPagelayout(),
+            'title'       => 'Confirm unregistration to Mailing Lists',
+            'isConfirmed' => $this->registrar->confirm($token),
+        ];
     }
 }

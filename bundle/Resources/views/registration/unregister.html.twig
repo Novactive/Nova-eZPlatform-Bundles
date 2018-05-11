@@ -1,0 +1,13 @@
+{% extends pagelayout %}
+
+{% block content %}
+    {% if form is defined %}
+        {{ form_start(form) }}
+        {{ form_row(form.user) }}
+        {{ form_row(form.mailingLists) }}
+        <input type="submit" value="Unregister" name="Unregister"/>
+        {{ form_end(form) }}
+    {% else %}
+        <p>You are going to receive an email to confirm your unregistration.</p>
+    {% endif %}
+{% endblock %}
