@@ -14,14 +14,14 @@ namespace Novactive\Bundle\eZMailingBundle\Security\Voter;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use Novactive\Bundle\eZMailingBundle\Entity\Campaign as CampaignEntity;
+use Novactive\Bundle\eZMailingBundle\Entity\MailingList as MailingListEntity;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 /**
- * Class Campaign.
+ * Class MailingList.
  */
-class Campaign extends Voter
+class MailingList extends Voter
 {
     const VIEW = 'view';
     const EDIT = 'edit';
@@ -57,7 +57,7 @@ class Campaign extends Voter
             return false;
         }
 
-        if (null !== $subject && !$subject instanceof CampaignEntity) {
+        if (!$subject instanceof MailingListEntity) {
             return false;
         }
 
@@ -70,7 +70,7 @@ class Campaign extends Voter
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
-        /* @var CampaignEntity $subject */
+        /* @var MailingListEntity $subject */
 
         // all create
         if (null === $subject) {
@@ -88,12 +88,12 @@ class Campaign extends Voter
     }
 
     /**
-     * @param CampaignEntity $subject
-     * @param mixed          $user
+     * @param MailingListEntity $subject
+     * @param mixed             $user
      *
      * @return bool
      */
-    private function canView(CampaignEntity $subject, $user): bool
+    private function canView(MailingListEntity $subject, $user): bool
     {
         $siteaccessLimist = $subject->getSiteaccessLimit();
         // if no limit then we vote OK
@@ -110,12 +110,12 @@ class Campaign extends Voter
     }
 
     /**
-     * @param CampaignEntity $subject
-     * @param mixed          $user
+     * @param MailingListEntity $subject
+     * @param mixed             $user
      *
      * @return bool
      */
-    private function canEdit(CampaignEntity $subject, $user): bool
+    private function canEdit(MailingListEntity $subject, $user): bool
     {
         return $this->canView($subject, $user);
     }

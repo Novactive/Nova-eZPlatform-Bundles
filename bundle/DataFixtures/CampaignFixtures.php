@@ -12,12 +12,15 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\DataFixtures;
 
+use Carbon\Carbon;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Faker;
+use Novactive\Bundle\eZMailingBundle\Entity\Broadcast;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
+use Novactive\Bundle\eZMailingBundle\Entity\StatHit;
 
 /**
  * Class CampaignFixtures.
@@ -69,6 +72,55 @@ class CampaignFixtures extends Fixture implements DependentFixtureInterface
                 $mailing->setDaysOfMonth([$faker->numberBetween(0, 31)]);
                 $mailing->setLocationId(2);
                 $campaign->addMailing($mailing);
+
+                // 80% d'avoir un
+                if ($faker->boolean(20)) {
+                    continue;
+                }
+
+                // Create 2 broadcasts
+                $nbBroadcasts = $faker->numberBetween(1, 2);
+                for ($l = 0; $l < $nbBroadcasts; ++$l) {
+                    $broadcast = new Broadcast();
+                    $broadcast->setEmailSentCount($faker->numberBetween(0, 500));
+                    $startDate = Carbon::instance($faker->dateTimeThisYear);
+                    $endDate   = clone $startDate;
+                    $endDate->addMinutes(15);
+                    $broadcast->setStarted($faker->dateTimeThisYear);
+                    $broadcast->setEnded($endDate);
+                    $broadcast->setHtml("Fixture {$i}{$k}{$l}");
+                    $mailing->addBroadcast($broadcast);
+
+                    // create Stats Hit
+                    $nbHits = $faker->numberBetween(0, 100);
+                    for ($m = 0; $m < $nbHits; ++$m) {
+                        $key = $faker->uuid;
+                        $hit = new StatHit();
+                        $hit->setUserKey($key);
+                        $hit->setUrl('-');
+                        $hit->setBrowserName(
+                            $faker->randomElement(['Chrome', 'Firefox', 'Safari', 'Internet Explorer'])
+                        );
+                        $hit->setOsName($faker->randomElement(['Mac OS X', 'Windows', 'Linux']));
+                        $hit->setBroadcast($broadcast);
+                        $manager->persist($hit);
+                        $nbSubHits = $faker->numberBetween(0, 5);
+                        for ($n = 0; $n < $nbSubHits; ++$n) {
+                            $hit = new StatHit();
+                            $hit->setUserKey($key);
+                            $hit->setBrowserName(
+                                $faker->randomElement(['Chrome', 'Firefox', 'Safari', 'Internet Explorer'])
+                            );
+                            $hit->setOsName($faker->randomElement(['Mac OS X', 'Windows', 'Linux']));
+                            $hit->setUrl(
+                                'https://'.$faker->randomElement(['facebook', 'skype', 'google', 'lycos', 'caramail']).
+                                '.com'
+                            );
+                            $hit->setBroadcast($broadcast);
+                            $manager->persist($hit);
+                        }
+                    }
+                }
             }
 
             $manager->persist($campaign);

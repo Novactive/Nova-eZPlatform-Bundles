@@ -71,7 +71,10 @@
                             {% for registration in item.registrations %}
                                 <tr>
                                     <td>
-                                        <a href="{{ path('novaezmailing_mailinglist_show',{mailingList:registration.mailinglist.id}) }}">{{ registration.mailinglist.name }}</a>
+                                        <a href="{{ path('novaezmailing_mailinglist_show',{mailingList:registration.mailinglist.id}) }}">
+                                            <img src="{{ asset("/bundles/novaezmailing/admin/images/16x16/mailinglist.png") }}" class="nova-icon" />
+                                            {{ registration.mailinglist.name }}
+                                        </a>
                                     </td>
                                     <td align="center">{{ ApprobationButton.show(registration) }}</td>
                                     <td align="center">{{ registration.updated|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>

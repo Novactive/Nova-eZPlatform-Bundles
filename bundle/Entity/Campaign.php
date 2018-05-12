@@ -181,7 +181,7 @@ class Campaign implements eZ\ContentInterface
     /**
      * @return array
      */
-    public function getSiteaccessLimit(): array
+    public function getSiteaccessLimit(): ?array
     {
         return $this->siteaccessLimit;
     }

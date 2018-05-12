@@ -7,20 +7,76 @@
         <li class="breadcrumb-item active">{{ item.name }}</li>
     </ol>
 {% endblock %}
-{% block novezmailing_title %}{{ item.name }}{% endblock %}
+{% block novezmailing_title %}
+    <img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/mailinglist.png") }}" class="nova-icon" /> {{ item.name }}{% endblock %}
 {% block novezmailing_subtitle %}Mailing List{% endblock %}
 
 {% block content %}
-    {% include "@NovaeZMailing/admin/common/list/users_filterer.html.twig" with {
-        route: "novaezmailing_mailinglist_show",
-        limit: pager.maxPerPage,
-        currentStatus: currentStatus,
-        statuses: statuses,
-        extraParams: {mailingList: item.id}
-    } only %}
-    {% include "@NovaeZMailing/admin/common/list/users.html.twig" with {items:pager.currentPageResults,currentMailingList: item, withRegistrations: false} only %}
-    <div class="pagerfanta">
-        {{ pagerfanta(pager, 'twitter_bootstrap4') }}
+    {% if pager.nbResults > 0 %}
+
+        {% include "@NovaeZMailing/admin/common/list/users_filterer.html.twig" with {
+            route: "novaezmailing_mailinglist_show",
+            limit: pager.maxPerPage,
+            currentStatus: currentStatus,
+            statuses: statuses,
+            extraParams: {mailingList: item.id}
+        } only %}
+        {% include "@NovaeZMailing/admin/common/list/users.html.twig" with {items:pager.currentPageResults,currentMailingList: item, withRegistrations: false} only %}
+        <div class="pagerfanta">
+            {{ pagerfanta(pager, 'twitter_bootstrap4') }}
+        </div>
+    {% else %}
+        <p>Mailing list is empty.</p>
+    {% endif %}
+    <div class="novaezmailing-button-actions float-right">
+        <a type="button" class="btn btn-sm btn-secondary" href="{{ path("novaezmailing_mailinglist_edit", {mailinglist: item.id}) }}">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#edit"></use>
+            </svg>
+            <span>Edit this Mailing List</span>
+        </a>
+        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#novaezmailingconfirmremovemailinglistmodal">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#trash"></use>
+            </svg>
+            <span>Delete this Mailing List </span>
+        </button>
     </div>
+    <div class="novaezmailing-button-actions float-left">
+        <a type="button" class="btn btn-sm btn-success" onclick="javascript:alert('@todo');">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#catalog"></use>
+            </svg>
+            <span>Import Users</span>
+        </a>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="novaezmailingconfirmremovemailinglistmodal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm removal</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this Mailing List?</p>
+                    <p>It is going to remove:</p>
+                    <ul>
+                        <li>1 Mailing List</li>
+                        <li>{{ item.registrations|length }} Registrations</li>
+                        <li>{{ item.campaigns|length }} assignations to Campaign</li>
+                    </ul>
+
+                    <p>Note: Users are not deleted.</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="{{ path('novaezmailing_mailinglist_remove', {mailinglist:item.id}) }}" type="button" class="btn btn-danger">Confirm</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 

@@ -156,7 +156,8 @@ class Mailing implements eZ\ContentInterface
     /**
      * @var Broadcast[]
      * @ORM\OneToMany(targetEntity="Novactive\Bundle\eZMailingBundle\Entity\Broadcast", mappedBy="mailing",
-     *                                                                                  cascade={"persist","remove"})
+     *                                                                                  cascade={"persist","remove"},
+     *                                                                                  fetch="EXTRA_LAZY")
      */
     private $broadcasts;
 

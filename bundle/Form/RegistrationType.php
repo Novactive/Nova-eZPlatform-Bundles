@@ -67,7 +67,9 @@ class RegistrationType extends AbstractType
                 foreach ($campaignRepository->findAll() as $campaign) {
                     if ($this->authorizationChecker->isGranted('view', $campaign)) {
                         foreach ($campaign->getMailingLists() as $mailingList) {
-                            $allowedMailingList[] = $mailingList;
+                            if ($this->authorizationChecker->isGranted('view', $mailingList)) {
+                                $allowedMailingList[] = $mailingList;
+                            }
                         }
                     }
                 }

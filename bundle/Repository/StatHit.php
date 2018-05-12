@@ -118,9 +118,8 @@ class StatHit extends EntityRepository
     public function getOpenedCount($broadcasts): int
     {
         $qb = $this->createQueryBuilderForFilters(['broadcasts' => $broadcasts]);
-        $qb->select($qb->expr()->count($this->getAlias().'.id').' as nb');
+        $qb->select($qb->expr()->countDistinct($this->getAlias().'.userKey').' as nb');
         $qb->andWhere($qb->expr()->eq($this->getAlias().'.url', ':url'))->setParameter('url', '-');
-        $qb->groupBy($this->getAlias().'.userKey');
 
         return (int) ($qb->getQuery()->getOneOrNullResult()['nb'] ?? 0);
     }

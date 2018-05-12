@@ -61,6 +61,15 @@ class MailingList
     private $withApproval;
 
     /**
+     * @var Campaign[]
+     * @ORM\ManyToMany(targetEntity="\Novactive\Bundle\eZMailingBundle\Entity\Campaign", mappedBy="mailingLists",
+     *                                                                                  cascade={"persist"},
+     *                                                                                  orphanRemoval=true,
+     *                                                                                  fetch="EXTRA_LAZY")
+     */
+    private $campaigns;
+
+    /**
      * MailingList constructor.
      */
     public function __construct()
@@ -148,7 +157,7 @@ class MailingList
     /**
      * @return array
      */
-    public function getSiteaccessLimit(): array
+    public function getSiteaccessLimit(): ?array
     {
         return $this->siteaccessLimit;
     }
@@ -166,10 +175,18 @@ class MailingList
     }
 
     /**
+     * @return Campaign[]|ArrayCollection
+     */
+    public function getCampaigns()
+    {
+        return $this->campaigns;
+    }
+
+    /**
      * @return string
      */
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getName() ?? '';
     }
 }

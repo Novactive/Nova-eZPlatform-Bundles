@@ -6,7 +6,7 @@
         <li class="breadcrumb-item active">Mailing Lists</li>
     </ol>
 {% endblock %}
-{% block novezmailing_title %}Mailing Lists{% endblock %}
+{% block novezmailing_title %}<img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/mailinglist.png") }}" class="nova-icon" /> Mailing Lists{% endblock %}
 {% block novezmailing_subtitle %}Group of users{% endblock %}
 
 {% block content %}
@@ -19,10 +19,11 @@
             <th class="text-center">Updated</th>
             <th class="text-center">Created</th>
             <th class="text-center">Registrations Count</th>
+            <th class="text-center"></th>
         </tr>
         </thead>
         <tbody>
-        {% for item in items %}
+        {% for item in items if is_granted('view', item) %}
             <tr>
                 <td class="text-center">{{ item.id }}</td>
                 <td><a href="{{ path('novaezmailing_mailinglist_show', {'mailingList':item.id}) }}">{{ item.name }}</a>
@@ -31,9 +32,23 @@
                 <td class="text-center">{{ item.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
                 <td class="text-center">{{ item.updated|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
                 <td class="text-center">{{ item.registrations|length }}</td>
+                <td class="text-center">
+                    <a href="{{ path("novaezmailing_mailinglist_edit", {'mailinglist': item.id} ) }}" class="edit-button">
+                        <svg class="ez-icon">
+                            <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#edit"></use>
+                        </svg>
+                    </a></td>
             </tr>
         {% endfor %}
         </tbody>
-
     </table>
+
+    <div class="novaezmailing-button-actions float-right">
+        <a type="button" class="btn btn-sm btn-secondary" href="{{ path('novaezmailing_mailinglist_create') }}">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#create"></use>
+            </svg>
+            <span>Create a new Mailing List</span>
+        </a>
+    </div>
 {% endblock %}

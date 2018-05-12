@@ -165,4 +165,25 @@ class CampaignController
             'form' => $form->createView(),
         ];
     }
+
+    /**
+     * @Route("/delete/{campaign}", name="novaezmailing_campaign_remove")
+     * @Security("is_granted('edit', campaign)")
+     *
+     * @param Campaign               $campaign
+     * @param EntityManagerInterface $entityManager
+     * @param RouterInterface        $router
+     *
+     * @return RedirectResponse
+     */
+    public function deleteAction(
+        Campaign $campaign,
+        EntityManagerInterface $entityManager,
+        RouterInterface $router
+    ): RedirectResponse {
+        $entityManager->remove($campaign);
+        $entityManager->flush();
+
+        return new RedirectResponse($router->generate('novaezmailing_dashboard_index'));
+    }
 }

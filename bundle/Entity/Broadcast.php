@@ -71,6 +71,14 @@ class Broadcast
     private $mailing;
 
     /**
+     * @var StatHit[]
+     * @ORM\OneToMany(targetEntity="Novactive\Bundle\eZMailingBundle\Entity\StatHit", mappedBy="broadcast",
+     *                                                                                cascade={"persist","remove"},
+     *                                                                                fetch="EXTRA_LAZY")
+     */
+    private $statHits;
+
+    /**
      * Broadcast constructor.
      */
     public function __construct()
@@ -196,5 +204,13 @@ class Broadcast
         $this->html = $html;
 
         return $this;
+    }
+
+    /**
+     * @return StatHit[]
+     */
+    public function getStatHits(): array
+    {
+        return $this->statHits;
     }
 }

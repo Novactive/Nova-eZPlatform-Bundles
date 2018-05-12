@@ -33,8 +33,9 @@
             <div class="novaezmailing-ez-mailings-view tab-pane" role="tabpanel" id="novaezmailing-mailings-broadcasts">
                 {% include "@NovaeZMailing/admin/common/list/broadcasts.html.twig" with { items: item.broadcasts} only %}
             </div>
-            {% for broadcast in item.broadcasts %}
-                <div class="novaezmailing-ez-mailings-view tab-pane" role="tabpanel" id="novaezmailing-mailings-stats">
+            <div class="novaezmailing-ez-mailings-view tab-pane" role="tabpanel" id="novaezmailing-mailings-stats">
+                {% for broadcast in item.broadcasts %}
+
                     <div class="novaezmailing-broadcast-charts-group">
                         <h3>Broadcasted on {{ broadcast.started|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</h3>
                         <hr/>
@@ -52,8 +53,8 @@
                         </div>
                         <hr/>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         {% endif %}
     </div>
     <div class="novaezmailing-button-actions float-right">

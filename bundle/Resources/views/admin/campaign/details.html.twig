@@ -33,7 +33,7 @@
                     <a href="{{ path('novaezmailing_mailinglist_show',{mailingList:mailingList.id}) }}"
                        class="list-group-item list-group-item-action"
                     >
-                        {{ mailingList.name }}
+                        <img src="{{ asset("/bundles/novaezmailing/admin/images/16x16/mailinglist.png") }}" class="nova-icon" /> {{ mailingList.name }}
                     </a>
                 {% endfor %}
             </div>
