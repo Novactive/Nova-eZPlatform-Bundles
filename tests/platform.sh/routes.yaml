@@ -1,4 +1,2 @@
-_novaezmailing_bundle:
-    resource: "@NovaeZMailingBundle/Controller"
-    type:     annotation
-    prefix:   /novaezmailing
+_novaezmailing_routes:
+    resource: '@NovaeZMailingBundle/Resources/config/routing.yml'
