@@ -43,6 +43,9 @@ class MailingController
      * @Template()
      * @Security("is_granted('view', mailing)")
      *
+     * @param Mailing                      $mailing
+     * @param ContentViewParameterSupplier $contentViewParameterSupplier
+     *
      * @return array
      */
     public function showAction(Mailing $mailing, ContentViewParameterSupplier $contentViewParameterSupplier): array
@@ -60,6 +63,10 @@ class MailingController
     /**
      * @Template()
      * @Security("is_granted('view', mailing)")
+     *
+     * @param Mailing    $mailing
+     * @param Repository $repository
+     * @param ContentTab $contentTab
      *
      * @return array
      */

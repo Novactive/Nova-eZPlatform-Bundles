@@ -81,7 +81,7 @@ class MailingListController
      * @Security("is_granted('edit', mailinglist)")
      * @Template()
      *
-     * @param MailingList|null       $mailing
+     * @param MailingList|null       $mailinglist
      * @param Request                $request
      * @param RouterInterface        $router
      * @param FormFactoryInterface   $formFactory
@@ -126,7 +126,7 @@ class MailingListController
      * @Route("/delete/{mailinglist}", name="novaezmailing_mailinglist_remove")
      * @Security("is_granted('edit', mailinglist)")
      *
-     * @param MailingList            $campaign
+     * @param MailingList            $mailinglist
      * @param EntityManagerInterface $entityManager
      * @param RouterInterface        $router
      *
@@ -139,6 +139,28 @@ class MailingListController
     ): RedirectResponse {
         $entityManager->remove($mailinglist);
         $entityManager->flush();
+
+        return new RedirectResponse($router->generate('novaezmailing_mailinglist_index'));
+    }
+
+    /**
+     * @Route("/import/{mailinglist}", name="novaezmailing_mailinglist_import")
+     * @Security("is_granted('edit', mailinglist)")
+     *
+     * @param MailingList            $mailinglist
+     * @param EntityManagerInterface $entityManager
+     * @param RouterInterface        $router
+     *
+     * @return RedirectResponse
+     */
+    public function importAction(
+        MailingList $mailinglist,
+        EntityManagerInterface $entityManager,
+        RouterInterface $router
+    ): RedirectResponse {
+
+
+        //@todo
 
         return new RedirectResponse($router->generate('novaezmailing_mailinglist_index'));
     }

@@ -8,7 +8,7 @@
     </ol>
 {% endblock %}
 {% block novezmailing_title %}
-    <img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/mailinglist.png") }}" class="nova-icon" /> {{ item.name }}{% endblock %}
+    <img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/mailinglist.png") }}" class="nova-icon"/> {{ item.name }}{% endblock %}
 {% block novezmailing_subtitle %}Mailing List{% endblock %}
 
 {% block content %}
@@ -43,7 +43,7 @@
         </button>
     </div>
     <div class="novaezmailing-button-actions float-left">
-        <a type="button" class="btn btn-sm btn-success" onclick="javascript:alert('@todo');">
+        <a type="button" class="btn btn-sm btn-success" href="{{ path('novaezmailing_mailinglist_import', {mailinglist:item.id}) }}">
             <svg class="ez-icon">
                 <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#catalog"></use>
             </svg>
