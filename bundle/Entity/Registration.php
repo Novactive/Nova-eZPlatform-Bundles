@@ -18,9 +18,11 @@ use Doctrine\ORM\Mapping as ORM;
  * Class Registration.
  *
  * @ORM\Table(name="novaezmailing_registrations",
- *            uniqueConstraints={ @ORM\UniqueConstraint(name="unique_registration",columns={"ML_id","USER_id"})}
+ *            uniqueConstraints={ @ORM\UniqueConstraint(name="unique_registration",columns={"ML_id","USER_id"})},
+ *            indexes={
+ *                @ORM\Index(name="search_idx_approved", columns={"REG_approved"})
+ *            }
  * )
- *
  * @ORM\Entity(repositoryClass="Novactive\Bundle\eZMailingBundle\Repository\Registration")
  */
 class Registration

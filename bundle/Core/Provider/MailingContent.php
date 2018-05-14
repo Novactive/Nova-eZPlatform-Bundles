@@ -17,9 +17,8 @@ use Novactive\Bundle\eZMailingBundle\Entity\Broadcast as BroadcastEntity;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Novactive\Bundle\eZMailingBundle\Entity\User as UserEntity;
 use Swift_Message;
-use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpKernel\Client;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -38,11 +37,6 @@ class MailingContent
     protected $modifiers;
 
     /**
-     * @var HttpKernelInterface
-     */
-    protected $httpKernel;
-
-    /**
      * @var RouterInterface
      */
     protected $router;
@@ -52,11 +46,10 @@ class MailingContent
      *
      * @param ModifierInterface[] $modifiers
      */
-    public function __construct(iterable $modifiers, HttpKernelInterface $httpKernel, RouterInterface $router)
+    public function __construct(iterable $modifiers, RouterInterface $router)
     {
-        $this->modifiers  = $modifiers;
-        $this->httpKernel = $httpKernel;
-        $this->router     = $router;
+        $this->modifiers = $modifiers;
+        $this->router    = $router;
     }
 
     /**
@@ -66,32 +59,20 @@ class MailingContent
      */
     public function preFetchContent(Mailing $mailing): string
     {
-        $client  = new Client($this->httpKernel);
-        $crawler = $client->request(
-            '/GET',
-            $this->router->generate(
-                '_novaezmailing_ez_content_view',
-                [
-                    'locationId' => $mailing->getLocation()->id,
-                    'contentId'  => $mailing->getContent()->id,
-                    'mailingId'  => $mailing->getId(),
-                ]
-            )
+        $kernel = new \AppKernel('prod', false);
+        $client = new Client($kernel);
+        $url    = $this->router->generate(
+            '_novaezmailing_ez_content_view',
+            [
+                'locationId' => $mailing->getLocation()->id,
+                'contentId'  => $mailing->getContent()->id,
+                'mailingId'  => $mailing->getId(),
+                'siteaccess' => $mailing->getSiteAccess(),
+            ],
+            UrlGeneratorInterface::ABSOLUTE_PATH
         );
-        $crawler->filter('body div.sf-toolbar, script, style[nonce]')->each(
-            function (Crawler $crawler) {
-                foreach ($crawler as $node) {
-                    $node->parentNode->removeChild($node);
-                }
-            }
-        );
-        $crawler->filter('body div.sf-toolbar, script, style[nonce]')->each(
-            function (Crawler $crawler) {
-                foreach ($crawler as $node) {
-                    $node->parentNode->removeChild($node);
-                }
-            }
-        );
+
+        $crawler                                        = $client->request('/GET', $url);
         $this->nativeContent[$mailing->getLocationId()] = $crawler->html();
 
         return $this->nativeContent[$mailing->getLocationId()];

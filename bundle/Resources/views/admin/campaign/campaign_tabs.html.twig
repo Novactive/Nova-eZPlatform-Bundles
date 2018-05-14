@@ -32,23 +32,23 @@
 
 
     <div class="novaezmailing-button-actions float-right">
-        <a type="button" class="btn btn-sm btn-secondary" href="{{ path('novaezmailing_mailing_create', {campaign: item.id}) }}">
+        <a class="btn btn-sm btn-secondary" href="{{ path('novaezmailing_mailing_create', {campaign: item.id}) }}">
             <svg class="ez-icon">
                 <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#create"></use>
             </svg>
-            <span>Create a new Mailing</span>
+            <span>Create</span>
         </a>
-        <a type="button" class="btn btn-sm btn-secondary" href="{{ path("novaezmailing_campaign_edit", {campaign: item.id}) }}">
+        <a class="btn btn-sm btn-secondary" href="{{ path("novaezmailing_campaign_edit", {campaign: item.id}) }}">
             <svg class="ez-icon">
                 <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#edit"></use>
             </svg>
-            <span>Edit this Campaign</span>
+            <span>Edit</span>
         </a>
         <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#novaezmailingconfirmremovecampaignmodal">
             <svg class="ez-icon">
                 <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#trash"></use>
             </svg>
-            <span>Delete this Campaign </span>
+            <span>Delete</span>
         </button>
     </div>
     <div class="modal fade" tabindex="-1" role="dialog" id="novaezmailingconfirmremovecampaignmodal">

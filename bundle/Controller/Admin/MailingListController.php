@@ -158,8 +158,6 @@ class MailingListController
         EntityManagerInterface $entityManager,
         RouterInterface $router
     ): RedirectResponse {
-
-
         //@todo
 
         return new RedirectResponse($router->generate('novaezmailing_mailinglist_index'));

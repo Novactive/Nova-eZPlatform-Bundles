@@ -31,6 +31,12 @@
             <property name="maxmethods" value="20"/>
         </properties>
     </rule>
+    <rule ref="rulesets/codesize.xml/TooManyPublicMethods">
+        <priority>1</priority>
+        <properties>
+            <property name="maxmethods" value="20"/>
+        </properties>
+    </rule>
     <rule ref="rulesets/codesize.xml/TooManyFields">
         <priority>1</priority>
         <properties>
@@ -85,6 +91,7 @@
         <exclude name="NPathComplexity"/>
         <exclude name="CyclomaticComplexity"/>
         <exclude name="TooManyMethods"/>
+        <exclude name="TooManyPublicMethods"/>
         <exclude name="TooManyFields"/>
         <exclude name="ExcessiveClassComplexity"/>
         <exclude name="ExcessivePublicCount"/>

@@ -29,21 +29,21 @@
         <p>Mailing list is empty.</p>
     {% endif %}
     <div class="novaezmailing-button-actions float-right">
-        <a type="button" class="btn btn-sm btn-secondary" href="{{ path("novaezmailing_mailinglist_edit", {mailinglist: item.id}) }}">
+        <a class="btn btn-sm btn-secondary" href="{{ path("novaezmailing_mailinglist_edit", {mailinglist: item.id}) }}">
             <svg class="ez-icon">
                 <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#edit"></use>
             </svg>
-            <span>Edit this Mailing List</span>
+            <span>Edit</span>
         </a>
         <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#novaezmailingconfirmremovemailinglistmodal">
             <svg class="ez-icon">
                 <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#trash"></use>
             </svg>
-            <span>Delete this Mailing List </span>
+            <span>Delete</span>
         </button>
     </div>
     <div class="novaezmailing-button-actions float-left">
-        <a type="button" class="btn btn-sm btn-success" href="{{ path('novaezmailing_mailinglist_import', {mailinglist:item.id}) }}">
+        <a class="btn btn-sm btn-success" href="{{ path('novaezmailing_mailinglist_import', {mailinglist:item.id}) }}">
             <svg class="ez-icon">
                 <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#catalog"></use>
             </svg>

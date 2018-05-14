@@ -12,14 +12,18 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Form;
 
+use EzSystems\EzPlatformAdminUi\Siteaccess\SiteaccessResolver;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -27,6 +31,21 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class MailingType extends AbstractType
 {
+    /**
+     * @var SiteaccessResolver
+     */
+    private $siteAccessResolver;
+
+    /**
+     * CampaignType constructor.
+     *
+     * @param SiteaccessResolver $siteAccessResolver
+     */
+    public function __construct(SiteaccessResolver $siteAccessResolver)
+    {
+        $this->siteAccessResolver = $siteAccessResolver;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -38,6 +57,11 @@ class MailingType extends AbstractType
         $fromString = function ($string) {
             return array_unique(null !== $string ? explode(',', $string) : []);
         };
+
+        $siteaccesses = array_combine(
+            array_values($this->siteAccessResolver->getSiteaccesses()),
+            array_values($this->siteAccessResolver->getSiteaccesses())
+        );
 
         $builder
             ->add(
@@ -80,6 +104,31 @@ class MailingType extends AbstractType
         foreach ($transformationFields as $field) {
             $builder->get($field)->addModelTransformer(new CallbackTransformer($fromArray, $fromString));
         }
+
+        $builder->addEventListener(
+            FormEvents::PRE_SET_DATA,
+            function (FormEvent $event) use ($siteaccesses) {
+                $form            = $event->getForm();
+                $mailing         = $event->getData();
+                $siteaccessLimit = $mailing->getCampaign()->getSiteaccessLimit() ?? [];
+                $siteaccessLimit = array_combine(
+                    array_values($siteaccessLimit),
+                    array_values($siteaccessLimit)
+                );
+                /* @var Mailing $mailing */
+                $form->add(
+                    'siteAccess',
+                    ChoiceType::class,
+                    [
+                        'label'    => 'On which siteaccess?',
+                        'choices'  => count($siteaccessLimit) > 0 ? $siteaccessLimit : $siteaccesses,
+                        'expanded' => true,
+                        'multiple' => false,
+                        'required' => true,
+                    ]
+                );
+            }
+        );
     }
 
     /**

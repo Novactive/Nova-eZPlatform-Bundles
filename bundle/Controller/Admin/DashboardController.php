@@ -28,7 +28,7 @@ use Symfony\Component\Routing\RouterInterface;
 class DashboardController
 {
     /**
-     * @Route("", name="novaezmailing_dashboard_index")
+     * @Route("/", name="novaezmailing_dashboard_index")
      * @Template()
      *
      * @return Response

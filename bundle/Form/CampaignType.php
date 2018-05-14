@@ -50,7 +50,7 @@ class CampaignType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $siteaccess = array_combine(
+        $siteaccesses = array_combine(
             array_values($this->siteAccessResolver->getSiteaccesses()),
             array_values($this->siteAccessResolver->getSiteaccesses())
         );
@@ -76,7 +76,7 @@ class CampaignType extends AbstractType
                 [
                     'expanded' => true,
                     'multiple' => true,
-                    'choices'  => $siteaccess,
+                    'choices'  => $siteaccesses,
                 ]
             )
             ->add(

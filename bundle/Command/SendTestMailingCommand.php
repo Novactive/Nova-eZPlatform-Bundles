@@ -12,7 +12,9 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Command;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZMailingBundle\Core\Processor\TestMailing;
+use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,14 +32,21 @@ class SendTestMailingCommand extends Command
     private $processor;
 
     /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    /**
      * SendTestMailingCommand constructor.
      *
-     * @param TestMailing $processor
+     * @param TestMailing            $processor
+     * @param EntityManagerInterface $entityManager
      */
-    public function __construct(TestMailing $processor)
+    public function __construct(TestMailing $processor, EntityManagerInterface $entityManager)
     {
         parent::__construct();
-        $this->processor = $processor;
+        $this->processor     = $processor;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -64,7 +73,8 @@ class SendTestMailingCommand extends Command
         $io->title('Sending a Mailing for test');
         $io->writeln("Mailing ID: <comment>{$mailingId}</comment>");
         $io->writeln("To: <comment>{$recipientEmail}</comment>");
-        $this->processor->execute($mailingId, $recipientEmail);
+        $mailing = $this->entityManager->getRepository(Mailing::class)->findOneById($mailingId);
+        $this->processor->execute($mailing, $recipientEmail);
         $io->success('Done.');
     }
 }

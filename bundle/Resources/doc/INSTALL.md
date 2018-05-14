@@ -1,6 +1,5 @@
 # Installation
 
-
 ## Requirements
 
 * eZ Platform 2+
@@ -9,24 +8,40 @@
 
 ## Installation steps
 
+Run `composer require novactive/ezmailingbundle` to install the bundle and its dependencies:
 
-    
+### Register the bundle
+
+Activate the bundle in `app\AppKernel.php` file.
+
+```php
+// app\AppKernel.php
+
+public function registerBundles()
+{
+   ...
+   $bundles = array(
+       new FrameworkBundle(),
+       ...
+       // NovaeZMailingBundle
+       new Novactive\Bundle\eZMailingBundle\NovaeZMailingBundle(),
+   );
+   ...
+}
+```
+
+### Add routes
+
+```yaml
 _novaezmailing_routes:
     resource: '@NovaeZMailingBundle/Resources/config/routing.yml'
+```
 
+### Add configuration
 
-// Nova eZ Mailing
-new Novactive\Bundle\eZMailingBundle\NovaeZMailingBundle()
+You need to declare a template for the view `novaezmailingfull`
 
-
-
-nova_ezmailing:
-    system:
-        default:
-            simple_mailer: "swiftmailer.mailer.myfirst_mailer"
-            mailing_mailer: "swiftmailer.mailer.mysecond_mailer"
-
-
+```yaml
 ezpublish:
     system:
         default:
@@ -36,3 +51,42 @@ ezpublish:
                         template: yourtemplatepath
                         match:
                             Identifier\ContentType: [a_content_type]
+```
+
+> Adapt according to your configuration
+
+
+You also need 2 mailers, 1 in charge to send the Mailings, the other to send the service emails.
+
+```yaml
+nova_ezmailing:
+    system:
+        default:
+            simple_mailer: "swiftmailer.mailer.local_mailer"
+            mailing_mailer: "swiftmailer.mailer.remote_mailer"
+```
+
+Example in dev mode
+
+```yaml
+swiftmailer:
+    default_mailer: myfirst_mailer
+    mailers:
+        myfirst_mailer:
+            transport: 'smtp'
+            host: 127.0.0.1
+            port: 1025
+            spool: { type: memory }
+        mysecond_mailer:
+            transport: 'smtp'
+            host: 127.0.0.1
+            port: 1025
+            spool: { type: memory }
+
+nova_ezmailing:
+    system:
+        default:
+            simple_mailer: "swiftmailer.mailer.myfirst_mailer"
+            mailing_mailer: "swiftmailer.mailer.mysecond_mailer"
+```
+

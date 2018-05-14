@@ -29,7 +29,7 @@
                         </svg>
                     </a>
                 {% endif %}
-                <a href="{{ path('_novaezmailing_ez_content_view', { locationId: item.location.id, contentId: item.content.id, mailingId: item.id }) }}" class="edit-button">
+                <a target="_blank" href="{{ path('_novaezmailing_ez_content_view', { locationId: item.location.id, contentId: item.content.id, mailingId: item.id, siteaccess: item.siteaccess }) }}" class="edit-button">
                     <svg class="ez-icon">
                         <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#view"></use>
                     </svg>

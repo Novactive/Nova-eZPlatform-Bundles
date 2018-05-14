@@ -71,6 +71,7 @@ class CampaignFixtures extends Fixture implements DependentFixtureInterface
                 $mailing->setHoursOfDay([$faker->numberBetween(0, 23)]);
                 $mailing->setDaysOfMonth([$faker->numberBetween(0, 31)]);
                 $mailing->setLocationId(2);
+                $mailing->setSiteAccess('site');
                 $campaign->addMailing($mailing);
 
                 // 80% d'avoir un

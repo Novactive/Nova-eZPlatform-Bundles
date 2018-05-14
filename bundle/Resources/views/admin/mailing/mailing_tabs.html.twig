@@ -58,31 +58,98 @@
         {% endif %}
     </div>
     <div class="novaezmailing-button-actions float-right">
-        <a type="button" {% if workflow_can(item,'edit') %} href="{{ path("novaezmailing_mailing_edit", {mailing: item.id}) }}" {% else %} disabled {% endif %} class="btn btn-sm btn-secondary">
+        <a target="_blank" href="{{ url('_novaezmailing_ez_content_view', { locationId: item.location.id, contentId: item.content.id, mailingId: item.id, siteaccess: item.siteaccess }) }}" class="btn btn-sm btn-info">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#view"></use>
+            </svg>
+            <span>View</span>
+        </a>
+        <a {% if workflow_can(item,'edit') %} href="{{ path("novaezmailing_mailing_edit", {mailing: item.id}) }}" {% else %} disabled {% endif %} class="btn btn-sm btn-secondary">
             <svg class="ez-icon">
                 <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#edit"></use>
             </svg>
-            <span>Edit this Mailing</span>
+            <span>Edit</span>
         </a>
-        <a type="button" {% if workflow_can(item,'archive') %} href="{{ path("novaezmailing_mailing_archive", {mailing: item.id}) }}" {% else %} disabled {% endif %} class="btn btn-sm btn-warning">
+        <a {% if workflow_can(item,'archive') %} href="{{ path("novaezmailing_mailing_archive", {mailing: item.id}) }}" {% else %} disabled {% endif %} class="btn btn-sm btn-warning">
             <svg class="ez-icon">
                 <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#move"></use>
             </svg>
-            <span>Archived this Mailing </span>
+            <span>Archive</span>
         </a>
-        <a type="button" {% if workflow_can(item,'cancel') %} href="{{ path("novaezmailing_mailing_cancel", {mailing: item.id}) }}" {% else %} disabled {% endif %} class="btn btn-sm btn-danger">
+        <a {% if workflow_can(item,'cancel') %} href="{{ path("novaezmailing_mailing_cancel", {mailing: item.id}) }}" {% else %} disabled {% endif %} class="btn btn-sm btn-danger">
             <svg class="ez-icon">
                 <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#trash"></use>
             </svg>
-            <span>Aborted this Mailing </span>
+            <span>Abort</span>
         </a>
     </div>
     <div class="novaezmailing-button-actions float-left">
-        <a type="button" {% if workflow_can(item,'confirm') %} href="{{ path("novaezmailing_mailing_confirm", {mailing: item.id}) }}" {% else %}disabled {% endif %} class="btn btn-sm btn-success">
+        <button type="button" {% if not workflow_can(item,'test') %} disabled {% endif %} class="btn btn-sm btn-dark" data-toggle="modal" data-target="#novaezmailingmailingtestmodal">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#checkmark"></use>
+            </svg>
+            <span>Test</span>
+        </button>
+        <button type="button" {% if not workflow_can(item,'confirm') %} disabled {% endif %} class="btn btn-sm btn-success" data-toggle="modal" data-target="#novaezmailingmailingconfirmmodal">
             <svg class="ez-icon">
                 <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#publish"></use>
             </svg>
-            <span>Confirm this Mailing </span>
-        </a>
+            <span>Confirm</span>
+        </button>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="novaezmailingmailingtestmodal">
+        <div class="modal-dialog" role="document">
+            <form class="modal-content" action="{{ path("novaezmailing_mailing_test", {mailing: item.id}) }}" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">Test the Mailing: {{ item.name }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Campaign defines <strong>{{ item.campaign.reportEmail }}</strong> as report email.</p>
+                    <p>Would you like to <strong>cc</strong> someone?</p>
+                    <label class="sr-only" for="ccEmailTest">email</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">@</div>
+                        </div>
+                        <input type="email" name="cc" class="form-control" id="ccEmailTest" placeholder="email"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Send a test</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="novaezmailingmailingconfirmmodal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm the sending: {{ item.name }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Campaign defines {{ item.campaign.mailingLists|length }} Mailing Lists:</p>
+                    {% set totalRecipients = 0 %}
+                    <ul>
+                        {% for mailingList in item.campaign.mailingLists %}
+                            {% set nb = mailingList.validRecipientsCount %}
+                            <li>{{ mailingList.name }}: {{ nb }} recipients.</li>
+                            {% set totalRecipients = totalRecipients + nb %}
+                        {% endfor %}
+                    </ul>
+                    <p>The reach of this Mailing is {{ totalRecipients }}.</p>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-success" href="{{ path("novaezmailing_mailing_confirm", {mailing: item.id}) }}">Confirm</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

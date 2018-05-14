@@ -40,6 +40,11 @@ class Mailing implements eZ\ContentInterface
     const DRAFT = 'draft';
 
     /**
+     * Tested.
+     */
+    const TESTED = 'tested';
+
+    /**
      * Ready to be sent.
      */
     const PENDING = 'pending';
@@ -69,6 +74,7 @@ class Mailing implements eZ\ContentInterface
      */
     const STATUSES = [
         self::DRAFT,
+        self::TESTED,
         self::PENDING,
         self::PROCESSING,
         self::SENT,
@@ -160,6 +166,13 @@ class Mailing implements eZ\ContentInterface
      *                                                                                  fetch="EXTRA_LAZY")
      */
     private $broadcasts;
+
+    /**
+     * @var string
+     * @Assert\NotBlank()
+     * @ORM\Column(name="MAIL_siteaccess", type="string", nullable=false)
+     */
+    private $siteAccess;
 
     /**
      * Mailing constructor.
@@ -482,6 +495,14 @@ class Mailing implements eZ\ContentInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isTested(): bool
+    {
+        return self::TESTED === $this->status;
+    }
+
+    /**
      * @return mixed
      */
     public function getBroadcasts()
@@ -513,6 +534,26 @@ class Mailing implements eZ\ContentInterface
         }
         $this->broadcasts->add($broadcast);
         $broadcast->setMailing($this);
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSiteAccess(): string
+    {
+        return $this->siteAccess;
+    }
+
+    /**
+     * @param string $siteAccess
+     *
+     * @return $this
+     */
+    public function setSiteAccess(string $siteAccess): self
+    {
+        $this->siteAccess = $siteAccess;
 
         return $this;
     }

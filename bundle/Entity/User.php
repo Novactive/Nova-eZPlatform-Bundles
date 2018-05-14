@@ -23,9 +23,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Class User.
  *
  * @ORM\Table(name="novaezmailing_user",
- *            uniqueConstraints={ @ORM\UniqueConstraint(name="unique_email",columns={"USER_email"})}
+ *            uniqueConstraints={ @ORM\UniqueConstraint(name="unique_email",columns={"USER_email"})},
+ *            indexes={
+ *                @ORM\Index(name="search_idx_restricted", columns={"USER_restricted"}),
+ *                @ORM\Index(name="search_idx_status", columns={"USER_status"})
+ *            }
  * )
- *
  * @ORM\Entity(repositoryClass="Novactive\Bundle\eZMailingBundle\Repository\User")
  * @UniqueEntity("email")
  */

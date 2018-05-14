@@ -18,9 +18,11 @@ use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use EzSystems\EzPlatformAdminUi\Tab\LocationView\ContentTab;
 use EzSystems\EzPlatformAdminUi\UI\Module\Subitems\ContentViewParameterSupplier;
+use Novactive\Bundle\eZMailingBundle\Core\Processor\TestMailing;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Novactive\Bundle\eZMailingBundle\Form\MailingType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -163,7 +165,7 @@ class MailingController
      *
      * @return RedirectResponse
      */
-    public function confirmAction(
+    public function statusAction(
         Request $request,
         Mailing $mailing,
         RouterInterface $router,
@@ -174,6 +176,39 @@ class MailingController
         $machine = $workflows->get($mailing);
         $machine->apply($mailing, $action);
         $entityManager->flush();
+
+        return new RedirectResponse($router->generate('novaezmailing_mailing_show', ['mailing' => $mailing->getId()]));
+    }
+
+    /**
+     * @Route("/test/{mailing}", name="novaezmailing_mailing_test")
+     * @Security("is_granted('view', mailing)")
+     * @Method({"POST"})
+     *
+     * @param Request                $request
+     * @param Mailing                $mailing
+     * @param TestMailing            $processor
+     * @param RouterInterface        $router
+     * @param EntityManagerInterface $entityManager
+     * @param Registry               $workflows
+     *
+     * @return RedirectResponse
+     */
+    public function testAction(
+        Request $request,
+        Mailing $mailing,
+        TestMailing $processor,
+        RouterInterface $router,
+        EntityManagerInterface $entityManager,
+        Registry $workflows
+    ): RedirectResponse {
+        $machine = $workflows->get($mailing);
+        if ($machine->can($mailing, 'test')) {
+            $ccEmail = $request->request->get('cc');
+            $processor->execute($mailing, $ccEmail);
+            $machine->apply($mailing, 'test');
+            $entityManager->flush();
+        }
 
         return new RedirectResponse($router->generate('novaezmailing_mailing_show', ['mailing' => $mailing->getId()]));
     }

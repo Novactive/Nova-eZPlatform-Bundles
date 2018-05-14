@@ -28,7 +28,7 @@ codeclean: ## Coding Standard checks
 	$(PHP_BIN) ./vendor/bin/phpmd tests text .cs/md_ruleset.xml
 
 .PHONY: tests
-tests: ## Run the testsBundle/bundle/Menu/Builder.php
+tests: ## Run the tests
 	$(PHP_BIN) ./vendor/bin/phpunit ./tests --exclude-group behat
 
 .PHONY: install
@@ -38,6 +38,7 @@ install: ## Install vendors
 .PHONY: convertpuml
 convertpuml: ## Convert PUML diagram in images
 	java -jar $(PLANTUMLJAR) -o $(CURRENT_DIR)/bundle/Resources/doc/images $(CURRENT_DIR)/bundle/Resources/doc/puml/*.puml
+	cd ../../../../../ezplatform && php bin/console workflow:dump mailing | java -jar $(PLANTUMLJAR) -p > $(CURRENT_DIR)/bundle/Resources/doc/images/mailing_workflow.png
 
 .PHONY: clean
 clean: ## Removes the vendors, and caches

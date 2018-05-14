@@ -15,6 +15,7 @@ namespace Novactive\Bundle\eZMailingBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Generator;
 
 /**
  * Class MailingList.
@@ -56,7 +57,7 @@ class MailingList
 
     /**
      * @var bool
-     * @ORM\Column(name="ML_approved", type="boolean", nullable=false)
+     * @ORM\Column(name="ML_approbation", type="boolean", nullable=false)
      */
     private $withApproval;
 
@@ -188,5 +189,29 @@ class MailingList
     public function __toString(): string
     {
         return $this->getName() ?? '';
+    }
+
+    /**
+     * @return Generator
+     */
+    public function getValidRecipients(): Generator
+    {
+        foreach ($this->getApprovedRegistrations() as $registration) {
+            $user = $registration->getUser();
+            // send only to confirm and soft bounce
+            if (!$user->isConfirmed() && !$user->isSoftBounce()) {
+                continue;
+            }
+
+            yield $user;
+        }
+    }
+
+    /**
+     * @return int
+     */
+    public function getValidRecipientsCount(): int
+    {
+        return count(iterator_to_array($this->getValidRecipients(), false));
     }
 }

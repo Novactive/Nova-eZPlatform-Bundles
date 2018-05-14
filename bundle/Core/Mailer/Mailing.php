@@ -83,13 +83,10 @@ class Mailing extends Mailer
             $campaign = $mailing->getCampaign();
             $this->logger->notice("Mailing Mailer starts to send Mailing {$mailing->getName()}");
             $recipientCounts = 0;
+
             foreach ($campaign->getMailingLists() as $mailingList) {
-                foreach ($mailingList->getApprovedRegistrations() as $registration) {
-                    $user = $registration->getUser();
-                    // send only to confirm and soft bounce
-                    if (!$user->isConfirmed() && !$user->isSoftBounce()) {
-                        continue;
-                    }
+                foreach ($mailingList->getValidRecipients() as $user) {
+                    /** @var User $user */
                     $contentMessage = $this->contentProvider->getContentMailing($mailing, $user, $broadcast);
                     $this->sendMessage($contentMessage);
                     ++$recipientCounts;
