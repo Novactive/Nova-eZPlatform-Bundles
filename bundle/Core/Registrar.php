@@ -180,6 +180,11 @@ class Registrar
             $user->setStatus(User::CONFIRMED);
         }
 
+        // if no more registration then we remove the user
+        if ($user->getRegistrations()->count() == 0) {
+            $this->entityManager->remove($user);
+        }
+
         $this->entityManager->remove($token);
         $this->entityManager->flush();
 
