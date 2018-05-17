@@ -46,3 +46,8 @@ runtime:
         - xsl
         - imagick
         - readline
+
+crons:
+    sendmailing:
+        spec: '18 * * * *'
+        cmd: 'cd ezplatform && bin/console novaezmailing:send:mailing'
