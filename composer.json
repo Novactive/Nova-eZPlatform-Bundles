@@ -24,7 +24,6 @@
         "php": "^7.1",
         "nesbot/carbon": "^1.22",
         "gedmo/doctrine-extensions": "^2.4",
-        "fabpot/goutte": "^3.2",
         "symfony/thanks": "^1.0",
         "ezsystems/ezpublish-kernel": "^7.1"
     },
