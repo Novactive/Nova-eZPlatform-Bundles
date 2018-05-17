@@ -52,6 +52,10 @@ class NovaeZMailingExtension extends Extension implements PrependExtensionInterf
         $processor = new ConfigurationProcessor($container, $this->getAlias());
         $processor->mapSetting('simple_mailer', $config);
         $processor->mapSetting('mailing_mailer', $config);
+        $processor->mapSetting('email_subject_prefix', $config);
+        $processor->mapSetting('email_from_address', $config);
+        $processor->mapSetting('email_from_name', $config);
+        $processor->mapSetting('email_return_path', $config);
     }
 
     /**

@@ -64,6 +64,11 @@ nova_ezmailing:
         default:
             simple_mailer: "swiftmailer.mailer.local_mailer"
             mailing_mailer: "swiftmailer.mailer.remote_mailer"
+            # Default email values
+            email_subject_prefix: "[NovaeZMailing]"
+            email_from_address: "no-reply@novactive.com"
+            email_from_name: "Novactive"
+            email_return_path: "return-path@novactive.com"
 ```
 
 Example in dev mode

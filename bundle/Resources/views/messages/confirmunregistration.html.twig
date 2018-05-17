@@ -1,0 +1,18 @@
+{% extends "@NovaeZMailing/eZViews/mailing_base.html.twig" %}
+
+{% block unregistrer %}{% endblock %}
+
+{% block preheader_message %}
+    Confirm your un-registration
+{% endblock %}
+
+{% block body %}
+    <p>To confirm your un-registration to your Mailing Lists</p>
+    <ul>
+        {% for mailinglist in unregistration.mailingLists %}
+            <li>{{ mailinglist.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <p><a href="{{ path('novaezmailing_unregistration_confirm', {id:token.id}) }}">Please click on this link</a></p>
+{% endblock %}

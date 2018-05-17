@@ -1,6 +1,10 @@
 {% extends "@NovaeZMailing/eZViews/mailing_base.html.twig" %}
 
+{% block preheader_message %}##FIRSTNAME## ##LASTNAME## (##EMAIL##){% endblock %}
+
 {% block body %}
+    <h2>Hello ##FIRSTNAME## ##LASTNAME## (##EMAIL##)</h2>
+
     <p>You are using the generic 'novaezmailingfull' view.</p>
     <hr/>
     <a href="http://www.novactive.us">Test Tracking Link - Novactive</a><br/>

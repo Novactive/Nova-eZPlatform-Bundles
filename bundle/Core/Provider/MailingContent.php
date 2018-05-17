@@ -113,6 +113,8 @@ class MailingContent
         $campaign = $mailing->getCampaign();
         $message->setFrom($campaign->getSenderEmail(), $campaign->getSenderName());
         $message->setTo($recipient->getEmail());
+        $message->setBcc($campaign->getReportEmail());
+        $message->setReturnPath($campaign->getReturnPathEmail());
 
         return $message;
     }

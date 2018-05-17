@@ -69,6 +69,7 @@ class CampaignType extends AbstractType
             ->add('senderName', TextType::class, ['required' => true])
             ->add('senderEmail', EmailType::class, ['required' => true])
             ->add('reportEmail', EmailType::class, ['required' => true])
+            ->add('returnPathEmail', EmailType::class, ['required' => true])
             ->add('locationId', HiddenType::class)
             ->add(
                 'siteaccessLimit',

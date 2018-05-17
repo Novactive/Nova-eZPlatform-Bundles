@@ -17,7 +17,7 @@ use Swift_Mailer;
 /**
  * Class Mailer.
  */
-class Mailer
+abstract class Mailer
 {
     /**
      * @var Swift_Mailer

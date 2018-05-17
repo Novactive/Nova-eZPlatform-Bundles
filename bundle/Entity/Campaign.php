@@ -65,6 +65,14 @@ class Campaign implements eZ\ContentInterface
     private $reportEmail;
 
     /**
+     * @var string
+     * @Assert\NotBlank()
+     * @Assert\Email()
+     * @ORM\Column(name="CAMP_return_path_email", type="string", length=255, nullable=false)
+     */
+    private $returnPathEmail;
+
+    /**
      * @var array
      * @ORM\Column(name="CAMP_siteaccess_limit", type="array", nullable=true)
      */
@@ -272,6 +280,26 @@ class Campaign implements eZ\ContentInterface
         }
         $this->mailings->add($mailing);
         $mailing->setCampaign($this);
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReturnPathEmail(): string
+    {
+        return $this->returnPathEmail;
+    }
+
+    /**
+     * @param string $returnPathEmail
+     *
+     * @return $this
+     */
+    public function setReturnPathEmail(string $returnPathEmail): self
+    {
+        $this->returnPathEmail = $returnPathEmail;
 
         return $this;
     }

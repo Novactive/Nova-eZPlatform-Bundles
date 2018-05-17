@@ -46,6 +46,7 @@ class CampaignFixtures extends Fixture implements DependentFixtureInterface
             );
             $campaign->setReportEmail($faker->email);
             $campaign->setSenderEmail($faker->email);
+            $campaign->setReturnPathEmail($faker->email);
             $campaign->setSenderName($faker->name);
             $campaign->setLocationId(2);
             // create MailingLists

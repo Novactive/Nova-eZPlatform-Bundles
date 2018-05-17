@@ -12,7 +12,10 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Mailer;
 
+use Novactive\Bundle\eZMailingBundle\Core\DataHandler\Registration;
+use Novactive\Bundle\eZMailingBundle\Core\DataHandler\Unregistration;
 use Novactive\Bundle\eZMailingBundle\Core\Provider\MessageContent;
+use Novactive\Bundle\eZMailingBundle\Entity\ConfirmationToken;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing as MailingEntity;
 use Psr\Log\LoggerInterface;
 use Swift_Message;
@@ -59,6 +62,26 @@ class Simple extends Mailer
     public function sendStopSendingMailingMessage(MailingEntity $mailing): void
     {
         $message = $this->messageProvider->getStopSendingMailing($mailing);
+        $this->sendMessage($message);
+    }
+
+    /**
+     * @param Registration      $registration
+     * @param ConfirmationToken $token
+     */
+    public function sendRegistrationConfirmation(Registration $registration, ConfirmationToken $token): void
+    {
+        $message = $this->messageProvider->getRegistrationConfirmation($registration, $token);
+        $this->sendMessage($message);
+    }
+
+    /**
+     * @param Unregistration    $unregistration
+     * @param ConfirmationToken $token
+     */
+    public function sendUnregistrationConfirmation(Unregistration $unregistration, ConfirmationToken $token): void
+    {
+        $message = $this->messageProvider->getUnregistrationConfirmation($unregistration, $token);
         $this->sendMessage($message);
     }
 

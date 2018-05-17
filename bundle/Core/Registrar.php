@@ -19,6 +19,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Novactive\Bundle\eZMailingBundle\Core\DataHandler\Registration;
 use Novactive\Bundle\eZMailingBundle\Core\DataHandler\Unregistration;
+use Novactive\Bundle\eZMailingBundle\Core\Mailer\Simple as SimpleMailer;
 use Novactive\Bundle\eZMailingBundle\Entity\ConfirmationToken;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
 use Novactive\Bundle\eZMailingBundle\Entity\Registration as RegistrationEntity;
@@ -46,14 +47,22 @@ class Registrar
     private $siteAccess;
 
     /**
+     * @var SimpleMailer
+     */
+    private $mailer;
+
+    /**
      * Registrar constructor.
      *
      * @param EntityManagerInterface $entityManager
+     * @param SiteAccess             $siteAccess
+     * @param SimpleMailer           $mailer
      */
-    public function __construct(EntityManagerInterface $entityManager, SiteAccess $siteAccess)
+    public function __construct(EntityManagerInterface $entityManager, SiteAccess $siteAccess, SimpleMailer $mailer)
     {
         $this->entityManager = $entityManager;
         $this->siteAccess    = $siteAccess;
+        $this->mailer        = $mailer;
     }
 
     /**
@@ -76,9 +85,12 @@ class Registrar
             $this->entityManager->flush();
         }
 
-        $this->createConfirmationToken(ConfirmationToken::REGISTER, $fetchUser, $registration->getMailingLists());
-
-        //@todo: send the email to get confirmation
+        $token = $this->createConfirmationToken(
+            ConfirmationToken::REGISTER,
+            $fetchUser,
+            $registration->getMailingLists()
+        );
+        $this->mailer->sendRegistrationConfirmation($registration, $token);
     }
 
     /**
@@ -97,9 +109,13 @@ class Registrar
             return false;
         }
 
-        $this->createConfirmationToken(ConfirmationToken::UNREGISTER, $fetchUser, $unregistration->getMailingLists());
+        $token = $this->createConfirmationToken(
+            ConfirmationToken::UNREGISTER,
+            $fetchUser,
+            $unregistration->getMailingLists()
+        );
 
-        //@todo: send the email to get confirmation
+        $this->mailer->sendUnregistrationConfirmation($unregistration, $token);
 
         return true;
     }
@@ -108,9 +124,14 @@ class Registrar
      * @param string          $action
      * @param User            $user
      * @param ArrayCollection $mailingLists
+     *
+     * @return ConfirmationToken
      */
-    private function createConfirmationToken(string $action, User $user, ArrayCollection $mailingLists): void
-    {
+    private function createConfirmationToken(
+        string $action,
+        User $user,
+        ArrayCollection $mailingLists
+    ): ConfirmationToken {
         /** @var ArrayCollection $mailingListIds */
         $mailingListIds = $mailingLists->map(
             function (MailingList $mailingList) {
@@ -128,6 +149,8 @@ class Registrar
         );
         $this->entityManager->persist($confirmationToken);
         $this->entityManager->flush();
+
+        return $confirmationToken;
     }
 
     /**
