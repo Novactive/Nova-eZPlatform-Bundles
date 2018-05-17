@@ -25,7 +25,7 @@
         "nesbot/carbon": "^1.22",
         "gedmo/doctrine-extensions": "^2.4",
         "symfony/thanks": "^1.0",
-        "ezsystems/ezpublish-kernel": "^7.1"
+        "ezsystems/ezpublish-kernel": "^7.1",
         "gedmo/doctrine-extensions": "^2.4",
         "phpoffice/phpspreadsheet": "^1.1"
     },
