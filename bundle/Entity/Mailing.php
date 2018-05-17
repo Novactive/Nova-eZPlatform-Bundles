@@ -246,9 +246,17 @@ class Mailing implements eZ\ContentInterface
         if (0 == $this->broadcasts->count()) {
             return null;
         }
-        $lastSent = Carbon::now();
+        if (1 == $this->broadcasts->count() && 0 === $this->broadcasts[0]->getEmailSentCount()) {
+            return null;
+        }
+
+        $lastSent = $this->broadcasts[0]->getStarted();
         foreach ($this->broadcasts as $broadcast) {
             /** @var Broadcast $broadcast */
+            if (0 === $broadcast->getEmailSentCount()) {
+                // it was a test
+                continue;
+            }
             if ($lastSent->getTimestamp() < $broadcast->getStarted()->getTimestamp()) {
                 $lastSent = $broadcast->getStarted();
             }

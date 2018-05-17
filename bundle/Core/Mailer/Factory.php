@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Mailer;
 
+use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Novactive\Bundle\eZMailingBundle\Core\Provider\Broadcast;
 use Novactive\Bundle\eZMailingBundle\Core\Provider\MailingContent;
@@ -55,6 +56,11 @@ class Factory
     private $broadcastProvider;
 
     /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    /**
      * Factory constructor.
      *
      * @param ConfigResolverInterface $configResolver
@@ -63,6 +69,7 @@ class Factory
      * @param MailingContent          $mailingContentProvider
      * @param LoggerInterface         $logger
      * @param Broadcast               $broadcastProvider
+     * @param EntityManagerInterface  $entityManager
      */
     public function __construct(
         ConfigResolverInterface $configResolver,
@@ -70,7 +77,8 @@ class Factory
         MessageContent $messageContentProvider,
         MailingContent $mailingContentProvider,
         LoggerInterface $logger,
-        Broadcast $broadcastProvider
+        Broadcast $broadcastProvider,
+        EntityManagerInterface $entityManager
     ) {
         $this->configResolver         = $configResolver;
         $this->container              = $container;
@@ -78,6 +86,7 @@ class Factory
         $this->mailingContentProvider = $mailingContentProvider;
         $this->logger                 = $logger;
         $this->broadcastProvider      = $broadcastProvider;
+        $this->entityManager          = $entityManager;
     }
 
     /**
@@ -97,7 +106,8 @@ class Factory
                 $this->container->get(Simple::class),
                 $this->mailingContentProvider,
                 $this->logger,
-                $this->broadcastProvider
+                $this->broadcastProvider,
+                $this->entityManager
             );
 
             return $mailing->setMailer($mailer);

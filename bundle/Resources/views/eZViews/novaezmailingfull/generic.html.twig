@@ -1,17 +1,21 @@
 {% extends "@NovaeZMailing/eZViews/mailing_base.html.twig" %}
 
-{% block preheader_message %}
-    PRE HEADER MESAGE
-{% endblock %}
-
 {% block body %}
     <p>You are using the generic 'novaezmailingfull' view.</p>
+    <hr/>
+    <a href="http://www.novactive.us">Test Tracking Link - Novactive</a><br/>
+    <a href="http://ez.no">Test Tracking Link - eZ No</a><br/>
+    <p><strong>Mailing</strong>: {{ mailing.name }}</p>
+    <p><strong>Associated content</strong>: {{ ez_content_name(mailing.content) }}</p>
+    <p><strong>Campaign</strong>: {{ mailing.campaign.name }}</p>
+    {% if mailing.campaign is not null %}
+        <p><strong>Associated content</strong>: {{ ez_content_name(mailing.campaign.content) }}</p>
+    {% endif %}
+    <hr/>
 
     <p>Please define a "view" that works in your project</p>
-
     <p>Example for a folder: </p>
-
-    <pre>
+    <pre style="background: #aaa; padding: 10px">
 content_view:
     novaezmailingfull:
         folder:
@@ -19,4 +23,5 @@ content_view:
             match:
                 Identifier\ContentType: [folder]
 </pre>
+    <hr/>
 {% endblock %}

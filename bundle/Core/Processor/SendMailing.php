@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Core\Processor;
 
 use Carbon\Carbon;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZMailingBundle\Core\Mailer\Mailing as MailingMailer;
 use Novactive\Bundle\eZMailingBundle\Core\Utils\Clock;
@@ -57,21 +58,24 @@ class SendMailing extends Processor
     }
 
     /**
-     * Send the mailings.
+     * Send the mailing.
+     *
+     * @param DateTime|null $overrideDatetime
      */
-    public function execute(): void
+    public function execute(?DateTime $overrideDatetime = null): void
     {
         $mailingRepository = $this->entityManager->getRepository('NovaeZMailingBundle:Mailing');
         $pendingMailings   = $mailingRepository->findByStatus(Mailing::PENDING);
-        $clock             = new Clock(Carbon::now());
+        $clockDate         = $overrideDatetime ?? Carbon::now();
+        $clock             = new Clock($clockDate);
         $matched           = $sent = 0;
         foreach ($pendingMailings as $mailing) {
             /** @var Mailing $mailing */
             if ($clock->match($mailing)) {
                 ++$matched;
-                $this->logger->notice("{$mailing->getName()} has been matched pending and rending to send.");
+                $this->logger->notice("{$mailing->getName()} has been matched pending and ready to be send.");
                 if (null !== $mailing->getLastSent() &&
-                    $mailing->getLastSent()->format('Y-m-d-H') === date('Y-m-d-H')) {
+                    $mailing->getLastSent()->format('Y-m-d-H') === $clockDate->format('Y-m-d-H')) {
                     //Security here, if is has been sent during this current hour already, do nothing
                     $this->logger->debug(
                         "{$mailing->getName()} has been matched and IGNORED. It has been sent during this hour already."

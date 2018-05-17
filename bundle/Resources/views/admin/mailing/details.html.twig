@@ -10,7 +10,10 @@
             {{ item.status }}
         </td>
     </tr>
-
+    <tr>
+        <th>Subject</th>
+        <td>{{ item.subject }}</td>
+    </tr>
     {% set nextTick = item.nextTick %}
     {% if item.hasBeenSent %}
         <tr>

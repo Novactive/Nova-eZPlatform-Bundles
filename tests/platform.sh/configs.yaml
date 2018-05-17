@@ -3,3 +3,21 @@ nova_ezmailing:
         default:
             simple_mailer: "swiftmailer.mailer.default"
             mailing_mailer: "swiftmailer.mailer.default"
+
+
+ezpublish:
+    system:
+        site_group:
+            content_view:
+                novaezmailingfull:
+                    folder:
+                        template: "@NovaeZMailing/eZViews/novaezmailingfull/generic.html.twig"
+                        match:
+                            Identifier\ContentType: [folder]
+        admin_group:
+            content_view:
+                novaezmailingfull:
+                    folder:
+                        template: "@NovaeZMailing/eZViews/novaezmailingfull/generic.html.twig"
+                        match:
+                            Identifier\ContentType: [folder]
