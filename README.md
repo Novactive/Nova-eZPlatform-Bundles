@@ -39,7 +39,8 @@ Wording
 Features
 --------
 
-Nova eZ Mailing allows you to: **Send eZ Contents by email based on the Mailing + Campaign configuration to a group of users (Mailing Lists)** 
+Novactive eZ Mailing allows you to: **Send eZ Contents by email based on the Mailing + Campaign configuration to a group
+of users (Mailing Lists)** 
 
 At a glance:
 
@@ -66,6 +67,10 @@ At a glance:
 
 - SiteAccess Aware (and SiteAccess Limitations)
 
+- Tracking
+
+- Personnalization
+
 - A mailer for the Mailings
 
 - A mailer for the Service Emails
@@ -88,7 +93,7 @@ Usage and installation instructions
 Contributing
 ----------------
 
-[Usage](bundle/Resources/doc/CONTRIBUTING.md)
+[Usage](CONTRIBUTING.md)
 
 
 Change and License
@@ -103,4 +108,4 @@ Special Mentions and Credits
 ----------------------------
 
 - This bundle features are inspired by https://github.com/cjw-network/cjw_newsletter fusionned with eZ Mailing
-(and old Novactive bundle neven released in Open Source)
+(and old Novactive bundle never released in Open Source)

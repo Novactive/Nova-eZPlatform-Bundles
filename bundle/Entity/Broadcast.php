@@ -129,7 +129,7 @@ class Broadcast
     /**
      * @return DateTime
      */
-    public function getEnded(): DateTime
+    public function getEnded(): ?DateTime
     {
         return $this->ended;
     }

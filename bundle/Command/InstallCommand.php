@@ -39,7 +39,7 @@ class InstallCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-        $io->title('Update the Database with Custom Nova eZ Mailing Table');
+        $io->title('Update the Database with Custom Novactive eZ Mailing Table');
         $command    = $this->getApplication()->find('doctrine:schema:update');
         $arguments  = [
             'command'    => 'doctrine:schema:update',

@@ -16,17 +16,15 @@ use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
 
 /**
- * Interface ModifierInterface.
+ * Class Packer.
  */
-interface ModifierInterface
+class Packer implements ModifierInterface
 {
     /**
-     * @param Mailing $mailing
-     * @param User    $user
-     * @param string  $html
-     * @param array   $options
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function modify(Mailing $mailing, User $user, string $html, array $options = []): string;
+    public function modify(Mailing $mailing, User $user, string $html, array $options = []): string
+    {
+        return str_replace(["\n", "\r"], ['', ''], $html);
+    }
 }

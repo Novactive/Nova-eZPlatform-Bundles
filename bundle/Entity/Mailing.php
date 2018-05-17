@@ -169,6 +169,13 @@ class Mailing implements eZ\ContentInterface
 
     /**
      * @var string
+     * @ORM\Column(name="MAIL_subject", type="string", length=255, nullable=false)
+     * @Assert\NotBlank()
+     */
+    private $subject;
+
+    /**
+     * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="MAIL_siteaccess", type="string", nullable=false)
      */
@@ -541,7 +548,7 @@ class Mailing implements eZ\ContentInterface
     /**
      * @return string
      */
-    public function getSiteAccess(): string
+    public function getSiteAccess(): ?string
     {
         return $this->siteAccess;
     }
@@ -554,6 +561,26 @@ class Mailing implements eZ\ContentInterface
     public function setSiteAccess(string $siteAccess): self
     {
         $this->siteAccess = $siteAccess;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSubject(): ?string
+    {
+        return $this->subject;
+    }
+
+    /**
+     * @param string $subject
+     *
+     * @return $this
+     */
+    public function setSubject(?string $subject): self
+    {
+        $this->subject = $subject;
 
         return $this;
     }

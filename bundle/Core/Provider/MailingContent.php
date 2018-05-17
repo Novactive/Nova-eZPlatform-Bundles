@@ -73,7 +73,7 @@ class MailingContent
         );
 
         $crawler                                        = $client->request('/GET', $url);
-        $this->nativeContent[$mailing->getLocationId()] = $crawler->html();
+        $this->nativeContent[$mailing->getLocationId()] = "<!DOCTYPE html><html>{$crawler->html()}</html>";
 
         return $this->nativeContent[$mailing->getLocationId()];
     }
@@ -106,10 +106,10 @@ class MailingContent
     ): Swift_Message {
         $html = $this->getNativeContent($mailing);
         foreach ($this->modifiers as $modifier) {
-            $html = $modifier->modify($mailing, $html, ['broadcast' => $broadcast]);
+            $html = $modifier->modify($mailing, $recipient, $html, ['broadcast' => $broadcast]);
         }
-        $message = new Swift_Message('subject');
-        $message->setBody($html);
+        $message = new Swift_Message($mailing->getSubject());
+        $message->setBody($html, 'text/html', 'utf8');
         $campaign = $mailing->getCampaign();
         $message->setFrom($campaign->getSenderEmail(), $campaign->getSenderName());
         $message->setTo($recipient->getEmail());

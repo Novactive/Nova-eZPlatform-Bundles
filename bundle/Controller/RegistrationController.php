@@ -17,6 +17,7 @@ use Novactive\Bundle\eZMailingBundle\Core\DataHandler\Registration;
 use Novactive\Bundle\eZMailingBundle\Core\DataHandler\Unregistration;
 use Novactive\Bundle\eZMailingBundle\Core\Registrar;
 use Novactive\Bundle\eZMailingBundle\Entity\ConfirmationToken;
+use Novactive\Bundle\eZMailingBundle\Entity\User;
 use Novactive\Bundle\eZMailingBundle\Form\RegistrationType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -108,7 +109,7 @@ class RegistrationController
     }
 
     /**
-     * @Route("/unregister", name="novaezmailing_registration_remove")
+     * @Route("/unregister/{email}", name="novaezmailing_registration_remove")
      *
      * @Template()
      *
@@ -117,7 +118,7 @@ class RegistrationController
      *
      * @return array
      */
-    public function unregisterAction(Request $request, FormFactoryInterface $formFactory): array
+    public function unregisterAction(string $email = null, Request $request, FormFactoryInterface $formFactory): array
     {
         $params = [
             'pagelayout' => $this->getPagelayout(),
@@ -125,6 +126,12 @@ class RegistrationController
         ];
 
         $unregistration = new Unregistration();
+
+        if (null !== $email) {
+            $user = new User();
+            $user->setEmail($email);
+            $unregistration->setUser($user);
+        }
 
         $form = $formFactory->create(RegistrationType::class, $unregistration);
         $form->handleRequest($request);

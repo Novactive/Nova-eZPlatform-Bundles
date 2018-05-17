@@ -106,7 +106,7 @@ class MailingList extends Voter
         }
 
         //@improvment: maybe we should add a module/function for that specific purpose
-        return $this->repository->getPermissionResolver()->hasAccess('setup', 'setup');
+        return $this->repository->getPermissionResolver()->hasAccess('setup', 'administrate');
     }
 
     /**

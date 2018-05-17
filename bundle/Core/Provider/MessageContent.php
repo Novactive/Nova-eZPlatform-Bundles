@@ -48,7 +48,9 @@ class MessageContent
         $message->setFrom($campaign->getSenderEmail(), $campaign->getSenderName());
         $message->setTo($campaign->getReportEmail());
         $message->setBody(
-            $this->twig->render('NovaeZMailingBundle:messages:startsending.html.twig', ['item' => $mailing])
+            $this->twig->render('NovaeZMailingBundle:messages:startsending.html.twig', ['item' => $mailing]),
+            'text/html',
+            'utf8'
         );
 
         return $message;
@@ -66,7 +68,9 @@ class MessageContent
         $message->setFrom($campaign->getSenderEmail(), $campaign->getSenderName());
         $message->setTo($campaign->getReportEmail());
         $message->setBody(
-            $this->twig->render('NovaeZMailingBundle:messages:stopsending.html.twig', ['item' => $mailing])
+            $this->twig->render('NovaeZMailingBundle:messages:stopsending.html.twig', ['item' => $mailing]),
+            'text/html',
+            'utf8'
         );
 
         return $message;

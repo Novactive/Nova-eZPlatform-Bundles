@@ -14,6 +14,7 @@ namespace Novactive\Bundle\eZMailingBundle\Core\Modifier;
 
 use Novactive\Bundle\eZMailingBundle\Entity\Broadcast;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
+use Novactive\Bundle\eZMailingBundle\Entity\User;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -40,7 +41,7 @@ class Tracking implements ModifierInterface
     /**
      * {@inheritdoc}
      */
-    public function modify(Mailing $mailing, string $html, array $options = []): string
+    public function modify(Mailing $mailing, User $user, string $html, array $options = []): string
     {
         /** @var Broadcast $broadcast */
         $broadcast  = $options['broadcast'];

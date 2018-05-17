@@ -76,6 +76,8 @@ class Mailing extends Mailer
         if ($forceRecipient) {
             $fakeUser = new User();
             $fakeUser->setEmail($forceRecipient);
+            $fakeUser->setFirstName('XXXX');
+            $fakeUser->setLastName('YYYY');
             $contentMessage = $this->contentProvider->getContentMailing($mailing, $fakeUser, $broadcast);
             $this->logger->debug("Mailing Mailer starts to test {$contentMessage->getSubject()}.");
             $this->sendMessage($contentMessage);

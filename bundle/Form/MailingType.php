@@ -75,6 +75,7 @@ class MailingType extends AbstractType
                     'required'     => true,
                 ]
             )
+            ->add('subject', TextType::class, ['required' => false])
             ->add('recurring', CheckboxType::class, ['label' => 'Is it a reccuring Mailing?'])
             ->add('locationId', HiddenType::class)
             ->add(

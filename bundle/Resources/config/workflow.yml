@@ -20,7 +20,7 @@ workflows:
                 from: [draft, tested, aborted, archived]
                 to: draft
             test:
-                from: draft
+                from: [draft,tested]
                 to: tested
             confirm:
                 from: tested

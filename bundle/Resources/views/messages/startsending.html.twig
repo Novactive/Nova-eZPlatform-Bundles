@@ -1,4 +1,25 @@
-<p>A new Mailing {{ item.name }} is being sent.</p>
+{% extends "@NovaeZMailing/eZViews/mailing_base.html.twig" %}
 
+{% block preheader_message %}
+    The Mailing {{ item.name }} #{{ item.id }} is being sent.
+{% endblock %}
 
-<p>From the campaign {{ item.campaign.name }}</p>
+{% block unregistrer %}{% endblock %}
+
+{% block body %}
+    <p>The Mailing {{ item.name }} #{{ item.id }} is being sent.</p>
+    <p>Its associated content is {{ ez_content_name(item.content) }}</p>
+
+    <p>It is part of the campaign {{ item.campaign.name }} #{{ item.campaign.id }}</p>
+
+    <p>This campaign defines {{ item.campaign.mailingLists|length }} Mailing Lists:</p>
+    {% set totalRecipients = 0 %}
+    <ul>
+        {% for mailingList in item.campaign.mailingLists %}
+            {% set nb = mailingList.validRecipientsCount %}
+            <li>{{ mailingList.name }}: {{ nb }} recipients.</li>
+            {% set totalRecipients = totalRecipients + nb %}
+        {% endfor %}
+    </ul>
+    <p>The reach of this Mailing is {{ totalRecipients }}.</p>
+{% endblock %}

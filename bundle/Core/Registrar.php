@@ -181,7 +181,7 @@ class Registrar
         }
 
         // if no more registration then we remove the user
-        if ($user->getRegistrations()->count() == 0) {
+        if (0 == $user->getRegistrations()->count()) {
             $this->entityManager->remove($user);
         }
 

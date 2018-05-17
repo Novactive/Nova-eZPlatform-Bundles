@@ -23,6 +23,7 @@ use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Novactive\Bundle\eZMailingBundle\Form\MailingType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -94,7 +95,9 @@ class MailingController
 
     /**
      * @Route("/edit/{mailing}", name="novaezmailing_mailing_edit")
+     * @ParamConverter("mailing", class="Novactive\Bundle\eZMailingBundle\Entity\Mailing", options={"id"="mailing"})
      * @Route("/create/{campaign}", name="novaezmailing_mailing_create")
+     * @ParamConverter("campaign", class="Novactive\Bundle\eZMailingBundle\Entity\Campaign", options={"id"="campaign"})
      * @Template()
      * @Security("is_granted('edit', mailing)")
      *
