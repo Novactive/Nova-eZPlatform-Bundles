@@ -12,11 +12,14 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZMailingBundle\Core\Provider\User as UserProvider;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Class UserController.
@@ -40,6 +43,25 @@ class UserController
         return [
             'item' => $user,
         ];
+    }
+
+    /**
+     * @Route("/delete/{user}", name="novaezmailing_user_remove")
+     *
+     * @param EntityManagerInterface $entityManager
+     * @param RouterInterface        $router
+     *
+     * @return RedirectResponse
+     */
+    public function deleteAction(
+        User $user,
+        EntityManagerInterface $entityManager,
+        RouterInterface $router
+    ): RedirectResponse {
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        return new RedirectResponse($router->generate('novaezmailing_user_index'));
     }
 
     /**
