@@ -546,17 +546,6 @@ class User
     /**
      * @return ArrayCollection|Registration[]
      */
-    public function getApprovedRegistrations()
-    {
-        $criteria = Criteria::create();
-        $criteria->where(Criteria::expr()->eq('approved', true));
-
-        return $this->registrations->matching($criteria);
-    }
-
-    /**
-     * @return ArrayCollection|Registration[]
-     */
     public function getPendingRegistrations()
     {
         $criteria = Criteria::create();

@@ -13,9 +13,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
-use Generator;
 
 /**
  * Class MailingList.
@@ -108,17 +106,6 @@ class MailingList
     }
 
     /**
-     * @return ArrayCollection|Registration[]
-     */
-    public function getApprovedRegistrations()
-    {
-        $criteria = Criteria::create();
-        $criteria->where(Criteria::expr()->eq('approved', true));
-
-        return $this->registrations->matching($criteria);
-    }
-
-    /**
      * @param Registration[] $registrations
      *
      * @return MailingList
@@ -189,29 +176,5 @@ class MailingList
     public function __toString(): string
     {
         return $this->getName() ?? '';
-    }
-
-    /**
-     * @return Generator
-     */
-    public function getValidRecipients(): Generator
-    {
-        foreach ($this->getApprovedRegistrations() as $registration) {
-            $user = $registration->getUser();
-            // send only to confirm and soft bounce
-            if (!$user->isConfirmed() && !$user->isSoftBounce()) {
-                continue;
-            }
-
-            yield $user;
-        }
-    }
-
-    /**
-     * @return int
-     */
-    public function getValidRecipientsCount(): int
-    {
-        return count(iterator_to_array($this->getValidRecipients(), false));
     }
 }

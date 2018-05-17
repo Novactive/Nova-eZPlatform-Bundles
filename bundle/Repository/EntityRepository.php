@@ -33,7 +33,7 @@ abstract class EntityRepository extends BaseEntityRepository
      */
     public function createQueryBuilderForFilters(array $filters = []): QueryBuilder
     {
-        return $this->createQueryBuilder($this->getAlias())->select($this->getAlias());
+        return $this->createQueryBuilder($this->getAlias())->select($this->getAlias())->distinct();
     }
 
     /**

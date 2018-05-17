@@ -21,6 +21,7 @@ use EzSystems\EzPlatformAdminUi\UI\Module\Subitems\ContentViewParameterSupplier;
 use Novactive\Bundle\eZMailingBundle\Core\Processor\TestMailing;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
+use Novactive\Bundle\eZMailingBundle\Entity\User;
 use Novactive\Bundle\eZMailingBundle\Form\MailingType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -73,8 +74,12 @@ class MailingController
      *
      * @return array
      */
-    public function mailingTabsAction(Mailing $mailing, Repository $repository, ContentTab $contentTab): array
-    {
+    public function mailingTabsAction(
+        Mailing $mailing,
+        Repository $repository,
+        ContentTab $contentTab,
+        EntityManagerInterface $entityManager
+    ): array {
         $content     = $mailing->getContent();
         $contentType = $repository->getContentTypeService()->loadContentType(
             $content->contentInfo->contentTypeId
@@ -88,8 +93,11 @@ class MailingController
         );
 
         return [
-            'item'    => $mailing,
-            'preview' => $preview,
+            'item'            => $mailing,
+            'totalRecipients' => $entityManager->getRepository(User::class)->countValidRecipients(
+                $mailing->getCampaign()->getMailingLists()
+            ),
+            'preview'         => $preview,
         ];
     }
 

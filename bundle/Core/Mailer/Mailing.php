@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Mailer;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZMailingBundle\Core\Provider\Broadcast;
 use Novactive\Bundle\eZMailingBundle\Core\Provider\MailingContent;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing as MailingEntity;
@@ -40,6 +41,11 @@ class Mailing extends Mailer
     private $broadcastProvider;
 
     /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -47,21 +53,24 @@ class Mailing extends Mailer
     /**
      * Mailing constructor.
      *
-     * @param Simple          $simpleMailer
-     * @param MailingContent  $contentProvider
-     * @param LoggerInterface $logger
-     * @param Broadcast       $broadcastProvider
+     * @param Simple                 $simpleMailer
+     * @param MailingContent         $contentProvider
+     * @param LoggerInterface        $logger
+     * @param Broadcast              $broadcastProvider
+     * @param EntityManagerInterface $entityManager
      */
     public function __construct(
         Simple $simpleMailer,
         MailingContent $contentProvider,
         LoggerInterface $logger,
-        Broadcast $broadcastProvider
+        Broadcast $broadcastProvider,
+        EntityManagerInterface $entityManager
     ) {
         $this->simpleMailer      = $simpleMailer;
         $this->contentProvider   = $contentProvider;
         $this->logger            = $logger;
         $this->broadcastProvider = $broadcastProvider;
+        $this->entityManager     = $entityManager;
     }
 
     /**
@@ -85,20 +94,18 @@ class Mailing extends Mailer
             $campaign = $mailing->getCampaign();
             $this->logger->notice("Mailing Mailer starts to send Mailing {$mailing->getName()}");
             $recipientCounts = 0;
+            $userRepo        = $this->entityManager->getRepository(User::class);
+            $recipients      = $userRepo->findValidRecipients($campaign->getMailingLists());
+            foreach ($recipients as $user) {
+                /** @var User $user */
+                $contentMessage = $this->contentProvider->getContentMailing($mailing, $user, $broadcast);
+                $this->sendMessage($contentMessage);
+                ++$recipientCounts;
 
-            foreach ($campaign->getMailingLists() as $mailingList) {
-                foreach ($mailingList->getValidRecipients() as $user) {
-                    /** @var User $user */
-                    $contentMessage = $this->contentProvider->getContentMailing($mailing, $user, $broadcast);
-                    $this->sendMessage($contentMessage);
-                    ++$recipientCounts;
-
-                    if (0 === $recipientCounts % 10) {
-                        $broadcast->setEmailSentCount($recipientCounts);
-                        $this->broadcastProvider->store($broadcast);
-                    }
+                if (0 === $recipientCounts % 10) {
+                    $broadcast->setEmailSentCount($recipientCounts);
+                    $this->broadcastProvider->store($broadcast);
                 }
-                $this->broadcastProvider->store($broadcast);
             }
             $this->broadcastProvider->store($broadcast);
             $this->logger->notice("Mailing {$mailing->getName()} induced {$recipientCounts} emails sent.");

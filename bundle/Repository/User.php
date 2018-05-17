@@ -15,6 +15,7 @@ namespace Novactive\Bundle\eZMailingBundle\Repository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign as CampaignEntity;
+use Novactive\Bundle\eZMailingBundle\Entity\User as UserEntity;
 
 /**
  * Class User.
@@ -49,14 +50,23 @@ class User extends EntityRepository
             $mailingLists = $filters['mailingLists'];
         }
         if (null !== $mailingLists) {
+            $joinExpr = $qb->expr()->andX(
+                $qb->expr()->in('reg.mailingList', ':mailingLists')
+            );
+            if (isset($filters['isApproved'])) {
+                $joinExpr->add($qb->expr()->eq('reg.approved', ':approved'));
+            }
             $qb
                 ->innerJoin(
                     'u.registrations',
                     'reg',
                     Join::WITH,
-                    $qb->expr()->in('reg.mailingList', ':mailingLists')
-                )
-                ->setParameter('mailingLists', $mailingLists);
+                    $joinExpr
+                )->setParameter('mailingLists', $mailingLists);
+
+            if (isset($filters['isApproved'])) {
+                $qb->setParameter('approved', $filters['isApproved']);
+            }
         }
 
         if (isset($filters['status'])) {
@@ -75,5 +85,37 @@ class User extends EntityRepository
         }
 
         return $qb;
+    }
+
+    /**
+     * @param $mailingLists
+     *
+     * @return array|\Doctrine\Common\Collections\ArrayCollection
+     */
+    public function findValidRecipients($mailingLists)
+    {
+        return $this->findByFilters(
+            [
+                'mailingLists' => $mailingLists,
+                'isApproved'   => true,
+                'status'       => [UserEntity::CONFIRMED, UserEntity::SOFT_BOUNCE],
+            ]
+        );
+    }
+
+    /**
+     * @param $mailingLists
+     *
+     * @return int
+     */
+    public function countValidRecipients($mailingLists): int
+    {
+        return $this->countByFilters(
+            [
+                'mailingLists' => $mailingLists,
+                'isApproved'   => true,
+                'status'       => [UserEntity::CONFIRMED, UserEntity::SOFT_BOUNCE],
+            ]
+        );
     }
 }
