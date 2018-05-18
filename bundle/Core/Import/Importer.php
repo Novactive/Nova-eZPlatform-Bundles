@@ -70,7 +70,13 @@ class Importer
      */
     public function getUser(array $row): User
     {
-        $user = new User();
+        $repo = $this->entityManager->getRepository('NovaeZMailingBundle:User');
+        $user = $repo->findOneBy([
+            'email' => $row['email'] ?? ''
+        ]);
+        if(!$user instanceof  User) {
+            $user = new User();
+        }
         $user->setEmail(filter_var($row['email'] ?? '', FILTER_SANITIZE_EMAIL));
         $user->setFirstName($row['firstName'] ?? '');
         $user->setLastName($row['lastName'] ?? '');
