@@ -13,8 +13,13 @@
     "authors": [
         {
             "name": "Novactive",
-            "homepage": "http://www.novactive.us",
-            "email": "s.morel@novactive.com"
+            "homepage": "https://www.novactive.us",
+            "email": "ezmailing@novactive.com"
+        },
+        {
+            "name": "Sebastien Morel",
+            "homepage": "https://github.com/Plopix",
+            "email": "morel.seb@gmail.com"
         }
     ],
     "license": [
