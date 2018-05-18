@@ -3,7 +3,10 @@ nova_ezmailing:
         default:
             simple_mailer: "swiftmailer.mailer.default"
             mailing_mailer: "swiftmailer.mailer.default"
-
+            email_subject_prefix: "[NovaeZMailing]"
+            email_from_address: "no-reply@novactive.com"
+            email_from_name: "Novactive"
+            email_return_path: "return-path@novactive.com"
 
 ezpublish:
     system:
