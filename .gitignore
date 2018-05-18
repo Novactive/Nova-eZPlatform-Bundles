@@ -2,3 +2,4 @@ composer.lock
 plantuml.jar
 vendor
 .php_cs.cache
+ezplatform
