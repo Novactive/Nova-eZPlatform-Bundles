@@ -10,17 +10,43 @@
  */
 declare(strict_types=1);
 
-namespace Novactive\Bundle\eZMailingBundle\Entity;
+namespace Novactive\Bundle\eZMailingBundle\Core\DataHandler;
 
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class Import
+/**
+ * Class UserImport.
+ */
+class UserImport
 {
     /**
+     * @var File
+     * @Assert\NotBlank()
      * @Assert\File(
      *     mimeTypes={"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
      *     mimeTypesMessage="Please upload a valid excel file (xls, xlsx)"
      * )
      */
-    public $file;
+    private $file;
+
+    /**
+     * @return File
+     */
+    public function getFile(): ?File
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param File $file
+     *
+     * @return $this
+     */
+    public function setFile(File $file): self
+    {
+        $this->file = $file;
+
+        return $this;
+    }
 }
