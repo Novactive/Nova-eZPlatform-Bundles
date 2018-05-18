@@ -25,8 +25,8 @@ ezpublish:
                         match:
                             Identifier\ContentType: [folder]
 
-
-
 swiftmailer:
-    host: "%env(PLATFORM_SMTP_HOST)%"
     delivery_addresses: ['ezmailing@novactive.com']
+
+parameters:
+    env(MAILER_HOST): "%env(PLATFORM_SMTP_HOST)%"
