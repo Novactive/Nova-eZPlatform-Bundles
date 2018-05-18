@@ -14,16 +14,21 @@ namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\Core\Helper\TranslationHelper;
+use Novactive\Bundle\eZMailingBundle\Core\Import\Importer;
 use Novactive\Bundle\eZMailingBundle\Core\Provider\User as UserProvider;
+use Novactive\Bundle\eZMailingBundle\Entity\Import;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
+use Novactive\Bundle\eZMailingBundle\Form\ImportType;
 use Novactive\Bundle\eZMailingBundle\Form\MailingListType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Class MailingListController.
@@ -146,20 +151,61 @@ class MailingListController
     /**
      * @Route("/import/{mailinglist}", name="novaezmailing_mailinglist_import")
      * @Security("is_granted('edit', mailinglist)")
+     * @Template("@NovaeZMailing/admin/mailing_list/import_user.html.twig")
      *
-     * @param MailingList            $mailinglist
-     * @param EntityManagerInterface $entityManager
-     * @param RouterInterface        $router
+     * @param MailingList $mailinglist
+     * @param RouterInterface $router
+     * @param FormFactoryInterface $formFactory
+     * @param Request $request
+     * @param Importer $importer
+     * @param ValidatorInterface $validator
      *
-     * @return RedirectResponse
+     * @return array|RedirectResponse
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      */
     public function importAction(
         MailingList $mailinglist,
-        EntityManagerInterface $entityManager,
-        RouterInterface $router
-    ): RedirectResponse {
-        //@todo
+        RouterInterface $router,
+        FormFactoryInterface $formFactory,
+        Request $request,
+        Importer $importer,
+        ValidatorInterface $validator
+    ) {
+        $form = $formFactory->create(ImportType::class, new Import());
+        $form->handleRequest($request);
+        $count = 0;
+        $errorList = [];
+        if( $form->isSubmitted() && $form->isValid() ) {
+            /** @var UploadedFile $file */
+            $file = $form->get('file')->getData();
+            if($file instanceof UploadedFile) {
+                $rows = $importer->getRawData($file);
+                foreach ($rows as $row) {
+                    $user = $importer->getUser($row);
+                    $errors = $validator->validate($user);
+                    if (count($errors) > 0) {
+                        $errorList[] = $errors;
+                    } else {
+                        $user = $importer->createUser($user, $mailinglist);
+                        if ($user->getId() > 0) {
+                            ++$count;
+                        }
+                    }
+                }
+                if (empty($errorList)) {
+                    return new RedirectResponse($router->generate('novaezmailing_mailinglist_index'));
+                }
+            }
+        }
 
-        return new RedirectResponse($router->generate('novaezmailing_mailinglist_index'));
+        return [
+            'count' => $count,
+            'form' => $form->createView(),
+            'error_list' => $errorList
+        ];
     }
 }

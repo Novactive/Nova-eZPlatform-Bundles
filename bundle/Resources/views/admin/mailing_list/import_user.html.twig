@@ -15,6 +15,22 @@
         {{ count }} user(s) imported
     </div>
     {% endif %}
+    {% if error_list is defined and not error_list is empty %}
+        <div class="message-error">
+        {% for errors in error_list %}
+        <ul>
+            <li>
+            Line {{ loop.index }}
+                <ul>
+                {% for error in errors%}
+                    <li>{{ error.message }}</li>
+                {% endfor %}
+                </ul>
+            </li>
+        </ul>
+        {% endfor %}
+        </div>
+    {% endif %}
     {{ form_start(form, {attr: {class:'col-11', novaezmailing: 'mainform'}}) }}
     {{ form(form) }}
     {{ form_end(form) }}
