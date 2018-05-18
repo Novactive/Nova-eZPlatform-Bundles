@@ -24,3 +24,9 @@ ezpublish:
                         template: "@NovaeZMailing/eZViews/novaezmailingfull/generic.html.twig"
                         match:
                             Identifier\ContentType: [folder]
+
+
+
+swiftmailer:
+    host: "%env(PLATFORM_SMTP_HOST)%"
+    delivery_addresses: ['ezmailing@novactive.com']
