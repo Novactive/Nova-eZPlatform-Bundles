@@ -30,7 +30,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  *            }
  * )
  * @ORM\Entity(repositoryClass="Novactive\Bundle\eZMailingBundle\Repository\User")
- * @UniqueEntity("email")
+ * @UniqueEntity(
+ *     fields={"email"},
+ *     errorPath="email",
+ *     message="This email {{ value }} is already in use"
+ * )
  */
 class User
 {
@@ -109,7 +113,7 @@ class User
     /**
      * @var string
      * @ORM\Column(name="USER_email", type="string", length=255, nullable=false)
-     * @Assert\NotBlank
+     * @Assert\NotBlank(message="Email is mandatory")
      */
     private $email;
 

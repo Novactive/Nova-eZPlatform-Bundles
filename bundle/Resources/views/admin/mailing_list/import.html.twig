@@ -1,0 +1,100 @@
+{% extends '@NovaeZMailing/admin/layout/pagelayout.html.twig' %}
+
+{% form_theme form with ['@EzPlatformAdminUi/form_fields.html.twig', _self ] %}
+
+{% block novezmailing_breadcrumb %}
+    <ol class="breadcrumb px-4">
+        <li class="breadcrumb-item"><a href="{{ path("novaezmailing_dashboard_index") }}">Nova eZ Mailing</a></li>
+        <li class="breadcrumb-item"><a href="{{ path("novaezmailing_mailinglist_index") }}">Mailing Lists</a></li>
+        <li class="breadcrumb-item active">{{ item.name }}</li>
+    </ol>
+{% endblock %}
+{% block novezmailing_title %}
+    <img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/user.png") }}" class="nova-icon"/> Import users{% endblock %}
+{% block novezmailing_subtitle %}And create registrations{% endblock %}
+
+{% block content %}
+    <p>Inject users into this Mailing List.</p>
+
+    <p>To do so, please provide an Spreadsheet file, that respect this format:
+        <small>(The first row will be ignored)</small>
+    </p>
+    <table class="table table-sm excel-example">
+        <tr>
+            <th>Email</th>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Gender</th>
+            <th>Birth date</th>
+            <th>Phone</th>
+            <th>Zipcode</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Country</th>
+            <th>Job Title</th>
+            <th>Company</th>
+        </tr>
+        <tr>
+            <td>ezmailing@novactive.com</td>
+            <td>John</td>
+            <td>Doe</td>
+            <td>Mr.</td>
+            <td>YYYY-MM-DD</td>
+            <td>+1 415 218 318</td>
+            <td>94111</td>
+            <td>San Francisco</td>
+            <td>California</td>
+            <td>United States Of America</td>
+            <td>CTO</td>
+            <td>Novactive</td>
+        </tr>
+    </table>
+    {{ form_start(form) }}
+    {{ form_row(form.file) }}
+    <hr/>
+    {% if count is defined and count is not null %}
+        <div class="success">
+            <strong>{{ count }}</strong> user{{ count > 1 ? 's':'' }} imported.
+        </div>
+    {% endif %}
+    {% if error_list is defined and error_list is not null %}
+        <div class="message-error">
+            {% for errors in error_list %}
+                <ul>
+                    <li>
+                        Line {{ loop.index }}
+                        <ul>
+                            {% for error in errors %}
+                                <li>{{ error.message }}</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <hr/>
+
+    <div class="novaezmailing-button-actions float-right">
+        <a href="{{ url('novaezmailing_mailinglist_show', { mailingList: item.id }) }}" class="btn btn-sm btn-info">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#view"></use>
+            </svg>
+            <span>View this Mailing List</span>
+        </a>
+    </div>
+    <div class="novaezmailing-button-actions">
+        <button type="submit" class="btn btn-sm btn-success">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#wand"></use>
+            </svg>
+            <span>Import</span>
+        </button>
+    </div>
+    {{ form_end(form) }}
+
+
+
+
+
+{% endblock %}

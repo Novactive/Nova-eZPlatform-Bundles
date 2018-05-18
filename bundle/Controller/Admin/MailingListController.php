@@ -14,8 +14,11 @@ namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\Core\Helper\TranslationHelper;
+use Novactive\Bundle\eZMailingBundle\Core\DataHandler\UserImport;
+use Novactive\Bundle\eZMailingBundle\Core\Import\User;
 use Novactive\Bundle\eZMailingBundle\Core\Provider\User as UserProvider;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
+use Novactive\Bundle\eZMailingBundle\Form\ImportType;
 use Novactive\Bundle\eZMailingBundle\Form\MailingListType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -24,6 +27,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Class MailingListController.
@@ -146,20 +150,52 @@ class MailingListController
     /**
      * @Route("/import/{mailinglist}", name="novaezmailing_mailinglist_import")
      * @Security("is_granted('edit', mailinglist)")
+     * @Template()
      *
-     * @param MailingList            $mailinglist
-     * @param EntityManagerInterface $entityManager
-     * @param RouterInterface        $router
+     * @param MailingList          $mailinglist
+     * @param RouterInterface      $router
+     * @param FormFactoryInterface $formFactory
+     * @param Request              $request
+     * @param User                 $importer
+     * @param ValidatorInterface   $validator
      *
-     * @return RedirectResponse
+     * @return array
      */
     public function importAction(
         MailingList $mailinglist,
-        EntityManagerInterface $entityManager,
-        RouterInterface $router
-    ): RedirectResponse {
-        //@todo
+        RouterInterface $router,
+        FormFactoryInterface $formFactory,
+        Request $request,
+        User $importer,
+        ValidatorInterface $validator
+    ): array {
+        $userImport = new UserImport();
+        $form       = $formFactory->create(ImportType::class, $userImport);
+        $form->handleRequest($request);
+        $count     = null;
+        $errorList = null;
+        if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($importer->rowsIterator($userImport) as $index => $row) {
+                try {
+                    $user   = $importer->hydrateUser($row);
+                    $errors = $validator->validate($user);
+                    if (count($errors) > 0) {
+                        $errorList["Line {$index}"] = $errors;
+                        continue;
+                    }
+                    $importer->registerUser($user, $mailinglist);
+                    ++$count;
+                } catch (\Exception $e) {
+                    $errorList["Line {$index}"] = [['message' => $e->getMessage()]];
+                }
+            }
+        }
 
-        return new RedirectResponse($router->generate('novaezmailing_mailinglist_index'));
+        return [
+            'count'      => $count,
+            'error_list' => $errorList,
+            'item'       => $mailinglist,
+            'form'       => $form->createView(),
+        ];
     }
 }
