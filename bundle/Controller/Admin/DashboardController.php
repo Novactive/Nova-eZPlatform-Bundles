@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Novactive\Bundle\eZMailingBundle\Entity\Broadcast;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -33,9 +34,15 @@ class DashboardController
      *
      * @return Response
      */
-    public function indexAction(): array
+    public function indexAction(EntityManagerInterface $entityManager): array
     {
-        return [];
+        $repoBroadcast = $entityManager->getRepository(Broadcast::class);
+        $repoUsers     = $entityManager->getRepository(User::class);
+
+        return [
+            'broadcasts' => $repoBroadcast->findLastBroadcasts(),
+            'users'      => $repoUsers->findLastUpdated(),
+        ];
     }
 
     /**

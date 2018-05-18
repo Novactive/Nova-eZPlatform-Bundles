@@ -118,4 +118,18 @@ class User extends EntityRepository
             ]
         );
     }
+
+    /**
+     * @param int $limit
+     *
+     * @return array
+     */
+    public function findLastUpdated(int $limit = 10): array
+    {
+        $qb = $this->createQueryBuilderForFilters([]);
+        $qb->setMaxResults($limit);
+        $qb->orderBy("{$this->getAlias()}.updated", 'DESC');
+
+        return $qb->getQuery()->getResult();
+    }
 }

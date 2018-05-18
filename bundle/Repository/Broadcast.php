@@ -24,4 +24,19 @@ class Broadcast extends EntityRepository
     {
         return 'broadcast';
     }
+
+    /**
+     * @param int $limit
+     *
+     * @return array
+     */
+    public function findLastBroadcasts(int $limit = 4): array
+    {
+        $qb = $this->createQueryBuilderForFilters([]);
+        $qb->where("{$this->getAlias()}.emailSentCount > 0");
+        $qb->setMaxResults($limit);
+        $qb->orderBy("{$this->getAlias()}.ended", 'DESC');
+
+        return $qb->getQuery()->getResult();
+    }
 }

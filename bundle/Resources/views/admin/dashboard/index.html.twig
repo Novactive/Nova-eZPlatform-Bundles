@@ -11,16 +11,35 @@
 {% block novezmailing_subtitle %}Quick overview{% endblock %}
 
 {% block content %}
-    Dashboard
+    <h2>Quick Actions</h2>
+    <div class="novaezmailing-button-actions">
+        <a class="btn btn-sm btn-secondary" href="{{ path('novaezmailing_campaign_create') }}">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#create"></use>
+            </svg>
+            <span>Create a new Campaign</span>
+        </a>
+        <a class="btn btn-sm btn-info" href="{{ path('novaezmailing_mailinglist_index') }}">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#view"></use>
+            </svg>
+            <span>See Mailing Lists</span>
+        </a>
+        <a class="btn btn-sm btn-primary" href="{{ path('novaezmailing_user_index') }}">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#user"></use>
+            </svg>
+            <span>See Users</span>
+        </a>
+    </div>
+    <hr/>
+    <h2>Last User updated</h2>
+    {% include "@NovaeZMailing/admin/common/list/users.html.twig" with {items:users} only %}
 
-<br />
-<br />
-<br />
-
-    <a type="button" class="btn btn-sm btn-secondary" href="{{ path('novaezmailing_campaign_create') }}">
-        <svg class="ez-icon">
-            <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#create"></use>
-        </svg>
-        <span>Create a new Campaign</span>
-    </a>
+    <hr/>
+    <h2>Last Broadcasts</h2>
+    {% if broadcasts|length > 0 %}
+        {% include "@NovaeZMailing/admin/common/list/broadcasts.html.twig" with { items: broadcasts} only %}
+        {% include "@NovaeZMailing/admin/common/list/broadcast_graphs.html.twig" with { items: broadcasts} only %}
+    {% endif %}
 {% endblock %}
