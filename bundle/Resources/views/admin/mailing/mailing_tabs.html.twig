@@ -39,17 +39,20 @@
                         <div class="novaezmailing-broadcast-charts-group">
                             <h3>Broadcasted on {{ broadcast.started|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</h3>
                             <hr/>
-                            <div style="width: 600px; height: 300px; float: left">
+                            <div style="width: 600px; height: 300px; float: left; margin: 20px 10px 10px 10px">
                                 {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\ChartController::browserChart", {broadcastId: broadcast.id })) }}
                             </div>
-                            <div style="width: 600px; height: 300px; float: left">
+                            <div style="width: 600px; height: 300px; float: left; margin: 20px 10px 10px 10px">
                                 {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\ChartController::osChart", {broadcastId: broadcast.id })) }}
                             </div>
-                            <div style="width: 600px; height: 300px; float: left">
+                            <div style="width: 600px; height: 300px; float: left; margin: 20px 10px 10px 10px">
                                 {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\ChartController::urlChart", {broadcastId: broadcast.id })) }}
                             </div>
-                            <div style="width: 600px; height: 300px; float: left">
+                            <div style="width: 600px; height: 300px; float: left; margin: 20px 10px 10px 10px">
                                 {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\ChartController::openedChart", {broadcastId: broadcast.id })) }}
+                            </div>
+                            <div style="width: 600px; height: 300px; float: left; margin: 20px 10px 10px 10px">
+                              {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\ChartController::openedTimeChart", {broadcastId: broadcast.id })) }}
                             </div>
                             <hr/>
                         </div>
