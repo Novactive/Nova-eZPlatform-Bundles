@@ -181,3 +181,12 @@ $eZLightBackground: #F5F5F5;
         border-bottom: 1px solid #000;
     }
 }
+
+.tab-pane {
+    .novaezmailing-broadcast-charts-group .graph-broadcast {
+        width: 600px;
+        height: 300px;
+        float: left;
+        margin: 20px 10px 10px 10px;
+    }
+}
