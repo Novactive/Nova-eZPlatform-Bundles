@@ -3,7 +3,10 @@
 namespace MC\Bundle\PrivateContentAccessBundle\Custom;
 
 use eZ\Publish\API\Container;
+use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\SearchService;
+use eZ\Publish\Core\MVC\RepositoryAwareInterface;
 use eZ\Publish\Core\Pagination\Pagerfanta\ContentSearchAdapter;
 use EzSystems\EzPlatformAdminUi\Tab\AbstractTab;
 use EzSystems\EzPlatformAdminUi\Tab\OrderedTabInterface;
@@ -66,7 +69,8 @@ class PrivateContentTab extends AbstractTab implements OrderedTabInterface
         $privateAccess = new PrivateAccess();
 
         return $this->twig->render('@MCPrivateContentAccess/tabs/private_content_tab.html.twig', [
-            'name' => $this->getName()
+            'name' => $this->getName(),
+            'location' => $parameters['location']
         ]);
     }
 }

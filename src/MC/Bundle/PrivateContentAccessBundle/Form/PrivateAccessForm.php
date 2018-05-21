@@ -5,6 +5,7 @@ namespace MC\Bundle\PrivateContentAccessBundle\Form;
 use EzSystems\RepositoryForms\Form\Type\FieldType\CheckboxFieldType;
 use MC\Bundle\PrivateContentAccessBundle\Entity\PrivateAccess;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -21,7 +22,8 @@ class PrivateAccessForm extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('activate', CheckboxFieldType::class)
+        $builder->add('location_path', HiddenType::class)
+            ->add('activate', CheckboxFieldType::class)
             ->add('plainPassword', RepeatedType::class, array(
                 'type' => PasswordType::class,
                 'first_options'  => array('label' => 'Password'),

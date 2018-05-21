@@ -1,5 +1,6 @@
 parameters:
   mc.private.content.sites_extensions.class: MC\Bundle\PrivateContentAccessBundle\Custom\PrivateContentTab
+  mc.pre_content_view_listener.class: MC\Bundle\PrivateContentAccessBundle\Listener\PreContentViewListener
 
 services:
   mc.private.content.sites_extensions:
@@ -10,7 +11,8 @@ services:
     tags:
       - { name: ezplatform.tab, group: location-view }
 #    arguments:
-#      - '@service_container'
+#      - '@templating'
+#      - '@ezpublish.api.repository'
 
   mc_privateaccess.controller.form:
     public: true
@@ -25,3 +27,17 @@ services:
     class: MC\Bundle\PrivateContentAccessBundle\Form
     tags:
       - { name: form.type, alias: 'private_access_form' }
+    arguments:
+      - "@ezpublish.api.service.location"
+
+  mc.pre_content_view_listener:
+    class: '%mc.pre_content_view_listener.class%'
+    tags:
+      - {name: kernel.event_listener, event: ezpublish.pre_content_view, method: onPreContentView}
+    arguments:
+      - '@eZ\Publish\API\Repository\PermissionResolver'
+      - '@ezpublish.api.repository'
+      - '@eZ\Publish\API\Repository\ContentService'
+      - '@doctrine.orm.entity_manager'
+      - '@router'
+      - '@session'
