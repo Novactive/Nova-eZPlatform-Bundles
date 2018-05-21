@@ -134,6 +134,7 @@ class StatHit extends EntityRepository
       $qb = $this->createQueryBuilderForFilters(['broadcasts' => $broadcasts]);
       $qb->select($qb->expr()->count($this->getAlias() . '.id') . ' as nb', 'SUBSTRING(stathit.created, 1, 10) as day');
       $qb->groupBy($this->getAlias() . '.userKey', 'day');
+      $qb->orderBy('day', 'DESC');
       $results = $qb->getQuery()->getArrayResult();
       $mappedResults = [];
 

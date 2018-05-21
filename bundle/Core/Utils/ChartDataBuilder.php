@@ -56,7 +56,7 @@ class ChartDataBuilder
         $this->options    = $options;
         $this->dataSets   = [];
         $this->colorsSets = [
-            '#ff6384', '#36a2eb', '#cc65fe', '#ffce56',
+            '#ff6384', '#36a2eb', '#cc65fe', '#ffce56', '#EC644B', '#DB0A5B', '#E26A6A', '#DCC6E0', '#663399', '#913D88', '#BF55EC', '#9B59B6', '#446CB3', '#59ABE3', '#19B5FE', '#A2DED0', '#66CC99', '#00B16A', '#F4B350'
             // @todo: add more
         ];
     }
@@ -97,6 +97,22 @@ class ChartDataBuilder
         $options                     = $this->options;
         $options['title']['display'] = true;
         $options['title']['text']    = $this->title;
+
+        if ($this->type == "bar"){
+          $options['legend'] = false;
+          $options['scales']['yAxes'] = [
+            [
+              'ticks' => [
+                'stepSize' => 1,
+                'beginAtZero' => true,
+              ]
+            ]
+          ];
+          $options['scales']['xAxes'] = [
+            [
+              'barThickness' => 6,
+            ]];
+        }
 
         return [
             'type'    => $this->type,
