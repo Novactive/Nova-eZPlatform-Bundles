@@ -128,7 +128,6 @@ class ChartController
      */
     public function openedTimeChart(int $broadcastId, EntityManagerInterface $entityManager): array
     {
-
       $repo = $entityManager->getRepository(Broadcast::class);
       /** @var Broadcast $item */
       $item = $repo->findOneById($broadcastId);
