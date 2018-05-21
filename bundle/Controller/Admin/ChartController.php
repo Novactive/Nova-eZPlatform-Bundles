@@ -119,7 +119,7 @@ class ChartController
     }
 
     /**
-     * @param int $broadcastId
+     * @param int                    $broadcastId
      * @param EntityManagerInterface $entityManager
      *
      * @Template("NovaeZMailingBundle:admin/chart:generic.html.twig")
@@ -128,15 +128,17 @@ class ChartController
      */
     public function openedTimeChart(int $broadcastId, EntityManagerInterface $entityManager): array
     {
-      $repo = $entityManager->getRepository(Broadcast::class);
-      /** @var Broadcast $item */
-      $item = $repo->findOneById($broadcastId);
-      $hitRepo = $entityManager->getRepository(StatHit::class);
-      $data = $hitRepo->getHitsPerDay([[$item]]);
+        $repo = $entityManager->getRepository(Broadcast::class);
+        /** @var Broadcast $item */
+        $item    = $repo->findOneById($broadcastId);
+        $hitRepo = $entityManager->getRepository(StatHit::class);
+        $data    = $hitRepo->getOpenedCountPerDay([[$item]]);
 
-      $chartBuilder = new ChartDataBuilder('Hits per day', 'bar');
-      $chartBuilder->addDataSet(array_values($data), array_keys($data));
+        $chartBuilder = new ChartDataBuilder('Opened per day', 'bar');
+        $values       = array_values($data);
+        $chartBuilder->addDataSet($values, array_keys($data), array_pad([], count($values), '#36a2eb'));
+        $chartBuilder->addDataSet($values, array_keys($data), ['#ff6384'], 'line');
 
-      return ['chart' => $chartBuilder()];
+        return ['chart' => $chartBuilder()];
     }
 }
