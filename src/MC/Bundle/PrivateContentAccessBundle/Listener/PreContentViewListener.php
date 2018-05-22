@@ -36,22 +36,23 @@ class PreContentViewListener
          * @var $contentView ContentView
          */
         $contentView = $event->getContentView();
-        $parameters = $contentView->getLocation();
-        $location = $parameters['location']->getInnerLocation();
-        $node_path = $location->pathString;
 
-        $content = $this->contentService->loadContent($location->contentInfo->id);
+        $location = $contentView->getLocation();
+
+        $locationId = $location->contentInfo->mainLocationId;
+
+        $content = $contentView->getContent();
 
         $current_user = $this->permissionResolver->getCurrentUserReference();
 
-        $result = $this->em->getRepository('MCPrivateContentAccessBundle:PrivateAccess')->findOneBy(['location_path' => $node_path, 'activate' => 1]);
+        $result = $this->em->getRepository('MCPrivateContentAccessBundle:PrivateAccess')->findOneBy(['locationId' => $locationId, 'activate' => 1]);
 
         $eZUser = $this->repository->getCurrentUser();
 
-        $canRead = $this->permissionResolver->canUser('content','read',$content);
+        $canRead = $this->permissionResolver->canUser('private_content','read', $content);
 
         if($result != NULL && $canRead){
-            return RedirectResponse::create($this->router->generate('form_private_access'),301);
+            return RedirectResponse::create($this->router->generate('form_private_access', ['locationid' => $locationId], 'true'),301);
         }
     }
 }

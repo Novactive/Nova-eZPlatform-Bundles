@@ -6,4 +6,4 @@ form_private_access:
     path:     /private_access_auth/{locationId}
     defaults:
         locationId: null
-        _controller: MCPrivateContentAccessBundle:PrivateAccess:askPassword
+        _controller: MCPrivateContentAccessBundle:FrontPrivateAccess:askPassword
