@@ -130,7 +130,7 @@ class ChartDataBuilder
             ];
             $options['scales']['xAxes'] = [
                 [
-                    'barThickness' => 6,
+                    'barThickness' => 3,
                 ],
             ];
         }
