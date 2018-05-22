@@ -20,60 +20,43 @@ use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-class PrivateAccessController extends Controller
+class FrontPrivateAccessController extends Controller
 {
-    /**
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-
-    public function privateAccessAction(Request $request, Location $location = null)
+    public function askPasswordAction(Location $location = null, Request $request)
     {
-        $session = $request->getSession();
-
-        $privateAccess = new PrivateAccess();
-
-        /**
-         * @var Form
-         */
-        $form = $this->createForm(PrivateAccessForm::class, $privateAccess, array(
-            'action' => $this->generateUrl('private_access'),
-            'method' => 'POST',
-        ));
-
-        if($location) {
-            $form->add('locationId', HiddenType::class, array(
-                'data' => $location->getContentInfo()->mainLocationId
-            ));
-        }
+        //$result = $this->getDoctrine()->getRepository('MCPrivateContentAccessBundle:PrivateAccess')->findOneBy(['locationId' => $location->contentInfo->mainLocationId, 'activate' => 1]);
+        $form = $this->createFormBuilder()
+            ->add('password', PasswordType::class, array(
+                'constraints' => array(
+                    new NotBlank()
+                ),
+                'label' => false
+            ))
+            ->add('locationId', HiddenType::class, array(
+                'data' => $location->contentInfo->mainLocationId
+            ))
+            ->add('Valider', SubmitType::class)
+            ->getForm();
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
+
             $data = $form->getData();
-
             $repository = $this->container->get('ezpublish.api.repository');
-            $contentService = $repository->getLocationService();
-            $locationInfo = $contentService->loadLocation($data['locationId']);
+            $contentService = $repository->getLocationService(); //getContentService();
+            $locationInfo = $contentService->loadLocation($session->get('locationid')); //loadContentInfo( $session->get('locationid') );
 
-            //$password = $passwordEncoder->encodePassword($privateAccessForm, $privateAccessForm->getPlainPassword());
+            $result = $this->getDoctrine()->getRepository('MCPrivateContentAccessBundle:PrivateAccess')->findOneBy(['locationId' => $data['locationId'], 'password' => $data['password'] ,'activate' => 1]);
+            if($result != NULL){
 
-            $date = new \DateTime();
-            $privateAccess->setCreated($date);
-            $privateAccess->setPassword($data['plainPassword']['first']);
-            $privateAccess->setLocationId($locationInfo->contentInfo->mainLocationId);
-            $privateAccess->setActivate($data['activate']);
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($privateAccess);
-            $entityManager->flush();
-
-            return $this->redirectToLocation($locationInfo,'/content/location/');
+                return $this->redirectToLocation($locationInfo,'');
+            }
         }
 
         return $this->render(
-            '@MCPrivateContentAccess/tabs/private_content_tab_form.html.twig',
-            array('form' => $form->createView())
+            '@MCPrivateContentAccess/full/ask_password_form.html.twig',
+            array('noLayout' => false, 'form' => $form->createView())
         );
     }
 

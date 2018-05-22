@@ -23,10 +23,10 @@ class PrivateAccess
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="integer", unique=true)
      * @Assert\NotBlank()
      */
-    protected $location_path;
+    protected $locationId;
 
     /**
      * @Assert\NotBlank()
@@ -75,19 +75,19 @@ class PrivateAccess
     }
 
     /**
-     * @return string
+     * @return integer
      */
-    public function getLocationPath(): string
+    public function getLocationId(): integer
     {
-        return $this->location_path;
+        return $this->locationId;
     }
 
     /**
-     * @param string $location_path
+     * @param integer $location_id
      */
-    public function setLocationPath(string $location_path): void
+    public function setLocationId(integer $location_id): void
     {
-        $this->location_path = $location_path;
+        $this->locationId = $location_id;
     }
 
     /**
@@ -123,17 +123,17 @@ class PrivateAccess
     }
 
     /**
-     * @return DateTime
+     * @return \DateTime
      */
-    public function getCreated(): DateTime
+    /*public function getCreated(): DateTime
     {
         return $this->created;
-    }
+    }*/
 
     /**
-     * @param DateTime $created
+     * @param \DateTime $created
      */
-    public function setCreated(DateTime $created): void
+    public function setCreated(\DateTime $created): void
     {
         $this->created = $created;
     }
