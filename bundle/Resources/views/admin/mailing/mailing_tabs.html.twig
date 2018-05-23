@@ -34,27 +34,7 @@
                 {% include "@NovaeZMailing/admin/common/list/broadcasts.html.twig" with { items: item.broadcasts} only %}
             </div>
             <div class="novaezmailing-ez-mailings-view tab-pane" role="tabpanel" id="novaezmailing-mailings-stats">
-                {% for broadcast in item.broadcasts %}
-                    {% if broadcast.emailSentCount > 0 %}
-                        <div class="novaezmailing-broadcast-charts-group">
-                            <h3>Broadcasted on {{ broadcast.started|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</h3>
-                            <hr/>
-                            <div style="width: 600px; height: 300px; float: left">
-                                {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\ChartController::browserChart", {broadcastId: broadcast.id })) }}
-                            </div>
-                            <div style="width: 600px; height: 300px; float: left">
-                                {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\ChartController::osChart", {broadcastId: broadcast.id })) }}
-                            </div>
-                            <div style="width: 600px; height: 300px; float: left">
-                                {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\ChartController::urlChart", {broadcastId: broadcast.id })) }}
-                            </div>
-                            <div style="width: 600px; height: 300px; float: left">
-                                {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\ChartController::openedChart", {broadcastId: broadcast.id })) }}
-                            </div>
-                            <hr/>
-                        </div>
-                    {% endif %}
-                {% endfor %}
+                {% include "NovaeZMailingBundle:admin/common/list:broadcast_graphs.html.twig" with { items: item.broadcasts } %}
             </div>
         {% endif %}
     </div>

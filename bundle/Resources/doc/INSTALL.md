@@ -95,3 +95,9 @@ nova_ezmailing:
             mailing_mailer: "swiftmailer.mailer.mysecond_mailer"
 ```
 
+
+### Add the tables
+
+```bash
+bin/console novaezmailing:install
+```

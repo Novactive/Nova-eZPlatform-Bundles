@@ -101,6 +101,7 @@ class CampaignFixtures extends Fixture implements DependentFixtureInterface
                         $hit = new StatHit();
                         $hit->setUserKey($key);
                         $hit->setUrl('-');
+                        $hit->setCreated($faker->dateTimeThisYear);
                         $hit->setBrowserName(
                             $faker->randomElement(['Chrome', 'Firefox', 'Safari', 'Internet Explorer'])
                         );
