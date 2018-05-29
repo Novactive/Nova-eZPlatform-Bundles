@@ -1,7 +1,7 @@
 {
-  "name": "mc/ldap-bundle",
+  "name": "novactive/ezldapauthenticator-bundle",
   "type": "symfony-bundle",
-  "description": "ldap user authentification",
+  "description": "ldap user authenticator",
   "keywords": [
     "ezplatform",
     "mc"
@@ -25,10 +25,7 @@
   },
   "autoload": {
     "psr-4": {
-      "MC\\Bundle\\LDAPBundle\\": "src/MC/Bundle/LDAPBundle"
+      "Novactive\\EzLdapAuthenticatorBundle\\": "src/"
     }
   },
-  "config": {
-    "bin-dir": "bin"
-  }
 }

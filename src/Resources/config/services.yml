@@ -1,0 +1,9 @@
+parameters:
+    nova_ez_ldap.interactive_event_listener.class: Acme\ExampleBundle\EventListener\InteractiveLoginListener
+
+services:
+    nova_ez_ldap.interactive_event_listener:
+        class: %nova_ez_ldap.interactive_event_listener.class%
+        arguments: [@ezpublish.api.service.user]
+        tags:
+            - { name: kernel.event_subscriber }

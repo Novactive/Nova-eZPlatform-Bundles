@@ -4,12 +4,12 @@
  * Date: 5/29/18
  */
 
-namespace MC\Bundle\LDAPBundle;
+namespace Novactive\EzLdapAuthenticatorBundle;
 
 use MC\Bundle\PrivateContentAccessBundle\DependencyInjection\MCPrivateContentAccessBundleExtension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class MCLDAPBundle extends Bundle
+class NovaEzLdapAuthenticatorBundle extends Bundle
 {
     /**
      * {@inheritdoc}
@@ -17,9 +17,8 @@ class MCLDAPBundle extends Bundle
     public function getContainerExtension()
     {
         if (!isset($this->extension)) {
-            $this->extension = new MCLDAPBundleExtension(__DIR__.'/Resources/config');
+            $this->extension = new NovaEzLdapAuthenticatorBundleExtension(__DIR__.'/Resources/config');
         }
-
         return $this->extension;
     }
 }
