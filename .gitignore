@@ -1,0 +1,17 @@
+vendor
+
+bin/doctrine-dbal
+bin/pdepend
+bin/php-cs-fixer
+bin/php-parse
+bin/phpcbf
+bin/phpcpd
+bin/phpcs
+bin/phpmd
+bin/security-checker
+
+data/metrics/*
+!data/metrics/.gitkeep
+
+.php_cs.cache
+.idea
