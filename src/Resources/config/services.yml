@@ -1,5 +1,5 @@
 parameters:
-    nova_ez_ldap.interactive_event_listener.class: Acme\ExampleBundle\EventListener\InteractiveLoginListener
+    nova_ez_ldap.interactive_event_listener.class: Novactive\EzLdapAuthenticatorBundle\EventListener\InteractiveLoginListener
 
 services:
     nova_ez_ldap.interactive_event_listener:

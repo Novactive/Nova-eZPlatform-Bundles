@@ -6,7 +6,7 @@
 
 namespace Novactive\EzLdapAuthenticatorBundle;
 
-use MC\Bundle\PrivateContentAccessBundle\DependencyInjection\MCPrivateContentAccessBundleExtension;
+use Novactive\EzLdapAuthenticatorBundle\DependencyInjection\NovaEzLdapAuthenticatorExtension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class NovaEzLdapAuthenticatorBundle extends Bundle
