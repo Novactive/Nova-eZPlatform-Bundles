@@ -1,0 +1,8 @@
+services:
+  Novactive\Bundle\HtmlIntegrationBundle\Routing\Router:
+    arguments:
+      - "%ezpublish.siteaccess.groups%"
+    calls:
+      - [setSiteaccess, ["@ezpublish.siteaccess"]]
+    tags:
+      - {name: router, priority: 300}
