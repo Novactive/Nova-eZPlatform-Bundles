@@ -1,15 +1,15 @@
 <?php
 /**
- * NovaHtmlIntegrationBundle.
+ * NovaeZStaticTemplatesBundle.
  *
- * @package   Novactive\Bundle\HtmlIntegrationBundle
+ * @package   Novactive\Bundle\EzStaticTemplatesBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
  * @copyright 2018 Novactive
- * @license   https://github.com/Novactive/NovaHtmlIntegrationBundle/blob/master/LICENSE
+ * @license   https://github.com/Novactive/NovaeZStaticTemplatesBundle/blob/master/LICENSE
  */
 
-namespace Novactive\Bundle\HtmlIntegrationBundle\Routing;
+namespace Novactive\Bundle\EzStaticTemplatesBundle\Routing;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
@@ -58,9 +58,9 @@ class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAcc
      */
     public function matchRequest(Request $request)
     {
-        if (!isset($this->siteAccessGroups['html_integration']) || !in_array(
+        if (!isset($this->siteAccessGroups['static_group']) || !in_array(
             $this->siteAccess->name,
-            $this->siteAccessGroups['html_integration']
+            $this->siteAccessGroups['static_group']
         )) {
             throw new ResourceNotFoundException();
         }
@@ -68,8 +68,8 @@ class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAcc
         $requestedPath = trim($requestedPath, '/');
 
         $params = [
-            '_route'      => 'html_integration',
-            '_controller' => 'HtmlIntegrationBundle:HtmlIntegration:index',
+            '_route'      => 'static_template',
+            '_controller' => 'EzStaticTemplatesBundle:EzStaticTemplates:index',
         ];
         if (!empty($requestedPath)) {
             $params['template'] = $requestedPath;

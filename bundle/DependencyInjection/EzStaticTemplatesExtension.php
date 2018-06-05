@@ -1,15 +1,15 @@
 <?php
 /**
- * NovaHtmlIntegrationBundle.
+ * NovaeZStaticTemplatesBundle.
  *
- * @package   Novactive\Bundle\HtmlIntegrationBundle
+ * @package   Novactive\Bundle\EzStaticTemplatesBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
  * @copyright 2018 Novactive
- * @license   https://github.com/Novactive/NovaHtmlIntegrationBundle/blob/master/LICENSE
+ * @license   https://github.com/Novactive/NovaeZStaticTemplatesBundle/blob/master/LICENSE
  */
 
-namespace Novactive\Bundle\HtmlIntegrationBundle\DependencyInjection;
+namespace Novactive\Bundle\EzStaticTemplatesBundle\DependencyInjection;
 
 use ReflectionClass;
 use Symfony\Component\Config\FileLocator;
@@ -20,7 +20,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class HtmlIntegrationExtension extends Extension implements PrependExtensionInterface
+class EzStaticTemplatesExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * {@inheritdoc}
@@ -36,7 +36,7 @@ class HtmlIntegrationExtension extends Extension implements PrependExtensionInte
      */
     public function prepend(ContainerBuilder $container)
     {
-        $htmlIntegrationThemePrefix = 'integration_';
+        $StaticTemplatesThemePrefix = 'static_';
         $themes                     = [];
 
         $globalViewsDir = $container->getParameter('kernel.root_dir').'/Resources/views';
@@ -55,7 +55,7 @@ class HtmlIntegrationExtension extends Extension implements PrependExtensionInte
 
             /** @var \Symfony\Component\Finder\SplFileInfo $directoryInfo */
             foreach ($finder->directories()->in($themeDir)->depth('== 0') as $directoryInfo) {
-                if (preg_match("/^{$htmlIntegrationThemePrefix}(.*)$/", $directoryInfo->getBasename())) {
+                if (preg_match("/^{$StaticTemplatesThemePrefix}(.*)$/", $directoryInfo->getBasename())) {
                     $themes[] = $directoryInfo->getBasename();
                 }
             }
@@ -65,7 +65,7 @@ class HtmlIntegrationExtension extends Extension implements PrependExtensionInte
         $appLevelThemesDir = $globalViewsDir.'/themes';
         if (is_dir($appLevelThemesDir)) {
             foreach ((new Finder())->directories()->in($appLevelThemesDir)->depth('== 0') as $directoryInfo) {
-                if (preg_match("/^{$htmlIntegrationThemePrefix}(.*)$/", $directoryInfo->getBasename())) {
+                if (preg_match("/^{$StaticTemplatesThemePrefix}(.*)$/", $directoryInfo->getBasename())) {
                     $themes[] = $directoryInfo->getBasename();
                 }
             }
@@ -74,7 +74,7 @@ class HtmlIntegrationExtension extends Extension implements PrependExtensionInte
             'siteaccess' => [
                 'list'   => [],
                 'groups' => [
-                    'html_integration' => [],
+                    'static_group' => [],
                 ],
                 'match'  => [
                     'Map\URI' => [],
@@ -88,12 +88,12 @@ class HtmlIntegrationExtension extends Extension implements PrependExtensionInte
         ];
         array_unique($themes);
         foreach ($themes as $theme) {
-            if (!preg_match("/^{$htmlIntegrationThemePrefix}(.*)$/", $theme)) {
+            if (!preg_match("/^{$StaticTemplatesThemePrefix}(.*)$/", $theme)) {
                 continue;
             }
             $uri                                                           = str_replace('_', '-', $theme);
             $ezpublishConfig['siteaccess']['list'][]                       = $theme;
-            $ezpublishConfig['siteaccess']['groups']['html_integration'][] = $theme;
+            $ezpublishConfig['siteaccess']['groups']['static_group'][] = $theme;
             $ezpublishConfig['siteaccess']['match']['Map\URI'][$uri]       = $theme;
             $ezpublishConfig['system'][$theme]                             = ['design' => "{$theme}_design"];
             $ezdesignConfig['design_list']["{$theme}_design"]              = [$theme];
