@@ -1,10 +1,10 @@
 {
-  "name": "novactive/htmlintegrationbundle",
+  "name": "novactive/ezstatictemplatesbundle",
   "type": "symfony-bundle",
-  "description": "This bundle is used for HTML integration with twig templates",
+  "description": "This bundle is used to expose twig templates to a siteaccess",
   "keywords": [
     "novactive",
-    "html integration"
+    "static template"
   ],
 
   "license": [
@@ -29,7 +29,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Novactive\\Bundle\\HtmlIntegrationBundle\\": "bundle"
+      "Novactive\\Bundle\\EzStaticTemplatesBundle\\": "bundle"
     }
   }
 }
