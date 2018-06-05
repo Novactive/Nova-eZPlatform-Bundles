@@ -36,12 +36,51 @@ class EzStaticTemplatesExtension extends Extension implements PrependExtensionIn
      */
     public function prepend(ContainerBuilder $container)
     {
+        $siteaccessList = $this->getSiteaccessIdentifierList($container);
+        if (!empty($siteaccessList)) {
+            $ezpublishConfig = [
+                'siteaccess' => [
+                    'list'   => [],
+                    'groups' => [
+                        'static_group' => [],
+                    ],
+                    'match' => [
+                        'Map\URI' => [],
+                    ],
+                ],
+                'system' => [],
+            ];
+            $ezdesignConfig  = [
+                'design_list' => [],
+            ];
+            foreach ($siteaccessList as $theme) {
+                $uri                                                       = str_replace('_', '-', $theme);
+                $ezpublishConfig['siteaccess']['list'][]                   = $theme;
+                $ezpublishConfig['siteaccess']['groups']['static_group'][] = $theme;
+                $ezpublishConfig['siteaccess']['match']['Map\URI'][$uri]   = $theme;
+                $ezpublishConfig['system'][$theme]                         = ['design' => "{$theme}_design"];
+                $ezdesignConfig['design_list']["{$theme}_design"]          = [$theme];
+            }
+            $container->prependExtensionConfig('ezpublish', $ezpublishConfig);
+            $container->prependExtensionConfig('ezdesign', $ezdesignConfig);
+        }
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     *
+     * @throws \ReflectionException
+     *
+     * @return array
+     */
+    protected function getSiteaccessIdentifierList(ContainerBuilder $container): array
+    {
         $StaticTemplatesThemePrefix = 'static_';
-        $themes                     = [];
+        $siteaccessList             = [];
 
         $globalViewsDir = $container->getParameter('kernel.root_dir').'/Resources/views';
         if (!is_dir($globalViewsDir)) {
-            (new Filesystem())->mkdir($globalViewsDir);
+            ( new Filesystem() )->mkdir($globalViewsDir);
         }
         $finder = new Finder();
         // Look for themes in bundles.
@@ -56,7 +95,7 @@ class EzStaticTemplatesExtension extends Extension implements PrependExtensionIn
             /** @var \Symfony\Component\Finder\SplFileInfo $directoryInfo */
             foreach ($finder->directories()->in($themeDir)->depth('== 0') as $directoryInfo) {
                 if (preg_match("/^{$StaticTemplatesThemePrefix}(.*)$/", $directoryInfo->getBasename())) {
-                    $themes[] = $directoryInfo->getBasename();
+                    $siteaccessList[] = $directoryInfo->getBasename();
                 }
             }
         }
@@ -64,42 +103,14 @@ class EzStaticTemplatesExtension extends Extension implements PrependExtensionIn
         // Now look for themes at application level (app/Resources/views/themes)
         $appLevelThemesDir = $globalViewsDir.'/themes';
         if (is_dir($appLevelThemesDir)) {
-            foreach ((new Finder())->directories()->in($appLevelThemesDir)->depth('== 0') as $directoryInfo) {
+            foreach (( new Finder() )->directories()->in($appLevelThemesDir)->depth('== 0') as $directoryInfo) {
                 if (preg_match("/^{$StaticTemplatesThemePrefix}(.*)$/", $directoryInfo->getBasename())) {
-                    $themes[] = $directoryInfo->getBasename();
+                    $siteaccessList[] = $directoryInfo->getBasename();
                 }
             }
         }
-        $ezpublishConfig = [
-            'siteaccess' => [
-                'list'   => [],
-                'groups' => [
-                    'static_group' => [],
-                ],
-                'match'  => [
-                    'Map\URI' => [],
-                ],
-            ],
-            'system'     => [],
-        ];
+        array_unique($siteaccessList);
 
-        $ezdesignConfig = [
-            'design_list' => [],
-        ];
-        array_unique($themes);
-        foreach ($themes as $theme) {
-            if (!preg_match("/^{$StaticTemplatesThemePrefix}(.*)$/", $theme)) {
-                continue;
-            }
-            $uri                                                           = str_replace('_', '-', $theme);
-            $ezpublishConfig['siteaccess']['list'][]                       = $theme;
-            $ezpublishConfig['siteaccess']['groups']['static_group'][] = $theme;
-            $ezpublishConfig['siteaccess']['match']['Map\URI'][$uri]       = $theme;
-            $ezpublishConfig['system'][$theme]                             = ['design' => "{$theme}_design"];
-            $ezdesignConfig['design_list']["{$theme}_design"]              = [$theme];
-        }
-
-        $container->prependExtensionConfig('ezpublish', $ezpublishConfig);
-        $container->prependExtensionConfig('ezdesign', $ezdesignConfig);
+        return $siteaccessList;
     }
 }
