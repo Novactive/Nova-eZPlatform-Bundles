@@ -34,8 +34,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Novactive\\Bundle\\EzMenuManagerBundle\\": "src/bundle",
-      "Novactive\\Bundle\\EzMenuManager\\": "src/lib"
+      "Novactive\\EzMenuManagerBundle\\": "src/bundle",
+      "Novactive\\EzMenuManager\\": "src/lib"
     }
   }
 }

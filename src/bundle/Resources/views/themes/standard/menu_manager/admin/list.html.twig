@@ -1,0 +1,49 @@
+{% extends 'EzPlatformAdminUiBundle::layout.html.twig' %}
+
+{% block title %}{{ 'menu.list'|trans([], 'menu_manager') }}{% endblock %}
+
+{%- block breadcrumbs -%}
+    {% include '@EzPlatformAdminUi/parts/breadcrumbs.html.twig' with { items: [
+        { value: 'menu.list'|trans([], 'menu_manager') }
+    ]} %}
+{%- endblock -%}
+
+{%- block page_title -%}
+    {% include '@EzPlatformAdminUi/parts/page_title.html.twig' with {
+        title: 'menu.list'|trans([], 'menu_manager'),
+        iconName: 'list'
+    } %}
+{%- endblock -%}
+
+{%- block content -%}
+    <section class="container my-4">
+        <div class="ez-table-header">
+            <div class="ez-table-header__headline">{{ 'menu.list'|trans([], 'menu_manager') }}</div>
+            <div>
+                <a class="btn btn-primary" href="{{ path('menu_manager.menu_new') }}">
+                    <svg class="ez-icon ez-icon-create">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                             xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#create"></use>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>{{ 'ID'|trans }}</th>
+                <th>{{ 'Name'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for menu in menus %}
+                <tr>
+                    <td>{{ menu.id }}</td>
+                    <td><a href={{ path('menu_manager.menu_edit', {'menu': menu.id}) }}>{{ menu.name }}</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {{ pagerfanta(menus, 'ez') }}
+    </section>
+{%- endblock -%}

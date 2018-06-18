@@ -1,0 +1,31 @@
+{% extends 'EzPlatformAdminUiBundle::layout.html.twig' %}
+{% form_theme form '@EzMenuManager/themes/standard/menu_manager/admin/form_fields.html.twig' %}
+
+{% block title %}{{ title|trans([], 'menu_manager') }}{% endblock %}
+
+{%- block breadcrumbs -%}
+    {% include '@EzPlatformAdminUi/parts/breadcrumbs.html.twig' with { items: [
+        { url: path('menu_manager.menu_list'), value: 'menu.list'|trans([], 'menu_manager') },
+        { value: title|trans([], 'menu_manager') }
+    ]} %}
+{%- endblock -%}
+
+{%- block page_title -%}
+    {% include '@EzPlatformAdminUi/parts/page_title.html.twig' with {
+        title: title|trans([], 'menu_manager'),
+        iconName: 'list'
+    } %}
+{%- endblock -%}
+
+{%- block content -%}
+    <section class="container my-4">
+        {{ form_start(form) }}
+            {{ form_row(form.name) }}
+            {{ form_row(form.rootLocationId) }}
+            <div class="mt-3">
+                <button class="btn btn-primary" type="submit">{{ 'Save'|trans }}</button>
+                <a href="{{ path('menu_manager.menu_list') }}" class="btn btn-secondary">{{ 'Back'|trans }}</a>
+            </div>
+        {{ form_end(form) }}
+    </section>
+{%- endblock -%}

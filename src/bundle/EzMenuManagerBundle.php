@@ -9,10 +9,10 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
-namespace Novactive\Bundle\EzMenuManagerBundle;
+namespace Novactive\EzMenuManagerBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class MenuManagerBundle extends Bundle
+class EzMenuManagerBundle extends Bundle
 {
 }

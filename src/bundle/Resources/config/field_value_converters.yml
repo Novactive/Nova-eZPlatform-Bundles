@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Novactive\EzMenuManager\Form\Type\FieldType\MenuItemFieldType: ~
+
+    Novactive\EzMenuManager\Persistence\Legacy\Content\FieldValue\Converter\MenuItemConverter:
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: menuitem}

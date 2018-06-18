@@ -1,0 +1,11 @@
+{% extends '@EzPublishCore/fielddefinition_settings.html.twig' %}
+
+{% block menuitem_settings %}
+    <ul class="ez-fielddefinition-settings ez-fielddefinition-"{{ fielddefinition.fieldTypeIdentifier }}-settings">
+        {% set defaultValue = null %}
+        {% if fielddefinition.defaultValue.text is not same as('') %}
+            {% set defaultValue = fielddefinition.defaultValue.text %}
+        {% endif %}
+        {{ block( 'settings_defaultvalue' ) }}
+    </ul>
+{% endblock %}

@@ -1,0 +1,6 @@
+system:
+    admin_group:
+        field_templates:
+            -
+                template: "@EzMenuManager/themes/standard/field_type/fieldtype_ui.html.twig"
+                priority: 10

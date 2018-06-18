@@ -1,0 +1,10 @@
+services:
+    Novactive\EzMenuManager\FieldType\MenuItem\Type:
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: menuitem}
+
+    Novactive\EzMenuManager\FieldType\Mapper\MenuItemFormMapper:
+        tags:
+            - { name: ez.fieldFormMapper.definition, fieldType: menuitem }
+            - { name: ez.fieldFormMapper.value, fieldType: menuitem }
