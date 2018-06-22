@@ -11,6 +11,7 @@
 
 namespace Novactive\EzMenuManagerBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Novactive\EzMenuManager\Traits\IdentityTrait;
 
@@ -20,12 +21,11 @@ use Novactive\EzMenuManager\Traits\IdentityTrait;
  * @ORM\Entity()
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="type", type="string")
- * @ORM\DiscriminatorMap({})
  * @ORM\Table(name="menu_manager_menu_item")
  *
  * @package Novactive\EzMenuManagerBundle\Entity
  */
-abstract class MenuItem
+class MenuItem
 {
     use IdentityTrait;
 
@@ -83,7 +83,7 @@ abstract class MenuItem
      *
      * @ORM\Column(name="position", type="integer")
      */
-    protected $position;
+    protected $position = 0;
 
     /**
      * @ORM\Column(name="options", type="json")
@@ -91,6 +91,14 @@ abstract class MenuItem
      * @var array
      */
     protected $options = [];
+
+    /**
+     * MenuItem constructor.
+     */
+    public function __construct()
+    {
+        $this->childrens = new ArrayCollection();
+    }
 
     /**
      * @return string
@@ -149,10 +157,11 @@ abstract class MenuItem
     }
 
     /**
-     * @param MenuItem $menu
+     * @param Menu $menu
      */
-    public function setMenu(MenuItem $menu): void
+    public function setMenu(Menu $menu): void
     {
+        $menu->addItem($this);
         $this->menu = $menu;
     }
 
@@ -173,6 +182,26 @@ abstract class MenuItem
     }
 
     /**
+     * @param MenuItem $children
+     *
+     * @return array
+     */
+    public function addChildren(MenuItem $children): void
+    {
+        if (!$this->childrens->indexOf($children)) {
+            $this->childrens->add($children);
+        }
+    }
+
+    /**
+     * @param MenuItem $children
+     */
+    public function removeChildren(MenuItem $children): void
+    {
+        $this->childrens->removeElement($children);
+    }
+
+    /**
      * @return MenuItem
      */
     public function getParent(): ?MenuItem
@@ -185,6 +214,7 @@ abstract class MenuItem
      */
     public function setParent(MenuItem $parent): void
     {
+        $parent->addChildren($this);
         $this->parent = $parent;
     }
 

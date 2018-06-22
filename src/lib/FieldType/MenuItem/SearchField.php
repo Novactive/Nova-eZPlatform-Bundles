@@ -19,18 +19,7 @@ class SearchField implements Indexable
      */
     public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
-        return [
-            new Search\Field(
-                'value',
-                $field->value->data,
-                new Search\FieldType\StringField()
-            ),
-            new Search\Field(
-                'fulltext',
-                $field->value->data,
-                new Search\FieldType\FullTextField()
-            ),
-        ];
+        return [];
     }
 
     /**
@@ -40,9 +29,7 @@ class SearchField implements Indexable
      */
     public function getIndexDefinition()
     {
-        return [
-            'value' => new Search\FieldType\StringField(),
-        ];
+        return [];
     }
 
     /**
@@ -56,7 +43,7 @@ class SearchField implements Indexable
      */
     public function getDefaultMatchField()
     {
-        return 'value';
+        return null;
     }
 
     /**
@@ -70,6 +57,6 @@ class SearchField implements Indexable
      */
     public function getDefaultSortField()
     {
-        return $this->getDefaultMatchField();
+        return null;
     }
 }

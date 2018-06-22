@@ -13,7 +13,7 @@ namespace Novactive\EzMenuManagerBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Novactive\EzMenuManager\Form\Type\MenuEditType;
+use Novactive\EzMenuManager\Form\Type\MenuType;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
@@ -81,7 +81,7 @@ class AdminController extends Controller
      */
     public function editAction(EntityManagerInterface $em, Request $request, Menu $menu)
     {
-        $form = $this->createForm(MenuEditType::class, $menu);
+        $form = $this->createForm(MenuType::class, $menu);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($menu);

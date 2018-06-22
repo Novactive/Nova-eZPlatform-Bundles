@@ -47,7 +47,7 @@ class Menu
      *     mappedBy="menu",
      *     cascade={"persist", "remove"}
      *     )
-     * @ORM\OrderBy({"weight" = "ASC"})
+     * @ORM\OrderBy({"position" = "ASC"})
      *
      * @var MenuItem[]|ArrayCollection
      */
@@ -94,9 +94,9 @@ class Menu
     }
 
     /**
-     * @return MenuItem[]
+     * @return MenuItem[]|ArrayCollection
      */
-    public function getItems(): array
+    public function getItems()
     {
         return $this->items;
     }
@@ -114,7 +114,9 @@ class Menu
      */
     public function addItem(MenuItem $menuItem)
     {
-        $this->items->add($menuItem);
+        if (!$this->items->indexOf($menuItem)) {
+            $this->items->add($menuItem);
+        }
     }
 
     /**

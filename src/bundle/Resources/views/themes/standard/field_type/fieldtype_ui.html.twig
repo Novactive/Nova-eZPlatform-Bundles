@@ -2,7 +2,8 @@
 
 {% block menuitem_field %}
 {% spaceless %}
-    {% set field_value = field.value.text %}
-    {{ block( 'simple_inline_field' ) }}
+    {{ dump() }}
+    {#{% set field_value = field.value.text %}#}
+    {#{{ block( 'simple_inline_field' ) }}#}
 {% endspaceless %}
 {% endblock %}

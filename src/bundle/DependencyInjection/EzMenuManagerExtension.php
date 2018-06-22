@@ -31,20 +31,41 @@ class EzMenuManagerExtension extends Extension implements PrependExtensionInterf
         $loader->load('fieldtypes.yml');
         $loader->load('indexable_fieldtypes.yml');
         $loader->load('field_value_converters.yml');
+        $loader->load('ezadminui/components.yml');
     }
 
+    /**
+     * Allow an extension to prepend the extension configurations.
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
     public function prepend(ContainerBuilder $container)
     {
-        $container->prependExtensionConfig('assetic', ['bundles' => ['EzMenuManagerBundle']]);
+        $container->prependExtensionConfig(
+            'assetic',
+            [
+                'bundles' => [
+                    'EzMenuManagerBundle',
+                ],
+            ]
+        );
 
-        $configFile = __DIR__.'/../Resources/config/field_templates.yml';
-        $config     = Yaml::parse(file_get_contents($configFile));
-        $container->prependExtensionConfig('ezpublish', $config);
-        $container->addResource(new FileResource($configFile));
+        $configs = [
+            'field_templates.yml'    => 'ezpublish',
+            'field_templates_ui.yml' => 'ezpublish',
+        ];
 
-        $configFile = __DIR__.'/../Resources/config/field_templates_ui.yml';
-        $config     = Yaml::parse(file_get_contents($configFile));
-        $container->prependExtensionConfig('ezpublish', $config);
-        $container->addResource(new FileResource($configFile));
+        $activatedBundles = array_keys($container->getParameter('kernel.bundles'));
+
+        if (in_array('EzPlatformAdminUiBundle', $activatedBundles, true)) {
+            $configs['ezadminui/twig.yml'] = 'twig';
+        }
+
+        foreach ($configs as $fileName => $extensionName) {
+            $configFile = __DIR__.'/../Resources/config/'.$fileName;
+            $config     = Yaml::parse(file_get_contents($configFile));
+            $container->prependExtensionConfig($extensionName, $config);
+            $container->addResource(new FileResource($configFile));
+        }
     }
 }

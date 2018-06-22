@@ -32,8 +32,6 @@ class MenuItemConverter implements Converter
      */
     public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue)
     {
-        $storageFieldValue->dataText      = $value->data;
-        $storageFieldValue->sortKeyString = $value->sortKey;
     }
 
     /**
@@ -44,8 +42,6 @@ class MenuItemConverter implements Converter
      */
     public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue)
     {
-        $fieldValue->data    = $value->dataText;
-        $fieldValue->sortKey = $value->sortKeyString;
     }
 
     /**
@@ -56,7 +52,6 @@ class MenuItemConverter implements Converter
      */
     public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef)
     {
-        $storageDef->dataText1 = $fieldDef->defaultValue->data;
     }
 
     /**
@@ -70,8 +65,6 @@ class MenuItemConverter implements Converter
         $validatorConstraints = [];
 
         $fieldDef->fieldTypeConstraints->validators = $validatorConstraints;
-        $fieldDef->defaultValue->data               = $storageDef->dataText1 ?: null;
-        $fieldDef->defaultValue->sortKey            = $storageDef->dataText1 ?: '';
     }
 
     /**

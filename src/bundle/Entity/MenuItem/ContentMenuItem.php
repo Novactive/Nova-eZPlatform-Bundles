@@ -15,29 +15,31 @@ use Doctrine\ORM\Mapping as ORM;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 
 /**
- * Class LocationMenuItem.
+ * Class ContentMenuItem.
  *
  * @ORM\Entity()
  *
- * @property int locationId
+ * @property int $contentId
  *
  * @package Novactive\EzMenuManagerBundle\Entity\MenuItem
  */
-class LocationMenuItem extends MenuItem
+class ContentMenuItem extends MenuItem
 {
+    const URL_PREFIX = 'content:';
+
     /**
      * @return int
      */
-    public function getLocationId(): int
+    public function getContentId(): int
     {
-        return $this->getOption('locationId');
+        return ltrim($this->getUrl(), static::URL_PREFIX);
     }
 
     /**
-     * @param int $locationId
+     * @param int $contentId
      */
-    public function setLocationId(int $locationId): void
+    public function setContentId(int $contentId): void
     {
-        $this->setOption('locationId', $locationId);
+        $this->setUrl(static::URL_PREFIX.$contentId);
     }
 }

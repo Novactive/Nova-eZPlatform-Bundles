@@ -5,6 +5,16 @@ services:
             - {name: ezpublish.fieldType, alias: menuitem}
 
     Novactive\EzMenuManager\FieldType\Mapper\MenuItemFormMapper:
+        autowire: true
         tags:
             - { name: ez.fieldFormMapper.definition, fieldType: menuitem }
             - { name: ez.fieldFormMapper.value, fieldType: menuitem }
+
+    Novactive\EzMenuManager\FieldType\MenuItem\MenuItemStorage:
+        arguments:
+            - '@Novactive\EzMenuManager\FieldType\MenuItem\MenuItemStorage\Gateway\DoctrineStorage'
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler, alias: menuitem}
+
+    Novactive\EzMenuManager\FieldType\MenuItem\MenuItemStorage\Gateway\DoctrineStorage:
+        autowire: true

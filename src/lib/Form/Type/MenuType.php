@@ -17,7 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class MenuEditType extends AbstractType
+class MenuType extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -44,6 +44,7 @@ class MenuEditType extends AbstractType
                 'rootLocationId',
                 MenuRootLocationType::class,
                 [
+                    'required'           => false,
                     'label'              => 'menu.property.root_location',
                     'translation_domain' => 'menu_manager',
                 ]

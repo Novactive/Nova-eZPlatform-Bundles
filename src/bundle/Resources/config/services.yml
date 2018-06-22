@@ -18,6 +18,12 @@ services:
     Novactive\EzMenuManager\Form\Type\:
         resource: "../../../lib/Form/Type/*"
 
+    Novactive\EzMenuManager\Service\:
+        resource: "../../../lib/Service/*"
+
+    Novactive\EzMenuManager\Twig\:
+        resource: "../../../lib/Twig/*"
+
     Novactive\EzMenuManager\EventListener\:
         resource: "../../../lib/EventListener/*"
         public: true

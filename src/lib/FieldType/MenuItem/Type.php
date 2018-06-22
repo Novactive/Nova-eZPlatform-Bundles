@@ -36,19 +36,6 @@ class Type extends FieldType
             return $validationErrors;
         }
 
-        //        foreach ($validatorConfiguration as $validatorIdentifier => $constraints) {
-        //            if ('StringLengthValidator' !== $validatorIdentifier) {
-        //                $validationErrors[] = new ValidationError(
-        //                    "Validator '%validator%' is unknown",
-        //                    null,
-        //                    [
-        //                        '%validator%' => $validatorIdentifier,
-        //                    ]
-        //                );
-        //                continue;
-        //            }
-        //        }
-
         return $validationErrors;
     }
 
@@ -90,13 +77,13 @@ class Type extends FieldType
      * It will be used to generate content name and url alias if current field is designated
      * to be used in the content name/urlAlias pattern.
      *
-     * @param \eZ\Publish\Core\FieldType\TextLine\Value $value
+     * @param Value $value
      *
      * @return string
      */
     public function getName(SPIValue $value)
     {
-        return (string) $value->text;
+        return (string) $value->menuItems;
     }
 
     public function getEmptyValue()
@@ -113,7 +100,7 @@ class Type extends FieldType
      */
     public function isEmptyValue(SPIValue $value)
     {
-        return null === $value->text || '' === trim($value->text);
+        return null === $value->menuItems || empty($value->menuItems);
     }
 
     protected function createValueFromInput($inputValue)
@@ -135,11 +122,11 @@ class Type extends FieldType
      */
     protected function checkValueStructure(BaseValue $value)
     {
-        if (!is_string($value->text)) {
+        if (!is_array($value->menuItems)) {
             throw new InvalidArgumentType(
-                '$value->text',
-                'string',
-                $value->text
+                '$value->menuItems',
+                'array',
+                $value->menuItems
             );
         }
     }
@@ -147,13 +134,13 @@ class Type extends FieldType
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
-     * @param \eZ\Publish\Core\FieldType\TextLine\Value $value
+     * @param Value $value
      *
      * @return array
      */
     protected function getSortInfo(BaseValue $value)
     {
-        return $this->transformationProcessor->transformByGroup((string) $value, 'lowercase');
+        return null;
     }
 
     /**
@@ -161,12 +148,16 @@ class Type extends FieldType
      *
      * @param mixed $hash
      *
-     * @return \eZ\Publish\Core\FieldType\TextLine\Value $value
+     * @return Value $value
      */
     public function fromHash($hash)
     {
         if (null === $hash) {
             return $this->getEmptyValue();
+        }
+
+        if (!is_array($hash)) {
+            return new Value();
         }
 
         return new Value($hash);
@@ -175,7 +166,7 @@ class Type extends FieldType
     /**
      * Converts a $Value to a hash.
      *
-     * @param \eZ\Publish\Core\FieldType\TextLine\Value $value
+     * @param Value $value
      *
      * @return mixed
      */
@@ -185,7 +176,7 @@ class Type extends FieldType
             return null;
         }
 
-        return $value->text;
+        return $value->menuItems;
     }
 
     /**

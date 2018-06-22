@@ -5,6 +5,7 @@ services:
         public: false
 
     Novactive\EzMenuManager\Form\Type\FieldType\MenuItemFieldType: ~
+    Novactive\EzMenuManager\Form\Type\FieldType\FieldValueTransformer: ~
 
     Novactive\EzMenuManager\Persistence\Legacy\Content\FieldValue\Converter\MenuItemConverter:
         tags:
