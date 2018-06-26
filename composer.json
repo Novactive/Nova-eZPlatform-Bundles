@@ -1,12 +1,16 @@
 {
-  "name": "novactive/ezldapauthenticator-bundle",
-  "type": "symfony-bundle",
+  "name": "novactive/ezldapauthenticatorbundle",
+  "type": "ezplatform-bundle",
   "description": "ldap user authenticator",
   "keywords": [
+    "novactive",
     "ezplatform",
-    "mc"
+    "ldap"
   ],
-  "license": "proprietary",
+
+  "license": [
+    "MIT"
+  ],
   "authors": [
     {
       "name": "Novactive",
@@ -15,6 +19,7 @@
     }
   ],
   "require": {
+    "php": "^7.1",
     "ezsystems/ezpublish-kernel": "^7.0"
   },
   "require-dev": {
@@ -25,7 +30,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Novactive\\EzLdapAuthenticatorBundle\\": "src/"
+      "Novactive\\EzLdapAuthenticatorBundle\\": "src/bundle",
+      "Novactive\\EzLdapAuthenticator\\": "src/lib"
     }
-  },
+  }
 }

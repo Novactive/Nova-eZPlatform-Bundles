@@ -1,0 +1,6 @@
+services:
+    Novactive\EzLdapAuthenticator\EventListener\:
+        resource: "../../../lib/EventListener/*"
+        public: true
+        tags:
+            - { name: kernel.event_subscriber }

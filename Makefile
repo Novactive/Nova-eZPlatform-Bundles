@@ -7,21 +7,12 @@ RESTORE=$(shell echo "\033[0m")
 
 # Variables
 PHP_BIN := php
-DOCKER_BIN := docker
+COMPOSER := composer
 SRCS := src
 CURRENT_DIR := $(shell pwd)
-SCRIPS_DIR := $(CURRENT_DIR)/scripts
-
+PLANTUMLJAR := $(CURRENT_DIR)/plantuml.jar
 .DEFAULT_GOAL := list
 
-# #####################################
-# BEGIN - Project Specific starts here
-# #####################################
-
-
-# #####################################
-# END
-# #####################################
 .PHONY: list
 list:
 	@echo "******************************"
@@ -30,14 +21,25 @@ list:
 	@echo "${RED}==============================${RESTORE}"
 
 .PHONY: codeclean
-codeclean: ## Run the codechecker
-	SCRIPS_DIR=$(SCRIPS_DIR) bash $(SCRIPS_DIR)/codechecker.bash
+codeclean: ## Coding Standard checks
+	$(PHP_BIN) ./vendor/bin/php-cs-fixer fix --config=.cs/.php_cs.php
+	$(PHP_BIN) ./vendor/bin/phpmd src text .cs/md_ruleset.xml
+	$(PHP_BIN) ./vendor/bin/phpcpd src
+	$(PHP_BIN) ./vendor/bin/phpcbf -n src --standard=.cs/cs_ruleset.xml
+	$(PHP_BIN) ./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src
 
-.PHONY: tests
-tests: ## Run the tests
-	SCRIPS_DIR=$(SCRIPS_DIR) bash $(SCRIPS_DIR)/runtests.bash
+.PHONY: install
+install: ## Install vendors
+	$(COMPOSER) install
 
 .PHONY: clean
 clean: ## Removes the vendors, and caches
 	rm -f .php_cs.cache
 	rm -rf vendor
+	rm -f composer.lock
+
+.PHONY: tests
+tests: ## Execute tests
+	$(PHP_BIN) ./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php bundle
+	$(PHP_BIN) ./vendor/bin/phpmd bundle text .cs/md_ruleset.xml
+	$(PHP_BIN) ./vendor/bin/phpcpd bundle

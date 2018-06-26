@@ -1,5 +1,15 @@
 <?php
-namespace Novactive\EzLdapAuthenticatorBundle\EventListener;
+/**
+ * NovaeZLdapAuthenticatorBundle.
+ *
+ * @package   NovaeZLdapAuthenticatorBundle
+ *
+ * @author    Novactive <f.alexandre@novactive.com>
+ * @copyright 2018 Novactive
+ * @license   https://github.com/Novactive/NovaeZLdapAuthenticatorBundle/blob/master/LICENSE
+ */
+
+namespace Novactive\EzLdapAuthenticator\EventListener;
 
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\Core\MVC\Symfony\Event\InteractiveLoginEvent;
@@ -13,7 +23,7 @@ class InteractiveLoginListener implements EventSubscriberInterface
      */
     private $userService;
 
-    public function __construct( UserService $userService )
+    public function __construct(UserService $userService)
     {
         $this->userService = $userService;
     }
@@ -21,14 +31,14 @@ class InteractiveLoginListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            MVCEvents::INTERACTIVE_LOGIN => 'onInteractiveLogin'
+            MVCEvents::INTERACTIVE_LOGIN => 'onInteractiveLogin',
         ];
     }
 
-    public function onInteractiveLogin( InteractiveLoginEvent $event )
+    public function onInteractiveLogin(InteractiveLoginEvent $event)
     {
         // This loads a generic user and assigns it back to the event.
         // You may want to create users here, or even load predefined users depending on your own rules.
-        $event->setApiUser( $this->userService->loadUserByLogin( 'lolautruche' ) );
+        $event->setApiUser($this->userService->loadUserByLogin('lolautruche'));
     }
 }
