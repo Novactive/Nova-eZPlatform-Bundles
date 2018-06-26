@@ -40,6 +40,6 @@ clean: ## Removes the vendors, and caches
 
 .PHONY: tests
 tests: ## Execute tests
-	$(PHP_BIN) ./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php bundle
-	$(PHP_BIN) ./vendor/bin/phpmd bundle text .cs/md_ruleset.xml
-	$(PHP_BIN) ./vendor/bin/phpcpd bundle
+	$(PHP_BIN) ./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src
+	$(PHP_BIN) ./vendor/bin/phpmd src text .cs/md_ruleset.xml
+	$(PHP_BIN) ./vendor/bin/phpcpd src
