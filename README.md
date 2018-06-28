@@ -1,2 +1,2 @@
-# NovaeZMenuManager
-A bundle to manage menus
+# NovaeZLdapAuthenticator
+A bundle to authenticate users against LDAP server
