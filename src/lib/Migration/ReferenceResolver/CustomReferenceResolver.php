@@ -59,7 +59,6 @@ class CustomReferenceResolver extends AbstractResolver
         switch ($refType) {
             case 'location_remote_id':
                 $location = $this->locationService->loadLocationByRemoteId($value);
-                var_dump([$value, $location->contentId]);
 
                 return $this->em->getRepository(ContentMenuItem::class)->findBy(
                     [

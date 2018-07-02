@@ -39,11 +39,6 @@ class MenuItemFieldHandler extends AbstractFieldHandler implements FieldValueImp
         foreach ($fieldHash as &$fieldHashItem) {
             /** @var MenuItem[] $parentMenuItem */
             $parentMenuItem = $this->referenceResolver->resolveReference($fieldHashItem['parentId']);
-            var_dump([
-                $fieldHashItem['parentId'],
-                $parentMenuItem,
-                is_array($parentMenuItem),
-                     ]);
             if (is_array($parentMenuItem)) {
                 $fieldHashItem['parentId'] = null;
                 foreach ($parentMenuItem as $parentMenuItem) {
