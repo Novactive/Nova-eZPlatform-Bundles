@@ -31,6 +31,7 @@ class EzMenuManagerExtension extends Extension implements PrependExtensionInterf
         $loader->load('fieldtypes.yml');
         $loader->load('indexable_fieldtypes.yml');
         $loader->load('field_value_converters.yml');
+        $loader->load('migration.yml');
         $loader->load('ezadminui/components.yml');
     }
 

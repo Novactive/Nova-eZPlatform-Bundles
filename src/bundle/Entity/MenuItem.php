@@ -58,7 +58,7 @@ class MenuItem
     protected $menu;
 
     /**
-     * @var MenuItem[]
+     * @var MenuItem[]|ArrayCollection
      *
      * @ORM\OneToMany(
      *     targetEntity="Novactive\EzMenuManagerBundle\Entity\MenuItem",
@@ -127,7 +127,7 @@ class MenuItem
     /**
      * @param string $url
      */
-    public function setUrl(string $url): void
+    public function setUrl($url): void
     {
         $this->url = $url;
     }
@@ -161,14 +161,21 @@ class MenuItem
      */
     public function setMenu(Menu $menu): void
     {
-        $menu->addItem($this);
         $this->menu = $menu;
     }
 
     /**
-     * @return MenuItem[]
+     * @return bool
      */
-    public function getChildrens(): array
+    public function hasChildrens(): bool
+    {
+        return !$this->childrens->isEmpty();
+    }
+
+    /**
+     * @return MenuItem[]|ArrayCollection
+     */
+    public function getChildrens()
     {
         return $this->childrens;
     }
@@ -188,7 +195,8 @@ class MenuItem
      */
     public function addChildren(MenuItem $children): void
     {
-        if (!$this->childrens->indexOf($children)) {
+        if (false === $this->childrens->indexOf($children)) {
+            $children->setParent($this);
             $this->childrens->add($children);
         }
     }
@@ -214,7 +222,6 @@ class MenuItem
      */
     public function setParent(MenuItem $parent): void
     {
-        $parent->addChildren($this);
         $this->parent = $parent;
     }
 
@@ -255,9 +262,9 @@ class MenuItem
      *
      * @return mixed
      */
-    public function getOption($name)
+    public function getOption($name, $default = false)
     {
-        return $this->options[$name] ?? false;
+        return $this->options[$name] ?? $default;
     }
 
     /**
@@ -267,5 +274,13 @@ class MenuItem
     public function setOption($name, $value): void
     {
         $this->options[$name] = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->id;
     }
 }

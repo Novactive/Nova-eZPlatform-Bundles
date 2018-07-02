@@ -12,14 +12,19 @@
 namespace Novactive\EzMenuManager\Form\Type\FieldType;
 
 use eZ\Publish\API\Repository\FieldTypeService;
+use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\Core\Helper\TranslationHelper;
+use EzSystems\RepositoryForms\Data\Content\ContentCreateData;
+use EzSystems\RepositoryForms\Data\Content\ContentUpdateData;
+use Novactive\EzMenuManager\Service\DataTransformer\MenuItemValueTransformer;
 use Novactive\EzMenuManager\Service\MenuService;
-use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class MenuItemFieldType extends AbstractType
 {
@@ -29,24 +34,42 @@ class MenuItemFieldType extends AbstractType
     /** @var MenuService */
     protected $menuService;
 
-    /** @var FieldValueTransformer */
+    /** @var LocationService */
+    protected $locationService;
+
+    /** @var MenuItemValueTransformer */
     protected $fieldValueTransformer;
+
+    /** @var TranslationHelper */
+    protected $translationHelper;
+
+    /** @var TranslatorInterface */
+    protected $translator;
 
     /**
      * MenuItemFieldType constructor.
      *
-     * @param FieldTypeService      $fieldTypeService
-     * @param MenuService           $menuService
-     * @param FieldValueTransformer $fieldValueTransformer
+     * @param FieldTypeService         $fieldTypeService
+     * @param MenuService              $menuService
+     * @param LocationService          $locationService
+     * @param MenuItemValueTransformer $fieldValueTransformer
+     * @param TranslationHelper        $translationHelper
+     * @param TranslatorInterface      $translator
      */
     public function __construct(
         FieldTypeService $fieldTypeService,
         MenuService $menuService,
-        FieldValueTransformer $fieldValueTransformer
+        LocationService $locationService,
+        MenuItemValueTransformer $fieldValueTransformer,
+        TranslationHelper $translationHelper,
+        TranslatorInterface $translator
     ) {
         $this->fieldTypeService      = $fieldTypeService;
         $this->menuService           = $menuService;
+        $this->locationService       = $locationService;
         $this->fieldValueTransformer = $fieldValueTransformer;
+        $this->translationHelper     = $translationHelper;
+        $this->translator            = $translator;
     }
 
     public function getName()
@@ -66,56 +89,77 @@ class MenuItemFieldType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-//        $available_menus   = $options['available_menus'];
-//        $parentLocationsId = $options['parentLocationsId'];
-//        $data              = [];
-//        foreach ($available_menus as $availableMenu) {
-//            if (empty($parentLocationsId)) {
-//                $ContentMenuItem = new MenuItem\ContentMenuItem();
-//                $ContentMenuItem->setMenu($availableMenu);
-//                $data[] = $ContentMenuItem;
-//            } else {
-//                foreach ($parentLocationsId as $parentLocationId) {
-//                    $parentContentMenuItems = $this->menuService->getMenuItemsInMenuWithLocationId(
-//                        $availableMenu,
-//                        $parentLocationId
-//                    );
-//                    if (empty($parentContentMenuItems)) {
-//                        $ContentMenuItem = new MenuItem\ContentMenuItem();
-//                        $ContentMenuItem->setMenu($availableMenu);
-//                        $data[] = $ContentMenuItem;
-//                    } else {
-//                        foreach ($parentContentMenuItems as $parentContentMenuItem) {
-//                            $ContentMenuItem = new MenuItem\ContentMenuItem();
-//                            $ContentMenuItem->setMenu($availableMenu);
-//                            $ContentMenuItem->setParent($parentContentMenuItem);
-//                            $data[] = $ContentMenuItem;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-
         $builder->addModelTransformer($this->fieldValueTransformer);
     }
 
     /**
-     * @inheritDoc
+     * @param FormView      $view
+     * @param FormInterface $form
+     * @param array         $options
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $attributes = [];
+        $attributes               = [];
+        $view->vars['attr']       = array_merge($view->vars['attr'], $attributes);
+        $view->vars['menu_items'] = $form->getData()->menuItems;
 
-        $view->vars['attr']            = array_merge($view->vars['attr'], $attributes);
-        $view->vars['available_menus'] = $form->getConfig()->getOption('available_menus');
+        $formData          = $form->getParent()->getParent()->getParent()->getData();
+        $parentLocationsId = [];
+        if ($formData instanceof ContentCreateData) {
+            $view->vars['content_name'] = $this->translator->trans(
+                'new_content_item',
+                ['%contentType%' => $this->translationHelper->getTranslatedByMethod($formData->contentType, 'getName')],
+                'content_create'
+            );
+            foreach ($formData->getLocationStructs() as $locationStruct) {
+                $parentLocationsId[] = $locationStruct->parentLocationId;
+            }
+        } elseif ($formData instanceof ContentUpdateData) {
+            $view->vars['content_name'] = $this->translationHelper->getTranslatedByMethod(
+                $formData->contentDraft,
+                'getName'
+            );
+
+            $parentLocations = $this->locationService->loadLocations($formData->contentDraft->contentInfo);
+
+            foreach ($parentLocations as $parentLocation) {
+                $parentLocationsId[] = $parentLocation->id;
+            }
+        }
+
+        $availableMenus = [];
+        foreach ($parentLocationsId as $parentLocationId) {
+            $menus = $this->menuService->getAvailableMenuForLocationId($parentLocationId);
+            if (!empty($menus)) {
+                $parentLocation = $this->locationService->loadLocation($parentLocationId);
+                foreach ($menus as $menu) {
+                    if (!isset($availableMenus[$menu->getId()])) {
+                        $availableMenus[$menu->getId()] = [
+                            'menu'                   => $menu,
+                            'defaultParentMenuItems' => [],
+                        ];
+                    }
+
+                    $availableMenus[$menu->getId()]['defaultParentMenuItems'] +=
+                        $this->menuService->getLocationMenuItemsInMenu(
+                            $parentLocation,
+                            $menu
+                        )->getValues();
+                }
+            }
+        }
+        $view->vars['available_menus'] = $availableMenus;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
-            [
-                'available_menus' => [],
-            ]
+            []
         );
     }
 }

@@ -56,14 +56,24 @@
          * @param menuId int
          * @param parentId int
          * @param position int
-         * @param enabled bool
+         * @param isNew bool
          */
-        constructor(id, menuId, parentId, position, enabled) {
+        constructor(id, menuId, parentId, position, isNew) {
             this.id = id;
             this.menuId = menuId;
-            this.parentId = parentId;
+            this.parentId = parseInt(parentId);
             this.position = position;
-            this.enabled = enabled || true;
+            this.isNew = isNew || (id ? false : true);
+            this.enabled = true;
+        }
+
+        toJSON() {
+            return {
+                id: this.isNew ? null : this.id,
+                menuId: this.menuId,
+                parentId: this.parentId,
+                position: this.position
+            }
         }
 
         enable() {
@@ -81,11 +91,18 @@
          * @param tree array
          * @param enabled bool
          */
-        constructor(id, tree, enabled) {
-            this.id = id;
-            this.enabled = enabled || true;
+        constructor(el, updateInputCallback) {
+            this.element = el;
+            this.id = parseInt(el.querySelector(SELECT_MENU_TREE_WRAPPER).dataset.menu_id);
+            this.menuItemName = el.querySelector(SELECT_MENU_TREE_WRAPPER).dataset.menu_item_name;
+            this.enabled = true;
             this.items = new Map();
-            this.tree = tree;
+            this.tree = new MenuTree(el.querySelector(SELECT_MENU_TREE_WRAPPER), this);
+            this.updateInputCallback = updateInputCallback;
+
+            let defaultParents =  el.querySelector(SELECT_MENU_TREE_WRAPPER).dataset.default_parents.split(',').filter(Number);
+            this.defaultParents = defaultParents.length > 0 ? defaultParents : [0];
+
         }
 
         /**
@@ -119,10 +136,19 @@
         enableItem(parentId) {
             let menuItem = this.getItemByParentId(parentId);
             if (!menuItem) {
-                this.addItem(new MenuItem(null, this.id, parentId, null, true));
-            } else {
-                menuItem.enable();
+                let id = this.tree.createNode({
+                    'id': null,
+                    'text': this.menuItemName,
+                    'state': {
+                        'disabled': true,
+                    }
+                }, parentId, "last");
+
+                menuItem = new MenuItem(id, this.id, parentId, null, true);
+                this.addItem(menuItem);
             }
+            menuItem.enable();
+            return menuItem;
         }
 
         /**
@@ -133,6 +159,7 @@
             if (menuItem) {
                 menuItem.disable();
             }
+            return menuItem;
         }
 
         enable() {
@@ -141,6 +168,158 @@
 
         disable() {
             this.enabled = false;
+        }
+
+        init() {
+            this.tree.init();
+            $(this.tree.element).on("ready.jstree", this.onTreeReady.bind(this));
+        }
+
+        onTreeReady() {
+
+            let menu = this;
+            $(SELECTOR_COLLAPSE, this.element)
+                .on("show.bs.collapse", function () {
+                    menu.enable();
+                    $('[data-target="#' + $(this).attr('id') + '"]').prop('checked', true);
+                    menu.updateInputCallback();
+                })
+                .on("hide.bs.collapse", function () {
+                    menu.disable();
+                    $('[data-target="#' + $(this).attr('id') + '"]').prop('checked', false);
+                    menu.updateInputCallback();
+                })
+                .collapse(this.hasItems() ? 'show' : 'hide');
+
+
+            if(!this.hasItems()){
+                menu.disable();
+                if(this.defaultParents.length > 0){
+                    for(let defaultParent of this.defaultParents){
+                        this.enableItem(defaultParent);
+                    }
+                }
+            }
+
+            for (let menuItem of this.getItems()) {
+                this.tree.selectNode(menuItem.parentId);
+                this.tree.disableTree(menuItem.id);
+            }
+
+            $(this.tree.element).on("changed.jstree", this.onTreeChange.bind(this));
+            $(this.tree.element).on("move_node.jstree", this.onTreeChange.bind(this));
+            this.element.classList.remove("ez-visually-hidden");
+        }
+
+        onTreeChange(e, data) {
+            if(e.type === "changed", data.changed){
+                for (let parentId of data.changed.selected) {
+                    this.enableItem(parentId);
+                    let menuItem = this.getItemByParentId(parentId);
+                    if (menuItem) {
+                        this.tree.showNode(menuItem.id);
+                    }
+                }
+                for (let parentId of data.changed.deselected) {
+                    this.disableItem(parentId);
+                    let menuItem = this.getItemByParentId(parentId);
+                    if (menuItem) {
+                        this.tree.hideNode(menuItem.id);
+                    }
+                }
+            }
+
+            this.updatePositions();
+            this.updateInputCallback();
+        }
+
+        updatePositions(){
+            let menuItems = this.getItems();
+            for(let menuItem of menuItems){
+                let parentNode = this.tree.getNode(menuItem.parentId);
+                menuItem.position = parentNode.children.findIndex((id) => {return id == menuItem.id});
+            }
+        }
+    }
+
+    class MenuTree {
+        constructor(el, menu) {
+            this.element = el;
+            this.tree = null;
+            this.json = JSON.parse(el.innerHTML);
+            this.menu = menu;
+        }
+
+        init() {
+            this.tree = $(this.element)
+                .on("ready.jstree", this.onReady.bind(this))
+                .jstree({
+                    'core': {
+                        'data': this.json,
+                        'check_callback' : this.check.bind(this)
+                    },
+                    "checkbox": {
+                        "three_state": false
+                    },
+                    "plugins": ["checkbox", "changed", "dnd"]
+                })
+                .jstree(true);
+        }
+
+        check(operation, node, node_parent, node_position, more){
+            if(operation === "create_node") return true;
+            if(operation === "move_node"){
+                let menuItem = this.menu.getItemByParentId(node.parent);
+                if(menuItem && menuItem.id == node.id && node.parent === node_parent.id && menuItem.isNew) return true;
+            }
+            return false;
+        }
+
+        onReady() {
+
+        }
+
+        getNode(id){
+            return this.tree.get_node(id);
+        }
+
+        showNode(id) {
+            let node = this.tree.get_node(id);
+            this.tree.show_node(node);
+            return node;
+        }
+
+        hideNode(id) {
+            let node = this.tree.get_node(id);
+            this.tree.hide_node(node);
+            return node;
+        }
+
+        disableNode(id) {
+            let node = this.tree.get_node(id);
+            this.tree.disable_node(node);
+            return node;
+        }
+
+        disableTree(id){
+            let node = this.disableNode(id);
+            if(node && node.children.length > 0){
+                for(let childId of node.children){
+                    this.disableTree(childId);
+                }
+            }
+        }
+
+        createNode(node, parentId, pos) {
+            return this.tree.create_node(
+                parentId,
+                node,
+                pos
+            );
+        }
+
+        selectNode(menuItemId) {
+            this.tree.select_node(menuItemId);
         }
     }
 
@@ -173,57 +352,14 @@
         }
 
         fieldContainer.querySelectorAll(SELECT_MENU_WRAPPER).forEach(menuWrapper => {
-            let menu = new Menu(parseInt(menuWrapper.querySelector(SELECT_MENU_TREE_WRAPPER).dataset.menu_id), JSON.parse(menuWrapper.querySelector(SELECT_MENU_TREE_WRAPPER).innerHTML));
+            let menu = new Menu(menuWrapper, updateInput);
             menuList.set(menu.id, menu);
             for (let rawMenuItem of rawMenuItems) {
                 if (rawMenuItem['menuId'] === menu.id) {
-                    menu.addItem(new MenuItem(rawMenuItem['id'], rawMenuItem['menuId'], rawMenuItem['parentId'] || 0, rawMenuItem['position'], true));
+                    menu.addItem(new MenuItem(rawMenuItem['id'], rawMenuItem['menuId'], rawMenuItem['parentId'] || 0, rawMenuItem['position'], false));
                 }
             }
-
-            let tree = $(SELECT_MENU_TREE_WRAPPER, menuWrapper)
-                .on("ready.jstree", function () {
-                    for (let menuItem of menu.getItems()) {
-                        tree.select_node(menuItem.parentId);
-                    }
-
-                    $(SELECTOR_COLLAPSE, menuWrapper)
-                        .on("show.bs.collapse", function () {
-                            menu.enable();
-                            $('[data-target="#' + $(this).attr('id') + '"]').prop('checked', true);
-                            updateInput();
-                        })
-                        .on("hide.bs.collapse", function () {
-                            menu.disable();
-                            $('[data-target="#' + $(this).attr('id') + '"]').prop('checked', false);
-                            updateInput();
-                        })
-                        .collapse(menu.hasItems() ? 'show' : 'hide');
-
-                    $(this).on("changed.jstree", function (e, data) {
-                        let tree = $(SELECT_MENU_TREE_WRAPPER, menuWrapper).jstree(true);
-                        for (let parentId of data.changed.selected) {
-                            menu.enableItem(parentId);
-                        }
-                        for (let parentId of data.changed.deselected) {
-                            menu.disableItem(parentId);
-                        }
-                        updateInput();
-                    });
-                    menuWrapper.classList.remove("ez-visually-hidden");
-
-                })
-                .jstree({
-                    'core': {
-                        'data': menu.tree
-                    },
-                    "checkbox": {
-                        "three_state": false
-                    },
-                    "plugins": ["checkbox", "changed"]
-                })
-                .jstree(true);
-
+            menu.init();
         });
         validator.init();
         global.eZ.fieldTypeValidators = global.eZ.fieldTypeValidators ?

@@ -33,13 +33,26 @@
             <tr>
                 <th>{{ 'ID'|trans }}</th>
                 <th>{{ 'Name'|trans }}</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
             {% for menu in menus %}
                 <tr>
                     <td>{{ menu.id }}</td>
-                    <td><a href={{ path('menu_manager.menu_edit', {'menu': menu.id}) }}>{{ menu.name }}</a></td>
+                    <td>{{ menu.name }}</a></td>
+                    <td>
+                        <a href={{ path('menu_manager.menu_view', {'menu': menu.id}) }} class="btn" target="_blank">
+                            <svg class="ez-icon ez-icon-view">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#view"></use>
+                            </svg>
+                        </a>
+                        <a href={{ path('menu_manager.menu_edit', {'menu': menu.id}) }} class="btn">
+                            <svg class="ez-icon ez-icon-edit">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#edit"></use>
+                            </svg>
+                        </a>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

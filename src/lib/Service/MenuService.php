@@ -11,8 +11,12 @@
 
 namespace Novactive\EzMenuManager\Service;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use Novactive\EzMenuManager\MenuItem\MenuItemTypeRegistry;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 
@@ -24,16 +28,24 @@ class MenuService
     /** @var LocationService */
     protected $locationService;
 
+    /** @var MenuItemTypeRegistry */
+    protected $menuItemTypeRegistry;
+
     /**
      * MenuService constructor.
      *
      * @param EntityManagerInterface $em
      * @param LocationService        $locationService
+     * @param MenuItemTypeRegistry   $menuItemTypeRegistry
      */
-    public function __construct(EntityManagerInterface $em, LocationService $locationService)
-    {
-        $this->em              = $em;
-        $this->locationService = $locationService;
+    public function __construct(
+        EntityManagerInterface $em,
+        LocationService $locationService,
+        MenuItemTypeRegistry $menuItemTypeRegistry
+    ) {
+        $this->em                   = $em;
+        $this->locationService      = $locationService;
+        $this->menuItemTypeRegistry = $menuItemTypeRegistry;
     }
 
     /**
@@ -58,34 +70,26 @@ class MenuService
     }
 
     /**
-     * @param Menu $menu
-     * @param $locationId
+     * @param Location $location
+     * @param Menu     $menu
      *
-     * @return array
+     * @return MenuItem[]|ArrayCollection
      */
-    public function getMenuItemsInMenuWithLocationId(Menu $menu, $locationId)
+    public function getLocationMenuItemsInMenu(Location $location, Menu $menu)
     {
-        $ContentMenuItems = [];
-        foreach ($menu->getItems() as $item) {
-            $ContentMenuItems += $this->getMenuItemsInMenuItemChildrensWithLocationId($item, $locationId);
-        }
+        $criteria = new Criteria();
+        $criteria->where(Criteria::expr()->eq('url', MenuItem\ContentMenuItem::URL_PREFIX.$location->contentId));
 
-        return $ContentMenuItems;
+        return $menu->getItems()->matching($criteria);
     }
 
     /**
-     * @param MenuItem $menuItem
-     * @param $locationId
+     * @param $menuId
      *
-     * @return array
+     * @return Menu|null|object
      */
-    public function getMenuItemsInMenuItemChildrensWithLocationId(MenuItem $menuItem, $locationId)
+    public function loadMenu($menuId)
     {
-        $ContentMenuItems = [];
-        foreach ($menuItem->getChildrens() as $item) {
-            $ContentMenuItems += $this->getMenuItemsInMenuItemChildrensWithLocationId($item, $locationId);
-        }
-
-        return $ContentMenuItems;
+        return $this->em->getRepository(Menu::class)->find($menuId);
     }
 }

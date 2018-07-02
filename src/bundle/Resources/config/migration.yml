@@ -1,0 +1,13 @@
+services:
+    Novactive\EzMenuManager\Migration\FieldHandler\MenuItemFieldHandler:
+        parent: ez_migration_bundle.complex_field
+        arguments:
+            - '@Novactive\EzMenuManager\FieldType\MenuItem\ValueConverter'
+        tags:
+            - { name: ez_migration_bundle.complex_field, fieldtype: menuitem, priority: 0 }
+
+    Novactive\EzMenuManager\Migration\ReferenceResolver\CustomReferenceResolver:
+        autowire: true
+        autoconfigure: true
+        tags:
+            - { name: ez_migration_bundle.reference_resolver.customreference }

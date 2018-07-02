@@ -32,16 +32,18 @@ class MenuItemConverter implements Converter
      */
     public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue)
     {
+        $storageFieldValue->dataText = json_encode($value->data);
     }
 
     /**
-     * Converts data from $value to $fieldValue.
+     * Converts data from $storageFieldValue to $value.
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
-     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue                $fieldValue
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $storageFieldValue
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue                $value
      */
-    public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue)
+    public function toFieldValue(StorageFieldValue $storageFieldValue, FieldValue $value)
     {
+        $value->data = json_decode($storageFieldValue->dataText, true);
     }
 
     /**

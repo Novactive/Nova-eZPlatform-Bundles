@@ -45,6 +45,14 @@ class MenuManagerExtension extends \Twig_Extension
         return $functions;
     }
 
+    /**
+     * @param Menu $menu
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     *
+     * @return array
+     */
     public function getMenuJstree(Menu $menu)
     {
         $list = [
@@ -59,15 +67,15 @@ class MenuManagerExtension extends \Twig_Extension
             ],
         ];
 
-        foreach ($menu->getItems() as $item) {
-            $parent = $item->getParent();
-            $name   = $item->getName();
-            if ($item instanceof ContentMenuItem) {
-                $content = $this->contentService->loadContent($item->getContentId());
+        foreach ($menu->getItems() as $menuItem) {
+            $parent = $menuItem->getParent();
+            $name   = $menuItem->getName();
+            if ($menuItem instanceof ContentMenuItem) {
+                $content = $this->contentService->loadContent($menuItem->getContentId());
                 $name    = $this->translationHelper->getTranslatedContentName($content);
             }
             $list[] = [
-                'id'     => $item->getId(),
+                'id'     => $menuItem->getId(),
                 'parent' => $parent ? $parent->getId() : 0,
                 'text'   => $name,
                 'state'  => [

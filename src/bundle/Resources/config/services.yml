@@ -21,6 +21,10 @@ services:
     Novactive\EzMenuManager\Service\:
         resource: "../../../lib/Service/*"
 
+    Novactive\EzMenuManager\Service\MenuCacheService:
+        calls:
+            - [setSiteAccess, ['@ezpublish.siteaccess']]
+
     Novactive\EzMenuManager\Twig\:
         resource: "../../../lib/Twig/*"
 
@@ -29,3 +33,10 @@ services:
         public: true
         tags:
             - { name: kernel.event_subscriber }
+
+
+    Novactive\EzMenuManager\MenuItem\:
+        resource: "../../../lib/MenuItem/*"
+
+    Novactive\EzMenuManager\MenuItem\MenuItemTypeRegistry:
+        arguments: [!tagged ezmenumanager.menuitemtype]

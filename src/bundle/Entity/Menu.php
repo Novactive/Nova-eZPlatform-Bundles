@@ -12,6 +12,7 @@
 namespace Novactive\EzMenuManagerBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Novactive\EzMenuManager\Traits\IdentityTrait;
 
@@ -47,7 +48,7 @@ class Menu
      *     mappedBy="menu",
      *     cascade={"persist", "remove"}
      *     )
-     * @ORM\OrderBy({"position" = "ASC"})
+     * @ORM\OrderBy({"id" = "ASC"})
      *
      * @var MenuItem[]|ArrayCollection
      */
@@ -102,6 +103,19 @@ class Menu
     }
 
     /**
+     * @param MenuItem $parent
+     *
+     * @return MenuItem[]|ArrayCollection
+     */
+    public function getItemsByParent($parent = null)
+    {
+        $criteria = new Criteria();
+        $criteria->where(Criteria::expr()->eq('parent', $parent));
+
+        return $this->items->matching($criteria);
+    }
+
+    /**
      * @param MenuItem[] $items
      */
     public function setItems(array $items): void
@@ -114,7 +128,8 @@ class Menu
      */
     public function addItem(MenuItem $menuItem)
     {
-        if (!$this->items->indexOf($menuItem)) {
+        if (false === $this->items->indexOf($menuItem)) {
+            $menuItem->setMenu($this);
             $this->items->add($menuItem);
         }
     }
@@ -125,5 +140,13 @@ class Menu
     public function removeItem(MenuItem $menuItem)
     {
         $this->items->removeElement($menuItem);
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->id;
     }
 }

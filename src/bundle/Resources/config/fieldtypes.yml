@@ -1,5 +1,9 @@
 services:
+    Novactive\EzMenuManager\FieldType\MenuItem\ValueConverter:
+        autowire: true
+
     Novactive\EzMenuManager\FieldType\MenuItem\Type:
+        autowire: true
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: menuitem}

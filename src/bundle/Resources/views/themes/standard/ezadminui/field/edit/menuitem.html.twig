@@ -7,7 +7,7 @@
             {% for available_menu in available_menus %}
                 {# @var menu \Novactive\EzMenuManagerBundle\Entity\Menu #}
                 {% set menu = available_menu.menu %}
-                <div class="card menu__wrapper ez-visually-hidden">
+                <div class="card menu__wrapper ez-visually-hidden*">
                     <div class="card-header" id="menu-heading-{{ menu.id }}">
                         <div class="form-check">
                             <label class="form-check-label">
@@ -19,7 +19,11 @@
 
                     <div id="menu-{{ menu.id }}" class="collapse" aria-labelledby="menu-heading-{{ menu.id }}">
                         <div class="card-body">
-                            <div class="menu-tree__wrapper" data-menu_id="{{ menu.id }}">{{ ezmenumanager_menu_jstree(menu)|json_encode }}</div>
+                            <div class="menu-tree__wrapper"
+                                 data-menu_id="{{ menu.id }}"
+                                 data-menu_item_name="{{ content_name }}"
+                                 data-default_parents="{{ available_menu.defaultParentMenuItems|join(',') }}"
+                            >{{ ezmenumanager_menu_jstree(menu)|json_encode }}</div>
                         </div>
                     </div>
                 </div>

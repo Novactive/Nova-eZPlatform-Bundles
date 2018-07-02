@@ -22,6 +22,7 @@
         {{ form_start(form) }}
             {{ form_row(form.name) }}
             {{ form_row(form.rootLocationId) }}
+            {{ form_row(form.items) }}
             <div class="mt-3">
                 <button class="btn btn-primary" type="submit">{{ 'Save'|trans }}</button>
                 <a href="{{ path('menu_manager.menu_list') }}" class="btn btn-secondary">{{ 'Back'|trans }}</a>

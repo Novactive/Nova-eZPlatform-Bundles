@@ -32,7 +32,9 @@ class MenuItemStorage extends GatewayBasedStorage
      */
     public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
-        return $this->gateway->storeFieldData($versionInfo, $field);
+        if (VersionInfo::STATUS_PUBLISHED === $versionInfo->status || 1 == $versionInfo->versionNo) {
+            return $this->gateway->storeFieldData($versionInfo, $field);
+        }
     }
 
     /**
@@ -44,7 +46,9 @@ class MenuItemStorage extends GatewayBasedStorage
      */
     public function getFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
-        return $this->gateway->getFieldData($versionInfo, $field);
+        if (VersionInfo::STATUS_PUBLISHED === $versionInfo->status) {
+            return $this->gateway->getFieldData($versionInfo, $field);
+        }
     }
 
     /**
@@ -56,7 +60,9 @@ class MenuItemStorage extends GatewayBasedStorage
      */
     public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds, array $context)
     {
-        return $this->gateway->deleteFieldData($versionInfo, $fieldIds);
+        if (VersionInfo::STATUS_PUBLISHED === $versionInfo->status) {
+            return $this->gateway->deleteFieldData($versionInfo, $fieldIds);
+        }
     }
 
     /**

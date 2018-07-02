@@ -21,6 +21,19 @@ class Type extends FieldType
 {
     protected $validatorConfigurationSchema = [];
 
+    /** @var ValueConverter */
+    protected $valueConverter;
+
+    /**
+     * Type constructor.
+     *
+     * @param ValueConverter $valueConverter
+     */
+    public function __construct(ValueConverter $valueConverter)
+    {
+        $this->valueConverter = $valueConverter;
+    }
+
     /**
      * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
      *
@@ -156,11 +169,7 @@ class Type extends FieldType
             return $this->getEmptyValue();
         }
 
-        if (!is_array($hash)) {
-            return new Value();
-        }
-
-        return new Value($hash);
+        return $this->valueConverter->fromHash($hash);
     }
 
     /**
@@ -176,7 +185,7 @@ class Type extends FieldType
             return null;
         }
 
-        return $value->menuItems;
+        return $this->valueConverter->toHash($value);
     }
 
     /**

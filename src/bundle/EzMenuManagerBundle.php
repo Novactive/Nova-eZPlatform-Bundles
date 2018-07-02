@@ -11,8 +11,19 @@
 
 namespace Novactive\EzMenuManagerBundle;
 
+use Novactive\EzMenuManager\MenuItem\MenuItemTypeInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class EzMenuManagerBundle extends Bundle
 {
+    /**
+     * @inheritDoc
+     */
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+        $container->registerForAutoconfiguration(MenuItemTypeInterface::class)
+                  ->addTag('ezmenumanager.menuitemtype');
+    }
 }

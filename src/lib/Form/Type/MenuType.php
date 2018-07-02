@@ -48,6 +48,15 @@ class MenuType extends AbstractType
                     'label'              => 'menu.property.root_location',
                     'translation_domain' => 'menu_manager',
                 ]
+            )
+            ->add(
+                'items',
+                MenuItemsCollectionType::class,
+                [
+                    'required'           => false,
+                    'label'              => 'menu.property.items',
+                    'translation_domain' => 'menu_manager',
+                ]
             );
     }
 }
