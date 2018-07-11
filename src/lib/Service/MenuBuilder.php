@@ -45,11 +45,11 @@ class MenuBuilder
         $this->cache                = $cache;
     }
 
-    public function build(Menu $menu)
+    public function build(Menu $menu, $parent = null)
     {
         $knpMenu = $this->createItem('root');
 
-        $rootMenuItems = $menu->getItemsByParent();
+        $rootMenuItems = $menu->getItemsByParent($parent);
         foreach ($rootMenuItems as $childMenuItem) {
             $this->appendChild($childMenuItem, $knpMenu);
         }
