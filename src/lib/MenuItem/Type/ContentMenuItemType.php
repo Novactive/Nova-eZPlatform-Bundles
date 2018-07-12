@@ -134,7 +134,6 @@ class ContentMenuItemType extends DefaultMenuItemType implements MenuItemTypeInt
             [
                 'contentId' => $location->contentId,
                 'locationId'=> $location->id,
-                'title'     => $this->contentService->loadContent($location->contentId)->getFieldValue('title')
             ]
         );
         $cacheItem->set($link);
