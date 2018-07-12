@@ -130,6 +130,12 @@ class ContentMenuItemType extends DefaultMenuItemType implements MenuItemTypeInt
         $link = new KnpMenuItem('location-'.$location->id, $this->factory);
         $link->setUri($this->router->generate($location));
         $link->setLabel($this->translationHelper->getTranslatedContentNameByContentInfo($contentInfo));
+        $link->setExtras(
+            [
+                'contentId' => $location->contentId,
+                'locationId'=> $location->id,
+            ]
+        );
         $cacheItem->set($link);
         $cacheItem->tag(
             [
