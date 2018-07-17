@@ -86,7 +86,7 @@ class MenuItem
     protected $position = 0;
 
     /**
-     * @ORM\Column(name="options", type="json")
+     * @ORM\Column(name="options", type="text")
      *
      * @var array
      */
@@ -246,7 +246,7 @@ class MenuItem
      */
     public function getOptions(): array
     {
-        return $this->options;
+        return json_decode($this->options, true);
     }
 
     /**
@@ -254,7 +254,7 @@ class MenuItem
      */
     public function setOptions(array $options): void
     {
-        $this->options = $options;
+        $this->options = json_encode($options);
     }
 
     /**
@@ -264,7 +264,8 @@ class MenuItem
      */
     public function getOption($name, $default = false)
     {
-        return $this->options[$name] ?? $default;
+        $options = $this->getOptions();
+        return $options[$name] ?? $default;
     }
 
     /**
@@ -273,7 +274,9 @@ class MenuItem
      */
     public function setOption($name, $value): void
     {
-        $this->options[$name] = $value;
+        $options = $this->getOptions();
+        $options[$name] = $value;
+        $this->setOptions($options);
     }
 
     /**
