@@ -48,7 +48,7 @@ class Menu
      *     mappedBy="menu",
      *     cascade={"persist", "remove"}
      *     )
-     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\OrderBy({"position" = "ASC"})
      *
      * @var MenuItem[]|ArrayCollection
      */
