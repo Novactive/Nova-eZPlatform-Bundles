@@ -1,0 +1,2 @@
+menuitem: { name: "Menu Item" }
+field_definition.menuitem.default_value: "Default value"

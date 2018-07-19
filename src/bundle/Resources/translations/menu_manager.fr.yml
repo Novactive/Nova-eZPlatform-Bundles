@@ -1,0 +1,10 @@
+menu.list: Liste des menus
+menu:
+  property:
+    id: "ID"
+    name: "Nom"
+    root_location: "Racine (location id)"
+    items: "Eléments du menu"
+  edit_form:
+    save: "Enregistrer le menu"
+    back: "Retour à la liste"

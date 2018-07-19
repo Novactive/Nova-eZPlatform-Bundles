@@ -3,7 +3,7 @@ menu:
   property:
     id: "ID"
     name: "Name"
-    root_location: "Racine (location id)"
+    root_location: "Root (location id)"
     items: "Items"
   edit_form:
     save: "Save menu"
