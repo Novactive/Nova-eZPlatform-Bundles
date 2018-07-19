@@ -35,7 +35,7 @@ class MenuItemStorage extends GatewayBasedStorage
         // VersionInfo return STATUS_DRAFT when publish Content
         // TODO: Store data field when content published
         //if (VersionInfo::STATUS_PUBLISHED === $versionInfo->status || 1 == $versionInfo->versionNo) {
-            return $this->gateway->storeFieldData($versionInfo, $field);
+        return $this->gateway->storeFieldData($versionInfo, $field);
         //}
     }
 

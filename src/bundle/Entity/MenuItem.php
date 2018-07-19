@@ -265,6 +265,7 @@ class MenuItem
     public function getOption($name, $default = false)
     {
         $options = $this->getOptions();
+
         return $options[$name] ?? $default;
     }
 
@@ -274,7 +275,7 @@ class MenuItem
      */
     public function setOption($name, $value): void
     {
-        $options = $this->getOptions();
+        $options        = $this->getOptions();
         $options[$name] = $value;
         $this->setOptions($options);
     }
