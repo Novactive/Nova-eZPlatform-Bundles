@@ -1,0 +1,10 @@
+menu.list: Menu list
+menu:
+  property:
+    id: "ID"
+    name: "Name"
+    root_location: "Racine (location id)"
+    items: "Items"
+  edit_form:
+    save: "Save menu"
+    back: "Back to the list"

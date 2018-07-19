@@ -24,8 +24,8 @@
             {{ form_row(form.rootLocationId) }}
             {{ form_row(form.items) }}
             <div class="mt-3">
-                <button class="btn btn-primary" type="submit">{{ 'Save'|trans }}</button>
-                <a href="{{ path('menu_manager.menu_list') }}" class="btn btn-secondary">{{ 'Back'|trans }}</a>
+                <button class="btn btn-primary" type="submit">{{ 'menu.edit_form.save'|trans([], 'menu_manager') }}</button>
+                <a href="{{ path('menu_manager.menu_list') }}" class="btn btn-secondary">{{ 'menu.edit_form.back'|trans([], 'menu_manager') }}</a>
             </div>
         {{ form_end(form) }}
     </section>
