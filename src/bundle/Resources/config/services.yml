@@ -31,8 +31,15 @@ services:
     Novactive\EzMenuManager\EventListener\:
         resource: "../../../lib/EventListener/*"
         public: true
+
+    Novactive\EzMenuManager\EventListener\CachePurgerListener:
+        arguments:
+            - "@fos_http_cache.handler.tag_handler"
         tags:
-            - { name: kernel.event_subscriber }
+            - { name: doctrine.event_listener, event: postPersist, lazy: true }
+            - { name: doctrine.event_listener, event: postUpdate, lazy: true }
+            - { name: doctrine.event_listener, event: postRemove, lazy: true }
+
 
 
     Novactive\EzMenuManager\MenuItem\:
