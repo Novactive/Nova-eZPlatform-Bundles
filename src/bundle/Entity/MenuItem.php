@@ -90,7 +90,7 @@ class MenuItem
      *
      * @var array
      */
-    protected $options = [];
+    protected $options;
 
     /**
      * MenuItem constructor.
@@ -98,6 +98,7 @@ class MenuItem
     public function __construct()
     {
         $this->childrens = new ArrayCollection();
+        $this->options   = json_encode([]);
     }
 
     /**
@@ -183,7 +184,7 @@ class MenuItem
     /**
      * @param MenuItem[] $childrens
      */
-    public function setChildrens(array $childrens): void
+    public function setChildrens($childrens): void
     {
         $this->childrens = $childrens;
     }

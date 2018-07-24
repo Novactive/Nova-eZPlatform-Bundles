@@ -16,6 +16,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\SPI\Persistence\Content\FieldValue as PersistenceValue;
 
 class Type extends FieldType
 {
@@ -154,6 +155,22 @@ class Type extends FieldType
     protected function getSortInfo(BaseValue $value)
     {
         return null;
+    }
+
+    /**
+     * Converts a persistence $fieldValue to a Value.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
+     *
+     * @return \eZ\Publish\Core\FieldType\Value
+     */
+    public function fromPersistenceValue(PersistenceValue $fieldValue)
+    {
+        return $this->fromHash(
+            is_array($fieldValue->externalData) && !empty($fieldValue->externalData) ?
+                $fieldValue->externalData :
+                $fieldValue->data
+        );
     }
 
     /**

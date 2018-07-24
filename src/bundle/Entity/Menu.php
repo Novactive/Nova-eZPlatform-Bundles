@@ -46,7 +46,8 @@ class Menu
      * @ORM\OneToMany(
      *     targetEntity="Novactive\EzMenuManagerBundle\Entity\MenuItem",
      *     mappedBy="menu",
-     *     cascade={"persist", "remove"}
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
      *     )
      * @ORM\OrderBy({"position" = "ASC"})
      *

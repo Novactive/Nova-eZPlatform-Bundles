@@ -261,7 +261,7 @@
                     "checkbox": {
                         "three_state": false
                     },
-                    "plugins": ["checkbox", "changed", "dnd"]
+                    "plugins": ["checkbox", "changed"]
                 })
                 .jstree(true);
         }
@@ -304,6 +304,7 @@
         disableTree(id){
             let node = this.disableNode(id);
             if(node && node.children.length > 0){
+                this.disableNode(node.parent);
                 for(let childId of node.children){
                     this.disableTree(childId);
                 }

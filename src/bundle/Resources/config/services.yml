@@ -32,6 +32,10 @@ services:
         resource: "../../../lib/EventListener/*"
         public: true
 
+    Novactive\EzMenuManager\EventListener\SignalListener:
+        arguments:
+            $persistenceHandler: "@ezpublish.api.persistence_handler"
+
     Novactive\EzMenuManager\EventListener\CachePurgerListener:
         arguments:
             - "@fos_http_cache.handler.tag_handler"

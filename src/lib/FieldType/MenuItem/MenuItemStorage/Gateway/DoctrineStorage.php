@@ -42,37 +42,6 @@ class DoctrineStorage extends Gateway
 
     public function storeFieldData(VersionInfo $versionInfo, Field $field)
     {
-        /** @var ContentMenuItem[] $menuItems */
-        $menuItems = $this->valueConverter->fromHash($field->value->data)->menuItems;
-        if (!empty($menuItems)) {
-            foreach ($menuItems as $menuItem) {
-                $menuItem->setContentId($versionInfo->contentInfo->id);
-                $this->em->persist($menuItem);
-            }
-        }
-
-        $currentMenuItems = $this->em->getRepository(MenuItem::class)->findBy(
-            [
-                'url' => MenuItem\ContentMenuItem::URL_PREFIX.$versionInfo->contentInfo->id,
-            ]
-        );
-        if (!empty($currentMenuItems)) {
-            $menuItemsToDelete = array_udiff(
-                $currentMenuItems,
-                $menuItems,
-                function (MenuItem $currentMenuItem, MenuItem $menuItem) {
-                    return $currentMenuItem->getId() - $menuItem->getId();
-                }
-            );
-
-            if (!empty($menuItemsToDelete)) {
-                foreach ($menuItemsToDelete as $menuItemToDelete) {
-                    $this->em->remove($menuItemToDelete);
-                }
-            }
-        }
-
-        $this->em->flush();
     }
 
     public function getFieldData(VersionInfo $versionInfo, Field $field)
@@ -83,7 +52,7 @@ class DoctrineStorage extends Gateway
             ]
         );
 
-        $field->value->data = $this->valueConverter->toHash(new Value($menuItems));
+        $field->value->externalData = $this->valueConverter->toHash(new Value($menuItems));
     }
 
     public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds)
@@ -96,17 +65,12 @@ class DoctrineStorage extends Gateway
         );
         foreach ($menuItems as $menuItem) {
             if ($menuItem->hasChildrens()) {
-                $newMenuItem = new MenuItem();
-                $newMenuItem->setChildrens($menuItem->getChildrens());
-                $newMenuItem->getPosition($menuItem->getPosition());
-
-                $menuItem->getParent()->addChildren($newMenuItem);
-                $menuItem->getMenu()->addItem($newMenuItem);
-                $this->em->persist($newMenuItem);
+                $menuItem->setName($versionInfo->names[$versionInfo->initialLanguageCode] ?? null);
+                $this->em->persist($menuItem);
+            } else {
+                $this->em->remove($menuItem);
             }
-            $this->em->remove($menuItem);
         }
-
         $this->em->flush();
     }
 }

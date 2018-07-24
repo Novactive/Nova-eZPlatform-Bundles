@@ -46,36 +46,67 @@
         }
 
         init() {
+            let onReadyFunc = this.onReady.bind(this),
+                syncItemsFunc = this.syncItems.bind(this);
             this.tree = $(this.treeWrapper)
-                .on("ready.jstree", this.onReady.bind(this))
-                .on("ready.changed", this.onReady.bind(this))
+                .on("ready.jstree", onReadyFunc)
+                .on("ready.changed", onReadyFunc)
 
-                .on('move_node.jstree', this.syncItems.bind(this))
-                .on('copy_node.jstree', this.syncItems.bind(this))
-                .on('delete_node.jstree', this.syncItems.bind(this))
-                .on('create_node.jstree', this.syncItems.bind(this))
+                .on('enable_node.jstree', syncItemsFunc)
+                .on('disabled_node.jstree', syncItemsFunc)
+                .on('move_node.jstree', syncItemsFunc)
+                .on('copy_node.jstree', syncItemsFunc)
+                .on('delete_node.jstree', syncItemsFunc)
+                .on('create_node.jstree', syncItemsFunc)
                 .jstree({
                     'core': {
                         'data': this.items,
                         'check_callback': this.check.bind(this)
                     },
-                    "conditionalselect" : function (node, event) {
+                    "conditionalselect": function (node, event) {
                         return false;
                     },
-                    "plugins": ["changed", "dnd", "conditionalselect"]
+                    "contextmenu": {
+                        "items": this.getContextmenuItems.bind(this)
+                    },
+                    "plugins": ["changed", "dnd", "conditionalselect", "contextmenu"]
                 })
                 .jstree(true);
         }
 
+        getContextmenuItems(node) {
+            let parent = this.getNode(node.parent),
+                items = {};
+
+            if (node.state.disabled && !parent.state.disabled) {
+                items["restoreItem"] = {
+                    label: Translator.trans('menu_item.restore'),
+                    action: this.onItemRestore.bind(this)
+                }
+            } else if (!node.state.disabled) {
+                items["removeItem"] = {
+                    label: Translator.trans('menu_item.remove'),
+                    action: this.onItemDelete.bind(this)
+                }
+            }
+            return items;
+        }
+
+        onItemRestore(event) {
+            this.enableTree(event.reference);
+            this.syncItems();
+        }
+
+        onItemDelete(event) {
+            this.disableTree(event.reference);
+            this.syncItems();
+        }
+
         check(operation, node, node_parent, node_position, more) {
-            console.log(operation);
+            if (operation === "move_node") {
+                if (node.state.disabled) return false;
+            }
             return true;
-            // if(operation === "create_node") return true;
-            // if(operation === "move_node"){
-            //     let menuItem = this.menu.getItemByParentId(node.parent);
-            //     if(menuItem && menuItem.id == node.id && node.parent === node_parent.id && menuItem.isNew) return true;
-            // }
-            // return false;
         }
 
         onReady() {
@@ -111,6 +142,7 @@
 
 
         addNodeItem(index, node, parentNode = null) {
+            if (node.state.disabled) return false;
             this.items.push({
                 'id': node.id,
                 'parent': parentNode ? parentNode.id : null,
@@ -144,6 +176,12 @@
             return node;
         }
 
+        enableNode(id) {
+            let node = this.tree.get_node(id);
+            this.tree.enable_node(node);
+            return node;
+        }
+
         disableNode(id) {
             let node = this.tree.get_node(id);
             this.tree.disable_node(node);
@@ -155,6 +193,15 @@
             if (node && node.children.length > 0) {
                 for (let childId of node.children) {
                     this.disableTree(childId);
+                }
+            }
+        }
+
+        enableTree(id) {
+            let node = this.enableNode(id);
+            if (node && node.children.length > 0) {
+                for (let childId of node.children) {
+                    this.enableTree(childId);
                 }
             }
         }

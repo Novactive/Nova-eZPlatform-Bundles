@@ -8,3 +8,6 @@ menu:
   edit_form:
     save: "Enregistrer le menu"
     back: "Retour à la liste"
+menu_item:
+  remove: "Supprimer l'élément"
+  restore: "Rétablir l'élément"

@@ -57,9 +57,11 @@ class DefaultMenuItemType extends AbstractMenuItemType implements MenuItemTypeIn
 
         $menuRepo     = $this->em->getRepository(Menu::class);
         $menuItemRepo = $this->em->getRepository(MenuItem::class);
+        $menuItem     = null;
         if (isset($hash['id']) && $hash['id']) {
             $menuItem = $menuItemRepo->find($hash['id']);
-        } else {
+        }
+        if (!$menuItem) {
             $menuItem = $this->createEntity();
         }
         $menuItem->setPosition($hash['position'] ?? 0);

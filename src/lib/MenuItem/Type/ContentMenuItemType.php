@@ -116,37 +116,42 @@ class ContentMenuItemType extends DefaultMenuItemType implements MenuItemTypeInt
     {
         try {
             $contentInfo = $this->contentService->loadContentInfo($menuItem->getContentId());
+
+            $label = $this->translationHelper->getTranslatedContentNameByContentInfo($contentInfo);
+            $menuItem->setName($label);
+
+            $location = $this->locationService->loadLocation($contentInfo->mainLocationId);
+
+            $cacheItem = $this->cache->getItem('content-menu-item-link-'.$menuItem->getId());
+            if ($cacheItem->isHit()) {
+                return $cacheItem->get();
+            }
+
+            $link = new KnpMenuItem('location-'.$location->id, $this->factory);
+            $link->setUri($this->router->generate($location));
+            $link->setLabel($menuItem->getName());
+            $link->setExtras(
+                [
+                    'contentId'  => $location->contentId,
+                    'locationId' => $location->id,
+                ]
+            );
+            $cacheItem->set($link);
+            $cacheItem->tag(
+                [
+                    'content-'.$contentInfo->id,
+                    'location-'.$location->id,
+                    'menu-item-'.$menuItem->getId(),
+                    'menu-'.$menuItem->getMenu()->getId(),
+                ]
+            );
+            $this->cache->save($cacheItem);
+
+            return $link;
         } catch (NotFoundException $e) {
-            return null;
+            $menuItem->setUrl(null);
+
+            return parent::toMenuItemLink($menuItem);
         }
-
-        $location = $this->locationService->loadLocation($contentInfo->mainLocationId);
-
-        $cacheItem = $this->cache->getItem('content-menu-item-link-'.$menuItem->getId());
-        if ($cacheItem->isHit()) {
-            return $cacheItem->get();
-        }
-
-        $link = new KnpMenuItem('location-'.$location->id, $this->factory);
-        $link->setUri($this->router->generate($location));
-        $link->setLabel($this->translationHelper->getTranslatedContentNameByContentInfo($contentInfo));
-        $link->setExtras(
-            [
-                'contentId' => $location->contentId,
-                'locationId'=> $location->id,
-            ]
-        );
-        $cacheItem->set($link);
-        $cacheItem->tag(
-            [
-                'content-'.$contentInfo->id,
-                'location-'.$location->id,
-                'menu-item-'.$menuItem->getId(),
-                'menu-'.$menuItem->getMenu()->getId(),
-            ]
-        );
-        $this->cache->save($cacheItem);
-
-        return $link;
     }
 }

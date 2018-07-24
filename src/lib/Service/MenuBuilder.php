@@ -81,12 +81,25 @@ class MenuBuilder
      */
     public function appendChild(MenuItem $menuItem, ItemInterface $knpMenu)
     {
-        $type   = $this->menuItemTypeRegistry->getMenuItemEntityType($menuItem);
-        $parent = $knpMenu->addChild($type->toMenuItemLink($menuItem));
+        $parent = $knpMenu->addChild($this->toMenuItemLink($menuItem));
         foreach ($menuItem->getChildrens() as $childMenuItem) {
             $this->appendChild($childMenuItem, $parent);
         }
 
         return $parent;
+    }
+
+    /**
+     * @param MenuItem $menuItem
+     *
+     * @throws \Novactive\EzMenuManager\Exception\MenuItemTypeNotFoundException
+     *
+     * @return ItemInterface|null
+     */
+    public function toMenuItemLink(MenuItem $menuItem)
+    {
+        $type = $this->menuItemTypeRegistry->getMenuItemEntityType($menuItem);
+
+        return $type->toMenuItemLink($menuItem);
     }
 }

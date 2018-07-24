@@ -41,7 +41,7 @@ class ContentMenuItem extends MenuItem
     public function setContentId($contentId): void
     {
         if (!$contentId) {
-            $this->setUrl();
+            $this->setUrl(null);
         } else {
             $this->setUrl(static::URL_PREFIX.$contentId);
         }

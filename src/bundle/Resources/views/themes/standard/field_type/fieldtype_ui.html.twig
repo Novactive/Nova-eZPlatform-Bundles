@@ -2,6 +2,17 @@
 
 {% block menuitem_field %}
 {% spaceless %}
+    {% set menuItems = field.value.menuItems %}
+    <ul>
+        {% for menuItem in menuItems %}
+            {% set breadcrumb = ezmenumanager_breadcrumb(menuItem) %}
+            <li>
+                {% for item in breadcrumb %}
+                    <a href="{{ item.uri }}">{{ item.label }}</a>{% if not loop.last %} /{% endif %}
+                {% endfor %}
+            </li>
+        {% endfor %}
+    </ul>
     {#{% set field_value = field.value.text %}#}
     {#{{ block( 'simple_inline_field' ) }}#}
 {% endspaceless %}

@@ -32,7 +32,11 @@ class MenuItemConverter implements Converter
      */
     public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue)
     {
-        $storageFieldValue->dataText = json_encode($value->data);
+        $storageFieldValue->dataText = json_encode(
+            is_array($value->externalData) && !empty($value->externalData) ?
+                $value->externalData :
+                $value->data
+        );
     }
 
     /**

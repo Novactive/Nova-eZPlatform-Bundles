@@ -84,6 +84,8 @@ class AdminController extends Controller
         $form = $this->createForm(MenuType::class, $menu);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Menu $menu */
+            $menu = $form->getData();
             $em->persist($menu);
             $em->flush();
 
