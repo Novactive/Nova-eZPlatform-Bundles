@@ -221,7 +221,7 @@ class MenuItem
     /**
      * @param MenuItem $parent
      */
-    public function setParent(MenuItem $parent): void
+    public function setParent($parent): void
     {
         $this->parent = $parent;
     }

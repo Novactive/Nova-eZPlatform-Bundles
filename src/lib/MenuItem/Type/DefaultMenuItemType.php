@@ -68,6 +68,8 @@ class DefaultMenuItemType extends AbstractMenuItemType implements MenuItemTypeIn
 
         if (isset($hash['parentId']) && $hash['parentId'] && $parent = $menuItemRepo->find($hash['parentId'])) {
             $menuItem->setParent($parent);
+        } else {
+            $menuItem->setParent(null);
         }
 
         $menu = $menuRepo->find($hash['menuId']);
