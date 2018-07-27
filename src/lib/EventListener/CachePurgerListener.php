@@ -9,6 +9,7 @@ namespace Novactive\EzMenuManager\EventListener;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use FOS\HttpCache\Handler\TagHandler;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
+use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 
 class CachePurgerListener
 {
@@ -55,11 +56,11 @@ class CachePurgerListener
     public function purgeMenuCache(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
-
-        if (!$entity instanceof Menu) {
-            return;
+        if ($entity instanceof Menu) {
+            $this->tagHandler->invalidateTags(['menu-'.$entity->getId()]);
         }
-
-        $this->tagHandler->invalidateTags(['menu-'.$entity->getId()]);
+        if ($entity instanceof MenuItem) {
+            $this->tagHandler->invalidateTags(['menu-'.$entity->getMenu()->getId()]);
+        }
     }
 }
