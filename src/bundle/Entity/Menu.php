@@ -111,7 +111,8 @@ class Menu
     public function getItemsByParent($parent = null)
     {
         $criteria = new Criteria();
-        $criteria->where(Criteria::expr()->eq('parent', $parent));
+        $criteria->where(Criteria::expr()->eq('parent', $parent))
+        ->orderBy(['position' => Criteria::ASC]);
 
         return $this->items->matching($criteria);
     }
