@@ -1,5 +1,5 @@
 var eZMailingSearchModule = function () {
-    function _init($app) {
+    function _init($, $app) {
         var $searchNovaeZMailing = $('.novaezmailing-search > input[type="search"]');
         if ($searchNovaeZMailing.length > 0) {
             $searchNovaeZMailing.autocomplete({

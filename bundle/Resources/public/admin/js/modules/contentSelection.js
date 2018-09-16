@@ -1,5 +1,5 @@
 var eZMailingContentSelectionModule = function () {
-    function _init($app) {
+    function _init($, $app) {
         $("button.js-novaezmailing-select-location-id", $app).click(function () {
             var token = document.querySelector('meta[name="CSRF-Token"]').content;
             var siteaccess = document.querySelector('meta[name="SiteAccess"]').content;

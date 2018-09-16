@@ -9,7 +9,7 @@ var eZMailingChartsModule = function () {
         });
     }
 
-    function _init($app) {
+    function _init($, $app) {
         $app.find("canvas.nova-ezmailing-chart").each(function () {
             _render($(this));
         });

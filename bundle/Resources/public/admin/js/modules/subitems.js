@@ -1,7 +1,7 @@
 var eZMailingSubItemsModule = function () {
     var token, siteaccess;
 
-    function _init($app) {
+    function _init($, $app) {
         token = document.querySelector('meta[name="CSRF-Token"]').content;
         siteaccess = document.querySelector('meta[name="SiteAccess"]').content;
         $(".ezmailing-subitem-children", $app).each(function ($container) {
