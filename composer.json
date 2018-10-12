@@ -19,7 +19,8 @@
   ],
   "require": {
     "ezsystems/ezplatform-solr-search-engine": "^1.5",
-    "php": ">=7.1"
+    "php": ">=7.1",
+    "ninoskopac/php-tika-wrapper": "~1.0"
   },
   "require-dev": {
     "phpmd/phpmd": "^2.6",
