@@ -11,6 +11,7 @@
 namespace Novactive\EzSolrSearchExtras\FieldMapper\ContentTranslationFieldMapper;
 
 use Enzim\Lib\TikaWrapper\TikaWrapper;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\IOService;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\SPI\Persistence\Content as SPIContent;
@@ -122,7 +123,11 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
                 continue;
             }
 
-            $plaintext = $this->getBinaryFileText($this->ioService->loadBinaryFile($field->value->externalData['id']));
+            try {
+                $plaintext = $this->getBinaryFileText($this->ioService->loadBinaryFile($field->value->externalData['id']));
+            } catch (NotFoundException $e) {
+                return null;
+            }
 
             return new SPISearchField(
                 self::$fieldName,
