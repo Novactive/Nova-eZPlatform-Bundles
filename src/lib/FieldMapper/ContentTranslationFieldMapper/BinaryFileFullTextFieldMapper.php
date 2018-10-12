@@ -1,14 +1,15 @@
 <?php
 /**
- * ezplatform-demo.
+ * NovaeZSolrSearchExtraBundle.
  *
- * @package   ezplatform-demo
+ * @package   NovaeZSolrSearchExtraBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
  * @copyright 2018 Novactive
+ * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
  */
 
-namespace Novactive\EzSolrSearchExtras\FieldMapper\ContentTranslationFieldMapper;
+namespace Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper;
 
 use Enzim\Lib\TikaWrapper\TikaWrapper;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
@@ -26,7 +27,7 @@ use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapp
 /**
  * Class BinaryFileFullTextFieldMapper.
  *
- * @package Novactive\EzSolrSearchExtras\FieldMapper\ContentTranslationFieldMapper
+ * @package Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper
  */
 class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
 {

@@ -1,5 +1,5 @@
 {
-  "name": "novactive/ezsolrsearchextrasbundle",
+  "name": "novactive/ezsolrsearchextrabundle",
   "type": "ezplatform-bundle",
   "description": "A bundle which extend ezplatform solr search handler",
   "keywords": [
@@ -30,8 +30,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Novactive\\EzSolrSearchExtrasBundle\\": "src/bundle",
-      "Novactive\\EzSolrSearchExtras\\": "src/lib"
+      "Novactive\\EzSolrSearchExtraBundle\\": "src/bundle",
+      "Novactive\\EzSolrSearchExtra\\": "src/lib"
     }
   },
   "scripts": {

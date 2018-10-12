@@ -1,22 +1,27 @@
 <?php
 /**
- * NovaeZSolrSearchExtras.
+ * NovaeZSolrSearchExtraBundle.
  *
- * @package   NovaeZSolrSearchExtras
+ * @package   NovaeZSolrSearchExtraBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
  * @copyright 2018 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtras/blob/master/LICENSE
+ * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
  */
 
-namespace Novactive\EzSolrSearchExtrasBundle\DependencyInjection;
+namespace Novactive\EzSolrSearchExtraBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-class EzSolrSearchExtrasExtension extends Extension
+/**
+ * Class EzSolrSearchExtraExtension.
+ *
+ * @package Novactive\EzSolrSearchExtraBundle\DependencyInjection
+ */
+class EzSolrSearchExtraExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
