@@ -1,8 +1,8 @@
 # Novactive eZ Solr Search Extra Bundle
 
-[![Build Status](https://img.shields.io/travis/Novactive/NovaeZSolrSearchExtraBundle.svg?style=flat-square&branch=develop-ezplatform)](https://travis-ci.org/Novactive/NovaeZSEOBundle)
+[![Build Status](https://img.shields.io/travis/Novactive/NovaeZSolrSearchExtraBundle.svg?style=flat-square&branch=develop-ezplatform)](https://travis-ci.org/Novactive/NovaeZSolrSearchExtraBundle)
 [![Downloads](https://img.shields.io/packagist/dt/novactive/ezsolrsearchextrabundle.svg?style=flat-square)](https://packagist.org/packages/novactive/ezsolrsearchextrabundle)
-[![Latest version](https://img.shields.io/github/release/Novactive/NovaeZSolrSearchExtraBundle.svg?style=flat-square)](https://github.com/Novactive/NovaeZSEOBundle/releases)
+[![Latest version](https://img.shields.io/github/release/Novactive/NovaeZSolrSearchExtraBundle.svg?style=flat-square)](https://github.com/Novactive/NovaeZSolrSearchExtraBundle/releases)
 [![License](https://img.shields.io/packagist/l/novactive/ezsolrsearchextrabundle.svg?style=flat-square)](LICENSE)
 
 An eZPlatform bundle which extend the solr search handler.
