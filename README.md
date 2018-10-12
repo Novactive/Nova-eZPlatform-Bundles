@@ -1,12 +1,49 @@
-# NovaeZSolrSearchExtrasBundle
+# Novactive eZ Solr Search Extra Bundle
 
- A bundle which extend ezplatform solr search handler.
+[![Build Status](https://img.shields.io/travis/Novactive/NovaeZSolrSearchExtraBundle.svg?style=flat-square&branch=develop-ezplatform)](https://travis-ci.org/Novactive/NovaeZSEOBundle)
+[![Downloads](https://img.shields.io/packagist/dt/novactive/ezsolrsearchextrabundle.svg?style=flat-square)](https://packagist.org/packages/novactive/ezsolrsearchextrabundle)
+[![Latest version](https://img.shields.io/github/release/Novactive/NovaeZSolrSearchExtraBundle.svg?style=flat-square)](https://github.com/Novactive/NovaeZSEOBundle/releases)
+[![License](https://img.shields.io/packagist/l/novactive/ezsolrsearchextrabundle.svg?style=flat-square)](LICENSE)
+
+An eZPlatform bundle which extend the solr search handler.
  
 ## Features
 
-- Binary file plain text content indexation in the full text field
+- **[Implemented]** Binary file plain text content indexation in the full text field
 - **[WIP]** Boost doc based on publish date (newer docs score higher)
 - **[WIP]** Highlighting 
+
+## Requirements
+
+- eZ Platform
+- Solr Search Engine Bundle for eZ Platform
+- PHP 7.1+
+
+## Installation
+
+### Use Composer
+
+Add NovaeZSolrSearchExtraBundle in your composer.json:
+
+```bash
+composer require novactive/ezsolrsearchextrabundle
+```
+
+### Register the bundle
+
+Register the bundle in your application's kernel class:
+
+```php
+// app/AppKernel.php
+public function registerBundles()
+{
+    $bundles = array(
+        // ...
+        new Novactive\EzSolrSearchExtraBundle\EzSolrSearchExtraBundle(),
+        // ...
+    );
+}
+```
 
 ## Docs
 ### Publish date boosting
