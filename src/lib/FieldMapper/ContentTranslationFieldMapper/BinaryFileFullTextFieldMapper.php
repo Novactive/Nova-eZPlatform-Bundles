@@ -124,7 +124,9 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
             }
 
             try {
-                $plaintext = $this->getBinaryFileText($this->ioService->loadBinaryFile($field->value->externalData['id']));
+                $plaintext = $this->getBinaryFileText(
+                    $this->ioService->loadBinaryFile($field->value->externalData['id'])
+                );
             } catch (NotFoundException $e) {
                 return null;
             }
