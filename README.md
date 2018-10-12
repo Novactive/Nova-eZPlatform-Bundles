@@ -12,6 +12,7 @@ An eZPlatform bundle which extend the solr search handler.
 - **[Implemented]** Binary file plain text content indexation in the full text field
 - **[WIP]** Boost doc based on publish date (newer docs score higher)
 - **[WIP]** Highlighting 
+- **[WIP]** Manage stopwords and synonyms from eZ Platform admin interface
 
 ## Requirements
 
@@ -53,3 +54,6 @@ https://wiki.apache.org/solr/SolrRelevancyFAQ
 
 ### Highlighting
 https://lucene.apache.org/solr/guide/6_6/highlighting.html
+
+### Stopwords/Synonyms managment
+https://lucene.apache.org/solr/guide/6_6/managed-resources.html
