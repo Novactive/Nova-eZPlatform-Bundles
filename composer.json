@@ -19,7 +19,7 @@
   ],
   "require": {
     "ezsystems/ezplatform-solr-search-engine": "^1.5",
-    "php": ">=7.1",
+    "php": "^7.1",
     "ninoskopac/php-tika-wrapper": "~1.0"
   },
   "require-dev": {
@@ -48,9 +48,9 @@
       "rm -f composer.lock"
     ],
     "tests": [
-      "./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php bundle",
-      "./vendor/bin/phpmd bundle text .cs/md_ruleset.xml",
-      "./vendor/bin/phpcpd bundle"
+      "./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src",
+      "./vendor/bin/phpmd src text .cs/md_ruleset.xml",
+      "./vendor/bin/phpcpd src"
     ]
   }
 }
