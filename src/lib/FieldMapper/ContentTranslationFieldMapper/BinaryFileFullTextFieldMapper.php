@@ -12,7 +12,7 @@
 namespace Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper;
 
 use Enzim\Lib\TikaWrapper\TikaWrapper;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
 use eZ\Publish\Core\IO\IOService;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\SPI\Persistence\Content as SPIContent;
@@ -23,6 +23,8 @@ use eZ\Publish\SPI\Search\Field as SPISearchField;
 use eZ\Publish\SPI\Search\FieldType as SPISearchFieldType;
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider;
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
+use Psr\Log\LoggerInterface;
+use RuntimeException;
 
 /**
  * Class BinaryFileFullTextFieldMapper.
@@ -47,7 +49,14 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
     /** @var BoostFactorProvider */
     private $boostFactorProvider;
 
-    /** @var string[] */
+    /** @var LoggerInterface */
+    private $logger;
+
+    /**
+     * List of field type which should be indexed.
+     *
+     * @var string[]
+     */
     private $binaryFileFieldTypeIndentifiers = [];
 
     /**
@@ -56,17 +65,20 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
      * @param IOService                     $ioService
      * @param ContentTypePersistenceHandler $contentTypeHandler
      * @param BoostFactorProvider           $boostFactorProvider
+     * @param LoggerInterface               $logger
      * @param string[]                      $binaryFileFieldTypeIndentifiers
      */
     public function __construct(
         IOService $ioService,
         ContentTypePersistenceHandler $contentTypeHandler,
         BoostFactorProvider $boostFactorProvider,
+        LoggerInterface $logger,
         array $binaryFileFieldTypeIndentifiers
     ) {
         $this->ioService                       = $ioService;
         $this->contentTypeHandler              = $contentTypeHandler;
         $this->boostFactorProvider             = $boostFactorProvider;
+        $this->logger                          = $logger;
         $this->binaryFileFieldTypeIndentifiers = $binaryFileFieldTypeIndentifiers;
     }
 
@@ -125,31 +137,30 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
             }
 
             try {
-                $plaintext = $this->getBinaryFileText(
-                    $this->ioService->loadBinaryFile($field->value->externalData['id'])
-                );
-            } catch (NotFoundException $e) {
-                return null;
-            }
+                $binaryFile = $this->ioService->loadBinaryFile($field->value->externalData['id']);
+                $plaintext  = $this->getBinaryFileText($binaryFile);
 
-            return new SPISearchField(
-                self::$fieldName,
-                $plaintext ?? '',
-                $this->getIndexFieldType($contentType)
-            );
+                return new SPISearchField(
+                    self::$fieldName,
+                    $plaintext ?? '',
+                    $this->getIndexFieldType($contentType)
+                );
+            } catch (RuntimeException $e) {
+                $this->logger->error($e->getMessage());
+            } catch (BinaryFileNotFoundException $e) {
+                $this->logger->warning($e->getMessage());
+            }
         }
 
         return null;
     }
 
     /**
-     * Return the plaintext value of a binary file.
-     *
      * @param BinaryFile $binaryFile
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      *
-     * @return string
+     * @return null|string|string[]
      */
     private function getBinaryFileText(BinaryFile $binaryFile)
     {
