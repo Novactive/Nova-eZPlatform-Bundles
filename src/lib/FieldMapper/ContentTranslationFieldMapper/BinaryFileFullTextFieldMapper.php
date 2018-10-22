@@ -145,8 +145,6 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
                     $plaintext ?? '',
                     $this->getIndexFieldType($contentType)
                 );
-            } catch (RuntimeException $e) {
-                $this->logger->error($e->getMessage());
             } catch (BinaryFileNotFoundException $e) {
                 $this->logger->warning($e->getMessage());
             }
@@ -166,7 +164,15 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
     {
         $resource         = $this->ioService->getFileInputStream($binaryFile);
         $resourceMetadata = stream_get_meta_data($resource);
-        $plaintext        = TikaWrapper::getText($resourceMetadata['uri']);
+        $fileUri = $resourceMetadata['uri'];
+        try
+        {
+            $plaintext = TikaWrapper::getText( $fileUri );
+        }catch (RuntimeException $e) {
+            $errorMsg = $e->getMessage();
+            $this->logger->error("Error when converting file $fileUri\n$errorMsg");
+            return null;
+        }
 
         // replace "tab" (hex 9) chars by space
         $cleanText = preg_replace('([\x09]+)', ' ', (string) $plaintext);
