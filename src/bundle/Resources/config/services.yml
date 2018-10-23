@@ -12,9 +12,18 @@ services:
   Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper\BinaryFileFullTextFieldMapper:
     lazy: true
     arguments:
-      $ioService: "@ezpublish.fieldType.ezbinaryfile.io_service"
+      $ioService: '@ezpublish.fieldType.ezbinaryfile.io_service'
       $contentTypeHandler: '@ezpublish.spi.persistence.content_type_handler'
+      $textExtractor: '@Novactive\EzSolrSearchExtra\TextExtractor\TikaTextExtractor'
       $binaryFileFieldTypeIndentifiers:
       - ezbinaryfile
     tags:
     - {name: ezpublish.search.solr.field_mapper.content_translation}
+
+  Novactive\EzSolrSearchExtra\TextExtractor\TikaTextExtractor:
+    arguments:
+      $tikaClient: '@Novactive\EzSolrSearchExtra\Tika\TikaLocalClient'
+
+  Novactive\EzSolrSearchExtra\Tika\TikaLocalClient:
+    arguments:
+      $jar: './bin/tika-app-1.19.1.jar'

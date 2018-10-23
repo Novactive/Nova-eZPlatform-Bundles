@@ -11,7 +11,6 @@
 
 namespace Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper;
 
-use Enzim\Lib\TikaWrapper\TikaWrapper;
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
 use eZ\Publish\Core\IO\IOService;
 use eZ\Publish\Core\IO\Values\BinaryFile;
@@ -23,8 +22,8 @@ use eZ\Publish\SPI\Search\Field as SPISearchField;
 use eZ\Publish\SPI\Search\FieldType as SPISearchFieldType;
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider;
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
+use Novactive\EzSolrSearchExtra\TextExtractor\TextExtractorInterface;
 use Psr\Log\LoggerInterface;
-use RuntimeException;
 
 /**
  * Class BinaryFileFullTextFieldMapper.
@@ -49,6 +48,9 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
     /** @var BoostFactorProvider */
     private $boostFactorProvider;
 
+    /** @var TextExtractorInterface */
+    private $textExtractor;
+
     /** @var LoggerInterface */
     private $logger;
 
@@ -65,6 +67,7 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
      * @param IOService                     $ioService
      * @param ContentTypePersistenceHandler $contentTypeHandler
      * @param BoostFactorProvider           $boostFactorProvider
+     * @param TextExtractorInterface        $textExtractor
      * @param LoggerInterface               $logger
      * @param string[]                      $binaryFileFieldTypeIndentifiers
      */
@@ -72,12 +75,14 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
         IOService $ioService,
         ContentTypePersistenceHandler $contentTypeHandler,
         BoostFactorProvider $boostFactorProvider,
+        TextExtractorInterface $textExtractor,
         LoggerInterface $logger,
         array $binaryFileFieldTypeIndentifiers
     ) {
         $this->ioService                       = $ioService;
         $this->contentTypeHandler              = $contentTypeHandler;
         $this->boostFactorProvider             = $boostFactorProvider;
+        $this->textExtractor                   = $textExtractor;
         $this->logger                          = $logger;
         $this->binaryFileFieldTypeIndentifiers = $binaryFileFieldTypeIndentifiers;
     }
@@ -158,26 +163,14 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      *
-     * @return null|string|string[]
+     * @return null|string
      */
     private function getBinaryFileText(BinaryFile $binaryFile)
     {
         $resource         = $this->ioService->getFileInputStream($binaryFile);
         $resourceMetadata = stream_get_meta_data($resource);
-        $fileUri = $resourceMetadata['uri'];
-        try
-        {
-            $plaintext = TikaWrapper::getText( $fileUri );
-        }catch (RuntimeException $e) {
-            $errorMsg = $e->getMessage();
-            $this->logger->error("Error when converting file $fileUri\n$errorMsg");
-            return null;
-        }
 
-        // replace "tab" (hex 9) chars by space
-        $cleanText = preg_replace('([\x09]+)', ' ', (string) $plaintext);
-
-        return $cleanText;
+        return $this->textExtractor->extract($resourceMetadata['uri']);
     }
 
     /**
