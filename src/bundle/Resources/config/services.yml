@@ -26,4 +26,4 @@ services:
 
   Novactive\EzSolrSearchExtra\Tika\TikaLocalClient:
     arguments:
-      $jar: './bin/tika-app-1.19.1.jar'
+      $jar: './bin/tika-app-1.17.jar'
