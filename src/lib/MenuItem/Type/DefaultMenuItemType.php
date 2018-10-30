@@ -43,37 +43,62 @@ class DefaultMenuItemType extends AbstractMenuItemType implements MenuItemTypeIn
             'url'      => $menuItem->getUrl(),
             'name'     => $menuItem->getName(),
             'target'   => $menuItem->getTarget(),
+            'type'     => $this->getEntityClassName(),
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function fromHash($hash): MenuItem
+    public function fromHash($hash): ?MenuItem
     {
         if (!is_array($hash)) {
             return null;
         }
 
-        $menuRepo     = $this->em->getRepository(Menu::class);
         $menuItemRepo = $this->em->getRepository(MenuItem::class);
-        $menuItem     = null;
-        if (isset($hash['id']) && $hash['id']) {
-            $menuItem = $menuItemRepo->find($hash['id']);
+        $menuRepo     = $this->em->getRepository(Menu::class);
+
+        $menuItem   = $this->getEntity(isset($hash['id']) && $hash['id'] ? $hash['id'] : null);
+        $updateData = [
+            'name'     => $hash['name'] ?? false,
+            'url'      => $hash['url'] ?? false,
+            'target'   => $hash['target'] ?? false,
+            'position' => $hash['position'] ?? 0,
+        ];
+        $menuItem->update(array_filter($updateData));
+
+        if (isset($hash['parentId']) && $hash['parentId']) {
+            $parent = $menuItemRepo->find($hash['parentId']);
+            $menuItem->setParent($parent);
         }
+
+        if (isset($hash['menuId'])) {
+            $menu = $menuRepo->find($hash['menuId']);
+            if (!$menu) {
+                return null;
+            }
+            $menuItem->setMenu($menu);
+        }
+
+        return $menuItem;
+    }
+
+    /**
+     * @param $id
+     *
+     * @throws \ReflectionException
+     *
+     * @return MenuItem|null|object
+     */
+    protected function getEntity($id)
+    {
+        $menuItemRepo = $this->em->getRepository(MenuItem::class);
+
+        $menuItem = $id ? $menuItemRepo->find($id) : null;
         if (!$menuItem) {
             $menuItem = $this->createEntity();
         }
-        $menuItem->setPosition($hash['position'] ?? 0);
-
-        if (isset($hash['parentId']) && $hash['parentId'] && $parent = $menuItemRepo->find($hash['parentId'])) {
-            $menuItem->setParent($parent);
-        } else {
-            $menuItem->setParent(null);
-        }
-
-        $menu = $menuRepo->find($hash['menuId']);
-        $menuItem->setMenu($menu);
 
         return $menuItem;
     }

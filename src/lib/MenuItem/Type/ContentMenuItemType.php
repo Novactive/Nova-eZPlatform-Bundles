@@ -95,9 +95,14 @@ class ContentMenuItemType extends DefaultMenuItemType implements MenuItemTypeInt
     /**
      * @inheritDoc
      */
-    public function fromHash($hash): MenuItem
+    public function fromHash($hash): ?MenuItem
     {
         $menuItem = parent::fromHash($hash);
+        if (!$menuItem) {
+            return null;
+        }
+
+        $menuItem->setName('');
         if (isset($hash['parentId']) && 'auto' == $hash['parentId']) {
             $menuItem->setOption('setParentOnPublish', true);
         }

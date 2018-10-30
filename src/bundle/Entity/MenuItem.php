@@ -74,7 +74,12 @@ class MenuItem
     /**
      * @var MenuItem
      *
-     * @ORM\ManyToOne(targetEntity="Novactive\EzMenuManagerBundle\Entity\MenuItem", inversedBy="childrens")
+     * @ORM\ManyToOne(
+     *     targetEntity="Novactive\EzMenuManagerBundle\Entity\MenuItem",
+     *     inversedBy="childrens",
+     *     cascade={"persist","remove"}
+     *     )
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $parent;
 
@@ -226,6 +231,14 @@ class MenuItem
         $this->parent = $parent;
     }
 
+    public function removeParent(): void
+    {
+        if ($this->parent) {
+            $this->parent->removeChildren($this);
+        }
+        $this->parent = null;
+    }
+
     /**
      * @return int
      */
@@ -287,5 +300,15 @@ class MenuItem
     public function __toString()
     {
         return (string) $this->id;
+    }
+
+    /**
+     * @param array $properties
+     */
+    public function update(array $properties)
+    {
+        foreach ($properties as $property => $value) {
+            $this->$property = $value;
+        }
     }
 }

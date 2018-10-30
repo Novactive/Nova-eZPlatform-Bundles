@@ -8,13 +8,18 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
-(function (global, $) {
+(function(global, $) {
     const SELECTOR_FIELD = '.ez-field-edit--menuitem';
     const SELECT_MENU_WRAPPER = '.menu__wrapper';
     const SELECT_MENU_TREE_WRAPPER = '.menu-tree__wrapper';
     const SELECTOR_INPUT = '.ez-data-source__input';
     const SELECTOR_LABEL_WRAPPER = '.ez-field-edit__label-wrapper';
     const SELECTOR_COLLAPSE = '.collapse';
+    const DEFAULT_ITEM_TYPES = {
+        root: {
+            icon: 'oi oi-menu',
+        },
+    };
 
     class MenuItemValidator extends global.eZ.BaseFieldValidator {
         /**
@@ -33,10 +38,10 @@
             try {
                 JSON.parse(event.target.value);
             } catch (e) {
-                console.log("Parsing error:", e);
+                console.log('Parsing error:', e);
                 hasCorrectValues = false;
             }
-            const result = {isError: false};
+            const result = { isError: false };
 
             if (isRequired && isEmpty) {
                 result.isError = true;
@@ -48,7 +53,7 @@
 
             return result;
         }
-    };
+    }
 
     class MenuItem {
         /**
@@ -61,7 +66,7 @@
         constructor(id, menuId, parentId, position, isNew) {
             this.id = id;
             this.menuId = menuId;
-            this.parentId = parseInt(parentId);
+            this.parentId = parentId;
             this.position = position;
             this.isNew = isNew || (id ? false : true);
             this.enabled = true;
@@ -72,8 +77,8 @@
                 id: this.isNew ? null : this.id,
                 menuId: this.menuId,
                 parentId: this.parentId,
-                position: this.position
-            }
+                position: this.position,
+            };
         }
 
         enable() {
@@ -100,16 +105,18 @@
             this.tree = new MenuTree(el.querySelector(SELECT_MENU_TREE_WRAPPER), this);
             this.updateInputCallback = updateInputCallback;
 
-            let defaultParents =  el.querySelector(SELECT_MENU_TREE_WRAPPER).dataset.default_parents.split(',').filter(Number);
-            this.defaultParents = defaultParents.length > 0 ? defaultParents : [0];
-
+            let defaultParents = el
+                .querySelector(SELECT_MENU_TREE_WRAPPER)
+                .dataset.default_parents.split(',')
+                .filter(Number);
+            this.defaultParents = defaultParents.length > 0 ? defaultParents : ['root'];
         }
 
         /**
          * @param item MenuItem
          */
         addItem(item) {
-            let key = this.id + "-" + item.parentId;
+            let key = this.id + '-' + item.parentId;
             this.items.set(key, item);
         }
 
@@ -118,7 +125,7 @@
          * @returns {MenuItem}
          */
         getItemByParentId(parentId) {
-            let key = this.id + "-" + parentId;
+            let key = this.id + '-' + parentId;
             return this.items.get(key);
         }
 
@@ -136,13 +143,17 @@
         enableItem(parentId) {
             let menuItem = this.getItemByParentId(parentId);
             if (!menuItem) {
-                let id = this.tree.createNode({
-                    'id': null,
-                    'text': this.menuItemName,
-                    'state': {
-                        'disabled': true,
-                    }
-                }, parentId, "last");
+                let id = this.tree.createNode(
+                    {
+                        id: null,
+                        text: this.menuItemName,
+                        state: {
+                            disabled: true,
+                        },
+                    },
+                    parentId,
+                    'last'
+                );
 
                 menuItem = new MenuItem(id, this.id, parentId, null, true);
                 this.addItem(menuItem);
@@ -172,30 +183,28 @@
 
         init() {
             this.tree.init();
-            $(this.tree.element).on("ready.jstree", this.onTreeReady.bind(this));
+            $(this.tree.element).on('ready.jstree', this.onTreeReady.bind(this));
         }
 
         onTreeReady() {
-
             let menu = this;
             $(SELECTOR_COLLAPSE, this.element)
-                .on("show.bs.collapse", function () {
+                .on('show.bs.collapse', function() {
                     menu.enable();
                     $('[data-target="#' + $(this).attr('id') + '"]').prop('checked', true);
                     menu.updateInputCallback();
                 })
-                .on("hide.bs.collapse", function () {
+                .on('hide.bs.collapse', function() {
                     menu.disable();
                     $('[data-target="#' + $(this).attr('id') + '"]').prop('checked', false);
                     menu.updateInputCallback();
                 })
                 .collapse(this.hasItems() ? 'show' : 'hide');
 
-
-            if(!this.hasItems()){
+            if (!this.hasItems()) {
                 menu.disable();
-                if(this.defaultParents.length > 0){
-                    for(let defaultParent of this.defaultParents){
+                if (this.defaultParents.length > 0) {
+                    for (let defaultParent of this.defaultParents) {
                         this.enableItem(defaultParent);
                     }
                 }
@@ -206,13 +215,13 @@
                 this.tree.disableTree(menuItem.id);
             }
 
-            $(this.tree.element).on("changed.jstree", this.onTreeChange.bind(this));
-            $(this.tree.element).on("move_node.jstree", this.onTreeChange.bind(this));
-            this.element.classList.remove("ez-visually-hidden");
+            $(this.tree.element).on('changed.jstree', this.onTreeChange.bind(this));
+            $(this.tree.element).on('move_node.jstree', this.onTreeChange.bind(this));
+            this.element.classList.remove('ez-visually-hidden');
         }
 
         onTreeChange(e, data) {
-            if(e.type === "changed", data.changed){
+            if ((e.type === 'changed', data.changed)) {
                 for (let parentId of data.changed.selected) {
                     this.enableItem(parentId);
                     let menuItem = this.getItemByParentId(parentId);
@@ -233,11 +242,13 @@
             this.updateInputCallback();
         }
 
-        updatePositions(){
+        updatePositions() {
             let menuItems = this.getItems();
-            for(let menuItem of menuItems){
+            for (let menuItem of menuItems) {
                 let parentNode = this.tree.getNode(menuItem.parentId);
-                menuItem.position = parentNode.children.findIndex((id) => {return id == menuItem.id});
+                menuItem.position = parentNode.children.findIndex((id) => {
+                    return id == menuItem.id;
+                });
             }
         }
     }
@@ -252,34 +263,33 @@
 
         init() {
             this.tree = $(this.element)
-                .on("ready.jstree", this.onReady.bind(this))
+                .on('ready.jstree', this.onReady.bind(this))
                 .jstree({
-                    'core': {
-                        'data': this.json,
-                        'check_callback' : this.check.bind(this)
+                    core: {
+                        data: this.json,
+                        check_callback: this.check.bind(this),
                     },
-                    "checkbox": {
-                        "three_state": false
+                    types: Object.assign({}, DEFAULT_ITEM_TYPES, MENU_MANAGER_CONFIG['types'] || {}),
+                    checkbox: {
+                        three_state: false,
                     },
-                    "plugins": ["checkbox", "changed"]
+                    plugins: ['checkbox', 'changed', 'types'],
                 })
                 .jstree(true);
         }
 
-        check(operation, node, node_parent, node_position, more){
-            if(operation === "create_node") return true;
-            if(operation === "move_node"){
+        check(operation, node, node_parent, node_position, more) {
+            if (operation === 'create_node') return true;
+            if (operation === 'move_node') {
                 let menuItem = this.menu.getItemByParentId(node.parent);
-                if(menuItem && menuItem.id == node.id && node.parent === node_parent.id && menuItem.isNew) return true;
+                if (menuItem && menuItem.id == node.id && node.parent === node_parent.id && menuItem.isNew) return true;
             }
             return false;
         }
 
-        onReady() {
+        onReady() {}
 
-        }
-
-        getNode(id){
+        getNode(id) {
             return this.tree.get_node(id);
         }
 
@@ -301,22 +311,18 @@
             return node;
         }
 
-        disableTree(id){
+        disableTree(id) {
             let node = this.disableNode(id);
-            if(node && node.children.length > 0){
+            if (node && node.children.length > 0) {
                 this.disableNode(node.parent);
-                for(let childId of node.children){
+                for (let childId of node.children) {
                     this.disableTree(childId);
                 }
             }
         }
 
         createNode(node, parentId, pos) {
-            return this.tree.create_node(
-                parentId,
-                node,
-                pos
-            );
+            return this.tree.create_node(parentId, node, pos);
         }
 
         selectNode(menuItemId) {
@@ -324,7 +330,7 @@
         }
     }
 
-    document.querySelectorAll(SELECTOR_FIELD).forEach(fieldContainer => {
+    document.querySelectorAll(SELECTOR_FIELD).forEach((fieldContainer) => {
         let menuList = new Map();
         const rawMenuItems = JSON.parse(fieldContainer.querySelector(SELECTOR_INPUT).value);
         const validator = new MenuItemValidator({
@@ -335,7 +341,7 @@
                     selector: SELECTOR_INPUT,
                     eventName: 'blur',
                     callback: 'validateInput',
-                    errorNodeSelectors: [SELECTOR_LABEL_WRAPPER]
+                    errorNodeSelectors: [SELECTOR_LABEL_WRAPPER],
                 },
             ],
         });
@@ -350,24 +356,21 @@
                 }
             }
             fieldContainer.querySelector(SELECTOR_INPUT).value = JSON.stringify(enabledItems);
-        }
+        };
 
-        fieldContainer.querySelectorAll(SELECT_MENU_WRAPPER).forEach(menuWrapper => {
+        fieldContainer.querySelectorAll(SELECT_MENU_WRAPPER).forEach((menuWrapper) => {
             let menu = new Menu(menuWrapper, updateInput);
             menuList.set(menu.id, menu);
             for (let rawMenuItem of rawMenuItems) {
                 if (rawMenuItem['menuId'] === menu.id) {
-                    menu.addItem(new MenuItem(rawMenuItem['id'], rawMenuItem['menuId'], rawMenuItem['parentId'] || 0, rawMenuItem['position'], false));
+                    menu.addItem(
+                        new MenuItem(rawMenuItem['id'], rawMenuItem['menuId'], rawMenuItem['parentId'] || 0, rawMenuItem['position'], false)
+                    );
                 }
             }
             menu.init();
         });
         validator.init();
-        global.eZ.fieldTypeValidators = global.eZ.fieldTypeValidators ?
-            [...global.eZ.fieldTypeValidators, validator] :
-            [validator];
+        global.eZ.fieldTypeValidators = global.eZ.fieldTypeValidators ? [...global.eZ.fieldTypeValidators, validator] : [validator];
     });
-
-
 })(window, window.jQuery);
-

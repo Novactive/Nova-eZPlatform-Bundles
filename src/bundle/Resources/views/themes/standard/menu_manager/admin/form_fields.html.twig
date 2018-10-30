@@ -1,4 +1,4 @@
-{% extends '@EzPlatformAdminUi/form_fields.html.twig' %}
+{% extends '@ezdesign/form_fields.html.twig' %}
 
 {% block menu_items_collection_widget %}
     <div class="card menu__wrapper">
@@ -6,7 +6,7 @@
             <div class="menu-edit__items-collection">
                 {% set attr = attr|merge({'class': 'ez-visually-hidden ez-data-source__input'}) %}
                 {{ block('form_widget') }}
-                <div class="menu-tree__wrapper">
+                <div class="menu-manager">
                     <span class="ez-inline-loader"></span>
                 </div>
             </div>

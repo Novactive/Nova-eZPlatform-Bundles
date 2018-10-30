@@ -1,5 +1,4 @@
 <?php
-
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -13,13 +12,12 @@
 namespace Novactive\EzMenuManager\Twig;
 
 use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use Knp\Menu\Twig\Helper;
+use Novactive\EzMenuManager\MenuItem\MenuItemConverter;
 use Novactive\EzMenuManager\Service\MenuBuilder;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
-use Novactive\EzMenuManagerBundle\Entity\MenuItem\ContentMenuItem;
 
 class MenuManagerExtension extends \Twig_Extension
 {
@@ -35,6 +33,9 @@ class MenuManagerExtension extends \Twig_Extension
     /** @var Helper */
     protected $knpHelper;
 
+    /** @var MenuItemConverter */
+    protected $menuItemConverter;
+
     /**
      * MenuManagerExtension constructor.
      *
@@ -42,17 +43,20 @@ class MenuManagerExtension extends \Twig_Extension
      * @param ContentService    $contentService
      * @param MenuBuilder       $menuBuilder
      * @param Helper            $knpHelper
+     * @param MenuItemConverter $menuItemConverter
      */
     public function __construct(
         TranslationHelper $translationHelper,
         ContentService $contentService,
         MenuBuilder $menuBuilder,
-        Helper $knpHelper
+        Helper $knpHelper,
+        MenuItemConverter $menuItemConverter
     ) {
         $this->translationHelper = $translationHelper;
         $this->contentService    = $contentService;
         $this->menuBuilder       = $menuBuilder;
         $this->knpHelper         = $knpHelper;
+        $this->menuItemConverter = $menuItemConverter;
     }
 
     /**
@@ -85,9 +89,7 @@ class MenuManagerExtension extends \Twig_Extension
     public function buildBreadcrumb(MenuItem $menuItem)
     {
         $breadcrumb = [];
-        if ($parent = $menuItem->getParent()) {
-            $this->addMenuItemToBreadcrumb($parent, $breadcrumb);
-        }
+        $this->addMenuItemToBreadcrumb($menuItem, $breadcrumb);
 
         return array_reverse($breadcrumb);
     }
@@ -104,31 +106,24 @@ class MenuManagerExtension extends \Twig_Extension
     {
         $list = [
             [
-                'id'     => 0,
+                'id'     => 'root',
                 'parent' => '#',
                 'text'   => $menu->getName(),
                 'state'  => [
                     'disabled' => false,
                     'opened'   => true,
                 ],
+                'type' => 'root',
             ],
         ];
 
         foreach ($menu->getItems() as $menuItem) {
-            $parent = $menuItem->getParent();
-            $name   = $menuItem->getName();
-            if ($menuItem instanceof ContentMenuItem) {
-                try {
-                    $content = $this->contentService->loadContent($menuItem->getContentId());
-                    $name    = $this->translationHelper->getTranslatedContentName($content);
-                } catch (NotFoundException $exception) {
-                    $name = $menuItem->getUrl();
-                }
-            }
+            $hash   = $this->menuItemConverter->toHash($menuItem);
             $list[] = [
-                'id'     => $menuItem->getId(),
-                'parent' => $parent ? $parent->getId() : 0,
-                'text'   => $name,
+                'id'     => $hash['id'],
+                'parent' => $hash['parentId'] ? $hash['parentId'] : 'root',
+                'text'   => $hash['name'],
+                'type'   => $hash['type'],
                 'state'  => [
                     'disabled' => false,
                     'opened'   => true,

@@ -1,4 +1,15 @@
 {% extends '@EzPublishCore/content_fields.html.twig' %}
 
 {% block menuitem_field %}
+    {% set menuItems = field.value.menuItems %}
+    <ul>
+        {% for menuItem in menuItems %}
+            {% set breadcrumb = ezmenumanager_breadcrumb(menuItem) %}
+            <li>
+                {% for item in breadcrumb %}
+                    <a href="{{ item.uri }}">{{ item.label }}</a>{% if not loop.last %} /{% endif %}
+                {% endfor %}
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}

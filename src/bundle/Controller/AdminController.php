@@ -11,8 +11,9 @@
 
 namespace Novactive\EzMenuManagerBundle\Controller;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use EzSystems\EzPlatformAdminUi\Notification\NotificationHandlerInterface;
+use Novactive\EzMenuManager\Form\Type\MenuDeleteType;
 use Novactive\EzMenuManager\Form\Type\MenuType;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
@@ -20,6 +21,7 @@ use Pagerfanta\Pagerfanta;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Class AdminController.
@@ -32,11 +34,29 @@ class AdminController extends Controller
 {
     const RESULTS_PER_PAGE = 10;
 
+    /** @var Translator */
+    protected $translator;
+
+    /** @var NotificationHandlerInterface */
+    protected $notificationHandler;
+
+    /**
+     * AdminController constructor.
+     *
+     * @param Translator                   $translator
+     * @param NotificationHandlerInterface $notificationHandler
+     */
+    public function __construct(Translator $translator, NotificationHandlerInterface $notificationHandler)
+    {
+        $this->translator          = $translator;
+        $this->notificationHandler = $notificationHandler;
+    }
+
     /**
      * @Route("/list/{page}", name="menu_manager.menu_list", requirements={"page" = "\d+"})
      *
-     * @param EntityManager $em
-     * @param int           $page
+     * @param EntityManagerInterface $em
+     * @param int                    $page
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -46,19 +66,44 @@ class AdminController extends Controller
                            ->select('m')
                            ->from(Menu::class, 'm');
 
-        $paginator = new Pagerfanta(
+        $pagerfanta = new Pagerfanta(
             new DoctrineORMAdapter($queryBuilder)
         );
-        $paginator->setMaxPerPage(self::RESULTS_PER_PAGE);
-        $paginator->setCurrentPage($page);
+
+        $pagerfanta->setMaxPerPage(self::RESULTS_PER_PAGE);
+        $pagerfanta->setCurrentPage(min($page, $pagerfanta->getNbPages()));
+
+        /** @var Menu[] $menus */
+        $menus    = $pagerfanta->getCurrentPageResults();
+        $menuIds  = $this->getMenusIds($menus);
+        $formData = [
+            'menus' => array_combine($menuIds, array_fill_keys($menuIds, false)),
+        ];
+
+        $menuDeleteForm = $this->createForm(MenuDeleteType::class, $formData);
 
         return $this->render(
             '@EzMenuManager/themes/standard/menu_manager/admin/list.html.twig',
             [
-                'totalCount' => $paginator->getNbResults(),
-                'menus'      => $paginator,
+                'pager'            => $pagerfanta,
+                'menu_delete_form' => $menuDeleteForm->createView(),
             ]
         );
+    }
+
+    /**
+     * @param Menu[] $menus
+     *
+     * @return array
+     */
+    protected function getMenusIds($menus)
+    {
+        $ids = [];
+        foreach ($menus as $menu) {
+            $ids[] = $menu->getId();
+        }
+
+        return $ids;
     }
 
     /**
@@ -66,6 +111,8 @@ class AdminController extends Controller
      *
      * @param EntityManagerInterface $em
      * @param Request                $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function newAction(EntityManagerInterface $em, Request $request)
     {
@@ -77,7 +124,11 @@ class AdminController extends Controller
     /**
      * @Route("/edit/{menu}", name="menu_manager.menu_edit")
      *
-     * @param Menu $menu
+     * @param EntityManagerInterface $em
+     * @param Request                $request
+     * @param Menu                   $menu
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function editAction(EntityManagerInterface $em, Request $request, Menu $menu)
     {
@@ -89,6 +140,10 @@ class AdminController extends Controller
             $em->persist($menu);
             $em->flush();
 
+            $this->notificationHandler->success(
+                $this->translator->trans('menu.notification.saved', [], 'menu_manager')
+            );
+
             return $this->redirectToRoute('menu_manager.menu_list');
         }
 
@@ -99,5 +154,33 @@ class AdminController extends Controller
                 'title' => $menu->getId() ? $menu->getName() : 'menu.new',
             ]
         );
+    }
+
+    /**
+     * @Route("/delete", name="menu_manager.menu_delete", methods={"POST"})
+     *
+     * @param Request $request
+     * @param Menu    $menu
+     */
+    public function deleteAction(EntityManagerInterface $em, Request $request)
+    {
+        $form = $this->createForm(MenuDeleteType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $formData = $form->getData();
+            $menuIds  = array_keys($formData['menus']);
+            foreach ($menuIds as $menuId) {
+                $menu = $em->find(Menu::class, $menuId);
+                $em->remove($menu);
+            }
+            $em->flush();
+
+            $this->notificationHandler->success(
+                $this->translator->trans('menu.notification.deleted', [], 'menu_manager')
+            );
+        }
+
+        return $this->redirectToRoute('menu_manager.menu_list');
     }
 }

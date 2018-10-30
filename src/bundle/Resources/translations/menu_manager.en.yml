@@ -1,13 +1,34 @@
 menu.list: Menu list
 menu:
+  root: Root
   property:
-    id: "ID"
-    name: "Name"
-    root_location: "Root (location id)"
-    items: "Items"
+    id: ID
+    name: Name
+    root_location: Root (location id)
+    items: Items
   edit_form:
-    save: "Save menu"
-    back: "Back to the list"
+    save: Save menu
+    back: Back to the list
+  notification:
+    saved: Menu got savec
+    deleted: Menu got deleted
+  action:
+    confirm_delete: Do you want to delete those menus ?
+    cancel: Cancel
+    delete: Delete menu
+    view: View menu
+    edit: Edit menu
 menu_item:
-  remove: "Remove item"
-  restore: "Restore item"
+  default_title: New link
+  property:
+    name: Link name
+    url: Url
+    new_window: Open in new window
+  action:
+    remove: Remove link
+    restore: Restore link
+    create: Create link
+    edit: Edit link
+  edit_form:
+    save: Save link
+    cancel: Cancel

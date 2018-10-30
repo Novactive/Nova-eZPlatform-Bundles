@@ -81,11 +81,18 @@ class MenuItemConverter
      */
     public function fromHashArray(array $hashArray, $defaultClass = MenuItem::class): array
     {
+        /** @var MenuItem[] $menuItems */
         $menuItems = [];
         foreach ($hashArray as $hashItem) {
-            $menuItem = $this->fromHash($hashItem, $defaultClass);
+            $menuItem = $this->fromHash($hashItem, isset($hashItem['type']) ? $hashItem['type'] : $defaultClass);
             if ($menuItem) {
-                $menuItems[] = $menuItem;
+                $menuItems[$hashItem['id']] = $menuItem;
+                if (!$menuItem->getParent()
+                    && 0 === strpos($hashItem['parentId'], '_')
+                    && ($parent = $menuItems[$hashItem['parentId']] ?? null)
+                ) {
+                    $parent->addChildren($menuItem);
+                }
             }
         }
 

@@ -33,7 +33,7 @@ interface MenuItemTypeInterface
      *
      * @return MenuItem
      */
-    public function fromHash($hash): MenuItem;
+    public function fromHash($hash): ?MenuItem;
 
     /**
      * @return MenuItem

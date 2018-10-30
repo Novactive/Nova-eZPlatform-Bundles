@@ -1,13 +1,34 @@
 menu.list: Liste des menus
 menu:
+  root: Racine
   property:
-    id: "ID"
-    name: "Nom"
-    root_location: "Racine (location id)"
-    items: "Eléments du menu"
+    id: ID
+    name: Nom
+    root_location: Racine (location id)
+    items: Eléments du menu
   edit_form:
-    save: "Enregistrer le menu"
-    back: "Retour à la liste"
+    save: Enregistrer le menu
+    back: Retour à la liste
+  notification:
+    saved: Le menu a été enregistré
+    deleted: Le menu a été supprimé
+  action:
+    confirm_delete: Voulez-vous supprimer le menu ?
+    cancel: Annuler
+    delete: Supprimer le menu
+    view: Voir le menu
+    edit: Editer le menu
 menu_item:
-  remove: "Supprimer l'élément"
-  restore: "Rétablir l'élément"
+  default_title: Nouveau lien
+  property:
+    name: Nom du lien
+    url: Url
+    new_window: Ouvrir dans une nouvelle fenêtre
+  action:
+    remove: Supprimer le lien
+    restore: Rétablir le lien
+    create: Créer un lien
+    edit: Modifier le lien
+  edit_form:
+    save: Enregistrer le lien
+    cancel: Annuler
