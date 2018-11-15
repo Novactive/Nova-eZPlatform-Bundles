@@ -364,7 +364,13 @@
             for (let rawMenuItem of rawMenuItems) {
                 if (rawMenuItem['menuId'] === menu.id) {
                     menu.addItem(
-                        new MenuItem(rawMenuItem['id'], rawMenuItem['menuId'], rawMenuItem['parentId'] || 0, rawMenuItem['position'], false)
+                        new MenuItem(
+                            rawMenuItem['id'],
+                            rawMenuItem['menuId'],
+                            rawMenuItem['parentId'] || 'root',
+                            rawMenuItem['position'],
+                            false
+                        )
                     );
                 }
             }

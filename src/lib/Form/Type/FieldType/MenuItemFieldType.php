@@ -125,10 +125,10 @@ class MenuItemFieldType extends AbstractType
                 'getName'
             );
 
-            $parentLocations = $this->locationService->loadLocations($formData->contentDraft->contentInfo);
+            $locations = $this->locationService->loadLocations($formData->contentDraft->contentInfo);
 
-            foreach ($parentLocations as $parentLocation) {
-                $parentLocationsId[] = $parentLocation->id;
+            foreach ($locations as $location) {
+                $parentLocationsId[] = $location->parentLocationId;
             }
         }
 
