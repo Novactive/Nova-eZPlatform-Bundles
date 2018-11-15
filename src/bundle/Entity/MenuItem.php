@@ -77,9 +77,8 @@ class MenuItem
      * @ORM\ManyToOne(
      *     targetEntity="Novactive\EzMenuManagerBundle\Entity\MenuItem",
      *     inversedBy="childrens",
-     *     cascade={"persist","remove"}
      *     )
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     protected $parent;
 
