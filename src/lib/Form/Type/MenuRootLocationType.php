@@ -12,6 +12,7 @@
 namespace Novactive\EzMenuManager\Form\Type;
 
 use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\LocationService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -54,17 +55,20 @@ class MenuRootLocationType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['rootLocation'] = null;
+        try {
+            /** @var int $rootLocationId */
+            $rootLocationId = $form->getData();
+            if ($rootLocationId) {
+                $location    = $this->locationService->loadLocation($rootLocationId);
+                $contentInfo = $this->contentService->loadContentInfo($location->contentId);
 
-        /** @var int $rootLocationId */
-        $rootLocationId = $form->getData();
-        if ($rootLocationId) {
-            $location    = $this->locationService->loadLocation($rootLocationId);
-            $contentInfo = $this->contentService->loadContentInfo($location->contentId);
-
-            $view->vars['rootLocation'] = [
-                'location'    => $location,
-                'contentInfo' => $contentInfo,
-            ];
+                $view->vars['rootLocation'] = [
+                    'location'    => $location,
+                    'contentInfo' => $contentInfo,
+                ];
+            }
+        } catch (NotFoundException $e) {
+            $view->vars['rootLocation'] = null;
         }
     }
 }
