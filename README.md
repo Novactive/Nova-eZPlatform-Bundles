@@ -9,7 +9,9 @@ An eZPlatform bundle which extend the solr search handler.
  
 ## Features
 
-- **[Implemented]** Binary file plain text content indexation in the full text field
+- **[Implemented]** [Binary file plain text content indexation in the full text field](./doc/file_indexation.md)
+- **[Implemented]** [FullText criterion to search on multiple fields](./doc/fulltext_criterion.md)
+- **[Implemented]** [Custom meta fulltext field](./doc/custom_meta_fields.md)
 - **[WIP]** Boost doc based on publish date (newer docs score higher)
 - **[WIP]** Highlighting 
 - **[WIP]** Manage stopwords and synonyms from eZ Platform admin interface

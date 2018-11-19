@@ -9,6 +9,14 @@ services:
     # if you need to do this, you can override this setting on individual services
     public: false
 
+  Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper\CustomFulltextFieldMapper:
+    arguments:
+      $contentTypeHandler: '@ezpublish.spi.persistence.content_type_handler'
+    calls:
+    - ['setFieldsConfig', ['$fulltext_fields;nova_solr_extra$']]
+    tags:
+    - {name: ezpublish.search.solr.field_mapper.content_translation}
+
   Novactive\EzSolrSearchExtra\FieldMapper\BinaryFileFieldMapper:
     arguments:
       $ioService: '@ezpublish.fieldType.ezbinaryfile.io_service'
@@ -21,7 +29,7 @@ services:
       $binaryFileFieldTypeIndentifiers:
       - ezbinaryfile
     calls:
-      - ['setEnabled', ['$enable_pdf_indexation;nova_solr_extra$']]
+    - ['setEnabled', ['$enable_pdf_indexation;nova_solr_extra$']]
     tags:
     - {name: ezpublish.search.solr.field_mapper.content_translation}
 
@@ -32,3 +40,14 @@ services:
   Novactive\EzSolrSearchExtra\Tika\TikaLocalClient:
     arguments:
       $jar: './bin/tika-app-1.17.jar'
+
+  Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor\MultipleFieldsFullText:
+    tags:
+    - {name: ezpublish.search.solr.query.content.criterion_visitor}
+
+  Novactive\EzSolrSearchExtra\Query\CriterionHandler\MultipleFieldsFullText:
+    arguments:
+      $dbHandler: "@ezpublish.api.storage_engine.legacy.dbhandler"
+    tags:
+    - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+    - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
