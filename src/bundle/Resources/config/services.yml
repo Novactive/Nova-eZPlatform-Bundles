@@ -9,14 +9,19 @@ services:
     # if you need to do this, you can override this setting on individual services
     public: false
 
+  Novactive\EzSolrSearchExtra\FieldMapper\BinaryFileFieldMapper:
+    arguments:
+      $ioService: '@ezpublish.fieldType.ezbinaryfile.io_service'
+      $textExtractor: '@Novactive\EzSolrSearchExtra\TextExtractor\TikaTextExtractor'
+
   Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper\BinaryFileFullTextFieldMapper:
     lazy: true
     arguments:
-      $ioService: '@ezpublish.fieldType.ezbinaryfile.io_service'
       $contentTypeHandler: '@ezpublish.spi.persistence.content_type_handler'
-      $textExtractor: '@Novactive\EzSolrSearchExtra\TextExtractor\TikaTextExtractor'
       $binaryFileFieldTypeIndentifiers:
       - ezbinaryfile
+    calls:
+      - ['setEnabled', ['$enable_pdf_indexation;nova_solr_extra$']]
     tags:
     - {name: ezpublish.search.solr.field_mapper.content_translation}
 

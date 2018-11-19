@@ -1,0 +1,2 @@
+parameters:
+  nova_solr_extra.default.enable_pdf_indexation: false
