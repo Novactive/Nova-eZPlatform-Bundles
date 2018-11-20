@@ -15,7 +15,7 @@ use Novactive\EzRssFeedBundle\DependencyInjection\Security\Provider\RssPolicyPro
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class RssBundle extends Bundle
+class EzRssFeedBundle extends Bundle
 {
     /**
      * Builds the bundle.

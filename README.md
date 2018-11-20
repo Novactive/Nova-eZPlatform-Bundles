@@ -4,7 +4,7 @@ RSS Bundle installation instructions
 Requirements
 ------------
 
-* eZ Platform 1.1+
+* eZ Platform 2.2+
 
 
 Installation steps
@@ -15,7 +15,7 @@ Installation steps
 Run the following from your website root folder to install Rss Bundle:
 
 ```
-$ composer require mc/rssbundle
+$ composer require novactive/ezrssfeedbundle
 ```
 
 ### Activate the bundle
@@ -28,7 +28,7 @@ public function registerBundles()
     ...
 
      $bundles[] = new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle();
-     $bundles[] = new Mc\RssBundle\RssBundle();
+     $bundles[] = new Novactive\EzRssFeedBundle\EzRssFeedBundle();
 
     return $bundles;
 }
@@ -39,15 +39,15 @@ public function registerBundles()
 Put the following in your `app/config/routing.yml` file to be able to display rss view pages:
 
 ```yml
-mc.rss:
-    resource: '@RssBundle/Resources/config/routing.yml'
+EzRssFeedBundle:
+    resource: '@EzRssFeedBundle/Resources/config/routing.yml'
 ```
 
 If you're installing Rss Bundle on eZ Platform 2.x and plan to use it integrated into eZ Platform Admin UI, you need to add it to Assetic configuration in `app/config/config.yml`, together with `EzPlatformAdminUiBundle` and all other bundles already configured there:
 
 ```
 assetic:
-    bundles: [EzPlatformAdminUiBundle, RssBundle]
+    bundles: [EzPlatformAdminUiBundle, EzRssFeedBundle]
 ```
 
 ### Import database tables

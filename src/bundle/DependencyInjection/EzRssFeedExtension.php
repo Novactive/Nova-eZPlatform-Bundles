@@ -24,7 +24,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * @see http://symfony.com/doc/current/cookbook/bundles/extension.html
  */
-class RssExtension extends Extension implements PrependExtensionInterface
+class EzRssFeedExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * {@inheritdoc}
