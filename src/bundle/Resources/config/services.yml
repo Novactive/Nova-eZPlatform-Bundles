@@ -1,0 +1,15 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  Novactive\EzRssFeedBundle\Form\RssFeedItemsType:
+    tags:
+    - { name: form.type }
+
+  Novactive\EzRssFeedBundle\Form\Type\TreeDiscoveryType:
+    tags:
+    - { name: form.type, alias: field.tree_discovery }
+
+  Novactive\EzRssFeedBundle\Services\RssFeedsService:

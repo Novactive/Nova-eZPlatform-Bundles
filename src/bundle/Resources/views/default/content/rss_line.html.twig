@@ -1,0 +1,14 @@
+{% extends noLayout == true ? viewbaseLayout : pagelayout %}
+{% block content %}
+    <item>
+        <title>{{ ez_field_value( content, mapping.title ) }}</title>
+        <link>{{ absolute_url(path( location )) }}</link>
+        <description>{{ ez_field_value(content, mapping.description).xml.textContent }}</description>
+        <pubDate>{{ content.versionInfo.creationDate|date('r') }}</pubDate>
+        {% if not(ez_is_field_empty(content,  mapping.media)) %}
+            <enclosure
+                    url="{{ ez_image_alias( content.getField( mapping.media ), content.versionInfo, 'original' ).uri }}"
+                    length="{{ content.getFieldValue(mapping.media).filesize }}"/>
+        {% endif %}
+    </item>
+{% endblock %}

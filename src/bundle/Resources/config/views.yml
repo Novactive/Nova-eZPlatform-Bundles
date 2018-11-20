@@ -1,0 +1,7 @@
+system:
+  default:
+    content_view:
+      rss_line:
+        default:
+          template: "EzRssFeedBundle:default:content/rss_line.html.twig"
+          match: []

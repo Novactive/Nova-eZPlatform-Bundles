@@ -1,0 +1,19 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  Novactive\EzRssFeedBundle\Controller\Admin\RssFeedController:
+    tags: ['controller.service_arguments']
+
+  Novactive\EzRssFeedBundle\PlatformAdminUI\EventListener\MainMenuBuilderListener:
+    public: false
+    arguments:
+    - "@security.authorization_checker"
+    tags:
+    - { name: kernel.event_subscriber }
+
+  Novactive\EzRssFeedBundle\PlatformAdminUI\Menu\RssEditRightSidebarBuilder:
+    tags:
+    - { name: knp_menu.menu_builder, method: build, alias: ezplatform_admin_ui.menu.rss_edit.sidebar_right }

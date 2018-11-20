@@ -1,0 +1,7 @@
+rss_platform_admin_ui:
+  resource: "@EzRssFeedBundle/Controller/Admin"
+  type:     annotation
+
+rss_front:
+  resource: "@EzRssFeedBundle/Controller"
+  type:     annotation

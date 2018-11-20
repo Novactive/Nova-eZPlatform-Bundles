@@ -1,0 +1,102 @@
+{% extends '@EzPlatformAdminUi/form_fields.html.twig' %}
+
+{% block tree_discovery_widget %}
+
+    <div>
+        <input type="hidden" id="{{ form.location.vars["id"] }}" name="{{ form.location.vars["full_name"] }}"
+               value="{{ form.location.vars["value"] }}"/>
+    </div>
+
+    <div class="items-rss-location">
+        <button data-universaldiscovery-title="{{ "role.policy.limitation.location.udw_title"|trans({}, "ezrepoforms_role") }}"
+                class="{{ form.vars.attr['class'] }}"
+                data-location-input-selector="#{{ form.location.vars["id"] }}"
+                data-selected-location-list-selector="#{{ form.location.vars["id"] }}-selected-location">
+            <svg class="ez-icon">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#relations"></use>
+            </svg>
+            <span
+                    class="ez-relations__cta-btn-label"
+                    data-location-input-selector="#{{ form.location.vars["id"] }}"
+                    data-selected-location-list-selector="#{{ form.location.vars["id"] }}-selected-location"
+            >
+                {{ "role.policy.limitation.location.udw_button"|trans({}, "ezrepoforms_role") }}
+            </span>
+        </button>
+    </div>
+    <div>
+        <ul class="location-tree" id="{{ form.location.vars["id"] }}-selected-location">
+        </ul>
+    </div>
+
+{% endblock %}
+
+{# rss feed items #}
+{% block _rss_feeds_feed_items_entry_include_subtree_row %}
+    <div class="form-group col-md-12 col-sm-12 col-xs-12 pull-left">
+        <label class="form-label">
+            {{- form_label(form) -}}
+        </label>
+        <div class="controls">
+            {{- form_errors(form) -}}
+            {{- form_widget(form) -}}
+        </div>
+    </div>
+{% endblock _rss_feeds_feed_items_entry_include_subtree_row %}
+{% block _rss_feeds_feed_items_entry_contenttype_id_row %}
+    <div class="form-group col-md-12 col-sm-12 col-xs-12 pull-left">
+        <label class="form-label">
+            {{- form_label(form) -}}
+        </label>
+        <div class="controls">
+            {{- form_errors(form) -}}
+            {{- form_widget(form) -}}
+        </div>
+    </div>
+{% endblock _rss_feeds_feed_items_entry_contenttype_id_row %}
+{% block _rss_feeds_feed_items_entry_title_row %}
+    <div class="form-group col-md-6 col-sm-12 col-xs-12 pull-left">
+        <label class="form-label">
+            {{- form_label(form) -}}
+        </label>
+        <div class="controls">
+            {{- form_errors(form) -}}
+            {{- form_widget(form) -}}
+        </div>
+    </div>
+{% endblock _rss_feeds_feed_items_entry_title_row %}
+{% block _rss_feeds_feed_items_entry_description_row %}
+    <div class="form-group col-md-6 col-sm-12 col-xs-12 pull-left">
+        <label class="form-label">
+            {{- form_label(form) -}}
+        </label>
+        <div class="controls">
+            {{- form_errors(form) -}}
+            {{- form_widget(form) -}}
+        </div>
+    </div>
+{% endblock _rss_feeds_feed_items_entry_description_row %}
+{% block _rss_feeds_feed_items_entry_category_row %}
+    <div class="form-group col-md-6 col-sm-12 col-xs-12 pull-left">
+        <label class="form-label">
+            {{- form_label(form) -}}
+        </label>
+        <div class="controls">
+            {{- form_errors(form) -}}
+            {{- form_widget(form) -}}
+        </div>
+    </div>
+{% endblock _rss_feeds_feed_items_entry_category_row %}
+{% block _rss_feeds_feed_items_entry_media_row %}
+    <div class="form-group col-md-6 col-sm-12 col-xs-12 pull-left">
+        <label class="form-label">
+            {{- form_label(form) -}}
+        </label>
+        <div class="controls">
+            {{- form_errors(form) -}}
+            {{- form_widget(form) -}}
+        </div>
+    </div>
+{% endblock _rss_feeds_feed_items_entry_media_row %}
+
+
