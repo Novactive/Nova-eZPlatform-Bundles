@@ -33,7 +33,7 @@ interface ContentInterface
     public function setLocationId(int $locationId): ContentInterface;
 
     /**
-     * @return eZContent
+     * @return eZContent|null
      */
     public function getContent(): ?eZContent;
 
@@ -45,7 +45,7 @@ interface ContentInterface
     public function setContent(eZContent $content): ContentInterface;
 
     /**
-     * @return eZLocation
+     * @return eZLocation|null
      */
     public function getLocation(): ?eZLocation;
 
