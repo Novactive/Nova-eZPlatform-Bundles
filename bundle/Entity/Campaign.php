@@ -287,7 +287,7 @@ class Campaign implements eZ\ContentInterface
     /**
      * @return string
      */
-    public function getReturnPathEmail(): string
+    public function getReturnPathEmail(): ?string
     {
         return $this->returnPathEmail;
     }

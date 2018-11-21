@@ -56,24 +56,37 @@ class ChartDataBuilder
         $this->options    = $options;
         $this->dataSets   = [];
         $this->colorsSets = [
-            '#ff6384', '#36a2eb', '#cc65fe', '#ffce56',
-            // @todo: add more
+            '#ff6384', '#36a2eb', '#cc65fe', '#ffce56', '#EC644B', '#DB0A5B', '#E26A6A', '#DCC6E0', '#663399',
+            '#913D88', '#BF55EC', '#9B59B6', '#446CB3', '#59ABE3', '#19B5FE', '#A2DED0', '#66CC99', '#00B16A',
+            '#F4B350',
         ];
     }
 
     /**
-     * @param array      $data
-     * @param array      $labels
-     * @param array|null $colors
+     * @param array       $data
+     * @param array       $labels
+     * @param array|null  $colors
+     * @param null|string $type
      *
      * @return ChartDataBuilder
      */
-    public function addDataSet(array $data, array $labels, ?array $colors = null): self
+    public function addDataSet(array $data, array $labels, ?array $colors = null, ?string $type = null): self
     {
+        if (null === $type) {
+            $this->dataSets[] = [
+                'data'   => $data,
+                'labels' => $labels,
+                'colors' => $colors,
+            ];
+
+            return $this;
+        }
+
         $this->dataSets[] = [
             'data'   => $data,
             'labels' => $labels,
             'colors' => $colors,
+            'type'   => $type,
         ];
 
         return $this;
@@ -87,16 +100,40 @@ class ChartDataBuilder
         $datasets = [];
         $labels   = [];
         foreach ($this->dataSets as $dataSet) {
-            $datasets[] = [
+            $exportedDataset = [
                 'data'            => $dataSet['data'],
                 'backgroundColor' => $dataSet['colors'] ?? $this->colorsSets,
             ];
+            if (isset($dataSet['type'])) {
+                $exportedDataset['type']        = $dataSet['type'];
+                $exportedDataset['fill']        = false;
+                $exportedDataset['borderColor'] = $dataSet['colors'] ?? $this->colorsSets;
+            }
+
+            $datasets[] = $exportedDataset;
             $labels     = $dataSet['labels'];
         }
 
         $options                     = $this->options;
         $options['title']['display'] = true;
         $options['title']['text']    = $this->title;
+
+        if ('bar' === $this->type) {
+            $options['legend']          = false;
+            $options['scales']['yAxes'] = [
+                [
+                    'ticks' => [
+                        'stepSize'    => 1,
+                        'beginAtZero' => true,
+                    ],
+                ],
+            ];
+            $options['scales']['xAxes'] = [
+                [
+                    'barThickness' => 3,
+                ],
+            ];
+        }
 
         return [
             'type'    => $this->type,

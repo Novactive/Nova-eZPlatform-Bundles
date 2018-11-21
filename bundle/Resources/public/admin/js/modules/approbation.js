@@ -1,5 +1,5 @@
 var eZMailingApprobationModule = function () {
-    function _init($app) {
+    function _init($, $app) {
         $(".novaezmailing-registration-approbation button", $app).click(function () {
                 var $button = $(this);
                 var $container = $button.parents('.novaezmailing-registration-approbation:first');

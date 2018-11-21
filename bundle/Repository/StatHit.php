@@ -123,4 +123,29 @@ class StatHit extends EntityRepository
 
         return (int) ($qb->getQuery()->getOneOrNullResult()['nb'] ?? 0);
     }
+
+    /**
+     * @param BroadcastEntity[] $broadcasts
+     *
+     * @return array
+     */
+    public function getOpenedCountPerDay($broadcasts): array
+    {
+        $qb = $this->createQueryBuilderForFilters(['broadcasts' => $broadcasts]);
+        $qb->select(
+            $qb->expr()->countDistinct($this->getAlias().'.userKey').' as nb',
+            'SUBSTRING(stathit.created, 1, 10) as day'
+        );
+        $qb->andWhere($qb->expr()->eq($this->getAlias().'.url', ':url'))->setParameter('url', '-');
+        $qb->groupBy('day');
+        $qb->orderBy('day', 'DESC');
+        $results       = $qb->getQuery()->getArrayResult();
+        $mappedResults = [];
+
+        foreach ($results as $result) {
+            $mappedResults[$result['day']] = (int) $result['nb'];
+        }
+
+        return $mappedResults;
+    }
 }
