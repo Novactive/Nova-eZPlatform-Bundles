@@ -79,6 +79,31 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
     public $boost = [];
 
     /**
+     * Boost for certain meta fields.
+     *
+     * Array of boosts to apply for certain meta fields – the array should look like
+     * this:
+     *
+     * <code>
+     *  array(
+     *      'title' => 2,
+     *      …
+     *  )
+     * </code>
+     *
+     * @var array
+     */
+    public $metaBoost = [];
+
+    /**
+     * Enable publish date boosting.
+     * This will boost most recent contents.
+     *
+     * @var bool
+     */
+    public $boostPublishDate = false;
+
+    /**
      * Analyzer configuration.
      *
      * @TODO: Define how this could look like

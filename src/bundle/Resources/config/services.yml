@@ -33,6 +33,15 @@ services:
     tags:
     - {name: ezpublish.search.solr.field_mapper.content_translation}
 
+  Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper\PublishDateFieldMapper:
+    lazy: true
+    arguments:
+      $contentTypeHandler: '@ezpublish.spi.persistence.content_type_handler'
+    calls:
+    - ['setFieldIdentifiers', ['$publishdate_fields;nova_solr_extra$']]
+    tags:
+    - {name: ezpublish.search.solr.field_mapper.content_translation}
+
   Novactive\EzSolrSearchExtra\TextExtractor\TikaTextExtractor:
     arguments:
       $tikaClient: '@Novactive\EzSolrSearchExtra\Tika\TikaLocalClient'

@@ -98,7 +98,7 @@ class MultipleFieldsFullText extends CriterionVisitor
      */
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText $criterion */
+        /** @var \Novactive\EzSolrSearchExtra\Query\Content\Criterion\MultipleFieldsFullText $criterion */
         $tokenSequence = $this->tokenizer->tokenize($criterion->value);
         $syntaxTree    = $this->parser->parse($tokenSequence);
 
@@ -111,7 +111,21 @@ class MultipleFieldsFullText extends CriterionVisitor
         $queryStringEscaped = $this->escapeQuote($queryString);
         $queryFields        = $this->getQueryFields($criterion);
 
-        return "{!edismax v='{$queryStringEscaped}' qf='{$queryFields}' tie=0.1 uf=-*}";
+        $queryParams = [
+            'v'   => $queryStringEscaped,
+            'qf'  => $queryFields,
+            'pf'  => $queryFields,
+            'tie' => 0.1,
+            'uf'  => '-*',
+        ];
+        if ($criterion->boostPublishDate) {
+            $queryParams['bf'] = 'recip(ms(NOW/HOUR,meta_publishdate__date_dt),3.16e-11,1,1)';
+        }
+        $queryParamsString = implode(' ', array_map(function ($key, $value) {
+            return "{$key}='{$value}'";
+        }, array_keys($queryParams), $queryParams));
+
+        return "{!edismax {$queryParamsString}}";
     }
 
     /**
@@ -121,17 +135,18 @@ class MultipleFieldsFullText extends CriterionVisitor
      */
     private function getQueryFields(Criterion $criterion)
     {
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText $criterion */
-        $queryFields = ['meta_content__text_t'];
+        /** @var \Novactive\EzSolrSearchExtra\Query\Content\Criterion\MultipleFieldsFullText $criterion */
+        $queryFields = ['meta_content__text_t', 'meta_content__text_t_raw'];
 
         foreach ($criterion->boost as $field => $boost) {
             $searchFields = $this->getSearchFields($criterion, $field);
-            if (empty($searchFields)) {
-                $searchFields[$field] = null;
-            }
             foreach (array_keys($searchFields) as $name) {
                 $queryFields[] = "{$name}^{$boost}";
             }
+        }
+        foreach ($criterion->metaBoost as $field => $boost) {
+            $queryFields[] = "meta_{$field}_text_t^{$boost}";
+            $queryFields[] = "meta_{$field}_text_t_raw^{$boost}";
         }
 
         return implode(' ', $queryFields);

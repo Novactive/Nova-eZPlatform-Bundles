@@ -1,5 +1,6 @@
-# Custom meta fulltext field
+# Custom meta field
 
+## Fulltext fields
 When defining a special configuration, it's possible to store the value of multiple content fields in a unique solr fields.
 
 This allow for example to do full text search on multiple fields with a different boost on each field.
@@ -34,3 +35,23 @@ ez_solr_search_extra:
                 - introduction
                 - heading
 ```
+
+## Publish date field
+
+A new date field is added to every content documents : `meta_publishdate__date_dt`
+
+This allow to boost content based on their publish date, this mean that newer content get higher score.
+
+The value of this field is by default set to content publish date.
+
+However it possible to define a content field to get the value from using the following setting :
+
+```yaml
+ez_solr_search_extra:
+    system:
+        default:
+            publishdate_fields:
+                - <content field identifier>
+                - <content type identifier>/<content field identifier>
+```
+
