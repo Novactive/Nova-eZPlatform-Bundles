@@ -16,11 +16,11 @@ export default class MenuItem {
         this.type = props.type;
     }
 
-    toTreeNode() {
+    toTreeNode(language) {
         return {
             id: this.id,
             parent: this.parentId,
-            text: this.name,
+            text: this.translateProperty(this.name, language),
             data: {
                 position: this.position,
                 url: this.url,
@@ -29,6 +29,15 @@ export default class MenuItem {
             state: this.state,
             type: this.type,
         };
+    }
+
+    translateProperty(property, language) {
+        try {
+            const values = JSON.parse(property);
+            return values[language];
+        } catch (e) {
+            return property;
+        }
     }
 
     isEnabled() {

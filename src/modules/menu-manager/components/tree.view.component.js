@@ -42,7 +42,7 @@ export default class TreeView extends PureComponent {
          * @var item MenuItem
          */
         for (let item of this.props.items.values()) {
-            const node = item.toTreeNode();
+            const node = item.toTreeNode(this.props.language);
             if (node.parent === '#') node.parent = ROOT_ID;
             data.push(node);
         }
@@ -136,7 +136,7 @@ export default class TreeView extends PureComponent {
 
     handleEditTreeNode(event) {
         const node = this.tree.get_node(event.reference),
-            item = MenuItem.fromTreeNode(node);
+            item = this.props.items.get(node.id);
         this.props.onEdit(item);
     }
 
@@ -205,4 +205,5 @@ TreeView.propTypes = {
     types: PropTypes.object,
     onChange: PropTypes.func,
     onEdit: PropTypes.func,
+    language: PropTypes.string,
 };

@@ -5,12 +5,16 @@ import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
 export default class MenuItemEditFormModule extends Component {
     constructor(props) {
         super(props);
+        this.defaultLanguage = eZ.adminUiConfig.languages.priority[0];
         this.state = {
             name: this.props.item.name,
             url: this.props.item.url,
             blank: this.props.item.target === '_blank',
+            language: this.defaultLanguage,
         };
+        this.handleLanguageChange = this.handleLanguageChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleLocalizedInputChange = this.handleLocalizedInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
     }
@@ -25,6 +29,14 @@ export default class MenuItemEditFormModule extends Component {
         }
     }
 
+    handleLanguageChange(event) {
+        const target = event.target;
+        const value = target.value;
+        this.setState({
+            language: value,
+        });
+    }
+
     handleInputChange(event) {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -32,6 +44,23 @@ export default class MenuItemEditFormModule extends Component {
 
         this.setState({
             [name]: value,
+        });
+    }
+
+    handleLocalizedInputChange(event) {
+        const target = event.target;
+        const rawValue = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+        let value = {};
+        try {
+            value = JSON.parse(this.state[name]);
+        } catch (e) {
+            value[this.defaultLanguage] = this.state[name];
+        }
+        value[this.state.language] = rawValue;
+        const stringValue = JSON.stringify(value);
+        this.setState({
+            [name]: stringValue,
         });
     }
 
@@ -48,18 +77,53 @@ export default class MenuItemEditFormModule extends Component {
         this.props.onCancel();
     }
 
+    getInputValue(property) {
+        try {
+            const values = JSON.parse(property);
+            return values[this.state.language] || '';
+        } catch (e) {
+            return property;
+        }
+    }
+
     render() {
         const isBlank = this.props.item.target === '_blank' ? 'checked="checked' : '';
+        let languages = [];
+        for (const languageCode in eZ.adminUiConfig.languages.mappings) {
+            languages.push(eZ.adminUiConfig.languages.mappings[languageCode]);
+        }
         return (
             <div>
                 <Form onSubmit={this.handleSubmit}>
                     <FormGroup>
+                        <Label for="language">{Translator.trans('menu_item.property.language')}</Label>
+                        <Input type="select" onChange={this.handleLanguageChange}>
+                            {[...languages].map((language) => (
+                                <option key={language.id} value={language.languageCode}>
+                                    {language.name}
+                                </option>
+                            ))}
+                        </Input>
+                    </FormGroup>
+                    <FormGroup>
                         <Label for="item_name">{Translator.trans('menu_item.property.name')}</Label>
-                        <Input type="text" name="name" value={this.state.name} id="item_name" onChange={this.handleInputChange} />
+                        <Input
+                            type="text"
+                            name="name"
+                            value={this.getInputValue(this.state.name)}
+                            id="item_name"
+                            onChange={this.handleLocalizedInputChange}
+                        />
                     </FormGroup>
                     <FormGroup>
                         <Label for="item_url">{Translator.trans('menu_item.property.url')}</Label>
-                        <Input type="text" name="url" value={this.state.url} id="item_url" onChange={this.handleInputChange} />
+                        <Input
+                            type="text"
+                            name="url"
+                            value={this.getInputValue(this.state.url)}
+                            id="item_url"
+                            onChange={this.handleLocalizedInputChange}
+                        />
                     </FormGroup>
                     <FormGroup check>
                         <Label check for="item_target">

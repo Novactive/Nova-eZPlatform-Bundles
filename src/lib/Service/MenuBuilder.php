@@ -81,12 +81,13 @@ class MenuBuilder
      */
     public function appendChild(MenuItem $menuItem, ItemInterface $knpMenu)
     {
-        $parent = $knpMenu->addChild($this->toMenuItemLink($menuItem));
-        foreach ($menuItem->getChildrens() as $childMenuItem) {
-            $this->appendChild($childMenuItem, $parent);
+        $menuItemLink = $this->toMenuItemLink($menuItem);
+        if (null !== $menuItemLink) {
+            $parent = $knpMenu->addChild($menuItemLink);
+            foreach ($menuItem->getChildrens() as $childMenuItem) {
+                $this->appendChild($childMenuItem, $parent);
+            }
         }
-
-        return $parent;
     }
 
     /**

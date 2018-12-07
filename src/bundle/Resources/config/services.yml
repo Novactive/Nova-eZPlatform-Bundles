@@ -49,5 +49,18 @@ services:
     Novactive\EzMenuManager\MenuItem\:
         resource: "../../../lib/MenuItem/*"
 
+    Novactive\EzMenuManager\MenuItem\Type\DefaultMenuItemType:
+        calls:
+            - ['setLanguages', ['$languages$']]
+
+    Novactive\EzMenuManager\MenuItem\Type\ContentMenuItemType:
+        calls:
+            - ['setTranslationHelper', ['@ezpublish.translation_helper']]
+            - ['setContentService', ['@ezpublish.siteaccessaware.service.content']]
+            - ['setLocationService', ['@ezpublish.siteaccessaware.service.location']]
+            - ['setRouter', ['@router']]
+            - ['setCache', ['@ezpublish.cache_pool']]
+            - ['setSiteAccess', ['@ezpublish.siteaccess']]
+
     Novactive\EzMenuManager\MenuItem\MenuItemTypeRegistry:
         arguments: [!tagged ezmenumanager.menuitemtype]

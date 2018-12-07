@@ -11,12 +11,12 @@
 
 namespace Novactive\EzMenuManager\MenuItem\Type;
 
-use Doctrine\ORM\EntityManagerInterface;
-use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\API\Repository\LocationService;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\Helper\TranslationHelper;
-use Knp\Menu\FactoryInterface;
+use eZ\Publish\Core\MVC\Symfony\siteAccess;
+use eZ\Publish\Core\Repository\siteAccessAware\ContentService;
+use eZ\Publish\Core\Repository\siteAccessAware\LocationService;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\MenuItem as KnpMenuItem;
 use Novactive\EzMenuManager\MenuItem\MenuItemTypeInterface;
@@ -38,32 +38,64 @@ class ContentMenuItemType extends DefaultMenuItemType implements MenuItemTypeInt
     /** @var RouterInterface */
     protected $router;
 
+    /** @var TagAwareAdapterInterface */
+    protected $cache;
+
+    /** @var SiteAccess */
+    protected $siteAccess;
+
     /**
-     * ContentMenuItemType constructor.
-     *
-     * @param EntityManagerInterface   $em
-     * @param FactoryInterface         $factory
-     * @param TranslationHelper        $translationHelper
-     * @param ContentService           $contentService
-     * @param LocationService          $locationService
-     * @param RouterInterface          $router
-     * @param TagAwareAdapterInterface $cache
+     * @param TranslationHelper $translationHelper
+     * @required
      */
-    public function __construct(
-        EntityManagerInterface $em,
-        FactoryInterface $factory,
-        TranslationHelper $translationHelper,
-        ContentService $contentService,
-        LocationService $locationService,
-        RouterInterface $router,
-        TagAwareAdapterInterface $cache
-    ) {
-        parent::__construct($em, $factory);
+    public function setTranslationHelper(TranslationHelper $translationHelper): void
+    {
         $this->translationHelper = $translationHelper;
-        $this->contentService    = $contentService;
-        $this->locationService   = $locationService;
-        $this->router            = $router;
-        $this->cache             = $cache;
+    }
+
+    /**
+     * @param ContentService $contentService
+     * @required
+     */
+    public function setContentService(ContentService $contentService): void
+    {
+        $this->contentService = $contentService;
+    }
+
+    /**
+     * @param LocationService $locationService
+     * @required
+     */
+    public function setLocationService(LocationService $locationService): void
+    {
+        $this->locationService = $locationService;
+    }
+
+    /**
+     * @param RouterInterface $router
+     * @required
+     */
+    public function setRouter(RouterInterface $router): void
+    {
+        $this->router = $router;
+    }
+
+    /**
+     * @param TagAwareAdapterInterface $cache
+     * @required
+     */
+    public function setCache(TagAwareAdapterInterface $cache): void
+    {
+        $this->cache = $cache;
+    }
+
+    /**
+     * @param siteAccess $siteAccess
+     * @required
+     */
+    public function setsiteAccess(siteAccess $siteAccess): void
+    {
+        $this->siteAccess = $siteAccess;
     }
 
     /**
@@ -120,43 +152,62 @@ class ContentMenuItemType extends DefaultMenuItemType implements MenuItemTypeInt
     public function toMenuItemLink(MenuItem $menuItem): ?ItemInterface
     {
         try {
-            $contentInfo = $this->contentService->loadContentInfo($menuItem->getContentId());
-
-            $label = $this->translationHelper->getTranslatedContentNameByContentInfo($contentInfo);
-            $menuItem->setName($label);
-
-            $location = $this->locationService->loadLocation($contentInfo->mainLocationId);
-
-            $cacheItem = $this->cache->getItem('content-menu-item-link-'.$menuItem->getId());
-            if ($cacheItem->isHit()) {
-                return $cacheItem->get();
-            }
-
-            $link = new KnpMenuItem('location-'.$location->id, $this->factory);
-            $link->setUri($this->router->generate($location));
-            $link->setLabel($menuItem->getName());
-            $link->setExtras(
-                [
-                    'contentId'  => $location->contentId,
-                    'locationId' => $location->id,
-                ]
-            );
-            $cacheItem->set($link);
-            $cacheItem->tag(
-                [
-                    'content-'.$contentInfo->id,
-                    'location-'.$location->id,
-                    'menu-item-'.$menuItem->getId(),
-                    'menu-'.$menuItem->getMenu()->getId(),
-                ]
-            );
-            $this->cache->save($cacheItem);
+            $menuItemLinkInfos = $this->getMenuItemLinkInfos($menuItem);
+            $link              = new KnpMenuItem($menuItemLinkInfos['id'], $this->factory);
+            $link->setUri($menuItemLinkInfos['uri']);
+            $link->setLabel($menuItemLinkInfos['label']);
+            $link->setExtras($menuItemLinkInfos['extras']);
 
             return $link;
+        } catch (UnauthorizedException $e) {
+            return null;
         } catch (NotFoundException $e) {
-            $menuItem->setUrl(null);
-
-            return parent::toMenuItemLink($menuItem);
+            return null;
         }
+
+        return null;
+    }
+
+    /**
+     * @param MenuItem $menuItem
+     *
+     * @throws NotFoundException
+     * @throws UnauthorizedException
+     * @throws \Psr\Cache\InvalidArgumentException
+     *
+     * @return array
+     */
+    protected function getMenuItemLinkInfos(MenuItem $menuItem): array
+    {
+        $cacheItem = $this->cache->getItem("content-menu-item-link-{$menuItem->getId()}-{$this->siteAccess->name}");
+        if ($cacheItem->isHit()) {
+            return $cacheItem->get();
+        }
+
+        $content  = $this->contentService->loadContent($menuItem->getContentId());
+        $location = $this->locationService->loadLocation($content->contentInfo->mainLocationId);
+
+        $menuItemLinkInfos = [
+            'id'     => "location-{$location->id}",
+            'uri'    => $this->router->generate($location),
+            'label'  => $this->translationHelper->getTranslatedContentNameByContentInfo($content->contentInfo),
+            'extras' => [
+                    'contentId'  => $location->contentId,
+                    'locationId' => $location->id,
+                ],
+        ];
+
+        $cacheItem->set($menuItemLinkInfos);
+        $cacheItem->tag(
+            [
+                'content-'.$content->id,
+                'location-'.$location->id,
+                'menu-item-'.$menuItem->getId(),
+                'menu-'.$menuItem->getMenu()->getId(),
+            ]
+        );
+        $this->cache->save($cacheItem);
+
+        return $menuItemLinkInfos;
     }
 }

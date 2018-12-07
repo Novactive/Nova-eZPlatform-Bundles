@@ -114,6 +114,18 @@ class MenuItem
     }
 
     /**
+     * @param $language
+     *
+     * @return string|null
+     */
+    public function getTranslatedName($language): ?string
+    {
+        $name = json_decode($this->getName(), true);
+
+        return is_array($name) ? ($name[$language] ?? null) : $this->getName();
+    }
+
+    /**
      * @param string $name
      */
     public function setName(string $name): void
@@ -127,6 +139,18 @@ class MenuItem
     public function getUrl(): ?string
     {
         return $this->url;
+    }
+
+    /**
+     * @param $language
+     *
+     * @return string|null
+     */
+    public function getTranslatedUrl($language): ?string
+    {
+        $url = json_decode($this->getUrl(), true);
+
+        return is_array($url) ? ($url[$language] ?? null) : $this->getUrl();
     }
 
     /**

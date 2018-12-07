@@ -20,6 +20,17 @@ use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 
 class DefaultMenuItemType extends AbstractMenuItemType implements MenuItemTypeInterface
 {
+    /** @var array */
+    protected $languages;
+
+    /**
+     * @param array $languages
+     */
+    public function setLanguages(array $languages): void
+    {
+        $this->languages = $languages;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -108,10 +119,49 @@ class DefaultMenuItemType extends AbstractMenuItemType implements MenuItemTypeIn
      */
     public function toMenuItemLink(MenuItem $menuItem): ?ItemInterface
     {
-        $link = new KnpMenuItem($menuItem->getName(), $this->factory);
-        $link->setUri($menuItem->getUrl());
+        $name = $this->getName($menuItem);
+        if (null === $name) {
+            return null;
+        }
+        $url  = $this->getUrl($menuItem);
+        $link = new KnpMenuItem($name, $this->factory);
+        $link->setUri($url);
         $link->setLinkAttribute('target', $menuItem->getTarget());
 
         return $link;
+    }
+
+    /**
+     * @param MenuItem $menuItem
+     *
+     * @return string|null
+     */
+    public function getName(MenuItem $menuItem): ?string
+    {
+        foreach ($this->languages as $lang) {
+            $value = $menuItem->getTranslatedName($lang);
+            if (null !== $value) {
+                return $value;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param MenuItem $menuItem
+     *
+     * @return string|null
+     */
+    public function getUrl(MenuItem $menuItem): ?string
+    {
+        foreach ($this->languages as $lang) {
+            $value = $menuItem->getTranslatedUrl($lang);
+            if (null !== $value) {
+                return $value;
+            }
+        }
+
+        return null;
     }
 }

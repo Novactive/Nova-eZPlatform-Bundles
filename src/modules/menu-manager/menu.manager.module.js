@@ -91,7 +91,13 @@ export default class MenuManagerModule extends Component {
         return (
             <div>
                 <div className="col-md-12">
-                    <TreeView items={this.state.items} onChange={this.handleTreeChange} onEdit={this.handeEdit} types={this.config.types} />
+                    <TreeView
+                        items={this.state.items}
+                        onChange={this.handleTreeChange}
+                        onEdit={this.handeEdit}
+                        language={eZ.adminUiConfig.languages.priority[0]}
+                        types={this.config.types}
+                    />
                 </div>
                 {editForm && <div className="col-md-6 card menu-manager-edit-form-container">{editForm}</div>}
             </div>
