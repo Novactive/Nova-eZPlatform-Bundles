@@ -24,6 +24,7 @@ menu_item:
     name: Link name
     url: Url
     new_window: Open in new window
+    language: Language
   action:
     remove: Remove link
     restore: Restore link
