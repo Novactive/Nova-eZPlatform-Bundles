@@ -100,3 +100,10 @@ services:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
             - [ setAnnotationReader, [ "@annotation_reader" ] ]
+
+#    Novactive\Bundle\eZMailingBundle\Command\MigrateCommand:
+#        arguments: ['@ez_mailing.io_service']
+
+    ez_mailing.io_service:
+        class: Novactive\Bundle\eZMailingBundle\Core\IOService
+        arguments: ['@ez_mailing.ezpublish.core.io_service']
