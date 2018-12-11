@@ -58,9 +58,8 @@ nova_ezcloudinary:
 This bundle mimics the native image variation system.
 
 ```yaml
-system:
-    default:
-        cloudinary_variations:
+parameters:
+    nova_ezcloudinary.site_group.cloudinary_variations:
             simpletest1:
                 ezreference_variation: 'Native eZ Variation Name, ~ means original'
                 filters: # look at the documentation on Cloudinary
