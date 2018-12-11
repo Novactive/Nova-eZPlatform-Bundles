@@ -12,7 +12,7 @@
                         width="{{ width }}"{% endif %}{% if height %}
                         height="{{ height }}"{% endif %} alt="{{ field.value.alternativeText }}"{% if parameters.class is defined and parameters.class is not empty %}
                         class="{{ parameters.class }}"{% endif %}
-                        {% for key,value in imageAlias.extraTags %}
+                        {% for key,value in imageAlias.extraTags|default([]) %}
                             {{ key }}="{{ value }}"
                         {%  endfor %}
                 />
