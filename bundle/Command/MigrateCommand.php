@@ -21,6 +21,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Novactive\Bundle\eZMailingBundle\Core\IOService;
+use eZ\Publish\Core\Repository\Repository;
 
 /**
  * Class MigrateCommand.
@@ -43,13 +44,21 @@ class MigrateCommand extends Command
     private $entityManager;
 
     /**
+     * @var Repository;
+     */
+    private $ezRepository;
+
+    public const CAMPAIGN_LIST_CONTENT_ID = 53;
+
+    /**
      * MigrateCommand constructor.
      */
-    public function __construct(IOService $ioService, EntityManagerInterface $entityManager)
+    public function __construct(IOService $ioService, EntityManagerInterface $entityManager, Repository $ezRepository)
     {
         parent::__construct();
         $this->ioService     = $ioService;
         $this->entityManager = $entityManager;
+        $this->ezRepository  = $ezRepository;
     }
 
     protected function configure(): void
@@ -83,9 +92,39 @@ class MigrateCommand extends Command
     {
         // Get the Lists first, then Users and subscriptions (which are supposed to be registrations)
 
-        $lists = [];
+        $contentService         = $this->ezRepository->getContentService();
+        $contentLanguageService = $this->ezRepository->getContentLanguageService();
+        $languages              = $contentLanguageService->loadLanguages();
 
-        $this->ioService->saveFile('ezmailing/manifest.json', json_encode($lists));
+        $lists = $campaigns = [];
+
+        $sql = 'SELECT contentobject_attribute_version, contentobject_id, auto_approve_registered_user,';
+
+        $sql .= 'email_sender_name, email_sender, email_receiver_test from cjwnl_list ';
+        $sql .= 'WHERE (contentobject_id ,contentobject_attribute_version) IN ';
+        $sql .= '(SELECT contentobject_id, MAX(contentobject_attribute_version) ';
+        $sql .= 'FROM cjwnl_list GROUP BY contentobject_id)';
+
+        $list_rows = $this->runQuery($sql);
+        foreach ($list_rows as $row) {
+            try {
+                $content = $contentService->loadContent($row['contentobject_id']);
+            } catch (\Exception $e) {
+                $content = $contentService->loadContent(self::CAMPAIGN_LIST_CONTENT_ID);
+            }
+            $names = [];
+            foreach ($languages as $language) {
+                $names[$language->languageCode] = $content->getFieldValue('title', $language->languageCode)->text;
+            }
+            $lists[] = basename(
+                $this->ioService->saveFile(
+                    "ezmailing/list/list_{$row['contentobject_id']}.json",
+                    json_encode(['names' => $names, 'approbation' => $row['auto_approve_registered_user']])
+                )
+            );
+        }
+
+        $this->ioService->saveFile('ezmailing/manifest.json', json_encode(['lists' => $lists]));
         $this->io->section(
             'Total: '.(string) count($lists).' lists.'
         );
