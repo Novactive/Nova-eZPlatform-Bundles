@@ -54,9 +54,27 @@ services:
     tags:
     - {name: ezpublish.search.solr.query.content.criterion_visitor}
 
+  Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor\MultipleFieldsFullText:
+    tags:
+    - {name: ezpublish.search.solr.query.content.criterion_visitor}
+
   Novactive\EzSolrSearchExtra\Query\CriterionHandler\MultipleFieldsFullText:
     arguments:
       $dbHandler: "@ezpublish.api.storage_engine.legacy.dbhandler"
     tags:
     - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
     - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+  Novactive\EzSolrSearchExtra\Query\SortClauseVisitor\Score:
+    tags:
+    - {name: ezpublish.search.solr.query.content.sort_clause_visitor}
+    - {name: ezpublish.search.solr.query.location.sort_clause_visitor}
+
+  Novactive\EzSolrSearchExtra\Query\SortClauseHandler\Score:
+    autowire: false
+    autoconfigure: false
+    public: false
+    parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
+    tags:
+    - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
+    - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
