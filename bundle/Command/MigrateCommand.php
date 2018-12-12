@@ -15,6 +15,10 @@ namespace Novactive\Bundle\eZMailingBundle\Command;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\ORM\EntityManagerInterface;
+use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
+use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
+use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
+use Novactive\Bundle\eZMailingBundle\Entity\User;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -49,6 +53,8 @@ class MigrateCommand extends Command
     private $ezRepository;
 
     public const CAMPAIGN_LIST_CONTENT_ID = 53;
+
+    public const MAILING_CONTENT_ID = 52;
 
     /**
      * MigrateCommand constructor.
@@ -90,6 +96,12 @@ class MigrateCommand extends Command
 
     private function export(): void
     {
+        // TODO: replace getFieldValue('title', $language->languageCode) with getName($language->languageCode)
+        // TODO: set Mailing subject as name of main language
+
+        // clean the 'ezmailing' dir
+        $this->ioService->cleanDir('ezmailing');
+
         // Get the Lists first, then Users and subscriptions (which are supposed to be registrations)
 
         $contentService         = $this->ezRepository->getContentService();
@@ -98,35 +110,167 @@ class MigrateCommand extends Command
 
         $lists = $campaigns = [];
 
+        $mailingCounter = 0;
+
         $sql = 'SELECT contentobject_attribute_version, contentobject_id, auto_approve_registered_user,';
 
-        $sql .= 'email_sender_name, email_sender, email_receiver_test from cjwnl_list ';
+        $sql .= 'email_sender_name, email_sender, email_receiver_test FROM cjwnl_list ';
         $sql .= 'WHERE (contentobject_id ,contentobject_attribute_version) IN ';
         $sql .= '(SELECT contentobject_id, MAX(contentobject_attribute_version) ';
         $sql .= 'FROM cjwnl_list GROUP BY contentobject_id)';
 
         $list_rows = $this->runQuery($sql);
-        foreach ($list_rows as $row) {
+        foreach ($list_rows as $list_row) {
             try {
-                $content = $contentService->loadContent($row['contentobject_id']);
+                $listContent = $contentService->loadContent($list_row['contentobject_id']);
             } catch (\Exception $e) {
-                $content = $contentService->loadContent(self::CAMPAIGN_LIST_CONTENT_ID);
+                $listContent = $contentService->loadContent(self::CAMPAIGN_LIST_CONTENT_ID);
             }
-            $names = [];
+            $listNames = [];
             foreach ($languages as $language) {
-                $names[$language->languageCode] = $content->getFieldValue('title', $language->languageCode)->text;
+                $title = $listContent->getFieldValue('title', $language->languageCode);
+                if (null !== $title) {
+                    $listNames[$language->languageCode] = $title->text;
+                }
             }
-            $lists[] = basename(
-                $this->ioService->saveFile(
-                    "ezmailing/list/list_{$row['contentobject_id']}.json",
-                    json_encode(['names' => $names, 'approbation' => $row['auto_approve_registered_user']])
+            $fileName = $this->ioService->saveFile(
+                "ezmailing/list/list_{$list_row['contentobject_id']}.json",
+                json_encode(
+                    ['names' => $listNames, 'withApproval' => $list_row['auto_approve_registered_user']]
                 )
             );
+            $lists[]  = pathinfo($fileName)['filename'];
+
+            $mailings = [];
+
+            $sql = 'SELECT edition_contentobject_id, status, siteaccess, mailqueue_process_finished ';
+
+            $sql .= 'FROM cjwnl_edition_send WHERE list_contentobject_id = ?';
+
+            $mailing_rows = $this->runQuery($sql, [$list_row['contentobject_id']]);
+            foreach ($mailing_rows as $mailing_row) {
+                switch ($mailing_row['status']) {
+                    case 0:
+                        $status = Mailing::PENDING;
+                        break;
+                    case 1:
+                        $status = Mailing::PENDING;
+                        break;
+                    case 2:
+                        $status = Mailing::PROCESSING;
+                        break;
+                    case 3:
+                        $status = Mailing::SENT;
+                        break;
+                    case 9:
+                        $status = Mailing::ABORTED;
+                        break;
+                    default:
+                        $status = Mailing::DRAFT;
+                        break;
+                }
+
+                try {
+                    $mailingContent = $contentService->loadContent($mailing_row['edition_contentobject_id']);
+                } catch (\Exception $e) {
+                    $mailingContent = $contentService->loadContent(self::MAILING_CONTENT_ID);
+                }
+                $mailingNames = [];
+                foreach ($languages as $language) {
+                    $title = $mailingContent->getFieldValue('title', $language->languageCode);
+                    if (null !== $title) {
+                        $mailingNames[$language->languageCode] = $title->text;
+                    }
+                }
+
+                $mailings[] = [
+                    'names'        => $mailingNames,
+                    'status'       => $status,
+                    'siteAccess'   => $mailing_row['siteaccess'],
+                    'locationId'   => $mailingContent->contentInfo->mainLocationId,
+                    //'recurring'    => 0, => import
+                    'hoursOfDay'   => (int) date('H', (int) $mailing_row['mailqueue_process_finished']),
+                    'daysOfMonth'  => (int) date('d', (int) $mailing_row['mailqueue_process_finished']),
+                    'monthsOfYear' => (int) date('m', (int) $mailing_row['mailqueue_process_finished'])
+                ];
+                ++$mailingCounter;
+            }
+
+            $fileName    = $this->ioService->saveFile(
+                "ezmailing/campaign/campaign_{$list_row['contentobject_id']}.json",
+                json_encode(
+                    [
+                        'names'       => $listNames,
+                        'locationId'  => $listContent->contentInfo->mainLocationId,
+                        'senderName'  => $list_row['email_sender_name'],
+                        'senderEmail' => $list_row['email_sender'],
+                        'reportEmail' => $list_row['email_receiver_test'],
+                        //'returnPathEmail' => '', => import
+                        'mailings'    => $mailings
+                    ]
+                )
+            );
+            $campaigns[] = pathinfo($fileName)['filename'];
+
         }
 
-        $this->ioService->saveFile('ezmailing/manifest.json', json_encode(['lists' => $lists]));
+        // getting users
+
+        $users = [];
+
+        $sql = 'SELECT id, email, first_name, last_name, organisation, birthday, ez_user_id, status, confirmed, ';
+
+        $sql .= 'removed, bounced, blacklisted FROM cjwnl_user';
+
+        $user_rows = $this->runQuery($sql);
+        foreach ($user_rows as $user_row) {
+            $status = User::PENDING;
+            if (0 !== $user_row['confirmed']) {
+                $status = User::CONFIRMED;
+            }
+            if (0 !== $user_row['bounced']) {
+                $status = User::SOFT_BOUNCE;
+            }
+            if (0 !== $user_row['blacklisted']) {
+                $status = User::BLACKLISTED;
+            }
+            $birthdate = empty($user_row['birthday']) ? null : new \DateTime('2018-12-11');
+
+            $sql               = 'SELECT list_contentobject_id, approved FROM cjwnl_subscription WHERE newsletter_user_id = ?';
+            $subscription_rows = $this->runQuery($sql, [$user_row['id']]);
+            $subscriptions     = [];
+            foreach ($subscription_rows as $subscription_row) {
+                $subscriptions[] = [
+                    'list_contentobject_id' => $subscription_row['list_contentobject_id'],
+                    'approved'              => (bool) $subscription_row['approved']
+                ];
+            }
+
+            $fileName = $this->ioService->saveFile(
+                "ezmailing/user/user_{$user_row['id']}.json",
+                json_encode(
+                    [
+                        'email'         => $user_row['email'],
+                        'firstName'     => $user_row['first_name'],
+                        'lastName'      => $user_row['last_name'],
+                        'birthDate'     => $birthdate,
+                        'status'        => $status,
+                        'company'       => $user_row['organisation'],
+                        //'origin'    => 'site' => import,
+                        'subscriptions' => $subscriptions
+                    ]
+                )
+            );
+            $users[]  = pathinfo($fileName)['filename'];
+
+        }
+
+        $this->ioService->saveFile(
+            'ezmailing/manifest.json',
+            json_encode(['lists' => $lists, 'campaigns' => $campaigns, 'users' => $users])
+        );
         $this->io->section(
-            'Total: '.(string) count($lists).' lists.'
+            'Total: '.(string) count($lists).' lists, '.$mailingCounter.' mailings, '.(string) count($users).' users.'
         );
 
         $this->io->success('Export done.');
@@ -137,12 +281,56 @@ class MigrateCommand extends Command
         // clear the tables, reset the IDs
         $this->clean();
 
-        $manifest     = $this->ioService->readFile('ezmailing/manifest.json');
-        $fileNames    = json_decode($manifest);
-        $listsCounter = 0;
+        $manifest  = $this->ioService->readFile('ezmailing/manifest.json');
+        $fileNames = json_decode($manifest);
+
+        // Importing Lists
+        $listCounter = $mailingCounter = $userCounter = 0;
+        $listIds     = [];
+
+        foreach ($fileNames->lists as $listFile) {
+            $listData    = json_decode($this->ioService->readFile('ezmailing/list/'.$listFile.'.json'));
+            $mailingList = new MailingList();
+            $mailingList->setNames((array) $listData->names);
+            $mailingList->setWithApproval((bool) $listData->withApproval);
+            $this->entityManager->persist($mailingList);
+            ++$listCounter;
+            $this->entityManager->flush();
+            $listIds[explode('_', $listFile)[1]] = $mailingList->getId();
+        }
+
+        // Importing campaigns with mailings
+        foreach ($fileNames->campaigns as $campaignFile) {
+            $campaignData = json_decode($this->ioService->readFile('ezmailing/campaign/'.$campaignFile.'.json'));
+            $campaign     = new Campaign();
+            $campaign->setNames((array) $campaignData->names);
+            $campaign->setReportEmail($campaignData->reportEmail);
+            $campaign->setSenderEmail($campaignData->senderEmail);
+            $campaign->setReturnPathEmail('');
+            $campaign->setSenderName($campaignData->senderName);
+            $campaign->setLocationId($campaignData->locationId);
+            $this->entityManager->persist($campaign);
+            foreach ($campaignData->mailings as $mailingData) {
+                $mailing = new Mailing();
+                $mailing->setNames((array) $mailingData->names);
+                $mailing->setStatus($mailingData->status);
+                $mailing->setRecurring(false);
+                $mailing->setHoursOfDay([$mailingData->hoursOfDay]);
+                $mailing->setDaysOfMonth([$mailingData->daysOfMonth]);
+                $mailing->setMonthsOfYear([$mailingData->monthsOfYear]);
+                $mailing->setLocationId($mailingData->locationId);
+                $mailing->setSiteAccess($mailingData->siteAccess);
+                $mailing->setSubject(''); // ??? What should be the subject ???
+                $this->entityManager->persist($mailing);
+                $campaign->addMailing($mailing);
+                ++$mailingCounter;
+            }
+        }
+
+        $this->entityManager->flush();
 
         $this->io->section(
-            'Total: '.$listsCounter.' lists, '
+            'Total: '.$listCounter.' lists, '.$mailingCounter.' mailings, '.$userCounter.' users.'
         );
 
         $this->io->success('Import done.');
