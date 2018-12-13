@@ -21,7 +21,7 @@ use Pagerfanta\Pagerfanta;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Translation\Translator;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class AdminController.
@@ -34,7 +34,7 @@ class AdminController extends Controller
 {
     const RESULTS_PER_PAGE = 10;
 
-    /** @var Translator */
+    /** @var TranslatorInterface */
     protected $translator;
 
     /** @var NotificationHandlerInterface */
@@ -43,10 +43,10 @@ class AdminController extends Controller
     /**
      * AdminController constructor.
      *
-     * @param Translator                   $translator
+     * @param TranslatorInterface                   $translator
      * @param NotificationHandlerInterface $notificationHandler
      */
-    public function __construct(Translator $translator, NotificationHandlerInterface $notificationHandler)
+    public function __construct(TranslatorInterface $translator, NotificationHandlerInterface $notificationHandler)
     {
         $this->translator          = $translator;
         $this->notificationHandler = $notificationHandler;
