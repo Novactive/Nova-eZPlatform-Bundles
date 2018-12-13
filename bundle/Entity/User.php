@@ -324,7 +324,7 @@ class User
      *
      * @return User
      */
-    public function setBirthDate(DateTime $birthDate): self
+    public function setBirthDate(?DateTime $birthDate): self
     {
         $this->birthDate = $birthDate;
 

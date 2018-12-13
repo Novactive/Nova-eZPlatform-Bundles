@@ -18,6 +18,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
+use Novactive\Bundle\eZMailingBundle\Entity\Registration;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -59,8 +60,11 @@ class MigrateCommand extends Command
     /**
      * MigrateCommand constructor.
      */
-    public function __construct(IOService $ioService, EntityManagerInterface $entityManager, Repository $ezRepository)
-    {
+    public function __construct(
+        IOService $ioService,
+        EntityManagerInterface $entityManager,
+        Repository $ezRepository
+    ) {
         parent::__construct();
         $this->ioService     = $ioService;
         $this->entityManager = $entityManager;
@@ -96,21 +100,21 @@ class MigrateCommand extends Command
 
     private function export(): void
     {
-        // TODO: replace getFieldValue('title', $language->languageCode) with getName($language->languageCode)
-        // TODO: set Mailing subject as name of main language
-
         // clean the 'ezmailing' dir
         $this->ioService->cleanDir('ezmailing');
+        $this->io->section('Cleaned the folder with json files.');
+        $this->io->section('Exporting from old database to json files.');
 
         // Get the Lists first, then Users and subscriptions (which are supposed to be registrations)
 
         $contentService         = $this->ezRepository->getContentService();
         $contentLanguageService = $this->ezRepository->getContentLanguageService();
         $languages              = $contentLanguageService->loadLanguages();
+        $defaultLanguageCode    = $contentLanguageService->getDefaultLanguageCode();
 
         $lists = $campaigns = [];
 
-        $mailingCounter = 0;
+        $mailingCounter = $subscriptionCounter = 0;
 
         $sql = 'SELECT contentobject_attribute_version, contentobject_id, auto_approve_registered_user,';
 
@@ -128,9 +132,9 @@ class MigrateCommand extends Command
             }
             $listNames = [];
             foreach ($languages as $language) {
-                $title = $listContent->getFieldValue('title', $language->languageCode);
+                $title = $listContent->getName($language->languageCode);
                 if (null !== $title) {
-                    $listNames[$language->languageCode] = $title->text;
+                    $listNames[$language->languageCode] = $title;
                 }
             }
             $fileName = $this->ioService->saveFile(
@@ -177,9 +181,9 @@ class MigrateCommand extends Command
                 }
                 $mailingNames = [];
                 foreach ($languages as $language) {
-                    $title = $mailingContent->getFieldValue('title', $language->languageCode);
+                    $title = $mailingContent->getName($language->languageCode);
                     if (null !== $title) {
-                        $mailingNames[$language->languageCode] = $title->text;
+                        $mailingNames[$language->languageCode] = $title;
                     }
                 }
 
@@ -188,10 +192,10 @@ class MigrateCommand extends Command
                     'status'       => $status,
                     'siteAccess'   => $mailing_row['siteaccess'],
                     'locationId'   => $mailingContent->contentInfo->mainLocationId,
-                    //'recurring'    => 0, => import
                     'hoursOfDay'   => (int) date('H', (int) $mailing_row['mailqueue_process_finished']),
                     'daysOfMonth'  => (int) date('d', (int) $mailing_row['mailqueue_process_finished']),
-                    'monthsOfYear' => (int) date('m', (int) $mailing_row['mailqueue_process_finished'])
+                    'monthsOfYear' => (int) date('m', (int) $mailing_row['mailqueue_process_finished']),
+                    'subject'      => $mailingContent->getName($defaultLanguageCode)
                 ];
                 ++$mailingCounter;
             }
@@ -205,7 +209,6 @@ class MigrateCommand extends Command
                         'senderName'  => $list_row['email_sender_name'],
                         'senderEmail' => $list_row['email_sender'],
                         'reportEmail' => $list_row['email_receiver_test'],
-                        //'returnPathEmail' => '', => import
                         'mailings'    => $mailings
                     ]
                 )
@@ -220,7 +223,8 @@ class MigrateCommand extends Command
 
         $sql = 'SELECT id, email, first_name, last_name, organisation, birthday, ez_user_id, status, confirmed, ';
 
-        $sql .= 'removed, bounced, blacklisted FROM cjwnl_user';
+        $sql .= 'bounced, blacklisted FROM cjwnl_user WHERE removed = 0 ';
+        $sql .= 'AND (id, email) in (select max(id), email from cjwnl_user group by email)';
 
         $user_rows = $this->runQuery($sql);
         foreach ($user_rows as $user_row) {
@@ -244,6 +248,7 @@ class MigrateCommand extends Command
                     'list_contentobject_id' => $subscription_row['list_contentobject_id'],
                     'approved'              => (bool) $subscription_row['approved']
                 ];
+                ++$subscriptionCounter;
             }
 
             $fileName = $this->ioService->saveFile(
@@ -256,7 +261,6 @@ class MigrateCommand extends Command
                         'birthDate'     => $birthdate,
                         'status'        => $status,
                         'company'       => $user_row['organisation'],
-                        //'origin'    => 'site' => import,
                         'subscriptions' => $subscriptions
                     ]
                 )
@@ -270,7 +274,8 @@ class MigrateCommand extends Command
             json_encode(['lists' => $lists, 'campaigns' => $campaigns, 'users' => $users])
         );
         $this->io->section(
-            'Total: '.(string) count($lists).' lists, '.$mailingCounter.' mailings, '.(string) count($users).' users.'
+            'Total: '.(string) count($lists).' lists, '.$mailingCounter.' mailings, '.(string) count($users).' users, '.
+            $subscriptionCounter.' subscriptions.'
         );
 
         $this->io->success('Export done.');
@@ -280,12 +285,13 @@ class MigrateCommand extends Command
     {
         // clear the tables, reset the IDs
         $this->clean();
+        $this->io->section('Importing from json files to new database.');
 
         $manifest  = $this->ioService->readFile('ezmailing/manifest.json');
         $fileNames = json_decode($manifest);
 
         // Importing Lists
-        $listCounter = $mailingCounter = $userCounter = 0;
+        $listCounter = $mailingCounter = $userCounter = $subscriptionCounter = 0;
         $listIds     = [];
 
         foreach ($fileNames->lists as $listFile) {
@@ -320,17 +326,56 @@ class MigrateCommand extends Command
                 $mailing->setMonthsOfYear([$mailingData->monthsOfYear]);
                 $mailing->setLocationId($mailingData->locationId);
                 $mailing->setSiteAccess($mailingData->siteAccess);
-                $mailing->setSubject(''); // ??? What should be the subject ???
+                $mailing->setSubject($mailingData->subject);
                 $this->entityManager->persist($mailing);
                 $campaign->addMailing($mailing);
                 ++$mailingCounter;
             }
         }
 
+        $mailingListRepository = $this->entityManager->getRepository(MailingList::class);
+        $userRepository        = $this->entityManager->getRepository(User::class);
+        // Importing Users & Subscriptions
+        foreach ($fileNames->users as $userFile) {
+            $userData = json_decode($this->ioService->readFile('ezmailing/user/'.$userFile.'.json'));
+
+            // check if email already exists
+            $existingUser = $userRepository->findOneBy(['email' => $userData->email]);
+            if (null === $existingUser) {
+                $user = new User();
+                $user
+                    ->setEmail($userData->email)
+                    ->setBirthDate($userData->birthDate)
+                    ->setCompany($userData->company)
+                    ->setFirstName($userData->firstName)
+                    ->setLastName($userData->lastName)
+                    ->setStatus($userData->status)
+                    ->setOrigin('site');
+
+                foreach ($userData->subscriptions as $subscription) {
+
+                    // Do we need to add the subscriptions with list_id that doesn't exist in the List table?
+                    if (\array_key_exists($subscription->list_contentobject_id, $listIds)) {
+                        $registration = new Registration();
+                        /* @var MailingList $mailingList */
+                        $mailingList = $mailingListRepository->findOneBy(
+                            ['id' => $listIds[$subscription->list_contentobject_id]]
+                        );
+                        $registration->setMailingList($mailingList);
+                        $registration->setApproved($subscription->approved);
+                        $user->addRegistration($registration);
+                        ++$subscriptionCounter;
+                    }
+                }
+                $this->entityManager->persist($user);
+                ++$userCounter;
+            }
+        }
         $this->entityManager->flush();
 
         $this->io->section(
-            'Total: '.$listCounter.' lists, '.$mailingCounter.' mailings, '.$userCounter.' users.'
+            'Total: '.$listCounter.' lists, '.$mailingCounter.' mailings, '.$userCounter.' users, '.
+            $subscriptionCounter.' registrations.'
         );
 
         $this->io->success('Import done.');
@@ -354,7 +399,7 @@ class MigrateCommand extends Command
         $this->entityManager->getConnection()->query('ALTER TABLE novaezmailing_mailing_list AUTO_INCREMENT = 1');
         $this->entityManager->getConnection()->query('DELETE FROM novaezmailing_user');
         $this->entityManager->getConnection()->query('ALTER TABLE novaezmailing_user AUTO_INCREMENT = 1');
-        $this->io->success('Current tables cleaned.');
+        $this->io->section('Current tables in new database cleaned.');
     }
 
     private function runQuery(string $sql, array $parameters = [], $fetchMode = null): array
