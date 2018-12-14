@@ -1,9 +1,10 @@
-{% extends '@NovaeZMailing/Admin/Layout/pagelayout.html.twig' %}
+{% extends '@NovaeZMailing/admin/layout/pagelayout.html.twig' %}
+{% trans_default_domain 'ezmailing' %}
 
 {% block novezmailing_breadcrumb %}
     <ol class="breadcrumb px-4">
         <li class="breadcrumb-item"><a href="{{ path("novaezmailing_dashboard_index") }}">Nova eZ Mailing</a></li>
-        <li class="breadcrumb-item"><a href="{{ path("novaezmailing_user_index") }}">Users</a></li>
+        <li class="breadcrumb-item"><a href="{{ path("novaezmailing_user_index") }}">{{"campaign.breadcrumb.users"|trans}}</a></li>
         <li class="breadcrumb-item active">{{ item.gender }} {{ item.firstName }} {{ item.lastname }}</li>
     </ol>
 {% endblock %}
@@ -13,63 +14,63 @@
 {% block content %}
     <div class="row">
         <div class="col-md-6">
-            <h3>Information</h3>
+            <h3>{{"user.show.information"|trans}}</h3>
             <table class="table table-hover table-sm">
                 <tr>
                     <th>ID</th>
                     <td>{{ item.id }}</td>
                 </tr>
                 <tr>
-                    <th>Email</th>
+                    <th>{{"generic.users.table.email"|trans}}</th>
                     <td>{{ item.email }} -
                         <span class="badge badge-{{ item.statusStyle }}">{{ item.status }}</span></td>
                 </tr>
                 <tr>
-                    <th>First Name</th>
+                    <th>{{"generic.users.table.firstname"|trans}}</th>
                     <td>{{ item.firstName }}</td>
                 </tr>
                 <tr>
-                    <th>Last Name</th>
+                    <th>{{"generic.users.table.lastname"|trans}}</th>
                     <td>{{ item.lastName }}</td>
                 </tr>
                 <tr>
-                    <th>Gender</th>
+                    <th>{{"generic.users.table.gender"|trans}}</th>
                     <td>{{ item.gender }}</td>
                 </tr>
                 <tr>
-                    <th>Birth date</th>
+                    <th>{{"generic.users.table.birthdate"|trans}}</th>
                     <td>{{ item.birthDate|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
                 </tr>
                 <tr>
-                    <th>Phone</th>
+                    <th>{{"generic.users.table.phone"|trans}}</th>
                     <td>{{ item.phone }}</td>
                 </tr>
                 <tr>
-                    <th>Zipcode</th>
+                    <th>{{"generic.users.table.zipcode"|trans}}</th>
                     <td>{{ item.zipcode }}</td>
                 </tr>
                 <tr>
-                    <th>City</th>
+                    <th>{{"generic.users.table.city"|trans}}</th>
                     <td>{{ item.city }}</td>
                 </tr>
                 <tr>
-                    <th>State</th>
+                    <th>{{"generic.users.table.state"|trans}}</th>
                     <td>{{ item.state }}</td>
                 </tr>
                 <tr>
-                    <th>Country</th>
+                    <th>{{"generic.users.table.country"|trans}}</th>
                     <td>{{ item.country }}</td>
                 </tr>
                 <tr>
-                    <th>Job Title</th>
+                    <th>{{"generic.users.table.job_title"|trans}}</th>
                     <td>{{ item.jobTitle }}</td>
                 </tr>
                 <tr>
-                    <th>Company</th>
+                    <th>{{"generic.users.table.company"|trans}}</th>
                     <td>{{ item.company }}</td>
                 </tr>
                 <tr>
-                    <th>Origin</th>
+                    <th>{{"mailing_list.import.origin"|trans}}</th>
                     <td>{{ item.origin }}</td>
                 </tr>
             </table>
@@ -78,9 +79,9 @@
             <h3>Registrations</h3>
             <table class="table table-hover table-sm">
                 <tr>
-                    <th>Mailing List</th>
-                    <th>Updated</th>
-                    <th>Created</th>
+                    <th>{{"generic.users.table.mailing_list"|trans}}</th>
+                    <th>{{"generic.users.table.updated"|trans}}</th>
+                    <th>{{"generic.users.table.created"|trans}}</th>
                 </tr>
                 {% for registration in item.registrations %}
                     <tr>
@@ -99,29 +100,29 @@
             <svg class="ez-icon">
                 <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#trash"></use>
             </svg>
-            <span>Delete</span>
+            <span>{{"button.actions.delete"|trans}}</span>
         </button>
     </div>
     <div class="modal fade" tabindex="-1" role="dialog" id="novaezmailingconfirmremoveusermodal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Confirm removal</h5>
+                    <h5 class="modal-title">{{"generic.confirm_removal"|trans}}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete this User?</p>
-                    <p>It is going to remove:</p>
+                    <p>{{"user.show.delete_user_confirmation1"|trans}}</p>
+                    <p>{{"user.show.delete_user_confirmation2"|trans}}</p>
                     <ul>
-                        <li>1 User</li>
-                        <li>{{ item.registrations|length }} Registrations</li>
+                        <li>{{"user.show.delete_user_confirmation3"|trans}}</li>
+                        <li>{{ item.registrations|length }} {{"user.show.registrations"|trans}}</li>
                     </ul>
                 </div>
                 <div class="modal-footer">
-                    <a href="{{ path('novaezmailing_user_remove', {'user':item.id }) }}" type="button" class="btn btn-danger">Confirm</a>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <a href="{{ path('novaezmailing_user_remove', {'user':item.id }) }}" type="button" class="btn btn-danger">{{"button.confirm"|trans}}</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{"button.cancel"|trans}}</button>
                 </div>
             </div>
         </div>

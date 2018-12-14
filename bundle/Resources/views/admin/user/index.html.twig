@@ -1,13 +1,14 @@
 {% extends "@NovaeZMailing/admin/layout/pagelayout.html.twig" %}
+{% trans_default_domain 'ezmailing' %}
 
 {% block novezmailing_breadcrumb %}
     <ol class="breadcrumb px-4">
         <li class="breadcrumb-item"><a href="{{ path("novaezmailing_dashboard_index") }}">Nova eZ Mailing</a></li>
-        <li class="breadcrumb-item active">Users</li>
+        <li class="breadcrumb-item active">{{"campaign.breadcrumb.users"|trans}}</li>
     </ol>
 {% endblock %}
-{% block novezmailing_title %}<img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/user.png") }}" class="nova-icon" /> Users{% endblock %}
-{% block novezmailing_subtitle %}{{ pager.nbResults }} entries{% endblock %}
+{% block novezmailing_title %}<img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/user.png") }}" class="nova-icon" /> {{"user.index.title"|trans}}{% endblock %}
+{% block novezmailing_subtitle %}{{ pager.nbResults }} {{"user.index.subtitle"|trans}}{% endblock %}
 
 {% block content %}
     {% include "@NovaeZMailing/admin/common/list/users_filterer.html.twig" with {

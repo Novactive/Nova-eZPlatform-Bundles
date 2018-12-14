@@ -1,9 +1,10 @@
 {% set withTitle = withTitle is defined ? withTitle : true %}
+{% trans_default_domain 'ezmailing' %}
 <table class="table table-striped table-hover table-sm">
     {% if withTitle %}
         <tr>
-            <th>Name</th>
-            <th>Status</th>
+            <th>{{"common.list.mailings.name"|trans}}</th>
+            <th>{{"common.list.mailings.status"|trans}}</th>
             <th>&nbsp;</th>
         </tr>
     {% endif %}

@@ -1,5 +1,8 @@
 {% extends "@NovaeZMailing/admin/layout/pagelayout.html.twig" %}
 
+{% trans_default_domain 'ezmailing' %}
+
+
 {% block novezmailing_breadcrumb %}
     <ol class="breadcrumb px-4">
         <li class="breadcrumb-item active">
@@ -7,37 +10,41 @@
         </li>
     </ol>
 {% endblock %}
-{% block novezmailing_title %}Dashboard{% endblock %}
-{% block novezmailing_subtitle %}Quick overview{% endblock %}
+
+
+{% set title = "dashboard.title"|trans %}
+{% set subtitle = "dashboard.subtitle"|trans %}
+{% block novezmailing_title %}{{ title }}{% endblock %}
+{% block novezmailing_subtitle %}{{ subtitle }}{% endblock %}
 
 {% block content %}
-    <h2>Quick Actions</h2>
+    <h2>{{"dashboard.quick_actions"|trans}}</h2>
     <div class="novaezmailing-button-actions">
         <a class="btn btn-sm btn-secondary" href="{{ path('novaezmailing_campaign_create') }}">
             <svg class="ez-icon">
                 <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#create"></use>
             </svg>
-            <span>Create a new Campaign</span>
+            <span>{{"dashboard.create_new_campaign"|trans}}</span>
         </a>
         <a class="btn btn-sm btn-info" href="{{ path('novaezmailing_mailinglist_index') }}">
             <svg class="ez-icon">
                 <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#view"></use>
             </svg>
-            <span>See Mailing Lists</span>
+            <span>{{"dashboard.see_mailing_lists"|trans}}</span>
         </a>
         <a class="btn btn-sm btn-primary" href="{{ path('novaezmailing_user_index') }}">
             <svg class="ez-icon">
                 <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#user"></use>
             </svg>
-            <span>See Users</span>
+            <span>{{"dashboard.see_users"|trans}}</span>
         </a>
     </div>
     <hr/>
-    <h2>Last User updated</h2>
+    <h2>{{"dashboard.last_user_updated"|trans}}</h2>
     {% include "@NovaeZMailing/admin/common/list/users.html.twig" with {items:users} only %}
 
     <hr/>
-    <h2>Last Broadcasts</h2>
+    <h2>{{"dashboard.last_broadcast"|trans}}</h2>
     {% if broadcasts|length > 0 %}
         {% include "@NovaeZMailing/admin/common/list/broadcasts.html.twig" with { items: broadcasts} only %}
         {% include "@NovaeZMailing/admin/common/list/broadcast_graphs.html.twig" with { items: broadcasts} only %}

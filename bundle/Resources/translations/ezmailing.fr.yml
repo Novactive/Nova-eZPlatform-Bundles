@@ -1,3 +1,176 @@
 ---
 campaigns.tab.name: Campagne|Campagnes
 mailings.tab.name: Mailing|Mailings
+generic.users.table.email: Courriel
+generic.users.table.status: Statut
+generic.users.table.origin: Origine
+generic.users.table.mailing_list: Liste de diffusion
+generic.users.table.approbation: Approbation
+generic.users.table.updated: Mis à jour le
+generic.users.table.created: Créé le
+generic.users.table.registrations: Inscriptions
+generic.users.table.birthdate: Date de naissance
+generic.users.table.phone: Téléphone
+generic.users.table.location: Localisation
+generic.users.table.job: Emploi
+generic.users.table.firstname: Prénom
+generic.users.table.lastname: Nom
+generic.users.table.gender: Sexe
+generic.users.table.zipcode: Code postal
+generic.users.table.city: Ville
+generic.users.table.state: Etat
+generic.users.table.country: Pays
+generic.users.table.job_title: Profession
+generic.users.table.company: Société
+generic.confirm_removal: Confirmer la suppression
+generic.details.hours_day: Heures de la journée
+generic.details.days_week: Jours de la semaine
+generic.details.days_month: Jours du mois
+generic.details.weeks_month: Semaines du mois
+generic.details.months_year: Mois de l'année
+generic.details.weeks_year: Semaines de l'année
+dashboard.title: "Tableau de bord"
+dashboard.subtitle: Vue globale
+dashboard.quick_actions: Actions rapides
+dashboard.create_new_campaign: Créer une nouvelle campagne
+dashboard.see_mailing_lists: Voir les listes de diffusion
+dashboard.see_users: Voir les utilisateurs
+dashboard.last_user_updated: Dernier utilisateur mis à jour
+dashboard.last_broadcast: Dernières diffusions
+campaign.tabs.campaign: Campagne|Campagnes
+campaign.tabs.associated_content: Contenu eZ associé
+campaign.tabs.mailings: Envoi
+campaign.tabs.create: Créer
+campaign.tabs.edit: Édition
+campaign.tabs.delete: Supprimer
+campaign.tabs.delete_campaign_confirmation_1: Êtes-vous sûr de vouloir supprimer cette campagne?
+campaign.tabs.delete_campaign_confirmation_2: "Cela va supprimer:"
+campaign.tabs.one_campaign: 1 campaign
+campaign.tabs.mailings_with_broadcast: Envois avec leur diffusion
+campaign.tabs.delete_campaign_note: "Note: Les listes de diffusion ne sont pas supprimées. (ni les utilisateurs)"
+campaign.tabs.confirm: Confirmer
+campaign.tabs.cancel: Annuler
+campaign.details.name: Nom
+campaign.details.sender: Expéditeur
+campaign.details.report_email: Signaler l'email
+campaign.details.siteaccess_limit: Limite du Siteaccess
+campaign.details.mailing_lists: Liste de diffusion|Listes de diffusion
+campaign.details.associated_content: Contenu associé
+campaign.edit.name: Nom
+campaign.edit.location: Localisation
+campaign.edit.change_content: Changer le contenu
+campaign.edit.select_content: Sélectionner un contenu
+campaign.breadcrumb.campaigns: Campagnes
+campaign.breadcrumb.mailings: Envois
+campaign.breadcrumb.mailing_list: Liste de diffusion
+campaign.breadcrumb.mailing_lists: Listes de diffusion
+campaign.breadcrumb.subscription: Souscriptions
+campaign.breadcrumb.edit: Modification
+campaign.breadcrumb.users: Utilisateurs
+campaign.edit.edit: Éditer
+campaign.edit.edition: Édition
+campaign.mailings.campaign: Campagne
+campaign.mailings.mailings: Envois
+campaign.subscriptions.campaign: Campagne
+common.list.broadcast_graph.broadcasted_on: "Diffusé le"
+common.list.broadcast.recipient_count: Nombre de destinataires
+common.list.broadcast.started: Démarrée le
+common.list.broadcast.ended: Finie le
+common.list.mailings.name: Nom
+common.list.mailings.status: Statut
+common.list.users.no_registrations: Pas d'inscription
+common.list.users_filterer.all: Tout
+common.registration_approbation_button.approve: Approuver
+common.registration_approbation_button.deny: Rejeter
+layout.header.search: Rechercher
+layout.pagelayout.campaigns: Campagnes
+layout.pagelayout.administration: Administration
+layout.footer.novactive: Novactive eZ Mailing | Fait avec <3 et conçu par Novactive en Californie.
+mailing.details.name: Nom
+mailing.details.status: Statut
+mailing.details.subject: Sujet
+mailing.details.last_sent_date: Dernière date d'envoi
+mailing.details.frequency: Fréquence
+mailing.details.rules: Règles
+mailing.details.next_sending_date: Prochaine date d'envoi
+mailing.details.sending_date: Date d'envoi
+mailing.details.currently_progress: En cours...
+mailing.edit.name: Nom
+mailing.edit.location: Localisation
+mailing.edit.change_content: Changer le contenu
+mailing.edit.select_content: Sélectionner un contenu
+mailing.edit.campaigns: Campagnes
+mailing.mailing_tabs.mailing: Envois
+mailing.mailing_tabs.associated_content: Contenu eZ Associé
+mailing.mailing_tabs.campaign: Campagne
+mailing.mailing_tabs.broadcasts: Diffusions
+mailing.mailing_tabs.stats: Statistiques
+mailing.mailing_tabs.views: Vue
+mailing.mailing_tabs.edit: Modifier
+mailing.mailing_tabs.archive: Archiver
+mailing.mailing_tabs.abort: Annuler
+mailing.mailing_tabs.test: Test
+mailing.mailing_tabs.confirm: Confirmer
+mailing.mailing_tabs.test_mailing: Tester l'envoi
+mailing.mailing_tabs.report_mail1: La campagne définit
+mailing.mailing_tabs.report_mail2: comme courriel de signalement
+mailing.mailing_tabs.add_cc: 'Désirez-vous ajouter une personne en <strong>cc</strong>?'
+mailing.mailing_tabs.email: courriel
+mailing.mailing_tabs.send_test: Envoyer un test
+mailing.mailing_tabs.cancel: Annuler
+mailing.mailing_tabs.confirm_sending: Confirmer l'envoi
+mailing.mailing_tabs.mailing_lists_count1: La campagne définit
+mailing.mailing_tabs.mailing_lists_count2: listes de diffusion
+mailing.mailing_tabs.mailing_list_reach: La portée de cet envoi est de
+mailing.edit.mailing: Envoi
+mailing_list.edit.name: Nom
+mailing_list.edit.title: Modifier
+mailing_list.edit.subtitle: Modification
+mailing_list.import.title: Importer des utilisateurs
+mailing_list.import.subtitle: Et créer des inscriptions
+mailing_list.import.inject_users1: Injecter des utilisateurs dans cette liste de diffusion.
+mailing_list.import.inject_users2: Pour ce faire, veuillez fournir un fichier de tableur qui respecte le format suivant
+mailing_list.import.inject_users3: (La première sera ignorée)
+mailing_list.import.imported_users1: utilisateur
+mailing_list.import.imported_users2: importé|importés
+mailing_list.import.line: Ligne
+mailing_list.import.view_mailing_list: Voir cette liste de diffusion
+mailing_list.import.import_button: Importer
+mailing_list.import.origin: Origine
+mailing_list.index.title: Listes de diffusion
+mailing_list.index.subtitle: Groupe d'utilisateur
+mailing_list.index.name: Nom
+mailing_list.index.approbation: Approbation
+mailing_list.index.registrations_count: Nombre d'inscriptions
+mailing_list.index.yes: Oui
+mailing_list.index.no: Non
+mailing_list.index.create_mailing_list: Créer une nouvelle liste de diffusion
+mailing_list.show.subtitle: Liste de diffusion
+mailing_list.show.mailing_list_empty: La liste de diffusion est vide.
+button.actions.edit: Modifier
+button.actions.delete: Supprimer
+button.actions.import_users: Importer utilisateurs
+button.confirm: Confirmer
+button.cancel: Annuler
+mailing_list.show.removal_details1: Êtes-vous sûr de vouloir supprimer cette liste de diffusion?
+mailing_list.show.removal_details2: Cela va supprimer
+mailing_list.show.removal_details3: 1 Liste de diffusion
+mailing_list.show.registrations: inscriptions
+mailing_list.show.assignation_to_campagin: relation avec une campagne|relations avec une campagne
+mailing_list.show.note: "Note: Les utilisateurs ne sont pas supprimés."
+tabs.campaigns.part_of_count1: Ce contenu fait partie de
+tabs.campaigns.part_of_count2: "campagnes."
+tabs.campaigns.mailings: envoi|envois
+tabs.mailings.part_of_count1: Ce contenu fait partie de
+tabs.mailings.part_of_count2: "envois."
+user.index.title: Utilisateurs
+user.index.subtitle: entrées
+user.show.information: Information
+user.show.delete_user_confirmation1: Êtes-vous sûr de vouloir supprimer cet utilisateur?
+user.show.delete_user_confirmation2: "Cela va supprimer:"
+user.show.delete_user_confirmation3: inscriptions
+dashboard.users.status.pending: En attente
+dashboard.users.status.confirmed: Confirmé
+dashboard.users.status.soft_bounce: Soft Bounce
+dashboard.users.status.hard_bounce: Hard Bounce
+dashboard.users.status.blacklisted: Liste noire

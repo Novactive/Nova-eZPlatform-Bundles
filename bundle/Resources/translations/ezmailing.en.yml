@@ -1,3 +1,177 @@
 ---
 campaigns.tab.name: Campaign|Campaings
 mailings.tab.name: Mailing|Mailings
+generic.users.table.email: Email
+generic.users.table.status: Status
+generic.users.table.country: Country
+generic.users.table.origin: Origin
+generic.users.table.mailing_list: Mailing List
+generic.users.table.approbation: Approbation
+generic.users.table.updated: Updated
+generic.users.table.created: Created
+generic.users.table.registrations: Registrations
+generic.users.table.birthdate: Birth Date
+generic.users.table.phone: Phone
+generic.users.table.location: Location
+generic.users.table.job: Job
+generic.users.table.firstname: Firstname
+generic.users.table.lastname: Lastname
+generic.users.table.gender: Gender
+generic.users.table.zipcode: Zipcode
+generic.users.table.city: City
+generic.users.table.state: State
+generic.users.table.job_title: Job title
+generic.users.table.company: Company
+generic.confirm_removal: Confirm removal
+dashboard.title: Dashboard
+dashboard.subtitle: Quick overview
+dashboard.quick_actions: Quick Actions
+dashboard.create_new_campaign: Create New Campaign
+dashboard.see_mailing_lists: See Mailing Lists
+dashboard.see_users: See Users
+dashboard.last_user_updated: Last User Updated
+dashboard.last_broadcast: Last Broadcasts
+campaign.tabs.campaign: Campaign
+campaign.tabs.associated_content: Associated eZ Content
+campaign.tabs.mailings: Mailings
+campaign.tabs.create: Create
+campaign.tabs.edit: Edit
+campaign.tabs.delete: Delete
+campaign.tabs.delete_campaign_confirmation_1: Are you sure you want to delete this Campaign?
+campaign.tabs.delete_campaign_confirmation_2: "It is going to remove:"
+campaign.tabs.one_campaign: 1 campaign
+campaign.tabs.mailings_with_broadcast: Mailings with their Broadcasts
+campaign.tabs.delete_campaign_note: "Note: Mailing List are not deleted. (nor Users)"
+campaign.tabs.confirm: Confirm
+campaign.tabs.cancel: Cancel
+campaign.details.name: Name
+campaign.details.sender: Sender
+campaign.details.report_email: Report Email
+campaign.details.siteaccess_limit: Siteaccess limit
+campaign.details.mailing_lists: Mailing Lists
+campaign.details.associated_content: Associated content
+campaign.edit.name: Name
+campaign.edit.location: Location
+campaign.edit.change_content: Change the Content
+campaign.edit.select_content: Select a Content
+campaign.breadcrumb.campaigns: Campaigns
+campaign.breadcrumb.mailings: Mailings
+campaign.breadcrumb.mailing_list: Mailing List
+campaign.breadcrumb.mailing_lists: Mailing Lists
+campaign.breadcrumb.subscription: Subscriptions
+campaign.breadcrumb.edit: Edit
+campaign.breadcrumb.users: Users
+campaign.edit.edit: Edit
+campaign.edit.edition: Edition
+campaign.mailings.campaign: Campaign
+campaign.mailings.mailings: Mailings
+campaign.subscriptions.campaign: Campaign
+common.list.broadcast_graph.broadcasted_on: Broadcasted on
+common.list.broadcast.recipient_count: Recipient counts
+common.list.broadcast.started: Started
+common.list.broadcast.ended: Ended
+common.list.mailings.name: Name
+common.list.mailings.status: Status
+common.list.users.no_registrations: No registrations
+common.list.users_filterer.all: All
+common.registration_approbation_button.approve: Approve
+common.registration_approbation_button.deny: Deny
+layout.header.search: Search
+layout.pagelayout.campaigns: Campaigns
+layout.pagelayout.administration: Administration
+layout.footer.novactive: Novactive eZ Mailing | Made with <3 and designed by Novactive in California.
+mailing.details.name: Name
+mailing.details.status: Status
+mailing.details.subject: Subject
+mailing.details.last_sent_date: Last sent date
+mailing.details.frequency: Frequency
+mailing.details.rules: Rules
+generic.details.hours_day: Hours of the Day
+generic.details.days_week: Days of the Week
+generic.details.days_month: Days of the Month
+generic.details.weeks_month: Weeks of the Month
+generic.details.months_year: Months of the Year
+generic.details.weeks_year: Weeks of the Year
+mailing.details.next_sending_date: Next Sending date
+mailing.details.sending_date: Sending date
+mailing.details.currently_progress: Currently in progress...
+mailing.edit.name: Name
+mailing.edit.location: Location
+mailing.edit.change_content: Change the Content
+mailing.edit.select_content: Select a Content
+mailing.edit.campaigns: Campaigns
+mailing.mailing_tabs.mailing: Mailing
+mailing.mailing_tabs.associated_content: Associated eZ Content
+mailing.mailing_tabs.campaign: Campaign
+mailing.mailing_tabs.broadcasts: Broadcasts
+mailing.mailing_tabs.stats: Stats
+mailing.mailing_tabs.views: View
+mailing.mailing_tabs.edit: Edit
+mailing.mailing_tabs.archive: Archive
+mailing.mailing_tabs.abort: Abort
+mailing.mailing_tabs.test: Test
+mailing.mailing_tabs.confirm: Confirm
+mailing.mailing_tabs.test_mailing: Test the Mailing
+mailing.mailing_tabs.report_mail1: Campaign defines
+mailing.mailing_tabs.report_mail2: as report email
+mailing.mailing_tabs.add_cc: 'Would you like to <strong>cc</strong> someone?'
+mailing.mailing_tabs.email: email
+mailing.mailing_tabs.send_test: Send a test
+mailing.mailing_tabs.cancel: Cancel
+mailing.mailing_tabs.confirm_sending: Confirm the sending
+mailing.mailing_tabs.mailing_lists_count1: Campaign defines
+mailing.mailing_tabs.mailing_lists_count2: Mailing Lists
+mailing.mailing_tabs.mailing_list_reach: The reach of this Mailing is
+mailing.edit.mailing: Mailing
+mailing_list.edit.name: Name
+mailing_list.edit.title: Edit
+mailing_list.edit.subtitle: Edition
+mailing_list.import.title: Import users
+mailing_list.import.subtitle: And create registrations
+mailing_list.import.inject_users1: Inject users into this Mailing List.
+mailing_list.import.inject_users2: To do so, please provide an Spreadsheet file, that respect this format
+mailing_list.import.inject_users3: (The first row will be ignored)
+mailing_list.import.imported_users1: user
+mailing_list.import.imported_users2: imported
+mailing_list.import.line: Line
+mailing_list.import.view_mailing_list: View this Mailing List
+mailing_list.import.import_button: Import
+mailing_list.import.origin: Origin
+mailing_list.index.title: Mailing Lists
+mailing_list.index.subtitle: Group of users
+mailing_list.index.name: Name
+mailing_list.index.approbation: Approbation
+mailing_list.index.registrations_count: Registrations Count
+mailing_list.index.yes: Yes
+mailing_list.index.no: No
+mailing_list.index.create_mailing_list: Create a new Mailing List
+mailing_list.show.subtitle: Mailing List
+mailing_list.show.mailing_list_empty: Mailing list is empty.
+button.actions.edit: Edit
+button.actions.delete: Delete
+button.actions.import_users: Import Users
+button.confirm: Confirm
+button.cancel: Cancel
+mailing_list.show.removal_details1: Are you sure you want to delete this Mailing List?
+mailing_list.show.removal_details2: It is going to remove
+mailing_list.show.removal_details3: 1 Mailing List
+mailing_list.show.registrations: Registrations
+mailing_list.show.assignation_to_campagin: assignations to Campaign
+mailing_list.show.note: "Note: Users are not deleted."
+tabs.campaigns.part_of_count1: This content is part of
+tabs.campaigns.part_of_count2: "campaigns."
+tabs.campaigns.mailings: Mailings
+tabs.mailings.part_of_count1: This content is part of
+tabs.mailings.part_of_count2: "mailings."
+user.index.title: Users
+user.index.subtitle: entries
+user.show.information: Information
+user.show.delete_user_confirmation1: Are you sure you want to delete this User?
+user.show.delete_user_confirmation2: "It is going to remove:"
+user.show.delete_user_confirmation3: 1 User
+user.show.registrations: Registrations
+dashboard.users.status.pending: Pending
+dashboard.users.status.confirmed: Confirmed
+dashboard.users.status.soft_bounce: Soft Bounce
+dashboard.users.status.hard_bounce: Hard Bounce
+dashboard.users.status.blacklisted: Blacklisted

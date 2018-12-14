@@ -22,11 +22,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * Class DashboardController.
  */
-class DashboardController
+class DashboardController extends Controller
 {
     /**
      * @Route("/", name="novaezmailing_dashboard_index")
@@ -38,6 +39,46 @@ class DashboardController
     {
         $repoBroadcast = $entityManager->getRepository(Broadcast::class);
         $repoUsers     = $entityManager->getRepository(User::class);
+
+        $translator = $this->container->get('translator');
+        $aUsers = $repoUsers->findLastUpdated();
+        foreach($aUsers as $user){
+            switch($user->getStatus()){
+
+                case $user::PENDING :
+                    $translatedTag =  $translator->trans('dashboard.users.status.pending', array(), 'ezmailing');
+                    $user->statusStyle = $user::STATUSES_STYLE[$user::PENDING];
+                    break;
+
+                case $user::CONFIRMED :
+                    $translatedTag =  $translator->trans('dashboard.users.status.confirmed', array(), 'ezmailing');
+                    $user->statusStyle = $user::STATUSES_STYLE[$user::CONFIRMED];
+                    break;
+
+                case $user::SOFT_BOUNCE :
+                    $translatedTag =  $translator->trans('dashboard.users.status.soft_bounce', array(), 'ezmailing');
+                    $user->statusStyle = $user::STATUSES_STYLE[$user::SOFT_BOUNCE];
+                    break;
+
+                case $user::HARD_BOUNCE :
+                    $translatedTag =  $translator->trans('dashboard.users.status.hard_bounce', array(), 'ezmailing');
+                    $user->statusStyle = $user::STATUSES_STYLE[$user::HARD_BOUNCE];
+                    break;
+
+                case $user::BLACKLISTED :
+                    $translatedTag =  $translator->trans('dashboard.users.status.blacklisted', array(), 'ezmailing');
+                    $user->statusStyle = $user::STATUSES_STYLE[$user::BLACKLISTED];
+                    break;
+
+                default:
+                    break;
+            }
+
+            /** @var User $user */
+
+            $user->setStatus($translatedTag);
+
+        }
 
         return [
             'broadcasts' => $repoBroadcast->findLastBroadcasts(),

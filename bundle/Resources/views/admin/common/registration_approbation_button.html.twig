@@ -1,7 +1,12 @@
+{% trans_default_domain 'ezmailing' %}
 {% macro show(item) %}
+
 
     {% set approveText = 'Approve' %}
     {% set denyText = 'Deny' %}
+
+    {% set approveTextTranslated = "common.registration_approbation_button.approve"|trans %}
+    {% set denyTextTranslated = "common.registration_approbation_button.deny"|trans %}
 
     <div class="novaezmailing-registration-approbation"
          data-endpoint-accept="{{ path("novaezmailing_registration_accept", {registration:item.id}) }}"
@@ -11,7 +16,7 @@
          data-token="{{ csrf_token(item.id) }}"
     >
         {% if item.mailingList.withApproval %}
-            <button type="button" class="btn btn-sm {{ item.approved? "btn-danger" :"btn-success" }}">{{ item.approved ? denyText : approveText }}</button>
+            <button type="button" class="btn btn-sm {{ item.approved? "btn-danger" :"btn-success" }}">{{ item.approved ? denyTextTranslated : approveTextTranslated }}</button>
         {% else %}
             <button type="button" class="btn btn-sm btn-light" disabled>n/a</button>
         {% endif %}

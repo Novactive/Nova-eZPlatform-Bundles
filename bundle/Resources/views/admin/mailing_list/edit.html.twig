@@ -1,21 +1,22 @@
 {% extends '@NovaeZMailing/admin/layout/pagelayout.html.twig' %}
+{% trans_default_domain 'ezmailing' %}
 
 {% form_theme form with ['@EzPlatformAdminUi/form_fields.html.twig', _self ] %}
 
 {% block _mailing_list_names_entry_label %}
-    <label class="form-control-label">Name {{ name }}</label>
+    <label class="form-control-label">{{"mailing_list.edit.name"|trans}} {{ name }}</label>
 {% endblock %}
 
 {% block novezmailing_breadcrumb %}
     <ol class="breadcrumb px-4">
         <li class="breadcrumb-item"><a href="{{ path("novaezmailing_dashboard_index") }}">Nova eZ Mailing</a></li>
-        <li class="breadcrumb-item">Mailing List</li>
+        <li class="breadcrumb-item">{{"campaign.breadcrumb.mailing_lists"|trans}}</li>
         <li class="breadcrumb-item">{{ item.name }}</li>
-        <li class="breadcrumb-item active">Edit</li>
+        <li class="breadcrumb-item active">{{"campaign.breadcrumb.edit"|trans}}</li>
     </ol>
 {% endblock %}
-{% block novezmailing_title %}Edit {{ item.name }}{% endblock %}
-{% block novezmailing_subtitle %}Edition{% endblock %}
+{% block novezmailing_title %}{{"mailing_list.edit.title"|trans}} {{ item.name }}{% endblock %}
+{% block novezmailing_subtitle %}{{"mailing_list.edit.subtitle"|trans}}{% endblock %}
 {% block content %}
     {{ form_start(form, {attr: {class:'col-11', novaezmailing:'mainform'}}) }}
     {{ form(form) }}
