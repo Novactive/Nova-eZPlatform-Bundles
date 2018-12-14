@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Command;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\DBAL\FetchMode;
 use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
@@ -27,6 +25,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Novactive\Bundle\eZMailingBundle\Core\IOService;
 use eZ\Publish\Core\Repository\Repository;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
 /**
  * Class MigrateCommand.
@@ -53,6 +52,11 @@ class MigrateCommand extends Command
      */
     private $ezRepository;
 
+    /**
+     * @var ConfigResolverInterface
+     */
+    private $configResolver;
+
     public const CAMPAIGN_LIST_CONTENT_ID = 53;
 
     public const MAILING_CONTENT_ID = 52;
@@ -63,12 +67,14 @@ class MigrateCommand extends Command
     public function __construct(
         IOService $ioService,
         EntityManagerInterface $entityManager,
-        Repository $ezRepository
+        Repository $ezRepository,
+        ConfigResolverInterface $configResolver
     ) {
         parent::__construct();
-        $this->ioService     = $ioService;
-        $this->entityManager = $entityManager;
-        $this->ezRepository  = $ezRepository;
+        $this->ioService      = $ioService;
+        $this->entityManager  = $entityManager;
+        $this->ezRepository   = $ezRepository;
+        $this->configResolver = $configResolver;
     }
 
     protected function configure(): void
@@ -106,11 +112,11 @@ class MigrateCommand extends Command
         $this->io->section('Exporting from old database to json files.');
 
         // Get the Lists first, then Users and subscriptions (which are supposed to be registrations)
-
         $contentService         = $this->ezRepository->getContentService();
         $contentLanguageService = $this->ezRepository->getContentLanguageService();
         $languages              = $contentLanguageService->loadLanguages();
         $defaultLanguageCode    = $contentLanguageService->getDefaultLanguageCode();
+        $siteAccessList         = $this->configResolver->getParameter('list', 'ezpublish', 'siteaccess');
 
         $lists = $campaigns = [];
 
@@ -186,11 +192,16 @@ class MigrateCommand extends Command
                         $mailingNames[$language->languageCode] = $title;
                     }
                 }
+                $siteAccess = \in_array(
+                    $mailing_row['siteaccess'],
+                    $siteAccessList,
+                    true
+                ) ? $mailing_row['siteaccess'] : $siteAccessList[0];
 
                 $mailings[] = [
                     'names'        => $mailingNames,
                     'status'       => $status,
-                    'siteAccess'   => $mailing_row['siteaccess'],
+                    'siteAccess'   => $siteAccess,
                     'locationId'   => $mailingContent->contentInfo->mainLocationId,
                     'hoursOfDay'   => (int) date('H', (int) $mailing_row['mailqueue_process_finished']),
                     'daysOfMonth'  => (int) date('d', (int) $mailing_row['mailqueue_process_finished']),
@@ -218,7 +229,6 @@ class MigrateCommand extends Command
         }
 
         // getting users
-
         $users = [];
 
         $sql = 'SELECT id, email, first_name, last_name, organisation, birthday, ez_user_id, status, confirmed, ';
@@ -229,13 +239,13 @@ class MigrateCommand extends Command
         $user_rows = $this->runQuery($sql);
         foreach ($user_rows as $user_row) {
             $status = User::PENDING;
-            if (0 !== $user_row['confirmed']) {
+            if ($user_row['confirmed']) {
                 $status = User::CONFIRMED;
             }
-            if (0 !== $user_row['bounced']) {
+            if ($user_row['bounced']) {
                 $status = User::SOFT_BOUNCE;
             }
-            if (0 !== $user_row['blacklisted']) {
+            if ($user_row['blacklisted']) {
                 $status = User::BLACKLISTED;
             }
             $birthdate = empty($user_row['birthday']) ? null : new \DateTime('2018-12-11');
@@ -266,7 +276,6 @@ class MigrateCommand extends Command
                 )
             );
             $users[]  = pathinfo($fileName)['filename'];
-
         }
 
         $this->ioService->saveFile(
@@ -277,7 +286,6 @@ class MigrateCommand extends Command
             'Total: '.(string) count($lists).' lists, '.$mailingCounter.' mailings, '.(string) count($users).' users, '.
             $subscriptionCounter.' subscriptions.'
         );
-
         $this->io->success('Export done.');
     }
 
@@ -293,6 +301,9 @@ class MigrateCommand extends Command
         // Importing Lists
         $listCounter = $mailingCounter = $userCounter = $subscriptionCounter = 0;
         $listIds     = [];
+
+        $mailingListRepository = $this->entityManager->getRepository(MailingList::class);
+        $userRepository        = $this->entityManager->getRepository(User::class);
 
         foreach ($fileNames->lists as $listFile) {
             $listData    = json_decode($this->ioService->readFile('ezmailing/list/'.$listFile.'.json'));
@@ -315,7 +326,14 @@ class MigrateCommand extends Command
             $campaign->setReturnPathEmail('');
             $campaign->setSenderName($campaignData->senderName);
             $campaign->setLocationId($campaignData->locationId);
-            $this->entityManager->persist($campaign);
+            $campaignContentId = explode('_', $campaignFile)[1];
+            if (\array_key_exists($campaignContentId, $listIds)) {
+                /* @var MailingList $mailingList */
+                $mailingList = $mailingListRepository->findOneBy(
+                    ['id' => $listIds[$campaignContentId]]
+                );
+                $campaign->addMailingList($mailingList);
+            }
             foreach ($campaignData->mailings as $mailingData) {
                 $mailing = new Mailing();
                 $mailing->setNames((array) $mailingData->names);
@@ -331,10 +349,9 @@ class MigrateCommand extends Command
                 $campaign->addMailing($mailing);
                 ++$mailingCounter;
             }
+            $this->entityManager->persist($campaign);
         }
 
-        $mailingListRepository = $this->entityManager->getRepository(MailingList::class);
-        $userRepository        = $this->entityManager->getRepository(User::class);
         // Importing Users & Subscriptions
         foreach ($fileNames->users as $userFile) {
             $userData = json_decode($this->ioService->readFile('ezmailing/user/'.$userFile.'.json'));
@@ -353,8 +370,6 @@ class MigrateCommand extends Command
                     ->setOrigin('site');
 
                 foreach ($userData->subscriptions as $subscription) {
-
-                    // Do we need to add the subscriptions with list_id that doesn't exist in the List table?
                     if (\array_key_exists($subscription->list_contentobject_id, $listIds)) {
                         $registration = new Registration();
                         /* @var MailingList $mailingList */
@@ -377,7 +392,6 @@ class MigrateCommand extends Command
             'Total: '.$listCounter.' lists, '.$mailingCounter.' mailings, '.$userCounter.' users, '.
             $subscriptionCounter.' registrations.'
         );
-
         $this->io->success('Import done.');
     }
 
