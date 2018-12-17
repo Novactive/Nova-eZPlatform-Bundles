@@ -22,12 +22,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * Class DashboardController.
  */
-class DashboardController extends Controller
+class DashboardController
 {
     /**
      * @Route("/", name="novaezmailing_dashboard_index")
