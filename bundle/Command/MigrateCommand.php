@@ -133,7 +133,7 @@ class MigrateCommand extends Command
                 $listContent = $contentService->loadContent($list_row['contentobject_id']);
             } catch (\Exception $e) {
                 try {
-                    $listContent = $contentService->loadContent(self::CAMPAIGN_LIST_CONTENT_ID);
+                    $listContent = $contentService->loadContent(self::DEFAULT_FALLBACK_CONTENT_ID);
                 } catch (\Exception $e) {
                     continue;
                 }
@@ -185,7 +185,7 @@ class MigrateCommand extends Command
                 try {
                     $mailingContent = $contentService->loadContent($mailing_row['edition_contentobject_id']);
                 } catch (\Exception $e) {
-                    $mailingContent = $contentService->loadContent(self::MAILING_CONTENT_ID);
+                    $mailingContent = $contentService->loadContent(self::DEFAULT_FALLBACK_CONTENT_ID);
                 }
                 $mailingNames = [];
                 foreach ($languages as $language) {
