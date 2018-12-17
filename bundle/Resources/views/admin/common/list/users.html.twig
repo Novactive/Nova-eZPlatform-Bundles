@@ -41,7 +41,7 @@
                    data-trigger="hover"
                 >{{ item.email }}</a></td>
             {% if withStatus %}
-                <td><span class="badge badge-{{ item.statusStyle }}">{{ item.status }}</span></td>
+                <td><span class="badge badge-{{ item.statusStyle }}">{{ ("generic.users.status."~item.status)|trans }}</span></td>
             {% endif %}
             <td class="text-center">{{ item.country|country_name }}</td>
             <td class="text-center">{{ item.origin }}</td>

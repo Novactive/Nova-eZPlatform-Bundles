@@ -11,11 +11,8 @@
     </ol>
 {% endblock %}
 
-
-{% set title = "dashboard.title"|trans %}
-{% set subtitle = "dashboard.subtitle"|trans %}
-{% block novezmailing_title %}{{ title }}{% endblock %}
-{% block novezmailing_subtitle %}{{ subtitle }}{% endblock %}
+{% block novezmailing_title %}{{ "dashboard.title"|trans }}{% endblock %}
+{% block novezmailing_subtitle %}{{ "dashboard.subtitle"|trans }}{% endblock %}
 
 {% block content %}
     <h2>{{"dashboard.quick_actions"|trans}}</h2>

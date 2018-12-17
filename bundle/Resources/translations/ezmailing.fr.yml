@@ -29,6 +29,11 @@ generic.details.days_month: Jours du mois
 generic.details.weeks_month: Semaines du mois
 generic.details.months_year: Mois de l'année
 generic.details.weeks_year: Semaines de l'année
+generic.users.status.pending: En attente
+generic.users.status.confirmed: Confirmé
+generic.users.status.soft_bounce: Soft Bounce
+generic.users.status.hard_bounce: Hard Bounce
+generic.users.status.blacklisted: Liste noire
 dashboard.title: "Tableau de bord"
 dashboard.subtitle: Vue globale
 dashboard.quick_actions: Actions rapides
@@ -169,8 +174,4 @@ user.show.information: Information
 user.show.delete_user_confirmation1: Êtes-vous sûr de vouloir supprimer cet utilisateur?
 user.show.delete_user_confirmation2: "Cela va supprimer:"
 user.show.delete_user_confirmation3: inscriptions
-dashboard.users.status.pending: En attente
-dashboard.users.status.confirmed: Confirmé
-dashboard.users.status.soft_bounce: Soft Bounce
-dashboard.users.status.hard_bounce: Hard Bounce
-dashboard.users.status.blacklisted: Liste noire
+user.show.registrations: Inscriptions
