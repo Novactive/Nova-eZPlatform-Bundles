@@ -1,0 +1,70 @@
+{% trans_default_domain 'ezrepoforms_content' %}
+
+{% use '@ezdesign/fieldtypes/edit/ezimage.html.twig' %}
+
+{%- block ezplatform_fieldtype_enhancedimage_row -%}
+    {% set preview_block_name = 'enhancedimage_preview' %}
+    {% set max_file_size = min(form.parent.vars.value.fieldDefinition.validatorConfiguration.FileSizeValidator.maxFileSize * 1024 * 1024, max_upload_size|round) %}
+    {% set attr = attr|merge({'accept': 'image/*'}) %}
+    {{ block('binary_base_row') }}
+{%- endblock -%}
+
+{% block enhancedimage_preview %}
+    {% form_theme form '@ezdesign/fieldtypes/edit/binary_base_fields.html.twig' %}
+
+    {% set image = form.parent.vars.value.value %}
+    {% set focusPoint = image.focusPoint %}
+    <div class="ez-field-edit-preview">
+        <div class="ez-field-edit-preview__visual focuspoint-helper">
+            <div class="ez-field-edit-preview__media-wrapper">
+                <div class="focuspoint-helper--frames">
+                    {% for i in 0..9 %}
+                        <div class="focuspoint-helper--frame focuspoint-helper--frame-{{ loop.index }} enhancedimage--wrapper"
+                             data-focus-x="{{ (focusPoint ? focusPoint.posX : '')}}"
+                             data-focus-y="{{ (focusPoint ? focusPoint.posY : '')}}"
+                             data-image-h="{{ (image ? image.height : '') }}"
+                             data-image-w="{{ (image ? image.width : '') }}"
+                        >
+                            <img src="{{ image.uri }}" alt="{{ 'content.field_type.ezimage.img_alt'|trans({'%label%': form.vars.label})|desc("Image stored in field '%label%'") }}">
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="focuspoint-helper--tool">
+                    <p>Click the image to set the focus point.</p>
+                    <div class="focuspoint-helper--target">
+                        <img
+                                class="ez-field-edit-preview__media focuspoint-helper--img"
+                                src="{{ image.uri }}"
+                                alt="{{ 'content.field_type.ezimage.img_alt'|trans({'%label%': form.vars.label})|desc("Image stored in field '%label%'") }}" />
+                        <img class="focuspoint-helper--reticle" src="{{ asset('bundles/ezenhancedimageasset/img/focuspoint-target.png') }}" hidden="true">
+                        <img    draggable="false"
+                                class="ez-field-edit-preview__media focuspoint-helper--img focuspoint-helper--target-overlay"
+                                src="{{ image.uri }}"
+                                alt="{{ 'content.field_type.ezimage.img_alt'|trans({'%label%': form.vars.label})|desc("Image stored in field '%label%'") }}" />
+                    </div>
+                </div>
+            </div>
+            <div class="ez-field-edit-preview__details">
+                <span class="ez-field-edit-preview__file-name">{{ image.fileName }}</span>
+                <span class="ez-field-edit-preview__file-size">{{ image.fileSize|ez_file_size(2) }}</span>
+            </div>
+            <div class="ez-field-edit-preview__image-alt">
+                {{ form_row(form.alternativeText) }}
+            </div>
+
+            {{ form_widget(form.focusPoint) }}
+        </div>
+        <div class="ez-field-edit-preview__actions">
+            <button type="button" class="ez-field-edit-preview__action--remove">
+                <svg class="ez-icon">
+                    <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#trash"></use>
+                </svg>
+            </button>
+            <a class="ez-field-edit-preview__action--preview" href="{{ image.uri }}" target="_blank">
+                <svg class="ez-icon">
+                    <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#open-newtab"></use>
+                </svg>
+            </a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,4 +1,4 @@
-vendor
+./vendor
 .php_cs.cache
 .idea
 composer.lock
