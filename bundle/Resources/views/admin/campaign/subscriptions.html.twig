@@ -1,23 +1,25 @@
 {% extends '@NovaeZMailing/admin/layout/pagelayout.html.twig' %}
+{% trans_default_domain 'ezmailing' %}
 
 {% block novezmailing_breadcrumb %}
     <ol class="breadcrumb px-4">
         <li class="breadcrumb-item"><a href="{{ path("novaezmailing_dashboard_index") }}">Nova eZ Mailing</a></li>
-        <li class="breadcrumb-item">Campaigns</li>
+        <li class="breadcrumb-item">{{"campaign.breadcrumb.campaigns"|trans}}</li>
         <li class="breadcrumb-item">{{ item.name }}</li>
-        <li class="breadcrumb-item active">Subscriptions</li>
+        <li class="breadcrumb-item active">{{"campaign.breadcrumb.subscription"|trans}}</li>
     </ol>
 {% endblock %}
 {% block novezmailing_title %}
     <img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/campaign.png") }}" class="nova-icon" /> {{ item.name }}{% endblock %}
-{% block novezmailing_subtitle %}Campaign{% endblock %}
+{% set subtitle = "campaign.subscriptions.campaign"|trans %}
+{% block novezmailing_subtitle %}{{ subtitle }}{% endblock %}
 
 {% block content %}
     {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\CampaignController::campaignTabsAction", {campaign: item.id})) }}
 
     {% if pager.nbResults > 0 %}
         <h2>
-            <img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/subscriptions.png") }}" class="nova-icon"/> Subscriptions
+            <img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/subscriptions.png") }}" class="nova-icon"/> {{"campaign.subscriptions.campaign"|trans}}
         </h2>
         {% include "@NovaeZMailing/admin/common/list/users_filterer.html.twig" with {
             route: "novaezmailing_campaign_subscriptions",

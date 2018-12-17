@@ -1,38 +1,38 @@
 {% extends '@NovaeZMailing/admin/layout/pagelayout.html.twig' %}
-
+{% trans_default_domain 'ezmailing' %}
 {% form_theme form with ['@EzPlatformAdminUi/form_fields.html.twig', _self ] %}
 
 {% block novezmailing_breadcrumb %}
     <ol class="breadcrumb px-4">
         <li class="breadcrumb-item"><a href="{{ path("novaezmailing_dashboard_index") }}">Nova eZ Mailing</a></li>
-        <li class="breadcrumb-item"><a href="{{ path("novaezmailing_mailinglist_index") }}">Mailing Lists</a></li>
+        <li class="breadcrumb-item"><a href="{{ path("novaezmailing_mailinglist_index") }}">{{"campaign.breadcrumb.mailing_lists"|trans}}</a></li>
         <li class="breadcrumb-item active">{{ item.name }}</li>
     </ol>
 {% endblock %}
 {% block novezmailing_title %}
-    <img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/user.png") }}" class="nova-icon"/> Import users{% endblock %}
-{% block novezmailing_subtitle %}And create registrations{% endblock %}
+    <img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/user.png") }}" class="nova-icon"/> {{"mailing_list.import.title"|trans}}{% endblock %}
+{% block novezmailing_subtitle %}{{"mailing_list.import.subtitle"|trans}}{% endblock %}
 
 {% block content %}
-    <p>Inject users into this Mailing List.</p>
+    <p>{{"mailing_list.import.inject_users1"|trans}}</p>
 
-    <p>To do so, please provide an Spreadsheet file, that respect this format:
-        <small>(The first row will be ignored)</small>
+    <p>{{"mailing_list.import.inject_users2"|trans}}:
+        <small>{{"mailing_list.import.inject_users3"|trans}}</small>
     </p>
     <table class="table table-sm excel-example">
         <tr>
-            <th>Email</th>
-            <th>Firstname</th>
-            <th>Lastname</th>
-            <th>Gender</th>
-            <th>Birth date</th>
-            <th>Phone</th>
-            <th>Zipcode</th>
-            <th>City</th>
-            <th>State</th>
-            <th>Country</th>
-            <th>Job Title</th>
-            <th>Company</th>
+            <th>{{"generic.users.table.email"|trans}}</th>
+            <th>{{"generic.users.table.firstname"|trans}}</th>
+            <th>{{"generic.users.table.lastname"|trans}}</th>
+            <th>{{"generic.users.table.gender"|trans}}</th>
+            <th>{{"generic.users.table.birthdate"|trans}}</th>
+            <th>{{"generic.users.table.phone"|trans}}</th>
+            <th>{{"generic.users.table.zipcode"|trans}}</th>
+            <th>{{"generic.users.table.city"|trans}}</th>
+            <th>{{"generic.users.table.state"|trans}}</th>
+            <th>{{"generic.users.table.country"|trans}}</th>
+            <th>{{"generic.users.table.job_title"|trans}}</th>
+            <th>{{"generic.users.table.company"|trans}}</th>
         </tr>
         <tr>
             <td>ezmailing@novactive.com</td>
@@ -54,7 +54,7 @@
     <hr/>
     {% if count is defined and count is not null %}
         <div class="success">
-            <strong>{{ count }}</strong> user{{ count > 1 ? 's':'' }} imported.
+            <strong>{{ count }}</strong> {{"mailing_list.import.imported_users1"|trans}}{{ count > 1 ? 's':'' }} {{"mailing_list.import.imported_users2"|trans}}.
         </div>
     {% endif %}
     {% if error_list is defined and error_list is not null %}
@@ -62,7 +62,7 @@
             {% for errors in error_list %}
                 <ul>
                     <li>
-                        Line {{ loop.index }}
+                        {{"mailing_list.import.line"|trans}} {{ loop.index }}
                         <ul>
                             {% for error in errors %}
                                 <li>{{ error.message }}</li>
@@ -80,7 +80,7 @@
             <svg class="ez-icon">
                 <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#view"></use>
             </svg>
-            <span>View this Mailing List</span>
+            <span>{{"mailing_list.import.view_mailing_list"|trans}}</span>
         </a>
     </div>
     <div class="novaezmailing-button-actions">
@@ -88,7 +88,7 @@
             <svg class="ez-icon">
                 <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#wand"></use>
             </svg>
-            <span>Import</span>
+            <span>{{"mailing_list.import.import_button"|trans}}</span>
         </button>
     </div>
     {{ form_end(form) }}

@@ -1,9 +1,10 @@
 {% extends '@NovaeZMailing/admin/layout/pagelayout.html.twig' %}
+{% trans_default_domain 'ezmailing' %}
 
 {% block novezmailing_breadcrumb %}
     <ol class="breadcrumb px-4">
         <li class="breadcrumb-item"><a href="{{ path("novaezmailing_dashboard_index") }}">Nova eZ Mailing</a></li>
-        <li class="breadcrumb-item">Campaigns</li>
+        <li class="breadcrumb-item">{{"campaign.breadcrumb.campaigns"|trans}}</li>
         <li class="breadcrumb-item"><a href="{{ path('novaezmailing_campaign_subscriptions', {campaign: item.campaign.id}) }}">{{ item.campaign.name }}</a></li>
         <li class="breadcrumb-item active">{{ item.name }}</li>
     </ol>
@@ -11,7 +12,7 @@
 {% block novezmailing_title %}
     <img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/"~item.status~".png") }}" class="nova-icon"/> {{ item.name }}{% endblock %}
 
-{% block novezmailing_subtitle %}Mailing{% endblock %}
+{% block novezmailing_subtitle %}{{"mailing.edit.mailing"|trans}}{% endblock %}
 {% block content %}
     {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\MailingController::mailingTabsAction", {mailing: item.id})) }}
     <br/>

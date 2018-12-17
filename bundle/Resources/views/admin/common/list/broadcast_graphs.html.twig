@@ -1,7 +1,9 @@
+{% trans_default_domain 'ezmailing' %}
+
 {% for broadcast in items %}
     {% if broadcast.emailSentCount > 0 %}
         <div class="novaezmailing-broadcast-charts-group">
-            <h3>Broadcasted on {{ broadcast.started|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</h3>
+            <h3>{{"common.list.broadcast_graph.broadcasted_on"|trans}} {{ broadcast.started|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</h3>
             <hr/>
             <div class="graph-broadcast full">
                 {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\ChartController::openedTimeChart", {broadcastId: broadcast.id })) }}

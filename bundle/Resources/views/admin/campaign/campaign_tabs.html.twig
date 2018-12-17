@@ -1,16 +1,18 @@
+{% trans_default_domain 'ezmailing' %}
+
 <div class="item-tabs-content">
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" href="#novaezmailing-campaign-preview" data-toggle="tab" role="tab">Campaign</a>
+            <a class="nav-link active" href="#novaezmailing-campaign-preview" data-toggle="tab" role="tab">{{"campaign.tabs.campaign"|trans}}</a>
         </li>
         {% if item.locationId is not null %}
             <li class="nav-item">
-                <a class="nav-link" href="#novaezmailing-content-preview" data-toggle="tab" role="tab">Associated eZ Content</a>
+                <a class="nav-link" href="#novaezmailing-content-preview" data-toggle="tab" role="tab">{{"campaign.tabs.associated_content"|trans}}</a>
             </li>
         {% endif %}
         {% if item.mailings|length > 0 %}
             <li class="nav-item">
-                <a class="nav-link" href="#novaezmailing-mailings-preview" data-toggle="tab" role="tab">Mailings</a>
+                <a class="nav-link" href="#novaezmailing-mailings-preview" data-toggle="tab" role="tab">{{"campaign.tabs.mailings"|trans}}</a>
             </li>
         {% endif %}
     </ul>
@@ -36,43 +38,43 @@
             <svg class="ez-icon">
                 <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#create"></use>
             </svg>
-            <span>Create</span>
+            <span>{{"campaign.tabs.create"|trans}}</span>
         </a>
         <a class="btn btn-sm btn-secondary" href="{{ path("novaezmailing_campaign_edit", {campaign: item.id}) }}">
             <svg class="ez-icon">
                 <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#edit"></use>
             </svg>
-            <span>Edit</span>
+            <span>{{"campaign.tabs.edit"|trans}}</span>
         </a>
         <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#novaezmailingconfirmremovecampaignmodal">
             <svg class="ez-icon">
                 <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#trash"></use>
             </svg>
-            <span>Delete</span>
+            <span>{{"campaign.tabs.delete"|trans}}</span>
         </button>
     </div>
     <div class="modal fade" tabindex="-1" role="dialog" id="novaezmailingconfirmremovecampaignmodal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Confirm removal</h5>
+                    <h5 class="modal-title">{{"campaign.tabs.confirm_removal"|trans}}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete this Campaing?</p>
-                    <p>It is going to remove:</p>
+                    <p>{{"campaign.tabs.delete_campaign_confirmation_1"|trans}}</p>
+                    <p>{{"campaign.tabs.delete_campaign_confirmation_2"|trans}}</p>
                     <ul>
-                        <li>1 Campaign</li>
-                        <li>{{ item.mailings|length }} Mailings with their Broadcasts</li>
+                        <li>{{"campaign.tabs.one_campaign"|trans}}1 Campaign</li>
+                        <li>{{ item.mailings|length }} {{"campaign.tabs.mailings_with_broadcast"|trans}}</li>
                     </ul>
 
-                    <p>Note: Mailing List are not deleted. (nor Users)</p>
+                    <p>{{"campaign.tabs.delete_campaign_note"|trans}}</p>
                 </div>
                 <div class="modal-footer">
-                    <a href="{{ path('novaezmailing_campaign_remove', {campaign: item.id}) }}" type="button" class="btn btn-danger">Confirm</a>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <a href="{{ path('novaezmailing_campaign_remove', {campaign: item.id}) }}" type="button" class="btn btn-danger">{{"campaign.tabs.confirm"|trans}}</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{"campaign.tabs.cancel"|trans}}Cancel</button>
                 </div>
             </div>
         </div>

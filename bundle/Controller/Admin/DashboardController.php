@@ -38,7 +38,6 @@ class DashboardController
     {
         $repoBroadcast = $entityManager->getRepository(Broadcast::class);
         $repoUsers     = $entityManager->getRepository(User::class);
-
         return [
             'broadcasts' => $repoBroadcast->findLastBroadcasts(),
             'users'      => $repoUsers->findLastUpdated(),
