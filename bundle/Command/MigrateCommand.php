@@ -57,9 +57,7 @@ class MigrateCommand extends Command
      */
     private $configResolver;
 
-    public const CAMPAIGN_LIST_CONTENT_ID = 53;
-
-    public const MAILING_CONTENT_ID = 52;
+    public const DEFAULT_FALLBACK_CONTENT_ID = 1;
 
     /**
      * MigrateCommand constructor.
@@ -134,7 +132,11 @@ class MigrateCommand extends Command
             try {
                 $listContent = $contentService->loadContent($list_row['contentobject_id']);
             } catch (\Exception $e) {
-                $listContent = $contentService->loadContent(self::CAMPAIGN_LIST_CONTENT_ID);
+                try {
+                    $listContent = $contentService->loadContent(self::CAMPAIGN_LIST_CONTENT_ID);
+                } catch (\Exception $e) {
+                    continue;
+                }
             }
             $listNames = [];
             foreach ($languages as $language) {
@@ -397,6 +399,7 @@ class MigrateCommand extends Command
 
     private function clean(): void
     {
+        // We don't run TRUNCATE command here because of foreign keys constraints
         $this->entityManager->getConnection()->query('DELETE FROM novaezmailing_stats_hit');
         $this->entityManager->getConnection()->query('ALTER TABLE novaezmailing_stats_hit AUTO_INCREMENT = 1');
         $this->entityManager->getConnection()->query('DELETE FROM novaezmailing_broadcast');
@@ -413,7 +416,7 @@ class MigrateCommand extends Command
         $this->entityManager->getConnection()->query('ALTER TABLE novaezmailing_mailing_list AUTO_INCREMENT = 1');
         $this->entityManager->getConnection()->query('DELETE FROM novaezmailing_user');
         $this->entityManager->getConnection()->query('ALTER TABLE novaezmailing_user AUTO_INCREMENT = 1');
-        $this->io->section('Current tables in new database cleaned.');
+        $this->io->section('Current tables in the new database have been cleaned.');
     }
 
     private function runQuery(string $sql, array $parameters = [], $fetchMode = null): array
