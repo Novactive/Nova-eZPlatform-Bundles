@@ -301,6 +301,8 @@ class MigrateCommand extends Command
         $manifest  = $this->ioService->readFile('ezmailing/manifest.json');
         $fileNames = json_decode($manifest);
 
+        $this->io->writeln('Lists/campaigns: '.count($fileNames->lists).', Users: '.count($fileNames->users));
+
         // Importing Lists
         $listCounter = $mailingCounter = $userCounter = $subscriptionCounter = 0;
         $listIds     = [];
