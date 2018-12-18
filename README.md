@@ -122,11 +122,12 @@ parameters:
 
 ## Local mode without Cloudinary
 
-You can also disable all Cloudinary variations for you local usages:
+You can also disable all Cloudinary variations for you local usages, using only native ezplatform variation:
 
 ```yaml
 parameters:
     nova_ezcloudinary.default.cloudinary_disabled: true
+    nova_ezcloudinary.default.cloudinary_fallback_variation: original # Will replace all unknown variation by original
 ```
 
 
