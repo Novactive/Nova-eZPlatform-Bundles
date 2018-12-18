@@ -227,7 +227,7 @@ class MigrateCommand extends Command
                 )
             );
             $campaigns[] = pathinfo($fileName)['filename'];
-            $this->io->writeln(pathinfo($fileName)['filename']);
+
         }
 
         // getting users
@@ -278,7 +278,6 @@ class MigrateCommand extends Command
                 )
             );
             $users[]  = pathinfo($fileName)['filename'];
-            $this->io->writeln(pathinfo($fileName)['filename']);
         }
 
         $this->ioService->saveFile(
@@ -300,8 +299,6 @@ class MigrateCommand extends Command
 
         $manifest  = $this->ioService->readFile('ezmailing/manifest.json');
         $fileNames = json_decode($manifest);
-
-        $this->io->writeln('Lists/campaigns: '.count($fileNames->lists).', Users: '.count($fileNames->users));
 
         // Importing Lists
         $listCounter = $mailingCounter = $userCounter = $subscriptionCounter = 0;
