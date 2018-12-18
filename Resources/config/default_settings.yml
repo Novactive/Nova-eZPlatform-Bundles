@@ -4,11 +4,10 @@ parameters:
         api_key: "P L O P I X"
         api_secret: "42"
 
-    nova_ezcloudinary.default:
-        cloudinary_fecth_proxy:
+    nova_ezcloudinary.default.cloudinary_fecth_proxy:
             host: ~
             port: ~
-        cloudinary_variations:
+    nova_ezcloudinary.default.cloudinary_variations:
             optimized_medium:
                 ezreference_variation: medium
                 filters:
