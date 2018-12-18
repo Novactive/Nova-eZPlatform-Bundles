@@ -120,6 +120,16 @@ parameters:
 
 > you can do your own tunnel, here, but `ngrok` is really good at it
 
+## Local mode without Cloudinary
+
+You can also disable all Cloudinary variations for you local usages:
+
+```yaml
+parameters:
+    nova_ezcloudinary.default.cloudinary_disabled: true
+```
+
+
 License
 -------
 

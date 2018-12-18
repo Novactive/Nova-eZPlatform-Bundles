@@ -66,7 +66,12 @@ class AliasGenerator implements VariationService
     public function getVariation(Field $field, VersionInfo $versionInfo, $variationName, array $parameters = array ())
     {
         $eZVariationsList         = $this->configResolver->getParameter('image_variations');
-        $cloudinaryVariationsList = $this->configResolver->getParameter('cloudinary_variations', 'nova_ezcloudinary');
+        $cloudinaryDisabled       = $this->configResolver->getParameter('cloudinary_disabled', 'nova_ezcloudinary');
+
+        $cloudinaryVariationsList = [];
+        if(!$cloudinaryDisabled) {
+            $cloudinaryVariationsList = $this->configResolver->getParameter('cloudinary_variations', 'nova_ezcloudinary');
+        }
 
         $cloudinaryCompliant = false;
         $eZVariationName     = $variationName;

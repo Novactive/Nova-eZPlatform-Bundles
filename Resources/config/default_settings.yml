@@ -3,7 +3,7 @@ parameters:
         cloud_name: demo
         api_key: "P L O P I X"
         api_secret: "42"
-
+    nova_ezcloudinary.default.cloudinary_disabled: false
     nova_ezcloudinary.default.cloudinary_fecth_proxy:
             host: ~
             port: ~
