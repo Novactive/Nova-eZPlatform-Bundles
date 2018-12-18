@@ -59,7 +59,7 @@ This bundle mimics the native image variation system.
 
 ```yaml
 parameters:
-    nova_ezcloudinary.site_group.cloudinary_variations:
+    nova_ezcloudinary.default.cloudinary_variations:
             simpletest1:
                 ezreference_variation: 'Native eZ Variation Name, ~ means original'
                 filters: # look at the documentation on Cloudinary
@@ -113,10 +113,9 @@ You will get something like:  `http://xxxxx.ngrok.io`
 And you can set up that in the configuration:
 
 ```yaml
-system:
-    default:
-        cloudinary_fecth_proxy:
-            host: xxxxx.ngrok.io
+parameters:
+    nova_ezcloudinary.default.cloudinary_fecth_proxy:
+        host: xxxxx.ngrok.io
 ```
 
 > you can do your own tunnel, here, but `ngrok` is really good at it
