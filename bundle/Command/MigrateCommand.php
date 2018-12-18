@@ -227,7 +227,7 @@ class MigrateCommand extends Command
                 )
             );
             $campaigns[] = pathinfo($fileName)['filename'];
-
+            $this->io->writeln(pathinfo($fileName)['filename']);
         }
 
         // getting users
@@ -278,6 +278,7 @@ class MigrateCommand extends Command
                 )
             );
             $users[]  = pathinfo($fileName)['filename'];
+            $this->io->writeln(pathinfo($fileName)['filename']);
         }
 
         $this->ioService->saveFile(
