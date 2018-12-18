@@ -31,7 +31,8 @@
         "gedmo/doctrine-extensions": "^2.4",
         "symfony/thanks": "^1.0",
         "ezsystems/ezpublish-kernel": "^7.1",
-        "phpoffice/phpspreadsheet": "^1.1"
+        "phpoffice/phpspreadsheet": "^1.1",
+        "ext-json": "*"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",

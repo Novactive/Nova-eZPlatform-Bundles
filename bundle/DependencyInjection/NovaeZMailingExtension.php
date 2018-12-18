@@ -45,6 +45,7 @@ class NovaeZMailingExtension extends Extension implements PrependExtensionInterf
         $loader->load('ezadminui.yml');
         $loader->load('default_settings.yml');
         $loader->load('services.yml');
+        $loader->load('services_nonautowired.yaml');
         $asseticBundles   = $container->getParameter('assetic.bundles');
         $asseticBundles[] = 'NovaeZMailingBundle';
         $container->setParameter('assetic.bundles', $asseticBundles);
