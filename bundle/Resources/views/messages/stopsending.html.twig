@@ -1,15 +1,16 @@
+{% trans_default_domain "ezmailing" %}
 {% extends "@NovaeZMailing/eZViews/mailing_base.html.twig" %}
 
 {% block unregistrer %}{% endblock %}
 
 {% block preheader_message %}
-    The Mailing {{ item.name }} #{{ item.id }} has been sent.
+    {{ "messages.stop_sending.sent1"|trans }} {{ item.name }} #{{ item.id }} {{ "messages.stop_sending.sent2"|trans }}.
 {% endblock %}
 
 {% block body %}
-    <p>The Mailing {{ item.name }} #{{ item.id }} has been sent.</p>
+    <p>{{ "messages.stop_sending.sent1"|trans }} {{ item.name }} #{{ item.id }} {{ "messages.stop_sending.sent2"|trans }}.</p>
 
-    <p>You can now follow the
-        <a href="{{ url("novaezmailing_mailing_show", { mailing: item.id }) }}#novaezmailing-mailings-stats">broadcast information here</a>.
+    <p>{{ "messages.stop_sending.follow_broadcast1"|trans }}
+        <a href="{{ url("novaezmailing_mailing_show", { mailing: item.id }) }}#novaezmailing-mailings-stats">{{ "messages.stop_sending.follow_broadcast2"|trans }}</a>.
     </p>
 {% endblock %}

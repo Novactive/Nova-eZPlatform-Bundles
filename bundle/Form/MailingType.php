@@ -75,22 +75,24 @@ class MailingType extends AbstractType
                     'required'     => true,
                 ]
             )
-            ->add('subject', TextType::class, ['required' => false])
-            ->add('recurring', CheckboxType::class, ['label' => 'Is it a reccuring Mailing?'])
+            ->add('subject', TextType::class, ['required' => false, 'label' => 'form.subject', 'translation_domain' => 'ezmailing'])
+            ->add('recurring', CheckboxType::class, ['label' => 'mailing.buildform.recuring_mailing', 'translation_domain' => 'ezmailing'])
             ->add('locationId', HiddenType::class)
             ->add(
                 'hoursOfDay',
                 TextType::class,
                 [
                     'required' => true,
+                    'label' => 'generic.details.hours_day',
+                    'translation_domain' => 'ezmailing'
                 ]
             )
-            ->add('daysOfWeek', TextType::class)
-            ->add('daysOfMonth', TextType::class)
-            ->add('daysOfYear', TextType::class)
-            ->add('weeksOfMonth', TextType::class)
-            ->add('monthsOfYear', TextType::class)
-            ->add('weeksOfYear', TextType::class);
+            ->add('daysOfWeek', TextType::class, ['label' => 'generic.details.days_week', 'translation_domain' => 'ezmailing'])
+            ->add('daysOfMonth', TextType::class, ['label' => 'generic.details.days_month', 'translation_domain' => 'ezmailing'])
+            ->add('daysOfYear', TextType::class, ['label' => 'generic.details.days_year', 'translation_domain' => 'ezmailing'])
+            ->add('weeksOfMonth', TextType::class, ['label' => 'generic.details.weeks_month', 'translation_domain' => 'ezmailing'])
+            ->add('monthsOfYear', TextType::class, ['label' => 'generic.details.months_year', 'translation_domain' => 'ezmailing'])
+            ->add('weeksOfYear', TextType::class, ['label' => 'generic.details.weeks_year', 'translation_domain' => 'ezmailing']);
 
         $transformationFields = [
             'hoursOfDay',
@@ -121,11 +123,12 @@ class MailingType extends AbstractType
                     'siteAccess',
                     ChoiceType::class,
                     [
-                        'label'    => 'On which siteaccess?',
+                        'label'    => 'mailing.buildform.which_siteaccess',
                         'choices'  => count($siteaccessLimit) > 0 ? $siteaccessLimit : $siteaccesses,
                         'expanded' => true,
                         'multiple' => false,
                         'required' => true,
+                        'translation_domain' => 'ezmailing'
                     ]
                 );
             }

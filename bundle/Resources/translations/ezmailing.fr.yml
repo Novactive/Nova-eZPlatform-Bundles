@@ -26,6 +26,7 @@ generic.confirm_removal: Confirmer la suppression
 generic.details.hours_day: Heures de la journée
 generic.details.days_week: Jours de la semaine
 generic.details.days_month: Jours du mois
+generic.details.days_year: Jours de l'année
 generic.details.weeks_month: Semaines du mois
 generic.details.months_year: Mois de l'année
 generic.details.weeks_year: Semaines de l'année
@@ -34,6 +35,13 @@ generic.users.status.confirmed: Confirmé
 generic.users.status.soft_bounce: Soft Bounce
 generic.users.status.hard_bounce: Hard Bounce
 generic.users.status.blacklisted: Liste noire
+generic.mailing_statuses.draft: brouillon
+generic.mailing_statuses.tested: testé
+generic.mailing_statuses.pending: en attente
+generic.mailing_statuses.processing: en cours
+generic.mailing_statuses.sent: envoyé
+generic.mailing_statuses.aborted: annulé
+generic.mailing_statuses.archived: archivé
 dashboard.title: "Tableau de bord"
 dashboard.subtitle: Vue globale
 dashboard.quick_actions: Actions rapides
@@ -175,3 +183,52 @@ user.show.delete_user_confirmation1: Êtes-vous sûr de vouloir supprimer cet ut
 user.show.delete_user_confirmation2: "Cela va supprimer:"
 user.show.delete_user_confirmation3: inscriptions
 user.show.registrations: Inscriptions
+layout.footer.unsubscribe: Se désinscrire
+registration.register.confirmation_email_message: Vous allez recevoir un courriel pour confirmer votre inscription.
+register.register.confirmation: Inscription réussie.
+register.register.failed: Cet url n'est plus valide, votre inscription n'a pas été confirmée.
+register.unregister.confirmation_email_message: Vous allez recevoir un courriel pour confirmer votre désinscription.
+register.unregister_confirmation.confirmed: Désinscription confirmée.
+register.unregister_confirmation.failed: Cet url n'est plus valide, votre inscription n'a pas été confirmée.
+messages.confirm_registration.confirm: Confirmez votre inscription
+messages.confirm_registration.confirm_process1: Pour confirmer votre inscription à la liste de diffusion
+messages.confirm_registration.confirm_process2: Veuillez cliquer sur ce lien
+messages.confirm_unregistration.confirmation: Confirmez votre désinscription
+messages.confirm_unregistration.process1: Pour confirmer votre désinscription à vos listes de diffusion
+messages.confirm_unregistration.process2: Veuillez cliquer sur ce lien
+messages.start_sending.being_sent1: L'envoi
+messages.start_sending.being_sent2: est en cours
+messages.start_sending.associated_content: Son contenu associé est
+messages.start_sending.part_of_campaign: Cela fait fait partie de la campagne
+messages.start_sending.campaign_ml_count1: Cette campagne définie
+messages.start_sending.campaign_ml_count2: listes de diffusion
+messages.stop_sending.sent1: L'envoi
+messages.stop_sending.sent2: a été effectué
+messages.stop_sending.follow_broadcast1: Vous pouvez désormais suivre les
+messages.stop_sending.follow_broadcast2: informations de diffusion ici
+novaezmailingfull.generic.hello: Bonjour
+novaezmailingfull.generic.generic_view1: Vous utilisez la vue générique 'novaezmailingfull'.
+novaezmailingfull.generic.nova_test_tracking_link: Tester le lien de suivi - Novactive
+novaezmailingfull.generic.ez_test_tracking_link: Tester le lien de suivi - eZ No
+novaezmailingfull.generic.mailing: Envoi
+novaezmailingfull.generic.associated_content: Contenu associé
+novaezmailingfull.generic.campaign: Campagne
+novaezmailingfull.generic.define_a_view: Veuillez définir une "vue" qui fonctionne dans votre projet
+novaezmailingfull.generic.define_a_view2: "Par exemple pour un dossier: "
+menu.savecancel.save: Sauvegarder
+menu.savecancel.cancel: Annuler
+menu.admin_menu.users: Utilisateurs
+menu.admin_menu.mailing_lists: Listes de diffusion
+menu.campaign_menu.subscriptions: Inscriptions
+mailing.buildform.recuring_mailing: "Est-ce un envoi périodique?"
+mailing.buildform.which_siteaccess: "Sur quel siteaccess?"
+form.subject: Sujet
+mailinglisttype.buildform.withapproval: "Avec approbation?"
+mailinglisttype.buildform.siteaccess_limit: Limite Siteaccess
+import.form.file: Fichier
+campaign.form.sender_name:  Nom de l'expéditeur
+campaign.form.sender_email: Courriel de l'expéditeur
+campaign.form.report_email: Courriel du rapport
+campaign.form.return_path_email: Courriel de retour
+campaign.form.siteaccess_limit: Limite siteaccess
+campaign.form.mailinglists: Listes de diffusion

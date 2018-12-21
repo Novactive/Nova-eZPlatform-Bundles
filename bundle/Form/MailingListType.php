@@ -63,7 +63,11 @@ class MailingListType extends AbstractType
                     'required'     => true,
                 ]
             )
-            ->add('withApproval', CheckboxType::class, ['required' => false])
+            ->add('withApproval', CheckboxType::class, [
+                'required' => false,
+                'label' => 'mailinglisttype.buildform.withapproval',
+                'translation_domain' => 'ezmailing'
+                ])
             ->add(
                 'siteaccessLimit',
                 ChoiceType::class,
@@ -71,6 +75,8 @@ class MailingListType extends AbstractType
                     'expanded' => true,
                     'multiple' => true,
                     'choices'  => $siteaccess,
+                    'label'    => 'mailinglisttype.buildform.siteaccess_limit',
+                    'translation_domain' => 'ezmailing'
                 ]
             );
     }

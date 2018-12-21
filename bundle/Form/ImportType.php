@@ -27,7 +27,11 @@ class ImportType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('file', FileType::class, ['required' => false]);
+        $builder->add('file', FileType::class, [
+            'required' => false,
+            'label' => 'import.form.file',
+            'translation_domain' => 'ezmailing'
+        ]);
     }
 
     /**
