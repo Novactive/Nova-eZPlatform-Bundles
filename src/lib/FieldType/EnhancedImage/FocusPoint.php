@@ -40,7 +40,7 @@ class FocusPoint
      * @param float $posX
      * @param float $posY
      */
-    public function __construct(float $posX, float $posY)
+    public function __construct(float $posX = 0, float $posY = 0)
     {
         $this->posX = $posX;
         $this->posY = $posY;
