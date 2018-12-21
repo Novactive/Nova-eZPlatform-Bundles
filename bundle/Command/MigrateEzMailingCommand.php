@@ -111,18 +111,14 @@ class MigrateEzMailingCommand extends Command
         $this->io->section('Cleaned the folder with json files.');
         $this->io->section('Exporting from old database to json files.');
 
-        // Get the Lists first, then Users and subscriptions (which are supposed to be registrations)
-        $contentService         = $this->ezRepository->getContentService();
         $contentLanguageService = $this->ezRepository->getContentLanguageService();
-        $languages              = $contentLanguageService->loadLanguages();
         $defaultLanguageCode    = $contentLanguageService->getDefaultLanguageCode();
-        $siteAccessList         = $this->configResolver->getParameter('list', 'ezpublish', 'siteaccess');
 
-        $lists = $campaigns = [];
+        $lists = $campaigns = $users = [];
 
-        $mailingCounter = $subscriptionCounter = 0;
+        $mailingCounter = $registrationCounter = 0;
 
-        // Mailing Lists
+        // Lists
 
         $sql = 'SELECT id, name, lang FROM ezmailingmailinglist WHERE draft = 0';
 
@@ -143,16 +139,15 @@ class MigrateEzMailingCommand extends Command
 
         $campaign_rows = $this->runQuery($sql);
         foreach ($campaign_rows as $campaign_row) {
-            $mailings = [];
             $fileName    = $this->ioService->saveFile(
                 self::DUMP_FOLDER."/campaign/campaign_{$campaign_row['id']}.json",
                 json_encode(
                     [
-                        'name'       => $campaign_row['subject'],
-                        'senderName'  => $campaign_row['sender_name'],
-                        'senderEmail' => $campaign_row['sender_email'],
-                        'reportEmail' => $campaign_row['report_email'],
-                        'mailings'    => $mailings
+                        'name'         => [$defaultLanguageCode => $campaign_row['subject']],
+                        'senderName'   => $campaign_row['sender_name'],
+                        'senderEmail'  => $campaign_row['sender_email'],
+                        'reportEmail'  => $campaign_row['report_email'],
+                        'mailing_list' => $campaign_row['destination_mailing_list']
                     ]
                 )
             );
@@ -160,8 +155,40 @@ class MigrateEzMailingCommand extends Command
 
         }
 
-        // getting users
-        $users = [];
+        // Users
+        $sql = 'SELECT id, email, first_name, last_name, origin FROM ezmailinguser WHERE draft = 0 ';
+
+        $sql .= 'AND (id, email) in (select max(id), email from ezmailinguser group by email)';
+
+        $user_rows = $this->runQuery($sql);
+        foreach ($user_rows as $user_row) {
+
+            $sql               = 'SELECT mailinglist_id, state FROM ezmailingregistration WHERE mailing_user_id = ?';
+            $subscription_rows = $this->runQuery($sql, [$user_row['id']]);
+            $subscriptions     = [];
+            foreach ($subscription_rows as $subscription_row) {
+                $subscriptions[] = [
+                    'mailinglist_id' => $subscription_row['mailinglist_id'],
+                    'approved'       => $subscription_row['state'] === 20
+                ];
+                ++$registrationCounter;
+            }
+
+            $fileName = $this->ioService->saveFile(
+                self::DUMP_FOLDER."/user/user_{$user_row['id']}.json",
+                json_encode(
+                    [
+                        'email'         => $user_row['email'],
+                        'firstName'     => $user_row['first_name'],
+                        'lastName'      => $user_row['last_name'],
+                        'origin'        => $user_row['origin'],
+                        'subscriptions' => $subscriptions
+                    ]
+                )
+            );
+            $users[]  = pathinfo($fileName)['filename'];
+
+        }
 
         $this->ioService->saveFile(
             self::DUMP_FOLDER.'/manifest.json',
@@ -169,23 +196,24 @@ class MigrateEzMailingCommand extends Command
         );
         $this->io->section(
             'Total: '.count($lists).' lists, '.count($campaigns).' campaigns, '.$mailingCounter.' mailings, '.
-            count($users).' users, '.$subscriptionCounter.' subscriptions.'
+            count($users).' users, '.$registrationCounter.' registrations.'
         );
         $this->io->success('Export done.');
     }
 
     private function import(): void
     {
-        // clear the tables, reset the IDs
+        // Clear the tables, reset the IDs
         $this->clean();
         $this->io->section('Importing from json files to new database.');
 
         $manifest  = $this->ioService->readFile(self::DUMP_FOLDER.'/manifest.json');
         $fileNames = json_decode($manifest);
 
-        // Importing Lists
-        $listCounter = $mailingCounter = $userCounter = $subscriptionCounter = 0;
-        $listIds     = [];
+        // Lists
+        $listCounter = $campaignCounter = $mailingCounter = $userCounter = $registrationCounter = 0;
+
+        $listIds = [];
 
         $mailingListRepository = $this->entityManager->getRepository(MailingList::class);
         $userRepository        = $this->entityManager->getRepository(User::class);
@@ -193,51 +221,46 @@ class MigrateEzMailingCommand extends Command
         foreach ($fileNames->lists as $listFile) {
             $listData    = json_decode($this->ioService->readFile(self::DUMP_FOLDER.'/list/'.$listFile.'.json'));
             $mailingList = new MailingList();
-            $mailingList->setNames((array) $listData->names);
-            $mailingList->setWithApproval((bool) $listData->withApproval);
+            $mailingList->setNames((array) $listData);
+            $mailingList->setWithApproval(false);
             $this->entityManager->persist($mailingList);
             ++$listCounter;
             $this->entityManager->flush();
             $listIds[explode('_', $listFile)[1]] = $mailingList->getId();
         }
 
-        // Importing campaigns with mailings
+        // Campaigns
         foreach ($fileNames->campaigns as $campaignFile) {
-            $campaignData = json_decode($this->ioService->readFile(self::DUMP_FOLDER.'/campaign/'.$campaignFile.'.json'));
+            $campaignData = json_decode(
+                $this->ioService->readFile(self::DUMP_FOLDER.'/campaign/'.$campaignFile.'.json')
+            );
             $campaign     = new Campaign();
-            $campaign->setNames((array) $campaignData->names);
+            $campaign->setNames((array) $campaignData->name);
             $campaign->setReportEmail($campaignData->reportEmail);
             $campaign->setSenderEmail($campaignData->senderEmail);
             $campaign->setReturnPathEmail('');
             $campaign->setSenderName($campaignData->senderName);
-            $campaign->setLocationId($campaignData->locationId);
-            $campaignContentId = explode('_', $campaignFile)[1];
-            if (\array_key_exists($campaignContentId, $listIds)) {
-                /* @var MailingList $mailingList */
-                $mailingList = $mailingListRepository->findOneBy(
-                    ['id' => $listIds[$campaignContentId]]
-                );
-                $campaign->addMailingList($mailingList);
-            }
-            foreach ($campaignData->mailings as $mailingData) {
-                $mailing = new Mailing();
-                $mailing->setNames((array) $mailingData->names);
-                $mailing->setStatus($mailingData->status);
-                $mailing->setRecurring(false);
-                $mailing->setHoursOfDay([$mailingData->hoursOfDay]);
-                $mailing->setDaysOfMonth([$mailingData->daysOfMonth]);
-                $mailing->setMonthsOfYear([$mailingData->monthsOfYear]);
-                $mailing->setLocationId($mailingData->locationId);
-                $mailing->setSiteAccess($mailingData->siteAccess);
-                $mailing->setSubject($mailingData->subject);
-                $this->entityManager->persist($mailing);
-                $campaign->addMailing($mailing);
-                ++$mailingCounter;
+            $campaign->setLocationId(self::DEFAULT_FALLBACK_LOCATION_ID);
+
+            if (!empty($campaignData->mailing_list)) {
+                $mailingLists = explode(':', $campaignData->mailing_list);
+                foreach ($mailingLists as $mailingListId) {
+                    if (\array_key_exists($mailingListId, $listIds)) {
+                        /* @var MailingList $mailingList */
+                        $mailingList = $mailingListRepository->findOneBy(
+                            ['id' => $listIds[$mailingListId]]
+                        );
+                        if (null !== $mailingList) {
+                            $campaign->addMailingList($mailingList);
+                        }
+                    }
+                }
             }
             $this->entityManager->persist($campaign);
+            ++$campaignCounter;
         }
 
-        // Importing Users & Subscriptions
+        // Users & Subscriptions
         foreach ($fileNames->users as $userFile) {
             $userData = json_decode($this->ioService->readFile(self::DUMP_FOLDER.'/user/'.$userFile.'.json'));
 
@@ -247,24 +270,24 @@ class MigrateEzMailingCommand extends Command
                 $user = new User();
                 $user
                     ->setEmail($userData->email)
-                    ->setBirthDate($userData->birthDate)
-                    ->setCompany($userData->company)
                     ->setFirstName($userData->firstName)
                     ->setLastName($userData->lastName)
-                    ->setStatus($userData->status)
-                    ->setOrigin('site');
+                    ->setStatus('confirmed')
+                    ->setOrigin($userData->origin);
 
                 foreach ($userData->subscriptions as $subscription) {
-                    if (\array_key_exists($subscription->list_contentobject_id, $listIds)) {
-                        $registration = new Registration();
+                    if (\array_key_exists($subscription->mailinglist_id, $listIds)) {
                         /* @var MailingList $mailingList */
                         $mailingList = $mailingListRepository->findOneBy(
-                            ['id' => $listIds[$subscription->list_contentobject_id]]
+                            ['id' => $listIds[$subscription->mailinglist_id]]
                         );
-                        $registration->setMailingList($mailingList);
-                        $registration->setApproved($subscription->approved);
-                        $user->addRegistration($registration);
-                        ++$subscriptionCounter;
+                        if (null !== $mailingList) {
+                            $registration = new Registration();
+                            $registration->setMailingList($mailingList);
+                            $registration->setApproved($subscription->approved);
+                            $user->addRegistration($registration);
+                            ++$registrationCounter;
+                        }
                     }
                 }
                 $this->entityManager->persist($user);
@@ -274,8 +297,8 @@ class MigrateEzMailingCommand extends Command
         $this->entityManager->flush();
 
         $this->io->section(
-            'Total: '.$listCounter.' lists, '.$mailingCounter.' mailings, '.$userCounter.' users, '.
-            $subscriptionCounter.' registrations.'
+            'Total: '.$listCounter.' lists, '.$campaignCounter.' campaigns, '.$mailingCounter.' mailings, '.
+            $userCounter.' users, '.$registrationCounter.' registrations.'
         );
         $this->io->success('Import done.');
     }

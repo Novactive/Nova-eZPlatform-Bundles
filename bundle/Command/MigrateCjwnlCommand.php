@@ -111,7 +111,6 @@ class MigrateCjwnlCommand extends Command
         $this->io->section('Cleaned the folder with json files.');
         $this->io->section('Exporting from old database to json files.');
 
-        // Get the Lists first, then Users and subscriptions (which are supposed to be registrations)
         $contentService         = $this->ezRepository->getContentService();
         $contentLanguageService = $this->ezRepository->getContentLanguageService();
         $languages              = $contentLanguageService->loadLanguages();
@@ -120,7 +119,9 @@ class MigrateCjwnlCommand extends Command
 
         $lists = $campaigns = [];
 
-        $mailingCounter = $subscriptionCounter = 0;
+        $mailingCounter = $registrationCounter = 0;
+
+        // Lists, Campaigns with Mailings
 
         $sql = 'SELECT contentobject_attribute_version, contentobject_id, auto_approve_registered_user,';
 
@@ -232,7 +233,7 @@ class MigrateCjwnlCommand extends Command
 
         }
 
-        // getting users
+        // Users
         $users = [];
 
         $sql = 'SELECT id, email, first_name, last_name, organisation, birthday, ez_user_id, status, confirmed, ';
@@ -254,6 +255,7 @@ class MigrateCjwnlCommand extends Command
             }
             $birthdate = empty($user_row['birthday']) ? null : new \DateTime('2018-12-11');
 
+            // Registrations
             $sql               = 'SELECT list_contentobject_id, approved FROM cjwnl_subscription WHERE newsletter_user_id = ?';
             $subscription_rows = $this->runQuery($sql, [$user_row['id']]);
             $subscriptions     = [];
@@ -262,7 +264,7 @@ class MigrateCjwnlCommand extends Command
                     'list_contentobject_id' => $subscription_row['list_contentobject_id'],
                     'approved'              => (bool) $subscription_row['approved']
                 ];
-                ++$subscriptionCounter;
+                ++$registrationCounter;
             }
 
             $fileName = $this->ioService->saveFile(
@@ -288,7 +290,7 @@ class MigrateCjwnlCommand extends Command
         );
         $this->io->section(
             'Total: '.count($lists).' lists, '.count($campaigns).' campaigns, '.$mailingCounter.' mailings, '.
-            count($users).' users, '.$subscriptionCounter.' subscriptions.'
+            count($users).' users, '.$registrationCounter.' registrations.'
         );
         $this->io->success('Export done.');
     }
@@ -302,8 +304,8 @@ class MigrateCjwnlCommand extends Command
         $manifest  = $this->ioService->readFile(self::DUMP_FOLDER.'/manifest.json');
         $fileNames = json_decode($manifest);
 
-        // Importing Lists
-        $listCounter = $mailingCounter = $userCounter = $subscriptionCounter = 0;
+        // Lists
+        $listCounter = $campaignCounter = $mailingCounter = $userCounter = $registrationCounter = 0;
         $listIds     = [];
 
         $mailingListRepository = $this->entityManager->getRepository(MailingList::class);
@@ -320,9 +322,11 @@ class MigrateCjwnlCommand extends Command
             $listIds[explode('_', $listFile)[1]] = $mailingList->getId();
         }
 
-        // Importing campaigns with mailings
+        // Campaigns with Mailings
         foreach ($fileNames->campaigns as $campaignFile) {
-            $campaignData = json_decode($this->ioService->readFile(self::DUMP_FOLDER.'/campaign/'.$campaignFile.'.json'));
+            $campaignData = json_decode(
+                $this->ioService->readFile(self::DUMP_FOLDER.'/campaign/'.$campaignFile.'.json')
+            );
             $campaign     = new Campaign();
             $campaign->setNames((array) $campaignData->names);
             $campaign->setReportEmail($campaignData->reportEmail);
@@ -336,7 +340,9 @@ class MigrateCjwnlCommand extends Command
                 $mailingList = $mailingListRepository->findOneBy(
                     ['id' => $listIds[$campaignContentId]]
                 );
-                $campaign->addMailingList($mailingList);
+                if (null !== $mailingList) {
+                    $campaign->addMailingList($mailingList);
+                }
             }
             foreach ($campaignData->mailings as $mailingData) {
                 $mailing = new Mailing();
@@ -354,9 +360,10 @@ class MigrateCjwnlCommand extends Command
                 ++$mailingCounter;
             }
             $this->entityManager->persist($campaign);
+            ++$campaignCounter;
         }
 
-        // Importing Users & Subscriptions
+        // Users & Registrations
         foreach ($fileNames->users as $userFile) {
             $userData = json_decode($this->ioService->readFile(self::DUMP_FOLDER.'/user/'.$userFile.'.json'));
 
@@ -380,10 +387,12 @@ class MigrateCjwnlCommand extends Command
                         $mailingList = $mailingListRepository->findOneBy(
                             ['id' => $listIds[$subscription->list_contentobject_id]]
                         );
-                        $registration->setMailingList($mailingList);
+                        if (null !== $mailingList) {
+                            $registration->setMailingList($mailingList);
+                        }
                         $registration->setApproved($subscription->approved);
                         $user->addRegistration($registration);
-                        ++$subscriptionCounter;
+                        ++$registrationCounter;
                     }
                 }
                 $this->entityManager->persist($user);
@@ -393,8 +402,8 @@ class MigrateCjwnlCommand extends Command
         $this->entityManager->flush();
 
         $this->io->section(
-            'Total: '.$listCounter.' lists, '.$mailingCounter.' mailings, '.$userCounter.' users, '.
-            $subscriptionCounter.' registrations.'
+            'Total: '.$listCounter.' lists, '.$campaignCounter.' campaigns, '.$mailingCounter.' mailings, '.
+            $userCounter.' users, '.$registrationCounter.' registrations.'
         );
         $this->io->success('Import done.');
     }
