@@ -10,10 +10,10 @@
     {% spaceless %}
         {% if not ez_is_field_empty( content, field ) %}
             {% set attr = attr|merge({
-                'class': (attr.class|default('') ~ ' enhancedimage--wrapper')|trim
-                'data-focus-x': focusPoint ? focusPoint.posX : ''
-                'data-focus-y': focusPoint ? focusPoint.posY : ''
-                'data-image-h': parameters.height is defined ? parameters.height : (imageAlias ? imageAlias.height : '')
+                'class': (attr.class|default('') ~ ' enhancedimage--wrapper')|trim,
+                'data-focus-x': focusPoint ? focusPoint.posX : '',
+                'data-focus-y': focusPoint ? focusPoint.posY : '',
+                'data-image-h': parameters.height is defined ? parameters.height : (imageAlias ? imageAlias.height : ''),
                 'data-image-w': parameters.width is defined ? parameters.width : (imageAlias ? imageAlias.width : ''),
             }) %}
             <figure {{ block( 'field_attributes' ) }}>
