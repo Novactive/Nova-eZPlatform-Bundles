@@ -25,8 +25,8 @@ hooks:
     build: |
         set -e
         composer create-project ezsystems/ezplatform --prefer-dist --no-progress --no-interaction --no-scripts
-        curl -o tests/platform.sh/wrap.php https://raw.githubusercontent.com/Plopix/symfony-bundle-app-wrapper/master/wrap-bundle.php
-        WRAP_APP_DIR=./ezplatform php tests/platform.sh/wrap.php
+        curl -o tests/provisioning/wrap.php https://raw.githubusercontent.com/Plopix/symfony-bundle-app-wrapper/master/wrap-bundle.php
+        WRAP_APP_DIR=./ezplatform php tests/provisioning/wrap.php
         cd ezplatform
         composer update --lock
     deploy: |
