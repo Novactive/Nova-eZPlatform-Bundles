@@ -1,2 +1,0 @@
-_novaezmailing_routes:
-    resource: '@NovaeZMailingBundle/Resources/config/routing.yml'
