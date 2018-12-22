@@ -26,9 +26,9 @@ hooks:
         set -e
         composer create-project ezsystems/ezplatform --prefer-dist --no-progress --no-interaction --no-scripts
         curl -o tests/provisioning/wrap.php https://raw.githubusercontent.com/Plopix/symfony-bundle-app-wrapper/master/wrap-bundle.php
-        WRAP_APP_DIR=./ezplatform php tests/provisioning/wrap.php
+        WRAP_APP_DIR=./ezplatform WRAP_BUNDLE_DIR=./ php tests/provisioning/wrap.php
         cd ezplatform
-        composer update --lock
+        COMPOSER_MEMORY_LIMIT=-1 composer update --lock
     deploy: |
         set -e
         cd ezplatform
