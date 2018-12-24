@@ -75,24 +75,23 @@ class MailingType extends AbstractType
                     'required'     => true,
                 ]
             )
-            ->add('subject', TextType::class, ['required' => false, 'label' => 'form.subject', 'translation_domain' => 'ezmailing'])
-            ->add('recurring', CheckboxType::class, ['label' => 'mailing.buildform.recuring_mailing', 'translation_domain' => 'ezmailing'])
+            ->add('subject', TextType::class, ['required' => false, 'label' => 'form.subject'])
+            ->add('recurring', CheckboxType::class, ['label' => 'mailing.buildform.recuring_mailing'])
             ->add('locationId', HiddenType::class)
             ->add(
                 'hoursOfDay',
                 TextType::class,
                 [
                     'required' => true,
-                    'label' => 'generic.details.hours_day',
-                    'translation_domain' => 'ezmailing'
+                    'label' => 'generic.details.hours_day'
                 ]
             )
-            ->add('daysOfWeek', TextType::class, ['label' => 'generic.details.days_week', 'translation_domain' => 'ezmailing'])
-            ->add('daysOfMonth', TextType::class, ['label' => 'generic.details.days_month', 'translation_domain' => 'ezmailing'])
-            ->add('daysOfYear', TextType::class, ['label' => 'generic.details.days_year', 'translation_domain' => 'ezmailing'])
-            ->add('weeksOfMonth', TextType::class, ['label' => 'generic.details.weeks_month', 'translation_domain' => 'ezmailing'])
-            ->add('monthsOfYear', TextType::class, ['label' => 'generic.details.months_year', 'translation_domain' => 'ezmailing'])
-            ->add('weeksOfYear', TextType::class, ['label' => 'generic.details.weeks_year', 'translation_domain' => 'ezmailing']);
+            ->add('daysOfWeek', TextType::class, ['label' => 'generic.details.days_week'])
+            ->add('daysOfMonth', TextType::class, ['label' => 'generic.details.days_month'])
+            ->add('daysOfYear', TextType::class, ['label' => 'generic.details.days_year'])
+            ->add('weeksOfMonth', TextType::class, ['label' => 'generic.details.weeks_month'])
+            ->add('monthsOfYear', TextType::class, ['label' => 'generic.details.months_year'])
+            ->add('weeksOfYear', TextType::class, ['label' => 'generic.details.weeks_year']);
 
         $transformationFields = [
             'hoursOfDay',
@@ -127,8 +126,7 @@ class MailingType extends AbstractType
                         'choices'  => count($siteaccessLimit) > 0 ? $siteaccessLimit : $siteaccesses,
                         'expanded' => true,
                         'multiple' => false,
-                        'required' => true,
-                        'translation_domain' => 'ezmailing'
+                        'required' => true
                     ]
                 );
             }
@@ -143,6 +141,7 @@ class MailingType extends AbstractType
         $resolver->setDefaults(
             [
                 'data_class' => Mailing::class,
+                'translation_domain' => 'ezmailing'
             ]
         );
     }
