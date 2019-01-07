@@ -17,8 +17,8 @@ namespace Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage;
 /**
  * Class FocusPoint.
  *
- * @propertposY float $posX
- * @propertposY float $posY
+ * @property float $posX
+ * @property float $posY
  *
  * @package Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage
  */
