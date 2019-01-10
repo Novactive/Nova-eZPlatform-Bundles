@@ -1,18 +1,19 @@
+{% trans_default_domain "ezmailing" %}
 {% extends "@NovaeZMailing/eZViews/mailing_base.html.twig" %}
 
 {% block unregistrer %}{% endblock %}
 
 {% block preheader_message %}
-    Confirm your registration
+    {{ "messages.confirm_registration.confirm"|trans }}
 {% endblock %}
 
 {% block body %}
-    <p>To confirm your registration to the Mailing List</p>
+    <p>{{ "messages.confirm_registration.confirm_process1"|trans }}</p>
     <ul>
         {% for mailinglist in registration.mailingLists %}
             <li>{{ mailinglist.name }}</li>
         {% endfor %}
     </ul>
 
-    <p><a href="{{ path('novaezmailing_registration_confirm', {id:token.id}) }}">Please click on this link</a></p>
+    <p><a href="{{ path('novaezmailing_registration_confirm', {id:token.id}) }}">{{ "messages.confirm_registration.confirm_process2"|trans }}</a></p>
 {% endblock %}

@@ -21,12 +21,15 @@ use Novactive\Bundle\eZMailingBundle\Entity\User;
 use Novactive\Bundle\eZMailingBundle\Security\Voter\Campaign as CampaignVoter;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class Builder.
  */
 class Builder
 {
+    private $translator;
+
     /**
      * @var FactoryInterface
      */
@@ -42,11 +45,13 @@ class Builder
      *
      * @param FactoryInterface              $factory
      * @param AuthorizationCheckerInterface $authorizationChecker
+     * @param TranslatorInterface           $translator
      */
-    public function __construct(FactoryInterface $factory, AuthorizationCheckerInterface $authorizationChecker)
+    public function __construct(FactoryInterface $factory, AuthorizationCheckerInterface $authorizationChecker, TranslatorInterface $translator)
     {
         $this->factory              = $factory;
         $this->authorizationChecker = $authorizationChecker;
+        $this->translator           = $translator;
     }
 
     /**
@@ -64,14 +69,14 @@ class Builder
         $menu  = $this->factory->createItem('root');
         $child = $menu->addChild(
             'mailinglists',
-            ['route' => "{$mailingRoute}_index", 'label' => 'Mailing Lists']
+            ['route' => "{$mailingRoute}_index", 'label' => $this->translator->trans('menu.admin_menu.mailing_lists', [], 'ezmailing')]
         );
 
         if (substr($route, 0, \strlen($mailingRoute)) === $mailingRoute) {
             $child->setCurrent(true);
         }
 
-        $child = $menu->addChild('users', ['route' => "{$userRoute}_index", 'label' => 'Users']);
+        $child = $menu->addChild('users', ['route' => "{$userRoute}_index", 'label' => $this->translator->trans('menu.admin_menu.users', [], 'ezmailing')]);
         if (substr($route, 0, \strlen($userRoute)) === $userRoute) {
             $child->setCurrent(true);
         }
@@ -113,7 +118,7 @@ class Builder
                 [
                     'route'           => 'novaezmailing_campaign_subscriptions',
                     'routeParameters' => ['campaign' => $campaign->getId()],
-                    'label'           => 'Subscriptions'." ({$count})",
+                    'label'           => $this->translator->trans('menu.campaign_menu.subscriptions', [], 'ezmailing')." ({$count})",
                     'attributes'      => [
                         'class' => 'leaf subscriptions',
                     ],
@@ -135,7 +140,7 @@ class Builder
                             'campaign' => $campaign->getId(),
                             'status'   => $status,
                         ],
-                        'label'           => $status." ({$count})",
+                        'label'           => $this->translator->trans('generic.mailing_statuses.'.$status, [], 'ezmailing')." ({$count})",
                         'attributes'      => [
                             'class' => "leaf {$status}",
                         ],
@@ -156,7 +161,7 @@ class Builder
         $menu->addChild(
             'novaezmailing_save',
             [
-                'label'  => 'Save',
+                'label'  => $this->translator->trans('menu.savecancel.save', [], 'ezmailing'),
                 'extras' => [
                     'icon' => 'save',
                 ],
@@ -166,7 +171,7 @@ class Builder
         $menu->addChild(
             'novaezmailing_cancel',
             [
-                'label'      => 'Cancel',
+                'label'      => $this->translator->trans('menu.savecancel.cancel', [], 'ezmailing'),
                 'attributes' => ['class' => 'btn-danger'],
                 'extras'     => [
                     'icon' => 'circle-close',

@@ -75,22 +75,23 @@ class MailingType extends AbstractType
                     'required'     => true,
                 ]
             )
-            ->add('subject', TextType::class, ['required' => false])
-            ->add('recurring', CheckboxType::class, ['label' => 'Is it a reccuring Mailing?'])
+            ->add('subject', TextType::class, ['required' => false, 'label' => 'form.subject'])
+            ->add('recurring', CheckboxType::class, ['label' => 'mailing.buildform.recuring_mailing'])
             ->add('locationId', HiddenType::class)
             ->add(
                 'hoursOfDay',
                 TextType::class,
                 [
                     'required' => true,
+                    'label' => 'generic.details.hours_day'
                 ]
             )
-            ->add('daysOfWeek', TextType::class)
-            ->add('daysOfMonth', TextType::class)
-            ->add('daysOfYear', TextType::class)
-            ->add('weeksOfMonth', TextType::class)
-            ->add('monthsOfYear', TextType::class)
-            ->add('weeksOfYear', TextType::class);
+            ->add('daysOfWeek', TextType::class, ['label' => 'generic.details.days_week'])
+            ->add('daysOfMonth', TextType::class, ['label' => 'generic.details.days_month'])
+            ->add('daysOfYear', TextType::class, ['label' => 'generic.details.days_year'])
+            ->add('weeksOfMonth', TextType::class, ['label' => 'generic.details.weeks_month'])
+            ->add('monthsOfYear', TextType::class, ['label' => 'generic.details.months_year'])
+            ->add('weeksOfYear', TextType::class, ['label' => 'generic.details.weeks_year']);
 
         $transformationFields = [
             'hoursOfDay',
@@ -121,11 +122,11 @@ class MailingType extends AbstractType
                     'siteAccess',
                     ChoiceType::class,
                     [
-                        'label'    => 'On which siteaccess?',
+                        'label'    => 'mailing.buildform.which_siteaccess',
                         'choices'  => count($siteaccessLimit) > 0 ? $siteaccessLimit : $siteaccesses,
                         'expanded' => true,
                         'multiple' => false,
-                        'required' => true,
+                        'required' => true
                     ]
                 );
             }
@@ -140,6 +141,7 @@ class MailingType extends AbstractType
         $resolver->setDefaults(
             [
                 'data_class' => Mailing::class,
+                'translation_domain' => 'ezmailing'
             ]
         );
     }

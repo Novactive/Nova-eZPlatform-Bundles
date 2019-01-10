@@ -1,3 +1,4 @@
+{% trans_default_domain "ezmailing" %}
 {% extends pagelayout %}
 
 {% block content %}
@@ -8,6 +9,6 @@
         <input type="submit" value="Register" name="Register"/>
         {{ form_end(form) }}
     {% else %}
-        <p>You are going to receive an email to confirm your registration.</p>
+        <p>{{ "registration.register.confirmation_email_message"|trans }}</p>
     {% endif %}
 {% endblock %}
