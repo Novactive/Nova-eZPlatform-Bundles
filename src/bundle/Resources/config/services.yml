@@ -1,24 +1,20 @@
 services:
-
-    # default configuration for services in *this* file
     _defaults:
         autowire: true
         autoconfigure: true
         public: true
 
-
-    Novactive\EzLdapAuthenticator\EventListener\:
-        resource: "../../../lib/EventListener/*"
+    nova_ez.ldap.login_listener:
+        class: Novactive\EzLdapAuthenticator\EventListener\InteractiveLoginListener
         arguments:
             $ldap: '@Symfony\Component\Ldap\Ldap'
-        tags:
-            - { name: kernel.event_subscriber }
 
     Symfony\Component\Ldap\Ldap:
         arguments: ['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter']
 
     Symfony\Component\Ldap\Adapter\ExtLdap\Adapter:
-        arguments:
-            -   host: '%ldap_auth_host%'
-                port: '%ldap_auth_port%'
-                version: '%ldap_auth_version%'
+        arguments: []
+
+    nova_ez.ldap.user.provider:
+        class: Symfony\Component\Security\Core\User\LdapUserProvider
+        arguments: []

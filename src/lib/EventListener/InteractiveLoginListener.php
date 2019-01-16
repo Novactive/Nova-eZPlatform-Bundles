@@ -11,14 +11,12 @@
 
 namespace Novactive\EzLdapAuthenticator\EventListener;
 
-use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\Symfony\Event\InteractiveLoginEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
-use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Ldap\Ldap;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class InteractiveLoginListener implements EventSubscriberInterface
 {
@@ -28,15 +26,19 @@ class InteractiveLoginListener implements EventSubscriberInterface
     /** @var  Symfony\Component\Ldap\Ldap*/
     private $ldap;
 
-    /** @var ContainerInterface */
-    private $container;
+    /** @var array */
+    private $config;
 
-    public function __construct(ContainerInterface $container, Repository $repository, Ldap $ldap)
+    public function __construct(Repository $repository, Ldap $ldap)
     {
-    	$this->container = $container;
         $this->repository = $repository;
 	    $this->userService = $this->repository->getUserService();
         $this->ldap = $ldap;
+    }
+
+    public function setConfig($config)
+    {
+        $this->config = $config;
     }
 
     public static function getSubscribedEvents()
@@ -54,37 +56,42 @@ class InteractiveLoginListener implements EventSubscriberInterface
         try {
 	        $event->setApiUser($userService->loadUserByLogin($username));
         } catch (\eZ\Publish\API\Repository\Exceptions\NotFoundException $exception) {
-        	$searchDn       = $this->container->getParameter("ldap_auth_search_dn");
-        	$password       = $this->container->getParameter("ldap_auth_search_password");
-        	$queryString    = $this->container->getParameter("ldap_auth_query_string");
-        	$baseDn         = $this->container->getParameter("ldap_auth_base_dn");
-        	$targetGroup    = $this->container->getParameter("ldap_auth_target_usergroup");
+        	$searchDn       = $this->config['search_dn'];
+        	$password       = $this->config['search_password'];
+        	$queryString    = $this->config['query_string'];
+        	$baseDn         = $this->config['base_dn'];
+        	$targetGroup    = $this->config['target_usergroup'];
+        	$uidKey         = $this->config['uid_key'];
 
         	// Login to LDAP server and get user attributes
         	$this->ldap->bind($searchDn, $password);
-        	$query = $this->ldap->query($baseDn, str_replace("{username}", $username, $queryString));
+            $queryString = str_replace("{username}", $username, $queryString);
+            $queryString = str_replace("{uid_key}", $uidKey, $queryString);
+        	$query = $this->ldap->query($baseDn, $queryString);
 	        $results = $query->execute();
 
 	        // Prepare user details
+            $propertyAccessor = PropertyAccess::createPropertyAccessor();
+
 	        $ldapUser = $results->toArray()[0]->getAttributes();
-	        $email = $ldapUser["mail"][0] ?? "email@example.com";
-	        $password = $ldapUser["userPassword"][0];
+	        $email      = $propertyAccessor->getValue($ldapUser, '[mail][0]');
+            $password   = $propertyAccessor->getValue($ldapUser, '[userPassword][0]');
+            $firstName  = $propertyAccessor->getValue($ldapUser, '[givenName][0]') ?: $username;
+            $lastName   = $propertyAccessor->getValue($ldapUser, '[sn][0]');
 
 	        $user = $userService->newUserCreateStruct($username, $email, $password, "fre-FR");
-	        $user->setField("first_name", $ldapUser["givenName"][0] ?? $username);
-	        $user->setField("last_name", $ldapUser["sn"][0] ?? $username);
+	        $user->setField("first_name", $firstName);
+	        if ($lastName) {
+                $user->setField("last_name", $lastName);
+            }
 	        $user->enabled = true;
 
 	        $group = $userService->loadUserGroup($targetGroup);
 
 	        // Create the user
-	        $this->repository->sudo(function (Repository $repository) use ($user, $group) {
+	        $this->repository->sudo(function (Repository $repository) use ($user, $group, $event, $userService) {
 		        $event->setApiUser($userService->loadUserByLogin('admin'));
-	        	try {
-			        $userService->createUser($user, [$group]);
-		        } catch (\eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException $exception) {
-	        		dump($exception);
-		        }
+		        $userService->createUser($user, [$group]);
 	        });
 
 	        $event->setApiUser($userService->loadUserByLogin($username));
