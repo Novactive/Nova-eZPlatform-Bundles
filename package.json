@@ -1,0 +1,27 @@
+{
+  "name": "ezenhancedimageassetbundle",
+  "version": "1.0.0",
+  "private": true,
+  "repository": "https://github.com/Novactive/NovaeZEnhancedImageAssetBundle.git",
+  "author": "Florian ALEXANDRE <f.alexandre@novactive.com>",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "7.1.0",
+    "babel-loader": "^8.0.5",
+    "babel-preset-env": "^1.7.0",
+    "image-focus": "^1.0.3",
+    "uglifyjs-webpack-plugin": "^2.1.1",
+    "webpack": "^4.29.0",
+    "webpack-cli": "^3.2.1",
+    "webpack-merge": "^4.2.1"
+  },
+  "scripts": {
+    "build": "webpack --config webpack.prod.js",
+    "builddev": "webpack --config webpack.dev.js",
+    "watch": "webpack --watch --config webpack.dev.js",
+    "watchprod": "webpack --watch --config webpack.prod.js",
+    "fix-cs": "prettier --write 'src/js/**/*.+(js)' && prettier --write 'src/bundle/Resources/public/js/scripts/**/*.+(js)'"
+  }
+}

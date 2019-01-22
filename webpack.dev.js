@@ -1,4 +1,4 @@
-/*!
+/*
  * NovaeZEnhancedImageAssetBundle.
  *
  * @package   NovaeZEnhancedImageAssetBundle
@@ -9,8 +9,10 @@
  *
  */
 
-picture.enhancedimage--wrapper {
-  display: block;
-  position: relative;
-  overflow: hidden;
-}
+const common = require('./webpack.common');
+const merge = require('webpack-merge');
+
+module.exports = merge(common, {
+    mode: 'development',
+    devtool: 'source-map'
+});
