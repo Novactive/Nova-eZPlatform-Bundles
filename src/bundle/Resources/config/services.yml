@@ -3,3 +3,27 @@ services:
         autowire: true
         autoconfigure: true
         public: false
+
+        bind:
+            $imageVariationService: '@ezpublish.fieldType.ezimage.variation_service'
+
+    Novactive\EzEnhancedImageAsset\Twig\:
+        resource: '../../../lib/Twig/*'
+
+    Novactive\EzEnhancedImageAsset\FocusPoint\FocusPointCalculator:
+
+    Novactive\EzEnhancedImageAsset\Imagine\Filter\AliasFilterManager:
+        arguments:
+            $filterManager: "@liip_imagine.filter.manager"
+            $filterConfiguration: "@liip_imagine.filter.configuration"
+
+    Novactive\EzEnhancedImageAsset\Imagine\Filter\Loader\FocusedThumbnailFilterLoader:
+        tags:
+            - {name: 'liip_imagine.filter.loader', loader: 'focusedThumbnail'}
+
+    Novactive\EzEnhancedImageAsset\Imagine\ImageAliasGenerator:
+        decorates: ezpublish.image_alias.imagine.alias_generator
+        arguments:
+            $dataLoader: "@ezpublish.image_alias.imagine.binary_loader"
+            $ioResolver: "@ezpublish.image_alias.imagine.cache_resolver"
+            $logger: "@?logger"

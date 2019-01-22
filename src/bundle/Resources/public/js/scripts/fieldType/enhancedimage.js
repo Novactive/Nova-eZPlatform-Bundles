@@ -9,7 +9,7 @@
  *
  */
 
-(function (global) {
+(function(global) {
     const SELECTOR_FIELD = '.ez-field-edit--enhancedimage';
     const SELECTOR_INPUT_FILE = 'input[type="file"]';
     const SELECTOR_LABEL_WRAPPER = '.ez-field-edit__label-wrapper';
@@ -34,11 +34,11 @@
          */
         getImageUrl(file, callback) {
             const reader = new FileReader();
-            reader.onload = readerEvent => {
+            reader.onload = (readerEvent) => {
                 const i = new Image();
-                i.onload = imageEvent => callback(imageEvent.target);
+                i.onload = (imageEvent) => callback(imageEvent.target);
                 i.src = readerEvent.target.result;
-            }
+            };
             reader.readAsDataURL(file);
         }
 
@@ -57,15 +57,15 @@
             const files = [].slice.call(event.target.files);
             const fileSize = this.formatFileSize(files[0].size);
 
-            this.getImageUrl(files[0], img => {
-                [...this.fieldContainer.querySelectorAll(SELECTOR_FRAME)].forEach(frame => {
+            this.getImageUrl(files[0], (img) => {
+                [...this.fieldContainer.querySelectorAll(SELECTOR_FRAME)].forEach((frame) => {
                     const image = frame.querySelector('img');
                     image.setAttribute('src', img.src);
                     frame.setAttribute('data-image-w', img.width);
                     frame.setAttribute('data-image-h', img.height);
                     frame.dispatchEvent(new CustomEvent('focusChange'));
                 });
-                [...images].forEach(image => {
+                [...images].forEach((image) => {
                     image.setAttribute('src', img.src);
                 });
             });
@@ -92,9 +92,9 @@
         validateAltInput(event) {
             const isRequired = event.target.required;
             const isEmpty = !event.target.value;
-            const isError = (isEmpty && isRequired);
+            const isError = isEmpty && isRequired;
             const label = event.target.closest(SELECTOR_ALT_WRAPPER).querySelector('.ez-data-source__label').innerHTML;
-            const result = {isError};
+            const result = { isError };
 
             if (isEmpty) {
                 result.errorMessage = global.eZ.errors.emptyField.replace('{fieldName}', label);
@@ -109,8 +109,8 @@
                 imageH = img.height;
 
             //Calculate FocusPoint coordinates
-            const focusX = (event.offsetX / imageW - .5) * 2,
-                focusY = (event.offsetY / imageH - .5) * -2;
+            const focusX = (event.offsetX / imageW - 0.5) * 2,
+                focusY = (event.offsetY / imageH - 0.5) * -2;
 
             this.fieldContainer.querySelector(SELECTOR_INPUT_FOCUS_X).setAttribute('value', focusX.toFixed(2));
             this.fieldContainer.querySelector(SELECTOR_INPUT_FOCUS_Y).setAttribute('value', focusY.toFixed(2));
@@ -123,10 +123,10 @@
             let focusX = parseFloat(this.fieldContainer.querySelector(SELECTOR_INPUT_FOCUS_X).getAttribute('value')),
                 focusY = parseFloat(this.fieldContainer.querySelector(SELECTOR_INPUT_FOCUS_Y).getAttribute('value'));
 
-            [...this.fieldContainer.querySelectorAll(SELECTOR_FRAME)].forEach(frame => {
+            [...this.fieldContainer.querySelectorAll(SELECTOR_FRAME)].forEach((frame) => {
                 frame.setAttribute('data-focus-x', focusX.toFixed(2));
                 frame.setAttribute('data-focus-y', focusY.toFixed(2));
-                frame.dispatchEvent(new CustomEvent('focusChange', {focusX: focusX, focusY: focusY}));
+                frame.dispatchEvent(new CustomEvent('focusChange', { focusX: focusX, focusY: focusY }));
             });
 
             const percentageX = ((focusX + 1) / 2) * 100,
@@ -139,8 +139,7 @@
         }
     }
 
-
-    [...document.querySelectorAll(SELECTOR_FIELD)].forEach(fieldContainer => {
+    [...document.querySelectorAll(SELECTOR_FIELD)].forEach((fieldContainer) => {
         const validator = new EnhancedImageFieldValidator({
             classInvalid: 'is-invalid',
             fieldContainer,
@@ -179,20 +178,18 @@
                     callback: 'cancelErrors',
                     invalidStateSelectors: ['.ez-data-source__field--alternativeText'],
                     errorNodeSelectors: [`${SELECTOR_ALT_WRAPPER} .ez-data-source__label-wrapper`],
-                }
+                },
             ],
         });
         validator.updateReticulePosition();
         const previewField = new EnhancedImageFilePreviewField({
             validator,
             fieldContainer,
-            fileTypeAccept: fieldContainer.querySelector(SELECTOR_INPUT_FILE).accept
+            fileTypeAccept: fieldContainer.querySelector(SELECTOR_INPUT_FILE).accept,
         });
 
         previewField.init();
 
-        global.eZ.fieldTypeValidators = global.eZ.fieldTypeValidators ?
-            [...global.eZ.fieldTypeValidators, validator] :
-            [validator];
-    })
+        global.eZ.fieldTypeValidators = global.eZ.fieldTypeValidators ? [...global.eZ.fieldTypeValidators, validator] : [validator];
+    });
 })(window);

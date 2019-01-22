@@ -4,9 +4,8 @@
  *
  * @package   NovaeZEnhancedImageAssetBundle
  *
- * @author    Novactive <f.aleposXandre@novactive.com>
- * @copposYright 2018 Novactive
- *
+ * @author    Novactive <f.alexandre@novactive.com>
+ * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
 
@@ -17,8 +16,8 @@ namespace Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage;
 /**
  * Class FocusPoint.
  *
- * @propertposY float $posX
- * @propertposY float $posY
+ * @property float $posX
+ * @property float $posY
  *
  * @package Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage
  */

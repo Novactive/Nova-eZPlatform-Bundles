@@ -9,14 +9,12 @@
             {% set src = imageAlias ? asset( imageAlias.uri ) : "//:0" %}
             {% set attr = attr|merge({'class': (attr.class|default('') ~ ' ez-field-preview ez-field-preview--ezimage')|trim}) %}
             <div {{ block( 'field_attributes' ) }}>
-                <div
-                    class="ez-image__wrapper  enhancedimage--wrapper"
-                    data-focus-x="{{ (focusPoint ? focusPoint.posX : '')}}"
-                    data-focus-y="{{ (focusPoint ? focusPoint.posY : '')}}"
-                    data-image-h="{{ (imageAlias ? imageAlias.height : '')}}"
-                    data-image-w="{{ (imageAlias ? imageAlias.width : '')}}"
-                >
-                    <img src="{{ src }}">
+                <div class="ez-image__wrapper  ">
+                    <picture class="enhancedimage--wrapper">
+                        <img srcset="{{ src }}" class="enhancedimage--img"
+                             data-focus-x="{{ (focusPoint ? focusPoint.posX : '')}}"
+                             data-focus-y="{{ (focusPoint ? focusPoint.posY : '')}}">
+                    </picture>
                 </div>
                 <table class="ez-field-preview__image-meta">
                     <thead>

@@ -8,74 +8,10 @@
  * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  *
  */
-.enhancedimage-field img {
-  display: inline-block;
-  max-width: 100%;
-  width: auto;
-  height: auto;
-}
-
-.enhancedimage--wrapper {
+picture.enhancedimage--wrapper {
+  display: block;
   position: relative;
-  /*Any position but static should work*/
   overflow: hidden;
 }
-.enhancedimage--wrapper img {
-  position: absolute;
-  left: 0;
-  top: 0;
-  margin: 0;
-  display: block;
-  /* fill and maintain aspect ratio */
-  width: auto;
-  height: auto;
-  min-width: 100%;
-  min-height: 100%;
-  max-height: none;
-  max-width: none;
-}
 
-.ez-field-edit--enhancedimage .ez-field-edit-preview {
-  padding: 1.25rem 0 0.75rem 1.25rem;
-}
-.ez-field-edit--enhancedimage .ez-field-edit-preview__media {
-  max-width: 100%;
-  width: auto;
-  height: auto;
-  display: block;
-}
-.ez-field-edit--enhancedimage .ez-field-edit-preview__details {
-  color: #878787;
-  font-size: 0.75rem;
-  padding-top: 0.5rem;
-}
-.ez-field-edit--enhancedimage .ez-field-edit-preview .ez-field-edit-preview__image-alt {
-  margin-top: 0.5rem;
-}
-.ez-field-edit--enhancedimage.is-invalid .ez-field-edit-preview {
-  position: relative;
-}
-.ez-field-edit--enhancedimage.is-invalid .ez-field-edit-preview:before {
-  content: "!";
-  position: absolute;
-  top: 0;
-  left: -20px;
-  width: 20px;
-  background: red;
-  color: white;
-  text-align: center;
-  font-size: 1.5rem;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-}
-.ez-field-edit--enhancedimage .ez-data-source__field--alternativeText.is-invalid .ez-data-source__label-wrapper,
-.ez-field-edit--enhancedimage .ez-data-source__field--alternativeText.is-invalid .ez-data-source__label-wrapper .ez-field-edit__label {
-  color: #d92d42;
-}
-.ez-field-edit--enhancedimage .ez-data-source__field--alternativeText.is-invalid .ez-field-edit__error {
-  margin-left: 8px;
-  display: inline-block;
-}
-.ez-field-edit--enhancedimage .ez-data-source__field--alternativeText.is-invalid .ez-data-source__input {
-  background: #fceaec;
-}
+/*# sourceMappingURL=enhancedimage.css.map */
