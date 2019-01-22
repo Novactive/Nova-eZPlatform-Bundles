@@ -29,6 +29,7 @@ hooks:
         WRAP_APP_DIR=./ezplatform WRAP_BUNDLE_DIR=./ php tests/provisioning/wrap.php
         cd ezplatform
         COMPOSER_MEMORY_LIMIT=-1 composer update --lock
+        COMPOSER_MEMORY_LIMIT=-1 composer require ezplatform-i18n/ezplatform-i18n-fr_fr
     deploy: |
         set -e
         cd ezplatform
@@ -51,3 +52,6 @@ crons:
     sendmailing:
         spec: '18 * * * *'
         cmd: 'cd ezplatform && bin/console novaezmailing:send:mailing'
+    removecache:
+        spec: "0 2 * * *"
+        cmd: "rm -rf ezplatform/var/cache/dev && rm -rf ezplatform/var/cache/prod"
