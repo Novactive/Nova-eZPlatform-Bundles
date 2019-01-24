@@ -14,6 +14,7 @@ namespace Novactive\EzLdapAuthenticatorBundle\DependencyInjection;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class EzLdapAuthenticatorExtension extends Extension
@@ -29,6 +30,8 @@ class EzLdapAuthenticatorExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
+        $container->setParameter('nova_ez_ldap', $config);
+/*
         $adapterConfig = [
             'host' => $config['host'],
             'port' => $config['port'],
@@ -49,8 +52,16 @@ class EzLdapAuthenticatorExtension extends Extension
         ];
         $userProviderDefinition = $container->getDefinition('nova_ez.ldap.user.provider');
         $userProviderDefinition->setArguments($userProviderArguments);
+*/
+    }
 
-        $loginListener = $container->getDefinition('nova_ez.ldap.login_listener');
-        $loginListener->addMethodCall('setConfig', $config);
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAlias()
+    {
+        return 'nova_ez_ldap';
     }
 }

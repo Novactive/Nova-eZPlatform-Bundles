@@ -8,13 +8,13 @@ services:
         class: Novactive\EzLdapAuthenticator\EventListener\InteractiveLoginListener
         arguments:
             $ldap: '@Symfony\Component\Ldap\Ldap'
+            $config: '%nova_ez_ldap%'
 
     Symfony\Component\Ldap\Ldap:
         arguments: ['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter']
 
     Symfony\Component\Ldap\Adapter\ExtLdap\Adapter:
-        arguments: []
-
-    nova_ez.ldap.user.provider:
-        class: Symfony\Component\Security\Core\User\LdapUserProvider
-        arguments: []
+        arguments:
+            -
+                connection_string: 'ldap://ldap'
+                version: 3

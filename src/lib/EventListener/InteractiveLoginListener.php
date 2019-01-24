@@ -11,9 +11,11 @@
 
 namespace Novactive\EzLdapAuthenticator\EventListener;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\Symfony\Event\InteractiveLoginEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Ldap\Ldap;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -29,15 +31,14 @@ class InteractiveLoginListener implements EventSubscriberInterface
     /** @var array */
     private $config;
 
-    public function __construct(Repository $repository, Ldap $ldap)
+    /** @var LoggerInterface */
+    private $logger;
+
+    public function __construct(Repository $repository, Ldap $ldap, $config)
     {
         $this->repository = $repository;
 	    $this->userService = $this->repository->getUserService();
         $this->ldap = $ldap;
-    }
-
-    public function setConfig($config)
-    {
         $this->config = $config;
     }
 
