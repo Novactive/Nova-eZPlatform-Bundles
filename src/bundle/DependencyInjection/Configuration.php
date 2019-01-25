@@ -46,10 +46,32 @@ class Configuration extends SiteAccessAware\Configuration
                     ->normalizeKeys(false)
                     ->prototype('array')
                         ->requiresAtLeastOneElement()
-                        ->prototype('scalar')
+                        ->prototype('scalar')->end()
                     ->end()
                 ->end()
-            ->end();
+                ->arrayNode('custom_fields')
+                    ->info('List of custom fields')
+                    ->example(
+                        [
+                            'title' => [
+                                'title',
+                                'article/name',
+                            ],
+                        ]
+                    )
+                    ->useAttributeAsKey('field_name')
+                    ->requiresAtLeastOneElement()
+                    ->normalizeKeys(false)
+                    ->prototype('array')
+                        ->requiresAtLeastOneElement()
+                        ->prototype('scalar')->end()
+                    ->end()
+                ->end()
+                ->arrayNode('publishdate_fields')
+                    ->requiresAtLeastOneElement()
+                    ->prototype('scalar')->end()
+                ->end()
+        ->end();
 
         return $treeBuilder;
     }

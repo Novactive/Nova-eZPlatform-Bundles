@@ -15,7 +15,7 @@ An eZPlatform bundle which extend the solr search handler.
     - boost depending on publish date
     - boost on phrases matches
     - boost on exact matches
-- **[Implemented]** [Custom meta field configuration](./doc/custom_meta_fields.md)
+- **[Implemented]** [Custom field configuration](./doc/custom_fields.md)
 - **[Implemented]** [Exact matches boosting configuration](./doc/custom_meta_fields.md)
 - **[WIP]** Boost doc based on publish date (newer docs score higher)
 - **[WIP]** Highlighting 

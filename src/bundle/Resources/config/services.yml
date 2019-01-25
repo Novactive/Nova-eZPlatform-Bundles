@@ -17,6 +17,14 @@ services:
     tags:
     - {name: ezpublish.search.solr.field_mapper.content_translation}
 
+  Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper\CustomFieldMapper:
+    arguments:
+      $contentTypeHandler: '@ezpublish.spi.persistence.content_type_handler'
+    calls:
+    - ['setFieldsConfig', ['$custom_fields;nova_solr_extra$']]
+    tags:
+    - {name: ezpublish.search.solr.field_mapper.block_translation}
+
   Novactive\EzSolrSearchExtra\FieldMapper\BinaryFileFieldMapper:
     arguments:
       $ioService: '@ezpublish.fieldType.ezbinaryfile.io_service'
@@ -78,3 +86,8 @@ services:
     tags:
     - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
     - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
+
+  Novactive\EzSolrSearchExtra\Query\Common\FacetBuilderVisitor\CustomField:
+    tags:
+    - {name: ezpublish.search.solr.query.content.facet_builder_visitor}
+    - {name: ezpublish.search.solr.query.location.facet_builder_visitor}
