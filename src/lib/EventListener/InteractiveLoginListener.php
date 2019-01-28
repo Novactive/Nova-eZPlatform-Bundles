@@ -13,12 +13,16 @@ namespace Novactive\EzLdapAuthenticator\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\Symfony\Event\InteractiveLoginEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Ldap\Ldap;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class InteractiveLoginListener implements EventSubscriberInterface
 {
@@ -33,13 +37,22 @@ class InteractiveLoginListener implements EventSubscriberInterface
 
     /** @var LoggerInterface */
     private $logger;
+    
+    /** @var TranslatorInterface */
+    private $translator;
 
-    public function __construct(Repository $repository, Ldap $ldap, $config)
+    /** @var TokenStorageInterface */
+    private $tokenStorage;
+
+    public function __construct(Repository $repository, Ldap $ldap, $config, LoggerInterface $logger, TranslatorInterface $translator, TokenStorageInterface $tokenStorage)
     {
         $this->repository = $repository;
 	    $this->userService = $this->repository->getUserService();
         $this->ldap = $ldap;
         $this->config = $config;
+        $this->logger = $logger;
+        $this->translator = $translator;
+        $this->tokenStorage = $tokenStorage;
     }
 
     public static function getSubscribedEvents()
@@ -56,13 +69,16 @@ class InteractiveLoginListener implements EventSubscriberInterface
 
         try {
 	        $event->setApiUser($userService->loadUserByLogin($username));
-        } catch (\eZ\Publish\API\Repository\Exceptions\NotFoundException $exception) {
-        	$searchDn       = $this->config['search_dn'];
-        	$password       = $this->config['search_password'];
-        	$queryString    = $this->config['query_string'];
-        	$baseDn         = $this->config['base_dn'];
-        	$targetGroup    = $this->config['target_usergroup'];
-        	$uidKey         = $this->config['uid_key'];
+        } catch (NotFoundException $exception) {
+            $baseDn         = $this->config['ldap']['base_dn'];
+        	$searchDn       = $this->config['ldap']['search']['search_dn'];
+        	$password       = $this->config['ldap']['search']['search_password'];
+        	$queryString    = $this->config['ldap']['search']['search_string'];
+        	$uidKey         = $this->config['ldap']['search']['uid_key'];
+        	$passwordAttr   = $this->config['ldap']['search']['password_attribute'];
+            $targetGroup    = $this->config['ez_user']['target_usergroup'];
+            $emailAttr      = $this->config['ez_user']['email_attr'];
+            $attributes     = $this->config['ez_user']['attributes'];
 
         	// Login to LDAP server and get user attributes
         	$this->ldap->bind($searchDn, $password);
@@ -74,29 +90,52 @@ class InteractiveLoginListener implements EventSubscriberInterface
 	        // Prepare user details
             $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
-	        $ldapUser = $results->toArray()[0]->getAttributes();
-	        $email      = $propertyAccessor->getValue($ldapUser, '[mail][0]');
-            $password   = $propertyAccessor->getValue($ldapUser, '[userPassword][0]');
-            $firstName  = $propertyAccessor->getValue($ldapUser, '[givenName][0]') ?: $username;
-            $lastName   = $propertyAccessor->getValue($ldapUser, '[sn][0]');
+	        $ldapUser   = $results->toArray()[0]->getAttributes();
+	        $email      = $propertyAccessor->getValue($ldapUser, "[$emailAttr][0]");
+            $password   = $propertyAccessor->getValue($ldapUser, "[$passwordAttr][0]");
 
-	        $user = $userService->newUserCreateStruct($username, $email, $password, "fre-FR");
-	        $user->setField("first_name", $firstName);
-	        if ($lastName) {
-                $user->setField("last_name", $lastName);
+            $user = $userService->newUserCreateStruct($username, $email, $password, "fre-FR");
+
+            foreach ($attributes as $attr) {
+                $value = $propertyAccessor->getValue($ldapUser, "[{$attr['ldap_attr']}][0]");
+                if ($value) {
+                    $user->setField($attr['user_attr'], $value);
+                } else {
+                    // TODO: look for best solution.
+                    // The only way to show the message to the user (as I know) -
+                    // to throw BadCredentialsException
+                    throw new BadCredentialsException($this->translator->trans('nullAttributeError', [
+                        '%username%' => $username,
+                        '%attribute%' => $attr['ldap_attr']
+                    ]));
+                }
             }
+
 	        $user->enabled = true;
 
-	        $group = $userService->loadUserGroup($targetGroup);
+            try {
+                $group = $userService->loadUserGroup($targetGroup);
+            } catch (NotFoundException $exception) {
+                throw new \Exception($this->translator->trans('wrongGroupError', ['%id%' => $targetGroup]));
+            }
 
-	        // Create the user
-	        $this->repository->sudo(function (Repository $repository) use ($user, $group, $event, $userService) {
-		        $event->setApiUser($userService->loadUserByLogin('admin'));
-		        $userService->createUser($user, [$group]);
-	        });
+            // Create new user under 'admin' user
+            $this->repository->sudo(function (Repository $repository) use ($user, $group, $event, $userService) {
+                try {
+                    $event->setApiUser($userService->loadUserByLogin('admin'));
+                    $userService->createUser($user, [$group]);
+                } catch (NotFoundException $exception) {
+                    $this->tokenStorage->setToken(null);
+                    $event->getRequest()->getSession()->invalidate();
+                    throw new \Exception($this->translator->trans('userNotCreated', ['%username%' => $username]), 0, $exception);
+                } catch (\Exception $exception) {
+                    $this->tokenStorage->setToken(null);
+                    $event->getRequest()->getSession()->invalidate();
+                    throw $exception;
+                }
+            });
 
-	        $event->setApiUser($userService->loadUserByLogin($username));
+            $event->setApiUser($userService->loadUserByLogin($username));
         }
-
     }
 }

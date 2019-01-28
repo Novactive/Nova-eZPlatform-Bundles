@@ -31,31 +31,7 @@ class EzLdapAuthenticatorExtension extends Extension
         $loader->load('services.yml');
 
         $container->setParameter('nova_ez_ldap', $config);
-/*
-        $adapterConfig = [
-            'host' => $config['host'],
-            'port' => $config['port'],
-            'version' => $config['version'],
-        ];
-        $adapterDefinition = $container->getDefinition('Symfony\Component\Ldap\Adapter\ExtLdap\Adapter');
-        $adapterDefinition->setArgument(0, $adapterConfig);
-
-        $userProviderArguments = [
-            'security.ldap.ldap',
-            $config['base_dn'],
-            $config['search_dn'],
-            $config['search_password'],
-            $config['default_roles'],
-            $config['uid_key'],
-            $config['query_string'],
-            $config['password_attribute'],
-        ];
-        $userProviderDefinition = $container->getDefinition('nova_ez.ldap.user.provider');
-        $userProviderDefinition->setArguments($userProviderArguments);
-*/
     }
-
-
 
     /**
      * {@inheritdoc}
