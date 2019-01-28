@@ -2,12 +2,13 @@
 
 namespace Novactive\EzLdapAuthenticatorBundle\DependencyInjection;
 
-
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
+    const DEFAULT_PORT = 389;
+    const DEFAULT_VERSION = 3;
 
     /**
      * {@inheritdoc}
@@ -24,8 +25,8 @@ class Configuration implements ConfigurationInterface
                             ->children()
                                 ->scalarNode('connection_string')->defaultValue('')->end()
                                 ->scalarNode('host')->defaultValue('localhost')->end()
-                                ->integerNode('port')->defaultValue(389)->end()
-                                ->integerNode('version')->defaultValue(3)->end()
+                                ->integerNode('port')->defaultValue(self::DEFAULT_PORT)->end()
+                                ->integerNode('version')->defaultValue(self::DEFAULT_VERSION)->end()
                                 ->enumNode('encryption')
                                     ->defaultValue('none')
                                     ->values(['none', 'ssl', 'tls'])

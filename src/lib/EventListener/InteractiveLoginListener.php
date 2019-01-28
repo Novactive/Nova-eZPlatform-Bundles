@@ -26,10 +26,10 @@ use Symfony\Component\Translation\TranslatorInterface;
 
 class InteractiveLoginListener implements EventSubscriberInterface
 {
-    /** @var \eZ\Publish\API\Repository\Repository */
+    /** @var Repository */
     private $repository;
 
-    /** @var  Symfony\Component\Ldap\Ldap*/
+    /** @var Ldap */
     private $ldap;
 
     /** @var array */
@@ -37,7 +37,7 @@ class InteractiveLoginListener implements EventSubscriberInterface
 
     /** @var LoggerInterface */
     private $logger;
-    
+
     /** @var TranslatorInterface */
     private $translator;
 
@@ -47,7 +47,6 @@ class InteractiveLoginListener implements EventSubscriberInterface
     public function __construct(Repository $repository, Ldap $ldap, $config, LoggerInterface $logger, TranslatorInterface $translator, TokenStorageInterface $tokenStorage)
     {
         $this->repository = $repository;
-	    $this->userService = $this->repository->getUserService();
         $this->ldap = $ldap;
         $this->config = $config;
         $this->logger = $logger;
@@ -64,34 +63,34 @@ class InteractiveLoginListener implements EventSubscriberInterface
 
     public function onInteractiveLogin(InteractiveLoginEvent $event)
     {
-	    $userService = $this->repository->getUserService();
+        $userService = $this->repository->getUserService();
         $username = $event->getAuthenticationToken()->getUsername();
 
         try {
-	        $event->setApiUser($userService->loadUserByLogin($username));
+            $event->setApiUser($userService->loadUserByLogin($username));
         } catch (NotFoundException $exception) {
             $baseDn         = $this->config['ldap']['base_dn'];
-        	$searchDn       = $this->config['ldap']['search']['search_dn'];
-        	$password       = $this->config['ldap']['search']['search_password'];
-        	$queryString    = $this->config['ldap']['search']['search_string'];
-        	$uidKey         = $this->config['ldap']['search']['uid_key'];
-        	$passwordAttr   = $this->config['ldap']['search']['password_attribute'];
+            $searchDn       = $this->config['ldap']['search']['search_dn'];
+            $password       = $this->config['ldap']['search']['search_password'];
+            $queryString    = $this->config['ldap']['search']['search_string'];
+            $uidKey         = $this->config['ldap']['search']['uid_key'];
+            $passwordAttr   = $this->config['ldap']['search']['password_attribute'];
             $targetGroup    = $this->config['ez_user']['target_usergroup'];
             $emailAttr      = $this->config['ez_user']['email_attr'];
             $attributes     = $this->config['ez_user']['attributes'];
 
-        	// Login to LDAP server and get user attributes
-        	$this->ldap->bind($searchDn, $password);
+            // Login to LDAP server and get user attributes
+            $this->ldap->bind($searchDn, $password);
             $queryString = str_replace("{username}", $username, $queryString);
             $queryString = str_replace("{uid_key}", $uidKey, $queryString);
-        	$query = $this->ldap->query($baseDn, $queryString);
-	        $results = $query->execute();
+            $query = $this->ldap->query($baseDn, $queryString);
+            $results = $query->execute();
 
-	        // Prepare user details
+            // Prepare user details
             $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
-	        $ldapUser   = $results->toArray()[0]->getAttributes();
-	        $email      = $propertyAccessor->getValue($ldapUser, "[$emailAttr][0]");
+            $ldapUser   = $results->toArray()[0]->getAttributes();
+            $email      = $propertyAccessor->getValue($ldapUser, "[$emailAttr][0]");
             $password   = $propertyAccessor->getValue($ldapUser, "[$passwordAttr][0]");
 
             $user = $userService->newUserCreateStruct($username, $email, $password, "fre-FR");
@@ -101,7 +100,7 @@ class InteractiveLoginListener implements EventSubscriberInterface
                 if ($value) {
                     $user->setField($attr['user_attr'], $value);
                 } else {
-                    // TODO: look for best solution.
+                    // TODO: look for better solution.
                     // The only way to show the message to the user (as I know) -
                     // to throw BadCredentialsException
                     throw new BadCredentialsException($this->translator->trans('nullAttributeError', [
@@ -111,7 +110,7 @@ class InteractiveLoginListener implements EventSubscriberInterface
                 }
             }
 
-	        $user->enabled = true;
+            $user->enabled = true;
 
             try {
                 $group = $userService->loadUserGroup($targetGroup);

@@ -2,7 +2,7 @@
 A bundle to authenticate users against LDAP server
 
 ## Installation
-Forst of all you must enable this bundle:
+First of all you must enable this bundle:
 ```php
 <?php
 // app/AppKernel.php
@@ -43,11 +43,11 @@ Also you can set `options` array that will be passed directly to the Symfony Lda
 
 #### LDAP attributes mapping
 To be able to store user who came from LDAP you have to configure mapping between LDAP attributes and eZPublish user fields.
-You mast map all required fields.  
+You must map all required fields.  
 By default eZPublish needs user credentials and email but you may have any additional fields in you `User` content class so you should fill all of them.
 
 #### Target group
-All users will be stored in the group `target_usergroup`. You mast put group object id here.
+All users will be stored in the group `target_usergroup`. You must put group object id here.
 
 #### Full default config
 Here is full default bundle configuration:
