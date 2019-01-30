@@ -56,6 +56,7 @@ class MailingController
     {
         $contentView = new ContentView();
         $contentView->setLocation($mailing->getLocation());
+        $contentView->setContent($mailing->getContent());
         $contentViewParameterSupplier->supply($contentView);
 
         return [

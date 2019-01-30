@@ -104,3 +104,7 @@ services:
     ez_mailing.io_service:
         class: Novactive\Bundle\eZMailingBundle\Core\IOService
         arguments: ['@ez_mailing.ezpublish.core.io_service']
+
+    # Validation
+    Novactive\Bundle\eZMailingBundle\Validator\Constraints\LocationValidator:
+        tags: ['validator.constraint_validator']

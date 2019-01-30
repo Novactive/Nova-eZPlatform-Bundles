@@ -3,8 +3,8 @@
 <table class="table table-striped table-hover table-sm">
     {% if withTitle %}
         <tr>
-            <th>{{"common.list.mailings.name"|trans}}</th>
-            <th>{{"common.list.mailings.status"|trans}}</th>
+            <th>{{ "common.list.mailings.name"|trans }}</th>
+            <th>{{ "common.list.mailings.status"|trans }}</th>
             <th>&nbsp;</th>
         </tr>
     {% endif %}
@@ -30,11 +30,13 @@
                         </svg>
                     </a>
                 {% endif %}
-                <a target="_blank" href="{{ path('_novaezmailing_ez_content_view', { locationId: item.location.id, contentId: item.content.id, mailingId: item.id, siteaccess: item.siteaccess }) }}" class="edit-button">
-                    <svg class="ez-icon">
-                        <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#view"></use>
-                    </svg>
-                </a>
+                {% if item.location is not null and item.content is not null %}
+                    <a target="_blank" href="{{ path('_novaezmailing_ez_content_view', { locationId: item.location.id, contentId: item.content.id, mailingId: item.id, siteaccess: item.siteaccess }) }}" class="edit-button">
+                        <svg class="ez-icon">
+                            <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#view"></use>
+                        </svg>
+                    </a>
+                {% endif %}
             </td>
         </tr>
 
