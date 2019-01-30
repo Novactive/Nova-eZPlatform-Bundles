@@ -16,18 +16,25 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
 /**
- * Class LocationValidator.
+ * Class NamesValidator.
  */
-class LocationValidator extends ConstraintValidator
+class NamesValidator extends ConstraintValidator
 {
     /**
      * {@inheritdoc}
      */
-    public function validate($value, Constraint $constraint): void
+    public function validate($values, Constraint $constraint): void
     {
-        if (null === $value) {
+        $empty = true;
+        foreach ($values as $value) {
+            if (null !== $value) {
+                $empty = false;
+                break;
+            }
+        }
+        if ($empty) {
             $this->context->buildViolation($constraint->message)
-                          ->atPath('locationId')
+                          ->atPath('names')
                           ->addViolation();
         }
     }

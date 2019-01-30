@@ -9,7 +9,11 @@
 {% block _mailing_locationId_row %}
     <label class="form-control-label">{{"mailing.edit.location"|trans}}</label>
     {{ form_widget(form) }}
-    <p id="{{ id }}_name">{% if value > 0 %}{{ ez_content_name(form.parent.vars.value.content) }}{% endif %}</p>
+    <p id="{{ id }}_name">
+        {% if value > 0 and form.parent.vars.value.content is not null %}
+            {{ ez_content_name(form.parent.vars.value.content) }}
+        {% endif %}
+    </p>
     <button data-target-id="#{{ id }}"
             data-target-name="#{{ id }}_name"
             type="button"

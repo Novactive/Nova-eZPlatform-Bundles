@@ -13,7 +13,7 @@
     <p><strong>{{ "novaezmailingfull.generic.mailing"|trans }}</strong>: {{ mailing.name }}</p>
     <p><strong>{{ "novaezmailingfull.generic.associated_content"|trans }}</strong>: {{ ez_content_name(mailing.content) }}</p>
     <p><strong>{{ "novaezmailingfull.generic.campaign"|trans }}</strong>: {{ mailing.campaign.name }}</p>
-    {% if mailing.campaign is not null %}
+    {% if mailing.campaign.content is not null %}
         <p><strong>{{ "novaezmailingfull.generic.associated_content"|trans }}</strong>: {{ ez_content_name(mailing.campaign.content) }}</p>
     {% endif %}
     <hr/>

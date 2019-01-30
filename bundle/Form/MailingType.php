@@ -26,7 +26,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Novactive\Bundle\eZMailingBundle\Validator\Constraints\Location as LocationConstraint;
-use Symfony\Component\Validator\Constraints\NotBlank;
+use Novactive\Bundle\eZMailingBundle\Validator\Constraints\Names as NamesConstraint;
 
 /**
  * Class MailingType.
@@ -74,7 +74,8 @@ class MailingType extends AbstractType
                     'allow_add'    => false,
                     'allow_delete' => false,
                     'entry_type'   => TextType::class,
-                    'required'     => false,
+                    'required'     => true,
+                    'constraints'  => [new NamesConstraint()]
                 ]
             )
             ->add('subject', TextType::class, ['required' => false, 'label' => 'form.subject'])

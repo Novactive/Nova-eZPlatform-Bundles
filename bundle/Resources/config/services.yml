@@ -106,5 +106,7 @@ services:
         arguments: ['@ez_mailing.ezpublish.core.io_service']
 
     # Validation
-    Novactive\Bundle\eZMailingBundle\Validator\Constraints\LocationValidator:
-        tags: ['validator.constraint_validator']
+#    Novactive\Bundle\eZMailingBundle\Validator\Constraints\LocationValidator:
+#        tags: ['validator.constraint_validator']
+#    Novactive\Bundle\eZMailingBundle\Validator\Constraints\NamesValidator:
+#        tags: ['validator.constraint_validator']

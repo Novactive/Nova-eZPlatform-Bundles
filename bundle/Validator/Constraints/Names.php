@@ -13,22 +13,29 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintValidator;
 
 /**
- * Class LocationValidator.
+ * Class Names.
+ *
+ * @Annotation
  */
-class LocationValidator extends ConstraintValidator
+class Names extends Constraint
 {
+    public $message = 'The Name should be NOT empty.';
+
     /**
      * {@inheritdoc}
      */
-    public function validate($value, Constraint $constraint): void
+    public function validatedBy(): string
     {
-        if (null === $value) {
-            $this->context->buildViolation($constraint->message)
-                          ->atPath('locationId')
-                          ->addViolation();
-        }
+        return NamesValidator::class;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTargets()
+    {
+        return self::CLASS_CONSTRAINT;
     }
 }

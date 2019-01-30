@@ -11,7 +11,11 @@
     {% for item in items %}
         <tr>
             <td>
-                <a href="{{ path('novaezmailing_mailing_show', {mailing:item.id}) }}">{{ item.name }}</a>
+                {% set showLink = path('novaezmailing_mailing_show', {mailing:item.id}) %}
+                {% if item.location is null %}
+                    {% set showLink = path('novaezmailing_mailing_edit', {mailing:item.id}) %}
+                {% endif %}
+                <a href="{{ showLink }}">{{ item.name }}</a>
             </td>
             <td>
                 <img src="{{ asset("/bundles/novaezmailing/admin/images/16x16/"~item.status~".png") }}" class="nova-icon"/> {{ item.status }}
