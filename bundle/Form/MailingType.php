@@ -25,6 +25,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Novactive\Bundle\eZMailingBundle\Validator\Constraints\Location as LocationConstraint;
+use Novactive\Bundle\eZMailingBundle\Validator\Constraints\Names as NamesConstraint;
 
 /**
  * Class MailingType.
@@ -73,17 +75,25 @@ class MailingType extends AbstractType
                     'allow_delete' => false,
                     'entry_type'   => TextType::class,
                     'required'     => true,
+                    'constraints'  => [new NamesConstraint()]
                 ]
             )
             ->add('subject', TextType::class, ['required' => false, 'label' => 'form.subject'])
             ->add('recurring', CheckboxType::class, ['label' => 'mailing.buildform.recuring_mailing'])
-            ->add('locationId', HiddenType::class)
+            ->add(
+                'locationId',
+                HiddenType::class,
+                [
+                    'required'    => true,
+                    'constraints' => [new LocationConstraint()]
+                ]
+            )
             ->add(
                 'hoursOfDay',
                 TextType::class,
                 [
                     'required' => true,
-                    'label' => 'generic.details.hours_day'
+                    'label'    => 'generic.details.hours_day'
                 ]
             )
             ->add('daysOfWeek', TextType::class, ['label' => 'generic.details.days_week'])
@@ -140,7 +150,7 @@ class MailingType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => Mailing::class,
+                'data_class'         => Mailing::class,
                 'translation_domain' => 'ezmailing'
             ]
         );

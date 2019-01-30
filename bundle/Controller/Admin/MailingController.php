@@ -56,6 +56,7 @@ class MailingController
     {
         $contentView = new ContentView();
         $contentView->setLocation($mailing->getLocation());
+        $contentView->setContent($mailing->getContent());
         $contentViewParameterSupplier->supply($contentView);
 
         return [
@@ -128,7 +129,8 @@ class MailingController
         FormFactoryInterface $formFactory,
         EntityManagerInterface $entityManager,
         Registry $workflows,
-        TranslationHelper $translationHelper
+        TranslationHelper $translationHelper,
+        Repository $repository
     ) {
         if (null === $mailing) {
             $mailing = new Mailing();
@@ -154,6 +156,13 @@ class MailingController
             return new RedirectResponse(
                 $router->generate('novaezmailing_mailing_show', ['mailing' => $mailing->getId()])
             );
+        }
+
+        if (null !== $mailing->getLocationId()) {
+            $location = $repository->getLocationService()->loadLocation($mailing->getLocationId());
+            $content  = $repository->getContentService()->loadContentByContentInfo($location->contentInfo);
+            $mailing->setLocation($location);
+            $mailing->setContent($content);
         }
 
         return [
