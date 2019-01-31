@@ -145,8 +145,8 @@ class MultipleFieldsFullText extends CriterionVisitor
             }
         }
         foreach ($criterion->metaBoost as $field => $boost) {
-            $queryFields[] = "meta_{$field}_text_t^{$boost}";
-            $queryFields[] = "meta_{$field}_text_t_raw^{$boost}";
+            $queryFields[] = "meta_{$field}__text_t^{$boost}";
+            $queryFields[] = "meta_{$field}__text_t_raw^{$boost}";
         }
 
         return implode(' ', $queryFields);
