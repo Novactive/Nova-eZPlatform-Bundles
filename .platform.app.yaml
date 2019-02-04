@@ -8,7 +8,7 @@ relationships:
     database: 'mysqldb:user'
 variables:
     env:
-        SYMFONY_ENV: dev
+        SYMFONY_ENV: prod
 web:
     locations:
         "/":
@@ -33,9 +33,9 @@ hooks:
     deploy: |
         set -e
         cd ezplatform
-        bin/console ezplatform:install clean
-        bin/console novaezmailing:install
-        bin/console doctrine:fixtures:load --no-interaction
+        #bin/console ezplatform:install clean
+        #bin/console novaezmailing:install
+        #bin/console doctrine:fixtures:load --no-interaction
         mv var/cache/$SYMFONY_ENV var/cache/oldcache
         bin/console cache:clear
     post_deploy: |
