@@ -16,14 +16,14 @@ ezpublish:
                     folder:
                         template: "@NovaeZMailing/eZViews/novaezmailingfull/generic.html.twig"
                         match:
-                            Identifier\ContentType: [folder]
+                            Identifier\ContentType: ['folder','article']
         admin_group:
             content_view:
                 novaezmailingfull:
                     folder:
                         template: "@NovaeZMailing/eZViews/novaezmailingfull/generic.html.twig"
                         match:
-                            Identifier\ContentType: [folder]
+                            Identifier\ContentType: ['folder','article']
 
 swiftmailer:
     delivery_addresses: ['ezmailing@novactive.com']

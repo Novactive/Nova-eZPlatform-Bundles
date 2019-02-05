@@ -16,6 +16,7 @@ $eZLightBackground: #F5F5F5;
         .navbar.ez-page-title {
             padding-top: 0 !important;
             padding-bottom: 0 !important;
+            display:flex;
         }
         .ez-header-container {
             background: $eZMediumBackground;
