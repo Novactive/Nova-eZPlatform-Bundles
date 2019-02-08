@@ -57,7 +57,7 @@
   height: 700px;
 }
 .focuspoint-helper .focuspoint-helper--frames .focuspoint-helper--frame {
-  position: absolute;
+  position: absolute !important;
   overflow: hidden;
   border: 5px solid #fff;
   margin: -5px 0 0 -5px;
@@ -99,3 +99,5 @@
 .ez-field-preview--ezimage .focuspoint-helper--target img.focuspoint-helper--reticle {
   width: 50px;
 }
+
+/*# sourceMappingURL=focuspoint.css.map */

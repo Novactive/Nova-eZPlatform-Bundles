@@ -18,15 +18,14 @@
         <div class="ez-field-edit-preview__visual focuspoint-helper">
             <div class="ez-field-edit-preview__media-wrapper">
                 <div class="focuspoint-helper--frames">
-                    {% for i in 0..9 %}
-                        <div class="focuspoint-helper--frame focuspoint-helper--frame-{{ loop.index }} enhancedimage--wrapper"
-                             data-focus-x="{{ (focusPoint ? focusPoint.posX : '')}}"
-                             data-focus-y="{{ (focusPoint ? focusPoint.posY : '')}}"
-                             data-image-h="{{ (image ? image.height : '') }}"
-                             data-image-w="{{ (image ? image.width : '') }}"
-                        >
-                            <img src="{{ image.uri }}" alt="{{ 'content.field_type.ezimage.img_alt'|trans({'%label%': form.vars.label})|desc("Image stored in field '%label%'") }}">
-                        </div>
+                    {% for i in 1..9 %}
+                        <picture class="focuspoint-helper--frame focuspoint-helper--frame-{{ loop.index }} enhancedimage--wrapper">
+                            <img srcset="{{ image.uri }}"
+                                 alt="{{ 'content.field_type.ezimage.img_alt'|trans({'%label%': form.vars.label})|desc("Image stored in field '%label%'") }}"
+                                 class="enhancedimage--img"
+                                 data-focus-x="{{ (focusPoint ? focusPoint.posX : '')}}"
+                                 data-focus-y="{{ (focusPoint ? focusPoint.posY : '')}}">
+                        </picture>
                     {% endfor %}
                 </div>
                 <div class="focuspoint-helper--tool">

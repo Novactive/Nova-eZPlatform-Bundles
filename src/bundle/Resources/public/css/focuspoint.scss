@@ -67,7 +67,7 @@
         height: 700px;
 
         .focuspoint-helper--frame {
-            position: absolute;
+            position: absolute !important;
             overflow: hidden;
             border: 5px solid #fff;
             margin: -5px 0 0 -5px;

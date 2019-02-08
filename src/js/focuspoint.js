@@ -16,17 +16,6 @@ const IMAGE_SELECTOR = 'enhancedimage--img';
 const THROTTLE_DELAY = 125;
 let elements;
 
-class Source {
-    /**
-     * @param {string} url
-     * @param {Focus} focusPoint
-     */
-    constructor(url, focusPoint) {
-        this.url = url;
-        this.focusPoint = focusPoint;
-    }
-}
-
 class Image {
     constructor(element) {
         this.sources = new Map();
@@ -35,18 +24,25 @@ class Image {
     }
 
     /**
-     * @param {Source} source
+     * @param {string} urlString
+     * @param {Focus} focusPoint
      */
-    addSource(source) {
-        this.sources.set(source.url, source);
+    addSource(urlString, focusPoint) {
+        const source = { url: new URL(urlString, location), focusPoint: focusPoint };
+        this.sources.set(source.url.pathname, source);
     }
 
-    updateFocusPoint() {
-        if (this.currentSrc === this.element.currentSrc) return false;
-        const currentSource = this.sources.get(this.element.currentSrc);
+    getSource(url) {
+        return this.sources.get(url.pathname);
+    }
+
+    updateFocusPoint(forceUpdate) {
+        if (this.currentSrc === this.element.currentSrc && forceUpdate !== true) return false;
+        const currentSource = this.getSource(new URL(this.element.currentSrc, location));
         if (!currentSource) return false;
 
         new FocusedImage(this.element, currentSource.focusPoint);
+        this.element.classList.add('focused');
         this.currentSrc = this.element.currentSrc;
     }
 }
@@ -81,12 +77,10 @@ const checkElements = function() {
         if (!image) {
             image = new Image(imageElement);
 
-            image.addSource(
-                new Source(imageElement.getAttribute('srcset'), {
-                    x: imageElement.getAttribute('data-focus-x'),
-                    y: imageElement.getAttribute('data-focus-y'),
-                })
-            );
+            image.addSource(imageElement.getAttribute('srcset'), {
+                x: imageElement.getAttribute('data-focus-x'),
+                y: imageElement.getAttribute('data-focus-y'),
+            });
 
             const sources = loadedElements[i].getElementsByTagName('source');
             const sourcesCount = sources.length;
@@ -96,12 +90,10 @@ const checkElements = function() {
                     continue;
                 }
                 const source = sources[j];
-                image.addSource(
-                    new Source(source.getAttribute('srcset'), {
-                        x: source.getAttribute('data-focus-x'),
-                        y: source.getAttribute('data-focus-y'),
-                    })
-                );
+                image.addSource(source.getAttribute('srcset'), {
+                    x: source.getAttribute('data-focus-x'),
+                    y: source.getAttribute('data-focus-y'),
+                });
             }
             imageElement._image = image;
         }

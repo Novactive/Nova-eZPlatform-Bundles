@@ -60,10 +60,16 @@
             this.getImageUrl(files[0], (img) => {
                 [...this.fieldContainer.querySelectorAll(SELECTOR_FRAME)].forEach((frame) => {
                     const image = frame.querySelector('img');
-                    image.setAttribute('src', img.src);
-                    frame.setAttribute('data-image-w', img.width);
-                    frame.setAttribute('data-image-h', img.height);
-                    frame.dispatchEvent(new CustomEvent('focusChange'));
+                    image.setAttribute('srcset', img.src);
+
+                    let imageComponent = image._image;
+                    if (imageComponent) {
+                        imageComponent.addSource(image.getAttribute('srcset'), {
+                            x: image.getAttribute('data-focus-x'),
+                            y: image.getAttribute('data-focus-y'),
+                        });
+                        imageComponent.updateFocusPoint(true);
+                    }
                 });
                 [...images].forEach((image) => {
                     image.setAttribute('src', img.src);
@@ -124,9 +130,15 @@
                 focusY = parseFloat(this.fieldContainer.querySelector(SELECTOR_INPUT_FOCUS_Y).getAttribute('value'));
 
             [...this.fieldContainer.querySelectorAll(SELECTOR_FRAME)].forEach((frame) => {
-                frame.setAttribute('data-focus-x', focusX.toFixed(2));
-                frame.setAttribute('data-focus-y', focusY.toFixed(2));
-                frame.dispatchEvent(new CustomEvent('focusChange', { focusX: focusX, focusY: focusY }));
+                const image = frame.querySelector('img');
+                image.setAttribute('data-focus-x', focusX.toFixed(2));
+                image.setAttribute('data-focus-y', focusY.toFixed(2));
+
+                let imageComponent = image._image;
+                if (imageComponent) {
+                    imageComponent.updateFocusPoint(true);
+                }
+                image.dispatchEvent(new CustomEvent('focusChange', { focusX: focusX, focusY: focusY }));
             });
 
             const percentageX = ((focusX + 1) / 2) * 100,
