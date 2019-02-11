@@ -12,6 +12,8 @@
     "babel-loader": "^8.0.5",
     "babel-preset-env": "^1.7.0",
     "image-focus": "^1.0.3",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.3.3",
     "uglifyjs-webpack-plugin": "^2.1.1",
     "webpack": "^4.29.0",
     "webpack-cli": "^3.2.1",
@@ -22,6 +24,6 @@
     "builddev": "webpack --config webpack.dev.js",
     "watch": "webpack --watch --config webpack.dev.js",
     "watchprod": "webpack --watch --config webpack.prod.js",
-    "fix-cs": "prettier --write 'src/js/**/*.+(js)' && prettier --write 'src/bundle/Resources/public/js/scripts/**/*.+(js)'"
+    "fix-cs": "prettier --write 'src/js/**/*.+(js|ts)' && prettier --write 'src/bundle/Resources/public/js/scripts/**/*.+(js|ts)'"
   }
 }

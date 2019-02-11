@@ -1,44 +1,42 @@
-/*
- * NovaeZEnhancedImageAssetBundle.
- *
- * @package   NovaeZEnhancedImageAssetBundle
- *
- * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
- * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
- *
- */
-
-import { FocusedImage } from 'image-focus/dist/image-focus.es5';
+import { Focus } from 'image-focus/dist/types/interfaces.d';
+import { FocusedImage } from 'image-focus';
 
 const CONTAINER_SELECTOR = 'enhancedimage--wrapper';
 const IMAGE_SELECTOR = 'enhancedimage--img';
 const THROTTLE_DELAY = 125;
-let elements;
+let elements: HTMLCollection;
+
+interface ImageElement extends HTMLImageElement {
+    _image?: Image;
+}
+interface Source {
+    url: URL;
+    focusPoint: Focus;
+}
 
 class Image {
-    constructor(element) {
+    sources: Map<string, Source>;
+    element: HTMLImageElement;
+    currentSrc: string;
+    constructor(element: HTMLImageElement) {
         this.sources = new Map();
         this.element = element;
         this.currentSrc = null;
     }
 
-    /**
-     * @param {string} urlString
-     * @param {Focus} focusPoint
-     */
-    addSource(urlString, focusPoint) {
-        const source = { url: new URL(urlString, location), focusPoint: focusPoint };
+    addSource(urlString: string, focusPoint: Focus) {
+        const url = new URL(urlString, window.location.toString());
+        const source = { url: url, focusPoint: focusPoint };
         this.sources.set(source.url.pathname, source);
     }
 
-    getSource(url) {
+    getSource(url: URL): Source | undefined {
         return this.sources.get(url.pathname);
     }
 
-    updateFocusPoint(forceUpdate) {
+    updateFocusPoint(forceUpdate?: boolean) {
         if (this.currentSrc === this.element.currentSrc && forceUpdate !== true) return false;
-        const currentSource = this.getSource(new URL(this.element.currentSrc, location));
+        const currentSource = this.getSource(new URL(this.element.currentSrc, window.location.toString()));
         if (!currentSource) return false;
 
         new FocusedImage(this.element, currentSource.focusPoint);
@@ -47,8 +45,8 @@ class Image {
     }
 }
 
-const throttle = (func) => {
-    let inThrottle;
+const throttle = (func: Function) => {
+    let inThrottle = false;
     return function() {
         const args = arguments;
         const context = this;
@@ -71,15 +69,15 @@ const checkElements = function() {
             continue;
         }
 
-        const imageElement = loadedElements[i].getElementsByClassName(IMAGE_SELECTOR)[0];
+        const imageElement = (loadedElements[i].getElementsByClassName(IMAGE_SELECTOR)[0]) as ImageElement;
 
         let image = imageElement._image;
         if (!image) {
             image = new Image(imageElement);
 
             image.addSource(imageElement.getAttribute('srcset'), {
-                x: imageElement.getAttribute('data-focus-x'),
-                y: imageElement.getAttribute('data-focus-y'),
+                x: parseFloat(imageElement.getAttribute('data-focus-x')),
+                y: parseFloat(imageElement.getAttribute('data-focus-y')),
             });
 
             const sources = loadedElements[i].getElementsByTagName('source');
@@ -91,8 +89,8 @@ const checkElements = function() {
                 }
                 const source = sources[j];
                 image.addSource(source.getAttribute('srcset'), {
-                    x: source.getAttribute('data-focus-x'),
-                    y: source.getAttribute('data-focus-y'),
+                    x: parseFloat(source.getAttribute('data-focus-x')),
+                    y: parseFloat(source.getAttribute('data-focus-y')),
                 });
             }
             imageElement._image = image;
@@ -109,7 +107,7 @@ const throttledCheckElements = throttle(checkElements);
     elements = document.getElementsByClassName(CONTAINER_SELECTOR);
 
     addEventListener('resize', throttledCheckElements, true);
-    if (window.MutationObserver) {
+    if (window && MutationObserver) {
         new MutationObserver(throttledCheckElements).observe(docElem, { childList: true, subtree: true, attributes: true });
     } else {
         docElem['addEventListener']('DOMNodeInserted', throttledCheckElements, true);
