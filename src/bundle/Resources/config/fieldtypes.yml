@@ -1,7 +1,6 @@
 services:
-    ezpublish.field_type.enhancedimage.external_storage:
+    Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\EnhancedImageStorage:
         parent: ezpublish.fieldType.ezimage.externalStorage
-        class: "%ezpublish.fieldType.ezimage.externalStorage.class%"
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: enhancedimage}
 
