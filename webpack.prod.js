@@ -15,12 +15,17 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = merge(common, {
     mode: 'production',
-    plugins: [
-        new UglifyJSPlugin({
-            sourceMap: true,
-            uglifyOptions: {
-                ecma: 6,
-            },
-        }),
-    ],
+    // plugins: [
+    //     new UglifyJSPlugin({
+    //         sourceMap: true,
+    //         uglifyOptions: {
+    //             ecma: 6,
+    //         },
+    //     }),
+    // ],
+    optimization: {
+        minimize: true,
+        mangleWasmImports: true,
+        concatenateModules: true
+    }
 });

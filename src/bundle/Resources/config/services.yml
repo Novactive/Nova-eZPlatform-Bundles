@@ -6,6 +6,7 @@ services:
 
         bind:
             $imageVariationService: '@ezpublish.fieldType.ezimage.variation_service'
+            $filterConfiguration: '@liip_imagine.filter.configuration'
 
     Novactive\EzEnhancedImageAsset\Twig\:
         resource: '../../../lib/Twig/*'
@@ -21,9 +22,20 @@ services:
         tags:
             - {name: 'liip_imagine.filter.loader', loader: 'focusedThumbnail'}
 
+    Novactive\EzEnhancedImageAsset\Imagine\Filter\Loader\PlaceholderFilterLoader:
+        tags:
+            - { name: "liip_imagine.filter.loader", loader: 'placeholder' }
+
     Novactive\EzEnhancedImageAsset\Imagine\ImageAliasGenerator:
         decorates: ezpublish.image_alias.imagine.alias_generator
         arguments:
             $dataLoader: "@ezpublish.image_alias.imagine.binary_loader"
             $ioResolver: "@ezpublish.image_alias.imagine.cache_resolver"
-            $logger: "@?logger"
+            $logger:
+
+    Novactive\EzEnhancedImageAsset\Imagine\Filter\FilterConfiguration:
+        decorates: 'liip_imagine.filter.configuration'
+        arguments:
+            $filterConfiguration: '@Novactive\EzEnhancedImageAsset\Imagine\Filter\FilterConfiguration.inner'
+        calls:
+            - [setDefaultPostProcessors, ['$image_default_post_processors;ez_enhanced_image_asset$']]

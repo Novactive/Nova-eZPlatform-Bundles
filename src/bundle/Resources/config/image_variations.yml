@@ -1,0 +1,11 @@
+system:
+  default:
+    image_variations:
+      original_optimized:
+        reference: null
+        post_processors:
+          jpegoptim: { strip_all: true, max: 70, progressive: true }
+      placeholder:
+        reference: original_optimized
+        filters:
+          - { name: placeholder, params: {size: [42, null]} }

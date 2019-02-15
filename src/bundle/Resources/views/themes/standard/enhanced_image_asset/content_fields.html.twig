@@ -1,53 +1,82 @@
 {% extends '@EzPublishCore/content_fields.html.twig' %}
 
-{# This field accepts the following parameters:
- #   - alias (image variation name). Defaults to "original" (e.g. image originally uploaded)
- #   - parameters.width. Allows forcing width of the image in the HTML
- #   - parameters.height. Allows forcing height of the image in the HTML
- #   - parameters.class. Allows setting CSS custom class name for the image
- #}
 {% block enhancedimage_field %}
     {% spaceless %}
         {% if not ez_is_field_empty( content, field ) %}
+            {% set lazyLoad = parameters.lazyLoad|default( lazy_load_images ) %}
             {% set imageAlias = ez_focused_image_alias( field, versionInfo, parameters.alias|default( 'original' ) ) %}
             {% set alternativeAliasList = parameters.alternativeAlias|default( [] ) %}
+
+            {% set imageAttrs = {
+                'class': parameters.class|default('') ~ ' enhancedimage--img enhancedimage--img--lazyload',
+                'alt': parameters.alternativeText|default(field.value.alternativeText)
+            } %}
 
             {% if imageAlias %}
                 {% set attr = attr|merge({
                     'class': (attr.class|default('') ~ ' enhancedimage--wrapper')|trim,
                 }) %}
-            {% endif %}
-            <picture {{ block( 'field_attributes' ) }}>
-                {% set attrs = {
-                    class: parameters.class|default('') ~ ' enhancedimage--img',
-                } %}
-
-                {% if imageAlias %}
-                    {% set attrs = attrs|merge({
-                        'data-focus-x': imageAlias.focusPoint is defined ? imageAlias.focusPoint.posX : 0,
-                        'data-focus-y': imageAlias.focusPoint is defined ? imageAlias.focusPoint.posY : 0,
-                        'data-image-h': parameters.height is defined ? parameters.height : (imageAlias ? imageAlias.height : ''),
-                        'data-image-w': parameters.width is defined ? parameters.width : (imageAlias ? imageAlias.width : ''),
+                {% if lazyLoad %}
+                    {% set placeholderAlias = ez_image_alias( field, versionInfo, "placeholder" ) %}
+                    {% set imageAttrs =  imageAttrs|merge({
+                        'class': imageAttrs.class ~ ' enhancedimage--img--lazyload blur-up',
+                        'srcset': placeholderAlias ? asset( placeholderAlias.uri )|replace({' ': '%20'}) : "//:0"
                     }) %}
                 {% endif %}
+                {% set imageAttrs = imageAttrs|merge({
+                    'data-focus-x': imageAlias.focusPoint is defined ? imageAlias.focusPoint.posX : 0,
+                    'data-focus-y': imageAlias.focusPoint is defined ? imageAlias.focusPoint.posY : 0,
+                    (lazyLoad ? 'data-srcset': 'srcset'): asset( imageAlias.uri )|replace({' ': '%20'})
+                }) %}
+            {% endif %}
+
+            <picture {{ block( 'field_attributes' ) }}>
                 {% for alternativeAlias in alternativeAliasList %}
                     {% set alternativeImageAlias = ez_focused_image_alias( field, versionInfo, alternativeAlias.alias ) %}
 
                     {% if alternativeImageAlias %}
-                        <source
-                            srcset="{{ asset( alternativeImageAlias.uri ) }}"
-                            media="{{ alternativeAlias.media }}"
-                            data-name="{{ alternativeAlias.alias }}"
-                            data-focus-x="{{ alternativeImageAlias.focusPoint is defined ? alternativeImageAlias.focusPoint.posX : 0 }}"
-                            data-focus-y="{{ alternativeImageAlias.focusPoint is defined ? alternativeImageAlias.focusPoint.posY : 0 }}"
-                            data-image-h="{{ alternativeImageAlias.height }}"
-                            data-image-w="{{ alternativeImageAlias.width }}"
-                        />
+                        {% set alternativeImageAttrs = {
+                            'data-focus-x': alternativeImageAlias.focusPoint is defined ? alternativeImageAlias.focusPoint.posX : 0,
+                            'data-focus-y': alternativeImageAlias.focusPoint is defined ? alternativeImageAlias.focusPoint.posY : 0,
+                            'media': alternativeAlias.media,
+                            'data-name': alternativeAlias.alias,
+                            (lazyLoad ? 'data-srcset': 'srcset'): asset( alternativeImageAlias.uri )|replace({' ': '%20'})
+                        } %}
+
+                        <source {% for attrname, attrvalue in alternativeImageAttrs if attrvalue is not empty %}{{ attrname }}="{{ attrvalue }}" {% endfor %}/>
                     {% endif %}
                 {% endfor %}
 
-                <img srcset="{{ imageAlias ? asset( imageAlias.uri ) : "//:0" }}" alt="{{ parameters.alternativeText|default(field.value.alternativeText) }}" {% for attrname, attrvalue in attrs if attrvalue is not empty %}{{ attrname }}="{{ attrvalue }}" {% endfor %}/>
+                <img {% for attrname, attrvalue in imageAttrs if attrvalue is not empty %}{{ attrname }}="{{ attrvalue }}" {% endfor %}/>
             </picture>
+        {% endif %}
+    {% endspaceless %}
+{% endblock %}
+
+{% block ezimage_field %}
+    {% spaceless %}
+        {% if not ez_is_field_empty( content, field ) %}
+            {% set lazyLoad = parameters.lazyLoad|default( lazy_load_images ) %}
+            <figure {{ block( 'field_attributes' ) }}>
+                {% set imageAlias = ez_image_alias( field, versionInfo, parameters.alias|default( 'original' ) ) %}
+                {% set src = imageAlias ? asset( imageAlias.uri ) : "//:0" %}
+                {% set imageAttrs = {
+                    class: parameters.class|default(''),
+                    height: parameters.height is defined ? parameters.height : (imageAlias ? imageAlias.height : ''),
+                    width: parameters.width is defined ? parameters.width : (imageAlias ? imageAlias.width : ''),
+                    (lazyLoad ? 'data-srcset': 'srcset'): src|replace({' ': '%20'}),
+                    alt: parameters.alternativeText|default(field.value.alternativeText)
+                } %}
+                {% if lazyLoad %}
+                    {% set placeholderAlias = ez_image_alias( field, versionInfo, "placeholder" ) %}
+                    {% set imageAttrs =  imageAttrs|merge({
+                        'class': imageAttrs.class ~ ' enhancedimage--img--lazyload blur-up',
+                        'srcset': placeholderAlias ? asset( placeholderAlias.uri )|replace({' ': '%20'}) : "//:0"
+                    }) %}
+                {% endif %}
+
+                <img {% for attrname, attrvalue in imageAttrs if attrvalue %}{{ attrname }}="{{ attrvalue }}" {% endfor %}/>
+            </figure>
         {% endif %}
     {% endspaceless %}
 {% endblock %}

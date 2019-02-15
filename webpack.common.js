@@ -13,7 +13,7 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        focuspoint: './src/js/focuspoint.ts',
+        enhancedimage: './src/js/enhancedimage.ts',
     },
     output: {
         filename: '[name].js',

@@ -34,6 +34,7 @@ class EzEnhancedImageAssetExtension extends Extension implements PrependExtensio
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+        $loader->load('default_settings.yml');
         $loader->load('fieldtypes.yml');
         $loader->load('field_value_converters.yml');
         $loader->load('migration.yml');
@@ -57,8 +58,10 @@ class EzEnhancedImageAssetExtension extends Extension implements PrependExtensio
         );
 
         $configs = [
-            'field_templates.yml' => 'ezpublish',
-            'admin_ui_forms.yml'  => 'ezpublish',
+            'field_templates.yml'   => 'ezpublish',
+            'admin_ui_forms.yml'    => 'ezpublish',
+            'image_variations.yml'  => 'ezpublish',
+            'twig.yml'              => 'twig',
         ];
 
         $activatedBundles = array_keys($container->getParameter('kernel.bundles'));

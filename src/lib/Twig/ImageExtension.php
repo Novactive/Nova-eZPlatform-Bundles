@@ -22,10 +22,12 @@ use eZ\Publish\SPI\Variation\Values\ImageVariation;
 use eZ\Publish\SPI\Variation\VariationHandler;
 use Imagine\Image\Box;
 use InvalidArgumentException;
+use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\FocusPoint;
 use Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\Value as EnhancedImageValue;
 use Novactive\EzEnhancedImageAsset\FocusPoint\FocusPointCalculator;
 use Novactive\EzEnhancedImageAsset\Values\FocusedVariation;
+use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use Twig_Extension;
 use Twig_SimpleFunction;
@@ -37,6 +39,12 @@ class ImageExtension extends Twig_Extension
 
     /** @var FocusPointCalculator */
     protected $focusPointCalculator;
+
+    /** @var FilterConfiguration */
+    protected $filterConfiguration;
+
+    /** @var LoggerInterface */
+    protected $logger;
 
     /**
      * @param VariationHandler $imageVariationService
@@ -54,6 +62,24 @@ class ImageExtension extends Twig_Extension
     public function setFocusPointCalculator(FocusPointCalculator $focusPointCalculator): void
     {
         $this->focusPointCalculator = $focusPointCalculator;
+    }
+
+    /**
+     * @param FilterConfiguration $filterConfiguration
+     * @required
+     */
+    public function setFilterConfiguration(FilterConfiguration $filterConfiguration): void
+    {
+        $this->filterConfiguration = $filterConfiguration;
+    }
+
+    /**
+     * @param LoggerInterface $logger
+     * @required
+     */
+    public function setLogger(LoggerInterface $logger): void
+    {
+        $this->logger = $logger;
     }
 
     public function getName()
@@ -86,24 +112,36 @@ class ImageExtension extends Twig_Extension
     public function getImageVariation(Field $field, VersionInfo $versionInfo, $variationName)
     {
         try {
-            /** @var FocusPoint $focusPoint */
-            $focusPoint = $field->value->focusPoint;
+            $parameters         = [];
+            $isFocusedThumbnail = false;
 
-            /** @var ImageVariation $variation */
-            $variation = $this->imageVariationService->getVariation(
-                $field,
-                $versionInfo,
-                $variationName,
-                [
+            if (IORepositoryResolver::VARIATION_ORIGINAL !== $variationName) {
+                $variationConfig    = $this->filterConfiguration->get($variationName);
+                $isFocusedThumbnail = isset($variationConfig['filters'])
+                                      && isset($variationConfig['filters']['focusedThumbnail']);
+                if ($isFocusedThumbnail) {
+                    /** @var FocusPoint $focusPoint */
+                    $focusPoint = $field->value->focusPoint;
+                    $parameters = [
                     'filters' => [
                         'focusedThumbnail' => [
                             'focusPoint'   => $focusPoint,
                             'originalSize' => new Box($field->value->width, $field->value->height),
                         ],
                     ],
-                ]
+                    ];
+                }
+            }
+
+            /** @var ImageVariation $variation */
+            $variation = $this->imageVariationService->getVariation(
+                $field,
+                $versionInfo,
+                $variationName,
+                $parameters
             );
-            if (!$field->value instanceof EnhancedImageValue) {
+
+            if (!$field->value instanceof EnhancedImageValue || !$isFocusedThumbnail) {
                 return $variation;
             }
 
@@ -151,5 +189,7 @@ class ImageExtension extends Twig_Extension
                 );
             }
         }
+
+        return null;
     }
 }

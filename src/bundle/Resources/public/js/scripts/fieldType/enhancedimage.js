@@ -65,8 +65,8 @@
                     let imageComponent = image._image;
                     if (imageComponent) {
                         imageComponent.addSource(image.getAttribute('srcset'), {
-                            x: image.getAttribute('data-focus-x'),
-                            y: image.getAttribute('data-focus-y'),
+                            x: parseFloat(image.getAttribute('data-focus-x')),
+                            y: parseFloat(image.getAttribute('data-focus-y')),
                         });
                         imageComponent.updateFocusPoint(true);
                     }
@@ -131,12 +131,9 @@
 
             [...this.fieldContainer.querySelectorAll(SELECTOR_FRAME)].forEach((frame) => {
                 const image = frame.querySelector('img');
-                image.setAttribute('data-focus-x', focusX.toFixed(2));
-                image.setAttribute('data-focus-y', focusY.toFixed(2));
-
                 let imageComponent = image._image;
                 if (imageComponent) {
-                    imageComponent.updateFocusPoint(true);
+                    imageComponent.setFocus({ x: parseFloat(focusX.toFixed(2)), y: parseFloat(focusY.toFixed(2)) });
                 }
                 image.dispatchEvent(new CustomEvent('focusChange', { focusX: focusX, focusY: focusY }));
             });

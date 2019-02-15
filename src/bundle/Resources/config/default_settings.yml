@@ -1,0 +1,3 @@
+parameters:
+  ez_enhanced_image_asset.default.image_default_post_processors: ~
+  ez_enhanced_image_asset.default.enable_lazy_load: true

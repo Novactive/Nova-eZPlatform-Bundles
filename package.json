@@ -5,13 +5,15 @@
   "repository": "https://github.com/Novactive/NovaeZEnhancedImageAssetBundle.git",
   "author": "Florian ALEXANDRE <f.alexandre@novactive.com>",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "image-focus": "^1.0.3",
+    "lazysizes": "^4.1.5"
+  },
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "7.1.0",
     "babel-loader": "^8.0.5",
     "babel-preset-env": "^1.7.0",
-    "image-focus": "^1.0.3",
     "ts-loader": "^5.3.3",
     "typescript": "^3.3.3",
     "uglifyjs-webpack-plugin": "^2.1.1",

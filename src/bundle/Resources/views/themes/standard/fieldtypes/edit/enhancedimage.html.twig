@@ -20,9 +20,9 @@
                 <div class="focuspoint-helper--frames">
                     {% for i in 1..9 %}
                         <picture class="focuspoint-helper--frame focuspoint-helper--frame-{{ loop.index }} enhancedimage--wrapper">
-                            <img srcset="{{ image.uri }}"
+                            <img data-srcset="{{ image.uri }}"
                                  alt="{{ 'content.field_type.ezimage.img_alt'|trans({'%label%': form.vars.label})|desc("Image stored in field '%label%'") }}"
-                                 class="enhancedimage--img"
+                                 class="enhancedimage--img enhancedimage--img--lazyload blur-up"
                                  data-focus-x="{{ (focusPoint ? focusPoint.posX : '')}}"
                                  data-focus-y="{{ (focusPoint ? focusPoint.posY : '')}}">
                         </picture>

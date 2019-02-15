@@ -9,9 +9,10 @@ system:
         field_templates:
             -
                 template: "@ezdesign/enhanced_image_asset/content_fields.html.twig"
+                priority: 1000
 
     admin_group:
         field_templates:
             -
                 template: "@ezdesign/enhanced_image_asset/admin_content_fields.html.twig"
-                priority: 10
+                priority: 1000

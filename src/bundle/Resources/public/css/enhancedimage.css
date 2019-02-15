@@ -13,5 +13,20 @@ picture.enhancedimage--wrapper {
   position: relative;
   overflow: hidden;
 }
+picture.enhancedimage--wrapper .enhancedimage--img {
+  position: absolute;
+  min-height: 100%;
+  min-width: 100%;
+}
+picture.enhancedimage--wrapper .enhancedimage--img.blur-up {
+  -webkit-filter: blur(0);
+  filter: blur(0);
+  transition: filter 400ms, -webkit-filter 400ms;
+}
+picture.enhancedimage--wrapper .enhancedimage--img.blur-up:not(.lazyloaded) {
+  -webkit-filter: blur(25px);
+  filter: blur(25px);
+  transform: scale(1.1);
+}
 
 /*# sourceMappingURL=enhancedimage.css.map */

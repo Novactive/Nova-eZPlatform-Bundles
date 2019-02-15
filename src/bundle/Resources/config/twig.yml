@@ -1,0 +1,2 @@
+globals:
+  lazy_load_images: $enable_lazy_load;ez_enhanced_image_asset$

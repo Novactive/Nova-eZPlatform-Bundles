@@ -47,9 +47,16 @@ public function registerBundles()
 ```
  
 ```twig
-<script src="{{ asset("bundles/ezenhancedimageasset/js/focuspoint.js") }}"></script>
+<script src="{{ asset("bundles/ezenhancedimageasset/js/enhancedimage.js") }}"></script>
 ```
- 
+#### LazyLoading
+Lazy loading is controlled globaly by the following settings (default to true) and can be overriden at field level.
+
+```yaml
+parameters: 
+  ez_enhanced_image_asset.default.enable_lazy_load: true
+```
+
 ### 2. Image variations configuration
 
 If needed, update your configuration and add the following filter to generate thumbnail based on the contributed focus point 
@@ -73,6 +80,7 @@ You can now specify the `alternativeAlias` parameter to define alternative image
                 media: '(max-width: 320px)'
             }
         ]
+        lazyLoad: true|false // optionnal
     }
 }) }}
 ```

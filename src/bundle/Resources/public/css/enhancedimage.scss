@@ -13,4 +13,19 @@ picture.enhancedimage--wrapper {
   display: block;
   position: relative;
   overflow: hidden;
+  .enhancedimage--img{
+    position: absolute;
+    min-height: 100%;
+    min-width: 100%;
+    &.blur-up {
+      -webkit-filter: blur(0);
+      filter: blur(0);
+      transition: filter 400ms, -webkit-filter 400ms;
+      &:not(.lazyloaded){
+        -webkit-filter: blur(25px);
+        filter: blur(25px);
+        transform: scale(1.1);
+      }
+    }
+  }
 }
