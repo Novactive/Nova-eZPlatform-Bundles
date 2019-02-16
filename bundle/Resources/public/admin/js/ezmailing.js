@@ -10,4 +10,9 @@ jQuery(function () {
     eZMailingSubItemsModule.init(jQuery, $app);
     eZMailingEditFormModule.init(jQuery, $app);
     eZMailingContentSelectionModule.init(jQuery, $app);
+
+    $('.campaigns > ul > li > label').click(function () {
+        window.location = $(this).parent().find('ul > li.subscriptions > a').attr('href');
+        return false;
+    });
 });
