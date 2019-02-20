@@ -67,7 +67,7 @@ campaign.details.name: Name
 campaign.details.sender: Sender
 campaign.details.report_email: Report Email
 campaign.details.siteaccess_limit: Siteaccess limit
-campaign.details.mailing_lists: Mailing Lists
+campaign.details.mailing_lists: Mailing List|Mailing Lists
 campaign.details.associated_content: Associated content
 campaign.edit.name: Name
 campaign.edit.location: Location
@@ -135,6 +135,7 @@ mailing.mailing_tabs.confirm_sending: Confirm the sending
 mailing.mailing_tabs.mailing_lists_count1: Campaign defines
 mailing.mailing_tabs.mailing_lists_count2: Mailing Lists
 mailing.mailing_tabs.mailing_list_reach: The reach of this Mailing is
+mailing.mailing_tabs.create_content: Create Content
 mailing.edit.mailing: Mailing
 mailing_list.edit.name: Name
 mailing_list.edit.title: Edit

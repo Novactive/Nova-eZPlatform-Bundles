@@ -31,9 +31,7 @@ var eZMailingSubItemsModule = function () {
             totalCount: subitemsList.ChildrenCount,
             handleEditItem: function (content) {
                 var contentId = content._id;
-                var versionNumber = content.CurrentVersion.Version.VersionInfo.versionNo;
                 var langCode = content.mainLanguageCode;
-                alert("/admin/content/edit/draft/" + contentId + "/" + versionNumber + "/" + langCode);
             },
             generateLink: function (locationId) {
                 return window.Routing.generate('_ezpublishLocation', {locationId: locationId});
