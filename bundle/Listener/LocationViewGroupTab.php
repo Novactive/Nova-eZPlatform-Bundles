@@ -83,6 +83,7 @@ class LocationViewGroupTab
         if ($campaigns) {
             $this->campaignsTab->setCampaigns($campaigns);
             $this->tabRegistry->addTab($this->campaignsTab, 'location-view');
+            $tabGroup->addTab($this->campaignsTab);
         }
 
         $mailingRepo = $this->entityManager->getRepository('NovaeZMailingBundle:Mailing');
@@ -90,6 +91,9 @@ class LocationViewGroupTab
         if ($mailings) {
             $this->mailingsTab->setMailings($mailings);
             $this->tabRegistry->addTab($this->mailingsTab, 'location-view');
+            $tabGroup->addTab($this->mailingsTab);
         }
+
+        $event->setData($tabGroup);
     }
 }

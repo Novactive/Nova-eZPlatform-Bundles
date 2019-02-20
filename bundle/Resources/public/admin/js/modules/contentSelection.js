@@ -21,6 +21,36 @@ var eZMailingContentSelectionModule = function () {
                 }
             }), udwContainer);
         });
+
+        $("button.js-novaezmailing-create-content", $app).click(function () {
+            var token = document.querySelector('meta[name="CSRF-Token"]').content;
+            var siteaccess = document.querySelector('meta[name="SiteAccess"]').content;
+            var udwContainer = $("#react-udw").get(0);
+            var parentLocationId = $(this).data('parent-location-id');
+            var title = $(this).find('span').html();
+            ReactDOM.render(React.createElement(eZ.modules.UniversalDiscovery, {
+                onCancel: function () {
+                    ReactDOM.unmountComponentAtNode(udwContainer)
+                },
+                title: title,
+                multiple: false,
+                startingLocationId: 1,
+                canSelectContent: function (data) {
+                    var contentDisabled = true;
+                    if (data.item.pathString.split('/').includes(parentLocationId.toString()) && $('.c-choose-content-type__list .is-selected').length > 0) {
+                        contentDisabled = false;
+                    }
+                    $('button.m-ud__action--create-content').prop("disabled", contentDisabled);
+                },
+                restInfo: {token: token, siteaccess: siteaccess},
+                visibleTabs: ['create'],
+                activeTab: 'create',
+                onConfirm: function (response) {
+                    ReactDOM.unmountComponentAtNode(udwContainer);
+                    location.reload();
+                }
+            }), udwContainer);
+        });
     }
 
     return {init: _init};

@@ -50,7 +50,7 @@ dashboard.see_mailing_lists: Voir les listes de diffusion
 dashboard.see_users: Voir les utilisateurs
 dashboard.last_user_updated: Dernier utilisateur mis à jour
 dashboard.last_broadcast: Dernières diffusions
-campaign.tabs.campaign: Campagne|Campagnes
+campaign.tabs.campaign: Campagne
 campaign.tabs.associated_content: Contenu eZ associé
 campaign.tabs.mailings: Envoi
 campaign.tabs.create: Créer
@@ -135,6 +135,7 @@ mailing.mailing_tabs.confirm_sending: Confirmer l'envoi
 mailing.mailing_tabs.mailing_lists_count1: La campagne définit
 mailing.mailing_tabs.mailing_lists_count2: listes de diffusion
 mailing.mailing_tabs.mailing_list_reach: La portée de cet envoi est de
+mailing.mailing_tabs.create_content: Créer du contenu
 mailing.edit.mailing: Envoi
 mailing_list.edit.name: Nom
 mailing_list.edit.title: Modifier
