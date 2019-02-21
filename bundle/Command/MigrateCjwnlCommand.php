@@ -123,6 +123,8 @@ class MigrateCjwnlCommand extends Command
 
         // Lists, Campaigns with Mailings
 
+        $this->io->writeln('Lists with Campaigns with Mailings:');
+
         $sql = 'SELECT contentobject_attribute_version, contentobject_id, auto_approve_registered_user,';
 
         $sql .= 'email_sender_name, email_sender, email_receiver_test FROM cjwnl_list ';
@@ -131,6 +133,9 @@ class MigrateCjwnlCommand extends Command
         $sql .= 'FROM cjwnl_list GROUP BY contentobject_id)';
 
         $list_rows = $this->runQuery($sql);
+
+        $this->io->progressStart(count($list_rows));
+
         foreach ($list_rows as $list_row) {
             try {
                 $listContent = $contentService->loadContent($list_row['contentobject_id']);
@@ -230,18 +235,25 @@ class MigrateCjwnlCommand extends Command
                 )
             );
             $campaigns[] = pathinfo($fileName)['filename'];
-
+            $this->io->progressAdvance();
         }
 
+        $this->io->progressFinish();
+
         // Users
+        $this->io->writeln('Users with Subscriptions:');
+
         $users = [];
 
-        $sql = 'SELECT id, email, first_name, last_name, organisation, birthday, ez_user_id, status, confirmed, ';
+        $sql = 'SELECT max(id) as `id`, email, first_name, last_name, organisation, birthday, ez_user_id, status, confirmed, ';
 
         $sql .= 'bounced, blacklisted FROM cjwnl_user WHERE removed = 0 ';
-        $sql .= 'AND (id, email) in (select max(id), email from cjwnl_user group by email)';
+        $sql .= 'GROUP BY email';
 
         $user_rows = $this->runQuery($sql);
+
+        $this->io->progressStart(count($user_rows));
+
         foreach ($user_rows as $user_row) {
             $status = User::PENDING;
             if ($user_row['confirmed']) {
@@ -282,12 +294,17 @@ class MigrateCjwnlCommand extends Command
                 )
             );
             $users[]  = pathinfo($fileName)['filename'];
+
+            $this->io->progressAdvance();
         }
 
         $this->ioService->saveFile(
             self::DUMP_FOLDER.'/manifest.json',
             json_encode(['lists' => $lists, 'campaigns' => $campaigns, 'users' => $users])
         );
+
+        $this->io->progressFinish();
+
         $this->io->section(
             'Total: '.count($lists).' lists, '.count($campaigns).' campaigns, '.$mailingCounter.' mailings, '.
             count($users).' users, '.$registrationCounter.' registrations.'
@@ -305,6 +322,9 @@ class MigrateCjwnlCommand extends Command
         $fileNames = json_decode($manifest);
 
         // Lists
+        $this->io->writeln('Lists:');
+        $this->io->progressStart(count($fileNames->lists));
+
         $listCounter = $campaignCounter = $mailingCounter = $userCounter = $registrationCounter = 0;
         $listIds     = [];
 
@@ -320,9 +340,14 @@ class MigrateCjwnlCommand extends Command
             ++$listCounter;
             $this->entityManager->flush();
             $listIds[explode('_', $listFile)[1]] = $mailingList->getId();
+            $this->io->progressAdvance();
         }
+        $this->io->progressFinish();
 
         // Campaigns with Mailings
+        $this->io->writeln('Campaigns with Mailings:');
+        $this->io->progressStart(count($fileNames->campaigns));
+
         foreach ($fileNames->campaigns as $campaignFile) {
             $campaignData = json_decode(
                 $this->ioService->readFile(self::DUMP_FOLDER.'/campaign/'.$campaignFile.'.json')
@@ -361,45 +386,54 @@ class MigrateCjwnlCommand extends Command
             }
             $this->entityManager->persist($campaign);
             ++$campaignCounter;
+            $this->io->progressAdvance();
         }
+        $this->io->progressFinish();
 
         // Users & Registrations
+        $this->io->writeln('Users and Registrations:');
+        $this->io->progressStart(count($fileNames->users));
+
         foreach ($fileNames->users as $userFile) {
-            $userData = json_decode($this->ioService->readFile(self::DUMP_FOLDER.'/user/'.$userFile.'.json'));
+                $userData = json_decode($this->ioService->readFile(self::DUMP_FOLDER.'/user/'.$userFile.'.json'));
 
-            // check if email already exists
-            $existingUser = $userRepository->findOneBy(['email' => $userData->email]);
-            if (null === $existingUser) {
-                $user = new User();
-                $user
-                    ->setEmail($userData->email)
-                    ->setBirthDate($userData->birthDate)
-                    ->setCompany($userData->company)
-                    ->setFirstName($userData->firstName)
-                    ->setLastName($userData->lastName)
-                    ->setStatus($userData->status)
-                    ->setOrigin('site');
+                // check if email already exists
+                $existingUser = $userRepository->findOneBy(['email' => $userData->email]);
+                if (null === $existingUser) {
+                    $user = new User();
+                    $user
+                        ->setEmail($userData->email)
+                        ->setBirthDate($userData->birthDate)
+                        ->setCompany($userData->company)
+                        ->setFirstName($userData->firstName)
+                        ->setLastName($userData->lastName)
+                        ->setStatus($userData->status)
+                        ->setOrigin('site');
 
-                foreach ($userData->subscriptions as $subscription) {
-                    if (\array_key_exists($subscription->list_contentobject_id, $listIds)) {
-                        $registration = new Registration();
-                        /* @var MailingList $mailingList */
-                        $mailingList = $mailingListRepository->findOneBy(
-                            ['id' => $listIds[$subscription->list_contentobject_id]]
-                        );
-                        if (null !== $mailingList) {
-                            $registration->setMailingList($mailingList);
+                    foreach ($userData->subscriptions as $subscription) {
+                        if (\array_key_exists($subscription->list_contentobject_id, $listIds)) {
+                            $registration = new Registration();
+                            /* @var MailingList $mailingList */
+                            $mailingList = $mailingListRepository->findOneBy(
+                                ['id' => $listIds[$subscription->list_contentobject_id]]
+                            );
+                            if (null !== $mailingList) {
+                                $registration->setMailingList($mailingList);
+                            }
+                            $registration->setApproved($subscription->approved);
+                            $user->addRegistration($registration);
+                            ++$registrationCounter;
                         }
-                        $registration->setApproved($subscription->approved);
-                        $user->addRegistration($registration);
-                        ++$registrationCounter;
                     }
+                    $this->entityManager->persist($user);
+                    ++$userCounter;
                 }
-                $this->entityManager->persist($user);
-                ++$userCounter;
-            }
+                $this->io->progressAdvance();
         }
         $this->entityManager->flush();
+        $this->entityManager->clear();
+
+        $this->io->progressFinish();
 
         $this->io->section(
             'Total: '.$listCounter.' lists, '.$campaignCounter.' campaigns, '.$mailingCounter.' mailings, '.
