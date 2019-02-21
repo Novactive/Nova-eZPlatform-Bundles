@@ -36,6 +36,38 @@ ez_solr_search_extra:
                 - heading
 ```
 
+## Custom field
+
+Work like the "Fulltext fields" but for others field types. 
+This can be used to generate facets based on the values of multiple fields of multiple content types
+
+```yaml
+ez_solr_search_extra:
+    system:
+        default:
+            custom_fields:
+                <field name>:
+                - <content field identifier>
+                - <content type identifier>/<content field identifier>
+```
+
+The following example will add two fields to solr documents :
+* title_value_s
+* intro_text_t
+
+```yaml
+ez_solr_search_extra:
+    system:
+        default:
+            custom_fields:
+                title:
+                - title
+                - article/name
+                intro:
+                - introduction
+                - heading
+```
+
 ## Publish date field
 
 A new date field is added to every content documents : `meta_publishdate__date_dt`
@@ -54,4 +86,3 @@ ez_solr_search_extra:
                 - <content field identifier>
                 - <content type identifier>/<content field identifier>
 ```
-

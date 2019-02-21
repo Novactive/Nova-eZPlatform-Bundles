@@ -108,7 +108,7 @@ class BinaryFileFieldMapper
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      *
-     * @return null|string
+     * @return string|null
      */
     private function getBinaryFileText(BinaryFile $binaryFile)
     {

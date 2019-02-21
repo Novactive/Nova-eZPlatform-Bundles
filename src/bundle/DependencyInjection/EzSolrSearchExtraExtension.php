@@ -48,5 +48,6 @@ class EzSolrSearchExtraExtension extends Extension
         $processor      = new ConfigurationProcessor($container, 'nova_solr_extra');
         $contextualizer = $processor->getContextualizer();
         $contextualizer->mapConfigArray('fulltext_fields', $config, ContextualizerInterface::MERGE_FROM_SECOND_LEVEL);
+        $contextualizer->mapConfigArray('custom_fields', $config, ContextualizerInterface::MERGE_FROM_SECOND_LEVEL);
     }
 }

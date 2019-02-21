@@ -23,7 +23,7 @@ interface TextExtractorInterface
      *
      * @param $fileName
      *
-     * @return null|string
+     * @return string|null
      */
     public function extract($fileName): ?string;
 }

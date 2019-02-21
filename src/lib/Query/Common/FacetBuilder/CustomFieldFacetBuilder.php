@@ -9,19 +9,16 @@
  * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
  */
 
-namespace Novactive\EzSolrSearchExtra\Tika;
+namespace Novactive\EzSolrSearchExtra\Query\Common\FacetBuilder;
 
-/**
- * Interface TikaClientInterface.
- *
- * @package Novactive\EzSolrSearchExtra\Tika
- */
-interface TikaClientInterface
+use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
+
+class CustomFieldFacetBuilder extends FacetBuilder
 {
     /**
-     * @param $fileName
+     * The field identifier.
      *
-     * @return string|null
+     * @var string
      */
-    public function getText($fileName): ?string;
+    public $field;
 }
