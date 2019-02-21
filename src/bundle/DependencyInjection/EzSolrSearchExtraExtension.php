@@ -49,5 +49,6 @@ class EzSolrSearchExtraExtension extends Extension
         $contextualizer = $processor->getContextualizer();
         $contextualizer->mapConfigArray('fulltext_fields', $config, ContextualizerInterface::MERGE_FROM_SECOND_LEVEL);
         $contextualizer->mapConfigArray('custom_fields', $config, ContextualizerInterface::MERGE_FROM_SECOND_LEVEL);
+        $contextualizer->mapConfigArray('publishdate_fields', $config, ContextualizerInterface::MERGE_FROM_SECOND_LEVEL);
     }
 }
