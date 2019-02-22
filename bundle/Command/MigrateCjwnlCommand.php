@@ -216,7 +216,7 @@ class MigrateCjwnlCommand extends Command
                     'hoursOfDay'   => (int) date('H', (int) $mailing_row['mailqueue_process_finished']),
                     'daysOfMonth'  => (int) date('d', (int) $mailing_row['mailqueue_process_finished']),
                     'monthsOfYear' => (int) date('m', (int) $mailing_row['mailqueue_process_finished']),
-                    'subject'      => $mailingContent->getName($defaultLanguageCode)
+                    'subject'      => $mailingContent->getName($defaultLanguageCode) ?? array_shift($mailingNames)
                 ];
                 ++$mailingCounter;
             }
@@ -331,6 +331,7 @@ class MigrateCjwnlCommand extends Command
         $mailingListRepository = $this->entityManager->getRepository(MailingList::class);
         $userRepository        = $this->entityManager->getRepository(User::class);
 
+        $n = 0;
         foreach ($fileNames->lists as $listFile) {
             $listData    = json_decode($this->ioService->readFile(self::DUMP_FOLDER.'/list/'.$listFile.'.json'));
             $mailingList = new MailingList();
@@ -340,6 +341,10 @@ class MigrateCjwnlCommand extends Command
             ++$listCounter;
             $this->entityManager->flush();
             $listIds[explode('_', $listFile)[1]] = $mailingList->getId();
+            ++$n;
+            if ($n % 100 === 0) {
+                $this->entityManager->clear();
+            }
             $this->io->progressAdvance();
         }
         $this->io->progressFinish();
@@ -348,6 +353,7 @@ class MigrateCjwnlCommand extends Command
         $this->io->writeln('Campaigns with Mailings:');
         $this->io->progressStart(count($fileNames->campaigns));
 
+        $n = 0;
         foreach ($fileNames->campaigns as $campaignFile) {
             $campaignData = json_decode(
                 $this->ioService->readFile(self::DUMP_FOLDER.'/campaign/'.$campaignFile.'.json')
@@ -386,52 +392,63 @@ class MigrateCjwnlCommand extends Command
             }
             $this->entityManager->persist($campaign);
             ++$campaignCounter;
+            ++$n;
+            if ($n % 100 === 0) {
+                $this->entityManager->flush();
+                $this->entityManager->clear();
+            }
             $this->io->progressAdvance();
         }
+        $this->entityManager->flush();
         $this->io->progressFinish();
 
         // Users & Registrations
         $this->io->writeln('Users and Registrations:');
         $this->io->progressStart(count($fileNames->users));
 
+        $n = 0;
         foreach ($fileNames->users as $userFile) {
-                $userData = json_decode($this->ioService->readFile(self::DUMP_FOLDER.'/user/'.$userFile.'.json'));
+            $userData = json_decode($this->ioService->readFile(self::DUMP_FOLDER.'/user/'.$userFile.'.json'));
 
-                // check if email already exists
-                $existingUser = $userRepository->findOneBy(['email' => $userData->email]);
-                if (null === $existingUser) {
-                    $user = new User();
-                    $user
-                        ->setEmail($userData->email)
-                        ->setBirthDate($userData->birthDate)
-                        ->setCompany($userData->company)
-                        ->setFirstName($userData->firstName)
-                        ->setLastName($userData->lastName)
-                        ->setStatus($userData->status)
-                        ->setOrigin('site');
+            // check if email already exists
+            $existingUser = $userRepository->findOneBy(['email' => $userData->email]);
+            if (null === $existingUser) {
+                $user = new User();
+                $user
+                    ->setEmail($userData->email)
+                    ->setBirthDate($userData->birthDate)
+                    ->setCompany($userData->company)
+                    ->setFirstName($userData->firstName)
+                    ->setLastName($userData->lastName)
+                    ->setStatus($userData->status)
+                    ->setOrigin('site');
 
-                    foreach ($userData->subscriptions as $subscription) {
-                        if (\array_key_exists($subscription->list_contentobject_id, $listIds)) {
-                            $registration = new Registration();
-                            /* @var MailingList $mailingList */
-                            $mailingList = $mailingListRepository->findOneBy(
-                                ['id' => $listIds[$subscription->list_contentobject_id]]
-                            );
-                            if (null !== $mailingList) {
-                                $registration->setMailingList($mailingList);
-                            }
-                            $registration->setApproved($subscription->approved);
-                            $user->addRegistration($registration);
-                            ++$registrationCounter;
+                foreach ($userData->subscriptions as $subscription) {
+                    if (\array_key_exists($subscription->list_contentobject_id, $listIds)) {
+                        $registration = new Registration();
+                        /* @var MailingList $mailingList */
+                        $mailingList = $mailingListRepository->findOneBy(
+                            ['id' => $listIds[$subscription->list_contentobject_id]]
+                        );
+                        if (null !== $mailingList) {
+                            $registration->setMailingList($mailingList);
                         }
+                        $registration->setApproved($subscription->approved);
+                        $user->addRegistration($registration);
+                        ++$registrationCounter;
                     }
-                    $this->entityManager->persist($user);
-                    ++$userCounter;
                 }
-                $this->io->progressAdvance();
+                $this->entityManager->persist($user);
+                ++$userCounter;
+                ++$n;
+                if ($n % 100 === 0) {
+                    $this->entityManager->flush();
+                    $this->entityManager->clear();
+                }
+            }
+            $this->io->progressAdvance();
         }
         $this->entityManager->flush();
-        $this->entityManager->clear();
 
         $this->io->progressFinish();
 
