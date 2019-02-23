@@ -107,6 +107,6 @@ bin/console novaezmailing:install
 If the bundle web assets (css, js etc.) are missing in the public directory it can be fixed by running the following commands:
 ```bash
 bin/console assets:install --symlink --relative
-bin/console assetiv:dump
+bin/console assetic:dump
 ```
 That will install bundles web assets under a public directory and dump them to the filesystem.
