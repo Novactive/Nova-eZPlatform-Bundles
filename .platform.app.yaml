@@ -42,6 +42,10 @@ hooks:
         set -e
         rm -rf ezplatform/var/cache/oldcache
 
+dependencies:
+    nodejs:
+        yarn: "*"
+
 runtime:
     extensions:
         - xsl
