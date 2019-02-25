@@ -25,6 +25,7 @@ use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
 use Novactive\Bundle\eZMailingBundle\Entity\Registration as RegistrationEntity;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
 use RuntimeException;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
 
 /**
  * Class Registrar.
@@ -52,17 +53,27 @@ class Registrar
     private $mailer;
 
     /**
+     * @var ConfigResolver
+     */
+    protected $configResolver;
+
+    /**
      * Registrar constructor.
      *
      * @param EntityManagerInterface $entityManager
      * @param SiteAccess             $siteAccess
      * @param SimpleMailer           $mailer
      */
-    public function __construct(EntityManagerInterface $entityManager, SiteAccess $siteAccess, SimpleMailer $mailer)
-    {
-        $this->entityManager = $entityManager;
-        $this->siteAccess    = $siteAccess;
-        $this->mailer        = $mailer;
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        SiteAccess $siteAccess,
+        SimpleMailer $mailer,
+        ConfigResolver $configResolver
+    ) {
+        $this->entityManager  = $entityManager;
+        $this->siteAccess     = $siteAccess;
+        $this->mailer         = $mailer;
+        $this->configResolver = $configResolver;
     }
 
     /**
@@ -228,5 +239,18 @@ class Registrar
             $this->entityManager->remove($result);
         }
         $this->entityManager->flush();
+    }
+
+    public function getDefaultMailingList(): ArrayCollection
+    {
+        $mailingListId = null;
+        if ($this->configResolver->hasParameter('default_mailinglist_id', 'nova_ezmailing')) {
+            $mailingListId = $this->configResolver->getParameter('default_mailinglist_id', 'nova_ezmailing');
+        }
+        $mailingList = $this->entityManager->getRepository(MailingList::class)->findOneBy(
+            ['id' => $mailingListId]
+        );
+
+        return new ArrayCollection([$mailingList]);
     }
 }

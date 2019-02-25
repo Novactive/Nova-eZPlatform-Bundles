@@ -102,6 +102,12 @@ nova_ezmailing:
 bin/console novaezmailing:install
 ```
 
+### Specify the Default Mailing List Id
+To be able to implement the subscription form by doing subrequest to `novaezmailing_registration_default_create` route the default Mailing List Id should be specified in the configuration file.
+It should be added to the `default` section under the `nova_ezmailing` namespace.
+
+If you need to the other mailing list id value for some particular site access it should be added to the corresponding section in the configuration file.
+
 ### Troubleshooting
 
 If the bundle web assets (css, js etc.) are missing in the public directory it can be fixed by running the following commands:
