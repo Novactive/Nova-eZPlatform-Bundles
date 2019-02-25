@@ -16,6 +16,8 @@ use eZ\Publish\SPI\Variation\Values\Variation;
 use eZ\Publish\SPI\Variation\VariationHandler as VariationService;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class AliasGenerator
@@ -32,20 +34,26 @@ class AliasGenerator implements VariationService
      */
     protected $variationService;
 
+    /** @var LoggerInterface */
+    private $logger;
+
     /**
      * AliasGenerator constructor.
      *
      * @param VariationService        $variationService
      * @param ConfigResolverInterface $configResolver
+     * @param LoggerInterface         $logger
      * @param array                   $auth
      */
     public function __construct(
         VariationService $variationService,
         ConfigResolverInterface $configResolver,
+        LoggerInterface $logger,
         array $auth
     ) {
         $this->configResolver   = $configResolver;
         $this->variationService = $variationService;
+        $this->logger = $logger;
         Cloudinary::config(
             [
                 "cloud_name" => $auth['cloud_name'],
@@ -66,7 +74,12 @@ class AliasGenerator implements VariationService
     public function getVariation(Field $field, VersionInfo $versionInfo, $variationName, array $parameters = array ())
     {
         $eZVariationsList         = $this->configResolver->getParameter('image_variations');
-        $cloudinaryVariationsList = $this->configResolver->getParameter('cloudinary_variations', 'nova_ezcloudinary');
+        $cloudinaryDisabled       = $this->configResolver->getParameter('cloudinary_disabled', 'nova_ezcloudinary');
+
+        $cloudinaryVariationsList = [];
+        if(!$cloudinaryDisabled) {
+            $cloudinaryVariationsList = $this->configResolver->getParameter('cloudinary_variations', 'nova_ezcloudinary');
+        }
 
         $cloudinaryCompliant = false;
         $eZVariationName     = $variationName;
@@ -78,7 +91,18 @@ class AliasGenerator implements VariationService
                 $eZVariationName = 'original';
             }
         }
-        $variation = $this->variationService->getVariation($field, $versionInfo, $eZVariationName);
+
+        try {
+            $variation = $this->variationService->getVariation($field, $versionInfo, $eZVariationName);
+        } catch (NonExistingFilterException $exception) {
+            $cloudinaryFallbackVariation = $this->configResolver->getParameter('cloudinary_fallback_variation', 'nova_ezcloudinary');
+            if ($cloudinaryFallbackVariation) {
+                $this->logger->warning(sprintf('Tried to load variation "%s" which does not exists. Using fallback :"%s". It\'s ok in a dev environment which skip cloudinary variations, but maybe you\'ve missed a variation setting.', $eZVariationName, $cloudinaryFallbackVariation));
+                $variation = $this->variationService->getVariation($field, $versionInfo, $cloudinaryFallbackVariation);
+            } else {
+                throw $exception;
+            }
+        }
 
         if (!$cloudinaryCompliant) {
             return $variation;

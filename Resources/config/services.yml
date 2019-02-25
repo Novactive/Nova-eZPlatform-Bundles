@@ -11,4 +11,5 @@ services:
         arguments:
             - "@ezpublish.fieldtype.ezimage.variation_service"
             - "@ezpublish.config.resolver"
+            - "@logger"
             - "%nova_ezcloudinary.authentification%"
