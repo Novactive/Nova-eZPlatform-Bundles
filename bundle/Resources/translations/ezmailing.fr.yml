@@ -48,8 +48,10 @@ dashboard.quick_actions: Actions rapides
 dashboard.create_new_campaign: Créer une nouvelle campagne
 dashboard.see_mailing_lists: Voir les listes de diffusion
 dashboard.see_users: Voir les utilisateurs
-dashboard.last_user_updated: Dernier utilisateur mis à jour
+dashboard.last_user_updated: Dernières utilisateurs mis à jour
 dashboard.last_broadcast: Dernières diffusions
+dashboard.last_mailing_updated: Dernières newletters modifiées
+dashboard.last_mailing_sent: Dernières newletters envoyés
 campaign.tabs.campaign: Campagne
 campaign.tabs.associated_content: Contenu eZ associé
 campaign.tabs.mailings: Envoi
