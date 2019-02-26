@@ -56,7 +56,7 @@ var eZMailingSubItemsModule = function () {
                         addDraftButton.addEventListener('click', addDraft, false);
                     }
 
-                    $(wrapper).find('.ez-btn--prevented').each(function (btn) {
+                    $(wrapper).find('.ez-btn--prevented').each(function (index, btn) {
                         btn.addEventListener('click', function (event) {
                             event.preventDefault()
                         }, false);

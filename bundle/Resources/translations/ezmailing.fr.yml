@@ -42,6 +42,7 @@ generic.mailing_statuses.processing: en cours
 generic.mailing_statuses.sent: envoyé
 generic.mailing_statuses.aborted: annulé
 generic.mailing_statuses.archived: archivé
+generic.no_status_mailings: Il n'y a pas encore de mailings avec ce statut
 dashboard.title: "Tableau de bord"
 dashboard.subtitle: Vue globale
 dashboard.quick_actions: Actions rapides
