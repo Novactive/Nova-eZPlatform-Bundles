@@ -49,12 +49,62 @@
             </div>
         {% endif %}
     </div>
-    <div class="novaezmailing-button-actions float-right">
-        <a href="{{ url('novaezmailing_campaign_subscriptions', { campaign: item.id }) }}" class="btn btn-sm btn-info">
-            <svg class="ez-icon">
-                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#view"></use>
-            </svg>
-            <span>{{ "mailing.mailing_tabs.views"|trans ~ " " ~ "menu.campaign_menu.subscriptions"|trans|capitalize }}</span>
-        </a>
-    </div>
+
+    {% if status == 'all' %}
+        <div class="novaezmailing-button-actions float-right">
+            <a class="btn btn-sm btn-secondary" href="{{ path('novaezmailing_mailing_create', {campaign: item.id}) }}">
+                <svg class="ez-icon">
+                    <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#create"></use>
+                </svg>
+                <span>{{ "campaign.tabs.create"|trans }}</span>
+            </a>
+            <a class="btn btn-sm btn-secondary" href="{{ path("novaezmailing_campaign_edit", {campaign: item.id}) }}">
+                <svg class="ez-icon">
+                    <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#edit"></use>
+                </svg>
+                <span>{{ "campaign.tabs.edit"|trans }}</span>
+            </a>
+            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#novaezmailingconfirmremovecampaignmodal">
+                <svg class="ez-icon">
+                    <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#trash"></use>
+                </svg>
+                <span>{{ "campaign.tabs.delete"|trans }}</span>
+            </button>
+        </div>
+        <div class="modal fade" tabindex="-1" role="dialog" id="novaezmailingconfirmremovecampaignmodal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ "campaign.tabs.confirm_removal"|trans }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>{{ "campaign.tabs.delete_campaign_confirmation_1"|trans }}</p>
+                        <p>{{ "campaign.tabs.delete_campaign_confirmation_2"|trans }}</p>
+                        <ul>
+                            <li>{{ "campaign.tabs.one_campaign"|trans }}1 Campaign</li>
+                            <li>{{ item.mailings|length }} {{ "campaign.tabs.mailings_with_broadcast"|trans }}</li>
+                        </ul>
+
+                        <p>{{ "campaign.tabs.delete_campaign_note"|trans }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{{ path('novaezmailing_campaign_remove', {campaign: item.id}) }}" type="button" class="btn btn-danger">{{ "campaign.tabs.confirm"|trans }}</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ "campaign.tabs.cancel"|trans }}Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="novaezmailing-button-actions float-right">
+            <a href="{{ url('novaezmailing_campaign_subscriptions', { campaign: item.id }) }}" class="btn btn-sm btn-info">
+                <svg class="ez-icon">
+                    <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#view"></use>
+                </svg>
+                <span>{{ "mailing.mailing_tabs.views"|trans ~ " " ~ "menu.campaign_menu.subscriptions"|trans|capitalize }}</span>
+            </a>
+        </div>
+    {% endif %}
 </div>

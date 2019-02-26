@@ -7,6 +7,7 @@ nova_ezmailing:
             email_from_address: "no-reply@novactive.com"
             email_from_name: "Novactive"
             email_return_path: "return-path@novactive.com"
+            default_mailinglist_id: 20
 
 ezpublish:
     system:
