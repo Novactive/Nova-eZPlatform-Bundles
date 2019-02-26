@@ -34,6 +34,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Workflow\Registry;
+use EzSystems\EzPlatformAdminUi\Form\Factory\FormFactory;
 
 /**
  * Class MailingController.
@@ -52,16 +53,25 @@ class MailingController
      *
      * @return array
      */
-    public function showAction(Mailing $mailing, ContentViewParameterSupplier $contentViewParameterSupplier): array
-    {
+    public function showAction(
+        Mailing $mailing,
+        ContentViewParameterSupplier $contentViewParameterSupplier,
+        FormFactory $formFactory
+    ): array {
         $contentView = new ContentView();
         $contentView->setLocation($mailing->getLocation());
         $contentView->setContent($mailing->getContent());
         $contentViewParameterSupplier->supply($contentView);
 
+        $subitemsContentEdit = $formFactory->contentEdit(
+            null,
+            'form_subitems_content_edit'
+        );
+
         return [
-            'item'            => $mailing,
-            'subitems_module' => $contentView->getParameter('subitems_module'),
+            'item'                       => $mailing,
+            'form_subitems_content_edit' => $subitemsContentEdit->createView(),
+            'subitems_module'            => $contentView->getParameter('subitems_module'),
         ];
     }
 
