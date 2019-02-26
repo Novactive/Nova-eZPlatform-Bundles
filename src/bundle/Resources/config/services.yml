@@ -1,6 +1,27 @@
 services:
-    Novactive\EzLdapAuthenticator\EventListener\:
-        resource: "../../../lib/EventListener/*"
+    _defaults:
+        autowire: true
+        autoconfigure: true
         public: true
-        tags:
-            - { name: kernel.event_subscriber }
+
+    nova_ez.ldap.login_listener:
+        class: Novactive\EzLdapAuthenticator\EventListener\InteractiveLoginListener
+        arguments:
+            $ldap: '@nova_ez.ldap'
+            $config: '%nova_ez_ldap%'
+            $translator: '@translator'
+            $tokenStorage: '@security.token_storage'
+
+    nova_ez.ldap.adapter:
+        class: Novactive\EzLdapAuthenticatorBundle\Adapter\NovaEzLdapAdapter
+        arguments: ['%nova_ez_ldap%']
+
+    nova_ez.ldap.user_provider:
+        class: Novactive\EzLdapAuthenticatorBundle\User\NovaEzLdapUserProvider
+        arguments:
+            $ldap: '@nova_ez.ldap'
+            $config: '%nova_ez_ldap%'
+
+    nova_ez.ldap:
+        class: Symfony\Component\Ldap\Ldap
+        arguments: ['@nova_ez.ldap.adapter']

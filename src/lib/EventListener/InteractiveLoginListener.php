@@ -11,21 +11,47 @@
 
 namespace Novactive\EzLdapAuthenticator\EventListener;
 
-use eZ\Publish\API\Repository\UserService;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\Symfony\Event\InteractiveLoginEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Ldap\Ldap;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class InteractiveLoginListener implements EventSubscriberInterface
 {
-    /**
-     * @var \eZ\Publish\API\Repository\UserService
-     */
-    private $userService;
+    /** @var Repository */
+    private $repository;
 
-    public function __construct(UserService $userService)
+    /** @var Ldap */
+    private $ldap;
+
+    /** @var array */
+    private $config;
+
+    /** @var LoggerInterface */
+    private $logger;
+
+    /** @var TranslatorInterface */
+    private $translator;
+
+    /** @var TokenStorageInterface */
+    private $tokenStorage;
+
+    public function __construct(Repository $repository, Ldap $ldap, $config, LoggerInterface $logger, TranslatorInterface $translator, TokenStorageInterface $tokenStorage)
     {
-        $this->userService = $userService;
+        $this->repository = $repository;
+        $this->ldap = $ldap;
+        $this->config = $config;
+        $this->logger = $logger;
+        $this->translator = $translator;
+        $this->tokenStorage = $tokenStorage;
     }
 
     public static function getSubscribedEvents()
@@ -37,8 +63,78 @@ class InteractiveLoginListener implements EventSubscriberInterface
 
     public function onInteractiveLogin(InteractiveLoginEvent $event)
     {
-        // This loads a generic user and assigns it back to the event.
-        // You may want to create users here, or even load predefined users depending on your own rules.
-        $event->setApiUser($this->userService->loadUserByLogin('lolautruche'));
+        $userService = $this->repository->getUserService();
+        $username = $event->getAuthenticationToken()->getUsername();
+
+        try {
+            $event->setApiUser($userService->loadUserByLogin($username));
+        } catch (NotFoundException $exception) {
+            $baseDn         = $this->config['ldap']['base_dn'];
+            $searchDn       = $this->config['ldap']['search']['search_dn'];
+            $password       = $this->config['ldap']['search']['search_password'];
+            $queryString    = $this->config['ldap']['search']['search_string'];
+            $uidKey         = $this->config['ldap']['search']['uid_key'];
+            $passwordAttr   = $this->config['ldap']['search']['password_attribute'];
+            $targetGroup    = $this->config['ez_user']['target_usergroup'];
+            $emailAttr      = $this->config['ez_user']['email_attr'];
+            $attributes     = $this->config['ez_user']['attributes'];
+
+            // Login to LDAP server and get user attributes
+            $this->ldap->bind($searchDn, $password);
+            $queryString = str_replace("{username}", $username, $queryString);
+            $queryString = str_replace("{uid_key}", $uidKey, $queryString);
+            $query = $this->ldap->query($baseDn, $queryString);
+            $results = $query->execute();
+
+            // Prepare user details
+            $propertyAccessor = PropertyAccess::createPropertyAccessor();
+
+            $ldapUser   = $results->toArray()[0]->getAttributes();
+            $email      = $propertyAccessor->getValue($ldapUser, "[$emailAttr][0]");
+            $password   = $propertyAccessor->getValue($ldapUser, "[$passwordAttr][0]");
+
+            $user = $userService->newUserCreateStruct($username, $email, $password, "fre-FR");
+
+            foreach ($attributes as $attr) {
+                $value = $propertyAccessor->getValue($ldapUser, "[{$attr['ldap_attr']}][0]");
+                if ($value) {
+                    $user->setField($attr['user_attr'], $value);
+                } else {
+                    // TODO: look for better solution.
+                    // The only way to show the message to the user (as I know) -
+                    // to throw BadCredentialsException
+                    throw new BadCredentialsException($this->translator->trans('nullAttributeError', [
+                        '%username%' => $username,
+                        '%attribute%' => $attr['ldap_attr']
+                    ]));
+                }
+            }
+
+            $user->enabled = true;
+
+            try {
+                $group = $userService->loadUserGroup($targetGroup);
+            } catch (NotFoundException $exception) {
+                throw new \Exception($this->translator->trans('wrongGroupError', ['%id%' => $targetGroup]));
+            }
+
+            // Create new user under 'admin' user
+            $this->repository->sudo(function (Repository $repository) use ($user, $group, $event, $userService) {
+                try {
+                    $event->setApiUser($userService->loadUserByLogin('admin'));
+                    $userService->createUser($user, [$group]);
+                } catch (NotFoundException $exception) {
+                    $this->tokenStorage->setToken(null);
+                    $event->getRequest()->getSession()->invalidate();
+                    throw new \Exception($this->translator->trans('userNotCreated', ['%username%' => $username]), 0, $exception);
+                } catch (\Exception $exception) {
+                    $this->tokenStorage->setToken(null);
+                    $event->getRequest()->getSession()->invalidate();
+                    throw $exception;
+                }
+            });
+
+            $event->setApiUser($userService->loadUserByLogin($username));
+        }
     }
 }

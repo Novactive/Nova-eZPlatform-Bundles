@@ -11,8 +11,16 @@
 
 namespace Novactive\EzLdapAuthenticatorBundle;
 
+use Novactive\EzLdapAuthenticatorBundle\DependencyInjection\EzLdapAuthenticatorExtension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class EzLdapAuthenticatorBundle extends Bundle
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getContainerExtension()
+    {
+        return new EzLdapAuthenticatorExtension();
+    }
 }
