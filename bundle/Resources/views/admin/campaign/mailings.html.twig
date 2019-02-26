@@ -14,13 +14,5 @@
 {% set subtitle = "campaign.mailings.campaign"|trans %}
 {% block novezmailing_subtitle %}{{ subtitle }}{% endblock %}
 {% block content %}
-    {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\CampaignController::campaignTabsAction", {campaign: item.id})) }}
-    <br/>
-
-    {% if children|length > 0 %}
-        <h2>
-            <img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/"~status~".png") }}" class="nova-icon"/> {{"campaign.mailings.mailings"|trans}}
-        </h2>
-        {% include "@NovaeZMailing/admin/common/list/mailings.html.twig" with { items: children} only %}
-    {% endif %}
+    {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\CampaignController::campaignTabsAction", {campaign: item.id, status: status, children: children})) }}
 {% endblock %}

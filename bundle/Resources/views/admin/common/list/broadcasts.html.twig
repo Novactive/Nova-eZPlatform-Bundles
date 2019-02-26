@@ -1,12 +1,20 @@
 {% trans_default_domain 'ezmailing' %}
 <table class="table table-striped table-hover table-sm">
     <tr>
-        <th>{{"common.list.broadcast.recipient_count"|trans}}</th>
-        <th>{{"common.list.broadcast.started"|trans}}</th>
-        <th>{{"common.list.broadcast.ended"|trans}}</th>
+        <th>{{ "novaezmailingfull.generic.mailing"|trans }}</th>
+        <th>{{ "common.list.broadcast.recipient_count"|trans }}</th>
+        <th>{{ "common.list.broadcast.started"|trans }}</th>
+        <th>{{ "common.list.broadcast.ended"|trans }}</th>
     </tr>
     {% for item in items %}
         <tr>
+            <td>
+                {% set showMailingLink = path('novaezmailing_mailing_show', {mailing:item.mailing.id}) %}
+                {% if item.mailing.location is null %}
+                    {% set showMailingLink = path('novaezmailing_mailing_edit', {mailing:item.mailing.id}) %}
+                {% endif %}
+                <a href="{{ showMailingLink }}">{{ item.mailing.name }}</a>
+            </td>
             <td>{{ item.emailSentCount }}</td>
             <td>{{ item.started|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
             <td>{{ item.ended|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>

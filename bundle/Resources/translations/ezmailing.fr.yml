@@ -42,14 +42,17 @@ generic.mailing_statuses.processing: en cours
 generic.mailing_statuses.sent: envoyé
 generic.mailing_statuses.aborted: annulé
 generic.mailing_statuses.archived: archivé
+generic.no_status_mailings: Il n'y a pas encore de mailings avec ce statut
 dashboard.title: "Tableau de bord"
 dashboard.subtitle: Vue globale
 dashboard.quick_actions: Actions rapides
 dashboard.create_new_campaign: Créer une nouvelle campagne
 dashboard.see_mailing_lists: Voir les listes de diffusion
 dashboard.see_users: Voir les utilisateurs
-dashboard.last_user_updated: Dernier utilisateur mis à jour
+dashboard.last_user_updated: Dernières utilisateurs mis à jour
 dashboard.last_broadcast: Dernières diffusions
+dashboard.last_mailing_updated: Dernières newletters modifiées
+dashboard.last_mailing_sent: Dernières newletters envoyés
 campaign.tabs.campaign: Campagne
 campaign.tabs.associated_content: Contenu eZ associé
 campaign.tabs.mailings: Envoi

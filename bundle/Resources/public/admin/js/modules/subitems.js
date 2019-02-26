@@ -31,7 +31,51 @@ var eZMailingSubItemsModule = function () {
             totalCount: subitemsList.ChildrenCount,
             handleEditItem: function (content) {
                 var contentId = content._id;
-                var langCode = content.mainLanguageCode;
+                var checkVersionDraftLink = Routing.generate('ezplatform.version_draft.has_no_conflict', {contentId: contentId});
+
+                var submitVersionEditForm = function (content) {
+                    document.querySelector('#form_subitems_content_edit_content_info').value = content._id;
+                    document.querySelector('#form_subitems_content_edit_version_info_content_info').value = content._id;
+                    document.querySelector('#form_subitems_content_edit_version_info_version_no').value =
+                        content.CurrentVersion.Version.VersionInfo.versionNo;
+                    document.querySelector('#form_subitems_content_edit_language_' + content.mainLanguageCode).checked = true;
+                    document.querySelector('#form_subitems_content_edit_create').click();
+                };
+
+                var addDraft = function () {
+                    submitVersionEditForm(content);
+                    $('#version-draft-conflict-modal').modal('hide');
+                };
+
+                var showModal = (modalHtml) => {
+                    var wrapper = document.querySelector('.ez-modal-wrapper');
+
+                    wrapper.innerHTML = modalHtml;
+                    var addDraftButton = wrapper.querySelector('.ez-btn--add-draft');
+                    if (addDraftButton) {
+                        addDraftButton.addEventListener('click', addDraft, false);
+                    }
+
+                    $(wrapper).find('.ez-btn--prevented').each(function (index, btn) {
+                        btn.addEventListener('click', function (event) {
+                            event.preventDefault()
+                        }, false);
+                    });
+
+                    $('#version-draft-conflict-modal').modal('show');
+                };
+
+                $.ajax({
+                    cache: false,
+                    url: checkVersionDraftLink,
+                    method: 'GET',
+                    success: function () {
+                        submitVersionEditForm(content);
+                    },
+                    error: function (data) {
+                        showModal(data.responseText);
+                    }
+                });
             },
             generateLink: function (locationId) {
                 return window.Routing.generate('_ezpublishLocation', {locationId: locationId});

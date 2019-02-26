@@ -42,14 +42,17 @@ generic.mailing_statuses.processing: processing
 generic.mailing_statuses.sent: sent
 generic.mailing_statuses.aborted: aborted
 generic.mailing_statuses.archived: archived
+generic.no_status_mailings: There no Mailings with this Status yet
 dashboard.title: Dashboard
 dashboard.subtitle: Quick overview
 dashboard.quick_actions: Quick Actions
 dashboard.create_new_campaign: Create New Campaign
 dashboard.see_mailing_lists: See Mailing Lists
 dashboard.see_users: See Users
-dashboard.last_user_updated: Last User Updated
+dashboard.last_user_updated: Last Users Updated
 dashboard.last_broadcast: Last Broadcasts
+dashboard.last_mailing_updated: Latest Mailings Modified
+dashboard.last_mailing_sent: Latest Mailings Sent
 campaign.tabs.campaign: Campaign
 campaign.tabs.associated_content: Associated eZ Content
 campaign.tabs.mailings: Mailings

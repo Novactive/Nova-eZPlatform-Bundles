@@ -32,8 +32,11 @@ class Mailing extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function createQueryBuilderForFilters(array $filters = []): QueryBuilder
-    {
+    public function createQueryBuilderForFilters(
+        array $filters = [],
+        ?string $orderBy = null,
+        ?int $limit = null
+    ): QueryBuilder {
         $qb = parent::createQueryBuilderForFilters($filters);
         if (isset($filters['campaign'])) {
             $qb->andWhere($qb->expr()->eq('mail.campaign', ':campaign'))->setParameter(
@@ -47,5 +50,19 @@ class Mailing extends EntityRepository
         }
 
         return $qb;
+    }
+
+    /**
+     * @param int $limit
+     *
+     * @return array
+     */
+    public function findLastUpdated(int $limit = 10): array
+    {
+        $qb = $this->createQueryBuilderForFilters([]);
+        $qb->setMaxResults($limit);
+        $qb->orderBy("{$this->getAlias()}.updated", 'DESC');
+
+        return $qb->getQuery()->getResult();
     }
 }

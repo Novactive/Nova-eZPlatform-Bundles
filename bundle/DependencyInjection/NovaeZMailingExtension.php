@@ -57,6 +57,7 @@ class NovaeZMailingExtension extends Extension implements PrependExtensionInterf
         $processor->mapSetting('email_from_address', $config);
         $processor->mapSetting('email_from_name', $config);
         $processor->mapSetting('email_return_path', $config);
+        $processor->mapSetting('default_mailinglist_id', $config);
     }
 
     /**

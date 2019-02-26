@@ -16,6 +16,9 @@
 {% block content %}
     {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\MailingController::mailingTabsAction", {mailing: item.id})) }}
     <br/>
+    {{ form_start(form_subitems_content_edit, { 'action': path('ezplatform.content.edit'), 'attr': { 'hidden': 'hidden' }}) }}
+    {{ form_end(form_subitems_content_edit) }}
+
     <div class="ezmailing-subitem-children" data-location="{{ item.locationId }}" data-items="{{ subitems_module.items }}" data-content-types="{{ subitems_module.content_type_info_list }}" data-limit="{{ subitems_module.limit }}"></div>
 {% endblock %}
 

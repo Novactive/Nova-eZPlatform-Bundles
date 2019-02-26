@@ -14,6 +14,7 @@ namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZMailingBundle\Entity\Broadcast;
+use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -38,9 +39,12 @@ class DashboardController
     {
         $repoBroadcast = $entityManager->getRepository(Broadcast::class);
         $repoUsers     = $entityManager->getRepository(User::class);
+        $repoMailings  = $entityManager->getRepository(Mailing::class);
+
         return [
-            'broadcasts' => $repoBroadcast->findLastBroadcasts(),
-            'users'      => $repoUsers->findLastUpdated(),
+            'broadcasts' => $repoBroadcast->findLastBroadcasts(5),
+            'mailings'   => $repoMailings->findLastUpdated(5),
+            'users'      => $repoUsers->findLastUpdated(5),
         ];
     }
 

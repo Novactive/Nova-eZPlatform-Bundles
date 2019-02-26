@@ -41,8 +41,13 @@ class CampaignController
      *
      * @return array
      */
-    public function campaignTabsAction(Campaign $campaign, Repository $repository, ContentTab $contentTab): array
-    {
+    public function campaignTabsAction(
+        Campaign $campaign,
+        string $status = 'all',
+        array $children = [],
+        Repository $repository,
+        ContentTab $contentTab
+    ): array {
         $content = $campaign->getContent();
         if (null !== $content) {
             $contentType = $repository->getContentTypeService()->loadContentType(
@@ -58,8 +63,10 @@ class CampaignController
         }
 
         return [
-            'item'    => $campaign,
-            'preview' => $preview ?? null,
+            'item'     => $campaign,
+            'status'   => $status,
+            'children' => $children,
+            'preview'  => $preview ?? null,
         ];
     }
 

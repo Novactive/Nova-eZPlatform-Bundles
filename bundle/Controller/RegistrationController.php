@@ -93,6 +93,43 @@ class RegistrationController
     }
 
     /**
+     * @Route("/register/default", name="novaezmailing_registration_default_create")
+     *
+     * @Template()
+     *
+     * @param Request              $request
+     * @param FormFactoryInterface $formFactory
+     *
+     * @return array
+     */
+    public function registerDefaultAction(Request $request, FormFactoryInterface $formFactory): array
+    {
+        $params = [
+            'pagelayout' => $this->getPagelayout(),
+            'title'      => 'Register to Default Mailing List',
+        ];
+
+        $registration = new Registration();
+
+        $form = $formFactory->create(RegistrationType::class, $registration);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->registrar->askForConfirmation($registration);
+        } else {
+            if (false === $form->isSubmitted()) {
+                $form->get('mailingLists')->setData($this->registrar->getDefaultMailingList());
+            }
+
+            $params += [
+                'form' => $form->createView(),
+            ];
+        }
+
+        return $params;
+    }
+
+    /**
      * @Route("/register/confirm/{id}", name="novaezmailing_registration_confirm")
      *
      * @Template()
