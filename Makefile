@@ -23,10 +23,8 @@ list:
 .PHONY: codeclean
 codeclean: ## Coding Standard checks
 	$(PHP_BIN) ./vendor/bin/php-cs-fixer fix --config=.cs/.php_cs.php
-	$(PHP_BIN) ./vendor/bin/phpmd src text .cs/md_ruleset.xml
-	$(PHP_BIN) ./vendor/bin/phpcpd src
-	$(PHP_BIN) ./vendor/bin/phpcbf -n src --standard=.cs/cs_ruleset.xml
-	$(PHP_BIN) ./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src
+	$(PHP_BIN) ./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php bundle
+	$(PHP_BIN) ./vendor/bin/phpmd bundle text .cs/md_ruleset.xml
 
 .PHONY: install
 install: ## Install vendors
@@ -37,9 +35,3 @@ clean: ## Removes the vendors, and caches
 	rm -f .php_cs.cache
 	rm -rf vendor
 	rm -f composer.lock
-
-.PHONY: tests
-tests: ## Execute tests
-	$(PHP_BIN) ./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src
-	$(PHP_BIN) ./vendor/bin/phpmd src text .cs/md_ruleset.xml
-	$(PHP_BIN) ./vendor/bin/phpcpd src

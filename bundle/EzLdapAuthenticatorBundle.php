@@ -4,7 +4,7 @@
  *
  * @package   NovaeZLdapAuthenticatorBundle
  *
- * @author    Novactive <f.alexandre@novactive.com>
+ * @author    Novactive
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZLdapAuthenticatorBundle/blob/master/LICENSE
  */

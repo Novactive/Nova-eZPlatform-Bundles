@@ -1,19 +1,26 @@
 <?php
+/**
+ * NovaeZLDAPAuthenticator Bundle.
+ *
+ * @package   Novactive\Bundle\eZLDAPAuthenticatorBundle
+ *
+ * @author    Novactive
+ * @copyright 2019 Novactive
+ * @license   https://github.com/Novactive/NovaeZLdapAuthenticatorBundle/blob/master/LICENSE MIT Licence
+ */
+declare(strict_types=1);
 
-namespace Novactive\EzLdapAuthenticatorBundle\DependencyInjection;
+namespace Novactive\Bundle\eZLDAPAuthenticatorBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    const DEFAULT_PORT = 389;
+    const DEFAULT_PORT    = 389;
     const DEFAULT_VERSION = 3;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder();
         $treeBuilder

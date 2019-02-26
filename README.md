@@ -1,4 +1,5 @@
-## NovaeZLdapAuthenticator
+# Novactive eZ LDAP Authenticator Bundle
+
 A bundle to authenticate users against LDAP server
 
 ## Installation

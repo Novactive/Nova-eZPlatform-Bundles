@@ -1,11 +1,20 @@
 <?php
+/**
+ * NovaeZLDAPAuthenticator Bundle.
+ *
+ * @package   Novactive\Bundle\eZLDAPAuthenticatorBundle
+ *
+ * @author    Novactive
+ * @copyright 2019 Novactive
+ * @license   https://github.com/Novactive/NovaeZLdapAuthenticatorBundle/blob/master/LICENSE MIT Licence
+ */
+declare(strict_types=1);
 
-namespace Novactive\EzLdapAuthenticatorBundle\User;
+namespace Novactive\Bundle\eZLDAPAuthenticatorBundle\User;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Ldap\LdapInterface;
 use Symfony\Component\Security\Core\User\LdapUserProvider;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class NovaEzLdapUserProvider extends LdapUserProvider
 {
