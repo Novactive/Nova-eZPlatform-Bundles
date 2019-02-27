@@ -10,7 +10,7 @@
  */
 declare(strict_types=1);
 
-namespace Novactive\Bundle\eZLDAPAuthenticatorBundle\EventListener;
+namespace Novactive\Bundle\eZLDAPAuthenticatorBundle\Listener;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Repository;

@@ -1,15 +1,16 @@
 <?php
 /**
- * NovaeZLdapAuthenticatorBundle.
+ * NovaeZLDAPAuthenticator Bundle.
  *
- * @package   NovaeZLdapAuthenticatorBundle
+ * @package   Novactive\Bundle\eZLDAPAuthenticatorBundle
  *
  * @author    Novactive
- * @copyright 2018 Novactive
- * @license   https://github.com/Novactive/NovaeZLdapAuthenticatorBundle/blob/master/LICENSE
+ * @copyright 2019 Novactive
+ * @license   https://github.com/Novactive/NovaeZLdapAuthenticatorBundle/blob/master/LICENSE MIT Licence
  */
+declare(strict_types=1);
 
-namespace Novactive\EzLdapAuthenticatorBundle;
+namespace Novactive\Bundle\eZLDAPAuthenticatorBundle;
 
 use Novactive\Bundle\eZLDAPAuthenticatorBundle\DependencyInjection\EzLdapAuthenticatorExtension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;

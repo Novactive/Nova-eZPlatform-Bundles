@@ -5,7 +5,7 @@ services:
         public: true
 
     nova_ez.ldap.login_listener:
-        class: Novactive\EzLdapAuthenticator\EventListener\InteractiveLoginListener
+        class: Novactive\Bundle\eZLDAPAuthenticatorBundle\Listener\InteractiveLoginListener
         arguments:
             $ldap: '@nova_ez.ldap'
             $config: '%nova_ez_ldap%'
@@ -13,11 +13,11 @@ services:
             $tokenStorage: '@security.token_storage'
 
     nova_ez.ldap.adapter:
-        class: Novactive\EzLdapAuthenticatorBundle\Adapter\NovaEzLdapAdapter
+        class: Novactive\Bundle\eZLDAPAuthenticatorBundle\Adapter\NovaEzLdapAdapter
         arguments: ['%nova_ez_ldap%']
 
     nova_ez.ldap.user_provider:
-        class: Novactive\EzLdapAuthenticatorBundle\User\NovaEzLdapUserProvider
+        class: Novactive\Bundle\eZLDAPAuthenticatorBundle\User\NovaEzLdapUserProvider
         arguments:
             $ldap: '@nova_ez.ldap'
             $config: '%nova_ez_ldap%'
