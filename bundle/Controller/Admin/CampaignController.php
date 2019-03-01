@@ -44,9 +44,9 @@ class CampaignController
     public function campaignTabsAction(
         Campaign $campaign,
         string $status = 'all',
-        array $children = [],
         Repository $repository,
-        ContentTab $contentTab
+        ContentTab $contentTab,
+        EntityManagerInterface $entityManager
     ): array {
         $content = $campaign->getContent();
         if (null !== $content) {
@@ -61,11 +61,18 @@ class CampaignController
                 ]
             );
         }
+        $repo     = $entityManager->getRepository(Mailing::class);
+        $mailings = $repo->findByFilters(
+            [
+                'campaign' => $campaign,
+                'status'   => 'all' === $status ? null : $status,
+            ]
+        );
 
         return [
             'item'     => $campaign,
             'status'   => $status,
-            'children' => $children,
+            'children' => $mailings,
             'preview'  => $preview ?? null,
         ];
     }
