@@ -8,21 +8,21 @@
             position: relative;
             margin-left: -15px;
             list-style: none;
+            background: url(../images/16x16/toggle-small-expand.png) -3px 3px no-repeat;
 
             input {
                 position: absolute;
-                left: 0;
+                left: -3px;
                 margin-left: 0;
                 opacity: 0;
                 z-index: 2;
                 cursor: pointer;
                 height: 1em;
                 width: 1em;
-                top: 0;
+                top: 3px;
             }
 
             input + ul {
-                background: url(../images/16x16/toggle-small-expand.png) 40px 0 no-repeat;
                 margin: -27px 0 0 -44px;
                 height: 21px;
             }
@@ -42,7 +42,6 @@
             }
 
             input:checked + ul {
-                background: url(../images/16x16/toggle-small.png) 40px 5px no-repeat;
                 margin: -32px 0 0 -44px;
                 padding: 1.563em 0 0 80px;
                 height: auto;
@@ -56,6 +55,10 @@
             input:checked + ul > li:last-child {
                 margin: 0 0 0.063em;
             }
+        }
+
+        li.expand {
+            background: url(../images/16x16/toggle-small.png) -3px 3px no-repeat;
         }
 
         li.leaf {

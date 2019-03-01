@@ -14,5 +14,5 @@
 {% set subtitle = "campaign.mailings.campaign"|trans %}
 {% block novezmailing_subtitle %}{{ subtitle }}{% endblock %}
 {% block content %}
-    {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\CampaignController::campaignTabsAction", {campaign: item.id, status: status, children: children})) }}
+    {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\CampaignController::campaignTabsAction", {campaign: item.id, status: status})) }}
 {% endblock %}
