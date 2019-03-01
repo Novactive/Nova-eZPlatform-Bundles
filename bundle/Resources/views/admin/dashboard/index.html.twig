@@ -45,7 +45,9 @@
 
     <hr/>
     <h2>{{ "dashboard.last_mailing_updated"|trans }}</h2>
-    {% include "@NovaeZMailing/admin/common/list/mailings.html.twig" with {items:mailings} only %}
+    <div class="novaezmailing-ez-mailings-view">
+        {% include "@NovaeZMailing/admin/common/list/mailings.html.twig" with {items:mailings} only %}
+    </div>
 
     <hr/>
     <h2>{{ "dashboard.last_user_updated"|trans }}</h2>
