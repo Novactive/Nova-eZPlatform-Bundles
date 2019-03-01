@@ -27,7 +27,7 @@
     </ul>
     <div class="novaezmailing-tabs-content tab-content">
         {% if status != 'all' %}
-            <div class="novaezmailing-ez-campaign-view tab-pane active" role="tabpanel" id="novaezmailing-mailings-status-preview">
+            <div class="novaezmailing-ez-mailings-view tab-pane active" role="tabpanel" id="novaezmailing-mailings-status-preview">
                 {% if children|length > 0 %}
                     {% include "@NovaeZMailing/admin/common/list/mailings.html.twig" with { items: children} only %}
                 {% else %}
