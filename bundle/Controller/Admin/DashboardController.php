@@ -73,8 +73,13 @@ class DashboardController
 
         $userResults = array_map(
             function (User $user) use ($router) {
+                $userName = trim($user->getFirstName().' '.$user->getLastName());
+                if ('' === $userName) {
+                    $userName = $user->getEmail();
+                }
+
                 return [
-                    'value' => trim($user->getGender().' '.$user->getFirstName().' '.$user->getLastName()),
+                    'value' => $userName,
                     'data'  => $router->generate('novaezmailing_user_show', ['user' => $user->getId()]),
                 ];
             },

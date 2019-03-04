@@ -146,7 +146,7 @@ class MailingController
             $mailing = new Mailing();
             $mailing->setStatus(Mailing::DRAFT);
             $mailing->setCampaign($campaign);
-            $languages = $translationHelper->getAvailableLanguages();
+            $languages = array_filter($translationHelper->getAvailableLanguages());
             $mailing->setNames(array_combine($languages, array_pad([], count($languages), '')));
         }
 
