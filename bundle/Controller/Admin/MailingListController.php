@@ -53,7 +53,7 @@ class MailingListController
     ): array {
         $filers = [
             'mailingLists' => [$mailingList],
-            'status'       => 'all' === $status ? null : (int) $status,
+            'status'       => 'all' === $status ? null : $status,
         ];
 
         return [
@@ -104,7 +104,7 @@ class MailingListController
     ) {
         if (null === $mailinglist) {
             $mailinglist = new MailingList();
-            $languages   = $translationHelper->getAvailableLanguages();
+            $languages   = array_filter($translationHelper->getAvailableLanguages());
             $mailinglist->setNames(array_combine($languages, array_pad([], count($languages), '')));
         }
 

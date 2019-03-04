@@ -99,6 +99,14 @@
         </div>
     {% else %}
         <div class="novaezmailing-button-actions float-right">
+            {% if status == 'draft' %}
+                <a class="btn btn-sm btn-secondary" href="{{ path('novaezmailing_mailing_create', {campaign: item.id}) }}">
+                    <svg class="ez-icon">
+                        <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#create"></use>
+                    </svg>
+                    <span>{{ "campaign.tabs.create"|trans }}</span>
+                </a>
+            {% endif %}
             <a href="{{ url('novaezmailing_campaign_subscriptions', { campaign: item.id }) }}" class="btn btn-sm btn-info">
                 <svg class="ez-icon">
                     <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#view"></use>

@@ -94,7 +94,7 @@ class CampaignController
     ): array {
         $filers = [
             'campaign' => $campaign,
-            'status'   => 'all' === $status ? null : (int) $status,
+            'status'   => 'all' === $status ? null : $status,
         ];
 
         return [
@@ -158,7 +158,7 @@ class CampaignController
     ) {
         if (null === $campaign) {
             $campaign  = new Campaign();
-            $languages = $translationHelper->getAvailableLanguages();
+            $languages = array_filter($translationHelper->getAvailableLanguages());
             $campaign->setNames(array_combine($languages, array_pad([], count($languages), '')));
         }
 
