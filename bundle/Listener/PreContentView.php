@@ -15,6 +15,7 @@ namespace Novactive\Bundle\eZProtectedContentBundle\Listener;
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;
+use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
 use Novactive\Bundle\eZProtectedContentBundle\Form\RequestProtectedAccessType;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -57,6 +58,11 @@ class PreContentView
     public function onPreContentView(PreContentViewEvent $event)
     {
         $contentView = $event->getContentView();
+
+        if (!$contentView instanceof ContentView) {
+            return;
+        }
+
         if ('full' !== $contentView->getViewType()) {
             return;
         }
