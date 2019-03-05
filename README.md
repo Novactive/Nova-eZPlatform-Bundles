@@ -1,32 +1,63 @@
-DocGA Bundle for Atlantic group
-==========================
+# Novactive eZ Protected Content Bundle
 
-## Requirements
+A bundle that provides quick password protection on Contents.
 
-* eZPlatform v2
+# Installation
 
-## Installation
+### Requirements
 
+* eZ Platform 2+
+* PHP 7.1+
+* MySQL 5.7.8+ / Maria DB 10.1+
 
-## Documentation
+### Installation steps
 
-<!-- Provide links to documentation file (.md) in the project directory -->
+Run `composer require novactive/ezprotectedcontentbundle` to install the bundle and its dependencies:
 
+### Register the bundles
 
-## Working on the project
+Activate the bundle in `app\AppKernel.php` file.
 
-The project provides a Makefile that will give you facilities to run common actions.
-Run `make` to get the help.
+```php
+// app\AppKernel.php
 
-Don't forget to launch the `codeclean` target to check the Coding Standard.
-
-```bash
-make codeclean
+public function registerBundles()
+{
+   ...
+   $bundles = array(
+        new FrameworkBundle(),
+        ...
+        // Novactive eZ Protected Content Bundle
+        new Novactive\Bundle\eZProtectedContentBundle\NovaeZProtectedContentBundle()
+   );
+   ...
+}
 ```
 
-Don't forget to launch the `tests` target to execute the tests.
+### Add routes
 
-```bash
-make test
+```yaml
+_novaezprotectedcontent_routes:
+    resource: '@NovaeZProtectedContentBundle/Resources/config/routing/main.yml'
 ```
 
+### Install the database schema
+
+```bash
+bin/console novaezprotectedcontent:install
+```
+
+Contributing
+----------------
+
+[Contributing](CONTRIBUTING.md)
+
+
+Change and License
+------------------
+
+[License](LICENSE)
+
+
+----
+Made with <3 by novactive.

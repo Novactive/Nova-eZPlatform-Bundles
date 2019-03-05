@@ -1,0 +1,15 @@
+_novaezprotectedcontent_private_access:
+    path:     /private_access
+    defaults: { _controller: MCPrivateContentAccessBundle:PrivateAccess:privateAccess }
+
+_novaezprotectedcontent_form_private_access:
+    path:     /private_access_auth/{locationId}
+    defaults:
+        locationId: null
+        _controller: MCPrivateContentAccessBundle:FrontPrivateAccess:askPassword
+
+
+_novaezprotectedcontent_bundle_admin:
+    resource: "@NovaeZProtectedContentBundle/Controller/Admin"
+    type:     annotation
+    prefix:   /novaezprotectedcontent/admin/

@@ -1,0 +1,2 @@
+_novaezprotectedcontent_routes:
+    resource: '@NovaeZProtectedContentBundle/Resources/config/routing/main.yml'

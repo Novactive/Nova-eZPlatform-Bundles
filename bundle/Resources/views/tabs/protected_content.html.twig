@@ -1,0 +1,73 @@
+<div class="ez-table-header ">
+    <div class="ez-table-header__headline">Content Protection</div>
+    <div>
+        <button class="btn btn-primary ez-btn--prevented" data-toggle="modal" data-target="#ez-modal--add-content-protection" title="Add Content Protection">
+            <svg class="ez-icon ez-icon-create">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#create"></use>
+            </svg>
+        </button>
+        <div class="modal fade ez-modal ez-modal--add-content-protection" id="ez-modal--add-content-protection" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    {{ form_start(form, {action: path("novaezprotectedcontent_bundle_admin_handle_form", {locationId: location.id })}) }}
+                    <div class="modal-header">
+                        <h3 class="modal-title">Add Content Protection</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <svg class="ez-icon ez-icon--medium" aria-hidden="true">
+                                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#discard"></use>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_row(form.password) }}
+                        {{ form_row(form.enabled) }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn--no" data-dismiss="modal">
+                            Cancel
+                        </button>
+                        <button class="btn btn-danger font-weight-bold" type="submit">
+                            Add
+                        </button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ez-table">
+    <table class="ez-table table">
+        <thead>
+        <tr>
+            <th>Password</th>
+            <th>Enabled?</th>
+            <th>Edit</th>
+            <th>Remove</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in items %}
+            <tr>
+                <td class="ez-table__cell">{{ item.password }}</td>
+                <td class="ez-table__cell">{{ item.enabled }}</td>
+                <td class="ez-table__cell">
+                    <a href="" class="button">
+                        <svg class="ez-icon ez-icon--medium">
+                            <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#edit"></use>
+                        </svg>
+                    </a>
+                </td>
+                <td class="ez-table__cell">
+                    <a href="" class="button">
+                        <svg class="ez-icon ez-icon--medium">
+                            <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#trash"></use>
+                        </svg>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
