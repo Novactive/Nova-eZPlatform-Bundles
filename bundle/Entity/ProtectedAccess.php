@@ -17,7 +17,7 @@ use Novactive\Bundle\eZProtectedContentBundle\Entity\eZ\ContentInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedAccessRepository")
  * @ORM\Table(name="novaezprotectedcontent")
  * @ORM\EntityListeners({"Novactive\Bundle\eZProtectedContentBundle\Listener\EntityContentLink"})
  */
@@ -51,9 +51,17 @@ class ProtectedAccess implements ContentInterface
      */
     protected $enabled;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    protected $protectChildren;
+
     public function __construct()
     {
-        $this->enabled = true;
+        $this->enabled         = true;
+        $this->protectChildren = true;
     }
 
     public function getId(): int
@@ -90,5 +98,15 @@ class ProtectedAccess implements ContentInterface
         $this->enabled = $enabled;
 
         return $this;
+    }
+
+    public function isProtectChildren(): bool
+    {
+        return $this->protectChildren;
+    }
+
+    public function setProtectChildren(bool $protectChildren): void
+    {
+        $this->protectChildren = $protectChildren;
     }
 }

@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Controller\Admin;
 
-use Datetime;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
@@ -26,7 +26,7 @@ use Symfony\Component\Routing\RouterInterface;
 class ProtectedAccessController
 {
     /**
-     * @Route("/handle/{locationId}/{accessId}", name="novaezprotectedcontent_bundle_admin_handle_form",
+     * @Route("/handle/{locationId}/{access}", name="novaezprotectedcontent_bundle_admin_handle_form",
      *                                           defaults={"accessId": null})
      */
     public function handle(
@@ -36,9 +36,9 @@ class ProtectedAccessController
         EntityManagerInterface $entityManager,
         RouterInterface $router,
         ?ProtectedAccess $access = null
-    ) {
+    ): RedirectResponse {
         if ($request->isMethod('post')) {
-            $now = new Datetime();
+            $now = new DateTime();
             if (null === $access) {
                 $access = new ProtectedAccess();
                 $access->setCreated($now);
@@ -52,6 +52,21 @@ class ProtectedAccessController
                 $entityManager->flush();
             }
         }
+
+        return new RedirectResponse($router->generate($location).'#ez-tab-location-view-protect-content#tab');
+    }
+
+    /**
+     * @Route("/remove/{locationId}/{access}", name="novaezprotectedcontent_bundle_admin_remove_protection")
+     */
+    public function remove(
+        Location $location,
+        EntityManagerInterface $entityManager,
+        RouterInterface $router,
+        ProtectedAccess $access
+    ): RedirectResponse {
+        $entityManager->remove($access);
+        $entityManager->flush();
 
         return new RedirectResponse($router->generate($location).'#ez-tab-location-view-protect-content#tab');
     }

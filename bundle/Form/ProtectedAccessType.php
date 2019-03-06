@@ -22,18 +22,20 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ProtectedAccessType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('contentId', HiddenType::class, ['required' => true])
-                ->add('enabled', CheckboxType::class)
-                ->add('password', TextType::class, ['required' => true]);
+                ->add('protectChildren', CheckboxType::class, ['label' => 'tab.table.th.children_protection'])
+                ->add('enabled', CheckboxType::class, ['label' => 'tab.table.th.enabled'])
+                ->add('password', TextType::class, ['required' => true, 'label' => 'tab.table.th.password']);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [
-                'data_class' => ProtectedAccess::class,
+                'data_class'         => ProtectedAccess::class,
+                'translation_domain' => 'ezprotectedcontent',
             ]
         );
     }

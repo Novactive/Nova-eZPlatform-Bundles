@@ -1,7 +1,9 @@
+{% trans_default_domain 'ezprotectedcontent' %}
+
 <div class="ez-table-header ">
-    <div class="ez-table-header__headline">Content Protection</div>
+    <div class="ez-table-header__headline">{{ "tab.header.title"|trans }}</div>
     <div>
-        <button class="btn btn-primary ez-btn--prevented" data-toggle="modal" data-target="#ez-modal--add-content-protection" title="Add Content Protection">
+        <button class="btn btn-primary ez-btn--prevented" data-toggle="modal" data-target="#ez-modal--add-content-protection" title="{{ "tab.modal.title"|trans }}">
             <svg class="ez-icon ez-icon-create">
                 <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#create"></use>
             </svg>
@@ -11,7 +13,7 @@
                 <div class="modal-content">
                     {{ form_start(form, {action: path("novaezprotectedcontent_bundle_admin_handle_form", {locationId: location.id })}) }}
                     <div class="modal-header">
-                        <h3 class="modal-title">Add Content Protection</h3>
+                        <h3 class="modal-title">{{ "tab.modal.title"|trans }}</h3>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <svg class="ez-icon ez-icon--medium" aria-hidden="true">
                                 <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#discard"></use>
@@ -20,14 +22,15 @@
                     </div>
                     <div class="modal-body">
                         {{ form_row(form.password) }}
+                        {{ form_row(form.protectChildren) }}
                         {{ form_row(form.enabled) }}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary btn--no" data-dismiss="modal">
-                            Cancel
+                            {{ "tab.modal.buttons.cancel"|trans }}
                         </button>
                         <button class="btn btn-danger font-weight-bold" type="submit">
-                            Add
+                            {{ "tab.modal.buttons.add"|trans }}
                         </button>
                     </div>
                     {{ form_end(form) }}
@@ -41,30 +44,32 @@
     <table class="ez-table table">
         <thead>
         <tr>
-            <th>Password</th>
-            <th>Enabled?</th>
-            <th>Edit</th>
-            <th>Remove</th>
+            <th>{{ 'tab.table.th.password'|trans }}</th>
+            <th>{{ "tab.table.th.children_protection"|trans }}</th>
+            <th>{{ "tab.table.th.enabled"|trans }}</th>
+            <th>{{ "tab.table.th.remove"|trans }}</th>
         </tr>
         </thead>
         <tbody>
         {% for item in items %}
-            <tr>
+            <tr class="{% if item.contentId != location.contentInfo.id %} disabled {% endif %}">
                 <td class="ez-table__cell">{{ item.password }}</td>
-                <td class="ez-table__cell">{{ item.enabled }}</td>
                 <td class="ez-table__cell">
-                    <a href="" class="button">
-                        <svg class="ez-icon ez-icon--medium">
-                            <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#edit"></use>
-                        </svg>
-                    </a>
+                    {% if item.contentId == location.contentInfo.id %}
+                        {{ item.protectChildren ? 'tab.yes'|trans:'tab.no'|trans }}
+                    {% else %}
+                        {{ 'tab.no'|trans }}
+                    {% endif %}
                 </td>
+                <td class="ez-table__cell">{{ item.enabled ? 'tab.yes'|trans:'tab.no'|trans }}</td>
                 <td class="ez-table__cell">
-                    <a href="" class="button">
-                        <svg class="ez-icon ez-icon--medium">
-                            <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#trash"></use>
-                        </svg>
-                    </a>
+                    {% if item.contentId == location.contentInfo.id %}
+                        <a href="{{ path("novaezprotectedcontent_bundle_admin_remove_protection", {locationId: location.id, access: item.id }) }}" class="button">
+                            <svg class="ez-icon ez-icon--medium">
+                                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#trash"></use>
+                            </svg>
+                        </a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

@@ -1,0 +1,13 @@
+tab.header.title: "Content Protection"
+tab.modal.title: "Add Content Protection"
+
+tab.modal.buttons.cancel: "Cancel"
+tab.modal.buttons.add: "Add"
+
+tab.table.th.password: "Password"
+tab.table.th.children_protection: "Protect Children?"
+tab.table.th.enabled: "Enabled?"
+tab.table.th.remove: "Remove"
+
+tab.yes: "YES"
+tab.no: "NO"

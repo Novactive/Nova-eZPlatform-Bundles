@@ -66,13 +66,12 @@ class PreContentView
         if ('full' !== $contentView->getViewType()) {
             return;
         }
+
         $content = $contentView->getContent();
 
-        $result = $this->entityManager->getRepository(ProtectedAccess::class)->findBy(
-            ['contentId' => $content->id, 'enabled' => true]
-        );
+        $protections = $this->entityManager->getRepository(ProtectedAccess::class)->findByContent($content);
 
-        if (0 == count($result)) {
+        if (0 == count($protections)) {
             return;
         }
         $contentView->setCacheEnabled(false);
@@ -87,9 +86,9 @@ class PreContentView
                 if (str_replace(PasswordProvided::COOKIE_PREFIX, '', $name) !== $value) {
                     continue;
                 }
-                foreach ($result as $item) {
-                    /** @var ProtectedAccess $item */
-                    if (md5($item->getPassword()) === $value) {
+                foreach ($protections as $protection) {
+                    /** @var ProtectedAccess $protection */
+                    if (md5($protection->getPassword()) === $value) {
                         $canRead = true;
                     }
                 }

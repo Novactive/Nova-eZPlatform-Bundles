@@ -61,8 +61,7 @@ class ProtectContent extends AbstractTab implements OrderedTabInterface
         $privateAccess->setContentId($content->id);
         $form = $this->formFactory->create(ProtectedAccessType::class, $privateAccess);
 
-        $repo  = $this->entityManager->getRepository(ProtectedAccess::class);
-        $items = $repo->findBy(['contentId' => $content->id]);
+        $items = $this->entityManager->getRepository(ProtectedAccess::class)->findByContent($content);
 
         return $this->twig->render(
             '@NovaeZProtectedContent/tabs/protected_content.html.twig',
