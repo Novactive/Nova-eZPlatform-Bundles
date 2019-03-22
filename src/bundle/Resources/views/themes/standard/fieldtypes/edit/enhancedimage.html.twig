@@ -23,8 +23,8 @@
                             <img data-srcset="{{ image.uri }}"
                                  alt="{{ 'content.field_type.ezimage.img_alt'|trans({'%label%': form.vars.label})|desc("Image stored in field '%label%'") }}"
                                  class="enhancedimage--img enhancedimage--img--lazyload blur-up"
-                                 data-focus-x="{{ (focusPoint ? focusPoint.posX : '')}}"
-                                 data-focus-y="{{ (focusPoint ? focusPoint.posY : '')}}">
+                                 data-focus-x="{{ focusPoint.posX }}"
+                                 data-focus-y="{{ focusPoint.posY }}">
                         </picture>
                     {% endfor %}
                 </div>
@@ -35,7 +35,9 @@
                                 class="ez-field-edit-preview__media focuspoint-helper--img"
                                 src="{{ image.uri }}"
                                 alt="{{ 'content.field_type.ezimage.img_alt'|trans({'%label%': form.vars.label})|desc("Image stored in field '%label%'") }}" />
-                        <img class="focuspoint-helper--reticle" src="{{ asset('bundles/ezenhancedimageasset/img/focuspoint-target.png') }}" hidden="true">
+                        {% set reticleX = ((focusPoint.posX + 1) / 2) * 100 %}
+                        {% set reticleY = ((-focusPoint.posY + 1) / 2) * 100 %}
+                        <img class="focuspoint-helper--reticle" src="{{ asset('bundles/ezenhancedimageasset/img/focuspoint-target.png') }}" style="top: {{ reticleY|round(2) }}%; left: {{ reticleX|round(2) }}%;">
                         <img    draggable="false"
                                 class="ez-field-edit-preview__media focuspoint-helper--img focuspoint-helper--target-overlay"
                                 src="{{ image.uri }}"
@@ -50,8 +52,10 @@
             <div class="ez-field-edit-preview__image-alt">
                 {{ form_row(form.alternativeText) }}
             </div>
-
-            {{ form_widget(form.focusPoint) }}
+            <div hidden="true">
+                {{ form_widget(form.focusPoint) }}
+                {{ form_widget(form.isNewFocusPoint) }}
+            </div>
         </div>
         <div class="ez-field-edit-preview__actions">
             <button type="button" class="ez-field-edit-preview__action--remove">

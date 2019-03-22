@@ -152,6 +152,7 @@ class Type extends ImageType
                 'posY' => $value->focusPoint->getPosY(),
             ];
         }
+        $hash['isNewFocusPoint'] = $value->isNewFocusPoint;
 
         return $hash;
     }
@@ -179,7 +180,7 @@ class Type extends ImageType
 
         $properties['focusPoint'] = (isset($fieldValue->data['focusPoint'])
             ? $fieldValue->data['focusPoint']
-            : null);
+            : new FocusPoint());
         // Restored data comes in $data, since it has already been processed
         // there might be more data in the persistence value than needed here
         $result = $this->fromHash($properties);

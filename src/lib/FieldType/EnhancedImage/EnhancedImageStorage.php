@@ -19,11 +19,19 @@ class EnhancedImageStorage extends ImageStorage
 {
     public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
-        $result = parent::storeFieldData($versionInfo, $field, $context);
-        if (isset($field->value->data['path']) && $this->aliasCleaner) {
-            $this->aliasCleaner->removeAliases($field->value->data['path']);
+        if (isset($field->value->externalData)) {
+            $isNewFocusPoint = $field->value->externalData['isNewFocusPoint'] ?? false;
+            if ($isNewFocusPoint && !isset($field->value->externalData['inputUri'])) {
+                if (isset($field->value->externalData['id'])) {
+                    $binaryFile      = $this->IOService->loadBinaryFile($field->value->externalData['id']);
+                    $stream          = $this->IOService->getFileInputStream($binaryFile);
+                    $streamMetadatas = stream_get_meta_data($stream);
+
+                    $field->value->externalData['inputUri'] = $streamMetadatas['uri'];
+                }
+            }
         }
 
-        return $result;
+        return parent::storeFieldData($versionInfo, $field, $context);
     }
 }

@@ -17,6 +17,7 @@ picture.enhancedimage--wrapper {
     position: absolute;
     min-height: 100%;
     min-width: 100%;
+    max-width: inherit;
     &.blur-up {
       -webkit-filter: blur(0);
       filter: blur(0);

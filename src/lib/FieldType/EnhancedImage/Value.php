@@ -27,9 +27,16 @@ class Value extends ImageValue
     /**
      * FocusPoint.
      *
-     * @var int
+     * @var FocusPoint
      */
     public $focusPoint;
+
+    /**
+     * After editing content, tell if focus point changed or not.
+     *
+     * @var bool
+     */
+    public $isNewFocusPoint = false;
 
     /**
      * Value constructor.
@@ -40,6 +47,7 @@ class Value extends ImageValue
      */
     public function __construct(array $imageData = [])
     {
+        $this->focusPoint = new FocusPoint();
         foreach ($imageData as $key => $value) {
             try {
                 $this->$key = $value;

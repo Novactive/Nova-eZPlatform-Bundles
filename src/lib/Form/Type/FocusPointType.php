@@ -4,7 +4,7 @@ namespace Novactive\EzEnhancedImageAsset\Form\Type;
 
 use Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\FocusPoint;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -28,10 +28,9 @@ class FocusPointType extends AbstractType
         $builder
             ->add(
                 'posX',
-                HiddenType::class,
+                TextType::class,
                 [
                     'label'      => /* @Desc("X") */ 'content.field_type.enhancedimage.focuspoint.posX',
-                    'empty_data' => 0,
                     'attr'       => [
                         'class' => 'focuspoint-helper--input-focus-x',
                     ],
@@ -39,10 +38,9 @@ class FocusPointType extends AbstractType
             )
             ->add(
                 'posY',
-                HiddenType::class,
+                TextType::class,
                 [
                     'label'      => /* @Desc("Y") */ 'content.field_type.enhancedimage.focuspoint.posY',
-                    'empty_data' => 0,
                     'attr'       => [
                         'class' => 'focuspoint-helper--input-focus-y',
                     ],

@@ -21,6 +21,7 @@
     const SELECTOR_RETICULE = '.focuspoint-helper--reticle';
     const SELECTOR_INPUT_FOCUS_X = '.focuspoint-helper--input-focus-x';
     const SELECTOR_INPUT_FOCUS_Y = '.focuspoint-helper--input-focus-y';
+    const SELECTOR_CB_IS_NEW = '.focuspoint-helper--cb-is-new';
 
     if (!global.eZ.BasePreviewField || !global.eZ.BaseFileFieldValidator) return null;
 
@@ -120,6 +121,7 @@
 
             this.fieldContainer.querySelector(SELECTOR_INPUT_FOCUS_X).setAttribute('value', focusX.toFixed(2));
             this.fieldContainer.querySelector(SELECTOR_INPUT_FOCUS_Y).setAttribute('value', focusY.toFixed(2));
+            this.fieldContainer.querySelector(SELECTOR_CB_IS_NEW).setAttribute('checked', 'checked');
 
             this.updateReticulePosition();
         }

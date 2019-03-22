@@ -52,6 +52,9 @@ class ValueTransformer extends ImageValueTransformer
         }
 
         $valueObject->focusPoint = $value['focusPoint'];
+        if ($value['isNewFocusPoint']) {
+            $valueObject->isNewFocusPoint = true;
+        }
 
         return $valueObject;
     }

@@ -40,7 +40,8 @@
       "./vendor/bin/phpmd src text .cs/md_ruleset.xml",
       "./vendor/bin/phpcpd src",
       "./vendor/bin/phpcbf -n src --standard=.cs/cs_ruleset.xml",
-      "./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src"
+      "./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src",
+      "yarn run fix-cs"
     ],
     "clean": [
       "rm -f .php_cs.cache",
