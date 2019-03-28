@@ -10,10 +10,10 @@
             {% set attr = attr|merge({'class': (attr.class|default('') ~ ' ez-field-preview ez-field-preview--ezimage')|trim}) %}
             <div {{ block( 'field_attributes' ) }}>
                 <div class="ez-image__wrapper  ">
-                    <picture class="enhancedimage--wrapper">
+                    <picture class="enhancedimage--wrapper enhancedimage--focused-img--wrapper">
                         <img srcset="{{ placeholderAlias ? asset( placeholderAlias.uri ) : "//:0" }}"
                              data-srcset="{{ imageAlias ? asset( imageAlias.uri ) : "//:0" }}"
-                             class="enhancedimage--img enhancedimage--img--lazyload blur-up"
+                             class="enhancedimage--img enhancedimage--focused-img enhancedimage--img--lazyload blur-up"
                              data-focus-x="{{ (focusPoint ? focusPoint.posX : '')}}"
                              data-focus-y="{{ (focusPoint ? focusPoint.posY : '')}}">
                     </picture>

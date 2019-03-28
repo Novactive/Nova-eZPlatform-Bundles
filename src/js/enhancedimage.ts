@@ -163,7 +163,7 @@ class EnhancedImage {
         };
     };
 
-    const imagesList = document.getElementsByClassName('enhancedimage--img');
+    const imagesList = document.getElementsByClassName('enhancedimage--focused-img');
     const throttleResizeCallback = throttle(function(e: Event) {
         const imagesCount = imagesList.length;
         for (let i = 0; i < imagesCount; i++) {
@@ -182,7 +182,7 @@ class EnhancedImage {
 
     document.addEventListener('lazyloaded', function(e: Event) {
         const elem = e.target as Element;
-        if (!regImg.test(elem.nodeName) || !elem.classList.contains('enhancedimage--img')) return false;
+        if (!regImg.test(elem.nodeName) || !elem.classList.contains('enhancedimage--focused-img')) return false;
 
         const imageElement = e.target as ImageElement,
             parent = imageElement.parentElement;
