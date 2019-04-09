@@ -12,6 +12,13 @@ Encore.setOutputPath(path.resolve(__dirname, 'src/bundle/Resources/public/js/mod
     .enableReactPreset()
     // .enableSingleRuntimeChunk()
     .splitEntryChunks()
+    .configureTerserPlugin((options) => {
+         options.terserOptions = {
+             output: {
+                 comments: false
+             }
+         }
+     })
 
 let config = Encore.getWebpackConfig();
 config.name = "menu_manager";

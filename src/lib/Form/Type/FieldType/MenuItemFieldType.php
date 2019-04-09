@@ -153,6 +153,10 @@ class MenuItemFieldType extends AbstractType
                 }
             }
         }
+
+        usort($availableMenus, function ($first, $second) {
+            return strcmp($first['menu']->getName(), $second['menu']->getName());
+        });
         $view->vars['available_menus'] = $availableMenus;
     }
 

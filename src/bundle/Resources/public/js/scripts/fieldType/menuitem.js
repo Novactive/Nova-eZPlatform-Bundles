@@ -151,6 +151,7 @@
                         state: {
                             disabled: true,
                         },
+                        type: 'Novactive\\EzMenuManagerBundle\\Entity\\MenuItem\\ContentMenuItem',
                     },
                     parentId,
                     'last'
@@ -270,7 +271,7 @@
                         data: this.json,
                         check_callback: this.check.bind(this),
                     },
-                    types: Object.assign({}, DEFAULT_ITEM_TYPES, MENU_MANAGER_CONFIG['types'] || {}),
+                    types: global.Novactive.MenuManagerConfig.getJsTreeTypes(),
                     checkbox: {
                         three_state: false,
                     },
@@ -283,7 +284,7 @@
             if (operation === 'create_node') return true;
             if (operation === 'move_node') {
                 let menuItem = this.menu.getItemByParentId(node.parent);
-                if (menuItem && menuItem.id == node.id && node.parent === node_parent.id && menuItem.isNew) return true;
+                if (menuItem && menuItem.id === node.id && node.parent === node_parent.id && menuItem.isNew) return true;
             }
             return false;
         }

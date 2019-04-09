@@ -33,3 +33,8 @@
 .menu-manager .jstree-disabled {
     text-decoration: line-through;
 }
+.menu-tree__wrapper {
+    max-height: 400px;
+    overflow: auto;
+    padding: 10px 0;
+}

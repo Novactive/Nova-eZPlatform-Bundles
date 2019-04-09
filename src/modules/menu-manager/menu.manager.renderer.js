@@ -20,9 +20,15 @@ import DefaultMenuItemType from './type/default.menu.item.type.module';
     const MenuManagerConfig = {
         config: {
             types: [],
+            jsTreeTypes: {
+                root: {
+                    icon: 'oi oi-menu',
+                },
+            },
         },
-        registerType: (type) => {
-            MenuManagerConfig.config['types'].push(type);
+        registerType: (itemType) => {
+            MenuManagerConfig.config['types'].push(itemType);
+            MenuManagerConfig.config['jsTreeTypes'][itemType.type] = itemType.getTreeType();
         },
         getTypesMap: () => {
             let map = new Map();
@@ -30,6 +36,9 @@ import DefaultMenuItemType from './type/default.menu.item.type.module';
                 map.set(itemType.type, itemType);
             }
             return map;
+        },
+        getJsTreeTypes: () => {
+            return MenuManagerConfig.config.jsTreeTypes;
         },
     };
     const MenuManagerRenderer = {

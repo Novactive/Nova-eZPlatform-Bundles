@@ -97,6 +97,7 @@ export default class MenuManagerModule extends Component {
                         onEdit={this.handeEdit}
                         language={eZ.adminUiConfig.languages.priority[0]}
                         types={this.props.config.getTypesMap()}
+                        jsTreeTypes={this.props.config.getJsTreeTypes()}
                     />
                 </div>
                 {editForm && <div className="col-md-6 card menu-manager-edit-form-container">{editForm}</div>}

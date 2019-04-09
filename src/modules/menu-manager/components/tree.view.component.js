@@ -17,22 +17,10 @@ import 'jstree/dist/jstree.min';
 import MenuItem from '../entity/menu.item.entity';
 
 const ROOT_ID = 'root';
-const DEFAULT_ITEM_TYPES = {
-    root: {
-        icon: 'oi oi-menu',
-    },
-};
-
 export default class TreeView extends PureComponent {
     constructor(props) {
         super(props);
         this.tree = null;
-
-        this.jsTreeTypes = DEFAULT_ITEM_TYPES;
-        const itemTypes = [...props.types.values()];
-        for (const itemType of itemTypes) {
-            this.jsTreeTypes[itemType.type] = itemType.getTreeType();
-        }
 
         this.onTreeChange = this.onTreeChange.bind(this);
         this.handleCheck = this.handleCheck.bind(this);
@@ -166,7 +154,7 @@ export default class TreeView extends PureComponent {
                     data: this.getTreeData(),
                     check_callback: this.handleCheck,
                 },
-                types: this.jsTreeTypes,
+                types: this.props.jsTreeTypes,
                 conditionalselect: (node, event) => {
                     return false;
                 },
@@ -192,6 +180,7 @@ export default class TreeView extends PureComponent {
 TreeView.propTypes = {
     items: PropTypes.instanceOf(Map),
     types: PropTypes.instanceOf(Map),
+    jsTreeTypes: PropTypes.instanceOf(Map),
     onChange: PropTypes.func,
     onEdit: PropTypes.func,
     language: PropTypes.string,

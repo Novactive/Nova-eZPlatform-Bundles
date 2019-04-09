@@ -2,14 +2,21 @@
 
 {% block menuitem_field %}
 {% spaceless %}
-    {% set menuItems = field.value.menuItems %}
+    {% set menuList = field.value.menuItems|sort_menu_items_by_menu() %}
     <ul>
-        {% for menuItem in menuItems %}
-            {% set breadcrumb = ezmenumanager_breadcrumb(menuItem) %}
+        {% for menu in menuList %}
             <li>
-                {% for item in breadcrumb %}
-                    <a href="{{ item.uri }}">{{ item.label }}</a>{% if not loop.last %} /{% endif %}
-                {% endfor %}
+                <a href="{{ path('menu_manager.menu_edit', {'menu': menu.menu}) }}"><strong>{{ menu.menu.name }}</strong></a>
+                <ul>
+                    {% for menuItem in menu.items %}
+                        {% set breadcrumb = ezmenumanager_breadcrumb(menuItem) %}
+                        <li>
+                            {% for item in breadcrumb %}
+                                <a href="{{ item.uri }}">{{ item.label }}</a>{% if not loop.last %} /{% endif %}
+                            {% endfor %}
+                        </li>
+                    {% endfor %}
+                </ul>
             </li>
         {% endfor %}
     </ul>
