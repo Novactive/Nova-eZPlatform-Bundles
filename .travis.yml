@@ -12,7 +12,8 @@ cache:
     - $HOME/.composer/cache
 
 install:
-  - travis_retry composer install --no-interaction
+  - COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install --no-interaction
+  - yarn install
 
 script:
   - composer tests
