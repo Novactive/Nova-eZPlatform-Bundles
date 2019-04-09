@@ -1,11 +1,12 @@
 <?php
 /**
- * MC-convergence-ezp.
+ * NovaeZMenuManagerBundle.
  *
- * @package   MC-convergence-ezp
+ * @package   NovaeZMenuManagerBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
+ * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
 namespace Novactive\EzMenuManager\MenuItem;

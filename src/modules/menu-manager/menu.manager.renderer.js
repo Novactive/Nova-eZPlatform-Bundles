@@ -1,3 +1,14 @@
+/*
+ * NovaeZMenuManagerBundle.
+ *
+ * @package   NovaeZMenuManagerBundle
+ *
+ * @author    Novactive <f.alexandre@novactive.com>
+ * @copyright 2019 Novactive
+ * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
+ *
+ */
+
 import ReactDOM from 'react-dom';
 import React from 'react';
 import MenuManager from './menu.manager.module';

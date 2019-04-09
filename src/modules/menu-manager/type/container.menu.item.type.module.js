@@ -1,3 +1,14 @@
+/*
+ * NovaeZMenuManagerBundle.
+ *
+ * @package   NovaeZMenuManagerBundle
+ *
+ * @author    Novactive <f.alexandre@novactive.com>
+ * @copyright 2019 Novactive
+ * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
+ *
+ */
+
 import React from 'react';
 import ContainerMenuItemEditFormModule from '../components/form/container.menu.item.edit.form.module';
 import DefaultMenuItemType from './default.menu.item.type.module';

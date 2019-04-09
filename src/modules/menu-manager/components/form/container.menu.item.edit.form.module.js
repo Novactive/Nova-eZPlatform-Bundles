@@ -1,3 +1,14 @@
+/*
+ * NovaeZMenuManagerBundle.
+ *
+ * @package   NovaeZMenuManagerBundle
+ *
+ * @author    Novactive <f.alexandre@novactive.com>
+ * @copyright 2019 Novactive
+ * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
+ *
+ */
+
 import PropTypes from 'prop-types';
 import MenuItemEditFormModule from './menu.item.edit.form.module';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
