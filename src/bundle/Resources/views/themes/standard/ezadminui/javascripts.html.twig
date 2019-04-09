@@ -1,33 +1,11 @@
-<script type="text/javascript">
-    var MENU_MANAGER_CONFIG = {
-        "types": {
-            "Novactive\\EzMenuManagerBundle\\Entity\\MenuItem" : {
-                icon : "oi oi-link-intact",
-                edit_form: "Novactive.modules.MenuItemEditForm",
-                max_children: -1,
-                max_depth: -1,
-                valid_children: -1
-            },
-            "Novactive\\EzMenuManagerBundle\\Entity\\MenuItem\\ContentMenuItem" : {
-                icon : "oi oi-document",
-                edit_form: null,
-                max_children: -1,
-                max_depth: -1,
-                valid_children: -1
-            }
-        }
-    }
-</script>
+{{ encore_entry_script_tags('menu-manager', null, 'menu_manager')}}
+{{ encore_entry_script_tags('menu-manager-renderer', null, 'menu_manager')}}
+{{ encore_entry_script_tags('menu-container-menuitem-type', null, 'menu_manager')}}
+{{ encore_entry_script_tags('menu-content-menuitem-type', null, 'menu_manager')}}
+{{ encore_entry_script_tags('menu-default-menuitem-type', null, 'menu_manager')}}
 {%  javascripts
-    '@EzMenuManagerBundle/Resources/public/js/modules/MenuItemEditForm.module.js'
-    '@EzMenuManagerBundle/Resources/public/js/modules/MenuManager.module.js'
     '@EzPlatformAdminUiBundle/Resources/public/js/scripts/fieldType/base/base-field.js'
     '@EzMenuManagerBundle/Resources/public/js/scripts/fieldType/*'
 %}
     <script src="{{ asset_url }}"></script>
 {% endjavascripts %}
-<script type="text/javascript">
-    var MENU_MANAGER_EDIT_FORMS_COMPONENTS = {
-        "Novactive.modules.MenuItemEditForm": Novactive.modules.MenuItemEditForm
-    };
-</script>

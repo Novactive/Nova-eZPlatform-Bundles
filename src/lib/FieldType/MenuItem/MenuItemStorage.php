@@ -99,7 +99,7 @@ class MenuItemStorage extends GatewayBasedStorage
      * @param \eZ\Publish\SPI\Persistence\Content\Field       $originalField
      * @param array                                           $context
      *
-     * @return null|bool same as {@link \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()}
+     * @return bool|null same as {@link \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()}
      */
     public function copyLegacyField(VersionInfo $versionInfo, Field $field, Field $originalField, array $context)
     {

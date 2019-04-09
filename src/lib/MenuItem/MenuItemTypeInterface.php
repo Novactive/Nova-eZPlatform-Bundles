@@ -11,7 +11,6 @@
 
 namespace Novactive\EzMenuManager\MenuItem;
 
-use Knp\Menu\ItemInterface;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 
 interface MenuItemTypeInterface
@@ -43,7 +42,7 @@ interface MenuItemTypeInterface
     /**
      * @param MenuItem $menuItem
      *
-     * @return ItemInterface
+     * @return MenuItemValue
      */
-    public function toMenuItemLink(MenuItem $menuItem): ?ItemInterface;
+    public function toMenuItemLink(MenuItem $menuItem): ?MenuItemValue;
 }

@@ -6,18 +6,13 @@ import MenuItem from './entity/menu.item.entity';
 
 import './css/menu-manager.css';
 
-const DEFAULT_CONFIG = {
-    types: {},
-};
-
 export default class MenuManagerModule extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            items: [],
+            items: new Map(),
             editedItem: null,
         };
-        this.config = Object.assign({}, DEFAULT_CONFIG, MENU_MANAGER_CONFIG);
         this.handleTreeChange = this.handleTreeChange.bind(this);
         this.handeEdit = this.handeEdit.bind(this);
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -57,7 +52,7 @@ export default class MenuManagerModule extends Component {
     componentDidMount() {
         const json = this.props.loadJson();
         const parsedItems = JSON.parse(json);
-        let items = new Map();
+        let items = this.state.items;
         for (let parsedItem of parsedItems) {
             const item = new MenuItem({
                 id: parsedItem['id'],
@@ -67,6 +62,7 @@ export default class MenuManagerModule extends Component {
                 url: parsedItem['url'],
                 target: parsedItem['target'],
                 type: parsedItem['type'],
+                options: parsedItem['options'],
             });
             items.set(item.id, item);
         }
@@ -74,18 +70,11 @@ export default class MenuManagerModule extends Component {
             items: items,
         }));
     }
-
     render() {
         let editForm = null;
         if (this.state.editedItem) {
-            const typeConfig = this.config.types[this.state.editedItem.type] || {},
-                editFormType = typeConfig['edit_form'];
-
-            editForm = React.createElement(MENU_MANAGER_EDIT_FORMS_COMPONENTS[editFormType], {
-                item: this.state.editedItem,
-                onSubmit: this.handleFormSubmit,
-                onCancel: this.handleFormCancel,
-            });
+            const itemType = this.props.config.getTypesMap().get(this.state.editedItem.type);
+            editForm = itemType.getEditForm(this.state.editedItem, this.handleFormSubmit, this.handleFormCancel);
         }
 
         return (
@@ -96,7 +85,7 @@ export default class MenuManagerModule extends Component {
                         onChange={this.handleTreeChange}
                         onEdit={this.handeEdit}
                         language={eZ.adminUiConfig.languages.priority[0]}
-                        types={this.config.types}
+                        types={this.props.config.getTypesMap()}
                     />
                 </div>
                 {editForm && <div className="col-md-6 card menu-manager-edit-form-container">{editForm}</div>}
@@ -108,4 +97,5 @@ export default class MenuManagerModule extends Component {
 MenuManagerModule.propTypes = {
     loadJson: PropTypes.func,
     onChange: PropTypes.func,
+    config: PropTypes.object,
 };

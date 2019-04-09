@@ -97,12 +97,22 @@ class MenuItem
     protected $options;
 
     /**
-     * MenuItem constructor.
+     * @ORM\Column(name="remote_id", type="string", nullable=false)
+     *
+     * @var string
      */
-    public function __construct()
+    protected $remoteId;
+
+    /**
+     * MenuItem constructor.
+     *
+     * @param string|null $remoteId
+     */
+    public function __construct(?string $remoteId = null)
     {
         $this->childrens = new ArrayCollection();
         $this->options   = json_encode([]);
+        $this->remoteId  = $remoteId ?? md5(uniqid(get_class($this), true));
     }
 
     /**

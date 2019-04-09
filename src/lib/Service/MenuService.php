@@ -86,7 +86,7 @@ class MenuService
     /**
      * @param $menuId
      *
-     * @return Menu|null|object
+     * @return Menu|object|null
      */
     public function loadMenu($menuId)
     {

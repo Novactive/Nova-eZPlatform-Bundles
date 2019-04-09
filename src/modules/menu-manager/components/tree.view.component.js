@@ -16,12 +16,17 @@ export default class TreeView extends PureComponent {
     constructor(props) {
         super(props);
         this.tree = null;
-        this.types = Object.assign({}, DEFAULT_ITEM_TYPES, this.props.types);
+
+        this.jsTreeTypes = DEFAULT_ITEM_TYPES;
+        const itemTypes = [...props.types.values()];
+        for (const itemType of itemTypes) {
+            this.jsTreeTypes[itemType.type] = itemType.getTreeType();
+        }
+
         this.onTreeChange = this.onTreeChange.bind(this);
         this.handleCheck = this.handleCheck.bind(this);
+        this.getNode = this.getNode.bind(this);
         this.handleContextMenu = this.handleContextMenu.bind(this);
-        this.handleDeleteTreeNode = this.handleDeleteTreeNode.bind(this);
-        this.handleRestoreTreeNode = this.handleRestoreTreeNode.bind(this);
         this.handleEditTreeNode = this.handleEditTreeNode.bind(this);
         this.handleCreateTreeNode = this.handleCreateTreeNode.bind(this);
     }
@@ -73,61 +78,30 @@ export default class TreeView extends PureComponent {
     }
 
     handleContextMenu(node) {
-        const parent = this.tree.get_node(node.parent);
-        let items = {};
+        const item = this.props.items.get(node.id);
+        let contextMenuItems = {};
 
-        if (node.state.disabled && !parent.state.disabled) {
-            items['restoreItem'] = {
-                label: Translator.trans('menu_item.action.restore'),
-                action: this.handleRestoreTreeNode,
+        if (!node.state.disabled) {
+            const itemTypes = [...this.props.types.values()];
+            let submenuItems = {};
+            for (const itemType of itemTypes) {
+                const btn = itemType.getContextualMenuCreateBtn(this, node, item);
+                if (btn) {
+                    submenuItems[`createItem_${itemType.identifier}`] = btn;
+                }
+            }
+            contextMenuItems[`createItem`] = {
+                label: Translator.trans(`menu_item.action.create`),
+                submenu: submenuItems,
+                separator_after: true,
             };
-        } else if (!node.state.disabled) {
-            for (const type in this.types) {
-                const typeConfig = this.types[type] || {},
-                    editFormType = typeConfig['edit_form'] || null;
-
-                if (editFormType) {
-                    items['createItem'] = {
-                        label: Translator.trans('menu_item.action.create'),
-                        action: (event) => {
-                            const parentNode = this.tree.get_node(event.reference),
-                                item = new MenuItem({
-                                    id: null,
-                                    name: Translator.trans('menu_item.default_title'),
-                                    parentId: parentNode.id,
-                                    type: type,
-                                });
-                            this.handleCreateTreeNode(item);
-                        },
-                    };
-                }
-            }
-            if (node.id !== ROOT_ID) {
-                const typeConfig = this.types[node.type] || {},
-                    editFormType = typeConfig['edit_form'] || null;
-                if (editFormType) {
-                    items['editItem'] = {
-                        label: Translator.trans('menu_item.action.edit'),
-                        action: this.handleEditTreeNode,
-                    };
-                }
-                items['removeItem'] = {
-                    label: Translator.trans('menu_item.action.remove'),
-                    action: this.handleDeleteTreeNode,
-                };
-            }
         }
-        return items;
-    }
 
-    handleRestoreTreeNode(event) {
-        this.enableTree(event.reference);
-        this.onTreeChange();
-    }
-
-    handleDeleteTreeNode(event) {
-        this.disableTree(event.reference);
-        this.onTreeChange();
+        if (node.id !== ROOT_ID) {
+            const itemType = this.props.types.get(node.type);
+            contextMenuItems = Object.assign(contextMenuItems, itemType.getContextualMenu(this, node, item) || {});
+        }
+        return contextMenuItems;
     }
 
     handleCreateTreeNode(item) {
@@ -138,6 +112,10 @@ export default class TreeView extends PureComponent {
         const node = this.tree.get_node(event.reference),
             item = this.props.items.get(node.id);
         this.props.onEdit(item);
+    }
+
+    getNode(id) {
+        return this.tree.get_node(id);
     }
 
     disableTree(id) {
@@ -177,7 +155,7 @@ export default class TreeView extends PureComponent {
                     data: this.getTreeData(),
                     check_callback: this.handleCheck,
                 },
-                types: this.types,
+                types: this.jsTreeTypes,
                 conditionalselect: (node, event) => {
                     return false;
                 },
@@ -201,8 +179,8 @@ export default class TreeView extends PureComponent {
 }
 
 TreeView.propTypes = {
-    items: PropTypes.arrayOf(PropTypes.instanceOf(MenuItem)),
-    types: PropTypes.object,
+    items: PropTypes.instanceOf(Map),
+    types: PropTypes.instanceOf(Map),
     onChange: PropTypes.func,
     onEdit: PropTypes.func,
     language: PropTypes.string,

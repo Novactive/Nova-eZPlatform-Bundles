@@ -11,24 +11,25 @@
 
 namespace Novactive\EzMenuManager\MenuItem\Type;
 
-use Knp\Menu\ItemInterface;
-use Knp\Menu\MenuItem as KnpMenuItem;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Novactive\EzMenuManager\MenuItem\AbstractMenuItemType;
-use Novactive\EzMenuManager\MenuItem\MenuItemTypeInterface;
+use Novactive\EzMenuManager\MenuItem\MenuItemValue;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 
-class DefaultMenuItemType extends AbstractMenuItemType implements MenuItemTypeInterface
+class DefaultMenuItemType extends AbstractMenuItemType
 {
-    /** @var array */
-    protected $languages;
+    /** @var ConfigResolverInterface */
+    protected $configResolver;
 
     /**
-     * @param array $languages
+     * @param ConfigResolverInterface $configResolver
+     *
+     * @required
      */
-    public function setLanguages(array $languages): void
+    public function setConfigResolver(ConfigResolverInterface $configResolver): void
     {
-        $this->languages = $languages;
+        $this->configResolver = $configResolver;
     }
 
     /**
@@ -54,6 +55,7 @@ class DefaultMenuItemType extends AbstractMenuItemType implements MenuItemTypeIn
             'url'      => $menuItem->getUrl(),
             'name'     => $menuItem->getName(),
             'target'   => $menuItem->getTarget(),
+            'options'  => $menuItem->getOptions(),
             'type'     => $this->getEntityClassName(),
         ];
     }
@@ -79,6 +81,11 @@ class DefaultMenuItemType extends AbstractMenuItemType implements MenuItemTypeIn
         ];
         $menuItem->update(array_filter($updateData));
 
+        $options = $hash['options'] ?? [];
+        foreach ($options as $option => $value) {
+            $menuItem->setOption($option, $value);
+        }
+
         if (isset($hash['parentId']) && $hash['parentId']) {
             $parent = $menuItemRepo->find($hash['parentId']);
             $menuItem->setParent($parent);
@@ -100,7 +107,7 @@ class DefaultMenuItemType extends AbstractMenuItemType implements MenuItemTypeIn
      *
      * @throws \ReflectionException
      *
-     * @return MenuItem|null|object
+     * @return MenuItem|object|null
      */
     protected function getEntity($id)
     {
@@ -117,15 +124,18 @@ class DefaultMenuItemType extends AbstractMenuItemType implements MenuItemTypeIn
     /**
      * @inheritDoc
      */
-    public function toMenuItemLink(MenuItem $menuItem): ?ItemInterface
+    public function toMenuItemLink(MenuItem $menuItem): ?MenuItemValue
     {
         $name = $this->getName($menuItem);
         if (null === $name) {
             return null;
         }
-        $url  = $this->getUrl($menuItem);
-        $link = new KnpMenuItem($name, $this->factory);
-        $link->setUri($url);
+
+        $link = new MenuItemValue($name);
+        if (true === $menuItem->getOption('active', true)) {
+            $url = $this->getUrl($menuItem);
+            $link->setUri($url);
+        }
         $link->setLinkAttribute('target', $menuItem->getTarget());
 
         return $link;
@@ -138,7 +148,8 @@ class DefaultMenuItemType extends AbstractMenuItemType implements MenuItemTypeIn
      */
     public function getName(MenuItem $menuItem): ?string
     {
-        foreach ($this->languages as $lang) {
+        $languages = $this->getLanguages();
+        foreach ($languages as $lang) {
             $value = $menuItem->getTranslatedName($lang);
             if (null !== $value) {
                 return $value;
@@ -155,7 +166,8 @@ class DefaultMenuItemType extends AbstractMenuItemType implements MenuItemTypeIn
      */
     public function getUrl(MenuItem $menuItem): ?string
     {
-        foreach ($this->languages as $lang) {
+        $languages = $this->getLanguages();
+        foreach ($languages as $lang) {
             $value = $menuItem->getTranslatedUrl($lang);
             if (null !== $value) {
                 return $value;
@@ -163,5 +175,10 @@ class DefaultMenuItemType extends AbstractMenuItemType implements MenuItemTypeIn
         }
 
         return null;
+    }
+
+    protected function getLanguages()
+    {
+        return $this->configResolver->getParameter('languages');
     }
 }

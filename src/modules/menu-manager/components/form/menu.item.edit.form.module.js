@@ -106,7 +106,9 @@ export default class MenuItemEditFormModule extends Component {
                         </Input>
                     </FormGroup>
                     <FormGroup>
-                        <Label for="item_name">{Translator.trans('menu_item.property.name')}</Label>
+                        <Label for="item_name">
+                            {Translator.trans('menu_item.property.name')} ({this.state.language})
+                        </Label>
                         <Input
                             type="text"
                             name="name"
@@ -116,7 +118,9 @@ export default class MenuItemEditFormModule extends Component {
                         />
                     </FormGroup>
                     <FormGroup>
-                        <Label for="item_url">{Translator.trans('menu_item.property.url')}</Label>
+                        <Label for="item_url">
+                            {Translator.trans('menu_item.property.url')} ({this.state.language})
+                        </Label>
                         <Input
                             type="text"
                             name="url"

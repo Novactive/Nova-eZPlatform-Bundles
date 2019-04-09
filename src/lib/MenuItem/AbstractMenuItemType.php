@@ -12,7 +12,6 @@
 namespace Novactive\EzMenuManager\MenuItem;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Knp\Menu\FactoryInterface;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 
 abstract class AbstractMenuItemType implements MenuItemTypeInterface
@@ -20,19 +19,14 @@ abstract class AbstractMenuItemType implements MenuItemTypeInterface
     /** @var EntityManagerInterface */
     protected $em;
 
-    /** @var FactoryInterface */
-    protected $factory;
-
     /**
      * AbstractMenuItemType constructor.
      *
      * @param EntityManagerInterface $em
-     * @param FactoryInterface       $factory
      */
-    public function __construct(EntityManagerInterface $em, FactoryInterface $factory)
+    public function __construct(EntityManagerInterface $em)
     {
-        $this->em      = $em;
-        $this->factory = $factory;
+        $this->em = $em;
     }
 
     /**

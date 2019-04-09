@@ -15,3 +15,10 @@
     box-shadow: -10px 0px 10px -5px #cfcfcf;
     filter: progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, Strength=10);
 }
+.menu-manager .jstree-desactivated {
+    background: transparent;
+    color: #666666;
+}
+.menu-manager .jstree-disabled {
+    text-decoration: line-through;
+}

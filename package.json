@@ -15,26 +15,18 @@
         "fix-cs": "prettier --write 'src/modules/**/*.+(js|scss|less|css)' && prettier --write 'src/bundle/Resources/public/js/scripts/**/*.+(js)'"
     },
     "devDependencies": {
-        "babel-core": "^6.26.3",
+        "@babel/core": "^7.4.3",
+        "@babel/plugin-proposal-class-properties": "^7.4.0",
+        "@babel/preset-env": "^7.4.3",
+        "@babel/preset-react": "^7.0.0",
+        "@babel/register": "^7.4.0",
+        "@symfony/webpack-encore": "^0.22.4",
         "babel-eslint": "^8.2.1",
-        "babel-loader": "^7.1.4",
-        "babel-plugin-transform-object-rest-spread": "^6.26.0",
-        "babel-preset-env": "^1.7.0",
-        "babel-preset-react": "^6.24.1",
-        "clean-webpack-plugin": "^0.1.17",
-        "css-loader": "^0.28.11",
-        "eslint": "^5.0.1",
-        "eslint-config-prettier": "^2.9.0",
-        "eslint-plugin-prettier": "^2.6.0",
-        "eslint-plugin-react": "^7.7.0",
-        "file-loader": "^2.0.0",
-        "html-to-react": "^1.3.2",
-        "npm-watch": "^0.3.0",
-        "prettier": "^1.12.1",
-        "prop-types": "^15.6.1",
-        "style-loader": "^0.21.0",
-        "uglifyjs-webpack-plugin": "^1.1.6",
-        "webpack": "3.10.0",
-        "webpack-merge": "^4.1.3"
+        "eslint": "^5.16.0",
+        "eslint-config-prettier": "^4.1.0",
+        "eslint-loader": "^1.9.0",
+        "eslint-plugin-prettier": "^3.0.1",
+        "eslint-plugin-react": "^7.12.4",
+        "prettier": "^1.16.4"
     }
 }

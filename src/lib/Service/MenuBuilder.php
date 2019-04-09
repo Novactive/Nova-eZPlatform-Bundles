@@ -14,6 +14,7 @@ namespace Novactive\EzMenuManager\Service;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Novactive\EzMenuManager\MenuItem\MenuItemTypeRegistry;
+use Novactive\EzMenuManager\MenuItem\MenuItemValue;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 
@@ -95,9 +96,9 @@ class MenuBuilder
      *
      * @throws \Novactive\EzMenuManager\Exception\MenuItemTypeNotFoundException
      *
-     * @return ItemInterface|null
+     * @return MenuItemValue|null
      */
-    public function toMenuItemLink(MenuItem $menuItem)
+    public function toMenuItemLink(MenuItem $menuItem): ?MenuItemValue
     {
         $type = $this->menuItemTypeRegistry->getMenuItemEntityType($menuItem);
 

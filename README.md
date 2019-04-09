@@ -15,6 +15,7 @@ An eZPlatform bundle to let your contributor manage their website menus.
 
 - eZ Platform Admin UI
 - PHP 7.1+
+- Webpack Encore
 
 ## Installation
 
@@ -40,6 +41,32 @@ public function registerBundles()
         // ...
     );
 }
+```
+
+### Routing config
+
+Add the following routing config
+
+```php
+novactive.menu_manager:
+    resource: "@EzMenuManagerBundle/Controller/"
+    type:     annotation
+    prefix:   /
+```
+
+### Define menu types
+
+Menu types are defined thougth the following siteaccess aware variable
+```yaml
+nova_menu_manager.default.menu_types:
+    <identifier>: <string or translation key>
+```
+
+Exemple 
+```yaml
+nova_menu_manager.default.menu_types:
+    main: menu.type.main
+    footer: menu.type.footer
 ```
 
 ## Usage
