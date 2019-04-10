@@ -5,6 +5,8 @@ services:
         autowire: true
         autoconfigure: true
         public: false
+        bind:
+            $httpCachePurgeClient: '@ezplatform.http_cache.purge_client'
 
     Novactive\Bundle\eZProtectedContentBundle\Repository\:
         resource: '../../Repository'

@@ -15,6 +15,7 @@ namespace Novactive\Bundle\eZProtectedContentBundle\Controller\Admin;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use EzSystems\PlatformHttpCacheBundle\PurgeClient\PurgeClientInterface;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
 use Novactive\Bundle\eZProtectedContentBundle\Form\ProtectedAccessType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -35,6 +36,7 @@ class ProtectedAccessController
         FormFactory $formFactory,
         EntityManagerInterface $entityManager,
         RouterInterface $router,
+        PurgeClientInterface $httpCachePurgeClient,
         ?ProtectedAccess $access = null
     ): RedirectResponse {
         if ($request->isMethod('post')) {
@@ -50,6 +52,12 @@ class ProtectedAccessController
                 $access->setUpdated($now);
                 $entityManager->persist($access);
                 $entityManager->flush();
+                $httpCachePurgeClient->purge(
+                    [
+                        'location-'.$location->id,
+                        'location-'.$location->parentLocationId,
+                    ]
+                );
             }
         }
 
@@ -63,10 +71,18 @@ class ProtectedAccessController
         Location $location,
         EntityManagerInterface $entityManager,
         RouterInterface $router,
-        ProtectedAccess $access
+        ProtectedAccess $access,
+        PurgeClientInterface $httpCachePurgeClient
     ): RedirectResponse {
         $entityManager->remove($access);
         $entityManager->flush();
+
+        $httpCachePurgeClient->purge(
+            [
+                'location-'.$location->id,
+                'location-'.$location->parentLocationId,
+            ]
+        );
 
         return new RedirectResponse($router->generate($location).'#ez-tab-location-view-protect-content#tab');
     }
