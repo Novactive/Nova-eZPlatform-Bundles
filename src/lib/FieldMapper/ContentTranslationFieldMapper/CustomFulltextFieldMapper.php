@@ -36,7 +36,6 @@ class CustomFulltextFieldMapper extends CustomFieldMapper
             return;
         }
 
-        $fields = [];
         foreach ($fieldNames as $fieldName) {
             $fields[] = new Field(
                 "meta_{$fieldName}__text",
