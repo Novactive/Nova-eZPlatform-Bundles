@@ -10,7 +10,7 @@
  */
 declare(strict_types=1);
 
-namespace Novactive\Bundle\eZLDAPAuthenticatorBundle\Provider;
+namespace Novactive\eZLDAPAuthenticator\Provider;
 
 use Symfony\Component\Ldap\LdapInterface;
 use Symfony\Component\Security\Core\Authentication\Provider\LdapBindAuthenticationProvider;

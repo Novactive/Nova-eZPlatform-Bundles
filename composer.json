@@ -31,7 +31,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Novactive\\Bundle\\eZLDAPAuthenticatorBundle\\": "bundle"
+            "Novactive\\Bundle\\eZLDAPAuthenticatorBundle\\": "src/bundle",
+            "Novactive\\eZLDAPAuthenticator\\": "src/lib"
         }
     }
 }

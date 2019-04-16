@@ -2,7 +2,7 @@
 /**
  * NovaeZLDAPAuthenticator Bundle.
  *
- * @package   Novactive\Bundle\eZLDAPAuthenticatorBundle
+ * @package   Novactive\Bundle\eZLDAPAuthenticator
  *
  * @author    Novactive
  * @copyright 2019 Novactive
@@ -10,7 +10,7 @@
  */
 declare(strict_types=1);
 
-namespace Novactive\Bundle\eZLDAPAuthenticatorBundle\User;
+namespace Novactive\eZLDAPAuthenticator\User;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Ldap\LdapInterface;

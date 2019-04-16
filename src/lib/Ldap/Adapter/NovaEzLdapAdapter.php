@@ -10,7 +10,7 @@
  */
 declare(strict_types=1);
 
-namespace Novactive\Bundle\eZLDAPAuthenticatorBundle\Adapter;
+namespace Novactive\eZLDAPAuthenticator\Ldap\Adapter;
 
 use Symfony\Component\Ldap\Adapter\ExtLdap\Adapter;
 
