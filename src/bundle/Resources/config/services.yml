@@ -62,10 +62,6 @@ services:
     tags:
     - {name: ezpublish.search.solr.query.content.criterion_visitor}
 
-  Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor\MultipleFieldsFullText:
-    tags:
-    - {name: ezpublish.search.solr.query.content.criterion_visitor}
-
   Novactive\EzSolrSearchExtra\Query\CriterionHandler\MultipleFieldsFullText:
     arguments:
       $dbHandler: "@ezpublish.api.storage_engine.legacy.dbhandler"
