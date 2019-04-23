@@ -87,10 +87,8 @@ class EzLdapAuthenticatorExtension extends Extension implements PrependExtension
                           '$baseDn'            => $userProviderConfig['base_dn'],
                           '$searchDn'          => $userProviderConfig['search_dn'],
                           '$searchPassword'    => $userProviderConfig['search_password'],
-                          '$defaultRoles'      => $userProviderConfig['default_roles'],
                           '$uidKey'            => $userProviderConfig['uid_key'],
                           '$filter'            => $userProviderConfig['filter'],
-                          '$passwordAttribute' => $userProviderConfig['password_attribute'],
                       ]
                   )
                   ->addMethodCall('setLdapEntryConverter', [new Reference($ldapEntryConverterId)]);
