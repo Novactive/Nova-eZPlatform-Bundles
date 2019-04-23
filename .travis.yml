@@ -15,4 +15,4 @@ install:
   - travis_retry composer install --no-interaction
 
 script:
-  - php vendor/bin/phpcs --standard=../.cs/cs_ruleset.xml --extensions=php src/
+  - composer tests

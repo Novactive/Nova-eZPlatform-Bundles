@@ -1,27 +1,39 @@
 services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
-        public: true
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
 
-    nova_ez.ldap.login_listener:
-        class: Novactive\eZLDAPAuthenticator\Listener\InteractiveLoginListener
-        arguments:
-            $ldap: '@nova_ez.ldap'
-            $config: '%nova_ez_ldap%'
-            $translator: '@translator'
-            $tokenStorage: '@security.token_storage'
+  nova_ez.ldap.connection:
+    alias: Novactive\eZLDAPAuthenticator\Ldap\LdapConnection
+    public: false
 
-    nova_ez.ldap.adapter:
-        class: Novactive\eZLDAPAuthenticator\Adapter\NovaEzLdapAdapter
-        arguments: ['%nova_ez_ldap%']
+  nova_ez.ldap:
+    class: Symfony\Component\Ldap\Ldap
+    factory: ['@nova_ez.ldap.connection', getLdap]
 
-    nova_ez.ldap.user_provider:
-        class: Novactive\eZLDAPAuthenticator\User\NovaEzLdapUserProvider
-        arguments:
-            $ldap: '@nova_ez.ldap'
-            $config: '%nova_ez_ldap%'
+  nova_ez.ldap.user_provider:
+    class: Novactive\eZLDAPAuthenticator\User\Provider\EzLdapUserProvider
+    factory: ['@nova_ez.ldap.connection', getLdapUserProvider]
 
-    nova_ez.ldap:
-        class: Symfony\Component\Ldap\Ldap
-        arguments: ['@nova_ez.ldap.adapter']
+  nova_ez.ldap.default:
+    class: Symfony\Component\Ldap\Ldap
+    abstract: true
+
+  nova_ez.ldap.default.adapter:
+    class: Symfony\Component\Ldap\Adapter\ExtLdap\Adapter
+    abstract: true
+
+  Novactive\eZLDAPAuthenticator\Ldap\LdapConnection:
+    abstract: true
+
+  Novactive\eZLDAPAuthenticator\User\Provider\EzLdapUserProvider:
+    abstract: true
+
+  Novactive\eZLDAPAuthenticator\User\Converter\LdapEntryConverter:
+    abstract: true
+
+  Novactive\eZLDAPAuthenticator\Listener\InteractiveLoginListener:
+
+  Novactive\eZLDAPAuthenticator\Listener\SecurityListener:
+    decorates: ezpublish.security.login_listener

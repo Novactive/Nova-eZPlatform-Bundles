@@ -8,16 +8,17 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZLdapAuthenticatorBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
-namespace Novactive\eZLDAPAuthenticator\Ldap\Adapter;
+namespace Novactive\eZLDAPAuthenticator\Ldap;
 
 use Symfony\Component\Ldap\Adapter\ExtLdap\Adapter;
 
-class NovaEzLdapAdapter extends Adapter
+class LdapAdapterFactory
 {
-    public function __construct(array $config)
+    public function createAdapter(array $options)
     {
-        parent::__construct($config['ldap']['connection']);
+        return new Adapter($options);
     }
 }

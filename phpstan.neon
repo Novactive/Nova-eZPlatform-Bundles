@@ -1,0 +1,5 @@
+includes:
+	- vendor/phpstan/phpstan-symfony/extension.neon
+parameters:
+    excludes_analyse:
+        - */DependencyInjection/Configuration.php
