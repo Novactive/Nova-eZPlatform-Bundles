@@ -22,6 +22,8 @@ services:
         resource: "../../../lib/Service/*"
 
     Novactive\EzMenuManager\Service\MenuCacheService:
+        arguments:
+            $cache: "@ezpublish.cache_pool"
         calls:
             - [setSiteAccess, ['@ezpublish.siteaccess']]
 
