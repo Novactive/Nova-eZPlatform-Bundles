@@ -180,7 +180,7 @@ export default class TreeView extends PureComponent {
 TreeView.propTypes = {
     items: PropTypes.instanceOf(Map),
     types: PropTypes.instanceOf(Map),
-    jsTreeTypes: PropTypes.instanceOf(Map),
+    jsTreeTypes: PropTypes.object,
     onChange: PropTypes.func,
     onEdit: PropTypes.func,
     language: PropTypes.string,

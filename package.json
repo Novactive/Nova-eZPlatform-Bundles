@@ -1,5 +1,5 @@
 {
-    "name": "ezplatform-admin-ui-modules",
+    "name": "@novactive/ezmenumanagerbundle",
     "license": "MIT",
     "dependencies": {
         "jstree": "^3.3.6",
@@ -8,10 +8,10 @@
         "reactstrap": "^6.5.0"
     },
     "scripts": {
-        "build": "webpack --config webpack.prod.js",
-        "builddev": "webpack --config webpack.dev.js",
-        "watch": "webpack --watch --config webpack.dev.js",
-        "watchprod": "webpack --watch --config webpack.prod.js",
+        "build": "encore production",
+        "builddev": "encore dev",
+        "watch": "encore production --watch",
+        "watchprod": "encore dev --watch",
         "fix-cs": "prettier --write 'src/modules/**/*.+(js|scss|less|css)' && prettier --write 'src/bundle/Resources/public/js/scripts/**/*.+(js)'"
     },
     "devDependencies": {

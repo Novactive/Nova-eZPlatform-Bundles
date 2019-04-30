@@ -17,7 +17,7 @@ export default class DefaultMenuItemType extends MenuItemType {
     /**
      * @inheritDoc
      */
-    getContextualMenu(treeView, node) {
+    getContextualMenu(treeView, node, item) {
         let items = {};
 
         items['editItem'] = {
@@ -25,7 +25,7 @@ export default class DefaultMenuItemType extends MenuItemType {
             action: treeView.handleEditTreeNode,
             separator_after: true,
         };
-        return Object.assign(items, super.getContextualMenu(treeView, node) || {});
+        return Object.assign(items, super.getContextualMenu(treeView, node, item) || {});
     }
 
     /**
@@ -38,7 +38,7 @@ export default class DefaultMenuItemType extends MenuItemType {
             label: Translator.trans(`menu_item.action.create.${this.identifier}`),
             action: () => {
                 const item = getNewItem({ parentId: parentNode.id });
-                this.handleCreateTreeNode(item);
+                treeView.handleCreateTreeNode(item);
             },
         };
     }
@@ -57,3 +57,4 @@ export default class DefaultMenuItemType extends MenuItemType {
         });
     }
 }
+
