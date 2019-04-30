@@ -15,9 +15,15 @@ interface ImageElement extends HTMLImageElement {
 }
 
 interface Source {
-    url: URL;
+    url: HTMLAnchorElement;
     focus: Focus;
 }
+
+const UrlParser = function(href: string) {
+    var l = document.createElement("a");
+    l.href = href;
+    return l;
+};
 
 class EnhancedImage {
     sources: Map<string, Source>;
@@ -32,7 +38,7 @@ class EnhancedImage {
     }
 
     addSource(urlString: string, focus: Focus) {
-        const url = new URL(urlString, window.location.toString());
+        const url = UrlParser(urlString);
         const source = { url: url, focus: focus };
         this.sources.set(source.url.pathname, source);
     }
@@ -44,7 +50,7 @@ class EnhancedImage {
 
     updateFocusPoint(forceUpdate?: boolean) {
         if (this.currentSrc === this.element.currentSrc && forceUpdate !== true) return false;
-        const currentSource = this.sources.get(new URL(this.element.currentSrc, window.location.toString()).pathname);
+        const currentSource = this.sources.get(UrlParser(this.element.currentSrc).pathname);
         if (!currentSource) return false;
 
         this.setFocus(currentSource.focus);
