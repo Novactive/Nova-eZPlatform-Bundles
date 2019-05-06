@@ -154,7 +154,7 @@ class AdminController extends Controller
     {
         $menu = new Menu();
 
-        return $this->editAction($this->em, $request, $menu);
+        return $this->editAction($request, $menu);
     }
 
     /**
