@@ -25,8 +25,12 @@ class ProtectedAccessType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('contentId', HiddenType::class, ['required' => true])
-                ->add('protectChildren', CheckboxType::class, ['label' => 'tab.table.th.children_protection'])
-                ->add('enabled', CheckboxType::class, ['label' => 'tab.table.th.enabled'])
+                ->add(
+                    'protectChildren',
+                    CheckboxType::class,
+                    ['label' => 'tab.table.th.children_protection', 'required' => false]
+                )
+                ->add('enabled', CheckboxType::class, ['label' => 'tab.table.th.enabled', 'required' => false])
                 ->add('password', TextType::class, ['required' => true, 'label' => 'tab.table.th.password']);
     }
 
