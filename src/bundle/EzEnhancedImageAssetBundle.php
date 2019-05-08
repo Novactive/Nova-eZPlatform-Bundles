@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAssetBundle;
 
+use Novactive\EzEnhancedImageAsset\FieldValueConverter\FieldValueConverterInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
@@ -19,4 +21,14 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class EzEnhancedImageAssetBundle extends Bundle
 {
+    /**
+     * @inheritDoc
+     */
+    public function build(ContainerBuilder $container): void
+    {
+        parent::build($container);
+        $container->registerForAutoconfiguration(FieldValueConverterInterface::class)
+            ->addTag('ez_enhanced_image_asset.field_value_converter')
+        ;
+    }
 }
