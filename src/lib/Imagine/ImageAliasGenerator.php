@@ -43,7 +43,7 @@ use SplFileInfo;
  */
 class ImageAliasGenerator implements VariationHandler
 {
-    const ALIAS_ORIGINAL = 'original';
+    public const ALIAS_ORIGINAL = 'original';
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -177,7 +177,7 @@ class ImageAliasGenerator implements VariationHandler
      *
      * @return bool
      */
-    public function supportsValue(Value $value)
+    public function supportsValue(Value $value): bool
     {
         return $value instanceof ImageValue;
     }

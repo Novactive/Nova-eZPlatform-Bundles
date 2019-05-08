@@ -72,7 +72,7 @@ class FocusPointCalculator
             $posY = $imageSize->getHeight() - $cropSize->getHeight();
         }
 
-        return new Point($posX, $posY);
+        return new Point((int) $posX, (int) $posY);
     }
 
     /**

@@ -21,7 +21,7 @@ class ValueTransformer extends ImageValueTransformer
      *
      * @return array
      */
-    public function transform($value)
+    public function transform($value): array
     {
         if (null === $value) {
             $value = $this->fieldType->getEmptyValue();
@@ -42,7 +42,7 @@ class ValueTransformer extends ImageValueTransformer
      *
      * @return Value
      */
-    public function reverseTransform($value)
+    public function reverseTransform($value): Value
     {
         /** @var Value $valueObject */
         $valueObject = parent::reverseTransform($value);

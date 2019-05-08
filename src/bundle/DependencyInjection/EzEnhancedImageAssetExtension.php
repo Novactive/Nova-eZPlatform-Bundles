@@ -30,7 +30,7 @@ class EzEnhancedImageAssetExtension extends Extension implements PrependExtensio
     /**
      * {@inheritDoc}
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
@@ -46,7 +46,7 @@ class EzEnhancedImageAssetExtension extends Extension implements PrependExtensio
      *
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function prepend(ContainerBuilder $container)
+    public function prepend(ContainerBuilder $container): void
     {
         $container->prependExtensionConfig(
             'assetic',
@@ -72,7 +72,7 @@ class EzEnhancedImageAssetExtension extends Extension implements PrependExtensio
 
         foreach ($configs as $fileName => $extensionName) {
             $configFile = __DIR__.'/../Resources/config/'.$fileName;
-            $config     = Yaml::parse(file_get_contents($configFile));
+            $config     = Yaml::parse((string) file_get_contents($configFile));
             $container->prependExtensionConfig($extensionName, $config);
             $container->addResource(new FileResource($configFile));
         }

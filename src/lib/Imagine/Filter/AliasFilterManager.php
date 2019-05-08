@@ -65,12 +65,15 @@ class AliasFilterManager
      *
      * @return \Liip\ImagineBundle\Binary\BinaryInterface
      */
-    public function applyFilter(BinaryInterface $image, $variationName, array $runtimeFiltersConfig = [])
-    {
+    public function applyFilter(
+        BinaryInterface $image,
+        $variationName,
+        array $runtimeFiltersConfig = []
+    ): BinaryInterface {
         $filterConfig = $this->filterConfiguration->get($variationName);
         // If the variation has a reference, we recursively call this method to apply reference's filters.
         if (isset($filterConfig['reference'])
-             && IORepositoryResolver::VARIATION_ORIGINAL !== $filterConfig['reference']) {
+            && IORepositoryResolver::VARIATION_ORIGINAL !== $filterConfig['reference']) {
             $image = $this->applyFilter($image, $filterConfig['reference'], $runtimeFiltersConfig);
         }
 

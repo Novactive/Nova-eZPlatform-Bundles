@@ -60,4 +60,34 @@ class Value extends ImageValue
             }
         }
     }
+
+    /**
+     * Creates a value only from a file path.
+     *
+     * @param string $path
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
+     *
+     * @return \eZ\Publish\Core\FieldType\Image\Value
+     *
+     * @deprecated Starting with 5.3.3, handled by Image\Type::acceptValue()
+     */
+    public static function fromString($path)
+    {
+        if (!file_exists($path)) {
+            throw new InvalidArgumentType(
+                '$path',
+                'existing file',
+                $path
+            );
+        }
+
+        return new static(
+            [
+                'inputUri' => $path,
+                'fileName' => basename($path),
+                'fileSize' => filesize($path),
+            ]
+        );
+    }
 }

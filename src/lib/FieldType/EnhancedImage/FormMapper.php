@@ -11,6 +11,7 @@
 
 namespace Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\FieldTypeService;
 use EzSystems\RepositoryForms\Data\Content\FieldData;
 use EzSystems\RepositoryForms\FieldType\Mapper\ImageFormMapper;
@@ -35,7 +36,7 @@ class FormMapper extends ImageFormMapper
      * @param FormInterface $fieldForm
      * @param FieldData     $data
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws NotFoundException
      */
     public function mapFieldValueForm(FormInterface $fieldForm, FieldData $data)
     {

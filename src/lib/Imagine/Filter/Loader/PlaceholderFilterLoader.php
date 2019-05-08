@@ -25,7 +25,7 @@ class PlaceholderFilterLoader implements LoaderInterface
      */
     public function load(ImageInterface $image, array $options = [])
     {
-        list($width, $height) = $options['size'];
+        [$width, $height] = $options['size'];
 
         $size       = $image->getSize();
         $origWidth  = $size->getWidth();
@@ -39,7 +39,7 @@ class PlaceholderFilterLoader implements LoaderInterface
             }
         }
 
-        if (($origWidth > $width || $origHeight > $height)) {
+        if ($origWidth > $width || $origHeight > $height) {
             $filter = new Thumbnail(new Box($width, $height), ImageInterface::THUMBNAIL_OUTBOUND);
             $image  = $filter->apply($image);
         }

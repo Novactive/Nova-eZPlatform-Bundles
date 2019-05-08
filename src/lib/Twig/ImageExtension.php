@@ -29,6 +29,7 @@ use Novactive\EzEnhancedImageAsset\FocusPoint\FocusPointCalculator;
 use Novactive\EzEnhancedImageAsset\Values\FocusedVariation;
 use Psr\Log\LoggerInterface;
 use ReflectionClass;
+use ReflectionException;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
@@ -48,6 +49,7 @@ class ImageExtension extends Twig_Extension
 
     /**
      * @param VariationHandler $imageVariationService
+     *
      * @required
      */
     public function setImageVariationService(VariationHandler $imageVariationService): void
@@ -57,6 +59,7 @@ class ImageExtension extends Twig_Extension
 
     /**
      * @param FocusPointCalculator $focusPointCalculator
+     *
      * @required
      */
     public function setFocusPointCalculator(FocusPointCalculator $focusPointCalculator): void
@@ -66,6 +69,7 @@ class ImageExtension extends Twig_Extension
 
     /**
      * @param FilterConfiguration $filterConfiguration
+     *
      * @required
      */
     public function setFilterConfiguration(FilterConfiguration $filterConfiguration): void
@@ -75,6 +79,7 @@ class ImageExtension extends Twig_Extension
 
     /**
      * @param LoggerInterface $logger
+     *
      * @required
      */
     public function setLogger(LoggerInterface $logger): void
@@ -82,12 +87,12 @@ class ImageExtension extends Twig_Extension
         $this->logger = $logger;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'ezpublish.image';
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new Twig_SimpleFunction(
@@ -103,32 +108,35 @@ class ImageExtension extends Twig_Extension
      *
      * @param Field       $field
      * @param VersionInfo $versionInfo
-     * @param $variationName
+     * @param string      $variationName
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
-     * @return ImageVariation|FocusedVariation
+     * @return ImageVariation|FocusedVariation|null
      */
-    public function getImageVariation(Field $field, VersionInfo $versionInfo, $variationName)
+    public function getImageVariation(Field $field, VersionInfo $versionInfo, string $variationName)
     {
         try {
             $parameters         = [];
             $isFocusedThumbnail = false;
+            $focusPoint         = null;
 
             if (IORepositoryResolver::VARIATION_ORIGINAL !== $variationName) {
                 $variationConfig    = $this->filterConfiguration->get($variationName);
-                $isFocusedThumbnail = isset($variationConfig['filters'])
-                                      && isset($variationConfig['filters']['focusedThumbnail']);
+                $isFocusedThumbnail = isset(
+                    $variationConfig['filters'],
+                    $variationConfig['filters']['focusedThumbnail']
+                );
                 if ($isFocusedThumbnail) {
                     /** @var FocusPoint $focusPoint */
                     $focusPoint = $field->value->focusPoint;
                     $parameters = [
-                    'filters' => [
-                        'focusedThumbnail' => [
-                            'focusPoint'   => $focusPoint,
-                            'originalSize' => new Box($field->value->width, $field->value->height),
+                        'filters' => [
+                            'focusedThumbnail' => [
+                                'focusPoint'   => $focusPoint,
+                                'originalSize' => new Box($field->value->width, $field->value->height),
+                            ],
                         ],
-                    ],
                     ];
                 }
             }
@@ -145,7 +153,7 @@ class ImageExtension extends Twig_Extension
                 return $variation;
             }
 
-            if (IORepositoryResolver::VARIATION_ORIGINAL !== $variationName) {
+            if (IORepositoryResolver::VARIATION_ORIGINAL !== $variationName && null !== $focusPoint) {
                 /** @var ImageVariation $originalVariation */
                 $originalVariation = $this->imageVariationService->getVariation(
                     $field,

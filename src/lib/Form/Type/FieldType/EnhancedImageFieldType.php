@@ -26,25 +26,25 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class EnhancedImageFieldType extends AbstractType
 {
     /**
-     * @return string|null
+     * {@inheritDoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->getBlockPrefix();
     }
 
     /**
-     * @return string|null
+     * {@inheritDoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'ezplatform_fieldtype_enhancedimage';
     }
 
     /**
-     * @return string|null
+     * {@inheritDoc}
      */
-    public function getParent()
+    public function getParent(): ?string
     {
         return ImageFieldType::class;
     }
@@ -53,7 +53,7 @@ class EnhancedImageFieldType extends AbstractType
      * @param FormBuilderInterface $builder
      * @param array                $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add(
@@ -80,7 +80,7 @@ class EnhancedImageFieldType extends AbstractType
     /**
      * @param OptionsResolver $resolver
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['translation_domain' => 'ezrepoforms_fieldtype']);
     }

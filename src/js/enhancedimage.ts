@@ -20,7 +20,7 @@ interface Source {
 }
 
 const UrlParser = function(href: string) {
-    var l = document.createElement("a");
+    var l = document.createElement('a');
     l.href = href;
     return l;
 };

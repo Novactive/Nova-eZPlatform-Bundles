@@ -70,7 +70,7 @@
     <rule ref="rulesets/design.xml/CouplingBetweenObjects">
         <priority>1</priority>
         <properties>
-            <property name="minimum" value="20"/>
+            <property name="minimum" value="50"/>
         </properties>
     </rule>
     <rule ref="rulesets/cleancode.xml">

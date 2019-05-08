@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage;
 
+use DOMDocument;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\ImageConverter;
 
 class ValueConverter extends ImageConverter
@@ -20,13 +21,13 @@ class ValueConverter extends ImageConverter
     /**
      * @inheritDoc
      */
-    protected function fillXml($imageData, $pathInfo, $timestamp)
+    protected function fillXml($imageData, $pathInfo, $timestamp): string
     {
         $xml = parent::fillXml($imageData, $pathInfo, $timestamp);
 
         $focusPoint = $imageData['focusPoint'] ?? null;
         if (is_array($focusPoint)) {
-            $dom = new \DOMDocument();
+            $dom = new DOMDocument();
             $dom->loadXML($xml);
             $ezimageTag = $dom->documentElement;
             $ezimageTag->setAttribute('focuspoint_x', (string) $focusPoint['posX']);
@@ -40,11 +41,11 @@ class ValueConverter extends ImageConverter
     /**
      * @inheritDoc
      */
-    protected function parseLegacyXml($xml)
+    protected function parseLegacyXml($xml): array
     {
         $extractedData = parent::parseLegacyXml($xml);
 
-        $dom = new \DOMDocument();
+        $dom = new DOMDocument();
         $dom->loadXml($xml);
 
         $ezimageTag = $dom->documentElement;

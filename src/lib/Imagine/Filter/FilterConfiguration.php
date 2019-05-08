@@ -71,7 +71,7 @@ class FilterConfiguration extends BaseFilterConfiguration
      * @param string $filter
      * @param array  $config
      */
-    public function set($filter, array $config)
+    public function set($filter, array $config): void
     {
         $this->filterConfiguration->set($filter, $config);
     }
@@ -81,7 +81,7 @@ class FilterConfiguration extends BaseFilterConfiguration
      *
      * @return array
      */
-    public function all()
+    public function all(): array
     {
         return $this->filterConfiguration->all();
     }

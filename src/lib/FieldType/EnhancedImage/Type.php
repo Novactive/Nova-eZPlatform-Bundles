@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage;
 
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\Image\Type as ImageType;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
+use eZ\Publish\SPI\FieldType\ValidationError;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 
@@ -30,7 +32,7 @@ class Type extends ImageType
      *
      * @return string
      */
-    public function getFieldTypeIdentifier()
+    public function getFieldTypeIdentifier(): string
     {
         return 'enhancedimage';
     }
@@ -83,7 +85,7 @@ class Type extends ImageType
      *
      * @param \Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\Value $value
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function checkValueStructure(BaseValue $value): void
     {
@@ -97,15 +99,13 @@ class Type extends ImageType
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
      * @param \Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\Value $fieldValue
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      *
-     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     * @return ValidationError[]
      */
-    public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue)
+    public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue): array
     {
-        $errors = parent::validate($fieldDefinition, $fieldValue);
-
-        return $errors;
+        return parent::validate($fieldDefinition, $fieldValue);
     }
 
     /**
@@ -117,7 +117,7 @@ class Type extends ImageType
      *
      * @return \Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\Value $value
      */
-    public function fromHash($hash)
+    public function fromHash($hash): Value
     {
         if (null === $hash) {
             return $this->getEmptyValue();
@@ -164,7 +164,7 @@ class Type extends ImageType
      *
      * @return \Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\Value
      */
-    public function fromPersistenceValue(FieldValue $fieldValue)
+    public function fromPersistenceValue(FieldValue $fieldValue): Value
     {
         if (null === $fieldValue->data) {
             return $this->getEmptyValue();
@@ -178,13 +178,9 @@ class Type extends ImageType
             }
         }
 
-        $properties['focusPoint'] = (isset($fieldValue->data['focusPoint'])
-            ? $fieldValue->data['focusPoint']
-            : new FocusPoint());
+        $properties['focusPoint'] = ($fieldValue->data['focusPoint'] ?? new FocusPoint());
         // Restored data comes in $data, since it has already been processed
         // there might be more data in the persistence value than needed here
-        $result = $this->fromHash($properties);
-
-        return $result;
+        return $this->fromHash($properties);
     }
 }
