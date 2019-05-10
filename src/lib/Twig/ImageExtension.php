@@ -124,11 +124,14 @@ class ImageExtension extends Twig_Extension
         $attrs['srcset'] = str_replace(' ', '%20', $this->assetExtension->getAssetUrl($defaultVariation->uri));
 
         try {
-            if ($retinaSupportEnabled &&
-                $retinaVariation = $this->getImageVariation($field, $versionInfo, "{$variationName}_retina")) {
-                $retinaUri = str_replace(' ', '%20', $this->assetExtension->getAssetUrl($retinaVariation->uri));
-
-                $attrs['srcset'] .= ", {$retinaUri} 2x";
+            if (
+                $retinaSupportEnabled &&
+                $retinaVariation = $this->getImageVariation($field, $versionInfo, "{$variationName}_retina")
+            ) {
+                if($retinaVariation->width >= $defaultVariation->width * 2){
+                    $retinaUri = str_replace(' ', '%20', $this->assetExtension->getAssetUrl($retinaVariation->uri));
+                    $attrs['srcset'] .= ", {$retinaUri} 2x";
+                }
             }
         } catch (NonExistingFilterException $e) {
             $this->logger->warning($e->getMessage());
