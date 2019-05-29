@@ -37,3 +37,7 @@ services:
 
   Novactive\eZLDAPAuthenticator\Listener\SecurityListener:
     decorates: ezpublish.security.login_listener
+
+  Novactive\Bundle\eZLDAPAuthenticatorBundle\Command\FindUserCommand:
+    calls:
+      - ['setUserProvider', ['@nova_ez.ldap.user_provider']]]]
