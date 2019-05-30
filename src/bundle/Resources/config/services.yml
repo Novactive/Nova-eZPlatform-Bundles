@@ -40,4 +40,4 @@ services:
 
   Novactive\Bundle\eZLDAPAuthenticatorBundle\Command\FindUserCommand:
     calls:
-      - ['setUserProvider', ['@nova_ez.ldap.user_provider']]]]
+      - ['setUserProvider', ['@nova_ez.ldap.user_provider']]
