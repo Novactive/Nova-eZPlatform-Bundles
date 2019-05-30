@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Command;
 
 use Carbon\Carbon;
-use Novactive\Bundle\eZMailingBundle\Core\Processor\SendMailing;
+use Novactive\Bundle\eZMailingBundle\Core\Processor\SendMailingProcessorInterface as SendMailing;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;

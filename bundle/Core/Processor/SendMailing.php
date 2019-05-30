@@ -23,7 +23,7 @@ use Symfony\Component\Workflow\Registry;
 /**
  * Class SendMailing.
  */
-class SendMailing extends Processor
+class SendMailing extends Processor implements SendMailingProcessorInterface
 {
     /**
      * @var EntityManagerInterface

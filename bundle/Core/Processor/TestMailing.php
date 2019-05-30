@@ -18,7 +18,7 @@ use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 /**
  * Class SendMailing.
  */
-class TestMailing extends Processor
+class TestMailing extends Processor implements TestMailingProcessorInterface
 {
     /**
      * @var MailingMailer
@@ -35,12 +35,8 @@ class TestMailing extends Processor
         $this->mailingMailer = $mailingMailer;
     }
 
-    /**
-     * @param Mailing $mailing
-     * @param string  $email
-     */
-    public function execute(Mailing $mailing, string $email): void
+    public function execute(Mailing $mailing, string $testEmail): void
     {
-        $this->mailingMailer->sendMailing($mailing, $email);
+        $this->mailingMailer->sendMailing($mailing, $testEmail);
     }
 }

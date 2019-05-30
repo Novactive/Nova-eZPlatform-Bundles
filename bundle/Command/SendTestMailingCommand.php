@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Novactive\Bundle\eZMailingBundle\Core\Processor\TestMailing;
+use Novactive\Bundle\eZMailingBundle\Core\Processor\TestMailingProcessorInterface as TestMailing;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

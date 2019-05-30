@@ -19,7 +19,7 @@ use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use EzSystems\EzPlatformAdminUi\Form\Factory\FormFactory;
 use EzSystems\EzPlatformAdminUi\Tab\LocationView\ContentTab;
 use EzSystems\EzPlatformAdminUi\UI\Module\Subitems\ContentViewParameterSupplier;
-use Novactive\Bundle\eZMailingBundle\Core\Processor\TestMailing;
+use Novactive\Bundle\eZMailingBundle\Core\Processor\TestMailingProcessorInterface as TestMailing;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
