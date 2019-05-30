@@ -47,7 +47,7 @@ trait Names
     }
 
     /**
-     * @param null|string $lang
+     * @param string|null $lang
      *
      * @return string
      */

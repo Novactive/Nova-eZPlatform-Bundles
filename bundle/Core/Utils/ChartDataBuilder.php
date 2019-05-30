@@ -66,7 +66,7 @@ class ChartDataBuilder
      * @param array       $data
      * @param array       $labels
      * @param array|null  $colors
-     * @param null|string $type
+     * @param string|null $type
      *
      * @return ChartDataBuilder
      */

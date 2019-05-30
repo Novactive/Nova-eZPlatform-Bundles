@@ -69,7 +69,11 @@ class CampaignType extends AbstractType
             ->add('senderName', TextType::class, ['required' => true, 'label' => 'campaign.form.sender_name'])
             ->add('senderEmail', EmailType::class, ['required' => true, 'label' => 'campaign.form.sender_email'])
             ->add('reportEmail', EmailType::class, ['required' => true, 'label' => 'campaign.form.report_email'])
-            ->add('returnPathEmail', EmailType::class, ['required' => true, 'label' => 'campaign.form.return_path_email'])
+            ->add(
+                'returnPathEmail',
+                EmailType::class,
+                ['required' => true, 'label' => 'campaign.form.return_path_email']
+            )
             ->add('locationId', HiddenType::class)
             ->add(
                 'siteaccessLimit',
@@ -78,7 +82,7 @@ class CampaignType extends AbstractType
                     'expanded' => true,
                     'multiple' => true,
                     'choices'  => $siteaccesses,
-                    'label'    => 'campaign.form.siteaccess_limit'
+                    'label'    => 'campaign.form.siteaccess_limit',
                 ]
             )
             ->add(
@@ -89,7 +93,7 @@ class CampaignType extends AbstractType
                     'expanded' => true,
                     'multiple' => true,
                     'required' => true,
-                    'label'    => 'campaign.form.mailinglists'
+                    'label'    => 'campaign.form.mailinglists',
                 ]
             );
     }
@@ -101,8 +105,8 @@ class CampaignType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => Campaign::class,
-                'translation_domain' => 'ezmailing'
+                'data_class'         => Campaign::class,
+                'translation_domain' => 'ezmailing',
             ]
         );
     }

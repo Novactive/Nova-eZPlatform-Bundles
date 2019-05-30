@@ -14,6 +14,8 @@ namespace Novactive\Bundle\eZMailingBundle\Form;
 
 use EzSystems\EzPlatformAdminUi\Siteaccess\SiteaccessResolver;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
+use Novactive\Bundle\eZMailingBundle\Validator\Constraints\Location as LocationConstraint;
+use Novactive\Bundle\eZMailingBundle\Validator\Constraints\Names as NamesConstraint;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -25,8 +27,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Novactive\Bundle\eZMailingBundle\Validator\Constraints\Location as LocationConstraint;
-use Novactive\Bundle\eZMailingBundle\Validator\Constraints\Names as NamesConstraint;
 
 /**
  * Class MailingType.
@@ -75,7 +75,7 @@ class MailingType extends AbstractType
                     'allow_delete' => false,
                     'entry_type'   => TextType::class,
                     'required'     => true,
-                    'constraints'  => [new NamesConstraint()]
+                    'constraints'  => [new NamesConstraint()],
                 ]
             )
             ->add('subject', TextType::class, ['required' => false, 'label' => 'form.subject'])
@@ -85,7 +85,7 @@ class MailingType extends AbstractType
                 HiddenType::class,
                 [
                     'required'    => true,
-                    'constraints' => [new LocationConstraint()]
+                    'constraints' => [new LocationConstraint()],
                 ]
             )
             ->add(
@@ -93,7 +93,7 @@ class MailingType extends AbstractType
                 TextType::class,
                 [
                     'required' => true,
-                    'label'    => 'generic.details.hours_day'
+                    'label'    => 'generic.details.hours_day',
                 ]
             )
             ->add('daysOfWeek', TextType::class, ['label' => 'generic.details.days_week'])
@@ -136,7 +136,7 @@ class MailingType extends AbstractType
                         'choices'  => count($siteaccessLimit) > 0 ? $siteaccessLimit : $siteaccesses,
                         'expanded' => true,
                         'multiple' => false,
-                        'required' => true
+                        'required' => true,
                     ]
                 );
             }
@@ -151,7 +151,7 @@ class MailingType extends AbstractType
         $resolver->setDefaults(
             [
                 'data_class'         => Mailing::class,
-                'translation_domain' => 'ezmailing'
+                'translation_domain' => 'ezmailing',
             ]
         );
     }

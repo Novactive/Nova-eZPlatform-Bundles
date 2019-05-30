@@ -47,8 +47,11 @@ class Builder
      * @param AuthorizationCheckerInterface $authorizationChecker
      * @param TranslatorInterface           $translator
      */
-    public function __construct(FactoryInterface $factory, AuthorizationCheckerInterface $authorizationChecker, TranslatorInterface $translator)
-    {
+    public function __construct(
+        FactoryInterface $factory,
+        AuthorizationCheckerInterface $authorizationChecker,
+        TranslatorInterface $translator
+    ) {
         $this->factory              = $factory;
         $this->authorizationChecker = $authorizationChecker;
         $this->translator           = $translator;
@@ -69,14 +72,23 @@ class Builder
         $menu  = $this->factory->createItem('root');
         $child = $menu->addChild(
             'mailinglists',
-            ['route' => "{$mailingRoute}_index", 'label' => $this->translator->trans('menu.admin_menu.mailing_lists', [], 'ezmailing')]
+            [
+                'route' => "{$mailingRoute}_index",
+                'label' => $this->translator->trans('menu.admin_menu.mailing_lists', [], 'ezmailing'),
+            ]
         );
 
         if (substr($route, 0, \strlen($mailingRoute)) === $mailingRoute) {
             $child->setCurrent(true);
         }
 
-        $child = $menu->addChild('users', ['route' => "{$userRoute}_index", 'label' => $this->translator->trans('menu.admin_menu.users', [], 'ezmailing')]);
+        $child = $menu->addChild(
+            'users',
+            [
+                'route' => "{$userRoute}_index",
+                'label' => $this->translator->trans('menu.admin_menu.users', [], 'ezmailing'),
+            ]
+        );
         if (substr($route, 0, \strlen($userRoute)) === $userRoute) {
             $child->setCurrent(true);
         }
@@ -118,7 +130,8 @@ class Builder
                 [
                     'route'           => 'novaezmailing_campaign_subscriptions',
                     'routeParameters' => ['campaign' => $campaign->getId()],
-                    'label'           => $this->translator->trans('menu.campaign_menu.subscriptions', [], 'ezmailing')." ({$count})",
+                    'label'           => $this->translator->trans('menu.campaign_menu.subscriptions', [], 'ezmailing').
+                                         " ({$count})",
                     'attributes'      => [
                         'class' => 'leaf subscriptions',
                     ],
@@ -140,7 +153,11 @@ class Builder
                             'campaign' => $campaign->getId(),
                             'status'   => $status,
                         ],
-                        'label'           => $this->translator->trans('generic.mailing_statuses.'.$status, [], 'ezmailing')." ({$count})",
+                        'label'           => $this->translator->trans(
+                            'generic.mailing_statuses.'.$status,
+                            [],
+                            'ezmailing'
+                        )." ({$count})",
                         'attributes'      => [
                             'class' => "leaf {$status}",
                         ],

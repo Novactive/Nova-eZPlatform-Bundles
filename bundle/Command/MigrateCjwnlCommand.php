@@ -13,6 +13,9 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\Repository\Repository;
+use Novactive\Bundle\eZMailingBundle\Core\IOService;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
@@ -23,9 +26,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Novactive\Bundle\eZMailingBundle\Core\IOService;
-use eZ\Publish\Core\Repository\Repository;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
 /**
  * Class MigrateCjwnlCommand.
@@ -216,7 +216,7 @@ class MigrateCjwnlCommand extends Command
                     'hoursOfDay'   => (int) date('H', (int) $mailing_row['mailqueue_process_finished']),
                     'daysOfMonth'  => (int) date('d', (int) $mailing_row['mailqueue_process_finished']),
                     'monthsOfYear' => (int) date('m', (int) $mailing_row['mailqueue_process_finished']),
-                    'subject'      => $mailingContent->getName($defaultLanguageCode) ?? array_shift($mailingNames)
+                    'subject'      => $mailingContent->getName($defaultLanguageCode) ?? array_shift($mailingNames),
                 ];
                 ++$mailingCounter;
             }
@@ -230,7 +230,7 @@ class MigrateCjwnlCommand extends Command
                         'senderName'  => $list_row['email_sender_name'],
                         'senderEmail' => $list_row['email_sender'],
                         'reportEmail' => $list_row['email_receiver_test'],
-                        'mailings'    => $mailings
+                        'mailings'    => $mailings,
                     ]
                 )
             );
@@ -245,7 +245,8 @@ class MigrateCjwnlCommand extends Command
 
         $users = [];
 
-        $sql = 'SELECT max(id) as `id`, email, first_name, last_name, organisation, birthday, ez_user_id, status, confirmed, ';
+        $sql = 'SELECT max(id) as `id`, email, first_name, last_name, organisation, '.
+               ' birthday, ez_user_id, status, confirmed, ';
 
         $sql .= 'bounced, blacklisted FROM cjwnl_user WHERE removed = 0 ';
         $sql .= 'GROUP BY email';
@@ -268,13 +269,14 @@ class MigrateCjwnlCommand extends Command
             $birthdate = empty($user_row['birthday']) ? null : new \DateTime('2018-12-11');
 
             // Registrations
-            $sql               = 'SELECT list_contentobject_id, approved FROM cjwnl_subscription WHERE newsletter_user_id = ?';
+            $sql               = 'SELECT list_contentobject_id, approved FROM'.
+                                 ' cjwnl_subscription WHERE newsletter_user_id = ?';
             $subscription_rows = $this->runQuery($sql, [$user_row['id']]);
             $subscriptions     = [];
             foreach ($subscription_rows as $subscription_row) {
                 $subscriptions[] = [
                     'list_contentobject_id' => $subscription_row['list_contentobject_id'],
-                    'approved'              => (bool) $subscription_row['approved']
+                    'approved'              => (bool) $subscription_row['approved'],
                 ];
                 ++$registrationCounter;
             }
@@ -289,7 +291,7 @@ class MigrateCjwnlCommand extends Command
                         'birthDate'     => $birthdate,
                         'status'        => $status,
                         'company'       => $user_row['organisation'],
-                        'subscriptions' => $subscriptions
+                        'subscriptions' => $subscriptions,
                     ]
                 )
             );
@@ -342,7 +344,7 @@ class MigrateCjwnlCommand extends Command
             $this->entityManager->flush();
             $listIds[explode('_', $listFile)[1]] = $mailingList->getId();
             ++$n;
-            if ($n % 100 === 0) {
+            if (0 === $n % 100) {
                 $this->entityManager->clear();
             }
             $this->io->progressAdvance();
@@ -393,7 +395,7 @@ class MigrateCjwnlCommand extends Command
             $this->entityManager->persist($campaign);
             ++$campaignCounter;
             ++$n;
-            if ($n % 100 === 0) {
+            if (0 === $n % 100) {
                 $this->entityManager->flush();
                 $this->entityManager->clear();
             }
@@ -441,7 +443,7 @@ class MigrateCjwnlCommand extends Command
                 $this->entityManager->persist($user);
                 ++$userCounter;
                 ++$n;
-                if ($n % 100 === 0) {
+                if (0 === $n % 100) {
                     $this->entityManager->flush();
                     $this->entityManager->clear();
                 }

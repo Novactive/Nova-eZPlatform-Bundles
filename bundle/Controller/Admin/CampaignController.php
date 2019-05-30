@@ -43,10 +43,10 @@ class CampaignController
      */
     public function campaignTabsAction(
         Campaign $campaign,
-        string $status = 'all',
         Repository $repository,
         ContentTab $contentTab,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        string $status = 'all'
     ): array {
         $content = $campaign->getContent();
         if (null !== $content) {

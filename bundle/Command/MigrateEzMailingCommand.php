@@ -13,8 +13,10 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\Repository\Repository;
+use Novactive\Bundle\eZMailingBundle\Core\IOService;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
-use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
 use Novactive\Bundle\eZMailingBundle\Entity\Registration;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
@@ -23,9 +25,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Novactive\Bundle\eZMailingBundle\Core\IOService;
-use eZ\Publish\Core\Repository\Repository;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
 /**
  * Class MigrateEzMailingCommand.
@@ -147,12 +146,11 @@ class MigrateEzMailingCommand extends Command
                         'senderName'   => $campaign_row['sender_name'],
                         'senderEmail'  => $campaign_row['sender_email'],
                         'reportEmail'  => $campaign_row['report_email'],
-                        'mailing_list' => $campaign_row['destination_mailing_list']
+                        'mailing_list' => $campaign_row['destination_mailing_list'],
                     ]
                 )
             );
             $campaigns[] = pathinfo($fileName)['filename'];
-
         }
 
         // Users
@@ -162,14 +160,13 @@ class MigrateEzMailingCommand extends Command
 
         $user_rows = $this->runQuery($sql);
         foreach ($user_rows as $user_row) {
-
             $sql               = 'SELECT mailinglist_id, state FROM ezmailingregistration WHERE mailing_user_id = ?';
             $subscription_rows = $this->runQuery($sql, [$user_row['id']]);
             $subscriptions     = [];
             foreach ($subscription_rows as $subscription_row) {
                 $subscriptions[] = [
                     'mailinglist_id' => $subscription_row['mailinglist_id'],
-                    'approved'       => $subscription_row['state'] === 20
+                    'approved'       => 20 === $subscription_row['state'],
                 ];
                 ++$registrationCounter;
             }
@@ -182,12 +179,11 @@ class MigrateEzMailingCommand extends Command
                         'firstName'     => $user_row['first_name'],
                         'lastName'      => $user_row['last_name'],
                         'origin'        => $user_row['origin'],
-                        'subscriptions' => $subscriptions
+                        'subscriptions' => $subscriptions,
                     ]
                 )
             );
             $users[]  = pathinfo($fileName)['filename'];
-
         }
 
         $this->ioService->saveFile(
