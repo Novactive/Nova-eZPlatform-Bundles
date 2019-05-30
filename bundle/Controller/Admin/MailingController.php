@@ -16,6 +16,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use EzSystems\EzPlatformAdminUi\Form\Factory\FormFactory;
 use EzSystems\EzPlatformAdminUi\Tab\LocationView\ContentTab;
 use EzSystems\EzPlatformAdminUi\UI\Module\Subitems\ContentViewParameterSupplier;
 use Novactive\Bundle\eZMailingBundle\Core\Processor\TestMailing;
@@ -34,7 +35,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Workflow\Registry;
-use EzSystems\EzPlatformAdminUi\Form\Factory\FormFactory;
 
 /**
  * Class MailingController.
@@ -235,9 +235,11 @@ class MailingController
         $machine = $workflows->get($mailing);
         if ($machine->can($mailing, 'test')) {
             $ccEmail = $request->request->get('cc');
-            $processor->execute($mailing, $ccEmail);
-            $machine->apply($mailing, 'test');
-            $entityManager->flush();
+            if (\strlen($ccEmail) > 0) {
+                $processor->execute($mailing, $ccEmail);
+                $machine->apply($mailing, 'test');
+                $entityManager->flush();
+            }
         }
 
         return new RedirectResponse($router->generate('novaezmailing_mailing_show', ['mailing' => $mailing->getId()]));
