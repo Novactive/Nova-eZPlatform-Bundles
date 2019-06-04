@@ -165,7 +165,7 @@ class EzLdapAuthenticationProvider extends LdapBindAuthenticationProvider
             try {
                 $eZLdapUserProvider->checkEzUser($user);
             } catch (Exception $e) {
-                $this->logger->error($e->getMessage(), ['exception' => $e]);
+                $this->logger->critical($e->getMessage(), ['exception' => $e]);
                 throw new BadCredentialsException($e->getMessage());
             }
         }

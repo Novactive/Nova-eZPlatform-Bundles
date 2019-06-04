@@ -108,8 +108,8 @@ class EzLdapAuthenticatorExtension extends Extension implements PrependExtension
                                   'dn_string'    => $ldapConfig['user_provider']['base_dn'],
                                   'query_string' => str_replace(
                                       '{uid_key}',
-                                      $ldapConfig['user_provider']['uid_key'],
-                                      $ldapConfig['user_provider']['filter']
+                                      $userProviderConfig['uid_key'],
+                                      $userProviderConfig['filter']
                                   ),
                               ],
                           ],
