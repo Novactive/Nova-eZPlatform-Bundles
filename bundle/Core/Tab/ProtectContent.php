@@ -43,7 +43,7 @@ class ProtectContent extends AbstractTab implements OrderedTabInterface
 
     public function getName(): string
     {
-        return 'Protect Content';
+        return $this->translator->trans('tab.header.title', [], 'ezprotectedcontent');
     }
 
     public function getOrder(): int
