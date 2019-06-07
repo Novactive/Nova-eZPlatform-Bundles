@@ -109,48 +109,58 @@ class ImageExtension extends Twig_Extension
         $retinaSupportEnabled = $parameters['retina'] ?? false;
         $attrs                = $parameters['attrs'] ?? [];
 
+        $attrs['srcset'] = [];
         if (!isset($attrs['class'])) {
             $attrs['class'] = [];
         } else {
             $attrs['class'] = !is_array($attrs['class']) ? [$attrs['class']] : $attrs['class'];
         }
 
+        $defaultVariation = $this->appendDefaultVariationAttrs($field, $versionInfo, $variationName, $attrs);
+        if ($defaultVariation) {
+            if ($retinaSupportEnabled) {
+                $this->appendRetinaVariationAttrs($field, $versionInfo, $variationName, $defaultVariation, $attrs);
+            }
+            if ($lazyLoadEnabled) {
+                $this->appendPlaceholderVariationAttrs($field, $versionInfo, $variationName, $attrs);
+            }
+        }
+
+        $attrs['class'] = implode(' ', $attrs['class']);
+        if (is_array($attrs['srcset'])) {
+            $attrs['srcset'] = implode(', ', $attrs['srcset']);
+        }
+
+        return $attrs;
+    }
+
+    /**
+     * @param Field       $field
+     * @param VersionInfo $versionInfo
+     * @param $variationName
+     * @param array $attrs
+     *
+     * @return ImageVariation|FocusedVariation|null
+     */
+    protected function appendDefaultVariationAttrs(
+        Field $field,
+        VersionInfo $versionInfo,
+        $variationName,
+        &$attrs = []
+    ) {
         $defaultVariation = $this->getImageVariation($field, $versionInfo, $variationName);
+        if (!$defaultVariation) {
+            return null;
+        }
+
         if ($defaultVariation instanceof FocusedVariation && $defaultVariation->focusPoint) {
             $attrs['data-focus-x'] = $defaultVariation->focusPoint->getPosX();
             $attrs['data-focus-y'] = $defaultVariation->focusPoint->getPosY();
             $attrs['class'][]      = 'enhancedimage--focused-img';
         }
-        $attrs['srcset'] = str_replace(' ', '%20', $this->assetExtension->getAssetUrl($defaultVariation->uri));
+        $attrs['srcset'][] = str_replace(' ', '%20', $this->assetExtension->getAssetUrl($defaultVariation->uri));
 
-        try {
-            if (
-                $retinaSupportEnabled &&
-                $retinaVariation = $this->getImageVariation($field, $versionInfo, "{$variationName}_retina")
-            ) {
-                if($retinaVariation->width >= $defaultVariation->width * 2){
-                    $retinaUri = str_replace(' ', '%20', $this->assetExtension->getAssetUrl($retinaVariation->uri));
-                    $attrs['srcset'] .= ", {$retinaUri} 2x";
-                }
-            }
-        } catch (NonExistingFilterException $e) {
-            $this->logger->warning($e->getMessage());
-        }
-        if ($lazyLoadEnabled &&
-            $placeholderVariation = $this->getImageVariation($field, $versionInfo, 'placeholder')) {
-            $attrs['class'][]     = 'enhancedimage--img--lazyload';
-            $attrs['class'][]     = 'blur-up';
-            $attrs['data-srcset'] = $attrs['srcset'];
-            $attrs['srcset']      = str_replace(
-                ' ',
-                '%20',
-                $this->assetExtension->getAssetUrl($placeholderVariation->uri)
-            );
-        }
-
-        $attrs['class'] = implode(' ', $attrs['class']);
-
-        return $attrs;
+        return $defaultVariation;
     }
 
     /**
@@ -186,6 +196,73 @@ class ImageExtension extends Twig_Extension
                     for image with id {$field->value->id} because an image could not be created from the given input"
                 );
             }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param Field       $field
+     * @param VersionInfo $versionInfo
+     * @param $variationName
+     * @param ImageVariation $defaultVariation
+     * @param array          $attrs
+     *
+     * @return ImageVariation|FocusedVariation|null
+     */
+    protected function appendRetinaVariationAttrs(
+        Field $field,
+        VersionInfo $versionInfo,
+        $variationName,
+        ImageVariation $defaultVariation,
+        &$attrs = []
+    ) {
+        try {
+            if ($retinaVariation = $this->getImageVariation($field, $versionInfo, "{$variationName}_retina")) {
+                if ($retinaVariation->width >= $defaultVariation->width * 2) {
+                    $retinaUri = str_replace(
+                        ' ',
+                        '%20',
+                        $this->assetExtension->getAssetUrl($retinaVariation->uri)
+                    );
+
+                    $attrs['srcset'][] = "{$retinaUri} 2x";
+
+                    return $retinaVariation;
+                }
+            }
+        } catch (NonExistingFilterException $e) {
+            $this->logger->warning($e->getMessage());
+        }
+
+        return null;
+    }
+
+    /**
+     * @param Field       $field
+     * @param VersionInfo $versionInfo
+     * @param $variationName
+     * @param array $attrs
+     *
+     * @return ImageVariation|FocusedVariation|null
+     */
+    protected function appendPlaceholderVariationAttrs(
+        Field $field,
+        VersionInfo $versionInfo,
+        $variationName,
+        &$attrs = []
+    ) {
+        if ($placeholderVariation = $this->getImageVariation($field, $versionInfo, 'placeholder')) {
+            $attrs['class'][]     = 'enhancedimage--img--lazyload';
+            $attrs['class'][]     = 'blur-up';
+            $attrs['data-srcset'] = is_array($attrs['srcset']) ? implode(', ', $attrs['srcset']) : $attrs['srcset'];
+            $attrs['srcset']      = str_replace(
+                ' ',
+                '%20',
+                $this->assetExtension->getAssetUrl($placeholderVariation->uri)
+            );
+
+            return $placeholderVariation;
         }
 
         return null;
