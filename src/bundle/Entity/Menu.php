@@ -63,7 +63,7 @@ class Menu
     protected $type;
 
     /**
-     * @ORM\Column(name="remote_id", type="string", nullable=false)
+     * @ORM\Column(name="remote_id", type="string", nullable=true)
      *
      * @var string
      */
