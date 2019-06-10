@@ -23,8 +23,10 @@ menu:
     default: Défaut
 menu_item:
   default_title: Nouveau lien
+  default_container_title: Nouveau dossier
   property:
     name: Nom du lien
+    container_name: Nom du dossier
     url: Url
     new_window: Ouvrir dans une nouvelle fenêtre
     language: Langue

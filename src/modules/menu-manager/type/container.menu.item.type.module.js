@@ -12,6 +12,7 @@
 import React from 'react';
 import ContainerMenuItemEditFormModule from '../components/form/container.menu.item.edit.form.module';
 import DefaultMenuItemType from './default.menu.item.type.module';
+import MenuItem from '../entity/menu.item.entity';
 
 export default class ContainerMenuItemType extends DefaultMenuItemType {
     /**
@@ -36,5 +37,19 @@ export default class ContainerMenuItemType extends DefaultMenuItemType {
             onCancel: onCancel,
         });
         return form;
+    }
+
+    /**
+     * @param props
+     * @returns {MenuItem}
+     */
+    getNewItem(props) {
+        const defaultProps = {
+            id: null,
+            name: Translator.trans('menu_item.default_container_title'),
+            type: this._type,
+        };
+        props = Object.assign(defaultProps, props || {});
+        return new MenuItem(props);
     }
 }

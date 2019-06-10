@@ -57,4 +57,3 @@ export default class DefaultMenuItemType extends MenuItemType {
         });
     }
 }
-
