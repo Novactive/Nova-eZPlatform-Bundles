@@ -1,0 +1,12 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  Novactive\Bundle\NovaeZEditHelpBundle\Listener\PreContentView:
+    tags:
+      - { name: kernel.event_listener, event: ezpublish.pre_content_view, method: onPreContentView }
+
+  Novactive\Bundle\NovaeZEditHelpBundle\Services\FetchDocumentation: ~
+

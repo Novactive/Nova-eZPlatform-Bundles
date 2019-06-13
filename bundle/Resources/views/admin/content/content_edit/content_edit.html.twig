@@ -1,0 +1,53 @@
+{% extends '@EzPlatformAdminUi/content/content_edit/content_edit.html.twig' %}
+
+{% trans_default_domain 'content_edit' %}
+
+{% block form_fields %}
+
+    <section class="container mt-4 px-5 mb-5">
+        <div class="card ez-card">
+            <div class="card-body">
+                {% set sections = [] %}
+                {% for field in form.fieldsData if not field.rendered -%}
+                    {% if field.value is defined %}
+                        {{- form_widget(field) -}} ?
+
+                        {% if items[field.vars.name] is defined %}
+                            ?
+                            {% set sections = sections|merge([items[field.vars.name]]) %}
+                        {% endif %}
+
+                    {% else %}
+                        <div>
+                            {{- form_label(field) -}} ?
+                            <p class="non-editable">
+                                {{ "content.field.non_editable"|trans|desc('Field type is not editable') }}
+                            </p>
+                            {% do field.setRendered() %}
+                        </div>
+                    {% endif %}
+                {%- endfor %}
+                {{ form_widget(form.publish, {'attr': {'hidden': 'hidden'}}) }}
+                {{ form_widget(form.saveDraft, {'attr': {'hidden': 'hidden'}}) }}
+                {{ form_widget(form.cancel, {'attr': {'hidden': 'hidden'}}) }}
+            </div>
+        </div>
+    </section>
+
+    {% if sections|length > 0 %}
+        <div class="documentation-container">
+            {% for section in sections %}
+                <div class="documentation-item">
+                    {% for field, value in section.fields %}
+                        <div class="documentation-item__field">
+                            {{ ez_render_field(section, field) }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+
