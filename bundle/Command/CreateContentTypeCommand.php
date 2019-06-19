@@ -82,7 +82,7 @@ class CreateContentTypeCommand extends ContainerAwareCommand
             $bodyFieldCreateStruct->isSearchable = true;
             $contentTypeCreateStruct->addFieldDefinition($bodyFieldCreateStruct);
 
-            // add a Image Field body field
+            // add a Image Field
             $imageFieldCreateStruct = $contentTypeService->newFieldDefinitionCreateStruct('image', 'ezimage');
             $imageFieldCreateStruct->names = ['eng-GB' => 'Image'];
             $imageFieldCreateStruct->fieldGroup = 'content';
