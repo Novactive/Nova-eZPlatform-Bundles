@@ -1,4 +1,4 @@
-{% extends '@ezdesign/layout.html.twig' %}
+{% extends '@EzPlatformAdminUi/admin/base.html.twig' %}
 
  {% block stylesheets %}
      <link rel="stylesheet" href="{{ asset("css/custom.css", "ezdesign") }}" media="screen" />
@@ -8,7 +8,7 @@
 
 {% form_theme form '@EzRssFeed/Form/form_fields.html.twig' %}
 {% set itemIndexes = [] %}
-{% block content %}
+{% block form %}
 
     {{ form_start(form) }}
 
@@ -118,23 +118,23 @@
 {% endblock %}
 
 {% block right_sidebar %}
-    {% set section_edit_sidebar_right = knp_menu_get('ezplatform_admin_ui.menu.section_edit.sidebar_right', [], {'section': section}) %}
-    {{ knp_menu_render(rss_edit_sidebar_right, {'template': '@ezdesign/parts/menu/sidebar_right.html.twig'}) }}
+    {% set rss_edit_sidebar_right = knp_menu_get('ezplatform_admin_ui.menu.rss_edit.sidebar_right') %}
+    {{ knp_menu_render(rss_edit_sidebar_right, {'template': '@EzPlatformAdminUi/parts/menu/sidebar_right.html.twig'}) }}
 {% endblock %}
 
 {% block javascripts %}
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="{{ asset("js/admin.rss.subtree.pick.js", "ezdesign") }}"></script>
-        <script src="{{ asset("js/collection_rss.js", "ezdesign") }}"></script>
+    <script src="{{ asset("js/admin.rss.subtree.pick.js", "ezdesign") }}"></script>
+    <script src="{{ asset("js/collection_rss.js", "ezdesign") }}"></script>
 
-        <script>
-            jQuery(document).ready(function () {
-                $('#delete-rest').hide();
-                $('.col-form-label').each(function () {
-                    if ($(this).html().length < 2) {
-                        $(this).hide();
-                    }
-                });
-            });
-        </script>
+    <script>
+		jQuery(document).ready(function () {
+			$('#delete-rest').hide();
+			$('.col-form-label').each(function () {
+				if ($(this).html().length < 2) {
+					$(this).hide();
+				}
+			});
+		});
+    </script>
 {% endblock %}
