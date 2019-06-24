@@ -208,7 +208,7 @@ class RssFeedItemsType extends AbstractType
         $contentTypeGroupContent = null;
 
         /**
-         * Maybe the content type group does not exists
+         * Maybe the content type group does not exist
          */
         try {
             $contentTypeGroupContent = $this->contentTypeService->loadContentTypeGroupByIdentifier('Content');
