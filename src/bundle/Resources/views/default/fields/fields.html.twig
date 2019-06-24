@@ -1,0 +1,30 @@
+{% extends "EzPublishCoreBundle::content_fields.html.twig" %}
+
+{% block ezimage_field %}
+    {% spaceless %}
+        {% if not ez_is_field_empty( content, field ) %}
+            {% set imageAlias = ez_image_alias( field, versionInfo, parameters.alias|default( 'reference' ) ) %}
+            {% set src = imageAlias ? asset( imageAlias.uri ) : "//:0" %}
+            <enclosure
+                    url="{{ src }}"
+                    length="{{ field.value.filesize }}"
+            />
+        {% endif %}
+    {% endspaceless %}
+{% endblock %}
+
+{% block ezimageasset_field %}
+    {% spaceless %}
+        {% if not ez_is_field_empty(content, field) and parameters.available %}
+            {{ fos_httpcache_tag('relation-' ~ field.value.destinationContentId) }}
+            {{ render(controller('ez_content:embedAction', {
+                contentId: field.value.destinationContentId,
+                viewType: 'asset_image',
+                noLayout: true,
+                params: {
+                    parameters: parameters|default({'alias': 'original'})|merge({'alternativeText': field.value.alternativeText })
+                }
+            }))}}
+        {% endif %}
+    {% endspaceless %}
+{% endblock %}
