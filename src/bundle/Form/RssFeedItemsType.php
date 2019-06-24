@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use MCC\Bundle\CoreBundle\Core\Logger\ExceptionLogger;
 use Novactive\EzRssFeedBundle\Entity\RssFeedItems;
 use Novactive\EzRssFeedBundle\Form\Type\TreeDiscoveryType;
 use Symfony\Component\Form\AbstractType;
@@ -37,8 +38,13 @@ class RssFeedItemsType extends AbstractType
     /** @var array */
     protected $fieldTypeMap;
 
+    /** @var ExceptionLogger */
+    protected $logger;
+
     /**
      * @param ContentTypeService $contentTypeService
+     * @param ConfigResolverInterface $configResolver
+     * @param ExceptionLogger $logger
      */
     public function __construct(ContentTypeService $contentTypeService, ConfigResolverInterface $configResolver)
     {
@@ -198,9 +204,22 @@ class RssFeedItemsType extends AbstractType
 
     public function getContentTypeList()
     {
+        $contentTypesMap         = [];
+        $contentTypeGroupContent = null;
+
+        /**
+         * Maybe the content type group does not exists
+         */
         try {
-            $contentTypesMap         = [];
             $contentTypeGroupContent = $this->contentTypeService->loadContentTypeGroupByIdentifier('Content');
+        } catch (NotFoundException $e) { }
+
+        try {
+            if ($contentTypeGroupContent === null)
+            {
+                $contentTypeGroupContent = $this->contentTypeService->loadContentTypeGroupByIdentifier('Contenu');
+            }
+
             $contentTypes            = $this->contentTypeService->loadContentTypes($contentTypeGroupContent);
 
             foreach ($contentTypes as $contentType) {
@@ -213,6 +232,7 @@ class RssFeedItemsType extends AbstractType
                 $this->fieldTypeMap = $this->getFieldTypeByContentType($defaultContentType);
             }
         } catch (NotFoundException $e) {
+            var_dump($e);
             return [];
         }
 
