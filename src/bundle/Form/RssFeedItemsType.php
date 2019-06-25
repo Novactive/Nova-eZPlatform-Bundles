@@ -38,9 +38,6 @@ class RssFeedItemsType extends AbstractType
     /** @var array */
     protected $fieldTypeMap;
 
-    /** @var ExceptionLogger */
-    protected $logger;
-
     /**
      * @param ContentTypeService $contentTypeService
      * @param ConfigResolverInterface $configResolver
@@ -232,7 +229,6 @@ class RssFeedItemsType extends AbstractType
                 $this->fieldTypeMap = $this->getFieldTypeByContentType($defaultContentType);
             }
         } catch (NotFoundException $e) {
-            var_dump($e);
             return [];
         }
 
