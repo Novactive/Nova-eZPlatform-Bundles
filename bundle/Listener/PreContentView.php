@@ -35,7 +35,10 @@ class PreContentView
                     }
                 }
 
-                $event->getContentView()->addParameters(['items' => $items]);
+                $event->getContentView()->addParameters([
+                    'documentation' => $documentation,
+                    'items' => $items
+                ]);
             }
         }
     }
