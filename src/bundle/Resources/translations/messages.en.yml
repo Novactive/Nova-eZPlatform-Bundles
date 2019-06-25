@@ -25,3 +25,6 @@ ez_rss_feed.form.field.title: Title field
 ez_rss_feed.form.field.description: Description field
 ez_rss_feed.form.field.category: Category field
 ez_rss_feed.form.field.media: Media field
+ez_rss_feed.form.fields.title: Éléments du flux
+ez_rss_feed.form.category: Category
+ez_rss_feed.form.media: Media

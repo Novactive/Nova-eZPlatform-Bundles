@@ -39,6 +39,7 @@ class RssFeedItemsType extends AbstractType
 
     /**
      * @param ContentTypeService $contentTypeService
+     * @param ConfigResolverInterface $configResolver
      */
     public function __construct(ContentTypeService $contentTypeService, ConfigResolverInterface $configResolver)
     {
@@ -198,9 +199,22 @@ class RssFeedItemsType extends AbstractType
 
     public function getContentTypeList()
     {
+        $contentTypesMap         = [];
+        $contentTypeGroupContent = null;
+
+        /**
+         * Maybe the content type group does not exist
+         */
         try {
-            $contentTypesMap         = [];
             $contentTypeGroupContent = $this->contentTypeService->loadContentTypeGroupByIdentifier('Content');
+        } catch (NotFoundException $e) { }
+
+        try {
+            if ($contentTypeGroupContent === null)
+            {
+                $contentTypeGroupContent = $this->contentTypeService->loadContentTypeGroupByIdentifier('Contenu');
+            }
+
             $contentTypes            = $this->contentTypeService->loadContentTypes($contentTypeGroupContent);
 
             foreach ($contentTypes as $contentType) {
