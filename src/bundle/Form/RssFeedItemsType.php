@@ -15,7 +15,6 @@ use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use MCC\Bundle\CoreBundle\Core\Logger\ExceptionLogger;
 use Novactive\EzRssFeedBundle\Entity\RssFeedItems;
 use Novactive\EzRssFeedBundle\Form\Type\TreeDiscoveryType;
 use Symfony\Component\Form\AbstractType;
