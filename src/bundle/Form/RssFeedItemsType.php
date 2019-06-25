@@ -41,7 +41,6 @@ class RssFeedItemsType extends AbstractType
     /**
      * @param ContentTypeService $contentTypeService
      * @param ConfigResolverInterface $configResolver
-     * @param ExceptionLogger $logger
      */
     public function __construct(ContentTypeService $contentTypeService, ConfigResolverInterface $configResolver)
     {
