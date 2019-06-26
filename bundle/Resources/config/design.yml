@@ -1,2 +1,3 @@
 templates_override_paths:
-    - '%kernel.root_dir%/../../bundle/Resources/views/admin'
+  #- '%kernel.root_dir%/../../bundle/Resources/views/admin'
+  - '%kernel.root_dir%/../vendor/novactive/ezedithelpbundle/bundle/Resources/views/admin'
