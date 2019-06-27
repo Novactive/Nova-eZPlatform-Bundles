@@ -40,7 +40,7 @@ class CreateContentTypeCommand extends ContainerAwareCommand
                 $contentTypeGroupCreateStruct = new ContentTypeGroupCreateStruct;
                 $contentTypeGroupCreateStruct->identifier = $contentTypeGroupIdentifier;
                 $contentTypeGroup = $contentTypeService->createContentTypeGroup($contentTypeGroupCreateStruct);
-                $output->writeln(sprinf('<info>Content Type Group with name %s has been created</info>', $contentTypeGroupIdentifier));
+                $output->writeln(sprintf('<info>Content Type Group with name %s has been created</info>', $contentTypeGroupIdentifier));
             }
 
             // instantiate a ContentTypeCreateStruct with the given content type identifier and set parameters
