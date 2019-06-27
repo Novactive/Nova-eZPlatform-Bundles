@@ -5,6 +5,7 @@ namespace Novactive\Bundle\NovaeZEditHelpBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 use Novactive\Bundle\NovaeZEditHelpBundle\Services\FetchDocumentation;
 
 
@@ -31,12 +32,15 @@ class CreateContentTypeCommand extends ContainerAwareCommand
             $output->writeln(sprintf('<error>Content Type with identifier %s already exists</error>', $contentTypeIdentifier));
         } catch (\eZ\Publish\API\Repository\Exceptions\NotFoundException $e) {
 
-            try {
-                $contentTypeGroup = $contentTypeService->loadContentTypeGroupByIdentifier('Content');
-            } catch (\eZ\Publish\API\Repository\Exceptions\NotFoundException $e) {
-                $output->writeln('<error>Content Type not found with identifier Content</error>');
+            $contentTypeGroupIdentifier = 'Help';
 
-                return;
+            try {
+                $contentTypeGroup = $contentTypeService->loadContentTypeGroupByIdentifier($contentTypeGroupIdentifier);
+            } catch (\eZ\Publish\API\Repository\Exceptions\NotFoundException $e) {
+                $contentTypeGroupCreateStruct = new ContentTypeGroupCreateStruct;
+                $contentTypeGroupCreateStruct->identifier = $contentTypeGroupIdentifier;
+                $contentTypeGroup = $contentTypeService->createContentTypeGroup($contentTypeGroupCreateStruct);
+                $output->writeln(sprinf('<info>Content Type Group with name %s has been created</info>', $contentTypeGroupIdentifier));
             }
 
             // instantiate a ContentTypeCreateStruct with the given content type identifier and set parameters
