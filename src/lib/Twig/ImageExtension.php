@@ -115,6 +115,7 @@ class ImageExtension extends Twig_Extension
         } else {
             $attrs['class'] = !is_array($attrs['class']) ? [$attrs['class']] : $attrs['class'];
         }
+        $attrs['class'][] = 'enhancedimage--img--lazyload';
 
         $defaultVariation = $this->appendDefaultVariationAttrs($field, $versionInfo, $variationName, $attrs);
         if ($defaultVariation) {
@@ -125,8 +126,8 @@ class ImageExtension extends Twig_Extension
                 $this->appendPlaceholderVariationAttrs($field, $versionInfo, $variationName, $attrs);
             }
         }
-
         $attrs['class'] = implode(' ', $attrs['class']);
+
         if (is_array($attrs['srcset'])) {
             $attrs['srcset'] = implode(', ', $attrs['srcset']);
         }
@@ -253,7 +254,6 @@ class ImageExtension extends Twig_Extension
         &$attrs = []
     ) {
         if ($placeholderVariation = $this->getImageVariation($field, $versionInfo, 'placeholder')) {
-            $attrs['class'][]     = 'enhancedimage--img--lazyload';
             $attrs['class'][]     = 'blur-up';
             $attrs['data-srcset'] = is_array($attrs['srcset']) ? implode(', ', $attrs['srcset']) : $attrs['srcset'];
             $attrs['srcset']      = str_replace(
