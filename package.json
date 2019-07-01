@@ -12,8 +12,11 @@
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "7.1.0",
+    "@typescript-eslint/eslint-plugin": "^1.11.0",
+    "@typescript-eslint/parser": "^1.11.0",
     "babel-loader": "^8.0.5",
     "babel-preset-env": "^1.7.0",
+    "eslint": "^6.0.1",
     "ts-loader": "^5.3.3",
     "typescript": "^3.3.3",
     "uglifyjs-webpack-plugin": "^2.1.1",
@@ -26,6 +29,7 @@
     "builddev": "webpack --config webpack.dev.js",
     "watch": "webpack --watch --config webpack.dev.js",
     "watchprod": "webpack --watch --config webpack.prod.js",
-    "fix-cs": "prettier --write 'src/js/**/*.+(js|ts)' && prettier --write 'src/bundle/Resources/public/js/scripts/**/*.+(js|ts)'"
+    "lint": "eslint --quiet 'src/js/**/*.+(js|ts)' && eslint --quiet 'src/bundle/Resources/public/js/scripts/**/*.+(js|ts)'",
+    "fix-cs": "eslint --fix 'src/js/**/*.+(js|ts)' && eslint --fix 'src/bundle/Resources/public/js/scripts/**/*.+(js|ts)'"
   }
 }
