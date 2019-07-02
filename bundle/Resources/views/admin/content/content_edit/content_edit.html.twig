@@ -42,9 +42,11 @@
         {% if documentation is defined %}
             <div class="collapse" id="collapse__main">
                 {% for item, value in documentation.valueObject.fields %}
-                    <div class="documentation-item__field">
-                        {{ ez_render_field(documentation.valueObject, item) }}
-                    </div>
+                    {% if item != 'identifier' and ez_field_value(documentation.valueObject, item) is not empty %}
+                        <div class="documentation-item__field {% if item == 'title' %}h4{% endif %}">
+                            {{ ez_render_field(documentation.valueObject, item) }}
+                        </div>
+                    {% endif %}
                 {% endfor %}
             </div>
         {% endif %}
@@ -104,9 +106,11 @@
                         {% if items[field.vars.name] is defined %}
                             <div class="collapse" id="collapse-{{ field.vars.name }}">
                                 {% for item, value in items[field.vars.name].fields %}
-                                    <div class="documentation-item__field">
-                                        {{ ez_render_field(items[field.vars.name], item) }}
-                                    </div>
+                                    {% if item != 'identifier' and ez_field_value(documentation.valueObject, item) is not empty %}
+                                        <div class="documentation-item__field {% if item == 'title' %}h4{% endif %}">
+                                            {{ ez_render_field(items[field.vars.name], item) }}
+                                        </div>
+                                    {% endif %}
                                 {% endfor %}
                             </div>
                         {% endif %}
