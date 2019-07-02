@@ -79,7 +79,7 @@
                 {% for field in form.fieldsData if not field.rendered -%}
                     {% if field.value is defined %}
                         <div class="d-flex align-items-center">
-                            <div class="flex-grow-1">
+                            <div class="flex-grow-1 mw-100">
                                 {{- form_widget(field) -}}
                             </div>
 
