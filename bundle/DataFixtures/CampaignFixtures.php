@@ -44,11 +44,13 @@ class CampaignFixtures extends Fixture implements DependentFixtureInterface
                     'eng-US' => $faker->words(2, true),
                 ]
             );
-            $campaign->setReportEmail($faker->email);
-            $campaign->setSenderEmail($faker->email);
-            $campaign->setReturnPathEmail($faker->email);
-            $campaign->setSenderName($faker->name);
-            $campaign->setLocationId(2);
+            $campaign
+                ->setReportEmail($faker->email)
+                ->setSenderEmail($faker->email)
+                ->setReturnPathEmail($faker->email)
+                ->setSenderName($faker->name)
+                ->setUpdated(new \DateTime())
+                ->setLocationId(2);
             // create MailingLists
             $nbDestinations = $faker->numberBetween(0, MailingListFixtures::FIXTURE_COUNT_MAILINGLIST);
             for ($j = 0; $j <= $nbDestinations; ++$j) {
@@ -89,9 +91,11 @@ class CampaignFixtures extends Fixture implements DependentFixtureInterface
                     $startDate = Carbon::instance($faker->dateTimeThisYear);
                     $endDate   = clone $startDate;
                     $endDate->addMinutes(15);
-                    $broadcast->setStarted($faker->dateTimeThisYear);
-                    $broadcast->setEnded($endDate);
-                    $broadcast->setHtml("Fixture {$i}{$k}{$l}");
+                    $broadcast
+                        ->setStarted($faker->dateTimeThisYear)
+                        ->setEnded($endDate)
+                        ->setHtml("Fixture {$i}{$k}{$l}")
+                        ->setUpdated(new \DateTime());
                     $mailing->addBroadcast($broadcast);
 
                     // create Stats Hit
@@ -101,7 +105,8 @@ class CampaignFixtures extends Fixture implements DependentFixtureInterface
                         $hit = new StatHit();
                         $hit->setUserKey($key);
                         $hit->setUrl('-');
-                        $hit->setCreated($faker->dateTimeThisYear);
+                        $hit->setCreated($faker->dateTimeThisYear)
+                            ->setUpdated(new \DateTime());
                         $hit->setBrowserName(
                             $faker->randomElement(['Chrome', 'Firefox', 'Safari', 'Internet Explorer'])
                         );
@@ -111,7 +116,8 @@ class CampaignFixtures extends Fixture implements DependentFixtureInterface
                         $nbSubHits = $faker->numberBetween(0, 5);
                         for ($n = 0; $n < $nbSubHits; ++$n) {
                             $hit = new StatHit();
-                            $hit->setUserKey($key);
+                            $hit->setUserKey($key)
+                                ->setUpdated(new \DateTime());
                             $hit->setBrowserName(
                                 $faker->randomElement(['Chrome', 'Firefox', 'Safari', 'Internet Explorer'])
                             );

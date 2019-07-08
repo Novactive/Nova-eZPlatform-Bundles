@@ -84,6 +84,7 @@ class Broadcast
     public function __construct()
     {
         $this->emailSentCount = 0;
+        $this->created        = new DateTime();
     }
 
     /**

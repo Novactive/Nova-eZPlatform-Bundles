@@ -14,7 +14,6 @@ namespace Novactive\Bundle\eZMailingBundle\Entity\Compose;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Trait Metadata.
@@ -24,14 +23,12 @@ trait Metadata
     /**
      * @var DateTime
      * @ORM\Column(name="OBJ_created", type="datetime")
-     * @Gedmo\Timestampable(on="create")
      */
     private $created;
 
     /**
      * @var DateTime
      * @ORM\Column(name="OBJ_updated", type="datetime")
-     * @Gedmo\Timestampable(on="update")
      */
     private $updated;
 

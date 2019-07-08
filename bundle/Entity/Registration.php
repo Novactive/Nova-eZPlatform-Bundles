@@ -63,6 +63,7 @@ class Registration
     public function __construct()
     {
         $this->approved = false;
+        $this->created  = new \DateTime();
     }
 
     /**

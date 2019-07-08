@@ -144,8 +144,9 @@ class MailingController
     ) {
         if (null === $mailing) {
             $mailing = new Mailing();
-            $mailing->setStatus(Mailing::DRAFT);
-            $mailing->setCampaign($campaign);
+            $mailing
+                ->setStatus(Mailing::DRAFT)
+                ->setCampaign($campaign);
             $languages = array_filter($translationHelper->getAvailableLanguages());
             $mailing->setNames(array_combine($languages, array_pad([], count($languages), '')));
         }
@@ -160,6 +161,7 @@ class MailingController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $machine->apply($mailing, 'edit');
+            $mailing->setUpdated(new \DateTime());
             $entityManager->persist($mailing);
             $entityManager->flush();
 

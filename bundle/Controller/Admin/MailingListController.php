@@ -112,6 +112,8 @@ class MailingListController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $mailinglist
+                ->setUpdated(new \DateTime());
             $entityManager->persist($mailinglist);
             $entityManager->flush();
 
@@ -177,7 +179,9 @@ class MailingListController
         if ($form->isSubmitted() && $form->isValid()) {
             foreach ($importer->rowsIterator($userImport) as $index => $row) {
                 try {
-                    $user   = $importer->hydrateUser($row);
+                    $user = $importer->hydrateUser($row);
+                    $user
+                        ->setUpdated(new \DateTime());
                     $errors = $validator->validate($user);
                     if (count($errors) > 0) {
                         $errorList["Line {$index}"] = $errors;

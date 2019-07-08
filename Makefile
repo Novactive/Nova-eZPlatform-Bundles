@@ -58,8 +58,6 @@ codeclean: ## Coding Standard checks
 	$(PHP_BIN) ./vendor/bin/php-cs-fixer fix --config=.cs/.php_cs.php
 	$(PHP_BIN) ./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php bundle
 	$(PHP_BIN) ./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php tests
-	$(PHP_BIN) ./vendor/bin/phpmd bundle text .cs/md_ruleset.xml
-	$(PHP_BIN) ./vendor/bin/phpmd tests text .cs/md_ruleset.xml
 
 .PHONY: tests
 tests: ## Run the tests

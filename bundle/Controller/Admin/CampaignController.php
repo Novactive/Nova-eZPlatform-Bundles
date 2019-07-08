@@ -166,6 +166,7 @@ class CampaignController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $campaign->setUpdated(new \DateTime());
             $entityManager->persist($campaign);
             $entityManager->flush();
 

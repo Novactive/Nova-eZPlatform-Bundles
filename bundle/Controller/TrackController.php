@@ -52,11 +52,13 @@ class TrackController
         $browser    = new Browser($request->headers->get('User-Agent'));
         $stat       = new StatHit();
         $decodedUrl = base64_decode($url);
-        $stat->setOsName($browser->getPlatform());
-        $stat->setBrowserName($browser->getName());
-        $stat->setUserKey($salt);
-        $stat->setUrl($decodedUrl);
-        $stat->setBroadcast($broadcast);
+        $stat
+            ->setOsName($browser->getPlatform())
+            ->setBrowserName($browser->getName())
+            ->setUserKey($salt)
+            ->setUrl($decodedUrl)
+            ->setBroadcast($broadcast)
+            ->setUpdated(new \DateTime());
         $entityManager->persist($stat);
         $entityManager->flush();
 
@@ -82,11 +84,13 @@ class TrackController
         $broadcast = $entityManager->getRepository('NovaeZMailingBundle:Broadcast')->findOneByid($broadcastId);
         $browser   = new Browser($request->headers->get('User-Agent'));
         $stat      = new StatHit();
-        $stat->setOsName($browser->getPlatform());
-        $stat->setBrowserName($browser->getName());
-        $stat->setUserKey($salt);
-        $stat->setUrl('-');
-        $stat->setBroadcast($broadcast);
+        $stat
+            ->setOsName($browser->getPlatform())
+            ->setBrowserName($browser->getName())
+            ->setUserKey($salt)
+            ->setUrl('-')
+            ->setBroadcast($broadcast)
+            ->setUpdated(new \DateTime());
         $entityManager->persist($stat);
         $entityManager->flush();
 
