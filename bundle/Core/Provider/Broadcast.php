@@ -46,9 +46,12 @@ class Broadcast
     public function start(Mailing $mailing, string $html): BroadcastEntity
     {
         $broadcast = new BroadcastEntity();
-        $broadcast->setMailing($mailing);
-        $broadcast->setStarted(Carbon::now());
-        $broadcast->setHtml($html);
+        $broadcast
+            ->setMailing($mailing)
+            ->setStarted(Carbon::now())
+            ->setHtml($html)
+            ->setCreated(new \DateTime())
+            ->setUpdated(new \DateTime());
         $this->store($broadcast);
 
         return $broadcast;

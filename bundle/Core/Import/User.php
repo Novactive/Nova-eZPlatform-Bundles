@@ -139,9 +139,12 @@ class User
     public function registerUser(UserEntity $user, MailingList $mailingList): UserEntity
     {
         $registration = new Registration();
-        $registration->setUser($user);
-        $registration->setMailingList($mailingList);
-        $registration->setApproved(true);
+        $registration
+            ->setUser($user)
+            ->setMailingList($mailingList)
+            ->setApproved(true)
+            ->setCreated(new \DateTime())
+            ->setUpdated(new \DateTime());
         $user->addRegistration($registration);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
