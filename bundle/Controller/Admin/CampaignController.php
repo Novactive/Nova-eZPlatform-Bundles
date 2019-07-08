@@ -159,13 +159,16 @@ class CampaignController
         if (null === $campaign) {
             $campaign  = new Campaign();
             $languages = array_filter($translationHelper->getAvailableLanguages());
-            $campaign->setNames(array_combine($languages, array_pad([], count($languages), '')));
+            $campaign
+                ->setNames(array_combine($languages, array_pad([], count($languages), '')))
+                ->setCreated(new \DateTime());
         }
 
         $form = $formFactory->create(CampaignType::class, $campaign);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $campaign->setUpdated(new \DateTime());
             $entityManager->persist($campaign);
             $entityManager->flush();
 

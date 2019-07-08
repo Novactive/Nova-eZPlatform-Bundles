@@ -105,13 +105,17 @@ class MailingListController
         if (null === $mailinglist) {
             $mailinglist = new MailingList();
             $languages   = array_filter($translationHelper->getAvailableLanguages());
-            $mailinglist->setNames(array_combine($languages, array_pad([], count($languages), '')));
+            $mailinglist
+                ->setNames(array_combine($languages, array_pad([], count($languages), '')))
+                ->setCreated(new \DateTime());
         }
 
         $form = $formFactory->create(MailingListType::class, $mailinglist);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $mailinglist
+                ->setUpdated(new \DateTime());
             $entityManager->persist($mailinglist);
             $entityManager->flush();
 
@@ -177,7 +181,10 @@ class MailingListController
         if ($form->isSubmitted() && $form->isValid()) {
             foreach ($importer->rowsIterator($userImport) as $index => $row) {
                 try {
-                    $user   = $importer->hydrateUser($row);
+                    $user = $importer->hydrateUser($row);
+                    $user
+                        ->setCreated(new \DateTime())
+                        ->setUpdated(new \DateTime());
                     $errors = $validator->validate($user);
                     if (count($errors) > 0) {
                         $errorList["Line {$index}"] = $errors;

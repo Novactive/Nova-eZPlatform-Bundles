@@ -98,13 +98,6 @@ services:
         resource: '../../DataFixtures'
         tags: ['doctrine.fixture.orm']
 
-    gedmo.listener.timestampable:
-        class: Gedmo\Timestampable\TimestampableListener
-        tags:
-            - { name: doctrine.event_subscriber, connection: default }
-        calls:
-            - [ setAnnotationReader, [ "@annotation_reader" ] ]
-
     ez_mailing.io_service:
         class: Novactive\Bundle\eZMailingBundle\Core\IOService
         arguments: ['@ez_mailing.ezpublish.core.io_service']

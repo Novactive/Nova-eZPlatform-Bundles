@@ -166,7 +166,10 @@ class RegistrationController
 
         if (null !== $email) {
             $user = new User();
-            $user->setEmail($email);
+            $user
+                ->setEmail($email)
+                ->setCreated(new \DateTime())
+                ->setUpdated(new \DateTime());
             $unregistration->setUser($user);
         }
 
