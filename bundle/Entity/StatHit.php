@@ -69,6 +69,11 @@ class StatHit
      */
     private $broadcast;
 
+    public function __construct()
+    {
+        $this->created = new \DateTime();
+    }
+
     /**
      * @return int
      */

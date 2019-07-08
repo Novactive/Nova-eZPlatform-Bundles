@@ -74,6 +74,7 @@ class MailingList
     public function __construct()
     {
         $this->registrations = new ArrayCollection();
+        $this->created       = new \DateTime();
         $this->withApproval  = false;
     }
 

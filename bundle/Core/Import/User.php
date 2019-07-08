@@ -143,7 +143,6 @@ class User
             ->setUser($user)
             ->setMailingList($mailingList)
             ->setApproved(true)
-            ->setCreated(new \DateTime())
             ->setUpdated(new \DateTime());
         $user->addRegistration($registration);
         $this->entityManager->persist($user);

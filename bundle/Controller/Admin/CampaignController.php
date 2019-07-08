@@ -159,9 +159,7 @@ class CampaignController
         if (null === $campaign) {
             $campaign  = new Campaign();
             $languages = array_filter($translationHelper->getAvailableLanguages());
-            $campaign
-                ->setNames(array_combine($languages, array_pad([], count($languages), '')))
-                ->setCreated(new \DateTime());
+            $campaign->setNames(array_combine($languages, array_pad([], count($languages), '')));
         }
 
         $form = $formFactory->create(CampaignType::class, $campaign);

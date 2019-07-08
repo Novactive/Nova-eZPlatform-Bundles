@@ -58,7 +58,6 @@ class TrackController
             ->setUserKey($salt)
             ->setUrl($decodedUrl)
             ->setBroadcast($broadcast)
-            ->setCreated(new \DateTime())
             ->setUpdated(new \DateTime());
         $entityManager->persist($stat);
         $entityManager->flush();
@@ -91,7 +90,6 @@ class TrackController
             ->setUserKey($salt)
             ->setUrl('-')
             ->setBroadcast($broadcast)
-            ->setCreated(new \DateTime())
             ->setUpdated(new \DateTime());
         $entityManager->persist($stat);
         $entityManager->flush();

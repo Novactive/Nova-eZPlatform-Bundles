@@ -50,7 +50,6 @@ class Broadcast
             ->setMailing($mailing)
             ->setStarted(Carbon::now())
             ->setHtml($html)
-            ->setCreated(new \DateTime())
             ->setUpdated(new \DateTime());
         $this->store($broadcast);
 

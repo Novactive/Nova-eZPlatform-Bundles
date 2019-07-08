@@ -189,6 +189,7 @@ class Mailing implements eZ\ContentInterface
         $this->recurring    = false;
         $this->statHits     = new ArrayCollection();
         $this->broadcasts   = new ArrayCollection();
+        $this->created      = new DateTime();
         $this->hoursOfDay   = [];
         $this->daysOfWeek   = [];
         $this->daysOfMonth  = [];

@@ -105,9 +105,7 @@ class MailingListController
         if (null === $mailinglist) {
             $mailinglist = new MailingList();
             $languages   = array_filter($translationHelper->getAvailableLanguages());
-            $mailinglist
-                ->setNames(array_combine($languages, array_pad([], count($languages), '')))
-                ->setCreated(new \DateTime());
+            $mailinglist->setNames(array_combine($languages, array_pad([], count($languages), '')));
         }
 
         $form = $formFactory->create(MailingListType::class, $mailinglist);
@@ -183,7 +181,6 @@ class MailingListController
                 try {
                     $user = $importer->hydrateUser($row);
                     $user
-                        ->setCreated(new \DateTime())
                         ->setUpdated(new \DateTime());
                     $errors = $validator->validate($user);
                     if (count($errors) > 0) {

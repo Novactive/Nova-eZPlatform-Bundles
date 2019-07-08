@@ -49,7 +49,6 @@ class CampaignFixtures extends Fixture implements DependentFixtureInterface
                 ->setSenderEmail($faker->email)
                 ->setReturnPathEmail($faker->email)
                 ->setSenderName($faker->name)
-                ->setCreated(new \DateTime())
                 ->setUpdated(new \DateTime())
                 ->setLocationId(2);
             // create MailingLists
@@ -96,7 +95,6 @@ class CampaignFixtures extends Fixture implements DependentFixtureInterface
                         ->setStarted($faker->dateTimeThisYear)
                         ->setEnded($endDate)
                         ->setHtml("Fixture {$i}{$k}{$l}")
-                        ->setCreated(new \DateTime())
                         ->setUpdated(new \DateTime());
                     $mailing->addBroadcast($broadcast);
 
@@ -119,7 +117,6 @@ class CampaignFixtures extends Fixture implements DependentFixtureInterface
                         for ($n = 0; $n < $nbSubHits; ++$n) {
                             $hit = new StatHit();
                             $hit->setUserKey($key)
-                                ->setCreated(new \DateTime())
                                 ->setUpdated(new \DateTime());
                             $hit->setBrowserName(
                                 $faker->randomElement(['Chrome', 'Firefox', 'Safari', 'Internet Explorer'])

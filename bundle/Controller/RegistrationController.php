@@ -168,7 +168,6 @@ class RegistrationController
             $user = new User();
             $user
                 ->setEmail($email)
-                ->setCreated(new \DateTime())
                 ->setUpdated(new \DateTime());
             $unregistration->setUser($user);
         }
