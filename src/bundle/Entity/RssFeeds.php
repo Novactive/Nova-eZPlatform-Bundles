@@ -122,6 +122,7 @@ class RssFeeds
         $this->sortType       = self::SORT_TYPE_PUBLICATION;
         $this->sortDirection  = self::SORT_DIRECTION_DESC;
         $this->numberOfObject = 10;
+        $this->createdAt      = new \DateTime();
     }
 
     /**
