@@ -199,6 +199,12 @@ class RssFeedItemsType extends AbstractType
 
     public function getContentTypeList()
     {
+        if ($this->configResolver->hasParameter('ez_rss_feed.content_group')) {
+            $contentGroup = $this->configResolver->getParameter('ez_rss_feed.content_group');
+        } else {
+            $contentGroup = 'Content';
+        }
+
         $contentTypesMap         = [];
         $contentTypeGroupContent = null;
 
@@ -206,7 +212,7 @@ class RssFeedItemsType extends AbstractType
          * Maybe the content type group does not exist
          */
         try {
-            $contentTypeGroupContent = $this->contentTypeService->loadContentTypeGroupByIdentifier('Content');
+            $contentTypeGroupContent = $this->contentTypeService->loadContentTypeGroupByIdentifier($contentGroup);
         } catch (NotFoundException $e) { }
 
         try {
