@@ -63,7 +63,7 @@ class Menu
     protected $type;
 
     /**
-     * @ORM\Column(name="remote_id", type="string", nullable=false)
+     * @ORM\Column(name="remote_id", type="string", nullable=true)
      *
      * @var string
      */
@@ -178,17 +178,17 @@ class Menu
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getRemoteId(): string
+    public function getRemoteId(): ?string
     {
         return $this->remoteId;
     }
 
     /**
-     * @param string $remoteId
+     * @param null|string $remoteId
      */
-    public function setRemoteId(string $remoteId): void
+    public function setRemoteId(?string $remoteId): void
     {
         $this->remoteId = $remoteId;
     }

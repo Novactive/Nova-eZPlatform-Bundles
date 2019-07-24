@@ -20,8 +20,10 @@ menu:
     edit: Edit menu
 menu_item:
   default_title: New link
+  default_container_title: Nouveau folder
   property:
     name: Link name
+    container_name: Folder name
     url: Url
     new_window: Open in new window
     language: Language

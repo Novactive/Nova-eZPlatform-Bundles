@@ -181,7 +181,7 @@ class AdminController extends Controller
                 $this->translator->trans('menu.notification.saved', [], 'menu_manager')
             );
 
-            return $this->redirectToRoute($lastAccessedUrl);
+            return $this->redirect($lastAccessedUrl);
         }
 
         return $this->render(

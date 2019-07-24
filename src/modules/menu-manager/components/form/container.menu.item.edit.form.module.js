@@ -59,7 +59,7 @@ export default class ContainerMenuItemEditFormModule extends MenuItemEditFormMod
                     </FormGroup>
                     <FormGroup>
                         <Label for="item_name">
-                            {Translator.trans('menu_item.property.name')} ({this.state.language})
+                            {Translator.trans('menu_item.property.container_name')} ({this.state.language})
                         </Label>
                         <Input
                             type="text"
