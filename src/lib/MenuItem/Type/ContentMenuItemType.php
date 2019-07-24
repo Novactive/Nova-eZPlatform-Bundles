@@ -5,7 +5,7 @@
  * @package   NovaeZMenuManagerBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
@@ -17,14 +17,12 @@ use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\MVC\Symfony\siteAccess;
 use eZ\Publish\Core\Repository\siteAccessAware\ContentService;
 use eZ\Publish\Core\Repository\siteAccessAware\LocationService;
-use Knp\Menu\ItemInterface;
-use Knp\Menu\MenuItem as KnpMenuItem;
-use Novactive\EzMenuManager\MenuItem\MenuItemTypeInterface;
+use Novactive\EzMenuManager\MenuItem\MenuItemValue;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\Routing\RouterInterface;
 
-class ContentMenuItemType extends DefaultMenuItemType implements MenuItemTypeInterface
+class ContentMenuItemType extends DefaultMenuItemType
 {
     /** @var TranslationHelper */
     protected $translationHelper;
@@ -116,7 +114,7 @@ class ContentMenuItemType extends DefaultMenuItemType implements MenuItemTypeInt
         $hash = parent::toHash($menuItem);
         try {
             $contentInfo = $this->contentService->loadContentInfo($menuItem->getContentId());
-        } catch (NotFoundException $exception) {
+        } catch (NotFoundException|UnauthorizedException $exception) {
             return $hash;
         }
         $hash['name'] = $this->translationHelper->getTranslatedContentNameByContentInfo($contentInfo);
@@ -147,14 +145,16 @@ class ContentMenuItemType extends DefaultMenuItemType implements MenuItemTypeInt
      *
      * @throws \Psr\Cache\InvalidArgumentException
      *
-     * @return ItemInterface
+     * @return MenuItemValue
      */
-    public function toMenuItemLink(MenuItem $menuItem): ?ItemInterface
+    public function toMenuItemLink(MenuItem $menuItem): ?MenuItemValue
     {
         try {
             $menuItemLinkInfos = $this->getMenuItemLinkInfos($menuItem);
-            $link              = new KnpMenuItem($menuItemLinkInfos['id'], $this->factory);
-            $link->setUri($menuItemLinkInfos['uri']);
+            $link              = new MenuItemValue($menuItemLinkInfos['id']);
+            if (true === $menuItem->getOption('active', true)) {
+                $link->setUri($menuItemLinkInfos['uri']);
+            }
             $link->setLabel($menuItemLinkInfos['label']);
             $link->setExtras($menuItemLinkInfos['extras']);
 

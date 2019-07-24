@@ -5,13 +5,12 @@
  * @package   NovaeZMenuManagerBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
 namespace Novactive\EzMenuManager\MenuItem;
 
-use Knp\Menu\ItemInterface;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 
 interface MenuItemTypeInterface
@@ -43,7 +42,7 @@ interface MenuItemTypeInterface
     /**
      * @param MenuItem $menuItem
      *
-     * @return ItemInterface
+     * @return MenuItemValue
      */
-    public function toMenuItemLink(MenuItem $menuItem): ?ItemInterface;
+    public function toMenuItemLink(MenuItem $menuItem): ?MenuItemValue;
 }

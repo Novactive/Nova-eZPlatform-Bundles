@@ -5,7 +5,7 @@
  * @package   NovaeZMenuManagerBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
@@ -56,11 +56,28 @@ class Menu
     protected $items;
 
     /**
-     * Menu constructor.
+     * @ORM\Column(name="type", type="string", nullable=true)
+     *
+     * @var string|null
      */
-    public function __construct()
+    protected $type;
+
+    /**
+     * @ORM\Column(name="remote_id", type="string", nullable=false)
+     *
+     * @var string
+     */
+    protected $remoteId;
+
+    /**
+     * Menu constructor.
+     *
+     * @param string|null $remoteId
+     */
+    public function __construct(?string $remoteId = null)
     {
-        $this->items = new ArrayCollection();
+        $this->items    = new ArrayCollection();
+        $this->remoteId = $remoteId ?? md5(uniqid(get_class($this), true));
     }
 
     /**
@@ -142,6 +159,38 @@ class Menu
     public function removeItem(MenuItem $menuItem)
     {
         $this->items->removeElement($menuItem);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType(?string $type): void
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRemoteId(): string
+    {
+        return $this->remoteId;
+    }
+
+    /**
+     * @param string $remoteId
+     */
+    public function setRemoteId(string $remoteId): void
+    {
+        $this->remoteId = $remoteId;
     }
 
     /**

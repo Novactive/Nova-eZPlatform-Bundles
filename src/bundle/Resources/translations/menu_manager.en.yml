@@ -26,10 +26,14 @@ menu_item:
     new_window: Open in new window
     language: Language
   action:
-    remove: Remove link
-    restore: Restore link
-    create: Create link
-    edit: Edit link
+    remove: Remove
+    restore: Restore
+    create: Create
+    create.default: Create link
+    create.container: Create folder
+    edit: Edit
+    activate: Activate
+    desactivate: Desactivate
   edit_form:
     save: Save link
     cancel: Cancel

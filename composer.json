@@ -24,7 +24,8 @@
     "knplabs/knp-menu-bundle": "^2.1",
     "php": ">=7.1",
     "symfony/symfony": "^3.4",
-    "doctrine/orm": "^2.6"
+    "doctrine/orm": "^2.6",
+    "symfony/webpack-encore-bundle": "^1.0.0"
   },
   "require-dev": {
     "phpmd/phpmd": "^2.6",

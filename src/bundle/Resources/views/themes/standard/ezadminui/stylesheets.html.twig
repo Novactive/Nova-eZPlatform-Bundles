@@ -1,5 +1,6 @@
 {% stylesheets filter='cssrewrite'
-    'https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.css'
+    'bundles/ezmenumanager/css/open-iconic-bootstrap.min.css'
 %}
     <link rel="stylesheet" href="{{ asset_url }}" />
 {% endstylesheets %}
+{{ encore_entry_link_tags('menu-manager', null, 'menu_manager')}}

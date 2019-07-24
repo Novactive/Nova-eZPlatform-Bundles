@@ -1,0 +1,40 @@
+{
+  "entrypoints": {
+    "menu-manager": {
+      "js": [
+        "/bundles/ezmenumanager/js/modules/1.js",
+        "/bundles/ezmenumanager/js/modules/menu-manager.js"
+      ],
+      "css": [
+        "/bundles/ezmenumanager/js/modules/menu-manager.css"
+      ]
+    },
+    "menu-manager-renderer": {
+      "js": [
+        "/bundles/ezmenumanager/js/modules/0.js",
+        "/bundles/ezmenumanager/js/modules/1.js",
+        "/bundles/ezmenumanager/js/modules/menu-manager-renderer.js"
+      ],
+      "css": [
+        "/bundles/ezmenumanager/js/modules/menu-manager-renderer.css"
+      ]
+    },
+    "menu-container-menuitem-type": {
+      "js": [
+        "/bundles/ezmenumanager/js/modules/0.js",
+        "/bundles/ezmenumanager/js/modules/menu-container-menuitem-type.js"
+      ]
+    },
+    "menu-content-menuitem-type": {
+      "js": [
+        "/bundles/ezmenumanager/js/modules/menu-content-menuitem-type.js"
+      ]
+    },
+    "menu-default-menuitem-type": {
+      "js": [
+        "/bundles/ezmenumanager/js/modules/0.js",
+        "/bundles/ezmenumanager/js/modules/menu-default-menuitem-type.js"
+      ]
+    }
+  }
+}

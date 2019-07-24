@@ -5,19 +5,23 @@
  * @package   NovaeZMenuManagerBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
 namespace Novactive\EzMenuManagerBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use EzSystems\EzPlatformAdminUi\Notification\NotificationHandlerInterface;
 use Novactive\EzMenuManager\Form\Type\MenuDeleteType;
+use Novactive\EzMenuManager\Form\Type\MenuSearchType;
 use Novactive\EzMenuManager\Form\Type\MenuType;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
+use Novactive\EzMenuManagerBundle\Entity\MenuSearch;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
+use PDO;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +36,7 @@ use Symfony\Component\Translation\TranslatorInterface;
  */
 class AdminController extends Controller
 {
-    const RESULTS_PER_PAGE = 10;
+    const RESULTS_PER_PAGE = 20;
 
     /** @var TranslatorInterface */
     protected $translator;
@@ -40,31 +44,62 @@ class AdminController extends Controller
     /** @var NotificationHandlerInterface */
     protected $notificationHandler;
 
+    /** @var EntityManagerInterface */
+    protected $em;
+
+    /** @var ConfigResolverInterface */
+    protected $configResolver;
+
     /**
      * AdminController constructor.
      *
-     * @param TranslatorInterface                   $translator
+     * @param TranslatorInterface          $translator
      * @param NotificationHandlerInterface $notificationHandler
+     * @param EntityManagerInterface       $em
+     * @param ConfigResolverInterface      $configResolver
      */
-    public function __construct(TranslatorInterface $translator, NotificationHandlerInterface $notificationHandler)
-    {
+    public function __construct(
+        TranslatorInterface $translator,
+        NotificationHandlerInterface $notificationHandler,
+        EntityManagerInterface $em,
+        ConfigResolverInterface $configResolver
+    ) {
         $this->translator          = $translator;
         $this->notificationHandler = $notificationHandler;
+        $this->em                  = $em;
+        $this->configResolver      = $configResolver;
     }
 
     /**
      * @Route("/list/{page}", name="menu_manager.menu_list", requirements={"page" = "\d+"})
      *
-     * @param EntityManagerInterface $em
-     * @param int                    $page
+     * @param int     $page
+     * @param Request $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listAction(EntityManagerInterface $em, $page = 1)
+    public function listAction(Request $request, $page = 1)
     {
-        $queryBuilder = $em->createQueryBuilder()
+        $queryBuilder = $this->em->createQueryBuilder()
                            ->select('m')
-                           ->from(Menu::class, 'm');
+                           ->from(Menu::class, 'm')
+                            ->orderBy('m.name');
+
+        $search     = new MenuSearch();
+        $searchForm = $this->createForm(MenuSearchType::class, $search, ['method'=> 'get']);
+        $searchForm->handleRequest($request);
+        if ($searchForm->isSubmitted() && $searchForm->isValid()) {
+            /** @var MenuSearch $search */
+            $search = $searchForm->getData();
+            if ($type = $search->getType()) {
+                $queryBuilder->andWhere($queryBuilder->expr()->eq('m.type', ':type'));
+                $queryBuilder->setParameter(':type', $type, PDO::PARAM_STR);
+            }
+            if ($name = $search->getName()) {
+                $queryBuilder->andWhere($queryBuilder->expr()->like('m.name', ':name'));
+                $queryBuilder->setParameter(':name', "%{$name}%", PDO::PARAM_STR);
+            }
+        }
 
         $pagerfanta = new Pagerfanta(
             new DoctrineORMAdapter($queryBuilder)
@@ -85,8 +120,10 @@ class AdminController extends Controller
         return $this->render(
             '@EzMenuManager/themes/standard/menu_manager/admin/list.html.twig',
             [
+                'search_form'      => $searchForm->createView(),
                 'pager'            => $pagerfanta,
                 'menu_delete_form' => $menuDeleteForm->createView(),
+                'menu_types'       => $this->configResolver->getParameter('menu_types', 'nova_menu_manager') ?? [],
             ]
         );
     }
@@ -109,49 +146,50 @@ class AdminController extends Controller
     /**
      * @Route("/new", name="menu_manager.menu_new")
      *
-     * @param EntityManagerInterface $em
-     * @param Request                $request
+     * @param Request $request
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function newAction(EntityManagerInterface $em, Request $request)
+    public function newAction(Request $request)
     {
         $menu = new Menu();
 
-        return $this->editAction($em, $request, $menu);
+        return $this->editAction($request, $menu);
     }
 
     /**
      * @Route("/edit/{menu}", name="menu_manager.menu_edit")
      *
-     * @param EntityManagerInterface $em
-     * @param Request                $request
-     * @param Menu                   $menu
+     * @param Request $request
+     * @param Menu    $menu
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function editAction(EntityManagerInterface $em, Request $request, Menu $menu)
+    public function editAction(Request $request, Menu $menu)
     {
+        $lastAccessedUrl = $this->lastAccessedUrl($request);
+
         $form = $this->createForm(MenuType::class, $menu);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Menu $menu */
             $menu = $form->getData();
-            $em->persist($menu);
-            $em->flush();
+            $this->em->persist($menu);
+            $this->em->flush();
 
             $this->notificationHandler->success(
                 $this->translator->trans('menu.notification.saved', [], 'menu_manager')
             );
 
-            return $this->redirectToRoute('menu_manager.menu_list');
+            return $this->redirectToRoute($lastAccessedUrl);
         }
 
         return $this->render(
             '@EzMenuManager/themes/standard/menu_manager/admin/edit.html.twig',
             [
-                'form'  => $form->createView(),
-                'title' => $menu->getId() ? $menu->getName() : 'menu.new',
+                'form'    => $form->createView(),
+                'title'   => $menu->getId() ? $menu->getName() : 'menu.new',
+                'lastUrl' => $lastAccessedUrl,
             ]
         );
     }
@@ -162,7 +200,7 @@ class AdminController extends Controller
      * @param Request $request
      * @param Menu    $menu
      */
-    public function deleteAction(EntityManagerInterface $em, Request $request)
+    public function deleteAction(Request $request)
     {
         $form = $this->createForm(MenuDeleteType::class);
         $form->handleRequest($request);
@@ -171,10 +209,10 @@ class AdminController extends Controller
             $formData = $form->getData();
             $menuIds  = array_keys($formData['menus']);
             foreach ($menuIds as $menuId) {
-                $menu = $em->find(Menu::class, $menuId);
-                $em->remove($menu);
+                $menu = $this->em->find(Menu::class, $menuId);
+                $this->em->remove($menu);
             }
-            $em->flush();
+            $this->em->flush();
 
             $this->notificationHandler->success(
                 $this->translator->trans('menu.notification.deleted', [], 'menu_manager')
@@ -182,5 +220,20 @@ class AdminController extends Controller
         }
 
         return $this->redirectToRoute('menu_manager.menu_list');
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return string
+     */
+    protected function lastAccessedUrl(Request $request)
+    {
+        $targetUrl = $request->headers->get('Referer');
+        if ($targetUrl && false === strpos($targetUrl, '/login')) {
+            return $targetUrl;
+        }
+
+        return $this->generateUrl('menu_manager.menu_list');
     }
 }

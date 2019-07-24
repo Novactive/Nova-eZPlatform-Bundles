@@ -1,3 +1,14 @@
+/*
+ * NovaeZMenuManagerBundle.
+ *
+ * @package   NovaeZMenuManagerBundle
+ *
+ * @author    Novactive <f.alexandre@novactive.com>
+ * @copyright 2019 Novactive
+ * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
+ *
+ */
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
@@ -106,7 +117,9 @@ export default class MenuItemEditFormModule extends Component {
                         </Input>
                     </FormGroup>
                     <FormGroup>
-                        <Label for="item_name">{Translator.trans('menu_item.property.name')}</Label>
+                        <Label for="item_name">
+                            {Translator.trans('menu_item.property.name')} ({this.state.language})
+                        </Label>
                         <Input
                             type="text"
                             name="name"
@@ -116,7 +129,9 @@ export default class MenuItemEditFormModule extends Component {
                         />
                     </FormGroup>
                     <FormGroup>
-                        <Label for="item_url">{Translator.trans('menu_item.property.url')}</Label>
+                        <Label for="item_url">
+                            {Translator.trans('menu_item.property.url')} ({this.state.language})
+                        </Label>
                         <Input
                             type="text"
                             name="url"

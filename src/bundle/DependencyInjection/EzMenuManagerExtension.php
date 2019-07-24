@@ -5,7 +5,7 @@
  * @package   NovaeZMenuManagerBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
@@ -27,6 +27,7 @@ class EzMenuManagerExtension extends Extension implements PrependExtensionInterf
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('default_settings.yml');
         $loader->load('services.yml');
         $loader->load('fieldtypes.yml');
         $loader->load('indexable_fieldtypes.yml');
@@ -43,10 +44,26 @@ class EzMenuManagerExtension extends Extension implements PrependExtensionInterf
     public function prepend(ContainerBuilder $container)
     {
         $container->prependExtensionConfig(
+            'webpack_encore',
+            [
+                'builds' => [
+                    'menu_manager' => '%kernel.project_dir%/web/bundles/ezmenumanager/js/modules',
+                ],
+            ]
+        );
+        $container->prependExtensionConfig(
             'assetic',
             [
                 'bundles' => [
                     'EzMenuManagerBundle',
+                ],
+            ]
+        );
+        $container->prependExtensionConfig(
+            'bazinga_js_translation',
+            [
+                'active_domains' => [
+                    'menu_manager',
                 ],
             ]
         );

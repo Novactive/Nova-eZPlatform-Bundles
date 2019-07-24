@@ -5,7 +5,7 @@
  * @package   NovaeZMenuManagerBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
@@ -15,20 +15,26 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use FOS\HttpCache\Handler\TagHandler;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
+use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
 class CachePurgerListener
 {
     /** @var TagHandler */
-    protected $tagHandler;
+    protected $httpCache;
+
+    /** @var TagAwareAdapterInterface */
+    protected $persistenceCache;
 
     /**
      * CachePurgerListener constructor.
      *
-     * @param TagHandler $tagHandler
+     * @param TagHandler               $httpCache
+     * @param TagAwareAdapterInterface $persistenceCache
      */
-    public function __construct(TagHandler $tagHandler)
+    public function __construct(TagHandler $httpCache, TagAwareAdapterInterface $persistenceCache)
     {
-        $this->tagHandler = $tagHandler;
+        $this->httpCache        = $httpCache;
+        $this->persistenceCache = $persistenceCache;
     }
 
     /**
@@ -61,11 +67,22 @@ class CachePurgerListener
     public function purgeMenuCache(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
+        $tags   = [];
+
         if ($entity instanceof Menu) {
-            $this->tagHandler->invalidateTags(['menu-'.$entity->getId()]);
+            $tags = ['menu-'.$entity->getId()];
         }
+
         if ($entity instanceof MenuItem) {
-            $this->tagHandler->invalidateTags(['menu-'.$entity->getMenu()->getId()]);
+            $tags = [
+                'menu-item-'.$entity->getId(),
+                'menu-'.$entity->getMenu()->getId(),
+            ];
+        }
+
+        if (!empty($tags)) {
+            $this->httpCache->invalidateTags($tags);
+            $this->persistenceCache->invalidateTags($tags);
         }
     }
 }

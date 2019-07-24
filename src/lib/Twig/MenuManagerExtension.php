@@ -5,7 +5,7 @@
  * @package   NovaeZMenuManagerBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
@@ -72,6 +72,17 @@ class MenuManagerExtension extends \Twig_Extension
     }
 
     /**
+     * @return array|\Twig_Filter[]
+     */
+    public function getFilters()
+    {
+        $functions   = parent::getFunctions();
+        $functions[] = new \Twig_SimpleFilter('sort_menu_items_by_menu', [$this, 'sortMenuItemsByMenu']);
+
+        return $functions;
+    }
+
+    /**
      * @param MenuItem $menuItem
      *
      * @return mixed
@@ -132,5 +143,27 @@ class MenuManagerExtension extends \Twig_Extension
         }
 
         return $list;
+    }
+
+    /**
+     * @param MenuItem[] $menuItems
+     *
+     * @return array
+     */
+    public function sortMenuItemsByMenu(array $menuItems)
+    {
+        $menus = [];
+        foreach ($menuItems as $menuItem) {
+            $menu = $menuItem->getMenu();
+            if (!isset($menus[$menu->getId()])) {
+                $menus[$menu->getId()] = [
+                    'menu'  => $menu,
+                    'items' => [],
+                ];
+            }
+            $menus[$menu->getId()]['items'][] = $menuItem;
+        }
+
+        return $menus;
     }
 }

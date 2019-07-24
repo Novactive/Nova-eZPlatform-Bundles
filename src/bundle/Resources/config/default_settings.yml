@@ -1,0 +1,2 @@
+parameters:
+  nova_menu_manager.default.menu_types: []
