@@ -44,14 +44,6 @@ class EzMenuManagerExtension extends Extension implements PrependExtensionInterf
     public function prepend(ContainerBuilder $container)
     {
         $container->prependExtensionConfig(
-            'webpack_encore',
-            [
-                'builds' => [
-                    'menu_manager' => '%kernel.project_dir%/web/bundles/ezmenumanager/js/modules',
-                ],
-            ]
-        );
-        $container->prependExtensionConfig(
             'assetic',
             [
                 'bundles' => [
