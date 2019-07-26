@@ -153,6 +153,9 @@ class AdminController extends Controller
     public function newAction(Request $request)
     {
         $menu = new Menu();
+        $menu->setRootLocationId(
+            $this->configResolver->getParameter('content.tree_root.location_id')
+        );
 
         return $this->editAction($request, $menu);
     }

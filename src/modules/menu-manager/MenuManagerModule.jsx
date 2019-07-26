@@ -12,6 +12,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import ContentTreeView from './components/ContentTreeView'
 import MenuTreeView from './components/MenuTreeView'
 import MenuItem from './entity/MenuItem'
 
@@ -90,7 +91,7 @@ export default class MenuManagerModule extends Component {
 
     return (
       <div className="row">
-        <div className="col-md-12">
+        <div className="col-md-6">
           <div className="card">
             <div className="card-body">
               <MenuTreeView
@@ -104,6 +105,17 @@ export default class MenuManagerModule extends Component {
             </div>
           </div>
         </div>
+        <div className="col-md-6">
+          <div className="card">
+            <div className="card-body">
+              <ContentTreeView
+                treeRootLocationId={this.props.treeRootLocationId}
+                restInfo={this.props.restInfo}
+                jsTreeTypes={this.props.config.getJsTreeTypes()}
+              />
+            </div>
+          </div>
+        </div>
         {editForm && <div className="col-md-6 card menu-manager-edit-form-container">{editForm}</div>}
       </div>
     )
@@ -111,7 +123,12 @@ export default class MenuManagerModule extends Component {
 }
 
 MenuManagerModule.propTypes = {
+  treeRootLocationId: PropTypes.number.isRequired,
   loadJson: PropTypes.func,
   onChange: PropTypes.func,
-  config: PropTypes.object
+  config: PropTypes.object,
+  restInfo: PropTypes.shape({
+    token: PropTypes.string.isRequired,
+    siteaccess: PropTypes.string.isRequired
+  }).isRequired
 }

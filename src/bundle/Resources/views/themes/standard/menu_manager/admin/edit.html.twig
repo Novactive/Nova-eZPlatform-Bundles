@@ -20,7 +20,7 @@
 
 {%- block content -%}
     <section class="container my-4">
-        {{ form_start(form) }}
+        {{ form_start(form, {'attr': {'class': 'menu-edit-form'}}) }}
             {{ form_row(form.name) }}
             {{ form_row(form.rootLocationId) }}
             {% if form.type is defined %}{{ form_row(form.type) }}{% endif %}

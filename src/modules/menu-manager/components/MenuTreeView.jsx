@@ -13,7 +13,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
 import $ from 'jquery'
-import 'jstree/dist/jstree.min'
+import 'jstree/dist/jstree'
 import MenuItem from '../entity/MenuItem'
 
 const ROOT_ID = 'root'

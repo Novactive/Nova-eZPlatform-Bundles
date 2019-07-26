@@ -16,7 +16,7 @@ import ContainerMenuItemType from './type/ContainerMenuItemType'
 import ContentMenuItemType from './type/ContentMenuItemType'
 import DefaultMenuItemType from './type/DefaultMenuItemType'
 
-(function (global) {
+(function (global, doc) {
   const MenuManagerConfig = {
     config: {
       types: [],
@@ -42,35 +42,46 @@ import DefaultMenuItemType from './type/DefaultMenuItemType'
     }
   }
   const MenuManagerRenderer = {
-    render: (container, input) => {
-      ReactDOM.render(
-        React.createElement(MenuManager, {
-          loadJson: () => {
-            return input.value
-          },
-          onChange: (items) => {
-            const json = []
-            for (const item of items.values()) {
-              if (!item.isEnabled()) {
-                continue
+    render: (container, input, menuRootLocationInput) => {
+      const token = doc.querySelector('meta[name="CSRF-Token"]').content
+      const siteaccess = doc.querySelector('meta[name="SiteAccess"]').content
+      const renderComponent = () => {
+        ReactDOM.render(
+          React.createElement(MenuManager, {
+            loadJson: () => {
+              return input.value
+            },
+            onChange: (items) => {
+              const json = []
+              for (const item of items.values()) {
+                if (!item.isEnabled()) {
+                  continue
+                }
+                json.push({
+                  id: item.id,
+                  name: item.name,
+                  parentId: item.parentId !== '#' ? item.parentId : null,
+                  position: item.position,
+                  url: item.url,
+                  target: item.target,
+                  type: item.type,
+                  options: item.options
+                })
               }
-              json.push({
-                id: item.id,
-                name: item.name,
-                parentId: item.parentId !== '#' ? item.parentId : null,
-                position: item.position,
-                url: item.url,
-                target: item.target,
-                type: item.type,
-                options: item.options
-              })
-            }
-            input.value = JSON.stringify(json)
-          },
-          config: MenuManagerConfig
-        }),
-        container
-      )
+              input.value = JSON.stringify(json)
+            },
+            config: MenuManagerConfig,
+            restInfo: { token, siteaccess },
+            treeRootLocationId: menuRootLocationInput.value
+          }),
+          container
+        )
+      }
+
+      renderComponent()
+      menuRootLocationInput.addEventListener('change', () => {
+        renderComponent()
+      })
     }
   }
 
@@ -84,12 +95,15 @@ import DefaultMenuItemType from './type/DefaultMenuItemType'
   global.Novactive['MenuManagerRenderer'] = MenuManagerRenderer
   global.Novactive['MenuManagerConfig'] = MenuManagerConfig
 
-  const SELECTOR_FIELD = '.menu-edit__items-collection'
+  const SELECTOR_FORM = '.menu-edit-form'
   const SELECTOR_MENU_MANAGER = '.menu-manager'
   const SELECTOR_INPUT = '.ez-data-source__input'
 
-  document.querySelectorAll(SELECTOR_FIELD).forEach((fieldContainer) => {
-    const input = fieldContainer.querySelector(SELECTOR_INPUT)
-    global.Novactive.MenuManagerRenderer.render(fieldContainer.querySelector(SELECTOR_MENU_MANAGER), input)
+  document.querySelectorAll(SELECTOR_FORM).forEach((formContainer) => {
+    global.Novactive.MenuManagerRenderer.render(
+      formContainer.querySelector(SELECTOR_MENU_MANAGER),
+      formContainer.querySelector(SELECTOR_INPUT),
+      formContainer.querySelector('input[name="menu[rootLocationId]"]')
+    )
   })
-})(window)
+})(window, window.document)
