@@ -80,13 +80,12 @@ bin/console novaezprotectedcontent:install
 This module add a cookie to unlock the contents that match it, for that reason you want to keep all the cookie that 
 starts with PasswordProvided::COOKIE_PREFIX (i.e: **protected-content-**).
 
-In the vcl_recv this block must be adapted (not tested yet)
 ```vcl
  // Remove all cookies besides Session ID, as JS tracker cookies and so will make the responses effectively un-cached
     if (req.http.cookie) {
         set req.http.cookie = ";" + req.http.cookie;
         set req.http.cookie = regsuball(req.http.cookie, "; +", ";");
-        set req.http.cookie = regsuball(req.http.cookie, ";(eZSESSID[^=]*|^protected-content)=", "; \1=");
+        set req.http.cookie = regsuball(req.http.cookie, ";[ ]*(eZSESSID[^=]*|protected-content-[^=]*)=", "; \1=");
         set req.http.cookie = regsuball(req.http.cookie, ";[^ ][^;]*", "");
         set req.http.cookie = regsuball(req.http.cookie, "^[; ]+|[; ]+$", "");
     }
