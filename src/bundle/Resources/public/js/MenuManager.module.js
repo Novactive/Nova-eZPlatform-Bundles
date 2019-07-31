@@ -15837,7 +15837,7 @@ class ContentTreeView extends __WEBPACK_IMPORTED_MODULE_0_react__["PureComponent
     const hasChildren = location.totalSubitemsCount > 0;
     const children = this.generateNodesFromLocationChildren(location);
     return {
-      id: location.locationId,
+      id: String('_' + Math.random().toString(36).substr(2, 9)),
       text: location.name,
       // icon: eZ.helpers.contentType.getContentTypeIconUrl(location.contentTypeIdentifier) || eZ.helpers.contentType.getContentTypeIconUrl('file'),
       state: {
@@ -15900,11 +15900,12 @@ class ContentTreeView extends __WEBPACK_IMPORTED_MODULE_0_react__["PureComponent
 
     for (let i = 0, j = data.data.nodes.length; i < j; i++) {
       const node = data.data.origin ? data.data.origin.get_node(data.data.nodes[i]) : data.data.nodes[i];
-      node.state.loaded = true;
-      node.children = [];
-      node.children_d = [];
-      node.id = String('_' + Math.random().toString(36).substr(2, 9));
-      nodes[i] = node;
+      const newNode = Object.assign({}, node);
+      newNode.state.loaded = true;
+      newNode.children = [];
+      newNode.children_d = [];
+      newNode.id = String('_' + Math.random().toString(36).substr(2, 9));
+      nodes[i] = newNode;
     }
 
     data.data.nodes = nodes;

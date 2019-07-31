@@ -1,6 +1,6 @@
 menu.list: Liste des menus
 menu:
-  root: Racine
+  root: Racine du menu
   property:
     id: ID
     name: Nom
@@ -10,6 +10,7 @@ menu:
   edit_form:
     save: Enregistrer le menu
     back: Retour à la liste
+    help: Il est possible de glisser et déposer les contenus de l'arborescence du site (liste de droite) dans le menu (liste de gauche)
   notification:
     saved: Le menu a été enregistré
     deleted: Le menu a été supprimé

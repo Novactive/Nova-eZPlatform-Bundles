@@ -1,6 +1,6 @@
 menu.list: Menu list
 menu:
-  root: Root
+  root: Menu root
   property:
     id: ID
     name: Name
@@ -9,6 +9,7 @@ menu:
   edit_form:
     save: Save menu
     back: Back to the list
+    help: you can drag and drop content from the website tree (right list) into the menu (left list)
   notification:
     saved: Menu got savec
     deleted: Menu got deleted

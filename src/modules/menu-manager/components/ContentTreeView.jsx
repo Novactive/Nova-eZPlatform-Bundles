@@ -50,7 +50,12 @@ export default class ContentTreeView extends PureComponent {
     const children = this.generateNodesFromLocationChildren(location)
 
     return {
-      id: location.locationId,
+      id: String(
+        '_' +
+          Math.random()
+            .toString(36)
+            .substr(2, 9)
+      ),
       text: location.name,
       // icon: eZ.helpers.contentType.getContentTypeIconUrl(location.contentTypeIdentifier) || eZ.helpers.contentType.getContentTypeIconUrl('file'),
       state: {
@@ -113,16 +118,17 @@ export default class ContentTreeView extends PureComponent {
     const nodes = []
     for (let i = 0, j = data.data.nodes.length; i < j; i++) {
       const node = data.data.origin ? data.data.origin.get_node(data.data.nodes[i]) : data.data.nodes[i]
-      node.state.loaded = true
-      node.children = []
-      node.children_d = []
-      node.id = String(
+      const newNode = Object.assign({}, node)
+      newNode.state.loaded = true
+      newNode.children = []
+      newNode.children_d = []
+      newNode.id = String(
         '_' +
           Math.random()
             .toString(36)
             .substr(2, 9)
       )
-      nodes[i] = node
+      nodes[i] = newNode
     }
     data.data.nodes = nodes
     data.data.origin = null
