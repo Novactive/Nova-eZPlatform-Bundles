@@ -86,7 +86,7 @@ In the vcl_recv this block must be adapted (not tested yet)
     if (req.http.cookie) {
         set req.http.cookie = ";" + req.http.cookie;
         set req.http.cookie = regsuball(req.http.cookie, "; +", ";");
-        set req.http.cookie = regsuball(req.http.cookie, ";(eZSESSID[^=]*|^protected-content)=", "; \1=");
+        set req.http.cookie = regsuball(req.http.cookie, ";[ ]*(eZSESSID[^=]*|protected-content-[^=]*)=", "; \1=");
         set req.http.cookie = regsuball(req.http.cookie, ";[^ ][^;]*", "");
         set req.http.cookie = regsuball(req.http.cookie, "^[; ]+|[; ]+$", "");
     }
