@@ -73,7 +73,7 @@ export default class MenuManagerModule extends Component {
         url: parsedItem['url'],
         target: parsedItem['target'],
         type: parsedItem['type'],
-        options: parsedItem['options']
+        options: Object.assign({}, parsedItem['options'])
       })
       items.set(item.id, item)
     }

@@ -11,15 +11,12 @@
 
 const common = require('./webpack.common')
 const merge = require('webpack-merge')
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin-legacy')
 
 module.exports = merge(common, {
   plugins: [
-    new UglifyJSPlugin({
-      sourceMap: true,
-      uglifyOptions: {
-        ecma: 6
-      }
+    new TerserPlugin({
+      extractComments: true
     })
   ]
 })
