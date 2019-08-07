@@ -89,7 +89,6 @@ class EnhancedImage extends FileFieldHandler implements FieldValueConverterInter
         if (null == $fieldValue->uri) {
             return null;
         }
-        var_dump($fieldValue);
 
         return [
             'path'            => sprintf(
