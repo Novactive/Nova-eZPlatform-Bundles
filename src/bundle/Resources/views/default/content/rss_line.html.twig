@@ -5,7 +5,9 @@
         <title>{{ ez_field_value( content, mapping.title ) }}</title>
         <link>{{ absolute_url(path( location )) }}</link>
         {% if feed_content.xml is defined and feed_content.xml.textContent is defined %}
-            <description>{{ feed_content.xml.textContent }}</description>
+            <description>{{ feed_content.xml.textContent|raw }}</description>
+        {% elseif feed_content is not empty %}
+            <description>{{ feed_content }}</description>
         {% endif %}
         <pubDate>{{ content.versionInfo.creationDate|date('r') }}</pubDate>
         {% if mapping.media is not empty and not(ez_is_field_empty(content,  mapping.media)) %}
