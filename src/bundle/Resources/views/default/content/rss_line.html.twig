@@ -8,7 +8,7 @@
             <description>{{ feed_content.xml.textContent }}</description>
         {% endif %}
         <pubDate>{{ content.versionInfo.creationDate|date('r') }}</pubDate>
-        {% if not(ez_is_field_empty(content,  mapping.media)) %}
+        {% if mapping.media is not empty and not(ez_is_field_empty(content,  mapping.media)) %}
             {{ ez_render_field( content, mapping.media, {
                 'template': '@EzRssFeed/default/content/fields/fields.html.twig',
             }) }}
