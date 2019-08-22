@@ -119,6 +119,15 @@
                 height: 11.1111111%;
                 top: 88.8888889%;
             }
+
+            picture.enhancedimage--wrapper {
+                width: auto;
+                height: auto;
+                min-width: 100%;
+                min-height: 100%;
+                max-height: none;
+                max-width: none;
+            }
         }
     }
 }

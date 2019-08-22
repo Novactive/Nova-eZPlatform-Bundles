@@ -182,7 +182,7 @@ class EnhancedImage {
 
     document.addEventListener('lazyloaded', function (e: Event): void {
         const elem = e.target as Element
-        if (!regImg.test(elem.nodeName) || !elem.classList.contains('enhancedimage--focused-img')) return 
+        if (!regImg.test(elem.nodeName) || !elem.classList.contains('enhancedimage--focused-img')) return
 
         const imageElement = e.target as ImageElement
         const parent = imageElement.parentElement
