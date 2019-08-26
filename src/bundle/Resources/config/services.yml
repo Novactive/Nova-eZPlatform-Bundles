@@ -10,6 +10,9 @@ services:
         # this means you cannot fetch services directly from the container via $container->get()
         # if you need to do this, you can override this setting on individual services
         public: false
+        bind:
+            $httpCacheTagHandler: "@fos_http_cache.handler.tag_handler"
+            $persistenceCacheAdapter: "@ezpublish.cache_pool"
 
     Novactive\EzMenuManagerBundle\Controller\:
         resource: "../../Controller/*"
@@ -34,20 +37,25 @@ services:
         resource: "../../../lib/EventListener/*"
         public: true
 
-    Novactive\EzMenuManager\EventListener\SignalListener:
+    Novactive\EzMenuManager\EventListener\PublishVersionSignalSlot:
         arguments:
             $persistenceHandler: "@ezpublish.api.persistence_handler"
+        tags:
+            - { name: ezpublish.api.slot, signal: ContentService\PublishVersionSignal }
 
-    Novactive\EzMenuManager\EventListener\CachePurgerListener:
-        arguments:
-            - "@fos_http_cache.handler.tag_handler"
-            - "@ezpublish.cache_pool"
+    Novactive\EzMenuManager\EventListener\AssignSectionSignalSlot:
+        tags:
+            - { name: ezpublish.api.slot, signal: SectionService\AssignSectionSignal }
+
+    Novactive\EzMenuManager\EventListener\AssignSectionToSubtreeSignalSlot:
+        tags:
+            - { name: ezpublish.api.slot, signal: SectionService\AssignSectionToSubtreeSignal }
+
+    Novactive\EzMenuManager\EventListener\DoctrineEventListener:
         tags:
             - { name: doctrine.event_listener, event: postPersist, lazy: true }
             - { name: doctrine.event_listener, event: postUpdate, lazy: true }
             - { name: doctrine.event_listener, event: postRemove, lazy: true }
-
-
 
     Novactive\EzMenuManager\MenuItem\:
         resource: "../../../lib/MenuItem/*"

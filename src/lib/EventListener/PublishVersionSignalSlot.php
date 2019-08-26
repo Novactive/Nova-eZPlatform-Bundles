@@ -12,16 +12,15 @@
 namespace Novactive\EzMenuManager\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
-use eZ\Publish\Core\MVC\Symfony\Event\SignalEvent;
-use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\PublishVersionSignal;
+use eZ\Publish\Core\SignalSlot\Slot;
 use eZ\Publish\SPI\Persistence\Handler;
 use Novactive\EzMenuManager\FieldType\MenuItem\ValueConverter;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem\ContentMenuItem;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class SignalListener implements EventSubscriberInterface
+class PublishVersionSignalSlot extends Slot
 {
     /** @var Handler */
     protected $persistenceHandler;
@@ -50,31 +49,14 @@ class SignalListener implements EventSubscriberInterface
     }
 
     /**
-     * @inheritDoc
+     * @param Signal $signal
      */
-    public static function getSubscribedEvents()
+    public function receive(Signal $signal): void
     {
-        return [
-            MVCEvents::API_SIGNAL => 'onAPISignal',
-        ];
-    }
-
-    /**
-     * @param SignalEvent $event
-     */
-    public function onAPISignal(SignalEvent $event)
-    {
-        $signal = $event->getSignal();
-        if ($signal instanceof PublishVersionSignal) {
-            $this->onPublishVersionSignal($signal);
+        if (!$signal instanceof PublishVersionSignal) {
+            return;
         }
-    }
 
-    /**
-     * @param PublishVersionSignal $signal
-     */
-    public function onPublishVersionSignal(PublishVersionSignal $signal)
-    {
         $content = $this->persistenceHandler->contentHandler()->load($signal->contentId, $signal->versionNo);
         $fields  = $content->fields;
         foreach ($fields as $field) {
