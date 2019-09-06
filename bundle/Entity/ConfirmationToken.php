@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use DateTime;
 
 /**
  * Class ConfirmationToken.
@@ -20,6 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="novaezmailing_confirmation_token")
  *
  * @ORM\Entity(repositoryClass="Novactive\Bundle\eZMailingBundle\Repository\ConfirmationToken")
+ * @ORM\HasLifecycleCallbacks()
  */
 class ConfirmationToken
 {
@@ -43,6 +45,15 @@ class ConfirmationToken
      * @ORM\Column(name="CT_payload", type="array", nullable=false)
      */
     private $payload;
+
+    /**
+     * ConfirmationToken constructor.
+     */
+    public function __construct()
+    {
+        $this->created = new DateTime();
+        $this->updated = new DateTime();
+    }
 
     /**
      * @return string

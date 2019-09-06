@@ -35,6 +35,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     errorPath="email",
  *     message="This email {{ value }} is already in use"
  * )
+ * @ORM\HasLifecycleCallbacks()
  */
 class User
 {
@@ -101,6 +102,7 @@ class User
         $this->registrations = new ArrayCollection();
         $this->created       = new DateTime();
         $this->restricted    = false;
+        $this->updated       = new DateTime();
     }
 
     /**
