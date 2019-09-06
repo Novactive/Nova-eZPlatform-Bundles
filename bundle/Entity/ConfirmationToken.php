@@ -21,7 +21,6 @@ use DateTime;
  * @ORM\Table(name="novaezmailing_confirmation_token")
  *
  * @ORM\Entity(repositoryClass="Novactive\Bundle\eZMailingBundle\Repository\ConfirmationToken")
- * @ORM\HasLifecycleCallbacks()
  */
 class ConfirmationToken
 {
