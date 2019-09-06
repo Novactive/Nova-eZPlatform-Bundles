@@ -101,6 +101,7 @@ class User
         $this->registrations = new ArrayCollection();
         $this->created       = new DateTime();
         $this->restricted    = false;
+        $this->updated       = new DateTime();
     }
 
     /**
