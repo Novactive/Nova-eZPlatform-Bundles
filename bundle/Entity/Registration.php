@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use DateTime;
 
 /**
  * Class Registration.
@@ -64,6 +65,7 @@ class Registration
     {
         $this->approved = false;
         $this->created  = new \DateTime();
+        $this->updated  = new \DateTime();
     }
 
     /**
