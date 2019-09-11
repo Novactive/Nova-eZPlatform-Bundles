@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @Route("/rss/feeds")
+ * @Route("/rss/feed")
  *
  * Class RssFeedController
  *
