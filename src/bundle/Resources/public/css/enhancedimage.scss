@@ -10,14 +10,18 @@
  */
 
 picture.enhancedimage--wrapper {
-  display: block;
-  position: relative;
-  overflow: hidden;
+  &.enhancedimage--focused-img--wrapper{
+    display: block;
+    position: relative;
+    overflow: hidden;
+  }
   .enhancedimage--img{
-    position: absolute;
-    min-height: 100%;
-    min-width: 100%;
-    max-width: inherit;
+    &.enhancedimage--focused-img{
+      position: absolute;
+      min-height: 100%;
+      min-width: 100%;
+      max-width: inherit;
+    }
     &.blur-up {
       -webkit-filter: blur(0);
       filter: blur(0);
