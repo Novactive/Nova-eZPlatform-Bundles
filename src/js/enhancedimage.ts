@@ -50,12 +50,13 @@ class EnhancedImage {
 
     public updateFocusPoint (forceUpdate?: boolean): void {
         if (this.currentSrc === this.element.currentSrc && forceUpdate !== true) return
-        const currentSource = this.sources.get(UrlParser(this.element.currentSrc).pathname)
+        const elCurrentSrc = this.element.currentSrc || this.element.src
+        const currentSource = this.sources.get(UrlParser(elCurrentSrc).pathname)
         if (!currentSource) return
 
         this.setFocus(currentSource.focus)
         this.element.classList.add('focused')
-        this.currentSrc = this.element.currentSrc
+        this.currentSrc = elCurrentSrc
     }
 }
 
