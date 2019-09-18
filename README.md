@@ -55,6 +55,7 @@ Lazy loading is controlled globaly by the following settings (default to true) a
 ```yaml
 parameters: 
   ez_enhanced_image_asset.default.enable_lazy_load: true
+  ez_enhanced_image_asset.default.enable_retina: true
 ```
 
 ### 2. Image variations configuration
@@ -64,6 +65,17 @@ If needed, update your configuration and add the following filter to generate th
  - { name: focusedThumbnail, params: {size: [<width>, <height>], focus: [0, 0]} }
 ```
 NB: the `focus` parameter automaticaly updated for each image based on what has been contributed
+
+#### Retina variations 
+
+Retina variations should be suffixed by `_retina`.
+To be displayed, the generated variation width should be two time the width of the default variation.
+
+Considering a variation named `my_alias`, the variation named `my_alias_retina` will be used and displayed on retina screens.
+```yaml
+ - { name: my_alias, params: {size: [<width>, <height>], focus: [0, 0]} }
+ - { name: my_alias_retina, params: {size: [<width*2>, <height*2>], focus: [0, 0]} }
+```
 
 ### 3. Twig render field configuration
 
@@ -81,6 +93,7 @@ You can now specify the `alternativeAlias` parameter to define alternative image
             }
         ]
         lazyLoad: true|false // optionnal
+        retina: true|false // optionnal
     }
 }) }}
 ```

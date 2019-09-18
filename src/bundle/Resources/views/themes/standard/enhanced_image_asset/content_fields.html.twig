@@ -5,7 +5,7 @@
         {% if not ez_is_field_empty( content, field ) %}
             {% set imageAttrs = ez_image_attrs( field, versionInfo, parameters.alias|default( 'original' ), {
                 lazyLoad: parameters.lazyLoad|default( lazy_load_images ),
-                retina: parameters.retina|default( true ),
+                retina: parameters.retina|default( enable_retina_variations ),
                 attrs: {
                     'class': parameters.class|default('') ~ ' enhancedimage--img',
                     'alt': parameters.alternativeText|default(field.value.alternativeText)
@@ -20,7 +20,7 @@
                 {% for alternativeAlias in alternativeAliasList %}
                     {% set alternativeImageAttrs = ez_image_attrs( field, versionInfo, alternativeAlias.alias, {
                         lazyLoad: parameters.lazyLoad|default( lazy_load_images ),
-                        retina: parameters.retina|default( true ),
+                        retina: parameters.retina|default( enable_retina_variations ),
                         attrs: {
                             'media': alternativeAlias.media,
                             'data-name': alternativeAlias.alias,
@@ -41,7 +41,7 @@
         {% if not ez_is_field_empty( content, field ) %}
             {% set imageAttrs = ez_image_attrs( field, versionInfo, parameters.alias|default( 'original' ), {
                 lazyLoad: parameters.lazyLoad|default( lazy_load_images ),
-                retina: parameters.retina|default( true ),
+                retina: parameters.retina|default( enable_retina_variations ),
                 attrs: {
                     'class': parameters.class|default('') ~ ' enhancedimage--img',
                     'alt': parameters.alternativeText|default(field.value.alternativeText)
@@ -56,7 +56,7 @@
                 {% for alternativeAlias in alternativeAliasList %}
                     {% set alternativeImageAttrs = ez_image_attrs( field, versionInfo, alternativeAlias.alias, {
                         lazyLoad: parameters.lazyLoad|default( lazy_load_images ),
-                        retina: parameters.retina|default( true ),
+                        retina: parameters.retina|default( enable_retina_variations ),
                         attrs: {
                             'media': alternativeAlias.media,
                             'data-name': alternativeAlias.alias,
