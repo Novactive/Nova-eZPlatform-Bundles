@@ -37,10 +37,23 @@ class EnhancedImage {
         this.currentSrc = null
     }
 
-    public addSource (urlString: string, focus: Focus): void {
-        const url = UrlParser(urlString)
-        const source = { url: url, focus: focus }
-        this.sources.set(source.url.pathname, source)
+    protected parseSrc (src: string): HTMLAnchorElement[] {
+        let urls = []
+        const urlStrings = src.split(',')
+        for (const urlString of urlStrings) {
+            const [url] = urlString.trim().split(' ')
+            urls.push(UrlParser(url))
+        }
+
+        return urls
+    }
+
+    public addSource (src: string, focus: Focus): void {
+        const urls = this.parseSrc(src)
+        for (const url of urls) {
+            const source = { url: url, focus: focus }
+            this.sources.set(source.url.pathname, source)
+        }
     }
 
     public setFocus (focus: Focus): void {
