@@ -32,8 +32,16 @@ class FocusPointCalculator
         BoxInterface $cropSize,
         FocusPoint $focusPoint
     ): FocusPoint {
-        $cropStartPoint  = $this->calculateCropStartPoint($imageSize, $cropSize, $focusPoint);
-        $imageFocusPoint = $this->toPixel($focusPoint, $imageSize);
+        $ratios = [
+            $cropSize->getWidth() / $imageSize->getWidth(),
+            $cropSize->getHeight() / $imageSize->getHeight(),
+        ];
+
+        $resizeRation = max($ratios);
+        $resizedSize  = $imageSize->scale($resizeRation);
+
+        $cropStartPoint  = $this->calculateCropStartPoint($resizedSize, $cropSize, $focusPoint);
+        $imageFocusPoint = $this->toPixel($focusPoint, $resizedSize);
 
         return $this->toCoordinate(
             new FocusPoint(
