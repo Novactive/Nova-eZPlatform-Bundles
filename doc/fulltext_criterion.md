@@ -2,7 +2,7 @@
 
 Added a new criterion for solr with the following features :
 - search and boost multiple fields
-- boost depending on publish date ([Publish date field](./custom_meta_fields.md))
+- boost depending on publish date ([Publish date field](./custom_fields.md#publish-date-field))
 - boost on phrases matches
 - boost on exact matches ([Exact matches boosting](./exact_match_boost.md))
 
