@@ -202,12 +202,14 @@ messages.confirm_unregistration.process1: To confirm your un-registration to you
 messages.confirm_unregistration.process2: Please click on this link
 messages.start_sending.being_sent1: The Mailing
 messages.start_sending.being_sent2: is being sent
+messages.start_sending.being_sent3: A new Mailing is being sent
 messages.start_sending.associated_content: Its associated content is
 messages.start_sending.part_of_campaign: It is part of the campaign
 messages.start_sending.campaign_ml_count1: This campaign defines
 messages.start_sending.campaign_ml_count2: Mailing Lists
 messages.stop_sending.sent1: The Mailing
 messages.stop_sending.sent2: has been sent
+messages.stop_sending.sent3: A new Mailing has been sent
 messages.stop_sending.follow_broadcast1: You can now follow the
 messages.stop_sending.follow_broadcast2: broadcast information here
 novaezmailingfull.generic.hello: Hello
