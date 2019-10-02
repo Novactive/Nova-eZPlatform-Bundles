@@ -202,12 +202,14 @@ messages.confirm_unregistration.process1: Pour confirmer votre désinscription �
 messages.confirm_unregistration.process2: Veuillez cliquer sur ce lien
 messages.start_sending.being_sent1: L'envoi
 messages.start_sending.being_sent2: est en cours
+messages.start_sending.being_sent3: Un nouveau mail est en cours d'envoi
 messages.start_sending.associated_content: Son contenu associé est
 messages.start_sending.part_of_campaign: Cela fait fait partie de la campagne
 messages.start_sending.campaign_ml_count1: Cette campagne définie
 messages.start_sending.campaign_ml_count2: listes de diffusion
 messages.stop_sending.sent1: L'envoi
 messages.stop_sending.sent2: a été effectué
+messages.stop_sending.sent3: Un nouveau mail a été envoyé
 messages.stop_sending.follow_broadcast1: Vous pouvez désormais suivre les
 messages.stop_sending.follow_broadcast2: informations de diffusion ici
 novaezmailingfull.generic.hello: Bonjour

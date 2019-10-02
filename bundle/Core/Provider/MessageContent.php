@@ -20,6 +20,7 @@ use Novactive\Bundle\eZMailingBundle\Entity\ConfirmationToken;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use RuntimeException;
 use Swift_Message;
+use Symfony\Component\Translation\Translator;
 use Twig_Environment;
 
 /**
@@ -38,15 +39,22 @@ class MessageContent
     private $configResolver;
 
     /**
+     * @var Translator
+     */
+    private $translator;
+
+    /**
      * MessageContent constructor.
      *
      * @param Twig_Environment $twig
      * @param ConfigResolver   $configResolver
+     * @param Translator       $translator
      */
-    public function __construct(Twig_Environment $twig, ConfigResolver $configResolver)
+    public function __construct(Twig_Environment $twig, ConfigResolver $configResolver, Translator $translator)
     {
         $this->twig           = $twig;
         $this->configResolver = $configResolver;
+        $this->translator     = $translator;
     }
 
     /**
@@ -81,8 +89,9 @@ class MessageContent
      */
     public function getStartSendingMailing(Mailing $mailing): Swift_Message
     {
-        $message  = $this->createMessage('A new Mailing is being sent', $mailing->getCampaign());
-        $campaign = $mailing->getCampaign();
+        $translated = $this->translator->trans('messages.start_sending.being_sent3', [], 'ezmailing');
+        $message    = $this->createMessage($translated, $mailing->getCampaign());
+        $campaign   = $mailing->getCampaign();
         $message->setTo($campaign->getReportEmail());
         $message->setBody(
             $this->twig->render('NovaeZMailingBundle:messages:startsending.html.twig', ['item' => $mailing]),
@@ -100,8 +109,9 @@ class MessageContent
      */
     public function getStopSendingMailing(Mailing $mailing): Swift_Message
     {
-        $message  = $this->createMessage('A new Mailing has been sent', $mailing->getCampaign());
-        $campaign = $mailing->getCampaign();
+        $translated = $this->translator->trans('messages.stop_sending.sent3', [], 'ezmailing');
+        $message    = $this->createMessage($translated, $mailing->getCampaign());
+        $campaign   = $mailing->getCampaign();
         $message->setTo($campaign->getReportEmail());
         $message->setBody(
             $this->twig->render('NovaeZMailingBundle:messages:stopsending.html.twig', ['item' => $mailing]),
@@ -120,8 +130,9 @@ class MessageContent
      */
     public function getRegistrationConfirmation(Registration $registration, ConfirmationToken $token): Swift_Message
     {
-        $message = $this->createMessage('Confirm your Registration');
-        $user    = $registration->getUser();
+        $translated = $this->translator->trans('messages.confirm_registration.confirm', [], 'ezmailing');
+        $message    = $this->createMessage($translated);
+        $user       = $registration->getUser();
         if (null === $user) {
             throw new RuntimeException('User cannot be empty.');
         }
@@ -151,8 +162,9 @@ class MessageContent
         Unregistration $unregistration,
         ConfirmationToken $token
     ): Swift_Message {
-        $message = $this->createMessage('Confirm your Un-Registration');
-        $user    = $unregistration->getUser();
+        $translated = $this->translator->trans('messages.confirm_unregistration.confirmation', [], 'ezmailing');
+        $message    = $this->createMessage($translated);
+        $user       = $unregistration->getUser();
         if (null === $user) {
             throw new RuntimeException('User cannot be empty.');
         }
