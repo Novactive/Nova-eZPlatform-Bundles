@@ -1,11 +1,5 @@
-{{ encore_entry_script_tags('menu-manager', null, 'menu_manager')}}
-{{ encore_entry_script_tags('menu-manager-renderer', null, 'menu_manager')}}
-{{ encore_entry_script_tags('menu-container-menuitem-type', null, 'menu_manager')}}
-{{ encore_entry_script_tags('menu-content-menuitem-type', null, 'menu_manager')}}
-{{ encore_entry_script_tags('menu-default-menuitem-type', null, 'menu_manager')}}
 {%  javascripts
-    '@EzPlatformAdminUiBundle/Resources/public/js/scripts/fieldType/base/base-field.js'
-    '@EzMenuManagerBundle/Resources/public/js/scripts/fieldType/*'
+    '@EzMenuManagerBundle/Resources/public/js/MenuManager.module.js'
 %}
     <script src="{{ asset_url }}"></script>
 {% endjavascripts %}

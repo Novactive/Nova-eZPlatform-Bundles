@@ -1,0 +1,44 @@
+/*
+ * NovaeZMenuManagerBundle.
+ *
+ * @package   NovaeZMenuManagerBundle
+ *
+ * @author    Novactive <f.alexandre@novactive.com>
+ * @copyright 2019 Novactive
+ * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
+ *
+ */
+
+.menu-manager {
+  min-height: 360px;
+  position: relative;
+}
+
+.menu-manager-edit-form-container {
+  position: absolute;
+  background: white;
+  right: -1px;
+  padding: 1em;
+  top: -1px;
+  bottom: -1px;
+  -moz-box-shadow: -10px 0 10px -5px #cfcfcf;
+  -webkit-box-shadow: -10px 0 10px -5px #cfcfcf;
+  -o-box-shadow: -10px 0 10px -5px #cfcfcf;
+  box-shadow: -10px 0 10px -5px #cfcfcf;
+  filter: progid:dximagetransform.microsoft.shadow(color=#cfcfcf, Direction=180, Strength=10);
+}
+
+.menu-manager .jstree-desactivated {
+  background: transparent;
+  color: #666;
+}
+
+.menu-manager .jstree-disabled {
+  text-decoration: line-through;
+}
+
+.menu-tree__wrapper {
+  max-height: 400px;
+  overflow: auto;
+  padding: 10px 0;
+}
