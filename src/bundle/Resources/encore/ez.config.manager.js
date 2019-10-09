@@ -16,6 +16,7 @@ module.exports = (eZConfig, eZConfigManager) => {
     eZConfig,
     entryName: 'ezplatform-admin-ui-content-edit-parts-js',
     newItems: [
+      path.resolve(__dirname, '../../../modules/menu-manager/menu.manager.renderer.js'),
       path.resolve(__dirname, '../public/js/scripts/fieldType/menuitem.js')
     ]
   })
