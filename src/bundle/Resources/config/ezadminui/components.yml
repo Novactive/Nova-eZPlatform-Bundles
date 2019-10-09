@@ -5,10 +5,3 @@ services:
             $template: '@@EzMenuManager/themes/standard/ezadminui/stylesheets.html.twig'
          tags:
              - { name: ezplatform.admin_ui.component, group: 'stylesheet-head' }
-
-    ezmenumanager.ezadminui.component.javascripts:
-         parent: EzSystems\EzPlatformAdminUi\Component\TwigComponent
-         arguments:
-            $template: '@@EzMenuManager/themes/standard/ezadminui/javascripts.html.twig'
-         tags:
-             - { name: ezplatform.admin_ui.component, group: 'script-body' }
