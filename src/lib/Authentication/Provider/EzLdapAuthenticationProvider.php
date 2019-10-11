@@ -19,6 +19,7 @@ use Novactive\eZLDAPAuthenticator\User\Provider\EzLdapUserProvider;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Ldap\Exception\ConnectionException;
 use Symfony\Component\Ldap\Exception\LdapException;
+use Symfony\Component\Ldap\Exception\NotBoundException;
 use Symfony\Component\Ldap\LdapInterface;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Provider\LdapBindAuthenticationProvider;
@@ -147,6 +148,16 @@ class EzLdapAuthenticationProvider extends LdapBindAuthenticationProvider
             }
 
             $this->ldap->bind($distinguishedName, $password);
+        } catch (NotBoundException $exception) {
+            $message = sprintf(
+                'Uncaught PHP Exception %s: "%s" at %s line %s',
+                get_class($exception),
+                $exception->getMessage(),
+                $exception->getFile(),
+                $exception->getLine()
+            );
+            $this->logger->critical($message, ['exception' => $exception]);
+            throw new BadCredentialsException('Connexion error.');
         } catch (ConnectionException $exception) {
             $message = sprintf(
                 'Uncaught PHP Exception %s: "%s" at %s line %s',
