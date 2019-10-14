@@ -82,7 +82,7 @@ class RssFeedViewController extends Controller
                 )
             );
 
-            $response->headers->set('Content-Type', 'application/xml; charset=utf-8');
+            $response->headers->set('Content-Type', 'application/rss+xml; charset=utf-8');
 
             return $response;
         } else {
