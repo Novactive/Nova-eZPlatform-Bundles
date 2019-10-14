@@ -118,7 +118,7 @@ export default class ContentTreeView extends PureComponent {
     const nodes = []
     for (let i = 0, j = data.data.nodes.length; i < j; i++) {
       const node = data.data.origin ? data.data.origin.get_node(data.data.nodes[i]) : data.data.nodes[i]
-      const newNode = Object.assign({}, node)
+      const newNode = JSON.parse(JSON.stringify(node))
       newNode.state.loaded = true
       newNode.children = []
       newNode.children_d = []
