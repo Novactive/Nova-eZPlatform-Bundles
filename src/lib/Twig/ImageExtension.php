@@ -160,7 +160,8 @@ class ImageExtension extends Twig_Extension
             $attrs['class'][]      = 'enhancedimage--focused-img';
         }
         $attrs['srcset'][] = str_replace(' ', '%20', $this->assetExtension->getAssetUrl($defaultVariation->uri));
-
+        $attrs['data-width'] = $defaultVariation->width;
+        $attrs['data-height'] = $defaultVariation->height;
         return $defaultVariation;
     }
 
