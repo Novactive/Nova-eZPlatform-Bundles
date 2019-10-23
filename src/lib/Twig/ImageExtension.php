@@ -109,12 +109,9 @@ class ImageExtension extends Twig_Extension
         $retinaSupportEnabled = $parameters['retina'] ?? false;
         $attrs                = $parameters['attrs'] ?? [];
 
-        $attrs['srcset'] = [];
-        if (!isset($attrs['class'])) {
-            $attrs['class'] = [];
-        } else {
-            $attrs['class'] = !is_array($attrs['class']) ? [$attrs['class']] : $attrs['class'];
-        }
+        $this->initiateArrayAttribute($attrs, 'srcset');
+        $this->initiateArrayAttribute($attrs, 'sizes');
+        $this->initiateArrayAttribute($attrs, 'class');
         $attrs['class'][] = 'enhancedimage--img--lazyload';
 
         $defaultVariation = $this->appendDefaultVariationAttrs($field, $versionInfo, $variationName, $attrs);
@@ -131,8 +128,19 @@ class ImageExtension extends Twig_Extension
         if (is_array($attrs['srcset'])) {
             $attrs['srcset'] = implode(', ', $attrs['srcset']);
         }
-
+        if (is_array($attrs['sizes'])) {
+            $attrs['sizes'] = implode(', ', $attrs['sizes']);
+        }
         return $attrs;
+    }
+
+    protected function initiateArrayAttribute(array &$attributes, string $attributeName): void
+    {
+        if (!isset($attributes[$attributeName])) {
+            $attributes[$attributeName] = [];
+        } else {
+            $attributes[$attributeName] = !is_array($attributes[$attributeName]) ? [$attributes[$attributeName]] : $attributes[$attributeName];
+        }
     }
 
     /**
@@ -159,6 +167,8 @@ class ImageExtension extends Twig_Extension
             $attrs['data-focus-y'] = $defaultVariation->focusPoint->getPosY();
             $attrs['class'][]      = 'enhancedimage--focused-img';
         }
+//        $attrs['sizes'][]      = sprintf('%dpx', $defaultVariation->width);
+        $attrs['width']      = $defaultVariation->width;
         $attrs['srcset'][] = str_replace(' ', '%20', $this->assetExtension->getAssetUrl($defaultVariation->uri));
         $attrs['data-width'] = $defaultVariation->width;
         $attrs['data-height'] = $defaultVariation->height;
