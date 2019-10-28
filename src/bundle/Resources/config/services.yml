@@ -34,6 +34,10 @@ services:
         tags:
             - { name: "liip_imagine.filter.loader", loader: 'placeholder' }
 
+    Novactive\EzEnhancedImageAsset\Imagine\Filter\Loader\WebOptimizationFilterLoader:
+        tags:
+            - { name: "liip_imagine.filter.loader", loader: 'webOptimization' }
+
     Novactive\EzEnhancedImageAsset\Imagine\FocusedImageAliasGenerator:
 
     Novactive\EzEnhancedImageAsset\Imagine\ImageAliasGenerator:
