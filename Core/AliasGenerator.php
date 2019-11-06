@@ -122,17 +122,10 @@ class AliasGenerator implements VariationService
         if (!empty($fetchPort)) {
             $components['port'] = $fetchPort;
         }
-        if (!array_key_exists('transformations', $cloudinaryVariationsList[$variationName])) {
-            $transformations = [$cloudinaryVariationsList[$variationName]['filters']];
-        } else {
-            $transformations = $cloudinaryVariationsList[$variationName]['transformations'];
-        }
-
-        $html = cl_image_tag(
+        $html       = fetch_image_tag(
             $this->unparseUrl($components),
-            ["type" => "fetch", "transformation" => $transformations]
+            $cloudinaryVariationsList[$variationName]['filters']
         );
-
         $attributes = [];
         foreach ($this->parseAttributes($html) as $key => $value) {
             if ($key == 'img') {
