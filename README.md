@@ -99,6 +99,29 @@ Then basically there is no change in your code, just yaml configuration for your
 > if you have override the content_fields, be sure to update the call to `nova_ezcloudinary_alias`
 
 
+### Chained Transformations
+Chained transformations can be done by adding an array to the configuration like so:
+```yaml 
+filters:
+  transformation:
+    - secure: 'true'
+      crop: 'crop'
+      height: 823
+      width: 1920
+      quality: 'auto:best'
+    - crop: 'crop'
+      y: 0
+      x: 415
+      width: 1234
+      height: 823
+      quality: 'auto:best'
+    - crop: 'scale'
+      width: 537
+      height: 358
+      aspect_ratio: '3:2'
+      quality: 'auto:eco'
+```
+
 ## Local mode
 
 This bundle uses the fetch mode of Cloudinary, then images have to be "reachable" to be converted.
