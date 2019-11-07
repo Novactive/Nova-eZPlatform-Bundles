@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core;
 
-use Doctrine\Bundle\DoctrineBundle\Mapping\ContainerAwareEntityListenerResolver;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\ORM\Configuration;
@@ -38,14 +37,13 @@ class SiteAccessAwareEntityManagerFactory
     private $settings;
 
     /**
-     * @var ContainerAwareEntityListenerResolver
+     * @var ContainerEntityListenerResolver
      */
     private $resolver;
-
     public function __construct(
         Registry $registry,
         RepositoryConfigurationProvider $repositoryConfigurationProvider,
-        ContainerAwareEntityListenerResolver $resolver,
+        ContainerEntityListenerResolver $resolver,
         array $settings
     ) {
         $this->registry                        = $registry;
