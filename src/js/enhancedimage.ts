@@ -14,9 +14,15 @@ interface ImageElement extends HTMLImageElement {
     _image?: EnhancedImage;
 }
 
+interface Size {
+    width: number;
+    height: number;
+}
+
 interface Source {
     url: HTMLAnchorElement;
     focus: Focus;
+    size: Size;
 }
 
 const UrlParser = function (href: string): HTMLAnchorElement {
@@ -48,10 +54,10 @@ class EnhancedImage {
         return urls
     }
 
-    public addSource (src: string, focus: Focus): void {
+    public addSource (src: string, focus: Focus, size: Size): void {
         const urls = this.parseSrc(src)
         for (const url of urls) {
-            const source = { url: url, focus: focus }
+            const source = { url: url, focus: focus, size: size }
             this.sources.set(source.url.pathname, source)
         }
     }
@@ -69,6 +75,7 @@ class EnhancedImage {
 
         this.setFocus(currentSource.focus)
         this.element.classList.add('focused')
+        this.element.setAttribute('width', currentSource.size.width.toString())
         this.currentSrc = elCurrentSrc
     }
 }
@@ -205,10 +212,17 @@ class EnhancedImage {
         if (!image) {
             image = new EnhancedImage(imageElement)
 
-            image.addSource(imageElement.getAttribute('srcset'), {
-                x: parseFloat(imageElement.getAttribute('data-focus-x')),
-                y: parseFloat(imageElement.getAttribute('data-focus-y'))
-            })
+            image.addSource(
+                imageElement.getAttribute('srcset'),
+                {
+                    x: parseFloat(imageElement.getAttribute('data-focus-x')),
+                    y: parseFloat(imageElement.getAttribute('data-focus-y'))
+                },
+                {
+                    width: parseInt(imageElement.getAttribute('data-width')),
+                    height: parseInt(imageElement.getAttribute('data-height'))
+                }
+            )
 
             if (parent && regPicture.test(parent.nodeName || '')) {
                 const sources = parent.getElementsByTagName('source')
@@ -219,10 +233,16 @@ class EnhancedImage {
                         continue
                     }
                     const source = sources[j]
-                    image.addSource(source.getAttribute('srcset'), {
-                        x: parseFloat(source.getAttribute('data-focus-x')),
-                        y: parseFloat(source.getAttribute('data-focus-y'))
-                    })
+                    image.addSource(
+                        source.getAttribute('srcset'),
+                        {
+                            x: parseFloat(source.getAttribute('data-focus-x')),
+                            y: parseFloat(source.getAttribute('data-focus-y'))
+                        },
+                        {
+                            width: parseInt(source.getAttribute('data-width')),
+                            height: parseInt(source.getAttribute('data-height'))
+                        })
                 }
             }
             imageElement._image = image
