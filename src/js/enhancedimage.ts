@@ -75,7 +75,6 @@ class EnhancedImage {
 
         this.setFocus(currentSource.focus)
         this.element.classList.add('focused')
-        this.element.setAttribute('width', currentSource.size.width.toString())
         this.currentSrc = elCurrentSrc
     }
 }
@@ -248,6 +247,7 @@ class EnhancedImage {
             imageElement._image = image
         }
 
+        imageElement.removeAttribute('width')
         image.updateFocusPoint()
     })
 })(window, document)

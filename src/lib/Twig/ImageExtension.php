@@ -269,6 +269,8 @@ class ImageExtension extends Twig_Extension
             );
 
             return $placeholderVariation;
+        }else{
+            unset($attrs['width']);
         }
 
         return null;
