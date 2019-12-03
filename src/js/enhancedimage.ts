@@ -247,7 +247,6 @@ class EnhancedImage {
             imageElement._image = image
         }
 
-        imageElement.removeAttribute('width')
         image.updateFocusPoint()
     })
 })(window, document)

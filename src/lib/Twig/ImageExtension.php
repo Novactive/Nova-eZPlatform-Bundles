@@ -118,15 +118,18 @@ class ImageExtension extends Twig_Extension
             if ($retinaSupportEnabled) {
                 $this->appendRetinaVariationAttrs($field, $versionInfo, $variationName, $defaultVariation, $attrs);
             }
-            if ($lazyLoadEnabled) {
-                $this->appendPlaceholderVariationAttrs($field, $versionInfo, $variationName, $attrs);
-            }
         }
-        $attrs['class'] = implode(' ', $attrs['class']);
 
         if (is_array($attrs['srcset'])) {
             $attrs['srcset'] = implode(', ', $attrs['srcset']);
         }
+        if ($lazyLoadEnabled) {
+            $attrs['class'][] = 'has-placeholder';
+            $attrs['data-srcset'] = is_array($attrs['srcset']) ? implode(', ', $attrs['srcset']) : $attrs['srcset'];
+            unset($attrs['srcset']);
+        }
+
+        $attrs['class'] = implode(' ', $attrs['class']);
         return $attrs;
     }
 
@@ -163,7 +166,6 @@ class ImageExtension extends Twig_Extension
             $attrs['data-focus-y'] = $defaultVariation->focusPoint->getPosY();
             $attrs['class'][]      = 'enhancedimage--focused-img';
         }
-        $attrs['width']       = $defaultVariation->width;
         $attrs['srcset'][]    = str_replace(' ', '%20', $this->assetExtension->getAssetUrl($defaultVariation->uri));
         $attrs['data-width']  = $defaultVariation->width;
         $attrs['data-height'] = $defaultVariation->height;
@@ -240,37 +242,6 @@ class ImageExtension extends Twig_Extension
             }
         } catch (NonExistingFilterException $e) {
             $this->logger->warning($e->getMessage());
-        }
-
-        return null;
-    }
-
-    /**
-     * @param Field       $field
-     * @param VersionInfo $versionInfo
-     * @param $variationName
-     * @param array $attrs
-     *
-     * @return ImageVariation|FocusedVariation|null
-     */
-    protected function appendPlaceholderVariationAttrs(
-        Field $field,
-        VersionInfo $versionInfo,
-        $variationName,
-        &$attrs = []
-    ) {
-        if ($placeholderVariation = $this->getImageVariation($field, $versionInfo, 'placeholder')) {
-            $attrs['class'][]     = 'blur-up';
-            $attrs['data-srcset'] = is_array($attrs['srcset']) ? implode(', ', $attrs['srcset']) : $attrs['srcset'];
-            $attrs['srcset']      = str_replace(
-                ' ',
-                '%20',
-                $this->assetExtension->getAssetUrl($placeholderVariation->uri)
-            );
-
-            return $placeholderVariation;
-        }else{
-            unset($attrs['width']);
         }
 
         return null;
