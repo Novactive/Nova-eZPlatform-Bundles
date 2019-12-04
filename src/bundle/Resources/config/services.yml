@@ -4,6 +4,8 @@ services:
     autoconfigure: true
     public: true
 
+  Novactive\EzRssFeedBundle\Controller\RssFeedViewController: ~
+
   Novactive\EzRssFeedBundle\Form\RssFeedItemsType:
     tags:
     - { name: form.type }

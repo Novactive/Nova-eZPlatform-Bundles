@@ -29,6 +29,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class RssFeedViewController extends Controller
 {
+    use EntityManagerTrait;
     /**
      * @Route("/{urlSlug}", name="rss_feed_view_index")
      *
@@ -49,7 +50,7 @@ class RssFeedViewController extends Controller
             );
         }
 
-        $rssFeedRepository = $this->getDoctrine()->getRepository(RssFeeds::class);
+        $rssFeedRepository = $this->entityManager->getRepository(RssFeeds::class);
 
         $rssFeed = $rssFeedRepository->findOneBy(
             [
