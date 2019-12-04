@@ -4,6 +4,10 @@ services:
     autoconfigure: true
     public: true
 
+  Novactive\EzRssFeedBundle\Controller\RssFeedViewController:
+    calls:
+      - [setEntityManager, ["@doctrine.orm.entity_manager"]]
+
   Novactive\EzRssFeedBundle\Form\RssFeedItemsType:
     tags:
     - { name: form.type }

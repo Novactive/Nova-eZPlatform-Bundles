@@ -6,6 +6,8 @@ services:
 
   Novactive\EzRssFeedBundle\Controller\Admin\RssFeedController:
     tags: ['controller.service_arguments']
+    calls:
+      - [setEntityManager, ["@doctrine.orm.entity_manager"]]
 
   Novactive\EzRssFeedBundle\PlatformAdminUI\EventListener\MainMenuBuilderListener:
     public: false

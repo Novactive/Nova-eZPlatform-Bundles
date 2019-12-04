@@ -18,6 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use EzSystems\EzPlatformAdminUi\Notification\NotificationHandlerInterface;
+use Novactive\EzRssFeedBundle\Controller\EntityManagerTrait;
 use Novactive\EzRssFeedBundle\Entity\RssFeeds;
 use Novactive\EzRssFeedBundle\Form\RssFeedsType;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -40,6 +41,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class RssFeedController extends Controller
 {
+    use EntityManagerTrait;
+    
     private $defaultPaginationLimit = 10;
 
     private $notificationHandler;
@@ -56,7 +59,7 @@ class RssFeedController extends Controller
      */
     public function listAction(Request $request): Response
     {
-        $rssFeedRepository = $this->get('doctrine.orm.entity_manager')->getRepository(RssFeeds::class);
+        $rssFeedRepository = $this->entityManager->getRepository(RssFeeds::class);
 
         /**
          * @var PermissionResolver
@@ -120,10 +123,9 @@ class RssFeedController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->get('doctrine.orm.entity_manager');
             $rssFeed->setStatus(RssFeeds::STATUS_ENABLED);
-            $entityManager->persist($rssFeed);
-            $entityManager->flush();
+            $this->entityManager->persist($rssFeed);
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('platform_admin_ui_rss_feeds_list');
         }
@@ -157,7 +159,6 @@ class RssFeedController extends Controller
             );
         }
 
-        $entityManager      = $this->get('doctrine.orm.entity_manager');
         $originalFeedsItems = new ArrayCollection();
         foreach ($rssFeed->getFeedItems() as $item) {
             $originalFeedsItems->add($item);
@@ -176,17 +177,17 @@ class RssFeedController extends Controller
         $feedForm->handleRequest($request);
 
         if ($feedForm->isValid()) {
-            $entityManager->persist($rssFeed);
+            $this->entityManager->persist($rssFeed);
 
             foreach ($originalFeedsItems as $originalChild) {
                 if (false === $rssFeed->getFeedItems()->contains($originalChild)) {
                     $rssFeed->removeFeedItem($originalChild);
                     $originalChild->setRssFeeds(null);
-                    $entityManager->remove($originalChild);
+                    $this->entityManager->remove($originalChild);
                 }
             }
 
-            $entityManager->flush();
+            $this->entityManager->flush();
 
             $this->getNotificationHandler()->success('Mise à jour effectuée avec succès.');
 
@@ -230,10 +231,9 @@ class RssFeedController extends Controller
             );
         }
 
-        $em = $this->get('doctrine.orm.entity_manager');
         if ($request->request) {
-            $em->remove($rssFeed);
-            $em->flush();
+            $this->entityManager->remove($rssFeed);
+            $this->entityManager->flush();
         }
 
         return new RedirectResponse($this->generateUrl('platform_admin_ui_rss_feeds_list'));
@@ -340,8 +340,7 @@ class RssFeedController extends Controller
                 []
             );
         }
-        $entityManager = $this->get('doctrine.orm.entity_manager');
-        $repository    = $entityManager->getRepository(RssFeeds::class);
+        $repository = $this->entityManager->getRepository(RssFeeds::class);
 
         /**
          * @var RssFeeds
@@ -353,8 +352,8 @@ class RssFeedController extends Controller
                 RssFeeds::STATUS_DISABLED : RssFeeds::STATUS_ENABLED;
 
             $rssFeed->setStatus($status);
-            $entityManager->persist($rssFeed);
-            $entityManager->flush();
+            $this->entityManager->persist($rssFeed);
+            $this->entityManager->flush();
 
             return new JsonResponse(['success' => true]);
         }
