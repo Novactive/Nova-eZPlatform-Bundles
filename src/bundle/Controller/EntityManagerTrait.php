@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Novactive\EzRssFeedBundle\Controller;
-
 
 use Doctrine\ORM\EntityManagerInterface;
 
