@@ -157,7 +157,7 @@ class RssFeedController extends Controller
             );
         }
 
-        $entityManager                 = $this->get('doctrine.orm.entity_manager');
+        $entityManager      = $this->get('doctrine.orm.entity_manager');
         $originalFeedsItems = new ArrayCollection();
         foreach ($rssFeed->getFeedItems() as $item) {
             $originalFeedsItems->add($item);
@@ -341,7 +341,7 @@ class RssFeedController extends Controller
             );
         }
         $entityManager = $this->get('doctrine.orm.entity_manager');
-        $repository = $entityManager->getRepository(RssFeeds::class);
+        $repository    = $entityManager->getRepository(RssFeeds::class);
 
         /**
          * @var RssFeeds
