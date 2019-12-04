@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @package Novactive\EzRssFeedBundle\Controller
  */
-class RssFeedViewController extends AbstractController
+class RssFeedViewController extends Controller
 {
     /**
      * @Route("/{urlSlug}", name="rss_feed_view_index")
@@ -49,7 +49,7 @@ class RssFeedViewController extends AbstractController
             );
         }
 
-        $rssFeedRepository = $this->getEntityManager()->getRepository(RssFeeds::class);
+        $rssFeedRepository = $this->get('doctrine.orm.entity_manager')->getRepository(RssFeeds::class);
 
         $rssFeed = $rssFeedRepository->findOneBy(
             [
