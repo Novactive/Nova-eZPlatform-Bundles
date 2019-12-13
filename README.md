@@ -39,36 +39,36 @@ public function registerBundles()
     );
 }
 ```
-## Usage
-### 1. Include javascript and CSS
+## Features
 
-```twig
-<link rel="stylesheet" href="{{ asset("bundles/ezenhancedimageasset/css/enhancedimage.css") }}" />
+### 1. Default image configuration
+
+Added to siteaccess aware parameters which allow to define the default post processors and configuration to use when generating image alias
+```yaml
+parameters:
+  ez_enhanced_image_asset.default.image_default_post_processors: 
+    pngquant:
+        quality: '40-85'
+    jpegoptim:
+        strip_all: true
+        max: 70
+        progressive: true
+  ez_enhanced_image_asset.default.image_default_config: 
+    animated: true
+    quality: 80
 ```
- 
-```twig
-<script src="{{ asset("bundles/ezenhancedimageasset/js/enhancedimage.js") }}"></script>
-```
-#### LazyLoading
+
+### 2. LazyLoading
 Lazy loading is controlled globaly by the following settings (default to true) and can be overriden at field level.
 
 ```yaml
 parameters: 
   ez_enhanced_image_asset.default.enable_lazy_load: true
-  ez_enhanced_image_asset.default.enable_retina: true
 ```
 
-### 2. Image variations configuration
+#### 3. Retina variations 
 
-If needed, update your configuration and add the following filter to generate thumbnail based on the contributed focus point 
-```yaml
- - { name: focusedThumbnail, params: {size: [<width>, <height>], focus: [0, 0]} }
-```
-NB: the `focus` parameter automaticaly updated for each image based on what has been contributed
-
-#### Retina variations 
-
-Retina variations should be suffixed by `_retina`.
+Retina variations should suffixed by `_retina` will be used automatically (if enabled) when using the provided field template.
 To be displayed, the generated variation width should be two time the width of the default variation.
 
 Considering a variation named `my_alias`, the variation named `my_alias_retina` will be used and displayed on retina screens.
@@ -77,7 +77,13 @@ Considering a variation named `my_alias`, the variation named `my_alias_retina` 
  - { name: my_alias_retina, params: {size: [<width*2>, <height*2>], focus: [0, 0]} }
 ```
 
-### 3. Twig render field configuration
+The automatic use of retina variations is controlled by this setting
+```yaml
+parameters: 
+  ez_enhanced_image_asset.default.enable_retina: true
+```
+
+### 4. Twig render field parameters
 
 You can now specify the `alternativeAlias` parameter to define alternative image alias depending the screen size
 
@@ -98,7 +104,25 @@ You can now specify the `alternativeAlias` parameter to define alternative image
 }) }}
 ```
 
-## Migrate existing ezimage fields
+### 4. Focus point
+
+This bundle provide a new `enhancedimage` field type which extend the `ezimage` field type. 
+This field type allow the user to select a focus point on the uploaded image.
+Variation can then be created based on the selected focus point.
+
+![Demo](doc/images/image-focus-demo.gif)
+
+[Check out the demo](https://image-focus.stackblitz.io/)
+
+#### Variations configuration
+
+Focused variations require the use of a "focusedThumbnail" filter to generate thumbnail based on the contributed focus point.
+```yaml
+ - { name: focusedThumbnail, params: {size: [<width>, <height>], focus: [0, 0]} }
+```
+NB: the `focus` parameter is automaticaly updated for each image based on what has been contributed
+
+#### Migrate existing ezimage fields
 
 As the new `enhancedimage` field type is an extend of the `ezimage` field type, you just need to update the `data_type_string` column in the database for the fields you want.
 
@@ -114,3 +138,20 @@ INNER JOIN ezcontentclass_attribute ca ON oa.contentclassattribute_id = ca.id
 SET oa.data_type_string = "enhancedimage"
 WHERE oa.data_type_string = "ezimage" AND ca.data_type_string="enhancedimage";
 ```
+
+## Usage
+Some feature will require the following assets
+```twig
+<link rel="stylesheet" href="{{ asset("bundles/ezenhancedimageasset/css/enhancedimage.css") }}" />
+```
+ 
+```twig
+<script src="{{ asset("bundles/ezenhancedimageasset/js/enhancedimage.js") }}"></script>
+```
+
+
+
+
+
+
+
