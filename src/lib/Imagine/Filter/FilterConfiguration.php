@@ -25,6 +25,8 @@ class FilterConfiguration extends BaseFilterConfiguration
 
     protected $defaultPostProcessors;
 
+    protected $defaultConfig;
+
     /**
      * FilterConfiguration constructor.
      *
@@ -44,6 +46,14 @@ class FilterConfiguration extends BaseFilterConfiguration
     }
 
     /**
+     * @param mixed $defaultConfig
+     */
+    public function setDefaultConfig($defaultConfig): void
+    {
+        $this->defaultConfig = $defaultConfig;
+    }
+
+    /**
      * @param string $filter
      *
      * @return array
@@ -60,6 +70,10 @@ class FilterConfiguration extends BaseFilterConfiguration
         }
         if ($this->defaultPostProcessors && (!isset($config['post_processors']) || empty($config['post_processors']))) {
             $config['post_processors'] = $this->defaultPostProcessors;
+        }
+
+        if ($this->defaultConfig) {
+            $config += $this->defaultConfig;
         }
 
         return $config;
