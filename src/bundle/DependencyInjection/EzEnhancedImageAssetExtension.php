@@ -1,17 +1,20 @@
 <?php
+
 /**
  * NovaeZEnhancedImageAssetBundle.
  *
  * @package   NovaeZEnhancedImageAssetBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
+
 declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAssetBundle\DependencyInjection;
 
+use Exception;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -29,6 +32,13 @@ class EzEnhancedImageAssetExtension extends Extension implements PrependExtensio
 {
     /**
      * {@inheritDoc}
+     *
+     * @throws Exception
+     * @throws Exception
+     * @throws Exception
+     * @throws Exception
+     * @throws Exception
+     * @throws Exception
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
@@ -43,8 +53,6 @@ class EzEnhancedImageAssetExtension extends Extension implements PrependExtensio
 
     /**
      * Allow an extension to prepend the extension configurations.
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function prepend(ContainerBuilder $container): void
     {

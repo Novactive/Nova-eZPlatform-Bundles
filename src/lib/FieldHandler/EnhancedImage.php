@@ -1,13 +1,20 @@
 <?php
+
 /**
- * @copyright Novactive
- * Date: 07/08/19
+ * NovaeZEnhancedImageAssetBundle.
+ *
+ * @package   NovaeZEnhancedImageAssetBundle
+ *
+ * @author    Novactive <f.alexandre@novactive.com>
+ * @copyright 2019 Novactive
+ * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
 
 declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\FieldHandler;
 
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use Kaliop\eZMigrationBundle\API\FieldValueConverterInterface;
 use Kaliop\eZMigrationBundle\Core\FieldHandler\FileFieldHandler;
 use Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\FocusPoint;
@@ -22,18 +29,20 @@ class EnhancedImage extends FileFieldHandler implements FieldValueConverterInter
      * @param array        $context    The context for execution of the current migrations.
      *                                 Contains f.e. the path to the migration
      *
-     * @return EnhancedImageValue
+     * @throws InvalidArgumentType
      *
      * @todo resolve refs more
      */
-    public function hashToFieldValue($fieldValue, array $context = [])
+    public function hashToFieldValue($fieldValue, array $context = []): EnhancedImageValue
     {
         $altText  = '';
         $fileName = '';
 
         if (null === $fieldValue) {
             return new EnhancedImageValue();
-        } elseif (is_string($fieldValue)) {
+        }
+
+        if (is_string($fieldValue)) {
             $filePath = $fieldValue;
         } else {
             $filePath = $fieldValue['path'];
@@ -55,13 +64,14 @@ class EnhancedImage extends FileFieldHandler implements FieldValueConverterInter
         }
 
         $focusPoint = null;
-        if (isset($fieldValue['focuspoint']) &&
+        if (
+            isset($fieldValue['focuspoint']) &&
             is_array($fieldValue['focuspoint']) &&
             2 === count($fieldValue['focuspoint'])
         ) {
             $focusPoint = new FocusPoint(
-                floatval($fieldValue['focuspoint'][0]),
-                floatval($fieldValue['focuspoint'][1])
+                (float) $fieldValue['focuspoint'][0],
+                (float) $fieldValue['focuspoint'][1]
             );
         }
 
@@ -69,7 +79,7 @@ class EnhancedImage extends FileFieldHandler implements FieldValueConverterInter
             [
                 'path'            => $realFilePath,
                 'fileSize'        => filesize($realFilePath),
-                'fileName'        => '' != $fileName ? $fileName : basename($realFilePath),
+                'fileName'        => '' !== $fileName ? $fileName : basename($realFilePath),
                 'alternativeText' => $altText,
                 'focusPoint'      => $focusPoint,
             ]
@@ -78,15 +88,12 @@ class EnhancedImage extends FileFieldHandler implements FieldValueConverterInter
 
     /**
      * @param EnhancedImageValue $fieldValue
-     * @param array              $context
-     *
-     * @return array
      *
      * @todo check out if this works in ezplatform
      */
-    public function fieldValueToHash($fieldValue, array $context = [])
+    public function fieldValueToHash($fieldValue, array $context = []): array
     {
-        if (null == $fieldValue->uri) {
+        if (null === $fieldValue->uri) {
             return null;
         }
 

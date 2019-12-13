@@ -1,11 +1,12 @@
 <?php
+
 /**
  * NovaeZEnhancedImageAssetBundle.
  *
  * @package   NovaeZEnhancedImageAssetBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
 
@@ -41,9 +42,6 @@ class AliasFilterManager
 
     /**
      * AliasFilterManager constructor.
-     *
-     * @param FilterManager       $filterManager
-     * @param FilterConfiguration $filterConfiguration
      */
     public function __construct(FilterManager $filterManager, FilterConfiguration $filterConfiguration)
     {
@@ -59,11 +57,7 @@ class AliasFilterManager
      * In that case, reference's filters are applied first, recursively (a reference may also have another reference).
      * Reference must be a valid variation name, configured in eZ or in LiipImagineBundle.
      *
-     * @param BinaryInterface $image
-     * @param string          $variationName
-     * @param array           $runtimeFiltersConfig
-     *
-     * @return \Liip\ImagineBundle\Binary\BinaryInterface
+     * @param string $variationName
      */
     public function applyFilter(
         BinaryInterface $image,
@@ -72,8 +66,10 @@ class AliasFilterManager
     ): BinaryInterface {
         $filterConfig = $this->filterConfiguration->get($variationName);
         // If the variation has a reference, we recursively call this method to apply reference's filters.
-        if (isset($filterConfig['reference'])
-            && IORepositoryResolver::VARIATION_ORIGINAL !== $filterConfig['reference']) {
+        if (
+            isset($filterConfig['reference'])
+            && IORepositoryResolver::VARIATION_ORIGINAL !== $filterConfig['reference']
+        ) {
             $image = $this->applyFilter($image, $filterConfig['reference'], $runtimeFiltersConfig);
         }
 

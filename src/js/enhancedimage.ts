@@ -1,3 +1,13 @@
+/*
+ * NovaeZEnhancedImageAssetBundle.
+ *
+ * @package   NovaeZEnhancedImageAssetBundle
+ *
+ * @author    Novactive <f.alexandre@novactive.com>
+ * @copyright 2019 Novactive
+ * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
+ */
+
 import { Focus } from 'image-focus/dist/types/interfaces.d'
 import { FocusedImage } from 'image-focus'
 import 'lazysizes';

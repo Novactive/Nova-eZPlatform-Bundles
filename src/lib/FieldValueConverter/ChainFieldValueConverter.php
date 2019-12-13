@@ -1,7 +1,13 @@
 <?php
+
 /**
- * @copyright Novactive
- * Date: 06/05/19
+ * NovaeZEnhancedImageAssetBundle.
+ *
+ * @package   NovaeZEnhancedImageAssetBundle
+ *
+ * @author    Novactive <f.alexandre@novactive.com>
+ * @copyright 2019 Novactive
+ * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
 
 declare(strict_types=1);
@@ -29,20 +35,11 @@ class ChainFieldValueConverter
         }
     }
 
-    /**
-     * @param FieldValueConverterInterface $converter
-     */
     public function addConverter(FieldValueConverterInterface $converter): void
     {
         $this->converters[] = $converter;
     }
 
-    /**
-     * @param Content $content
-     * @param Field   $field
-     *
-     * @return ImageAssetValue|null
-     */
     public function toImageAssetValue(Content $content, Field $field): ?ImageAssetValue
     {
         foreach ($this->converters as $converter) {

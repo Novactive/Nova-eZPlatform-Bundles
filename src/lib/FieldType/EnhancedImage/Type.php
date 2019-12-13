@@ -6,9 +6,10 @@
  * @package   NovaeZEnhancedImageAssetBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
+
 declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage;
@@ -29,8 +30,6 @@ class Type extends ImageType
 {
     /**
      * Returns the field type identifier for this field type.
-     *
-     * @return string
      */
     public function getFieldTypeIdentifier(): string
     {
@@ -41,9 +40,7 @@ class Type extends ImageType
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *
-     * @throws InvalidArgumentType
-     *
-     * @return \Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\Value
+     *@throws InvalidArgumentType
      */
     public function getEmptyValue(): Value
     {
@@ -53,11 +50,9 @@ class Type extends ImageType
     /**
      * Inspects given $inputValue and potentially converts it into a dedicated value object.
      *
-     * @param string|array|\Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\Value $inputValue
+     * @param string|array|Value $inputValue
      *
-     * @throws InvalidArgumentType
-     *
-     * @return \Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\Value
+     *@throws InvalidArgumentType
      */
     protected function createValueFromInput($inputValue): Value
     {
@@ -82,9 +77,6 @@ class Type extends ImageType
     /**
      * Throws an exception if value structure is not of expected format.
      *
-     *
-     * @param \Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\Value $value
-     *
      * @throws InvalidArgumentException
      */
     protected function checkValueStructure(BaseValue $value): void
@@ -94,10 +86,6 @@ class Type extends ImageType
 
     /**
      * Validates a field based on the validators in the field definition.
-     *
-     *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
-     * @param \Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\Value $fieldValue
      *
      * @throws InvalidArgumentException
      *
@@ -111,11 +99,11 @@ class Type extends ImageType
     /**
      * Converts an $hash to the Value defined by the field type.
      *
-     * @param mixed $hash
+     * @param $hash
      *
      * @throws InvalidArgumentType
      *
-     * @return \Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\Value $value
+     * @return Value $value
      */
     public function fromHash($hash): Value
     {
@@ -135,9 +123,7 @@ class Type extends ImageType
     /**
      * Converts a $Value to a hash.
      *
-     * @param \Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\Value $value
-     *
-     * @return mixed
+     * @return mixed|null
      */
     public function toHash(SPIValue $value)
     {
@@ -160,9 +146,7 @@ class Type extends ImageType
     /**
      * Converts a persistence $fieldValue to a Value.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
-     *
-     * @return \Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\Value
+     * @throws InvalidArgumentType
      */
     public function fromPersistenceValue(FieldValue $fieldValue): Value
     {

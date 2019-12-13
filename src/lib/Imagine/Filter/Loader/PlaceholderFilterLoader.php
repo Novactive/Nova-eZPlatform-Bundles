@@ -1,11 +1,12 @@
 <?php
+
 /**
  * NovaeZEnhancedImageAssetBundle.
  *
  * @package   NovaeZEnhancedImageAssetBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
 
@@ -23,7 +24,7 @@ class PlaceholderFilterLoader implements LoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function load(ImageInterface $image, array $options = [])
+    public function load(ImageInterface $image, array $options = []): ImageInterface
     {
         [$width, $height] = $options['size'];
 

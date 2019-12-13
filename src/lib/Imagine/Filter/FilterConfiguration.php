@@ -1,13 +1,16 @@
 <?php
+
 /**
  * NovaeZEnhancedImageAssetBundle.
  *
  * @package   NovaeZEnhancedImageAssetBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
+
+declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\Imagine\Filter;
 
@@ -23,14 +26,18 @@ class FilterConfiguration extends BaseFilterConfiguration
     /** @var BaseFilterConfiguration */
     protected $filterConfiguration;
 
+    /**
+     * @var
+     */
     protected $defaultPostProcessors;
 
+    /**
+     * @var
+     */
     protected $defaultConfig;
 
     /**
      * FilterConfiguration constructor.
-     *
-     * @param BaseFilterConfiguration $filterConfiguration
      */
     public function __construct(BaseFilterConfiguration $filterConfiguration)
     {
@@ -38,7 +45,7 @@ class FilterConfiguration extends BaseFilterConfiguration
     }
 
     /**
-     * @param mixed $defaultPostProcessors
+     * @param $defaultPostProcessors
      */
     public function setDefaultPostProcessors($defaultPostProcessors): void
     {
@@ -46,7 +53,7 @@ class FilterConfiguration extends BaseFilterConfiguration
     }
 
     /**
-     * @param mixed $defaultConfig
+     * @param $defaultConfig
      */
     public function setDefaultConfig($defaultConfig): void
     {
@@ -55,8 +62,6 @@ class FilterConfiguration extends BaseFilterConfiguration
 
     /**
      * @param string $filter
-     *
-     * @return array
      */
     public function get($filter): array
     {
@@ -83,7 +88,6 @@ class FilterConfiguration extends BaseFilterConfiguration
      * Sets a configuration on the given filter.
      *
      * @param string $filter
-     * @param array  $config
      */
     public function set($filter, array $config): void
     {
@@ -92,8 +96,6 @@ class FilterConfiguration extends BaseFilterConfiguration
 
     /**
      * Get all filters.
-     *
-     * @return array
      */
     public function all(): array
     {

@@ -1,13 +1,16 @@
 <?php
+
 /**
  * NovaeZEnhancedImageAssetBundle.
  *
  * @package   NovaeZEnhancedImageAssetBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
+
+declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage;
 
@@ -24,7 +27,6 @@ class FormMapper extends ImageFormMapper
     private $fieldTypeService;
 
     /**
-     * @param FieldTypeService $fieldTypeService
      * @required
      */
     public function setFieldTypeService(FieldTypeService $fieldTypeService): void
@@ -33,9 +35,6 @@ class FormMapper extends ImageFormMapper
     }
 
     /**
-     * @param FormInterface $fieldForm
-     * @param FieldData     $data
-     *
      * @throws NotFoundException
      */
     public function mapFieldValueForm(FormInterface $fieldForm, FieldData $data)

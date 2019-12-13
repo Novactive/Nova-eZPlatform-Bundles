@@ -1,11 +1,12 @@
 <?php
+
 /**
  * NovaeZEnhancedImageAssetBundle.
  *
  * @package   NovaeZEnhancedImageAssetBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
 
@@ -46,7 +47,7 @@ class ImageAliasGenerator implements VariationHandler
     public const ALIAS_ORIGINAL = 'original';
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -54,7 +55,7 @@ class ImageAliasGenerator implements VariationHandler
      * Loader used to retrieve the original image.
      * DataManager is not used to remain independent from ImagineBundle configuration.
      *
-     * @var \Liip\ImagineBundle\Binary\Loader\LoaderInterface
+     * @var LoaderInterface
      */
     private $dataLoader;
 
@@ -64,17 +65,12 @@ class ImageAliasGenerator implements VariationHandler
     private $filterManager;
 
     /**
-     * @var \Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface
+     * @var ResolverInterface
      */
     private $ioResolver;
 
     /**
      * ImageAliasGenerator constructor.
-     *
-     * @param LoaderInterface      $dataLoader
-     * @param AliasFilterManager   $filterManager
-     * @param ResolverInterface    $ioResolver
-     * @param LoggerInterface|null $logger
      */
     public function __construct(
         LoaderInterface $dataLoader,
@@ -93,32 +89,33 @@ class ImageAliasGenerator implements VariationHandler
      *
      * if field value is not an instance of \eZ\Publish\Core\FieldType\Image\Value
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * if source image cannot be found
-     * @throws \eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException
+     * @throws SourceImageNotFoundException
      *
      * if a problem occurs with generated variation
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidVariationException
+     * @throws InvalidVariationException
      */
     public function getVariation(Field $field, VersionInfo $versionInfo, $variationName, array $parameters = [])
     {
-        /** @var \eZ\Publish\Core\FieldType\Image\Value $imageValue */
+        /** @var ImageValue $imageValue */
         $imageValue         = $field->value;
         $fieldId            = $field->id;
         $fieldDefIdentifier = $field->fieldDefIdentifier;
         if (!$this->supportsValue($imageValue)) {
-            throw new InvalidArgumentException(
-                "Value for field #$fieldId ($fieldDefIdentifier) cannot be used for image alias generation."
-            );
+            $message = "Value for field #$fieldId ($fieldDefIdentifier) cannot be used for image alias generation.";
+            throw new InvalidArgumentException($message);
         }
 
         $originalPath = $imageValue->id;
 
         $variationWidth = $variationHeight = null;
         // Create the image alias only if it does not already exist.
-        if (IORepositoryResolver::VARIATION_ORIGINAL !== $variationName
-             && !$this->ioResolver->isStored($originalPath, $variationName)) {
+        if (
+            IORepositoryResolver::VARIATION_ORIGINAL !== $variationName
+            && !$this->ioResolver->isStored($originalPath, $variationName)
+        ) {
             try {
                 $originalBinary = $this->dataLoader->find($originalPath);
             } catch (NotLoadableException $e) {
@@ -172,11 +169,6 @@ class ImageAliasGenerator implements VariationHandler
         );
     }
 
-    /**
-     * @param Value $value
-     *
-     * @return bool
-     */
     public function supportsValue(Value $value): bool
     {
         return $value instanceof ImageValue;

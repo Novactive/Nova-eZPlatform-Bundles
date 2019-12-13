@@ -1,11 +1,12 @@
 <?php
+
 /**
  * NovaeZEnhancedImageAssetBundle.
  *
  * @package   NovaeZEnhancedImageAssetBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
 
@@ -14,17 +15,21 @@ declare(strict_types=1);
 namespace Novactive\EzEnhancedImageAsset\Imagine;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver;
+use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException;
 use eZ\Publish\SPI\Variation\Values\ImageVariation;
 use eZ\Publish\SPI\Variation\VariationHandler;
 use Imagine\Image\Box;
+use InvalidArgumentException;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\FocusPoint;
 use Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\Value as EnhancedImageValue;
 use Novactive\EzEnhancedImageAsset\FocusPoint\FocusPointCalculator;
 use Novactive\EzEnhancedImageAsset\Values\FocusedVariation;
 use ReflectionClass;
+use ReflectionException;
 
 /**
  * Class FocusedImageAliasGenerator.
@@ -43,7 +48,6 @@ class FocusedImageAliasGenerator implements VariationHandler
     protected $filterConfiguration;
 
     /**
-     * @param VariationHandler $imageVariationService
      * @required
      */
     public function setImageVariationService(VariationHandler $imageVariationService): void
@@ -52,7 +56,6 @@ class FocusedImageAliasGenerator implements VariationHandler
     }
 
     /**
-     * @param FocusPointCalculator $focusPointCalculator
      * @required
      */
     public function setFocusPointCalculator(FocusPointCalculator $focusPointCalculator): void
@@ -61,7 +64,6 @@ class FocusedImageAliasGenerator implements VariationHandler
     }
 
     /**
-     * @param FilterConfiguration $filterConfiguration
      * @required
      */
     public function setFilterConfiguration(FilterConfiguration $filterConfiguration): void
@@ -74,14 +76,14 @@ class FocusedImageAliasGenerator implements VariationHandler
      *
      * if field value is not an instance of \eZ\Publish\Core\FieldType\Image\Value
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * if source image cannot be found
-     * @throws \eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException
+     * @throws SourceImageNotFoundException
      *
      * if a problem occurs with generated variation
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidVariationException
-     * @throws \ReflectionException
+     * @throws InvalidVariationException
+     * @throws ReflectionException
      */
     public function getVariation(Field $field, VersionInfo $versionInfo, $variationName, array $parameters = [])
     {

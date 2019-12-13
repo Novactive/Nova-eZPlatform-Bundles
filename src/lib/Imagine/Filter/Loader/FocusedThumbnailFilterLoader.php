@@ -1,11 +1,12 @@
 <?php
+
 /**
  * NovaeZEnhancedImageAssetBundle.
  *
  * @package   NovaeZEnhancedImageAssetBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
 
@@ -24,7 +25,6 @@ class FocusedThumbnailFilterLoader implements LoaderInterface
     protected $focusPointCalculator;
 
     /**
-     * @param FocusPointCalculator $focusPointCalculator
      * @required
      */
     public function setFocusPointCalculator(FocusPointCalculator $focusPointCalculator): void
@@ -35,7 +35,7 @@ class FocusedThumbnailFilterLoader implements LoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function load(ImageInterface $image, array $options = [])
+    public function load(ImageInterface $image, array $options = []): ImageInterface
     {
         $imageSize = $image->getSize();
         $cropSize  = $this->focusPointCalculator->calculateCropSize($imageSize, $options);
@@ -46,8 +46,10 @@ class FocusedThumbnailFilterLoader implements LoaderInterface
         $focusPoint   = $options['focusPoint'] ?? new FocusPoint($options['focus'][0] ?? 0, $options['focus'][1] ?? 0);
         $originalSize = $options['originalSize'] ?? $imageSize;
 
-        if ($originalSize->getWidth() !== $imageSize->getWidth()
-           || $originalSize->getHeight() !== $imageSize->getHeight()) {
+        if (
+            $originalSize->getWidth() !== $imageSize->getWidth()
+            || $originalSize->getHeight() !== $imageSize->getHeight()
+        ) {
             $focusPoint = $this->focusPointCalculator->calculateCropFocusPoint(
                 $originalSize,
                 $imageSize,

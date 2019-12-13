@@ -1,11 +1,12 @@
 <?php
+
 /**
  * NovaeZEnhancedImageAssetBundle.
  *
  * @package   NovaeZEnhancedImageAssetBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
 
@@ -23,11 +24,12 @@ use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
 use Novactive\EzEnhancedImageAsset\Imagine\FocusedImageAliasGenerator;
 use Novactive\EzEnhancedImageAsset\Values\FocusedVariation;
 use Psr\Log\LoggerInterface;
+use ReflectionException;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
-use Twig_Extension;
-use Twig_SimpleFunction;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class ImageExtension extends Twig_Extension
+class ImageExtension extends AbstractExtension
 {
     /** @var FocusedImageAliasGenerator */
     protected $focusedImageAliasGenerator;
@@ -39,7 +41,6 @@ class ImageExtension extends Twig_Extension
     protected $assetExtension;
 
     /**
-     * @param FocusedImageAliasGenerator $focusedImageAliasGenerator
      * @required
      */
     public function setFocusedImageAliasGenerator(FocusedImageAliasGenerator $focusedImageAliasGenerator): void
@@ -48,8 +49,6 @@ class ImageExtension extends Twig_Extension
     }
 
     /**
-     * @param LoggerInterface $logger
-     *
      * @required
      */
     public function setLogger(LoggerInterface $logger): void
@@ -58,7 +57,6 @@ class ImageExtension extends Twig_Extension
     }
 
     /**
-     * @param AssetExtension $assetExtension
      * @required
      */
     public function setAssetExtension(AssetExtension $assetExtension): void
@@ -80,12 +78,12 @@ class ImageExtension extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new Twig_SimpleFunction(
+            new TwigFunction(
                 'ez_focused_image_alias',
                 [$this, 'getImageVariation'],
                 ['is_safe' => ['html']]
             ),
-            new Twig_SimpleFunction(
+            new TwigFunction(
                 'ez_image_attrs',
                 [$this, 'getImageAttributes'],
                 ['is_safe' => ['html']]
@@ -94,12 +92,10 @@ class ImageExtension extends Twig_Extension
     }
 
     /**
-     * @param Field       $field
-     * @param VersionInfo $versionInfo
-     * @param $variationName
+     * @param       $variationName
      * @param array $parameters
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return array|mixed
      */
@@ -114,22 +110,21 @@ class ImageExtension extends Twig_Extension
         $attrs['class'][] = 'enhancedimage--img--lazyload';
 
         $defaultVariation = $this->appendDefaultVariationAttrs($field, $versionInfo, $variationName, $attrs);
-        if ($defaultVariation) {
-            if ($retinaSupportEnabled) {
-                $this->appendRetinaVariationAttrs($field, $versionInfo, $variationName, $defaultVariation, $attrs);
-            }
+        if ($defaultVariation && $retinaSupportEnabled) {
+            $this->appendRetinaVariationAttrs($field, $versionInfo, $variationName, $defaultVariation, $attrs);
         }
 
         if (is_array($attrs['srcset'])) {
             $attrs['srcset'] = implode(', ', $attrs['srcset']);
         }
         if ($lazyLoadEnabled) {
-            $attrs['class'][] = 'has-placeholder';
+            $attrs['class'][]     = 'has-placeholder';
             $attrs['data-srcset'] = is_array($attrs['srcset']) ? implode(', ', $attrs['srcset']) : $attrs['srcset'];
             unset($attrs['srcset']);
         }
 
         $attrs['class'] = implode(' ', $attrs['class']);
+
         return $attrs;
     }
 
@@ -138,15 +133,17 @@ class ImageExtension extends Twig_Extension
         if (!isset($attributes[$attributeName])) {
             $attributes[$attributeName] = [];
         } else {
-            $attributes[$attributeName] = !is_array($attributes[$attributeName]) ? [$attributes[$attributeName]] : $attributes[$attributeName];
+            $attributes[$attributeName] = !is_array($attributes[$attributeName]) ?
+                [$attributes[$attributeName]] :
+                $attributes[$attributeName];
         }
     }
 
     /**
-     * @param Field       $field
-     * @param VersionInfo $versionInfo
-     * @param $variationName
+     * @param       $variationName
      * @param array $attrs
+     *
+     * @throws ReflectionException
      *
      * @return ImageVariation|FocusedVariation|null
      */
@@ -169,15 +166,12 @@ class ImageExtension extends Twig_Extension
         $attrs['srcset'][]    = str_replace(' ', '%20', $this->assetExtension->getAssetUrl($defaultVariation->uri));
         $attrs['data-width']  = $defaultVariation->width;
         $attrs['data-height'] = $defaultVariation->height;
+
         return $defaultVariation;
     }
 
     /**
      * Returns the image variation object for $field/$versionInfo.
-     *
-     * @param Field       $field
-     * @param VersionInfo $versionInfo
-     * @param string      $variationName
      *
      * @throws ReflectionException
      *
@@ -211,11 +205,10 @@ class ImageExtension extends Twig_Extension
     }
 
     /**
-     * @param Field       $field
-     * @param VersionInfo $versionInfo
-     * @param $variationName
-     * @param ImageVariation $defaultVariation
-     * @param array          $attrs
+     * @param       $variationName
+     * @param array $attrs
+     *
+     * @throws ReflectionException
      *
      * @return ImageVariation|FocusedVariation|null
      */
@@ -227,18 +220,21 @@ class ImageExtension extends Twig_Extension
         &$attrs = []
     ) {
         try {
-            if ($retinaVariation = $this->getImageVariation($field, $versionInfo, "{$variationName}_retina")) {
-                if ($retinaVariation->width >= $defaultVariation->width * 2) {
-                    $retinaUri = str_replace(
-                        ' ',
-                        '%20',
-                        $this->assetExtension->getAssetUrl($retinaVariation->uri)
-                    );
+            $retinaVariation = $this->getImageVariation(
+                $field,
+                $versionInfo,
+                "{$variationName}_retina"
+            );
+            if ($retinaVariation && $retinaVariation->width >= $defaultVariation->width * 2) {
+                $retinaUri = str_replace(
+                    ' ',
+                    '%20',
+                    $this->assetExtension->getAssetUrl($retinaVariation->uri)
+                );
 
-                    $attrs['srcset'][] = "{$retinaUri} 2x";
+                $attrs['srcset'][] = "{$retinaUri} 2x";
 
-                    return $retinaVariation;
-                }
+                return $retinaVariation;
             }
         } catch (NonExistingFilterException $e) {
             $this->logger->warning($e->getMessage());

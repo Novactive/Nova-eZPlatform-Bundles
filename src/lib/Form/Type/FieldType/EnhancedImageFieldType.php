@@ -1,13 +1,16 @@
 <?php
+
 /**
  * NovaeZEnhancedImageAssetBundle.
  *
  * @package   NovaeZEnhancedImageAssetBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
+
+declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\Form\Type\FieldType;
 
@@ -49,10 +52,6 @@ class EnhancedImageFieldType extends AbstractType
         return ImageFieldType::class;
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -77,9 +76,6 @@ class EnhancedImageFieldType extends AbstractType
             );
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['translation_domain' => 'ezrepoforms_fieldtype']);

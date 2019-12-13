@@ -1,13 +1,16 @@
 <?php
+
 /**
  * NovaeZEnhancedImageAssetBundle.
  *
  * @package   NovaeZEnhancedImageAssetBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
+
+declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage;
 
@@ -18,8 +21,6 @@ class ValueTransformer extends ImageValueTransformer
 {
     /**
      * @param Value $value
-     *
-     * @return array
      */
     public function transform($value): array
     {
@@ -39,8 +40,6 @@ class ValueTransformer extends ImageValueTransformer
      * @param array $value
      *
      * @throws TransformationFailedException
-     *
-     * @return Value
      */
     public function reverseTransform($value): Value
     {

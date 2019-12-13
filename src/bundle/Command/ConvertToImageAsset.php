@@ -1,7 +1,13 @@
 <?php
+
 /**
- * @copyright Novactive
- * Date: 06/05/19
+ * NovaeZEnhancedImageAssetBundle.
+ *
+ * @package   NovaeZEnhancedImageAssetBundle
+ *
+ * @author    Novactive <f.alexandre@novactive.com>
+ * @copyright 2019 Novactive
+ * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
 
 declare(strict_types=1);
@@ -16,7 +22,7 @@ use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Exceptions\BadStateException;
 use eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Content;
@@ -28,6 +34,7 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
 use eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\FieldType\ImageAsset\Value as ImageAssetValue;
 use eZ\Publish\Core\Repository\ContentTypeService;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
@@ -67,8 +74,6 @@ class ConvertToImageAsset extends Command
     protected $io;
 
     /**
-     * @param Connection $connection
-     *
      * @required
      */
     public function setConnection(Connection $connection): void
@@ -77,8 +82,6 @@ class ConvertToImageAsset extends Command
     }
 
     /**
-     * @param Repository $repository
-     *
      * @required
      */
     public function setRepository(Repository $repository): void
@@ -87,8 +90,6 @@ class ConvertToImageAsset extends Command
     }
 
     /**
-     * @param ContentTypeService $contentTypeService
-     *
      * @required
      */
     public function setContentTypeService(ContentTypeService $contentTypeService): void
@@ -97,8 +98,6 @@ class ConvertToImageAsset extends Command
     }
 
     /**
-     * @param ContentService $contentService
-     *
      * @required
      */
     public function setContentService(ContentService $contentService): void
@@ -107,8 +106,6 @@ class ConvertToImageAsset extends Command
     }
 
     /**
-     * @param ChainFieldValueConverter $valueConverter
-     *
      * @required
      */
     public function setValueConverter(ChainFieldValueConverter $valueConverter): void
@@ -117,8 +114,6 @@ class ConvertToImageAsset extends Command
     }
 
     /**
-     * @param SignalDispatcher $signalDispatcher
-     *
      * @required
      */
     public function setSignalDispatcher(SignalDispatcher $signalDispatcher): void
@@ -127,8 +122,6 @@ class ConvertToImageAsset extends Command
     }
 
     /**
-     * @param TagAwareAdapterInterface $cache
-     *
      * @required
      */
     public function setCache(TagAwareAdapterInterface $cache): void
@@ -160,12 +153,7 @@ class ConvertToImageAsset extends Command
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
      * @throws Exception
-     *
-     * @return int|null
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
@@ -176,13 +164,10 @@ class ConvertToImageAsset extends Command
                 foreach ($fieldIdentifiers as $fieldIdentifier) {
                     [$contentTypeIdentifier, $fieldIdentifier] = explode('/', $fieldIdentifier);
 
-                    $contentType     = $this->contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
+                    $contentType = $this->contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
                     $fieldDefinition = $contentType->getFieldDefinition($fieldIdentifier);
                     if (null === $fieldDefinition) {
-                        throw new \eZ\Publish\Core\Base\Exceptions\NotFoundException(
-                            FieldDefinition::class,
-                            $fieldIdentifier
-                        );
+                        throw new NotFoundException(FieldDefinition::class, $fieldIdentifier);
                     }
                     $this->io->comment("Converting {$contentTypeIdentifier}/{$fieldIdentifier}");
 
@@ -227,12 +212,36 @@ class ConvertToImageAsset extends Command
     }
 
     /**
-     * @param ContentType $contentType
-     *
+     * @throws InvalidArgumentValue
+     */
+    protected function getNewFieldDefinitionCreateStruct(
+        FieldDefinition $originalFieldDefinition
+    ): FieldDefinitionCreateStruct {
+        $createStruct = $this->contentTypeService->newFieldDefinitionCreateStruct(
+            $this->assetFieldIdentifier($originalFieldDefinition),
+            'ezimageasset'
+        );
+
+        $createStruct->names           = $originalFieldDefinition->getNames();
+        $createStruct->descriptions    = $originalFieldDefinition->getDescriptions();
+        $createStruct->position        = $originalFieldDefinition->position;
+        $createStruct->isRequired      = $originalFieldDefinition->isRequired;
+        $createStruct->isSearchable    = $originalFieldDefinition->isSearchable;
+        $createStruct->isInfoCollector = $originalFieldDefinition->isInfoCollector;
+        $createStruct->isTranslatable  = $originalFieldDefinition->isTranslatable;
+        $createStruct->fieldGroup      = $originalFieldDefinition->fieldGroup;
+
+        return $createStruct;
+    }
+
+    protected function assetFieldIdentifier(FieldDefinition $originalFieldDefinition): string
+    {
+        return sprintf('%s_asset', $originalFieldDefinition->identifier);
+    }
+
+    /**
+     * @throws APINotFoundException
      * @throws UnauthorizedException
-     * @throws NotFoundException
-     *
-     * @return ContentTypeDraft
      */
     protected function getContentTypeDraft(ContentType $contentType): ContentTypeDraft
     {
@@ -244,12 +253,10 @@ class ConvertToImageAsset extends Command
     }
 
     /**
-     * @param ContentType     $contentType
-     * @param FieldDefinition $originalFieldDefinition
-     * @param FieldDefinition $fieldDefinition
-     *
-     * @throws NotFoundException
+     * @throws InvalidArgumentException
+     * @throws APINotFoundException
      * @throws UnauthorizedException
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function updateContents(
         ContentType $contentType,
@@ -288,12 +295,10 @@ class ConvertToImageAsset extends Command
     }
 
     /**
-     * @param ContentInfo     $contentInfo
-     * @param FieldDefinition $originalFieldDefinition
-     * @param FieldDefinition $fieldDefinition
-     *
-     * @throws NotFoundException
+     * @throws InvalidArgumentException
+     * @throws APINotFoundException
      * @throws UnauthorizedException
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function updateContent(
         ContentInfo $contentInfo,
@@ -342,13 +347,6 @@ class ConvertToImageAsset extends Command
         }
     }
 
-    /**
-     * @param Content         $content
-     * @param FieldDefinition $fieldDefinition
-     * @param VersionInfo     $version
-     * @param ImageAssetValue $value
-     * @param string          $languageCode
-     */
     protected function updateField(
         Content $content,
         FieldDefinition $fieldDefinition,
@@ -380,17 +378,12 @@ class ConvertToImageAsset extends Command
     }
 
     /**
-     * @param ContentType     $contentType
-     * @param FieldDefinition $fieldDefinition
-     *
-     * @throws InvalidArgumentException
-     * @throws NotFoundException
-     * @throws UnauthorizedException
-     * @throws InvalidArgumentValue
      * @throws BadStateException
      * @throws ContentTypeFieldDefinitionValidationException
-     *
-     * @return FieldDefinition
+     * @throws InvalidArgumentException
+     * @throws InvalidArgumentValue
+     * @throws APINotFoundException
+     * @throws UnauthorizedException
      */
     protected function updateContentType(ContentType $contentType, FieldDefinition $fieldDefinition): FieldDefinition
     {
@@ -403,42 +396,5 @@ class ConvertToImageAsset extends Command
         }
 
         return $contentType->getFieldDefinition($newFieldCreateStruct->identifier);
-    }
-
-    /**
-     * @param FieldDefinition $originalFieldDefinition
-     *
-     * @throws InvalidArgumentValue
-     *
-     * @return FieldDefinitionCreateStruct
-     */
-    protected function getNewFieldDefinitionCreateStruct(
-        FieldDefinition $originalFieldDefinition
-    ): FieldDefinitionCreateStruct {
-        $createStruct = $this->contentTypeService->newFieldDefinitionCreateStruct(
-            $this->assetFieldIdentifier($originalFieldDefinition),
-            'ezimageasset'
-        );
-
-        $createStruct->names           = $originalFieldDefinition->getNames();
-        $createStruct->descriptions    = $originalFieldDefinition->getDescriptions();
-        $createStruct->position        = $originalFieldDefinition->position;
-        $createStruct->isRequired      = $originalFieldDefinition->isRequired;
-        $createStruct->isSearchable    = $originalFieldDefinition->isSearchable;
-        $createStruct->isInfoCollector = $originalFieldDefinition->isInfoCollector;
-        $createStruct->isTranslatable  = $originalFieldDefinition->isTranslatable;
-        $createStruct->fieldGroup      = $originalFieldDefinition->fieldGroup;
-
-        return $createStruct;
-    }
-
-    /**
-     * @param FieldDefinition $originalFieldDefinition
-     *
-     * @return string
-     */
-    protected function assetFieldIdentifier(FieldDefinition $originalFieldDefinition): string
-    {
-        return sprintf('%s_asset', $originalFieldDefinition->identifier);
     }
 }

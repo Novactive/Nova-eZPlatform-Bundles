@@ -1,7 +1,13 @@
 <?php
+
 /**
- * @copyright Novactive
- * Date: 06/05/19
+ * NovaeZEnhancedImageAssetBundle.
+ *
+ * @package   NovaeZEnhancedImageAssetBundle
+ *
+ * @author    Novactive <f.alexandre@novactive.com>
+ * @copyright 2019 Novactive
+ * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
 
 declare(strict_types=1);
@@ -43,8 +49,6 @@ class ImageFieldValueConverter implements FieldValueConverterInterface
 
     /**
      * ImageFieldValueConverter constructor.
-     *
-     * @param array $mappings
      */
     public function __construct(array $mappings)
     {
@@ -52,8 +56,6 @@ class ImageFieldValueConverter implements FieldValueConverterInterface
     }
 
     /**
-     * @param VariationHandler $imageVariationService
-     *
      * @required
      */
     public function setImageVariationService(VariationHandler $imageVariationService): void
@@ -62,8 +64,6 @@ class ImageFieldValueConverter implements FieldValueConverterInterface
     }
 
     /**
-     * @param ContentService $contentService
-     *
      * @required
      */
     public function setContentService(ContentService $contentService): void
@@ -72,8 +72,6 @@ class ImageFieldValueConverter implements FieldValueConverterInterface
     }
 
     /**
-     * @param LocationService $locationService
-     *
      * @required
      */
     public function setLocationService(LocationService $locationService): void
@@ -82,8 +80,6 @@ class ImageFieldValueConverter implements FieldValueConverterInterface
     }
 
     /**
-     * @param ContentTypeService $contentTypeService
-     *
      * @required
      */
     public function setContentTypeService(ContentTypeService $contentTypeService): void
@@ -100,24 +96,19 @@ class ImageFieldValueConverter implements FieldValueConverterInterface
     }
 
     /**
-     * @param Content $content
-     * @param Field   $field
-     *
-     * @throws NotFoundException
      * @throws BadStateException
      * @throws ContentFieldValidationException
      * @throws ContentValidationException
      * @throws InvalidArgumentException
-     * @throws UnauthorizedException
      * @throws InvalidArgumentType
-     *
-     * @return ImageAssetValue|null
+     * @throws NotFoundException
+     * @throws UnauthorizedException
      */
     public function toImageAssetValue(Content $content, Field $field): ?ImageAssetValue
     {
         /** @var ImageValue $fieldValue */
         $fieldValue = $field->value;
-        if (null === $fieldValue || $fieldValue == new ImageValue()) {
+        if (null === $fieldValue || $fieldValue === new ImageValue()) {
             return null;
         }
 
@@ -147,12 +138,8 @@ class ImageFieldValueConverter implements FieldValueConverterInterface
     }
 
     /**
-     * @param string $remoteId
-     *
-     * @throws UnauthorizedException
      * @throws NotFoundException
-     *
-     * @return Content
+     * @throws UnauthorizedException
      */
     protected function getAsset(string $remoteId): Content
     {
@@ -160,19 +147,12 @@ class ImageFieldValueConverter implements FieldValueConverterInterface
     }
 
     /**
-     * @param string     $name
-     * @param string     $remoteId
-     * @param ImageValue $image
-     * @param string     $languageCode
-     *
-     * @throws NotFoundException
      * @throws BadStateException
      * @throws ContentFieldValidationException
      * @throws ContentValidationException
      * @throws InvalidArgumentException
+     * @throws NotFoundException
      * @throws UnauthorizedException
-     *
-     * @return Content
      */
     protected function createAsset(string $name, string $remoteId, ImageValue $image, string $languageCode): Content
     {
@@ -196,18 +176,11 @@ class ImageFieldValueConverter implements FieldValueConverterInterface
     }
 
     /**
-     * @param Content    $content
-     * @param string     $name
-     * @param ImageValue $image
-     * @param string     $languageCode
-     *
      * @throws BadStateException
      * @throws ContentFieldValidationException
      * @throws ContentValidationException
      * @throws InvalidArgumentException
      * @throws UnauthorizedException
-     *
-     * @return Content
      */
     protected function updateAsset(Content $content, string $name, ImageValue $image, string $languageCode): Content
     {

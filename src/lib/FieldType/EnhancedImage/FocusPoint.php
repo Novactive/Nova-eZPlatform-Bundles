@@ -1,11 +1,12 @@
 <?php
+
 /**
  * NovaeZEnhancedImageAssetBundle.
  *
  * @package   NovaeZEnhancedImageAssetBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
 
@@ -35,9 +36,6 @@ class FocusPoint
 
     /**
      * FocusPoint constructor.
-     *
-     * @param float $posX
-     * @param float $posY
      */
     public function __construct(float $posX = 0.0, float $posY = 0.0)
     {
@@ -45,33 +43,21 @@ class FocusPoint
         $this->posY = $posY;
     }
 
-    /**
-     * @return float
-     */
     public function getPosX(): float
     {
         return $this->posX;
     }
 
-    /**
-     * @param float $posX
-     */
     public function setPosX(float $posX): void
     {
         $this->posX = $posX;
     }
 
-    /**
-     * @return float
-     */
     public function getPosY(): float
     {
         return $this->posY;
     }
 
-    /**
-     * @param float $posY
-     */
     public function setPosY(float $posY): void
     {
         $this->posY = $posY;

@@ -1,11 +1,12 @@
 <?php
+
 /**
  * NovaeZEnhancedImageAssetBundle.
  *
  * @package   NovaeZEnhancedImageAssetBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
 
@@ -20,13 +21,6 @@ use Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\FocusPoint;
 
 class FocusPointCalculator
 {
-    /**
-     * @param BoxInterface $imageSize
-     * @param BoxInterface $cropSize
-     * @param FocusPoint   $focusPoint
-     *
-     * @return FocusPoint
-     */
     public function calculateCropFocusPoint(
         BoxInterface $imageSize,
         BoxInterface $cropSize,
@@ -52,13 +46,6 @@ class FocusPointCalculator
         );
     }
 
-    /**
-     * @param BoxInterface $imageSize
-     * @param BoxInterface $cropSize
-     * @param FocusPoint   $focusPoint
-     *
-     * @return Point
-     */
     public function calculateCropStartPoint(
         BoxInterface $imageSize,
         BoxInterface $cropSize,
@@ -83,12 +70,6 @@ class FocusPointCalculator
         return new Point((int) $posX, (int) $posY);
     }
 
-    /**
-     * @param FocusPoint   $focusPoint
-     * @param BoxInterface $imageSize
-     *
-     * @return FocusPoint
-     */
     protected function toCoordinate(FocusPoint $focusPoint, BoxInterface $imageSize): FocusPoint
     {
         return new FocusPoint(
@@ -97,12 +78,6 @@ class FocusPointCalculator
         );
     }
 
-    /**
-     * @param FocusPoint   $focusPoint
-     * @param BoxInterface $imageSize
-     *
-     * @return FocusPoint
-     */
     protected function toPixel(FocusPoint $focusPoint, BoxInterface $imageSize): FocusPoint
     {
         $percentFocusPoint = $this->toPercent($focusPoint);
@@ -113,11 +88,6 @@ class FocusPointCalculator
         );
     }
 
-    /**
-     * @param FocusPoint $focusPoint
-     *
-     * @return FocusPoint
-     */
     protected function toPercent(FocusPoint $focusPoint): FocusPoint
     {
         return new FocusPoint(
@@ -126,12 +96,6 @@ class FocusPointCalculator
         );
     }
 
-    /**
-     * @param BoxInterface $imageSize
-     * @param array        $options
-     *
-     * @return Box|null
-     */
     public function calculateCropSize(BoxInterface $imageSize, array $options): ?Box
     {
         $width  = $options['size'][0] ?? null;

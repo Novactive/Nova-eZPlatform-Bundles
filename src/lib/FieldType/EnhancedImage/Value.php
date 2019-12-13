@@ -6,9 +6,10 @@
  * @package   NovaeZEnhancedImageAssetBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
+
 declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage;
@@ -41,8 +42,6 @@ class Value extends ImageValue
     /**
      * Value constructor.
      *
-     * @param array $imageData
-     *
      * @throws InvalidArgumentType
      */
     public function __construct(array $imageData = [])
@@ -52,11 +51,7 @@ class Value extends ImageValue
             try {
                 $this->$key = $value;
             } catch (PropertyNotFoundException $e) {
-                throw new InvalidArgumentType(
-                    sprintf('EnhancedImage\Value::$%s', $key),
-                    'Existing property',
-                    $value
-                );
+                throw new InvalidArgumentType(sprintf('EnhancedImage\Value::$%s', $key), 'Existing property', $value);
             }
         }
     }
@@ -66,20 +61,14 @@ class Value extends ImageValue
      *
      * @param string $path
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
-     *
-     * @return \eZ\Publish\Core\FieldType\Image\Value
+     * @throws InvalidArgumentType
      *
      * @deprecated Starting with 5.3.3, handled by Image\Type::acceptValue()
      */
-    public static function fromString($path)
+    public static function fromString($path): Value
     {
         if (!file_exists($path)) {
-            throw new InvalidArgumentType(
-                '$path',
-                'existing file',
-                $path
-            );
+            throw new InvalidArgumentType('$path', 'existing file', $path);
         }
 
         return new static(

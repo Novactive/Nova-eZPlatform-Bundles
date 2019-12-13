@@ -1,13 +1,16 @@
 <?php
+
 /**
  * NovaeZEnhancedImageAssetBundle.
  *
  * @package   NovaeZEnhancedImageAssetBundle
  *
  * @author    Novactive <f.alexandre@novactive.com>
- * @copyright 2018 Novactive
+ * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
+
+declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage;
 
@@ -21,13 +24,9 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 class EnhancedImageStorage extends ImageStorage
 {
     /**
-     * @param VersionInfo $versionInfo
-     * @param Field       $field
-     * @param array       $context
-     *
+     * @throws InvalidArgumentException
      * @throws InvalidArgumentValue
      * @throws NotFoundException
-     * @throws InvalidArgumentException
      *
      * @return bool|mixed
      */
@@ -35,9 +34,11 @@ class EnhancedImageStorage extends ImageStorage
     {
         if (isset($field->value->externalData)) {
             $isNewFocusPoint = $field->value->externalData['isNewFocusPoint'] ?? false;
-            if ($isNewFocusPoint
+            if (
+                $isNewFocusPoint
                 && !isset($field->value->externalData['inputUri'])
-                && isset($field->value->externalData['id'])) {
+                && isset($field->value->externalData['id'])
+            ) {
                 $binaryFile      = $this->IOService->loadBinaryFile($field->value->externalData['id']);
                 $stream          = $this->IOService->getFileInputStream($binaryFile);
                 $streamMetadatas = stream_get_meta_data($stream);

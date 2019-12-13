@@ -1,4 +1,15 @@
 <?php
+/**
+ * NovaeZEnhancedImageAssetBundle.
+ *
+ * @package   NovaeZEnhancedImageAssetBundle
+ *
+ * @author    Novactive <f.alexandre@novactive.com>
+ * @copyright 2019 Novactive
+ * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
+ */
+
+declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\Form\Type;
 
@@ -19,10 +30,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class FocusPointType extends AbstractType
 {
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -48,9 +55,6 @@ class FocusPointType extends AbstractType
             );
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['data_class' => FocusPoint::class]);

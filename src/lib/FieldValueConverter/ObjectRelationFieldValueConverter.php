@@ -1,7 +1,13 @@
 <?php
+
 /**
- * @copyright Novactive
- * Date: 06/05/19
+ * NovaeZEnhancedImageAssetBundle.
+ *
+ * @package   NovaeZEnhancedImageAssetBundle
+ *
+ * @author    Novactive <f.alexandre@novactive.com>
+ * @copyright 2019 Novactive
+ * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
 
 declare(strict_types=1);
@@ -14,7 +20,6 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Field;
-use eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException;
 use eZ\Publish\Core\FieldType\ImageAsset\AssetMapper;
 use eZ\Publish\Core\FieldType\ImageAsset\Value as ImageAssetValue;
 use eZ\Publish\Core\FieldType\Relation\Value;
@@ -31,7 +36,6 @@ class ObjectRelationFieldValueConverter implements FieldValueConverterInterface
     protected $assetMapper;
 
     /**
-     * @param ContentService $contentService
      * @required
      */
     public function setContentService(ContentService $contentService): void
@@ -40,7 +44,6 @@ class ObjectRelationFieldValueConverter implements FieldValueConverterInterface
     }
 
     /**
-     * @param ContentTypeService $contentTypeService
      * @required
      */
     public function setContentTypeService(ContentTypeService $contentTypeService): void
@@ -49,7 +52,6 @@ class ObjectRelationFieldValueConverter implements FieldValueConverterInterface
     }
 
     /**
-     * @param AssetMapper $assetMapper
      * @required
      */
     public function setAssetMapper(AssetMapper $assetMapper): void
@@ -66,11 +68,6 @@ class ObjectRelationFieldValueConverter implements FieldValueConverterInterface
     }
 
     /**
-     * @param Content $content
-     * @param Field   $field
-     *
-     * @throws ContentFieldValidationException
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws UnauthorizedException
      *
      * @return ImageAssetValue
