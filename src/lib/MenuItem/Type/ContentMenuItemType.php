@@ -20,6 +20,7 @@ use eZ\Publish\Core\Repository\siteAccessAware\LocationService;
 use Novactive\EzMenuManager\MenuItem\MenuItemValue;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 class ContentMenuItemType extends DefaultMenuItemType
@@ -189,7 +190,7 @@ class ContentMenuItemType extends DefaultMenuItemType
 
         $menuItemLinkInfos = [
             'id'     => "location-{$location->id}",
-            'uri'    => $this->router->generate($location),
+            'uri'    => $this->router->generate($location, [], UrlGeneratorInterface::ABSOLUTE_URL),
             'label'  => $this->translationHelper->getTranslatedContentNameByContentInfo($content->contentInfo),
             'extras' => [
                     'contentId'  => $location->contentId,
