@@ -62,6 +62,11 @@ services:
     tags:
     - {name: ezpublish.search.solr.query.content.criterion_visitor}
 
+  Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor\FilterTag:
+    tags:
+    - {name: ezpublish.search.solr.query.content.criterion_visitor}
+    - {name: ezpublish.search.solr.query.location.criterion_visitor}
+
   Novactive\EzSolrSearchExtra\Query\CriterionHandler\MultipleFieldsFullText:
     arguments:
       $dbHandler: "@ezpublish.api.storage_engine.legacy.dbhandler"
@@ -101,3 +106,20 @@ services:
     tags:
     - {name: ezpublish.search.solr.query.content.facet_builder_visitor}
     - {name: ezpublish.search.solr.query.location.facet_builder_visitor}
+
+
+  nova_solr_extra.search.solr.query.content.query_converter:
+    class: Novactive\EzSolrSearchExtra\Query\Common\QueryConverter
+    decorates: ezpublish.search.solr.query_converter.content
+    decoration_priority: -10
+    arguments:
+      - '@nova_solr_extra.search.solr.query.content.query_converter.inner'
+      - '@ezpublish.search.solr.query.content.criterion_visitor.aggregate'
+
+  nova_solr_extra.search.solr.query.location.query_converter:
+    class: Novactive\EzSolrSearchExtra\Query\Common\QueryConverter
+    decorates: ezpublish.search.solr.query_converter.location
+    decoration_priority: -10
+    arguments:
+      - '@nova_solr_extra.search.solr.query.location.query_converter.inner'
+      - '@ezpublish.search.solr.query.location.criterion_visitor.aggregate'

@@ -42,12 +42,22 @@ class CustomField extends FacetBuilderVisitor implements FacetFieldVisitor
     }
 
     /**
-     * {@inheritdoc}.
+     * @param CustomFieldFacetBuilder $facetBuilder
+     * @param string                  $fieldId
+     *
+     * @return array|string[]
      */
     public function visitBuilder(FacetBuilder $facetBuilder, $fieldId)
     {
+        $excludeTags = ['dt'];
+        if ($facetBuilder->excludeTags) {
+            array_push($excludeTags, ...$facetBuilder->excludeTags);
+        }
+
+        $excludeTags = implode(',', $excludeTags);
+
         return [
-            'facet.field'                             => "{!ex=dt key=${fieldId}}$facetBuilder->field",
+            'facet.field'                             => "{!ex={$excludeTags} key=${fieldId}}$facetBuilder->field",
             "f.{$facetBuilder->field}.facet.limit"    => $facetBuilder->limit,
             "f.{$facetBuilder->field}.facet.mincount" => $facetBuilder->minCount,
         ];
