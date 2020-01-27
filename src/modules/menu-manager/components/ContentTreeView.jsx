@@ -97,7 +97,8 @@ export default class ContentTreeView extends PureComponent {
       .jstree({
         core: {
           data: this.getTreeData,
-          check_callback: this.handleCheck
+          check_callback: this.handleCheck,
+          worker: false
         },
         types: this.props.jsTreeTypes,
         dnd: {
