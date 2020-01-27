@@ -40,8 +40,8 @@ services:
 
     Novactive\EzEnhancedImageAsset\Imagine\FocusedImageAliasGenerator:
 
-    Novactive\EzEnhancedImageAsset\Imagine\ImageAliasGenerator:
-        decorates: ezpublish.image_alias.imagine.alias_generator
+    ezpublish.image_alias.imagine.alias_generator:
+        class: Novactive\EzEnhancedImageAsset\Imagine\ImageAliasGenerator
         arguments:
             $dataLoader: "@ezpublish.image_alias.imagine.binary_loader"
             $ioResolver: "@ezpublish.image_alias.imagine.cache_resolver"
