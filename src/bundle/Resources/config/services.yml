@@ -62,3 +62,7 @@ services:
     Novactive\EzEnhancedImageAsset\FieldValueConverter\ImageFieldValueConverter:
         arguments:
             $mappings: '$fieldtypes.ezimageasset.mappings$'
+
+    Novactive\EzEnhancedImageAsset\Imagine\ChainPlaceholderProvider:
+        tags:
+            - { name: 'ezpublish.placeholder_provider', type: 'chain_provider' }
