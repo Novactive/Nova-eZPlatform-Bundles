@@ -29,6 +29,6 @@ class FilterTag extends BaseVisitor
      */
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
-        return '{!tag=' . $criterion->tag . '}' . $subVisitor->visit($criterion->criterion);
+        return '{!tag='.$criterion->tag.'}'.$subVisitor->visit($criterion->criterion);
     }
 }

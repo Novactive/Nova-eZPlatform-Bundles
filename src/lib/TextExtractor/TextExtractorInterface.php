@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZSolrSearchExtraBundle.
  *
@@ -22,8 +23,6 @@ interface TextExtractorInterface
      * Extract text from a file.
      *
      * @param $fileName
-     *
-     * @return string|null
      */
     public function extract($fileName): ?string;
 }

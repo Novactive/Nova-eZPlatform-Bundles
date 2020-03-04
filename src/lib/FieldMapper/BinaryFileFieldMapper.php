@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZSolrSearchExtraBundle.
  *
@@ -50,11 +51,6 @@ class BinaryFileFieldMapper
 
     /**
      * BinaryFileFieldMapper constructor.
-     *
-     * @param IOService              $ioService
-     * @param BoostFactorProvider    $boostFactorProvider
-     * @param TextExtractorInterface $textExtractor
-     * @param LoggerInterface        $logger
      */
     public function __construct(
         IOService $ioService,
@@ -69,20 +65,17 @@ class BinaryFileFieldMapper
     }
 
     /**
-     * @param SPIField       $field
-     * @param SPIContentType $contentType
-     *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
-     *
-     * @return SPISearchField|null
      */
     public function mapField(SPIField $field, SPIContentType $contentType): ?SPISearchField
     {
         foreach ($contentType->fieldDefinitions as $fieldDefinition) {
-            if ($fieldDefinition->id !== $field->fieldDefinitionId
+            if (
+                $fieldDefinition->id !== $field->fieldDefinitionId
                  || !$fieldDefinition->isSearchable
-                 || !$field->value->externalData) {
+                 || !$field->value->externalData
+            ) {
                 continue;
             }
 
@@ -104,8 +97,6 @@ class BinaryFileFieldMapper
     }
 
     /**
-     * @param BinaryFile $binaryFile
-     *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      *
      * @return string|null
@@ -120,8 +111,6 @@ class BinaryFileFieldMapper
 
     /**
      * Return index field type for the given $contentType.
-     *
-     * @param SPIContentType $contentType
      *
      * @return SPISearchFieldType\TextField
      */

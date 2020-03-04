@@ -1,26 +1,25 @@
 <?php
+declare(strict_types=1);
+
+$finder = PhpCsFixer\Finder::create()->in('src');
 
 return PhpCsFixer\Config::create()
                         ->setRules(
                             [
-                                '@Symfony' => true,
-                                '@Symfony:risky' => true,
-                                'concat_space' => [ 'spacing' => 'one' ],
-                                'array_syntax' => [ 'syntax' => 'short' ],
-                                'binary_operator_spaces' => [
-                                    'align_equals' => true,
+                                '@Symfony'                    => true,
+                                'binary_operator_spaces'      => [
+                                    'align_equals'       => true,
                                     'align_double_arrow' => true,
                                 ],
-                                'ordered_imports' => true,
-                                'phpdoc_order' => true,
+                                'array_syntax'                => ['syntax' => 'short'],
+                                'pre_increment'               => false,
+                                'ordered_imports'             => true,
+                                'phpdoc_order'                => true,
                                 'linebreak_after_opening_tag' => true,
-                                'phpdoc_no_package' => false,
-                                'cast_spaces' => false,
+                                'phpdoc_no_package'           => false,
+                                'phpdoc_inline_tag'           => false,
+                                'cast_spaces'                 => false,
+                                'no_superfluous_phpdoc_tags'  => true,
                             ]
                         )
-                        ->setRiskyAllowed( true )
-                        ->setFinder(
-                            PhpCsFixer\Finder::create()
-                                             ->in( __DIR__ . '/../src' )
-                                             ->files()->name( '*.php' )
-                        );
+                        ->setFinder($finder);

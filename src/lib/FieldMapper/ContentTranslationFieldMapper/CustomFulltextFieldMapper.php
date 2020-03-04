@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZSolrSearchExtraBundle.
  *
@@ -19,11 +20,7 @@ use eZ\Publish\SPI\Search\FieldType;
 class CustomFulltextFieldMapper extends CustomFieldMapper
 {
     /**
-     * @param array                                                         $fields
-     * @param \eZ\Publish\SPI\Search\Field                                  $indexField
-     * @param \eZ\Publish\SPI\Persistence\Content\Type                      $contentType
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
-     * @param array                                                         $fieldNames
      */
     protected function appendField(
         array &$fields,
@@ -48,8 +45,7 @@ class CustomFulltextFieldMapper extends CustomFieldMapper
     /**
      * Return index field type for the given $contentType.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Type $contentType
-     * @param string                                   $fieldName
+     * @param string $fieldName
      *
      * @return \eZ\Publish\SPI\Search\FieldType
      */

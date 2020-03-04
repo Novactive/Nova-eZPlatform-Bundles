@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZSolrSearchExtraBundle.
  *
@@ -46,9 +47,7 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
     /**
      * BinaryFileFullTextFieldMapper constructor.
      *
-     * @param BinaryFileFieldMapper         $binaryFileFieldMapper
-     * @param ContentTypePersistenceHandler $contentTypeHandler
-     * @param string[]                      $binaryFileFieldTypeIndentifiers
+     * @param string[] $binaryFileFieldTypeIndentifiers
      */
     public function __construct(
         BinaryFileFieldMapper $binaryFileFieldMapper,
@@ -60,9 +59,6 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
         $this->binaryFileFieldTypeIndentifiers = $binaryFileFieldTypeIndentifiers;
     }
 
-    /**
-     * @param bool $enabled
-     */
     public function setEnabled(bool $enabled): void
     {
         $this->enabled = $enabled;
@@ -88,8 +84,10 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
         );
 
         foreach ($content->fields as $field) {
-            if ($field->languageCode !== $languageCode
-                 || !\in_array($field->type, $this->binaryFileFieldTypeIndentifiers)) {
+            if (
+                $field->languageCode !== $languageCode
+                 || !\in_array($field->type, $this->binaryFileFieldTypeIndentifiers)
+            ) {
                 continue;
             }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZSolrSearchExtraBundle.
  *
@@ -47,11 +48,6 @@ class CustomFieldMapper extends ContentTranslationFieldMapper
 
     /**
      * CustomFulltextFieldMapper constructor.
-     *
-     * @param ContentType\Handler                                                   $contentTypeHandler
-     * @param \eZ\Publish\Core\Search\Common\FieldRegistry                          $fieldRegistry
-     * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator                     $fieldNameGenerator
-     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider $boostFactorProvider
      */
     public function __construct(
         ContentType\Handler $contentTypeHandler,
@@ -65,17 +61,13 @@ class CustomFieldMapper extends ContentTranslationFieldMapper
         $this->boostFactorProvider = $boostFactorProvider;
     }
 
-    /**
-     * @param array $fieldsConfig
-     */
     public function setFieldsConfig(array $fieldsConfig): void
     {
         $this->fieldsConfig = $fieldsConfig;
     }
 
     /**
-     * @param Content $content
-     * @param string  $languageCode
+     * @param string $languageCode
      *
      * @return bool
      */
@@ -85,8 +77,7 @@ class CustomFieldMapper extends ContentTranslationFieldMapper
     }
 
     /**
-     * @param \eZ\Publish\SPI\Persistence\Content $content
-     * @param string                              $languageCode
+     * @param string $languageCode
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
@@ -136,13 +127,6 @@ class CustomFieldMapper extends ContentTranslationFieldMapper
         return $fields;
     }
 
-    /**
-     * @param array                                                    $fields
-     * @param \eZ\Publish\SPI\Search\Field                             $indexField
-     * @param \eZ\Publish\SPI\Persistence\Content\Type                 $contentType
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     * @param array                                                    $fieldNames
-     */
     protected function appendField(
         array &$fields,
         Field $indexField,
@@ -176,13 +160,15 @@ class CustomFieldMapper extends ContentTranslationFieldMapper
     {
         $fieldNames = [];
         foreach ($this->fieldsConfig as $fieldName => $fieldIdentifiers) {
-            if (\in_array(
-                $fieldDefinition->identifier,
-                $fieldIdentifiers
-            ) || \in_array(
-                "{$contentType->identifier}/{$fieldDefinition->identifier}",
-                $fieldIdentifiers
-            )) {
+            if (
+                \in_array(
+                    $fieldDefinition->identifier,
+                    $fieldIdentifiers
+                ) || \in_array(
+                    "{$contentType->identifier}/{$fieldDefinition->identifier}",
+                    $fieldIdentifiers
+                )
+            ) {
                 $fieldNames[] = $fieldName;
             }
         }
@@ -193,9 +179,7 @@ class CustomFieldMapper extends ContentTranslationFieldMapper
     /**
      * Return index field type for the given arguments.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Type                 $contentType
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     * @param \eZ\Publish\SPI\Search\FieldType                         $fieldType
      *
      * @return \eZ\Publish\SPI\Search\FieldType
      */

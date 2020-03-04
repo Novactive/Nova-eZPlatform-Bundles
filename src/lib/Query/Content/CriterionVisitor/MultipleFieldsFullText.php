@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZSolrSearchExtraBundle.
  *
@@ -45,11 +46,6 @@ class MultipleFieldsFullText extends CriterionVisitor
 
     /**
      * Create from content type handler and field registry.
-     *
-     * @param \eZ\Publish\Core\Search\Common\FieldNameResolver            $fieldNameResolver
-     * @param \QueryTranslator\Languages\Galach\Tokenizer                 $tokenizer
-     * @param \QueryTranslator\Languages\Galach\Parser                    $parser
-     * @param \QueryTranslator\Languages\Galach\Generators\ExtendedDisMax $generator
      */
     public function __construct(
         FieldNameResolver $fieldNameResolver,
@@ -66,8 +62,7 @@ class MultipleFieldsFullText extends CriterionVisitor
     /**
      * Get field type information.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param string                                                    $fieldDefinitionIdentifier
+     * @param string $fieldDefinitionIdentifier
      *
      * @return array
      */
@@ -79,8 +74,6 @@ class MultipleFieldsFullText extends CriterionVisitor
     /**
      * Check if visitor is applicable to current criterion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     *
      * @return bool
      */
     public function canVisit(Criterion $criterion)
@@ -91,7 +84,6 @@ class MultipleFieldsFullText extends CriterionVisitor
     /**
      * Map field value to a proper Solr representation.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion    $criterion
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $subVisitor
      *
      * @return string
@@ -129,8 +121,6 @@ class MultipleFieldsFullText extends CriterionVisitor
     }
 
     /**
-     * @param Criterion $criterion
-     *
      * @return string
      */
     private function getQueryFields(Criterion $criterion)

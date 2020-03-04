@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZSolrSearchExtraBundle.
  *
@@ -30,9 +31,6 @@ class TikaTextExtractor implements TextExtractorInterface
 
     /**
      * TikaTextExtractor constructor.
-     *
-     * @param TikaClientInterface $tikaClient
-     * @param LoggerInterface     $logger
      */
     public function __construct(TikaClientInterface $tikaClient, LoggerInterface $logger)
     {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZSolrSearchExtraBundle.
  *
@@ -23,8 +24,6 @@ class Score extends SortClauseVisitor
     /**
      * Check if visitor is applicable to current sortClause.
      *
-     * @param APISortClause $sortClause
-     *
      * @return bool
      */
     public function canVisit(APISortClause $sortClause)
@@ -35,12 +34,10 @@ class Score extends SortClauseVisitor
     /**
      * Map field value to a proper Solr representation.
      *
-     * @param APISortClause $sortClause
-     *
      * @return string
      */
     public function visit(APISortClause $sortClause)
     {
-        return 'score' . $this->getDirection($sortClause);
+        return 'score'.$this->getDirection($sortClause);
     }
 }

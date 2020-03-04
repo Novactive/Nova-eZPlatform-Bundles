@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZSolrSearchExtraBundle.
  *
@@ -20,8 +21,6 @@ interface TikaClientInterface
 {
     /**
      * @param $fileName
-     *
-     * @return string|null
      */
     public function getText($fileName): ?string;
 }

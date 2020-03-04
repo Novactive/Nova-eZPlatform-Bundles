@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZSolrSearchExtraBundle.
  *
@@ -22,7 +23,6 @@ class CustomField extends SortClause
     /**
      * Constructs a new CustomField SortClause.
      *
-     * @param string $fieldIdentifier
      * @param string $sortDirection
      */
     public function __construct(string $fieldIdentifier, $sortDirection = Query::SORT_ASC)

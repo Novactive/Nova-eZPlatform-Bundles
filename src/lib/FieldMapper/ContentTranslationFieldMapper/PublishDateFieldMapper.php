@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZSolrSearchExtraBundle.
  *
@@ -44,9 +45,6 @@ class PublishDateFieldMapper extends ContentTranslationFieldMapper
 
     /**
      * PublishDateFieldMapper constructor.
-     *
-     * @param ContentTypeHandler $contentTypeHandler
-     * @param FieldRegistry      $fieldRegistry
      */
     public function __construct(ContentTypeHandler $contentTypeHandler, FieldRegistry $fieldRegistry)
     {
@@ -54,17 +52,13 @@ class PublishDateFieldMapper extends ContentTranslationFieldMapper
         $this->fieldRegistry      = $fieldRegistry;
     }
 
-    /**
-     * @param array $fieldIdentifiers
-     */
     public function setFieldIdentifiers(array $fieldIdentifiers): void
     {
         $this->fieldIdentifiers = $fieldIdentifiers;
     }
 
     /**
-     * @param Content $content
-     * @param string  $languageCode
+     * @param string $languageCode
      *
      * @return bool
      */
@@ -74,8 +68,7 @@ class PublishDateFieldMapper extends ContentTranslationFieldMapper
     }
 
     /**
-     * @param Content $content
-     * @param string  $languageCode
+     * @param string $languageCode
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
@@ -93,7 +86,8 @@ class PublishDateFieldMapper extends ContentTranslationFieldMapper
             }
 
             foreach ($contentType->fieldDefinitions as $fieldDefinition) {
-                if ($fieldDefinition->id !== $field->fieldDefinitionId
+                if (
+                    $fieldDefinition->id !== $field->fieldDefinitionId
                     || (
                         !\in_array(
                             $fieldDefinition->identifier,

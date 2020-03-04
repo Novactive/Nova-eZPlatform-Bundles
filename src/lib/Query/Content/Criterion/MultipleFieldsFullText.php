@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZSolrSearchExtraBundle.
  *
@@ -14,6 +15,7 @@ namespace Novactive\EzSolrSearchExtra\Query\Content\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
+use InvalidArgumentException;
 
 /**
  * Full text search criterion.
@@ -136,7 +138,7 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
         // API the only sensible way, I guess.
         foreach ($properties as $name => $value) {
             if (!isset($this->$name)) {
-                throw new \InvalidArgumentException("Unknown property $name.");
+                throw new InvalidArgumentException("Unknown property $name.");
             }
 
             $this->$name = $value;
@@ -155,7 +157,7 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
      */
     public static function createFromQueryBuilder($target, $operator, $value)
     {
-        @trigger_error('The ' . __METHOD__ . ' method is deprecated 
+        @trigger_error('The '.__METHOD__.' method is deprecated 
         since version 7.2 and will be removed in 8.0.', E_USER_DEPRECATED);
 
         return new self($value);
@@ -182,13 +184,13 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
      *
      * @param string $type
      * @param string $field
-     *
-     * @return mixed
      */
     public function getCustomField($type, $field)
     {
-        if (!isset($this->customFields[$type]) ||
-            !isset($this->customFields[$type][$field])) {
+        if (
+            !isset($this->customFields[$type]) ||
+            !isset($this->customFields[$type][$field])
+        ) {
             return null;
         }
 

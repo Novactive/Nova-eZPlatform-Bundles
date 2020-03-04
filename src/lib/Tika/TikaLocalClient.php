@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZSolrSearchExtraBundle.
  *
@@ -11,6 +12,8 @@
 
 namespace Novactive\EzSolrSearchExtra\Tika;
 
+use RuntimeException;
+use SplFileInfo;
 use Symfony\Component\Process\Process;
 
 /**
@@ -25,8 +28,6 @@ class TikaLocalClient implements TikaClientInterface
 
     /**
      * Client constructor.
-     *
-     * @param string $jar
      */
     public function __construct(string $jar)
     {
@@ -43,11 +44,11 @@ class TikaLocalClient implements TikaClientInterface
         $shellCommand = sprintf('java -Dpdfbox.fontcache=/tmp -jar %s %s', $this->jar, $command);
 
         $process = new Process($shellCommand);
-        $process->setWorkingDirectory(__DIR__ . '/../../../');
+        $process->setWorkingDirectory(__DIR__.'/../../../');
         $process->run();
 
         if (!$process->isSuccessful()) {
-            throw new \RuntimeException($process->getErrorOutput());
+            throw new RuntimeException($process->getErrorOutput());
         }
 
         return $process->getOutput();
@@ -58,7 +59,7 @@ class TikaLocalClient implements TikaClientInterface
      */
     public function getText($fileName): ?string
     {
-        $file    = new \SplFileInfo($fileName);
+        $file    = new SplFileInfo($fileName);
         $command = sprintf('--text %s', $file->getRealPath());
 
         return $this->run($command);

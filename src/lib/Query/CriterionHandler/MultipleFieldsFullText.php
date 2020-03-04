@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZSolrSearchExtraBundle.
  *
@@ -19,8 +20,6 @@ class MultipleFieldsFullText extends FullText
 {
     /**
      * Check if this criterion handler accepts to handle the given criterion.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
      * @return bool
      */
