@@ -16,7 +16,7 @@ services:
             - { name: ezpublish_rest.field_type_processor, alias: enhancedimage }
 
     Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\Type:
-        parent: ezpublish.fieldType
+        parent: ezpublish.fieldType.ezimage
         tags:
             - {name: ezpublish.fieldType, alias: enhancedimage}
 
