@@ -9,6 +9,29 @@ services:
     # if you need to do this, you can override this setting on individual services
     public: false
 
+  Novactive\EzSolrSearchExtraBundle\Controller\:
+    resource: "../../Controller/*"
+    public: true
+
+  Novactive\EzSolrSearchExtra\EventListener\:
+    resource: "../../../lib/EventListener/*"
+
+  Novactive\EzSolrSearchExtra\Api\:
+    resource: "../../../lib/Api/*"
+
+  Novactive\EzSolrSearchExtra\ApiLoader\GatewayFactory:
+    arguments:
+      - "@ezpublish.api.repository_configuration_provider"
+      - "%ez_search_engine_solr.default_connection%"
+    calls:
+      - [setContainer, ["@service_container"]]
+
+  Novactive\EzSolrSearchExtra\Api\Gateway:
+    factory: ['@Novactive\EzSolrSearchExtra\ApiLoader\GatewayFactory', buildGateway]
+    arguments:
+      - "@ezpublish.search.solr.gateway.client.http.stream"
+      - "@ezpublish.search.solr.gateway.endpoint_registry"
+
   Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper\CustomFulltextFieldMapper:
     arguments:
       $contentTypeHandler: '@ezpublish.spi.persistence.content_type_handler'

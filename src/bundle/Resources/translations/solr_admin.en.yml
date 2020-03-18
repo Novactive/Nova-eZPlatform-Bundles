@@ -1,0 +1,54 @@
+solr_admin:
+  title: Solr
+  permission:
+    failed: You don't have the permission to acces to Manage Synonyms/StopWords interface
+  action:
+    stopwords:
+      added: The word %words% has been added|The words %words% has been added
+    synonyms:
+      added: The synonym %synonyms% has been added for term %term%|The synonyms %synonyms% has been added for term %term%
+  page:
+    dashboard:
+      title: Manage Synonyms/StopWords
+      table:
+        title: Title
+        action: Action
+    stopwords:
+      title: List of Stopwords
+      empty: no stop words found
+      action:
+        view: consult list of stopwords
+      table:
+        nbr_termes: Number stopwords (%nbr%)
+        empty: no stop words found
+        term: StopWords
+        stopwords: StopWords
+        action:
+          title: Actions
+          edit: Edit Stopword
+          remove: delete the selected stopwords
+          msg_delete: Do you want to delete the selected stopwords ?
+          add: Add a stop word
+      add:
+        placeholder: stopwords 1, stopwords 2, ...
+    synonyms:
+      title: Lists of synonyms
+      empty: no synonym found
+      action:
+        view: Consult list of synonyms
+      table:
+        nbr_termes: Number of synonyms (%nbr%)
+        empty: no term found
+        term: Synonym
+        synonym: Synonyms
+        action:
+          title: Actions
+          edit: Edit synonym
+          remove: delete the selected synonyms
+          cancel: Cancel the modification
+          confirm : Validate the modification of the synonym
+          msg_delete: Do you want to delete the selected synonyms ?
+          add: Add synonym
+      add:
+        placeholder: synonym 1, synonym 2,...
+
