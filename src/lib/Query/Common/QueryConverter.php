@@ -12,6 +12,7 @@ namespace Novactive\EzSolrSearchExtra\Query\Common;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter as BaseQueryConverter;
+use Novactive\EzSolrSearchExtra\Query\AdvancedContentQuery;
 
 class QueryConverter extends BaseQueryConverter
 {
@@ -48,6 +49,10 @@ class QueryConverter extends BaseQueryConverter
                     $params['fq'][] = $this->criterionVisitor->visit($criterion);
                 }
             }
+        }
+
+        if ($query instanceof AdvancedContentQuery && $query->groupConfig) {
+            $params = array_merge($params, $query->groupConfig);
         }
 
         return $params;
