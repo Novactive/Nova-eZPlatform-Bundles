@@ -66,3 +66,7 @@ services:
     Novactive\EzEnhancedImageAsset\Imagine\ChainPlaceholderProvider:
         tags:
             - { name: 'ezpublish.placeholder_provider', type: 'chain_provider' }
+
+    Novactive\EzEnhancedImageAsset\Imagine\PlaceholderProvider\RemoteProvider:
+        tags:
+            - { name: 'ezpublish.placeholder_provider', type: 'enhanced_remote' }
