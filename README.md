@@ -19,7 +19,7 @@ An eZPlatform bundle which extend the solr search handler.
 - **[Implemented]** [Exact matches boosting configuration](./doc/custom_meta_fields.md)
 - **[WIP]** Boost doc based on publish date (newer docs score higher)
 - **[WIP]** Highlighting 
-- **[WIP]** Manage stopwords and synonyms from eZ Platform admin interface
+- **[Implemented]** Manage stopwords and synonyms from eZ Platform admin interface
 
 ## Requirements
 
