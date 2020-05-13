@@ -1,4 +1,14 @@
 <?xml version="1.0"?>
+<!--
+  ~ NovaeZSolrSearchExtraBundle.
+  ~
+  ~ @package   NovaeZSolrSearchExtraBundle
+  ~
+  ~ @author    Novactive
+  ~ @copyright 2020 Novactive
+  ~ @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
+  -->
+
 <ruleset name="NovactiveCustomCodeStyle">
     <description>Novactive coding standard.</description>
     <arg name="tab-width" value="4"/>

@@ -1,8 +1,13 @@
 <?php
 
 /**
- * @copyright Novactive
- * Date: 10/01/2020
+ * NovaeZSolrSearchExtraBundle.
+ *
+ * @package   NovaeZSolrSearchExtraBundle
+ *
+ * @author    Novactive
+ * @copyright 2020 Novactive
+ * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
  */
 
 declare(strict_types=1);
