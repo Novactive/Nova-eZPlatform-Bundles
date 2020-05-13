@@ -1,0 +1,8 @@
+solradmin:
+    dashboard: ~
+    synonyms.view: ~
+    synonyms.create: ~
+    synonyms.delete: ~
+    stopwords.view: ~
+    stopwords.create: ~
+    stopwords.delete: ~

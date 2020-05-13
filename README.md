@@ -53,6 +53,17 @@ public function registerBundles()
 }
 ```
 
+### Routing config
+
+Add the following routing config
+
+```yaml
+solr:
+    resource: "@EzSolrSearchExtraBundle/Controller/"
+    type:     annotation
+    prefix:   /
+```
+
 ## Docs
 ### Publish date boosting
 http://lucene.apache.org/solr/guide/6_6/the-dismax-query-parser.html#TheDisMaxQueryParser-Thebf_BoostFunctions_Parameter

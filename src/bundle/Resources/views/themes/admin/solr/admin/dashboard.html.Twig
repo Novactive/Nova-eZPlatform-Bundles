@@ -1,0 +1,66 @@
+{% extends "@ezdesign/layout.html.twig" %}
+
+{% trans_default_domain 'solr_admin' %}
+
+{% block title %}{{ 'solr_admin.page.dashboard.title'|trans }}{% endblock %}
+
+{%- block breadcrumbs -%}
+    {% include '@EzPlatformAdminUi/parts/breadcrumbs.html.twig' with { items: [
+        { value: 'solr_admin.title'|trans },
+        { value: 'solr_admin.page.dashboard.title'|trans }
+    ]} %}
+{%- endblock -%}
+
+{%- block page_title -%}
+    {% include '@EzPlatformAdminUi/parts/page_title.html.twig' with {
+        title: 'solr_admin.page.dashboard.title'|trans,
+        iconName: 'list'
+    } %}
+{%- endblock -%}
+
+{%- block content -%}
+    <section class="container my-4">
+        {% if sets is defined %}
+            {% for set in sets %}
+                {% set titleSet = 'solr_admin.page.synonyms.title'|trans %}
+                {% set empty = 'solr_admin.page.synonyms.empty'|trans %}
+                {% if set.type == 'stopwords' %}
+                    {% set titleSet = 'solr_admin.page.stopwords.title'|trans %}
+                    {% set empty = 'solr_admin.page.stopwords.empty'|trans %}
+                {% endif %}
+                <div class="ez-table-header">
+                    <div class="ez-table-header__headline">{{ titleSet }}</div>
+                </div>
+                {% if sets is empty %}
+                    <table class="table">
+                        <tr>
+                            <td colspan="4">
+                                <span>{{ empty }}</span>
+                            </td>
+                        </tr>
+                    </table>
+                {% else %}
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td class="ez-table__cell">
+                                {{ ('solr_admin.' ~ set.type ~ '.' ~ set.id)|trans }}
+                            </td>
+                            <td class="ez-table__cell ez-table__cell--has-action-btns text-right">
+                                <a
+                                        title="{{ ('solr_admin.page.' ~ set.type ~ '.action.view')|trans }}"
+                                        href="{{ path('solr_admin.' ~ set.type ~ '.index', {'setId': set.id}) }}"
+                                        class="btn btn-icon mx-2">
+                                    <svg class="ez-icon ez-icon-view">
+                                        <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#view"></use>
+                                    </svg>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </section>
+{%- endblock -%}

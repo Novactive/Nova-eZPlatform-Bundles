@@ -1,0 +1,166 @@
+{% extends noLayout ? "@ezdesign/solr/pagelayout_ajax.html.twig" : "@ezdesign/layout.html.twig" %}
+{% trans_default_domain 'solr_admin' %}
+
+{% form_theme add_form '@EzPlatformAdminUi/form_fields.html.twig'  %}
+
+{% block title %}{{ 'solr_admin.page.synonyms.title'|trans }}{% endblock %}
+
+{%- block breadcrumbs -%}
+    {% include '@EzPlatformAdminUi/parts/breadcrumbs.html.twig' with { items: [
+        { value: 'solr_admin.title'|trans },
+        { value: 'solr_admin.page.dashboard.title'|trans, url: path('solr_admin.dashboard') },
+        { value: 'solr_admin.page.synonyms.title'|trans }
+    ]} %}
+{%- endblock -%}
+
+{%- block page_title -%}
+    {% include '@EzPlatformAdminUi/parts/page_title.html.twig' with {
+        title: 'solr_admin.page.synonyms.title'|trans,
+        iconName: 'list'
+    } %}
+{%- endblock -%}
+
+{%- block content -%}
+    <section class="container page-list-terms my-4">
+        {% block ajax_content %}
+            {% if pager is defined %}
+                <div class="ez-table-header">
+                    <div>
+                        <a href="{{ path('solr_admin.dashboard') }}" class="btn btn-primary">
+                            <svg class="ez-icon ez-icon-trash">
+                                <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#back"></use>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="ez-table-header__headline">{{ 'solr_admin.page.synonyms.table.nbr_termes'|trans({'%nbr%': pager|length }) }}</div>
+                    {% if manageAccess['synonyms.delete'] %}
+                        <div>
+                            {% set modal_data_target = 'delete-terms-modal' %}
+                            <button
+                                    id="delete-terms"
+                                    type="button"
+                                    class="btn btn-danger"
+                                    disabled
+                                    data-toggle="modal"
+                                    data-target="#{{ modal_data_target }}"
+                                    title="{{ 'solr_admin.page.synonyms.table.action.remove'|trans }}">
+                                <svg class="ez-icon ez-icon-trash">
+                                    <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#trash"></use>
+                                </svg>
+                            </button>
+                            {% include '@ezdesign/admin/bulk_delete_confirmation_modal.html.twig' with {
+                                'id': modal_data_target,
+                                'message': 'solr_admin.page.synonyms.table.action.msg_delete'|trans,
+                                'data_click': '#delete-terms-delete',
+                            }%}
+                        </div>
+                    {% endif %}
+                </div>
+                <table class="table">
+                    <tbody>
+                        {% if pager is empty %}
+                            <tr>
+                                <td colspan="4">
+                                    <span> {{ 'solr_admin.page.synonyms.table.empty'|trans }} </span>
+                                </td>
+                            </tr>
+                        {% else %}
+                            {% for elt in pager %}
+                                <tr>
+                                    <td class="ez-table__cell ez-table__cell--has-checkbox">
+                                        {% if manageAccess['synonyms.delete'] %}
+                                            <input id="delete-{{ loop.index }}" type="checkbox" name="termsToDelete[]" class="terms-to-delete" value="{{ elt.term }}" />
+                                        {% endif %}
+                                    </td>
+                                    <td class="ez-table__cell term"><label for="delete-{{ loop.index }}">{{ elt.term }}</label></td>
+                                    <td class="ez-table__cell synonyms">
+                                        <ul>
+                                            {% for synonym in elt.synonyms %}
+                                                <li> {{ synonym }} </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </td>
+                                    {% if manageAccess['synonyms.create'] %}
+                                        <td class="ez-table__cell ez-table__cell--has-action-btns text-right">
+                                            <a
+                                                    title="{{ 'solr_admin.page.synonyms.table.action.edit'|trans }}"
+                                                    href=""
+                                                    class="btn btn-icon mx-2"
+                                                    id="edit-terms">
+                                                <svg class="ez-icon ez-icon-edit">
+                                                    <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#edit"></use>
+                                                </svg>
+                                            </a>
+
+                                            <a
+                                                    title="{{ 'solr_admin.page.synonyms.table.action.confirm'|trans }}"
+                                                    href="{{ path('solr_admin.synonyms.add', {'setId': setId}) }}"
+                                                    class="btn btn-icon mx-2 valid-update-terms" style="display: none">
+                                                <svg class="ez-icon ez-icon-edit">
+                                                    <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#checkmark"></use>
+                                                </svg>
+                                            </a>
+
+                                            <a
+                                                    title="{{ 'solr_admin.page.synonyms.table.action.cancel'|trans }}"
+                                                    href=""
+                                                    class="btn btn-icon mx-2 cancel-update-terms"  style="display: none">
+                                                <svg class="ez-icon ez-icon-edit">
+                                                    <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#discard"></use>
+                                                </svg>
+                                            </a>
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if add_form is defined %}
+                            <tr>
+                                <td class="ez-table__cell words" colspan="2">
+                                    {{ form_start(add_form, {'attr' : {'class': 'row'}}) }}
+                                    <div class="col-5">
+                                        {{ form_widget(add_form.term) }}
+                                    </div>
+                                    <div class="col-5">
+                                        {{ form_widget(add_form.synonyms, {'attr': {'placeholder': 'solr_admin.page.synonyms.add.placeholder'|trans}}) }}
+                                    </div>
+                                    <div class="col-2">
+                                        <button type="submit" title="{{ 'solr_admin.page.synonyms.table.action.add'|trans }}" class="btn btn-icon mx-2">
+                                            <svg class="ez-icon ez-icon-edit">
+                                                <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#create"></use>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    {{ form_end(add_form) }}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+                <a href="{{ path('solr_admin.synonyms.delete', {'setId': setId}) }}" id="delete-terms-delete" style="display: none"></a>
+            {% endif %}
+            {% if pager.haveToPaginate %}
+                <div class="row justify-content-center align-items-center mb-2 ez-pagination__spacing">
+                    <span class="ez-pagination__text">
+                        {{ 'pagination.viewing'|trans({
+                            '%viewing%': pager.currentPageResults|length,
+                            '%total%': pager.nbResults}, 'pagination')|desc('Viewing <strong>%viewing%</strong> out of <strong>%total%</strong> items')|raw }}
+                    </span>
+                </div>
+                <div class="row justify-content-center align-items-center ez-pagination__btn mb-5">
+                    {{ pagerfanta(pager, 'ez') }}
+                </div>
+            {% endif %}
+        {% endblock %}
+    </section>
+{%- endblock -%}
+
+{% block javascripts %}
+    {% javascripts
+        '@EzPlatformAdminUiBundle/Resources/public/js/scripts/button.state.toggle.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    {{ encore_entry_script_tags('ezplatform-admin-ui-solr-config-js', null, 'ezplatform') }}
+{% endblock %}

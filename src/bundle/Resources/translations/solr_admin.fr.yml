@@ -1,0 +1,53 @@
+solr_admin:
+  title: Solr
+  permission:
+    failed: Vous n'avez pas assez de permissions pour accéder à la gestion des synonymes/mots vides
+  action:
+    stopwords:
+      added: Le mot %words% a été ajouté|Les mots %words% ont été ajoutés
+    synonyms:
+      added: Le synonyme %synonyms% à été ajouté au terme %term%|Les synonymes %synonyms% ont été ajoutés au terme %term%
+  page:
+    dashboard:
+      title: Gestion des synonymes/mots vides
+      table:
+        title: Titre
+        action: Action
+    stopwords:
+      title: Liste des mots vides
+      empty: aucun mots vides trouvé
+      action:
+        view: Voir les mots vides
+      table:
+        nbr_termes: Nombre des mots vides (%nbr%)
+        empty: aucun mot vide trouvé
+        term: Term
+        stopwords: StopWords
+        action:
+          title: Actions
+          edit: Modifier le mot vide
+          remove: supprimer le ou les mots vides sélectionnés
+          msg_delete: Voulez-vous supprimer le ou les mots vides sélectionnes ?
+          add: Ajouter un mot vide
+      add:
+        placeholder: mot vide 1, mot vide 2,...
+    synonyms:
+      title: Listes des synonymes
+      empty: aucun synonyme trouvé
+      action:
+        view: Voir les synonymes
+      table:
+        nbr_termes: Nombre de synonymes (%nbr%)
+        empty: aucun synonymes trouvés
+        term: Synonyme
+        synonym: Synonymes
+        action:
+          title: Actions
+          edit: Modifier le synonyme
+          remove: supprimer le ou les synonymes sélectionnés
+          cancel: Annuler la modification
+          confirm : Valider la modification du synonyme
+          msg_delete: Voulez-vous supprimer le ou les synonymes sélectionnes ?
+          add: Ajouter un synonyme
+      add:
+        placeholder: synonyme 1, synonyme 2,...
