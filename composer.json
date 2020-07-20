@@ -31,6 +31,7 @@
         "ext-dom": "*",
         "ext-pdo": "*",
         "ext-json": "*",
+        "ezsystems/ezplatform-kernel": "~1.1.0",
         "symfony/messenger": "*"
     },
     "require-dev": {
