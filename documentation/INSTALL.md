@@ -9,24 +9,75 @@
 ## Installation steps
 
 
+Add the following to your composer.json and run `php composer.phar update novactive/ezaccelerator` to refresh dependencies:
 
+```json
+# composer.json
 
-## Setup Buses
+"require": {
+    "novactive/ezaccelerator": "^1.0.0",
+}
+```
+
+## Configuration
+
+First you need to instruct Messenger
 
 ```yaml
-
+# config/packages/messenger.yaml
 framework:
     messenger:
-        # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
-        # failure_transport: failed
-
+        buses:
+            my.bus:
+                middleware:
+                    - Novactive\Bundle\eZAccelerator\Core\SiteAccessAwareMiddleware
+        
+        # simplest one here with doctrine, but you can use Rabbit MQ or any other 
         transports:
-            # https://symfony.com/doc/current/messenger.html#transport-configuration
-            # async: '%env(MESSENGER_TRANSPORT_DSN)%'
-            # failed: 'doctrine://default?queue_name=failed'
-            # sync: 'sync://'
+            ezaccelerator: 'doctrine://default?queue_name=nova_ezaccelerator'
 
         routing:
-            # Route your messages to the transports
-            # 'App\Message\YourMessage': async
+            Novactive\Bundle\eZAccelerator\Message\HTTPCache\PurgeAllHttpCache: ezaccelerator
+            Novactive\Bundle\eZAccelerator\Message\HTTPCache\PurgeHttpCacheTags: ezaccelerator
+            Novactive\Bundle\eZAccelerator\Message\Search\IndexContent: ezaccelerator
+            Novactive\Bundle\eZAccelerator\Message\Search\IndexLocation: ezaccelerator
+            Novactive\Bundle\eZAccelerator\Message\Search\UnindexContent: ezaccelerator
+            Novactive\Bundle\eZAccelerator\Message\Search\UnindexLocation: ezaccelerator
+            Novactive\Bundle\eZAccelerator\Message\Search\PurgeIndex: ezaccelerator
+
+            # Your own
+            # Novactive\Bundle\eZAccelerator\Message\VoidEventMessage: ezaccelerator
+
+```
+
+Then eZ Accelerator
+
+```yaml
+# config/packages/ezaccelerator.yaml
+
+nova_ezaccelerator:
+    system:
+        default:
+            # # default_bus: a.default.bus.for.this.siteaccess.config
+            # event_to_message:
+            #    eZ\Publish\API\Repository\Events\Bookmark\CreateBookmarkEvent:
+            #        message: Novactive\Bundle\eZAccelerator\Message\VoidEventMessage
+            #        stop_propagation: false # default
+            #        # bus: a.specific.bus.for.this.siteaccess.config.and.that.event
+
+```
+
+### Register the bundle
+
+If Symfony Flex did not do it already, activate the bundle in `config\bundles.php` file.
+
+```php
+// config\bundles.php
+<?php
+
+return [
+    Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
+    ...
+    Novactive\Bundle\eZAccelerator\NovaeZAccelerator::class => ['all' => true],
+];
 ```
