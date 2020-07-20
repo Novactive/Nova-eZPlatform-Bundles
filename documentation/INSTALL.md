@@ -1,0 +1,32 @@
+# Install
+
+## Requirements
+
+* eZ Platform 3.x
+* PHP 7.3
+
+
+## Installation steps
+
+
+
+
+## Setup Buses
+
+```yaml
+
+framework:
+    messenger:
+        # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
+        # failure_transport: failed
+
+        transports:
+            # https://symfony.com/doc/current/messenger.html#transport-configuration
+            # async: '%env(MESSENGER_TRANSPORT_DSN)%'
+            # failed: 'doctrine://default?queue_name=failed'
+            # sync: 'sync://'
+
+        routing:
+            # Route your messages to the transports
+            # 'App\Message\YourMessage': async
+```

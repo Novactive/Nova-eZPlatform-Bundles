@@ -1,0 +1,32 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    _instanceof:
+        eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware:
+            calls:
+                - [setSiteAccess, ['@ezpublish.siteaccess']]
+
+    Novactive\Bundle\eZAccelerator\Core\:
+        resource: '../../Core'
+        bind:
+            $configResolver: '@ezpublish.config.resolver'
+
+    Novactive\Bundle\eZAccelerator\Core\AsyncCachePurger:
+        decorates: 'ezplatform.http_cache.purge_client'
+
+    Novactive\Bundle\eZAccelerator\Handler\HTTPCache\:
+        resource: '../../Handler/HTTPCache'
+        bind:
+            EzSystems\PlatformHttpCacheBundle\PurgeClient\PurgeClientInterface $cachePurger: '@Novactive\Bundle\eZAccelerator\Core\AsyncCachePurger.inner'
+
+    Novactive\Bundle\eZAccelerator\Core\AsyncSearchIndexer:
+        decorates: 'ezpublish.spi.search'
+
+    Novactive\Bundle\eZAccelerator\Handler\Search\:
+        resource: '../../Handler/Search'
+        bind:
+            eZ\Publish\SPI\Search\Handler $searchHandler: '@Novactive\Bundle\eZAccelerator\Core\AsyncSearchIndexer.inner'
+            eZ\Publish\SPI\Persistence\Handler $persistenceHandler: '@ezpublish.api.persistence_handler'
