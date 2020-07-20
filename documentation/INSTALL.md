@@ -2,7 +2,7 @@
 
 ## Requirements
 
-* eZ Platform 3.x
+* eZ Platform 3.1+
 * PHP 7.3
 
 

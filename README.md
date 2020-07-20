@@ -27,9 +27,9 @@ First you need to understand the [Symony Messenger Component](https://symfony.co
 ## Asynchronous HTTP Cache Purge
 
 eZ Accelerator decorates the eZ Platform purger to dispatch the corresponding messages.
-To enable the asynchronoucity, you just need to know the Message FQDN
+To enable the asynchronicity, you just need to know the Message FQDN
 
-- **Tag Purge**: Novactive\Bundle\eZAccelerator\Message\PurgeHttpCacheTags: ezaccelerator
+- **Tag Purge**: Novactive\Bundle\eZAccelerator\Message\PurgeHttpCacheTags
 - **Purge All**: Novactive\Bundle\eZAccelerator\Message\PurgeAllHttpCache
 
 > that's it! See the config example below
@@ -37,12 +37,12 @@ To enable the asynchronoucity, you just need to know the Message FQDN
 ## Asynchronous Search Index
 
 eZ Accelerator decorates the eZ Platform Search Handler to dispatch the corresponding messages.
-To enable the asynchronoucity, you just need to know the Message FQDN
+To enable the asynchronicity, you just need to know the Message FQDN
 
-- **Index Content**: Novactive\Bundle\eZAccelerator\Message\Search\IndexContent: ezaccelerator
-- **Index Location**: Novactive\Bundle\eZAccelerator\Message\Search\IndexLocation: ezaccelerator
-- **Remove Content **: Novactive\Bundle\eZAccelerator\Message\Search\UnindexContent: ezaccelerator
-- **Remove Location **: Novactive\Bundle\eZAccelerator\Message\Search\UnindexLocation: ezaccelerator
+- **Index Content**: Novactive\Bundle\eZAccelerator\Message\Search\IndexContent
+- **Index Location**: Novactive\Bundle\eZAccelerator\Message\Search\IndexLocation
+- **Remove Content**: Novactive\Bundle\eZAccelerator\Message\Search\UnindexContent
+- **Remove Location**: Novactive\Bundle\eZAccelerator\Message\Search\UnindexLocation
 - **Purge All**: Novactive\Bundle\eZAccelerator\Message\Search\PurgeIndex
 
 > that's it! See the config example below
@@ -51,7 +51,7 @@ To enable the asynchronoucity, you just need to know the Message FQDN
 
 The concept is simple, everytime eZ Platform is doing something an event is triggered. eZ Accelerator gives you the 
 opportunity to handle the event through a bus which gives you the opportunity to handle that event via a message 
-synchronously or asynchronously using the transport of your choice.
+synchronously or asynchronicity using the transport of your choice.
 
 Everything is opt-in, you can still use the default event dispatcher or you can switch to the bus approach.
 
@@ -104,11 +104,11 @@ With this configuration you can handle **asynchronously** whatever you want when
 
 ## Considerations
 
-### Consumers and SiteAccesses in Complex MultiSiteAccess situation
+### Consumers and SiteAccesses in complex MultiSiteAccess situation
 
 When running the consumers, you will probably run them via **1** siteaccess (`default` maybe).
 
-Things is you might want to know the original SiteAccess. That's why eZ Accelerator injects the `SiteAccessAwareMiddleware`
+Thing is you might want to know the original SiteAccess. That's why eZ Accelerator injects the `SiteAccessAwareMiddleware`
 which tags the Message with the Orginal SiteAccess.
 
 Nevertheless, and even more importantly, in your handler you need to handle according to the correct configuration.
@@ -127,7 +127,7 @@ To handle those situations you can run and setup different consumers and transpo
 
 Ex: 
 
-- All default config bin/console messenger:consume`
+- All default `config bin/console messenger:consume`
 - SiteAccess `A` `bin/console messenger:consume --siteaccess=A`
 
 But you can also specify the `bus` and the `receiver`
@@ -139,9 +139,7 @@ But you can also specify the `bus` and the `receiver`
 
 [Implemented](documentation/FEATURES.md)
 
-## Usage and installation instructions
-
-[Usage](documentation/USAGE.md)
+## Installation instructions
 
 [Installation](documentation/INSTALL.md)
 

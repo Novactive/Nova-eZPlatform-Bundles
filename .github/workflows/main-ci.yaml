@@ -45,7 +45,7 @@ jobs:
                 options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
         strategy:
             matrix:
-                php: [7.3]
+                php: [7.3, 7.4]
         env:
             CACHE_POOL: cache.redis
             DATABASE_URL: mysql://root@127.0.0.1:3306/ezplatform
@@ -101,7 +101,6 @@ jobs:
                     curl -o tests/provisioning/wrap.php https://raw.githubusercontent.com/Plopix/symfony-bundle-app-wrapper/master/wrap-bundle.php
                     WRAP_APP_DIR=./ezplatform WRAP_BUNDLE_DIR=./ php tests/provisioning/wrap.php
                     rm tests/provisioning/wrap.php
-                    mysql -u root -h 127.0.0.1 ezplatform < bundle/Resources/sql/schema.sql
                     cd ezplatform
                     COMPOSER_MEMORY_LIMIT=-1 composer update --lock
                     bin/console cache:clear
