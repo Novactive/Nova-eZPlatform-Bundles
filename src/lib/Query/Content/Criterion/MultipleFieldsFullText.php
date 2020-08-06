@@ -130,6 +130,13 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
      */
     protected $customFields = [];
 
+    /**
+     * Array of boost functions.
+     *
+     * @var array
+     */
+    public $boostFunctions = [];
+
     public function __construct($value, array $properties = [])
     {
         parent::__construct(null, Criterion\Operator::LIKE, $value);

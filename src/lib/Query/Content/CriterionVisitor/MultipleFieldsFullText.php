@@ -110,9 +110,16 @@ class MultipleFieldsFullText extends CriterionVisitor
             'tie' => 0.1,
             'uf'  => '-*',
         ];
+        $boostFunction = $criterion->boostFunctions;
         if ($criterion->boostPublishDate) {
-            $queryParams['bf'] = 'recip(ms(NOW/HOUR,meta_publishdate__date_dt),3.16e-11,1,1)';
+            $boostFunction[] = 'recip(ms(NOW/HOUR,meta_publishdate__date_dt),3.16e-11,1,1)';
         }
+        if (!empty($boostFunction)) {
+            $queryParams['bf'] = 1 === count($boostFunction) ?
+                reset($boostFunction) :
+                sprintf('sum(%s)', implode(',', $boostFunction));
+        }
+
         $queryParamsString = implode(' ', array_map(function ($key, $value) {
             return "{$key}='{$value}'";
         }, array_keys($queryParams), $queryParams));
