@@ -37,7 +37,7 @@ class MenuItem
     protected $name;
 
     /**
-     * @ORM\Column(name="url", type="test", nullable=true)
+     * @ORM\Column(name="url", type="text", nullable=true)
      *
      * @var string
      */
