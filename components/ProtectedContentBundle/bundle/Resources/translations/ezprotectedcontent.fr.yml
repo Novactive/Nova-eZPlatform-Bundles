@@ -1,0 +1,13 @@
+tab.header.title: "Protection de contenu"
+tab.modal.title: "Ajouter une protection sur le contenu"
+
+tab.modal.buttons.cancel: "Annuler"
+tab.modal.buttons.add: "Ajouter"
+
+tab.table.th.password: "Mot de passe"
+tab.table.th.children_protection: "Protéger les contenus enfants?"
+tab.table.th.enabled: "Activer?"
+tab.table.th.remove: "Supprimer"
+
+tab.yes: "OUI"
+tab.no: "NON"
