@@ -1,15 +1,11 @@
-| Q             | A
-| ------------- | ---
-| Branch?       | master / x.y.z
-| Bug fix?      | yes/no
-| New feature?  | yes/no <!-- don't forget updating docs/CHANGELOG.md files -->
-| BC breaks?    | yes/no
-| Fixed tickets | #... <!-- #-prefixed issue number(s), if any -->
+Thanks for your pull request! We love contributions.
 
-<!--
-- Bug fixes must be submitted against the lowest branch where they apply
-  (lowest branches are regularly merged to upper ones so they get the fixes too).
-- Features and deprecations must be submitted against the master branch.
-- Please fill in this template according to the PR you're about to submit.
-- Replace this comment by a description of what your PR is solving.
--->
+However, this repository is what we call a "subtree split": a read-only copy of one directory of the main repository. It is used by Composer to allow developers to depend on specific bundles.
+
+If you want to contribute, you should instead open a pull request on the main repository:
+
+https://github.com/Novactive/Nova-eZPlatform-Bunddles
+
+Thank you for your contribution!
+
+PS: if you haven't already, please add tests.
