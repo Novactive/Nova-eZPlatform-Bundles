@@ -65,19 +65,6 @@ Go to : */_novaezextra/dev/test*
 
 ### Twig Helper
 
-
-#### eznova_content_by_contentinfo( location.contentInfo )
-
-``` twig
-{% set content = eznova_content_by_contentinfo( location.contentInfo ) %}
-```
-
-#### eznova_contenttype_by_content( content )
-
-``` twig
-{% set contentType = eznova_contenttype_by_content( content ) %}
-```
-
 #### eznova_parentcontent_by_contentinfo( content )
 
 ``` twig

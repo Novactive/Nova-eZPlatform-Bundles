@@ -37,17 +37,9 @@ class ContentExtension extends KernelContentExtension
         return array_merge(
             parent::getFunctions(),
             [
-                'eznova_content_by_contentinfo' => new Twig_Function_Method(
-                    $this,
-                    'contentByContentInfo'
-                ),
                 'eznova_parentcontent_by_contentinfo' => new Twig_Function_Method(
                     $this,
                     'parentContentByContentInfo'
-                ),
-                'eznova_contenttype_by_content' => new Twig_Function_Method(
-                    $this,
-                    'contentTypeByContent'
                 ),
                 'eznova_location_by_content' => new Twig_Function_Method(
                     $this,
@@ -66,16 +58,6 @@ class ContentExtension extends KernelContentExtension
     }
 
     /**
-     * ContentByContentInfo.
-     *
-     * @return Content
-     */
-    public function contentByContentInfo(ContentInfo $contentInfo)
-    {
-        return $this->repository->getContentService()->loadContentByContentInfo($contentInfo);
-    }
-
-    /**
      * ParentContentByContentInfo.
      *
      * @return Content
@@ -87,16 +69,6 @@ class ContentExtension extends KernelContentExtension
         $parentLocation = $repository->getLocationService()->loadLocation($location->parentLocationId);
 
         return $this->contentByContentInfo($parentLocation->contentInfo);
-    }
-
-    /**
-     * ContentTypeByContent.
-     *
-     * @return ContentType
-     */
-    public function contentTypeByContent(Content $content)
-    {
-        return $this->repository->getContentTypeService()->loadContentType($content->contentInfo->contentTypeId);
     }
 
     /**
