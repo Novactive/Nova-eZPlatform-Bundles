@@ -1,0 +1,148 @@
+services:
+  # default configuration for services in *this* file
+  _defaults:
+    # automatically injects dependencies in your services
+    autowire: true
+    # automatically registers your services as commands, event subscribers, etc.
+    autoconfigure: true
+    # this means you cannot fetch services directly from the container via $container->get()
+    # if you need to do this, you can override this setting on individual services
+    public: false
+
+  Novactive\EzSolrSearchExtraBundle\Controller\:
+    resource: "../../Controller/*"
+    public: true
+
+  Novactive\EzSolrSearchExtra\EventListener\:
+    resource: "../../../lib/EventListener/*"
+
+  Novactive\EzSolrSearchExtra\Api\:
+    resource: "../../../lib/Api/*"
+
+  Novactive\EzSolrSearchExtra\ApiLoader\GatewayFactory:
+    arguments:
+      - "@ezpublish.api.repository_configuration_provider"
+      - "%ez_search_engine_solr.default_connection%"
+    calls:
+      - [setContainer, ["@service_container"]]
+
+  Novactive\EzSolrSearchExtra\Api\Gateway:
+    factory: ['@Novactive\EzSolrSearchExtra\ApiLoader\GatewayFactory', buildGateway]
+    arguments:
+      - "@ezpublish.search.solr.gateway.client.http.stream"
+      - "@ezpublish.search.solr.gateway.endpoint_registry"
+
+  Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper\CustomFulltextFieldMapper:
+    arguments:
+      $contentTypeHandler: '@ezpublish.spi.persistence.content_type_handler'
+    calls:
+    - ['setFieldsConfig', ['$fulltext_fields;nova_solr_extra$']]
+    tags:
+    - {name: ezpublish.search.solr.field_mapper.content_translation}
+
+  Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper\CustomFieldMapper:
+    arguments:
+      $contentTypeHandler: '@ezpublish.spi.persistence.content_type_handler'
+    calls:
+    - ['setFieldsConfig', ['$custom_fields;nova_solr_extra$']]
+    tags:
+    - {name: ezpublish.search.solr.field_mapper.block_translation}
+
+  Novactive\EzSolrSearchExtra\FieldMapper\BinaryFileFieldMapper:
+    arguments:
+      $ioService: '@ezpublish.fieldType.ezbinaryfile.io_service'
+      $textExtractor: '@Novactive\EzSolrSearchExtra\TextExtractor\TikaTextExtractor'
+
+  Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper\BinaryFileFullTextFieldMapper:
+    lazy: true
+    arguments:
+      $contentTypeHandler: '@ezpublish.spi.persistence.content_type_handler'
+      $binaryFileFieldTypeIndentifiers:
+      - ezbinaryfile
+    calls:
+    - ['setEnabled', ['$enable_pdf_indexation;nova_solr_extra$']]
+    tags:
+    - {name: ezpublish.search.solr.field_mapper.content_translation}
+
+  Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper\PublishDateFieldMapper:
+    lazy: true
+    arguments:
+      $contentTypeHandler: '@ezpublish.spi.persistence.content_type_handler'
+    calls:
+    - ['setFieldIdentifiers', ['$publishdate_fields;nova_solr_extra$']]
+    tags:
+    - {name: ezpublish.search.solr.field_mapper.content_translation}
+
+  Novactive\EzSolrSearchExtra\TextExtractor\TikaTextExtractor:
+    arguments:
+      $tikaClient: '@Novactive\EzSolrSearchExtra\Tika\TikaLocalClient'
+
+  Novactive\EzSolrSearchExtra\Tika\TikaLocalClient:
+    arguments:
+      $jar: './bin/tika-app-1.17.jar'
+
+  Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor\MultipleFieldsFullText:
+    tags:
+    - {name: ezpublish.search.solr.query.content.criterion_visitor}
+
+  Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor\FilterTag:
+    tags:
+    - {name: ezpublish.search.solr.query.content.criterion_visitor}
+    - {name: ezpublish.search.solr.query.location.criterion_visitor}
+
+  Novactive\EzSolrSearchExtra\Query\CriterionHandler\MultipleFieldsFullText:
+    arguments:
+      $dbHandler: "@ezpublish.api.storage_engine.legacy.dbhandler"
+    tags:
+    - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+    - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+  Novactive\EzSolrSearchExtra\Query\SortClauseVisitor\Score:
+    tags:
+    - {name: ezpublish.search.solr.query.content.sort_clause_visitor}
+    - {name: ezpublish.search.solr.query.location.sort_clause_visitor}
+
+  Novactive\EzSolrSearchExtra\Query\SortClauseHandler\Score:
+    autowire: false
+    autoconfigure: false
+    public: false
+    parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
+    tags:
+    - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
+    - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
+
+  Novactive\EzSolrSearchExtra\Query\SortClauseVisitor\CustomField:
+    tags:
+    - {name: ezpublish.search.solr.query.content.sort_clause_visitor}
+    - {name: ezpublish.search.solr.query.location.sort_clause_visitor}
+
+  Novactive\EzSolrSearchExtra\Query\SortClauseHandler\CustomField:
+    autowire: false
+    autoconfigure: false
+    public: false
+    parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
+    tags:
+    - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
+    - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
+
+  Novactive\EzSolrSearchExtra\Query\Common\FacetBuilderVisitor\CustomField:
+    tags:
+    - {name: ezpublish.search.solr.query.content.facet_builder_visitor}
+    - {name: ezpublish.search.solr.query.location.facet_builder_visitor}
+
+
+  nova_solr_extra.search.solr.query.content.query_converter:
+    class: Novactive\EzSolrSearchExtra\Query\Common\QueryConverter
+    decorates: ezpublish.search.solr.query_converter.content
+    decoration_priority: -10
+    arguments:
+      - '@nova_solr_extra.search.solr.query.content.query_converter.inner'
+      - '@ezpublish.search.solr.query.content.criterion_visitor.aggregate'
+
+  nova_solr_extra.search.solr.query.location.query_converter:
+    class: Novactive\EzSolrSearchExtra\Query\Common\QueryConverter
+    decorates: ezpublish.search.solr.query_converter.location
+    decoration_priority: -10
+    arguments:
+      - '@nova_solr_extra.search.solr.query.location.query_converter.inner'
+      - '@ezpublish.search.solr.query.location.criterion_visitor.aggregate'

@@ -1,0 +1,5 @@
+parameters:
+  nova_solr_extra.default.enable_pdf_indexation: false
+  nova_solr_extra.default.fulltext_fields: []
+  nova_solr_extra.default.custom_fields: []
+  nova_solr_extra.default.publishdate_fields: []
