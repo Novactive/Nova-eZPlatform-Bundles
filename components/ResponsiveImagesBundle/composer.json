@@ -1,0 +1,34 @@
+{
+    "name": "novactive/ezresponsiveimagesbundle",
+    "description": "Novactive eZ Responsive Images is a lightweight eZ Publish 5.x|6.x bundle for Responsive Images management.",
+    "keywords": [
+        "ezpublish",
+        "novactive",
+        "ezplatform",
+        "ezstudio"
+    ],
+    "homepage": "https://github.com/Novactive/NovaeZResponsiveImagesBundle",
+    "authors": [
+        {
+            "name": "Novactive",
+            "homepage": "http://www.novactive.us",
+            "email": "novaezresponsiveimages@novactive.com"
+        }
+    ],
+    "license": [
+        "MIT"
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Novactive\\Bundle\\eZResponsiveImagesBundle\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}

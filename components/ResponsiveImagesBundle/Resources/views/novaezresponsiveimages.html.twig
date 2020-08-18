@@ -1,0 +1,12 @@
+<!-- begin - loading the need js for responsive images -->
+<script>document.createElement("picture");</script>
+{% javascripts '@novaezresponsiveimages' %}
+<script src="{{ asset_url }}"></script>
+{% endjavascripts %}
+<style type="text/css">
+    img.unveiled {
+        opacity: 0;
+        transition: opacity .3s ease-in;
+    }
+</style>
+<!-- end - loading the need js for responsive images -->
