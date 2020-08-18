@@ -1,0 +1,31 @@
+nova_ezaccelerator:
+    system:
+        default:
+            event_to_message:
+                eZ\Publish\API\Repository\Events\Bookmark\CreateBookmarkEvent:
+                    message: Novactive\Bundle\eZAccelerator\Message\VoidMessageSiteAccess
+                    stop_propagation: false
+                eZ\Publish\API\Repository\Events\Bookmark\DeleteBookmarkEvent:
+                    message: Novactive\Bundle\eZAccelerator\Message\VoidMessageSiteAccess
+                    stop_propagation: false
+
+framework:
+    messenger:
+        buses:
+            my.bus:
+                middleware:
+                    - Novactive\Bundle\eZAccelerator\Core\SiteAccessAwareMiddleware
+        transports:
+            ezaccelerator: 'doctrine://default?queue_name=nova_ezaccelerator'
+
+        routing:
+            Novactive\Bundle\eZAccelerator\Message\HTTPCache\PurgeAllHttpCache: ezaccelerator
+            Novactive\Bundle\eZAccelerator\Message\HTTPCache\PurgeHttpCacheTags: ezaccelerator
+            Novactive\Bundle\eZAccelerator\Message\Search\IndexContent: ezaccelerator
+            Novactive\Bundle\eZAccelerator\Message\Search\IndexLocation: ezaccelerator
+            Novactive\Bundle\eZAccelerator\Message\Search\UnindexContent: ezaccelerator
+            Novactive\Bundle\eZAccelerator\Message\Search\UnindexLocation: ezaccelerator
+            Novactive\Bundle\eZAccelerator\Message\Search\PurgeIndex: ezaccelerator
+
+            # Your own
+            Novactive\Bundle\eZAccelerator\Message\VoidEventMessage: ezaccelerator

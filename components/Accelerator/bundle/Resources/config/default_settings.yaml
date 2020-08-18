@@ -1,0 +1,3 @@
+parameters:
+    nova_ezaccelerator.default.default_bus: ~
+    nova_ezaccelerator.default.event_to_message: []
