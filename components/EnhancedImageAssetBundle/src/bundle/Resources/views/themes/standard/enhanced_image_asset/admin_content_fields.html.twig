@@ -1,0 +1,74 @@
+{% extends '@EzPublishCore/content_fields.html.twig' %}
+
+{% trans_default_domain 'fieldtypes_preview' %}
+
+{% block enhancedimage_field %}
+    {% spaceless %}
+        {% if not ez_is_field_empty( content, field ) %}
+            {% set imageAlias = ez_image_alias( field, versionInfo, parameters.alias|default( 'original' ) ) %}
+            {% set placeholderAlias = ez_image_alias( field, versionInfo, "placeholder" ) %}
+            {% set focusPoint = field.value.focusPoint %}
+            {% set attr = attr|merge({'class': (attr.class|default('') ~ ' ez-field-preview ez-field-preview--ezimage')|trim}) %}
+            <div {{ block( 'field_attributes' ) }}>
+                <div class="ez-image__wrapper  ">
+                    <picture class="enhancedimage--wrapper enhancedimage--focused-img--wrapper">
+                        <img srcset="{{ placeholderAlias ? asset( placeholderAlias.uri ) : "//:0" }}"
+                             data-srcset="{{ imageAlias ? asset( imageAlias.uri ) : "//:0" }}"
+                             class="enhancedimage--img enhancedimage--focused-img enhancedimage--img--lazyload blur-up"
+                             data-focus-x="{{ (focusPoint ? focusPoint.posX : '')}}"
+                             data-focus-y="{{ (focusPoint ? focusPoint.posY : '')}}">
+                    </picture>
+                </div>
+                <table class="ez-field-preview__image-meta">
+                    <thead>
+                    <tr>
+                        <th>{{ 'ezimage.image_file_properties'|trans|desc('Image file properties') }}:</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{ 'ezimage.file_name'|trans|desc('File name') }}:</td>
+                        <td>{{ field.value.fileName }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'ezimage.size'|trans|desc('Size') }}:</td>
+                        <td>{{ field.value.fileSize|ez_file_size( 1 ) }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'ezimage.alternative_text'|trans|desc('Alternative text') }}:</td>
+                        <td>{{ field.value.alternativeText }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'ezimage.master_dimensions'|trans|desc('Master dimensions') }}:</td>
+                        <td>{{ 'ezimage.width_and_height'|trans({'%width%': field.value.width, '%height%': field.value.height})|desc('%width%px Width - %height%px Height') }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'ezimage.ratio'|trans|desc('Ratio') }}:</td>
+                        <td>{{ (field.value.width/field.value.height)|round(2) }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'enhancedimage.focuspoint'|trans|desc('Focus point') }}:</td>
+                        <td>
+                            <div class="focuspoint-helper">
+                                <div class="focuspoint-helper--target">
+                                    {% set reticleX = ((focusPoint.posX + 1) / 2) * 100 %}
+                                    {% set reticleY = ((-focusPoint.posY + 1) / 2) * 100 %}
+                                    <img class="focuspoint-helper--reticle" src="{{ asset('bundles/ezenhancedimageasset/img/focuspoint-target.png') }}" style="top: {{ reticleY|round(2) }}%; left: {{ reticleX|round(2) }}%;">
+                                    <img class="focuspoint-helper--img" src="{{ imageAlias ? asset( imageAlias.uri ) : "//:0" }}">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="ez-field-preview__actions-wrapper">
+                    <a class="ez-field-preview__action ez-field-preview__action--preview" href="{{ field.value.uri }}" target="_blank">
+                        <svg class="ez-icon ez-icon--medium ez-icon--light">
+                            <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#open-newtab"></use>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    {% endspaceless %}
+{% endblock %}

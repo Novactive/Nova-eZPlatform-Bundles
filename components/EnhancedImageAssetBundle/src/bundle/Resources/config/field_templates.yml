@@ -1,0 +1,18 @@
+system:
+    default:
+        fielddefinition_settings_templates:
+            -
+                template: "@ezdesign/enhanced_image_asset/fielddefinition_settings.html.twig"
+        fielddefinition_edit_templates:
+            -
+                template: "@ezdesign/enhanced_image_asset/fielddefinition_edit_templates.html.twig"
+        field_templates:
+            -
+                template: "@ezdesign/enhanced_image_asset/content_fields.html.twig"
+                priority: 1000
+
+    admin_group:
+        field_templates:
+            -
+                template: "@ezdesign/enhanced_image_asset/admin_content_fields.html.twig"
+                priority: 10000

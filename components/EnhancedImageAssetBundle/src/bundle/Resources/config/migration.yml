@@ -1,0 +1,7 @@
+services:
+  Novactive\EzEnhancedImageAsset\FieldHandler\EnhancedImage:
+    arguments:
+      - "$io.root_dir$"
+      - "@?ezpublish.core.io.prefix_url_decorator"
+    tags:
+      - { name: ez_migration_bundle.complex_field, fieldtype: enhancedimage, priority: 0 }

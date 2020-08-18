@@ -1,0 +1,36 @@
+services:
+    Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\EnhancedImageStorage:
+        parent: ezpublish.fieldType.ezimage.externalStorage
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler, alias: enhancedimage}
+
+    ezpublish.field_type.indexable.enhancedimage:
+        parent: ezpublish.fieldType.indexable.ezimage
+        class: "%ezpublish.fieldType.indexable.ezimage.class%"
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: enhancedimage}
+
+    ezpublish_rest.field_type_processor.enhancedimage:
+        parent: ezpublish_rest.field_type_processor.ezimage
+        tags:
+            - { name: ezpublish_rest.field_type_processor, alias: enhancedimage }
+
+    Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\Type:
+        parent: ezpublish.fieldType.ezimage
+        tags:
+            - {name: ezpublish.fieldType, alias: enhancedimage}
+
+    Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\ValueConverter:
+        parent: ezpublish.fieldType.ezimage.converter
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: enhancedimage}
+
+    eZ\Publish\Core\FieldType\Image\Type: '@ezpublish.fieldType.ezimage'
+
+
+    Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\FormMapper:
+        autoconfigure: true
+        autowire: true
+        tags:
+            - { name: ez.fieldFormMapper.definition, fieldType: enhancedimage }
+            - { name: ez.fieldFormMapper.value, fieldType: enhancedimage }

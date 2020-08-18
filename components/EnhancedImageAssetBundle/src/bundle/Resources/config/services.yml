@@ -1,0 +1,72 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+        bind:
+            $imageVariationService: '@ezpublish.fieldType.ezimage.variation_service'
+            $filterConfiguration: '@liip_imagine.filter.configuration'
+            $signalDispatcher: '@ezpublish.signalslot.signal_dispatcher_transaction_wrapper'
+            $cache: "@ezpublish.cache_pool"
+
+    Novactive\EzEnhancedImageAsset\Twig\:
+        resource: '../../../lib/Twig/*'
+
+    Novactive\EzEnhancedImageAsset\FieldValueConverter\:
+        resource: '../../../lib/FieldValueConverter/*'
+
+    Novactive\EzEnhancedImageAssetBundle\Command\:
+        resource: '../../Command/*'
+
+    Novactive\EzEnhancedImageAsset\FocusPoint\FocusPointCalculator:
+
+    Novactive\EzEnhancedImageAsset\Imagine\Filter\AliasFilterManager:
+        arguments:
+            $filterManager: "@liip_imagine.filter.manager"
+            $filterConfiguration: "@liip_imagine.filter.configuration"
+
+    Novactive\EzEnhancedImageAsset\Imagine\Filter\Loader\FocusedThumbnailFilterLoader:
+        tags:
+            - {name: 'liip_imagine.filter.loader', loader: 'focusedThumbnail'}
+
+    Novactive\EzEnhancedImageAsset\Imagine\Filter\Loader\PlaceholderFilterLoader:
+        tags:
+            - { name: "liip_imagine.filter.loader", loader: 'placeholder' }
+
+    Novactive\EzEnhancedImageAsset\Imagine\Filter\Loader\WebOptimizationFilterLoader:
+        tags:
+            - { name: "liip_imagine.filter.loader", loader: 'webOptimization' }
+
+    Novactive\EzEnhancedImageAsset\Imagine\FocusedImageAliasGenerator:
+
+    ezpublish.image_alias.imagine.alias_generator:
+        class: Novactive\EzEnhancedImageAsset\Imagine\ImageAliasGenerator
+        arguments:
+            $dataLoader: "@ezpublish.image_alias.imagine.binary_loader"
+            $ioResolver: "@ezpublish.image_alias.imagine.cache_resolver"
+            $logger:
+
+    Novactive\EzEnhancedImageAsset\Imagine\Filter\FilterConfiguration:
+        decorates: 'liip_imagine.filter.configuration'
+        arguments:
+            $filterConfiguration: '@Novactive\EzEnhancedImageAsset\Imagine\Filter\FilterConfiguration.inner'
+        calls:
+            - [setDefaultPostProcessors, ['$image_default_post_processors;ez_enhanced_image_asset$']]
+            - [setDefaultConfig, ['$image_default_config;ez_enhanced_image_asset$']]
+
+    Novactive\EzEnhancedImageAsset\FieldValueConverter\ChainFieldValueConverter:
+        arguments:
+            $converters: !tagged ez_enhanced_image_asset.field_value_converter
+
+    Novactive\EzEnhancedImageAsset\FieldValueConverter\ImageFieldValueConverter:
+        arguments:
+            $mappings: '$fieldtypes.ezimageasset.mappings$'
+
+    Novactive\EzEnhancedImageAsset\Imagine\ChainPlaceholderProvider:
+        tags:
+            - { name: 'ezpublish.placeholder_provider', type: 'chain_provider' }
+
+    Novactive\EzEnhancedImageAsset\Imagine\PlaceholderProvider\RemoteProvider:
+        tags:
+            - { name: 'ezpublish.placeholder_provider', type: 'enhanced_remote' }

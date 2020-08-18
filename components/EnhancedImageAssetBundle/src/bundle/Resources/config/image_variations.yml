@@ -1,0 +1,7 @@
+system:
+  default:
+    image_variations:
+      placeholder:
+        reference: null
+        filters:
+          - { name: placeholder, params: {size: [42, null]} }

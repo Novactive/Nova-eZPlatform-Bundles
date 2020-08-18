@@ -1,0 +1,14 @@
+services:
+    ez_enhanced_image_asset.ezadminui.component.stylesheets:
+         parent: EzSystems\EzPlatformAdminUi\Component\TwigComponent
+         arguments:
+            $template: '@@ezdesign/ezadminui/enhanced_image_asset_stylesheets.html.twig'
+         tags:
+             - { name: ezplatform.admin_ui.component, group: 'stylesheet-head' }
+
+    ez_enhanced_image_asset.ezadminui.component.javascripts:
+         parent: EzSystems\EzPlatformAdminUi\Component\TwigComponent
+         arguments:
+            $template: '@@ezdesign/ezadminui/enhanced_image_asset_javascripts.html.twig'
+         tags:
+             - { name: ezplatform.admin_ui.component, group: 'script-body' }

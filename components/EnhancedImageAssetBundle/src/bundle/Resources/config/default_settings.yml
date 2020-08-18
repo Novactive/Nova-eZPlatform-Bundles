@@ -1,0 +1,5 @@
+parameters:
+  ez_enhanced_image_asset.default.image_default_post_processors: ~
+  ez_enhanced_image_asset.default.image_default_config: ~
+  ez_enhanced_image_asset.default.enable_lazy_load: true
+  ez_enhanced_image_asset.default.enable_retina: true

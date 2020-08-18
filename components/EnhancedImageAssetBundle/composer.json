@@ -1,0 +1,61 @@
+{
+  "name": "novactive/ezenhancedimageassetbundle",
+  "type": "ezplatform-bundle",
+  "description": "",
+  "keywords": [
+    "novactive",
+    "ez",
+    "image"
+  ],
+
+  "license": [
+    "MIT"
+  ],
+  "authors": [
+    {
+      "name": "Novactive",
+      "homepage": "http://www.novactive.com",
+      "email": "dir.tech@novactive.com"
+    }
+  ],
+  "require": {
+    "php": "^7.1",
+    "ezsystems/ezpublish-kernel": "^7.3",
+    "ezsystems/repository-forms": "^2.3"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-master",
+    "phpmd/phpmd": "^2.6",
+    "sebastian/phpcpd": "^4.0",
+    "friendsofphp/php-cs-fixer": "^2.10",
+    "squizlabs/php_codesniffer": "^3.2",
+    "phpstan/phpstan": "^0.11.5",
+    "phpstan/phpstan-symfony": "^0.11.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Novactive\\EzEnhancedImageAssetBundle\\": "src/bundle",
+      "Novactive\\EzEnhancedImageAsset\\": "src/lib"
+    }
+  },
+  "scripts": {
+    "fix-cs": [
+      "./vendor/bin/php-cs-fixer fix --config=.cs/.php_cs.php",
+      "./vendor/bin/phpcpd src",
+      "./vendor/bin/phpcbf -n src --standard=.cs/cs_ruleset.xml",
+      "./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src",
+      "yarn run fix-cs"
+    ],
+    "clean": [
+      "rm -f .php_cs.cache",
+      "rm -rf ./vendor",
+      "rm -f composer.lock",
+      "rm -rf ./node_modules"
+    ],
+    "tests": [
+      "./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src",
+      "./vendor/bin/phpcpd src",
+      "yarn run fix-cs"
+    ]
+  }
+}
