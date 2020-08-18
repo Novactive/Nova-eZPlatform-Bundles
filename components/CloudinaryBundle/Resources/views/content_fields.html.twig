@@ -1,0 +1,22 @@
+{% extends "@EzPublishCore/content_fields.html.twig" %}
+{% block ezimage_field %}
+    {% spaceless %}
+        {% if not ez_is_field_empty( content, field ) %}
+            <figure {{ block( 'field_attributes' ) }}>
+                {% set imageAlias = nova_ezcloudinary_alias(field, versionInfo, parameters.alias|default( 'original' )) %}
+                {% set src = imageAlias ? asset( imageAlias.uri ) : "//:0" %}
+                {% set width = parameters.width is defined ? parameters.width : imageAlias.width %}
+                {% set height = parameters.height is defined ? parameters.height : imageAlias.height %}
+                <img
+                        src="{{ src }}"{% if width %}
+                        width="{{ width }}"{% endif %}{% if height %}
+                        height="{{ height }}"{% endif %} alt="{{ field.value.alternativeText }}"{% if parameters.class is defined and parameters.class is not empty %}
+                        class="{{ parameters.class }}"{% endif %}
+                        {% for key,value in imageAlias.extraTags|default([]) %}
+                            {{ key }}="{{ value }}"
+                        {%  endfor %}
+                />
+            </figure>
+        {% endif %}
+    {% endspaceless %}
+{% endblock %}

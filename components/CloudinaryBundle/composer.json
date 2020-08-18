@@ -1,0 +1,26 @@
+{
+    "name": "novactive/ezcloudinarybundle",
+    "description": "Novactive eZ Cloudinary Bundle is an eZPlatform bundle for Images optimizations and manipulations.",
+    "keywords": ["images", "ezpublish", "novactive", "ezplatform"],
+    "homepage": "https://github.com/Novactive/NovaeZCloudinaryBundle",
+    "type": "ezplatform-bundle",
+    "authors": [
+        {
+            "name": "Novactive",
+            "homepage": "http://www.novactive.us",
+            "email": "novacloudinarybundle@novactive.com"
+        }
+    ],
+    "license": [
+        "MIT"
+    ],
+    "require": {
+        "php": "~5.6|~7.0",
+        "cloudinary/cloudinary_php": "^1.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "Novactive\\Bundle\\eZCloudinaryBundle\\": ""
+        }
+    }
+}
