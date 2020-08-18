@@ -1,0 +1,30 @@
+{
+  "name": "novactive/ezedithelpbundle",
+  "description": "Add a helper when editing an object. This helper allows to display personalised text for the object (info on the class) itself and for each attributes",
+  "keywords": [
+    "tooltip",
+    "ezpublish",
+    "novactive",
+    "ezplatform"
+  ],
+  "homepage": "https://github.com/Novactive/NovaeZEditHelpBundle",
+  "type": "ezplatform-bundle",
+  "authors": [
+    {
+      "name": "Novactive",
+      "homepage": "https://www.novactive.us",
+      "email": "ezmailing@novactive.com"
+    }
+  ],
+  "license": [
+    "MIT"
+  ],
+  "require": {
+    "php": "^7.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Novactive\\Bundle\\NovaeZEditHelpBundle\\": "bundle/"
+    }
+  }
+}
