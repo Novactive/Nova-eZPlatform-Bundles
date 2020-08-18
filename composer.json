@@ -1,0 +1,49 @@
+{
+    "license": [
+        "MIT"
+    ],
+    "autoload": {
+        "psr-4": {
+            "Novactive\\eZPlatform\\Bundles\\": "src/",
+            "Novactive\\Bundle\\eZAccelerator\\": "components/Accelerator/bundle",
+            "Novactive\\Bundle\\eZAccelerator\\Tests\\": "components/Accelerator/tests/Tests",
+            "Novactive\\Bundle\\eZSEOBundle\\": "components/SEOBundle/bundle",
+            "Novactive\\Bundle\\eZSEOBundle\\Tests\\": "components/SEOBundle/tests/Tests",
+            "Novactive\\Bundle\\eZCloudinaryBundle\\": "components/CloudinaryBundle",
+            "Novactive\\Bundle\\NovaeZEditHelpBundle\\": "components/EditHelpBundle/bundle",
+            "Novactive\\EzEnhancedImageAssetBundle\\": "components/EnhancedImageAssetBundle/src/bundle",
+            "Novactive\\EzEnhancedImageAsset\\": "components/EnhancedImageAssetBundle/src/lib",
+            "Novactive\\Bundle\\eZExtraBundle\\": "components/ExtraBundle",
+            "Novactive\\Bundle\\eZLDAPAuthenticatorBundle\\": "components/LDAPAuthenticatorBundle/src/bundle",
+            "Novactive\\eZLDAPAuthenticator\\": "components/LDAPAuthenticatorBundle/src/lib",
+            "Novactive\\Bundle\\eZMailingBundle\\": "components/MailingBundle/bundle",
+            "Novactive\\Bundle\\eZMailingBundle\\Tests\\": "components/MailingBundle/tests/Tests",
+            "Novactive\\EzMenuManagerBundle\\": "components/MenuManagerBundle/src/bundle",
+            "Novactive\\EzMenuManager\\": "components/MenuManagerBundle/src/lib",
+            "Novactive\\Bundle\\eZProtectedContentBundle\\": "components/ProtectedContentBundle/bundle",
+            "Novactive\\Bundle\\eZProtectedContentBundle\\Tests\\": "components/ProtectedContentBundle/tests/Tests",
+            "Novactive\\Bundle\\eZResponsiveImagesBundle\\": "components/ResponsiveImagesBundle",
+            "Novactive\\EzRssFeedBundle\\": "components/RssFeedBundle/src/bundle",
+            "Novactive\\Bundle\\eZSlackBundle\\": "components/SlackBundle/bundle",
+            "Novactive\\Bundle\\eZSlackBundle\\Tests\\": "components/SlackBundle/tests/Tests",
+            "Novactive\\EzSolrSearchExtraBundle\\": "components/SolrSearchExtraBundle/src/bundle",
+            "Novactive\\EzSolrSearchExtra\\": "components/SolrSearchExtraBundle/src/lib",
+            "Novactive\\Bundle\\EzStaticTemplatesBundle\\": "components/StaticTemplatesBundle/bundle"
+        }
+    },
+    "require": {
+        "symfony/console": "^5.1",
+        "symfony/process": "^5.1",
+        "squizlabs/php_codesniffer": "^3.5",
+        "phpmd/phpmd": "^2.8",
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "symfony/var-dumper": "^5.1",
+        "symfony/finder": "^5.1",
+        "symfony/http-client": "^5.1",
+        "ext-json": "*",
+        "phpunit/phpunit": "^8.0",
+        "symfony/panther": "^0.7.1",
+        "fzaninotto/faker": "*",
+        "symfony/yaml": "^5.1"
+    }
+}

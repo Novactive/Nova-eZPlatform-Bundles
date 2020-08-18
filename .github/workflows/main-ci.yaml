@@ -1,0 +1,138 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+    lint:
+        name: Coding Standards
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@master
+                with:
+                    php-version: 7.4
+                id: php
+
+            -   name: Install dependencies
+                run: composer install --prefer-dist --no-progress --no-suggest --no-interaction
+
+            -   name: Check Sources
+                run: php vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src/ components/ bin/
+
+            #-   name: Check Mess Sources
+            #    run: php vendor/bin/phpmd src,components,bin text .cs/md_ruleset.xml
+    tests:
+        name: Tests
+        runs-on: ubuntu-latest
+        services:
+            mysql:
+                image: mariadb:10.3
+                env:
+                    MYSQL_ALLOW_EMPTY_PASSWORD: yes
+                    MYSQL_DATABASE: ezplatform
+                ports:
+                    - 3306:3306
+                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+            redis:
+                image: redis:latest
+                ports:
+                    - 6379:6379
+                options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
+        strategy:
+            matrix:
+                php: [7.3, 7.4]
+        env:
+            CACHE_POOL: cache.redis
+            DATABASE_URL: mysql://root@127.0.0.1:3306/ezplatform
+            CACHE_DSN: 127.0.0.1:6379
+            APP_ENV: dev
+            APP_DEBUG: 1
+            COMPOSER_MEMORY_LIMIT: 4G
+            PANTHER_EXTERNAL_BASE_URI: http://127.0.0.1:8000
+            PANTHER_CHROME_DRIVER_BINARY: /home/runner/.chrome/chromedriver
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@master
+                with:
+                    php-version: ${{ matrix.php }}
+                    extensions: mbstring, intl
+                id: php
+
+            -   name: Install Latest Chrome Driver
+                run: |
+                    wget https://chromedriver.storage.googleapis.com/83.0.4103.39/chromedriver_linux64.zip -P /home/runner/
+                    unzip /home/runner/chromedriver_linux64.zip -d /home/runner/.chrome
+
+            -   name: Install Symfony Server
+                run: |
+                    wget https://get.symfony.com/cli/installer -O - | bash
+                    /home/runner/.symfony/bin/symfony local:php:list
+
+            -   name: Get Composer Cache Directory
+                id: composer-cache
+                run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+            -   uses: actions/cache@v1
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-composer-cache-dir
+                    restore-keys: |
+                        ${{ runner.os }}-composer-cache-dir
+
+            -   name: Install dependencies of the Mono Repo
+                run: composer install --prefer-dist --no-progress --no-suggest --no-interaction
+
+            -   name: Install eZ Platform
+                run: |
+                    composer create-project ezsystems/ezplatform --prefer-dist --no-progress --no-interaction --no-scripts ezplatform
+                    cd ezplatform
+                    rm -rf var/cache
+                    composer ezplatform-install
+
+            -   name: Run Webserver
+                run: |
+                    cd ezplatform
+                    /home/runner/.symfony/bin/symfony local:server:start --no-tls -d
+                    /home/runner/.symfony/bin/symfony local:server:list
+
+            -   name: Install All the bundle on Top of a fresh eZ Installation
+                run: |
+                    for COMPONENT in `ls components`; do
+                        if COMPONENT=${COMPONENT} bin/ci-should install; then
+                            echo ::group::..:: ${COMPONENT} ::..
+                            COMPONENT_CONFIG_DIR="components/${COMPONENT}/tests/provisioning" COMPONENT=${COMPONENT} bin/wrapbundle
+                            echo ::endgroup::
+                        fi
+                    done
+
+                    cd ezplatform
+
+                    echo ::group::..:: Update Composer ::..
+                    composer update --lock
+                    bin/console cache:clear
+                    echo ::endgroup::
+
+                    echo ::group::..:: Do bundle specifics ::..
+                    mysql -u root -h 127.0.0.1 -P 3306 ezplatform < ../components/SEOBundle/bundle/Resources/sql/schema.sql
+                    echo ::endgroup::
+
+                    echo ::group::..:: Final Steps ::..
+                    bin/console cache:clear
+                    echo ::endgroup::
+
+            -   name: Test Web Server
+                run: curl -I http://127.0.0.1:8000 | grep "HTTP/1.1 200 OK"
+
+            -   name: Finally Run the tests
+                run: |
+                    for COMPONENT in `ls components`; do
+                        if COMPONENT=${COMPONENT} bin/ci-should test; then
+                            echo ::group::..:: ${COMPONENT} ::..
+                            php ./vendor/bin/phpunit "components/${COMPONENT}/tests" --exclude-group behat;
+                            echo ::endgroup::
+                        fi
+                    done

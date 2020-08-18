@@ -1,0 +1,4 @@
+vendor
+ezplatform
+chromedriver
+.php_cs.cache
