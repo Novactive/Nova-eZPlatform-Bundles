@@ -1,0 +1,42 @@
+parameters:
+    ezpublish.twig.extension.content.class: Novactive\Bundle\eZExtraBundle\Twig\ContentExtension
+    novaezextra.content.manager.class: Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\Content
+    novaezextra.content_type.manager.class: Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\ContentType
+    novaezextra.content.helper.class: Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Content
+    novaezextra.abstract.children.provider.class: Novactive\Bundle\eZExtraBundle\EventListener\Type
+    novaezextra.pre_content_view_listener.class: Novactive\Bundle\eZExtraBundle\EventListener\PreContentViewListener
+    novactive.ezextra.wrapper.factory.class: Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\WrapperFactory
+
+services:
+
+    novactive.ezextra.wrapper.factory:
+        class: %novactive.ezextra.wrapper.factory.class%
+        arguments: [@ezpublish.api.repository]
+
+    novactive.ezextra.content.manager:
+        class: %novaezextra.content.manager.class%
+        arguments: [@ezpublish.api.repository]
+
+    novactive.ezextra.content_type.manager:
+        class: %novaezextra.content_type.manager.class%
+        arguments: [@ezpublish.api.repository]
+
+    novactive.ezextra.content.helper:
+        class: %novaezextra.content.helper.class%
+        arguments: [@ezpublish.api.repository, @novactive.ezextra.wrapper.factory]
+
+    novactive.ezextra.pre_content_view_listener:
+        class: %novaezextra.pre_content_view_listener.class%
+        arguments: [@ezpublish.api.repository, @ezpublish.templating.global_helper]
+        tags:
+            - {name: kernel.event_listener, event: ezpublish.pre_content_view, method: onPreContentView}
+
+    novactive.ezextra.abstract.children.provider:
+        class: %novaezextra.abstract.children.provider.class%
+        abstract: true
+        calls:
+            - [setRepository, ["@ezpublish.api.repository"]]
+            - [setContentHelper, ["@novactive.ezextra.content.helper"]]
+            - [setWrapperFactory, ["@novactive.ezextra.wrapper.factory"]]
+            - [setConfigResolver, ["@ezpublish.config.resolver"]]
+

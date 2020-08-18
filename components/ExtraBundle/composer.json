@@ -1,0 +1,39 @@
+{
+    "name": "novactive/ezextrabundle",
+    "description": "Novactive eZ Platform Extra Bundle",
+    "license": "MIT",
+    "homepage": "https://github.com/Novactive/NovaeZExtraBundle",
+    "authors": [
+        {
+            "name": "Novactive",
+            "homepage": "http://www.novactive.us",
+            "email": "dir.tech@novactive.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/Novactive/NovaExtraBundle.git"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "novactive/collection": "1.*",
+        "phpoffice/phpexcel": "~1.8"
+    },
+    "require-dev": {
+        "phpmd/phpmd": "2.*",
+        "sebastian/phpcpd": "2.0.*@dev",
+        "novactive/phpcs-novastandards": "~1.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Novactive\\Bundle\\eZExtraBundle\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0.x-dev"
+        }
+    }
+}

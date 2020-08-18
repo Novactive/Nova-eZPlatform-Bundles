@@ -1,0 +1,4 @@
+novaezextra_picture:
+    resource: "@NovaeZExtraBundle/Controller/PictureController.php"
+    type:     annotation
+    prefix:   /_novaezextra

@@ -1,0 +1,12 @@
+{% if options is not empty and options.render == 'inline' %}
+    {% if not ez_is_field_empty( picture, fieldIdentifier ) %}
+        {% set field = picture.getField(fieldIdentifier) %}
+
+        {% set imageAlias = ez_image_alias( field, picture.versionInfo, alias|default( 'original' ) ) %}
+        {% set src = imageAlias ? asset( imageAlias.uri ) : "//:0" %}
+
+        <img src="{{ src }}" alt="{{ field.value.alternativeText }}"{% if options.class is defined and options.class is not empty %} class="{{ options.class }}"{% endif %} />
+    {% endif %}
+{% else %}
+    {{ ez_render_field( picture, fieldIdentifier, { "parameters": {"alias": alias } } ) }}
+{% endif %}
