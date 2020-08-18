@@ -1,0 +1,28 @@
+<div class="modal fade ez-modal ez-modal--send-to-trash" id="delete-rss-modal-{{ rss.id }}" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <svg class="ez-icon ez-icon--medium" aria-hidden="true">
+                        <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#discard"></use>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="ez-modal-body__main">
+                    {{ 'ez_rss_feed.modal.message'|trans }}
+                </p>
+            </div>
+            <div class="modal-footer">
+                <form action="{{ path('platform_admin_ui_rss_feeds_delete', {'id': rss.id}) }}" method="POST">
+                    <button type="button" class="btn btn-secondary btn--no" data-dismiss="modal">
+                        {{ 'form.cancel'|trans|desc('Cancel') }}
+                    </button>
+                    <button type="submit" class="btn btn-danger" name="delete">
+                        {{ 'ez_rss_feed.delete.item'|trans }}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

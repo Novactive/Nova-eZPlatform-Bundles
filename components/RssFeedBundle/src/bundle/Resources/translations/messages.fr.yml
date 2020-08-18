@@ -1,0 +1,30 @@
+ez_rss_feed.menu.main_menu.header: Flux RSS
+ez_rss_feed.list.title: Liste de flux RSS
+ez_rss_feed.new: Nouveau
+ez_rss_feed.title: Nom
+ez_rss_feed.created_at: Date de création
+ez_rss_feed.modified_at: Date de modification
+ez_rss_feed.status: Visibilité
+ez_rss_feed.edit: Editer
+ez_rss_feed.delete: Supprimer
+ez_rss_feed.viewing: <strong>%viewing%</strong> sur <strong>%total%</strong> éléments
+ez_rss_feed.modal.message: Étes vous sur de vouloir supprimer le flux RSS ?
+ez_rss_feed.form.cancel: Annuler
+ez_rss_feed.form.sort_type: Type de tri
+ez_rss_feed.form.sort_direction: Sens du tri
+ez_rss_feed.delete.item: Supprimer
+ez_rss_feed.form.title: Titre
+ez_rss_feed.form.description: Description
+ez_rss_feed.form.url_slug: URL
+ez_rss_feed.form.sources: Sources
+ez_rss_feed.form.subtree_path: Sélectionner un emplacement
+ez_rss_feed.form.include_subtree: Inclure les sous noeuds
+ez_rss_feed.form.number_of_object: Nombre d'objet
+ez_rss_feed.form.contenttype: Sélectionner le type de contenu
+ez_rss_feed.form.field.title: Champ Titre
+ez_rss_feed.form.field.description: Champ Description
+ez_rss_feed.form.field.category: Champ Catégorie
+ez_rss_feed.form.field.media: Champ Média
+ez_rss_feed.form.fields.title: Éléments du flux
+mc.rss.form.category: Catégorie
+mc.rss.form.media: Média
