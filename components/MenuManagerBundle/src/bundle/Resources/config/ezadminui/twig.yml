@@ -1,0 +1,2 @@
+form_themes:
+    - '@EzMenuManager/themes/standard/ezadminui/field/edit/menuitem.html.twig'

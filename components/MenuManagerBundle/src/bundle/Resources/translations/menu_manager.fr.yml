@@ -1,0 +1,45 @@
+menu.list: Liste des menus
+menu:
+  root: Racine du menu
+  property:
+    id: ID
+    name: Nom
+    root_location: Racine (location id)
+    items: Eléments du menu
+    type: Type
+  edit_form:
+    save: Enregistrer le menu
+    back: Retour à la liste
+    help: Il est possible de glisser et déposer les contenus de l'arborescence du site (liste de droite) dans le menu (liste de gauche)
+  notification:
+    saved: Le menu a été enregistré
+    deleted: Le menu a été supprimé
+  action:
+    confirm_delete: Voulez-vous supprimer le menu ?
+    cancel: Annuler
+    delete: Supprimer le menu
+    view: Voir le menu
+    edit: Editer le menu
+  type:
+    default: Défaut
+menu_item:
+  default_title: Nouveau lien
+  default_container_title: Nouveau dossier
+  property:
+    name: Nom du lien
+    container_name: Nom du dossier
+    url: Url
+    new_window: Ouvrir dans une nouvelle fenêtre
+    language: Langue
+  action:
+    remove: Supprimer
+    restore: Rétablir
+    create: Créer
+    create.default: Créer un lien
+    create.container: Créer un dossier
+    edit: Modifier
+    activate: Activer
+    desactivate: Désactiver
+  edit_form:
+    save: Enregistrer le lien
+    cancel: Annuler

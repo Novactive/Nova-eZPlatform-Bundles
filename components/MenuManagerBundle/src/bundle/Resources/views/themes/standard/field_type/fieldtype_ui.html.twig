@@ -1,0 +1,24 @@
+{% extends '@EzPublishCore/content_fields.html.twig' %}
+
+{% block menuitem_field %}
+{% spaceless %}
+    {% set menuList = field.value.menuItems|sort_menu_items_by_menu() %}
+    <ul>
+        {% for menu in menuList %}
+            <li>
+                <a href="{{ path('menu_manager.menu_edit', {'menu': menu.menu}) }}"><strong>{{ menu.menu.name }}</strong></a>
+                <ul>
+                    {% for menuItem in menu.items %}
+                        {% set breadcrumb = ezmenumanager_breadcrumb(menuItem) %}
+                        <li>
+                            {% for item in breadcrumb %}
+                                <a href="{{ item.uri }}">{{ item.label }}</a>{% if not loop.last %} /{% endif %}
+                            {% endfor %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+{% endspaceless %}
+{% endblock %}

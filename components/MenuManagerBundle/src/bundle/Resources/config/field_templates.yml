@@ -1,0 +1,11 @@
+system:
+    default:
+        fielddefinition_settings_templates:
+            -
+                template: "@EzMenuManager/themes/standard/field_type/fielddefinition_settings.html.twig"
+        fielddefinition_edit_templates:
+            -
+                template: "@EzMenuManager/themes/standard/field_type/field_types.html.twig"
+        field_templates:
+            -
+                template: "@EzMenuManager/themes/standard/field_type/content_fields.html.twig"

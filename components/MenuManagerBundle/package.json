@@ -1,0 +1,43 @@
+{
+    "name": "@novactive/ezmenumanagerbundle",
+    "license": "MIT",
+    "dependencies": {
+        "jstree": "^3.3.6",
+        "react": "^16.2.0",
+        "react-dom": "^16.2.0",
+        "reactstrap": "^6.5.0"
+    },
+    "scripts": {
+        "build": "webpack --config webpack.prod.js",
+        "builddev": "webpack --config webpack.dev.js",
+        "watch": "webpack --watch --config webpack.dev.js",
+        "watchprod": "webpack --watch --config webpack.prod.js",
+        "lint": "eslint --quiet 'src/modules/**/*.+(js|jsx)' && eslint --quiet 'src/bundle/Resources/public/js/scripts/**/*.+(js)' && stylelint -q 'src/bundle/Resources/public/css/*.+(scss|less|css)'",
+        "fix-cs": "eslint --fix 'src/modules/**/*.+(js|jsx)' && eslint --fix 'src/bundle/Resources/public/js/scripts/**/*.+(js)' && stylelint --fix 'src/bundle/Resources/public/css/*.+(scss|less|css)'"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.4.3",
+        "@babel/plugin-proposal-class-properties": "^7.4.0",
+        "@babel/preset-env": "^7.4.3",
+        "@babel/preset-react": "^7.0.0",
+        "@babel/register": "^7.4.0",
+        "babel-eslint": "^8.2.1",
+        "css-loader": "^3.1.0",
+        "eslint": "^5.16.0",
+        "eslint-config-prettier": "^4.1.0",
+        "eslint-config-standard": "^13.0.1",
+        "eslint-loader": "^1.9.0",
+        "eslint-plugin-prettier": "^3.0.1",
+        "eslint-plugin-react": "^7.12.4",
+        "eslint-plugin-standard": "^4.0.0",
+        "node-sass": "^4.12.0",
+        "prop-types": "^15.7.2",
+        "style-loader": "^0.23.1",
+        "stylelint": "^10.1.0",
+        "stylelint-config-standard": "^18.3.0",
+        "stylelint-scss": "^3.9.2",
+        "terser-webpack-plugin-legacy": "^1.2.3",
+        "webpack": "^3.0.0",
+        "webpack-merge": "^4.2.1"
+    }
+}

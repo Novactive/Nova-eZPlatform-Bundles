@@ -1,0 +1,73 @@
+parameters:
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        # automatically injects dependencies in your services
+        autowire: true
+        # automatically registers your services as commands, event subscribers, etc.
+        autoconfigure: true
+        # this means you cannot fetch services directly from the container via $container->get()
+        # if you need to do this, you can override this setting on individual services
+        public: false
+        bind:
+            $httpCacheTagHandler: "@fos_http_cache.handler.tag_handler"
+            $persistenceCacheAdapter: "@ezpublish.cache_pool"
+
+    Novactive\EzMenuManagerBundle\Controller\:
+        resource: "../../Controller/*"
+        public: true
+
+    Novactive\EzMenuManager\Form\Type\:
+        resource: "../../../lib/Form/Type/*"
+
+    Novactive\EzMenuManager\Service\:
+        resource: "../../../lib/Service/*"
+
+    Novactive\EzMenuManager\Service\MenuCacheService:
+        arguments:
+            $cache: '@ezpublish.cache_pool'
+        calls:
+            - [setSiteAccess, ['@ezpublish.siteaccess']]
+
+    Novactive\EzMenuManager\Twig\:
+        resource: "../../../lib/Twig/*"
+
+    Novactive\EzMenuManager\EventListener\:
+        resource: "../../../lib/EventListener/*"
+        public: true
+
+    Novactive\EzMenuManager\EventListener\PublishVersionSignalSlot:
+        arguments:
+            $persistenceHandler: "@ezpublish.api.persistence_handler"
+        tags:
+            - { name: ezpublish.api.slot, signal: ContentService\PublishVersionSignal }
+
+    Novactive\EzMenuManager\EventListener\AssignSectionSignalSlot:
+        tags:
+            - { name: ezpublish.api.slot, signal: SectionService\AssignSectionSignal }
+
+    Novactive\EzMenuManager\EventListener\AssignSectionToSubtreeSignalSlot:
+        tags:
+            - { name: ezpublish.api.slot, signal: SectionService\AssignSectionToSubtreeSignal }
+
+    Novactive\EzMenuManager\EventListener\DoctrineEventListener:
+        tags:
+            - { name: doctrine.event_listener, event: postPersist, lazy: true }
+            - { name: doctrine.event_listener, event: postUpdate, lazy: true }
+            - { name: doctrine.event_listener, event: postRemove, lazy: true }
+
+    Novactive\EzMenuManager\MenuItem\:
+        resource: "../../../lib/MenuItem/*"
+
+    Novactive\EzMenuManager\MenuItem\Type\ContentMenuItemType:
+        calls:
+            - ['setTranslationHelper', ['@ezpublish.translation_helper']]
+            - ['setContentService', ['@ezpublish.siteaccessaware.service.content']]
+            - ['setLocationService', ['@ezpublish.siteaccessaware.service.location']]
+            - ['setRouter', ['@router']]
+            - ['setCache', ['@ezpublish.cache_pool']]
+            - ['setSiteAccess', ['@ezpublish.siteaccess']]
+
+    Novactive\EzMenuManager\MenuItem\MenuItemTypeRegistry:
+        arguments: [!tagged ezmenumanager.menuitemtype]

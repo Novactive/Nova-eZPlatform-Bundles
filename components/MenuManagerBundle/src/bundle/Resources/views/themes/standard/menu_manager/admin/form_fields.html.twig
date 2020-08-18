@@ -1,0 +1,14 @@
+{% extends '@ezdesign/form_fields.html.twig' %}
+
+{% block menu_items_collection_widget %}
+    <small class="form-text">{{ 'menu.edit_form.help'|trans({}, 'menu_manager') }}</small>
+    <div class="menu__wrapper">
+        <div class="menu-edit__items-collection">
+            {% set attr = attr|merge({'class': 'ez-visually-hidden ez-data-source__input'}) %}
+            {{ block('form_widget') }}
+            <div class="menu-manager">
+                <span class="ez-inline-loader"></span>
+            </div>
+        </div>
+    </div>
+{% endblock %}

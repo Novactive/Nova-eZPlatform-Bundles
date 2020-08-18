@@ -1,0 +1,141 @@
+{% extends "@ezdesign/layout.html.twig" %}
+
+{% form_theme menu_delete_form '@ezdesign/form_fields.html.twig'  %}
+{% form_theme search_form 'bootstrap_4_layout.html.twig'  %}
+
+{% trans_default_domain 'menu_manager' %}
+
+{% block title %}{{ 'menu.list'|trans }}{% endblock %}
+
+{%- block breadcrumbs -%}
+    {% include '@EzPlatformAdminUi/parts/breadcrumbs.html.twig' with { items: [
+        { value: 'menu.list'|trans }
+    ]} %}
+{%- endblock -%}
+
+{%- block page_title -%}
+    {% include '@EzPlatformAdminUi/parts/page_title.html.twig' with {
+        title: 'menu.list'|trans,
+        iconName: 'list'
+    } %}
+{%- endblock -%}
+
+{%- block content -%}
+    <section class="container my-4">
+
+        {{ form_start(search_form, {'attr': {'class': 'form-inline'}}) }}
+            <div class="form-group mb-2">
+                {{ form_label(search_form.name, search_form.name.vars.label, {'label_attr': {'class': 'mx-sm-3'}}) }}
+                {{ form_widget(search_form.name) }}
+            </div>
+            {% if search_form.type is defined %}
+                <div class="form-group mb-2 mx-sm-3 ">
+                    {{ form_label(search_form.type, search_form.type.vars.label, {'label_attr': {'class': 'mx-sm-3'}}) }}
+                    {{ form_widget(search_form.type) }}
+                </div>
+            {% endif %}
+            <button type="submit" class="btn btn-primary font-weight-bold mb-2">
+                <span class="ez-btn ez-btn--search-label">{{ 'search.perform'|trans({}, 'search')|desc('Search') }}</span>
+            </button>
+        {{ form_end(search_form) }}
+
+        <div class="ez-table-header">
+            <div class="ez-table-header__headline">{{ 'menu.list'|trans }}</div>
+            <div>
+                <a class="btn btn-primary" href="{{ path('menu_manager.menu_new') }}">
+                    <svg class="ez-icon ez-icon-create">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                             xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#create"></use>
+                    </svg>
+                </a>
+                {% set modal_data_target = 'delete-menus-modal' %}
+                <button
+                        id="delete-menus"
+                        type="button"
+                        class="btn btn-danger"
+                        disabled
+                        data-toggle="modal"
+                        data-target="#{{ modal_data_target }}"
+                        title="{{ 'menu.action.delete'|trans }}">
+                    <svg class="ez-icon ez-icon-trash">
+                        <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#trash"></use>
+                    </svg>
+                </button>
+                {% include '@ezdesign/admin/bulk_delete_confirmation_modal.html.twig' with {
+                    'id': modal_data_target,
+                    'message': 'menu.action.confirm_delete'|trans,
+                    'data_click': '#menu_delete_delete',
+                }%}
+            </div>
+        </div>
+
+        {{ form_start(menu_delete_form, {
+            'action': path('menu_manager.menu_delete'),
+            'attr': { 'class': 'ez-toggle-btn-state', 'data-toggle-button-id': '#delete-menus' }
+        }) }}
+        <table class="ez-table table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>{{ 'menu.property.id'|trans }}</th>
+                <th>{{ 'menu.property.name'|trans }}</th>
+                <th>{{ 'menu.property.type'|trans }}</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for menu in pager.currentPageResults %}
+                <tr>
+                    <td class="ez-table__cell ez-table__cell--has-checkbox">
+                        {{ form_widget(menu_delete_form.menus[menu.id]) }}
+                    </td>
+                    <td class="ez-table__cell">{{ menu.id }}</td>
+                    <td class="ez-table__cell">{{ menu.name }}</a></td>
+                    <td class="ez-table__cell">{{ menu_types[menu.type]|default(menu.type)|trans() }}</a></td>
+                    <td class="ez-table__cell ez-table__cell--has-action-btns text-right">
+                        <a
+                                title="{{ 'menu.action.view'|trans }}"
+                                href="{{ path('menu_manager.menu_view', {'menu': menu.id}) }}"
+                                class="btn btn-icon mx-2">
+                            <svg class="ez-icon ez-icon-view">
+                                <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#view"></use>
+                            </svg>
+                        </a>
+                        <a
+                                title="{{ 'menu.action.edit'|trans }}"
+                                href="{{ path('menu_manager.menu_edit', {'menu': menu.id}) }}"
+                                class="btn btn-icon mx-2">
+                            <svg class="ez-icon ez-icon-edit">
+                                <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#edit"></use>
+                            </svg>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {{ form_end(menu_delete_form) }}
+
+        {% if pager.haveToPaginate %}
+            <div class="row justify-content-center align-items-center mb-2 ez-pagination__spacing">
+                <span class="ez-pagination__text">
+                    {{ 'pagination.viewing'|trans({
+                        '%viewing%': pager.currentPageResults|length,
+                        '%total%': pager.nbResults}, 'pagination')|desc('Viewing <strong>%viewing%</strong> out of <strong>%total%</strong> items')|raw }}
+                </span>
+            </div>
+            <div class="row justify-content-center align-items-center ez-pagination__btn mb-5">
+                {{ pagerfanta(pager, 'ez') }}
+            </div>
+        {% endif %}
+    </section>
+{%- endblock -%}
+
+{% block javascripts %}
+    {% javascripts
+        '@EzPlatformAdminUiBundle/Resources/public/js/scripts/button.state.toggle.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

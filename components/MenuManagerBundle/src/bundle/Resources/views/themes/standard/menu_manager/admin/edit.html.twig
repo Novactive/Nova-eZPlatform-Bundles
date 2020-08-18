@@ -1,0 +1,38 @@
+{% extends "@ezdesign/layout.html.twig" %}
+
+{% form_theme form '@ezdesign/menu_manager/admin/form_fields.html.twig' %}
+
+{% block title %}{{ title|trans([], 'menu_manager') }}{% endblock %}
+
+{%- block breadcrumbs -%}
+    {% include '@EzPlatformAdminUi/parts/breadcrumbs.html.twig' with { items: [
+        { url: path('menu_manager.menu_list'), value: 'menu.list'|trans([], 'menu_manager') },
+        { value: title|trans([], 'menu_manager') }
+    ]} %}
+{%- endblock -%}
+
+{%- block page_title -%}
+    {% include '@EzPlatformAdminUi/parts/page_title.html.twig' with {
+        title: title|trans([], 'menu_manager'),
+        iconName: 'list'
+    } %}
+{%- endblock -%}
+
+{%- block content -%}
+    <section class="container my-4">
+        {{ form_start(form, {'attr': {'class': 'menu-edit-form'}}) }}
+            {{ form_row(form.name) }}
+            {{ form_row(form.rootLocationId) }}
+            {% if form.type is defined %}{{ form_row(form.type) }}{% endif %}
+            {{ form_row(form.items) }}
+        <div class="mt-3">
+            <button class="btn btn-primary pull-right" type="submit">{{ 'menu.edit_form.save'|trans([], 'menu_manager') }}</button>
+            <a href="{{ lastUrl }}" class="btn btn-secondary">{{ 'menu.edit_form.back'|trans([], 'menu_manager') }}</a>
+        </div>
+        {{ form_end(form) }}
+    </section>
+{%- endblock -%}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('ezplatform-admin-ui-modules-menu-manager-js', null, 'ezplatform') }}
+{% endblock %}
