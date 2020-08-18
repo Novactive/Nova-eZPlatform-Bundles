@@ -1,0 +1,43 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  nova_ez.ldap.connection:
+    alias: Novactive\eZLDAPAuthenticator\Ldap\LdapConnection
+    public: false
+
+  nova_ez.ldap:
+    class: Symfony\Component\Ldap\Ldap
+    factory: ['@nova_ez.ldap.connection', getLdap]
+
+  nova_ez.ldap.user_provider:
+    class: Novactive\eZLDAPAuthenticator\User\Provider\EzLdapUserProvider
+    factory: ['@nova_ez.ldap.connection', getLdapUserProvider]
+
+  nova_ez.ldap.default:
+    class: Symfony\Component\Ldap\Ldap
+    abstract: true
+
+  nova_ez.ldap.default.adapter:
+    class: Symfony\Component\Ldap\Adapter\ExtLdap\Adapter
+    abstract: true
+
+  Novactive\eZLDAPAuthenticator\Ldap\LdapConnection:
+    abstract: true
+
+  Novactive\eZLDAPAuthenticator\User\Provider\EzLdapUserProvider:
+    abstract: true
+
+  Novactive\eZLDAPAuthenticator\User\Converter\LdapEntryConverter:
+    abstract: true
+
+  Novactive\eZLDAPAuthenticator\Listener\InteractiveLoginListener:
+
+  Novactive\eZLDAPAuthenticator\Listener\SecurityListener:
+    decorates: ezpublish.security.login_listener
+
+  Novactive\Bundle\eZLDAPAuthenticatorBundle\Command\FindUserCommand:
+    calls:
+      - ['setUserProvider', ['@nova_ez.ldap.user_provider']]

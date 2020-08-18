@@ -1,0 +1,3 @@
+nullAttributeError: "LDAP error: User %username% has Null attribute: %attribute%"
+wrongGroupError: "Undefined user group with object id %id%"
+userNotCreated: "User %username% hasn't been created"
