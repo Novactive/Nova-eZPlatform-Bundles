@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Listener;
@@ -42,24 +44,17 @@ class PreContentView
 
     /**
      * PreContentView constructor.
-     *
-     * @param EntityManagerInterface $entityManager
-     * @param RequestStack           $requestStack
-     * @param AuthorizationChecker   $authorizationChecker
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         RequestStack $requestStack,
         AuthorizationChecker $authorizationChecker
     ) {
-        $this->entityManager        = $entityManager;
-        $this->requestStack         = $requestStack;
+        $this->entityManager = $entityManager;
+        $this->requestStack = $requestStack;
         $this->authorizationChecker = $authorizationChecker;
     }
 
-    /**
-     * @param PreContentViewEvent $event
-     */
     public function onPreContentView(PreContentViewEvent $event): void
     {
         $contentView = $event->getContentView();

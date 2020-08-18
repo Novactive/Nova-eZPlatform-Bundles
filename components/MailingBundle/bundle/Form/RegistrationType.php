@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Form;
@@ -39,16 +41,13 @@ class RegistrationType extends AbstractType
 
     /**
      * RegistrationType constructor.
-     *
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param EntityManagerInterface        $entityManager
      */
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
         EntityManagerInterface $entityManager
     ) {
         $this->authorizationChecker = $authorizationChecker;
-        $this->entityManager        = $entityManager;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -60,7 +59,7 @@ class RegistrationType extends AbstractType
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
             function (FormEvent $event) {
-                $form               = $event->getForm();
+                $form = $event->getForm();
                 $allowedMailingList = [];
                 $campaignRepository = $this->entityManager->getRepository(Campaign::class);
                 // permissions on Campaing can be more complex, then we don't filter in SQL
@@ -79,8 +78,8 @@ class RegistrationType extends AbstractType
                         'mailingLists',
                         EntityType::class,
                         [
-                            'class'    => MailingList::class,
-                            'choices'  => $allowedMailingList,
+                            'class' => MailingList::class,
+                            'choices' => $allowedMailingList,
                             'expanded' => true,
                             'multiple' => true,
                             'required' => true,

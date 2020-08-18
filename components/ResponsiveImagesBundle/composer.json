@@ -19,7 +19,7 @@
         "MIT"
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": "^7.3"
     },
     "autoload": {
         "psr-4": {
@@ -27,8 +27,9 @@
         }
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "1.0-dev"
+        "thanks": {
+            "name": "ezsystems/ezplatform",
+            "url": "https://github.com/ezsystems/ezplatform"
         }
     }
 }

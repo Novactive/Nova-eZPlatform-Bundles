@@ -34,7 +34,7 @@ final class UnindexLocation implements SiteAccessAwareInterface
 
     public function __construct(int $contentId, int $locationId)
     {
-        $this->contentId  = $contentId;
+        $this->contentId = $contentId;
         $this->locationId = $locationId;
     }
 

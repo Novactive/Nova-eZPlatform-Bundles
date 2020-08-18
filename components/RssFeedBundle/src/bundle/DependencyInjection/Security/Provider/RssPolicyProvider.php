@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZRssFeedBundle.
  *
@@ -21,7 +22,7 @@ class RssPolicyProvider extends YamlPolicyProvider
     public function getFiles()
     {
         return [
-            __DIR__ . '/../../../Resources/config/policies.yml',
+            __DIR__.'/../../../Resources/config/policies.yml',
         ];
     }
 }

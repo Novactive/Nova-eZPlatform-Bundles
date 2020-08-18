@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,10 +9,12 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use Novactive\Bundle\eZMailingBundle\Core\DataHandler\UserImport;
@@ -41,8 +44,6 @@ class MailingListController
      *                                              defaults={"page":1, "limit":10, "status":"all"})
      * @Security("is_granted('view', mailingList)")
      * @Template()
-     *
-     * @return array
      */
     public function showAction(
         MailingList $mailingList,
@@ -53,13 +54,13 @@ class MailingListController
     ): array {
         $filers = [
             'mailingLists' => [$mailingList],
-            'status'       => 'all' === $status ? null : $status,
+            'status' => 'all' === $status ? null : $status,
         ];
 
         return [
-            'pager'         => $provider->getPagerFilters($filers, $page, $limit),
-            'item'          => $mailingList,
-            'statuses'      => $provider->getStatusesData($filers),
+            'pager' => $provider->getPagerFilters($filers, $page, $limit),
+            'item' => $mailingList,
+            'statuses' => $provider->getStatusesData($filers),
             'currentStatus' => $status,
         ];
     }
@@ -67,10 +68,6 @@ class MailingListController
     /**
      * @Route("", name="novaezmailing_mailinglist_index")
      * @Template()
-     *
-     * @param EntityManagerInterface $entityManager
-     *
-     * @return array
      */
     public function indexAction(EntityManagerInterface $entityManager): array
     {
@@ -85,13 +82,6 @@ class MailingListController
      * @Security("is_granted('edit', mailinglist)")
      * @Template()
      *
-     * @param MailingList|null       $mailinglist
-     * @param Request                $request
-     * @param RouterInterface        $router
-     * @param FormFactoryInterface   $formFactory
-     * @param EntityManagerInterface $entityManager
-     * @param TranslationHelper      $translationHelper
-     *
      * @return array|RedirectResponse
      */
     public function editAction(
@@ -104,7 +94,7 @@ class MailingListController
     ) {
         if (null === $mailinglist) {
             $mailinglist = new MailingList();
-            $languages   = array_filter($translationHelper->getAvailableLanguages());
+            $languages = array_filter($translationHelper->getAvailableLanguages());
             $mailinglist->setNames(array_combine($languages, array_pad([], count($languages), '')));
         }
 
@@ -113,7 +103,7 @@ class MailingListController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $mailinglist
-                ->setUpdated(new \DateTime());
+                ->setUpdated(new DateTime());
             $entityManager->persist($mailinglist);
             $entityManager->flush();
 
@@ -131,12 +121,6 @@ class MailingListController
     /**
      * @Route("/delete/{mailinglist}", name="novaezmailing_mailinglist_remove")
      * @Security("is_granted('edit', mailinglist)")
-     *
-     * @param MailingList            $mailinglist
-     * @param EntityManagerInterface $entityManager
-     * @param RouterInterface        $router
-     *
-     * @return RedirectResponse
      */
     public function deleteAction(
         MailingList $mailinglist,
@@ -153,15 +137,6 @@ class MailingListController
      * @Route("/import/{mailinglist}", name="novaezmailing_mailinglist_import")
      * @Security("is_granted('edit', mailinglist)")
      * @Template()
-     *
-     * @param MailingList          $mailinglist
-     * @param RouterInterface      $router
-     * @param FormFactoryInterface $formFactory
-     * @param Request              $request
-     * @param User                 $importer
-     * @param ValidatorInterface   $validator
-     *
-     * @return array
      */
     public function importAction(
         MailingList $mailinglist,
@@ -172,16 +147,16 @@ class MailingListController
         ValidatorInterface $validator
     ): array {
         $userImport = new UserImport();
-        $form       = $formFactory->create(ImportType::class, $userImport);
+        $form = $formFactory->create(ImportType::class, $userImport);
         $form->handleRequest($request);
-        $count     = null;
+        $count = null;
         $errorList = null;
         if ($form->isSubmitted() && $form->isValid()) {
             foreach ($importer->rowsIterator($userImport) as $index => $row) {
                 try {
                     $user = $importer->hydrateUser($row);
                     $user
-                        ->setUpdated(new \DateTime());
+                        ->setUpdated(new DateTime());
                     $errors = $validator->validate($user);
                     if (count($errors) > 0) {
                         $errorList["Line {$index}"] = $errors;
@@ -196,10 +171,10 @@ class MailingListController
         }
 
         return [
-            'count'      => $count,
+            'count' => $count,
             'error_list' => $errorList,
-            'item'       => $mailinglist,
-            'form'       => $form->createView(),
+            'item' => $mailinglist,
+            'form' => $form->createView(),
         ];
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,12 +9,15 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use RuntimeException;
 
 /**
  * Class MailingList.
@@ -74,21 +78,16 @@ class MailingList
     public function __construct()
     {
         $this->registrations = new ArrayCollection();
-        $this->created       = new \DateTime();
-        $this->withApproval  = false;
+        $this->created = new DateTime();
+        $this->withApproval = false;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return (int) $this->id;
     }
 
     /**
-     * @param int $id
-     *
      * @return MailingList
      */
     public function setId(int $id): self
@@ -115,7 +114,7 @@ class MailingList
     {
         foreach ($registrations as $registration) {
             if (!$registration instanceof Registration) {
-                throw new \RuntimeException(sprintf('Provided Registration is not a %s', Registration::class));
+                throw new RuntimeException(sprintf('Provided Registration is not a %s', Registration::class));
             }
         }
         $this->registrations = $registrations;
@@ -123,17 +122,12 @@ class MailingList
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isWithApproval(): bool
     {
         return $this->withApproval;
     }
 
     /**
-     * @param bool $withApproval
-     *
      * @return MailingList
      */
     public function setWithApproval(bool $withApproval): self
@@ -152,8 +146,6 @@ class MailingList
     }
 
     /**
-     * @param array $siteaccessLimit
-     *
      * @return MailingList
      */
     public function setSiteaccessLimit(array $siteaccessLimit): self
@@ -171,9 +163,6 @@ class MailingList
         return $this->campaigns;
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->getName() ?? '';

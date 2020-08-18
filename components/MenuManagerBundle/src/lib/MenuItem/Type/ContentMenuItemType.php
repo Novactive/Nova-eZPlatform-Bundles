@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -44,7 +45,6 @@ class ContentMenuItemType extends DefaultMenuItemType
     protected $siteAccess;
 
     /**
-     * @param TranslationHelper $translationHelper
      * @required
      */
     public function setTranslationHelper(TranslationHelper $translationHelper): void
@@ -53,7 +53,6 @@ class ContentMenuItemType extends DefaultMenuItemType
     }
 
     /**
-     * @param ContentService $contentService
      * @required
      */
     public function setContentService(ContentService $contentService): void
@@ -62,7 +61,6 @@ class ContentMenuItemType extends DefaultMenuItemType
     }
 
     /**
-     * @param LocationService $locationService
      * @required
      */
     public function setLocationService(LocationService $locationService): void
@@ -71,7 +69,6 @@ class ContentMenuItemType extends DefaultMenuItemType
     }
 
     /**
-     * @param RouterInterface $router
      * @required
      */
     public function setRouter(RouterInterface $router): void
@@ -80,7 +77,6 @@ class ContentMenuItemType extends DefaultMenuItemType
     }
 
     /**
-     * @param TagAwareAdapterInterface $cache
      * @required
      */
     public function setCache(TagAwareAdapterInterface $cache): void
@@ -89,7 +85,6 @@ class ContentMenuItemType extends DefaultMenuItemType
     }
 
     /**
-     * @param siteAccess $siteAccess
      * @required
      */
     public function setsiteAccess(siteAccess $siteAccess): void
@@ -107,15 +102,13 @@ class ContentMenuItemType extends DefaultMenuItemType
 
     /**
      * @param MenuItem\ContentMenuItem $menuItem
-     *
-     * @return array
      */
     public function toHash(MenuItem $menuItem): array
     {
         $hash = parent::toHash($menuItem);
         try {
             $contentInfo = $this->contentService->loadContentInfo($menuItem->getContentId());
-        } catch (NotFoundException|UnauthorizedException $exception) {
+        } catch (NotFoundException | UnauthorizedException $exception) {
             return $hash;
         }
         $hash['name'] = $this->translationHelper->getTranslatedContentNameByContentInfo($contentInfo);
@@ -142,8 +135,6 @@ class ContentMenuItemType extends DefaultMenuItemType
     }
 
     /**
-     * @param MenuItem $menuItem
-     *
      * @throws \Psr\Cache\InvalidArgumentException
      *
      * @return MenuItemValue
@@ -152,7 +143,7 @@ class ContentMenuItemType extends DefaultMenuItemType
     {
         try {
             $menuItemLinkInfos = $this->getMenuItemLinkInfos($menuItem);
-            $link              = new MenuItemValue($menuItemLinkInfos['id']);
+            $link = new MenuItemValue($menuItemLinkInfos['id']);
             if (true === $menuItem->getOption('active', true)) {
                 $link->setUri($menuItemLinkInfos['uri']);
             }
@@ -170,13 +161,9 @@ class ContentMenuItemType extends DefaultMenuItemType
     }
 
     /**
-     * @param MenuItem $menuItem
-     *
      * @throws NotFoundException
      * @throws UnauthorizedException
      * @throws \Psr\Cache\InvalidArgumentException
-     *
-     * @return array
      */
     protected function getMenuItemLinkInfos(MenuItem $menuItem): array
     {
@@ -185,15 +172,15 @@ class ContentMenuItemType extends DefaultMenuItemType
             return $cacheItem->get();
         }
 
-        $content  = $this->contentService->loadContent($menuItem->getContentId());
+        $content = $this->contentService->loadContent($menuItem->getContentId());
         $location = $this->locationService->loadLocation($content->contentInfo->mainLocationId);
 
         $menuItemLinkInfos = [
-            'id'     => "location-{$location->id}",
-            'uri'    => $this->router->generate($location, [], UrlGeneratorInterface::ABSOLUTE_URL),
-            'label'  => $this->translationHelper->getTranslatedContentNameByContentInfo($content->contentInfo),
+            'id' => "location-{$location->id}",
+            'uri' => $this->router->generate($location, [], UrlGeneratorInterface::ABSOLUTE_URL),
+            'label' => $this->translationHelper->getTranslatedContentNameByContentInfo($content->contentInfo),
             'extras' => [
-                    'contentId'  => $location->contentId,
+                    'contentId' => $location->contentId,
                     'locationId' => $location->id,
                 ],
         ];

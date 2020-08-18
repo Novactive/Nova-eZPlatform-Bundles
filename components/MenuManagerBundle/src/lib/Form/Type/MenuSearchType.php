@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -25,7 +26,6 @@ class MenuSearchType extends AbstractType
     protected $configResolver;
 
     /**
-     * @param ConfigResolverInterface $configResolver
      * @required
      */
     public function setConfigResolver(ConfigResolverInterface $configResolver): void
@@ -51,9 +51,9 @@ class MenuSearchType extends AbstractType
                 'name',
                 TextType::class,
                 [
-                    'label'              => 'menu.property.name',
+                    'label' => 'menu.property.name',
                     'translation_domain' => 'menu_manager',
-                    'required'           => false,
+                    'required' => false,
                 ]
             );
         if (!empty($menuTypes)) {
@@ -62,11 +62,11 @@ class MenuSearchType extends AbstractType
                     'type',
                     ChoiceType::class,
                     [
-                        'label'                     => 'menu.property.type',
-                        'translation_domain'        => 'menu_manager',
-                        'choices'                   => array_combine(array_values($menuTypes), array_keys($menuTypes)),
+                        'label' => 'menu.property.type',
+                        'translation_domain' => 'menu_manager',
+                        'choices' => array_combine(array_values($menuTypes), array_keys($menuTypes)),
                         'choice_translation_domain' => 'menu_manager',
-                        'required'                  => false,
+                        'required' => false,
                     ]
                 );
         }

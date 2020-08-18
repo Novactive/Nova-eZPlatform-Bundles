@@ -1,64 +1,67 @@
 <?php
+
 /**
- * NovaeZExtraBundle Result
+ * NovaeZExtraBundle Result.
  *
  * @package   Novactive\Bundle\eZExtraBundle
+ *
  * @author    Novactive <dir.tech@novactive.com>
  * @copyright 2015 Novactive
  * @license   https://github.com/Novactive/NovaeZExtraBundle/blob/master/LICENSE MIT Licence
  */
+
 namespace Novactive\Bundle\eZExtraBundle\Core\Helper\eZ;
 
 use Novactive\Collection\Collection;
 use Novactive\Collection\Factory;
 
 /**
- * Class Result
+ * Class Result.
  */
 class Result extends Collection
 {
     /**
-     * Extra data
+     * Extra data.
      *
      * @var array
      */
     protected $extras;
 
     /**
-     * Total
+     * Total.
      *
-     * @var integer
+     * @var int
      */
     protected $resultTotalCount;
 
     /**
-     * Limit
+     * Limit.
      *
-     * @var integer
+     * @var int
      */
     protected $resultLimit;
 
     /**
-     * Offset
+     * Offset.
      *
-     * @var integer
+     * @var int
      */
     protected $resultOffset;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         parent::__construct([]);
         $this->resultTotalCount = 0;
-        $this->resultLimit      = 0;
+        $this->resultLimit = 0;
     }
 
     /**
-     * Set the Total
+     * Set the Total.
      *
-     * @param integer $resultCount
+     * @param int $resultCount
      *
      * @return $this
      */
@@ -70,9 +73,9 @@ class Result extends Collection
     }
 
     /**
-     * Return tht Total
+     * Return tht Total.
      *
-     * @return integer
+     * @return int
      */
     public function getResultTotalCount()
     {
@@ -80,23 +83,19 @@ class Result extends Collection
     }
 
     /**
-     * Set the Results
-     *
-     * @param mixed $results
+     * Set the Results.
      *
      * @return $this
      */
     public function setResults($results)
     {
-        $this->items = Factory::getArrayForItems($results);;
+        $this->items = Factory::getArrayForItems($results);
 
         return $this;
     }
 
     /**
-     * Add a result
-     *
-     * @param mixed $result
+     * Add a result.
      *
      * @return $this
      */
@@ -108,9 +107,7 @@ class Result extends Collection
     }
 
     /**
-     * Set extras data
-     *
-     * @param mixed $extras
+     * Set extras data.
      *
      * @return $this
      */
@@ -122,9 +119,7 @@ class Result extends Collection
     }
 
     /**
-     * Get Extras
-     *
-     * @return mixed
+     * Get Extras.
      */
     public function getExtras()
     {
@@ -132,7 +127,7 @@ class Result extends Collection
     }
 
     /**
-     * Get Results
+     * Get Results.
      *
      * @return array
      */
@@ -142,9 +137,9 @@ class Result extends Collection
     }
 
     /**
-     * Set the Result Limit
+     * Set the Result Limit.
      *
-     * @param integer $resultLimit
+     * @param int $resultLimit
      *
      * @return $this
      */
@@ -156,9 +151,9 @@ class Result extends Collection
     }
 
     /**
-     * Get the Result Limit
+     * Get the Result Limit.
      *
-     * @return integer
+     * @return int
      */
     public function getResultLimit()
     {
@@ -166,9 +161,9 @@ class Result extends Collection
     }
 
     /**
-     * Set the Result Offset
+     * Set the Result Offset.
      *
-     * @param integer $resultOffset
+     * @param int $resultOffset
      *
      * @return $this
      */
@@ -180,9 +175,7 @@ class Result extends Collection
     }
 
     /**
-     * Get the result offset
-     *
-     * @return mixed
+     * Get the result offset.
      */
     public function getResultOffset()
     {
@@ -196,27 +189,25 @@ class Result extends Collection
      */
     public function hasMore()
     {
-        return (
-            (($this->getResultLimit() == 0) && ($this->count() < $this->getResultTotalCount())) ||
+        return
+            ((0 == $this->getResultLimit()) && ($this->count() < $this->getResultTotalCount())) ||
             (($this->getResultLimit() > 0) && ($this->count() == $this->getResultLimit()) &&
              ($this->getResultLimit() < $this->getResultTotalCount()))
-        );
-
+        ;
     }
 
     /**
-     * Get the ResultOffsetPage
+     * Get the ResultOffsetPage.
      *
      * @return int
      */
     public function getResultOffsetPage()
     {
         return intval(ceil($this->getResultOffset() / $this->getResultLimit())) + 1;
-
     }
 
     /**
-     * Get the Next page
+     * Get the Next page.
      *
      * @return bool|int
      */
@@ -226,7 +217,7 @@ class Result extends Collection
     }
 
     /**
-     * Get the Previous page
+     * Get the Previous page.
      *
      * @return bool|int
      */
@@ -236,7 +227,7 @@ class Result extends Collection
     }
 
     /**
-     * Get the Last page
+     * Get the Last page.
      *
      * @return bool|int
      */

@@ -29,7 +29,7 @@ class SynonymsMap
      */
     public function __construct(string $term, array $synonyms)
     {
-        $this->term     = $term;
+        $this->term = $term;
         $this->synonyms = $synonyms;
     }
 

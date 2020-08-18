@@ -35,7 +35,7 @@ class FacetedContentSearchAdapter implements AdapterInterface
 
     public function __construct(Query $query, SearchService $searchService)
     {
-        $this->query         = $query;
+        $this->query = $query;
         $this->searchService = $searchService;
     }
 
@@ -50,7 +50,7 @@ class FacetedContentSearchAdapter implements AdapterInterface
             return $this->nbResults;
         }
 
-        $countQuery        = clone $this->query;
+        $countQuery = clone $this->query;
         $countQuery->limit = 0;
 
         return $this->nbResults = $this->searchService->findContent($countQuery)->totalCount;
@@ -69,7 +69,7 @@ class FacetedContentSearchAdapter implements AdapterInterface
             return $this->facets;
         }
 
-        $facetQuery        = clone $this->query;
+        $facetQuery = clone $this->query;
         $facetQuery->limit = 0;
 
         return $this->facets = $this->searchService->findContent($facetQuery)->facets;
@@ -85,9 +85,9 @@ class FacetedContentSearchAdapter implements AdapterInterface
      */
     public function getSlice($offset, $length)
     {
-        $query               = clone $this->query;
-        $query->offset       = $offset;
-        $query->limit        = $length;
+        $query = clone $this->query;
+        $query->offset = $offset;
+        $query->limit = $length;
         $query->performCount = false;
 
         $searchResult = $this->searchService->findContent($query);

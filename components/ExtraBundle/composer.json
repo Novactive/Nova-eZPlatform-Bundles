@@ -17,14 +17,9 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
+        "php": ">7.3",
         "novactive/collection": "1.*",
-        "phpoffice/phpexcel": "~1.8"
-    },
-    "require-dev": {
-        "phpmd/phpmd": "2.*",
-        "sebastian/phpcpd": "2.0.*@dev",
-        "novactive/phpcs-novastandards": "~1.3"
+        "phpoffice/phpexcel": "*"
     },
     "autoload": {
         "psr-4": {
@@ -32,8 +27,9 @@
         }
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "2.0.x-dev"
+        "thanks": {
+            "name": "ezsystems/ezplatform",
+            "url": "https://github.com/ezsystems/ezplatform"
         }
     }
 }

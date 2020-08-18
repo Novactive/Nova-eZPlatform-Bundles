@@ -43,7 +43,7 @@ final class EventPass implements CompilerPassInterface
                 $busDisptacherListenerDef->addTag(
                     'kernel.event_listener',
                     [
-                        'event'  => $event,
+                        'event' => $event,
                         'method' => 'dispatchEvent',
                     ]
                 );

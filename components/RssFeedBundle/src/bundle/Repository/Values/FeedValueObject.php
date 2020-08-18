@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZRssFeedBundle.
  *
@@ -49,17 +50,11 @@ class FeedValueObject
         return $this->mapping['category'];
     }
 
-    /**
-     * @return mixed
-     */
     public function getContent()
     {
         return $this->content;
     }
 
-    /**
-     * @return mixed
-     */
     public function getMapping()
     {
         return $this->mapping;

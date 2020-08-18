@@ -154,7 +154,7 @@ class Type extends ImageType
             return $this->getEmptyValue();
         }
 
-        $baseValue  = parent::fromPersistenceValue($fieldValue);
+        $baseValue = parent::fromPersistenceValue($fieldValue);
         $properties = [];
         foreach (get_object_vars($baseValue) as $property => $propertyValue) {
             if ($baseValue->__isset($property)) {

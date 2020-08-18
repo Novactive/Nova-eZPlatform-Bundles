@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Repository;
@@ -26,19 +28,12 @@ abstract class EntityRepository extends BaseEntityRepository
      */
     abstract protected function getAlias(): string;
 
-    /**
-     * @param array $filters
-     *
-     * @return QueryBuilder
-     */
     public function createQueryBuilderForFilters(array $filters = []): QueryBuilder
     {
         return $this->createQueryBuilder($this->getAlias())->select($this->getAlias())->distinct();
     }
 
     /**
-     * @param array $filters
-     *
      * @return array|ArrayCollection
      */
     public function findByFilters(array $filters = [])
@@ -48,11 +43,6 @@ abstract class EntityRepository extends BaseEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    /**
-     * @param array $filters
-     *
-     * @return int
-     */
     public function countByFilters(array $filters = []): int
     {
         $qb = $this->createQueryBuilderForFilters($filters);

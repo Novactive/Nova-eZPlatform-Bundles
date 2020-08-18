@@ -2,9 +2,8 @@ workflows:
     mailing:
         type: 'state_machine'
         marking_store:
-            type: 'single_state'
-            arguments:
-                - 'status'
+            type: 'method'
+            property: 'status'
         supports:
             - Novactive\Bundle\eZMailingBundle\Entity\Mailing
         places:

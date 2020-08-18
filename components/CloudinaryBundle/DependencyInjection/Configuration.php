@@ -1,8 +1,10 @@
 <?php
+
 /**
- * Novactive eZ Cloudinary Bundle
+ * Novactive eZ Cloudinary Bundle.
  *
  * @package   Novactive\Bundle\eZCloudinary
+ *
  * @author    Novactive <novacloudinarybundle@novactive.com>
  * @copyright 2015 Novactive
  * @license   https://github.com/Novactive/NovaeZCloudinaryBundle/blob/master/LICENSE MIT Licence
@@ -10,13 +12,13 @@
 
 namespace Novactive\Bundle\eZCloudinaryBundle\DependencyInjection;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\Configuration as SAConfiguration;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\Configuration as SiteAccessConfiguration;
 
 /**
- * Class Configuration
+ * Class Configuration.
  */
-class Configuration extends SiteAccessConfiguration
+class Configuration extends SAConfiguration
 {
     /**
      * {@inheritdoc}
@@ -34,18 +36,19 @@ class Configuration extends SiteAccessConfiguration
                         ->scalarNode('api_secret')->defaultNull()->end()
                     ->end()
                 ->end();
-                $this->generateScopeBaseNode( $rootNode )
-                     ->arrayNode( 'cloudinary_fecth_proxy' )
+
+        $this->generateScopeBaseNode($rootNode)
+                     ->arrayNode('cloudinary_fecth_proxy')
                         ->children()
                             ->scalarNode('host')->defaultNull()->end()
                             ->scalarNode('port')->defaultNull()->end()
                         ->end()
                     ->end()
-                     ->arrayNode( 'cloudinary_variations' )
+                     ->arrayNode('cloudinary_variations')
                         ->prototype('array')
                             ->children()
                                 ->scalarNode('ezreference_variation')->defaultNull()->end()
-                                ->arrayNode( 'filters' )
+                                ->arrayNode('filters')
                                     ->prototype('variable')
 
                                     ->end()

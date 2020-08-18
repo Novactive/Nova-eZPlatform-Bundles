@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core;
@@ -33,9 +35,9 @@ class IOService
 
         $temporaryPath = tempnam(sys_get_temp_dir(), uniqid($fileName, true));
         $fs->dumpFile($temporaryPath, $content);
-        $uploadedFileStruct     = $this->io->newBinaryCreateStructFromLocalFile($temporaryPath);
+        $uploadedFileStruct = $this->io->newBinaryCreateStructFromLocalFile($temporaryPath);
         $uploadedFileStruct->id = $fileName;
-        $ioFile                 = $this->io->createBinaryFile($uploadedFileStruct);
+        $ioFile = $this->io->createBinaryFile($uploadedFileStruct);
         $fs->remove($temporaryPath);
 
         return $ioFile->id;

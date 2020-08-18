@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
@@ -24,20 +26,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class ChartController
 {
     /**
-     * @param int                    $broadcastId
-     * @param EntityManagerInterface $entityManager
-     *
      * @Template("NovaeZMailingBundle:admin/chart:generic.html.twig")
-     *
-     * @return array
      */
     public function browserChart(int $broadcastId, EntityManagerInterface $entityManager): array
     {
         $repo = $entityManager->getRepository(Broadcast::class);
         /** @var Broadcast $item */
-        $item    = $repo->findOneById($broadcastId);
+        $item = $repo->findOneById($broadcastId);
         $hitRepo = $entityManager->getRepository(StatHit::class);
-        $data    = $hitRepo->getBrowserMapCount([$item]);
+        $data = $hitRepo->getBrowserMapCount([$item]);
 
         $chartBuilder = new ChartDataBuilder('Browser Repartition', 'doughnut');
         $chartBuilder->addDataSet(array_values($data), array_keys($data));
@@ -46,18 +43,13 @@ class ChartController
     }
 
     /**
-     * @param int                    $broadcastId
-     * @param EntityManagerInterface $entityManager
-     *
      * @Template("NovaeZMailingBundle:admin/chart:generic.html.twig")
-     *
-     * @return array
      */
     public function osChart(int $broadcastId, EntityManagerInterface $entityManager): array
     {
         $repo = $entityManager->getRepository(Broadcast::class);
         /** @var Broadcast $item */
-        $item    = $repo->findOneById($broadcastId);
+        $item = $repo->findOneById($broadcastId);
         $hitRepo = $entityManager->getRepository(StatHit::class);
 
         $data = $hitRepo->getOSMapCount([$item]);
@@ -69,18 +61,13 @@ class ChartController
     }
 
     /**
-     * @param int                    $broadcastId
-     * @param EntityManagerInterface $entityManager
-     *
      * @Template("NovaeZMailingBundle:admin/chart:generic.html.twig")
-     *
-     * @return array
      */
     public function urlChart(int $broadcastId, EntityManagerInterface $entityManager): array
     {
         $repo = $entityManager->getRepository(Broadcast::class);
         /** @var Broadcast $item */
-        $item    = $repo->findOneById($broadcastId);
+        $item = $repo->findOneById($broadcastId);
         $hitRepo = $entityManager->getRepository(StatHit::class);
 
         $data = $hitRepo->getURLMapCount([$item]);
@@ -92,23 +79,18 @@ class ChartController
     }
 
     /**
-     * @param int                    $broadcastId
-     * @param EntityManagerInterface $entityManager
-     *
      * @Template("NovaeZMailingBundle:admin/chart:generic.html.twig")
-     *
-     * @return array
      */
     public function openedChart(int $broadcastId, EntityManagerInterface $entityManager): array
     {
         $repo = $entityManager->getRepository(Broadcast::class);
         /** @var Broadcast $item */
-        $item           = $repo->findOneById($broadcastId);
-        $hitRepo        = $entityManager->getRepository(StatHit::class);
-        $openedCount    = $hitRepo->getOpenedCount([[$item]]);
+        $item = $repo->findOneById($broadcastId);
+        $hitRepo = $entityManager->getRepository(StatHit::class);
+        $openedCount = $hitRepo->getOpenedCount([[$item]]);
         $broadcastCount = $item->getEmailSentCount();
-        $data           = [
-            'Opened'     => $openedCount,
+        $data = [
+            'Opened' => $openedCount,
             'Not Opened' => $broadcastCount - $openedCount,
         ];
 
@@ -119,23 +101,18 @@ class ChartController
     }
 
     /**
-     * @param int                    $broadcastId
-     * @param EntityManagerInterface $entityManager
-     *
      * @Template("NovaeZMailingBundle:admin/chart:generic.html.twig")
-     *
-     * @return array
      */
     public function openedTimeChart(int $broadcastId, EntityManagerInterface $entityManager): array
     {
         $repo = $entityManager->getRepository(Broadcast::class);
         /** @var Broadcast $item */
-        $item    = $repo->findOneById($broadcastId);
+        $item = $repo->findOneById($broadcastId);
         $hitRepo = $entityManager->getRepository(StatHit::class);
-        $data    = $hitRepo->getOpenedCountPerDay([[$item]]);
+        $data = $hitRepo->getOpenedCountPerDay([[$item]]);
 
         $chartBuilder = new ChartDataBuilder('Opened per day', 'bar');
-        $values       = array_values($data);
+        $values = array_values($data);
         $chartBuilder->addDataSet($values, array_keys($data), array_pad([], count($values), '#36a2eb'));
         $chartBuilder->addDataSet($values, array_keys($data), ['#ff6384'], 'line');
 

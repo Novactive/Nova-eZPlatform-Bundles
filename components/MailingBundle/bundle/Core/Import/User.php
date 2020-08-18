@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,12 +9,15 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Import;
 
 use Carbon\Carbon;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Generator;
 use Novactive\Bundle\eZMailingBundle\Core\DataHandler\UserImport;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
@@ -34,28 +38,21 @@ class User
 
     /**
      * Importer constructor.
-     *
-     * @param EntityManagerInterface $entityManager
      */
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * @param UserImport $userImport
-     *
-     * @return Generator
-     */
     public function rowsIterator(UserImport $userImport): Generator
     {
         $spreadsheet = IOFactory::load($userImport->getFile()->getPathname());
-        $worksheet   = $spreadsheet->getActiveSheet();
+        $worksheet = $spreadsheet->getActiveSheet();
         foreach ($worksheet->getRowIterator() as $row) {
             if (1 === $row->getRowIndex()) {
                 continue;
             }
-            $cells        = [];
+            $cells = [];
             $cellIterator = $row->getCellIterator();
             $cellIterator->setIterateOnlyExistingCells(false);
             foreach ($cellIterator as $cell) {
@@ -67,8 +64,6 @@ class User
 
     /**
      * Hydrate user.
-     *
-     * @param array $row
      *
      * @return User
      */
@@ -95,7 +90,7 @@ class User
         if (isset($cells[4])) {
             try {
                 $date = Carbon::createFromFormat('Y-m-d', (string) $cells[4]);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $date = Date::excelToDateTimeObject((string) $cells[4]);
             }
             $user->setBirthDate($date);
@@ -131,9 +126,6 @@ class User
     /**
      * Register the user to the MailingList.
      *
-     * @param UserEntity  $user
-     * @param MailingList $mailingList
-     *
      * @return User
      */
     public function registerUser(UserEntity $user, MailingList $mailingList): UserEntity
@@ -143,7 +135,7 @@ class User
             ->setUser($user)
             ->setMailingList($mailingList)
             ->setApproved(true)
-            ->setUpdated(new \DateTime());
+            ->setUpdated(new DateTime());
         $user->addRegistration($registration);
         $this->entityManager->persist($user);
         $this->entityManager->flush();

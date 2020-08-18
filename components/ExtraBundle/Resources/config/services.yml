@@ -10,29 +10,29 @@ parameters:
 services:
 
     novactive.ezextra.wrapper.factory:
-        class: %novactive.ezextra.wrapper.factory.class%
-        arguments: [@ezpublish.api.repository]
+        class: '%novactive.ezextra.wrapper.factory.class%'
+        arguments: ['@ezpublish.api.repository']
 
     novactive.ezextra.content.manager:
-        class: %novaezextra.content.manager.class%
-        arguments: [@ezpublish.api.repository]
+        class: '%novaezextra.content.manager.class%'
+        arguments: ['@ezpublish.api.repository']
 
     novactive.ezextra.content_type.manager:
-        class: %novaezextra.content_type.manager.class%
-        arguments: [@ezpublish.api.repository]
+        class: '%novaezextra.content_type.manager.class%'
+        arguments: ['@ezpublish.api.repository']
 
     novactive.ezextra.content.helper:
-        class: %novaezextra.content.helper.class%
-        arguments: [@ezpublish.api.repository, @novactive.ezextra.wrapper.factory]
+        class: '%novaezextra.content.helper.class%'
+        arguments: ['@ezpublish.api.repository', '@novactive.ezextra.wrapper.factory']
 
     novactive.ezextra.pre_content_view_listener:
-        class: %novaezextra.pre_content_view_listener.class%
-        arguments: [@ezpublish.api.repository, @ezpublish.templating.global_helper]
+        class: '%novaezextra.pre_content_view_listener.class%'
+        arguments: ['@ezpublish.api.repository', '@ezpublish.templating.global_helper']
         tags:
             - {name: kernel.event_listener, event: ezpublish.pre_content_view, method: onPreContentView}
 
     novactive.ezextra.abstract.children.provider:
-        class: %novaezextra.abstract.children.provider.class%
+        class: '%novaezextra.abstract.children.provider.class%'
         abstract: true
         calls:
             - [setRepository, ["@ezpublish.api.repository"]]

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Mailer;
@@ -19,6 +21,7 @@ use Novactive\Bundle\eZMailingBundle\Core\Provider\MailingContent;
 use Novactive\Bundle\eZMailingBundle\Core\Provider\MessageContent;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 
 /**
  * Class Factory.
@@ -62,14 +65,6 @@ class Factory
 
     /**
      * Factory constructor.
-     *
-     * @param ConfigResolverInterface $configResolver
-     * @param ContainerInterface      $container
-     * @param MessageContent          $messageContentProvider
-     * @param MailingContent          $mailingContentProvider
-     * @param LoggerInterface         $logger
-     * @param Broadcast               $broadcastProvider
-     * @param EntityManagerInterface  $entityManager
      */
     public function __construct(
         ConfigResolverInterface $configResolver,
@@ -80,20 +75,15 @@ class Factory
         Broadcast $broadcastProvider,
         EntityManagerInterface $entityManager
     ) {
-        $this->configResolver         = $configResolver;
-        $this->container              = $container;
+        $this->configResolver = $configResolver;
+        $this->container = $container;
         $this->messageContentProvider = $messageContentProvider;
         $this->mailingContentProvider = $mailingContentProvider;
-        $this->logger                 = $logger;
-        $this->broadcastProvider      = $broadcastProvider;
-        $this->entityManager          = $entityManager;
+        $this->logger = $logger;
+        $this->broadcastProvider = $broadcastProvider;
+        $this->entityManager = $entityManager;
     }
 
-    /**
-     * @param string $mailerDef
-     *
-     * @return Mailer
-     */
     public function get(string $mailerDef): Mailer
     {
         $mailer = $this->container->get((string) $this->configResolver->getParameter($mailerDef, 'nova_ezmailing'));
@@ -113,6 +103,6 @@ class Factory
             return $mailing->setMailer($mailer);
         }
 
-        throw new \RuntimeException('Mailers are not correctly defined.');
+        throw new RuntimeException('Mailers are not correctly defined.');
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -30,13 +31,10 @@ class DoctrineStorage extends Gateway
 
     /**
      * DoctrineStorage constructor.
-     *
-     * @param EntityManagerInterface $em
-     * @param ValueConverter         $valueConverter
      */
     public function __construct(EntityManagerInterface $em, ValueConverter $valueConverter)
     {
-        $this->em             = $em;
+        $this->em = $em;
         $this->valueConverter = $valueConverter;
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -28,9 +29,9 @@ class MenuItemFormMapper implements FieldDefinitionFormMapperInterface, FieldVal
     public function mapFieldValueForm(FormInterface $fieldForm, FieldData $data)
     {
         $fieldDefinition = $data->fieldDefinition;
-        $formConfig      = $fieldForm->getConfig();
-        $names           = $fieldDefinition->getNames();
-        $label           = $fieldDefinition->getName($formConfig->getOption('mainLanguageCode')) ?: reset($names);
+        $formConfig = $fieldForm->getConfig();
+        $names = $fieldDefinition->getNames();
+        $label = $fieldDefinition->getName($formConfig->getOption('mainLanguageCode')) ?: reset($names);
         //        $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
 
         $fieldForm
@@ -41,7 +42,7 @@ class MenuItemFormMapper implements FieldDefinitionFormMapperInterface, FieldVal
                                MenuItemFieldType::class,
                                [
                                    'required' => $fieldDefinition->isRequired,
-                                   'label'    => $label,
+                                   'label' => $label,
                                ]
                            )
                            ->setAutoInitialize(false)

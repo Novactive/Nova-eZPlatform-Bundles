@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -21,24 +22,17 @@ class ValueConverter
 
     /**
      * ValueConverter constructor.
-     *
-     * @param MenuItemTypeRegistry $menuItemTypeRegistry
      */
     public function __construct(MenuItemTypeRegistry $menuItemTypeRegistry)
     {
         $this->menuItemTypeRegistry = $menuItemTypeRegistry;
     }
 
-    /**
-     * @param Value $value
-     *
-     * @return array
-     */
     public function toHash(Value $value): array
     {
         $hash = [];
         foreach ($value->menuItems as $menuItem) {
-            $type   = $this->menuItemTypeRegistry->getMenuItemType(MenuItem\ContentMenuItem::class);
+            $type = $this->menuItemTypeRegistry->getMenuItemType(MenuItem\ContentMenuItem::class);
             $hash[] = $type->toHash($menuItem);
         }
 
@@ -47,8 +41,6 @@ class ValueConverter
 
     /**
      * @param $hash
-     *
-     * @return Value
      */
     public function fromHash($hash): Value
     {
@@ -58,7 +50,7 @@ class ValueConverter
 
         $menuItems = [];
         foreach ($hash as $hashItem) {
-            $type     = $this->menuItemTypeRegistry->getMenuItemType(MenuItem\ContentMenuItem::class);
+            $type = $this->menuItemTypeRegistry->getMenuItemType(MenuItem\ContentMenuItem::class);
             $menuItem = $type->fromHash($hashItem);
             if ($menuItem) {
                 $menuItems[] = $menuItem;

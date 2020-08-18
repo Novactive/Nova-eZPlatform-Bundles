@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,12 +9,14 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Security\Voter;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use LogicException;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList as MailingListEntity;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -23,8 +26,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  */
 class MailingList extends Voter
 {
-    const VIEW = 'view';
-    const EDIT = 'edit';
+    public const VIEW = 'view';
+    public const EDIT = 'edit';
 
     /**
      * @var Repository
@@ -38,9 +41,6 @@ class MailingList extends Voter
 
     /**
      * Campaign constructor.
-     *
-     * @param Repository $repository
-     * @param SiteAccess $siteAccess
      */
     public function __construct(Repository $repository, SiteAccess $siteAccess)
     {
@@ -84,15 +84,9 @@ class MailingList extends Voter
                 return $this->canEdit($subject, $user);
         }
 
-        throw new \LogicException('This code should not be reached!');
+        throw new LogicException('This code should not be reached!');
     }
 
-    /**
-     * @param MailingListEntity $subject
-     * @param mixed             $user
-     *
-     * @return bool
-     */
     private function canView(MailingListEntity $subject, $user): bool
     {
         $siteaccessLimist = $subject->getSiteaccessLimit();
@@ -109,12 +103,6 @@ class MailingList extends Voter
         return $this->repository->getPermissionResolver()->hasAccess('setup', 'administrate');
     }
 
-    /**
-     * @param MailingListEntity $subject
-     * @param mixed             $user
-     *
-     * @return bool
-     */
     private function canEdit(MailingListEntity $subject, $user): bool
     {
         return $this->canView($subject, $user);

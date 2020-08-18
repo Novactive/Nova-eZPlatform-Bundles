@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Entity;
@@ -84,20 +86,15 @@ class Broadcast
     public function __construct()
     {
         $this->emailSentCount = 0;
-        $this->created        = new DateTime();
+        $this->created = new DateTime();
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return (int) $this->id;
     }
 
     /**
-     * @param int $id
-     *
      * @return $this
      */
     public function setId(int $id): self
@@ -107,17 +104,12 @@ class Broadcast
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
     public function getStarted(): DateTime
     {
         return $this->started;
     }
 
     /**
-     * @param DateTime $started
-     *
      * @return $this
      */
     public function setStarted(DateTime $started): self
@@ -136,8 +128,6 @@ class Broadcast
     }
 
     /**
-     * @param DateTime $ended
-     *
      * @return $this
      */
     public function setEnded(DateTime $ended): self
@@ -147,17 +137,12 @@ class Broadcast
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getEmailSentCount(): int
     {
         return $this->emailSentCount;
     }
 
     /**
-     * @param int $emailSentCount
-     *
      * @return $this
      */
     public function setEmailSentCount(int $emailSentCount): self
@@ -167,17 +152,12 @@ class Broadcast
         return $this;
     }
 
-    /**
-     * @return Mailing
-     */
     public function getMailing(): Mailing
     {
         return $this->mailing;
     }
 
     /**
-     * @param Mailing $mailing
-     *
      * @return $this
      */
     public function setMailing(Mailing $mailing): self
@@ -187,17 +167,12 @@ class Broadcast
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getHtml(): string
     {
         return $this->html;
     }
 
     /**
-     * @param string $html
-     *
      * @return $this
      */
     public function setHtml(string $html): self

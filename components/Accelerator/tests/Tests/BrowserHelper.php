@@ -56,12 +56,12 @@ final class BrowserHelper
         bool $changeHistory = true
     ): Crawler {
         $request = [
-            'method'        => $method,
-            'uri'           => $uri,
-            'parameters'    => $parameters,
-            'files'         => $files,
-            'server'        => $server,
-            'content'       => $content,
+            'method' => $method,
+            'uri' => $uri,
+            'parameters' => $parameters,
+            'files' => $files,
+            'server' => $server,
+            'content' => $content,
             'changeHistory' => $changeHistory,
         ];
 

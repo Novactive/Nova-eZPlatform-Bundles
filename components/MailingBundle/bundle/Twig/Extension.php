@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,11 +9,13 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Twig;
 
 use Symfony\Component\Intl\Intl;
+use Twig_SimpleFilter;
 
 /**
  * Class Extension.
@@ -25,7 +28,7 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
     public function getFilters(): array
     {
         return [
-            new \Twig_SimpleFilter(
+            new Twig_SimpleFilter(
                 'country_name',
                 function ($value) {
                     return Intl::getRegionBundle()->getCountryName($value);

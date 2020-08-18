@@ -101,9 +101,9 @@ class ImageExtension extends AbstractExtension
      */
     public function getImageAttributes(Field $field, VersionInfo $versionInfo, $variationName, $parameters = [])
     {
-        $lazyLoadEnabled      = $parameters['lazyLoad'] ?? false;
+        $lazyLoadEnabled = $parameters['lazyLoad'] ?? false;
         $retinaSupportEnabled = $parameters['retina'] ?? false;
-        $attrs                = $parameters['attrs'] ?? [];
+        $attrs = $parameters['attrs'] ?? [];
 
         $this->initiateArrayAttribute($attrs, 'srcset');
         $this->initiateArrayAttribute($attrs, 'class');
@@ -118,7 +118,7 @@ class ImageExtension extends AbstractExtension
             $attrs['srcset'] = implode(', ', $attrs['srcset']);
         }
         if ($lazyLoadEnabled) {
-            $attrs['class'][]     = 'has-placeholder';
+            $attrs['class'][] = 'has-placeholder';
             $attrs['data-srcset'] = is_array($attrs['srcset']) ? implode(', ', $attrs['srcset']) : $attrs['srcset'];
             unset($attrs['srcset']);
         }
@@ -161,10 +161,10 @@ class ImageExtension extends AbstractExtension
         if ($defaultVariation instanceof FocusedVariation && $defaultVariation->focusPoint) {
             $attrs['data-focus-x'] = $defaultVariation->focusPoint->getPosX();
             $attrs['data-focus-y'] = $defaultVariation->focusPoint->getPosY();
-            $attrs['class'][]      = 'enhancedimage--focused-img';
+            $attrs['class'][] = 'enhancedimage--focused-img';
         }
-        $attrs['srcset'][]    = str_replace(' ', '%20', $this->assetExtension->getAssetUrl($defaultVariation->uri));
-        $attrs['data-width']  = $defaultVariation->width;
+        $attrs['srcset'][] = str_replace(' ', '%20', $this->assetExtension->getAssetUrl($defaultVariation->uri));
+        $attrs['data-width'] = $defaultVariation->width;
         $attrs['data-height'] = $defaultVariation->height;
 
         return $defaultVariation;

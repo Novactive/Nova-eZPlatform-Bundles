@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -27,16 +28,14 @@ class ViewController extends Controller
 {
     /**
      * @Route("/view/{menu}", name="menu_manager.menu_view")
-     *
-     * @param Menu $menu
      */
     public function viewMenuAction(Menu $menu, MenuBuilder $menuBuilder)
     {
         return $this->render(
             '@EzMenuManager/themes/standard/menu_manager/view.html.twig',
             [
-                'knpMenu'  => $menuBuilder->build($menu),
-                'title'    => $menu->getName(),
+                'knpMenu' => $menuBuilder->build($menu),
+                'title' => $menu->getName(),
             ]
         );
     }

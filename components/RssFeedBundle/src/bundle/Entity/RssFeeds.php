@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZRssFeedBundle.
  *
@@ -11,6 +12,8 @@
 
 namespace Novactive\EzRssFeedBundle\Entity;
 
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -23,19 +26,19 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class RssFeeds
 {
-    const STATUS_ENABLED = 1;
+    public const STATUS_ENABLED = 1;
 
-    const STATUS_DISABLED = 0;
+    public const STATUS_DISABLED = 0;
 
-    const SORT_TYPE_PUBLICATION = 1;
+    public const SORT_TYPE_PUBLICATION = 1;
 
-    const SORT_TYPE_MODIFICATION = 2;
+    public const SORT_TYPE_MODIFICATION = 2;
 
-    const SORT_TYPE_NAME = 3;
+    public const SORT_TYPE_NAME = 3;
 
-    const SORT_DIRECTION_ASC = 'ascending';
+    public const SORT_DIRECTION_ASC = 'ascending';
 
-    const SORT_DIRECTION_DESC = 'descending';
+    public const SORT_DIRECTION_DESC = 'descending';
 
     /**
      * @var int
@@ -75,7 +78,7 @@ class RssFeeds
     private $status;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
      */
@@ -100,7 +103,7 @@ class RssFeeds
     private $sortDirection;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="modified_at", type="datetime", nullable=true)
      */
@@ -118,11 +121,11 @@ class RssFeeds
      */
     public function __construct()
     {
-        $this->feedItems      = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->sortType       = self::SORT_TYPE_PUBLICATION;
-        $this->sortDirection  = self::SORT_DIRECTION_DESC;
+        $this->feedItems = new ArrayCollection();
+        $this->sortType = self::SORT_TYPE_PUBLICATION;
+        $this->sortDirection = self::SORT_DIRECTION_DESC;
         $this->numberOfObject = 10;
-        $this->createdAt      = new \DateTime();
+        $this->createdAt = new DateTime();
     }
 
     /**
@@ -234,7 +237,7 @@ class RssFeeds
     /**
      * Get createdAt.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -244,24 +247,18 @@ class RssFeeds
     /**
      * Get modifiedAt.
      *
-     * @return \DateTime|null
+     * @return DateTime|null
      */
     public function getModifiedAt()
     {
         return $this->modifiedAt;
     }
 
-    /**
-     * @return int
-     */
     public function getNumberOfObject(): int
     {
         return $this->numberOfObject;
     }
 
-    /**
-     * @param int $numberOfObject
-     */
     public function setNumberOfObject(int $numberOfObject): void
     {
         $this->numberOfObject = $numberOfObject;
@@ -269,8 +266,6 @@ class RssFeeds
 
     /**
      * Add feedItem.
-     *
-     * @param \Novactive\EzRssFeedBundle\Entity\RssFeedItems $feedItem
      *
      * @return RssFeeds
      */
@@ -284,8 +279,6 @@ class RssFeeds
 
     /**
      * Remove feedItem.
-     *
-     * @param \Novactive\EzRssFeedBundle\Entity\RssFeedItems $feedItem
      *
      * @return bool TRUE if this collection contained the specified element, FALSE otherwise
      */
@@ -304,17 +297,11 @@ class RssFeeds
         return $this->feedItems;
     }
 
-    /**
-     * @return int
-     */
     public function getSortType(): int
     {
         return $this->sortType;
     }
 
-    /**
-     * @param int $sortType
-     */
     public function setSortType(int $sortType): void
     {
         $this->sortType = $sortType;
@@ -328,9 +315,6 @@ class RssFeeds
         return $this->sortDirection;
     }
 
-    /**
-     * @param string $sortDirection
-     */
     public function setSortDirection(string $sortDirection): void
     {
         $this->sortDirection = $sortDirection;

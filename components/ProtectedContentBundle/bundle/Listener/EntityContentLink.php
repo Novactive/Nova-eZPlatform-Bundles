@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZProtectedContentBundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/eZProtectedContentBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Listener;
@@ -36,7 +38,7 @@ class EntityContentLink
     /** @PostLoad */
     public function postLoadHandler(ContentInterface $entity, LifecycleEventArgs $event): void
     {
-        $content  = $this->repository->getContentService()->loadContent($entity->getContentId());
+        $content = $this->repository->getContentService()->loadContent($entity->getContentId());
         $location = $this->repository->getLocationService()->loadLocation($content->contentInfo->mainLocationId);
         $entity->setLocation($location);
         $entity->setContent($content);

@@ -1,18 +1,23 @@
 <?php
+
 /**
- * Novactive eZ Cloudinary Bundle
+ * Novactive eZ Cloudinary Bundle.
  *
  * @package   Novactive\Bundle\eZCloudinary
+ *
  * @author    Novactive <novacloudinarybundle@novactive.com>
  * @copyright 2015 Novactive
  * @license   https://github.com/Novactive/NovaeZCloudinaryBundle/blob/master/LICENSE MIT Licence
  */
+
 namespace Novactive\Bundle\eZCloudinaryBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use LogicException;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
+
 /**
- * Class NovaeZCloudinaryBundle
+ * Class NovaeZCloudinaryBundle.
  */
 class NovaeZCloudinaryBundle extends Bundle
 {
@@ -26,7 +31,12 @@ class NovaeZCloudinaryBundle extends Bundle
 
             if (null !== $extension) {
                 if (!$extension instanceof ExtensionInterface) {
-                    throw new \LogicException(sprintf('Extension %s must implement Symfony\Component\DependencyInjection\Extension\ExtensionInterface.', get_class($extension)));
+                    throw new LogicException(
+                        sprintf(
+                            'Extension %s must implement '.ExtensionInterface::class,
+                            \get_class($extension)
+                        )
+                    );
                 }
                 $this->extension = $extension;
             } else {

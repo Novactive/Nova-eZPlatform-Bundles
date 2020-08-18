@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Command;
@@ -70,9 +72,9 @@ class MigrateEzMailingCommand extends Command
         ConfigResolverInterface $configResolver
     ) {
         parent::__construct();
-        $this->ioService      = $ioService;
-        $this->entityManager  = $entityManager;
-        $this->ezRepository   = $ezRepository;
+        $this->ioService = $ioService;
+        $this->entityManager = $entityManager;
+        $this->ezRepository = $ezRepository;
         $this->configResolver = $configResolver;
     }
 
@@ -111,7 +113,7 @@ class MigrateEzMailingCommand extends Command
         $this->io->section('Exporting from old database to json files.');
 
         $contentLanguageService = $this->ezRepository->getContentLanguageService();
-        $defaultLanguageCode    = $contentLanguageService->getDefaultLanguageCode();
+        $defaultLanguageCode = $contentLanguageService->getDefaultLanguageCode();
 
         $lists = $campaigns = $users = [];
 
@@ -127,7 +129,7 @@ class MigrateEzMailingCommand extends Command
                 self::DUMP_FOLDER."/list/list_{$list_row['id']}.json",
                 json_encode([$list_row['lang'] => $list_row['name']]) // Approve should be false when importing
             );
-            $lists[]  = pathinfo($fileName)['filename'];
+            $lists[] = pathinfo($fileName)['filename'];
         }
 
         // Campaigns
@@ -138,14 +140,14 @@ class MigrateEzMailingCommand extends Command
 
         $campaign_rows = $this->runQuery($sql);
         foreach ($campaign_rows as $campaign_row) {
-            $fileName    = $this->ioService->saveFile(
+            $fileName = $this->ioService->saveFile(
                 self::DUMP_FOLDER."/campaign/campaign_{$campaign_row['id']}.json",
                 json_encode(
                     [
-                        'name'         => [$defaultLanguageCode => $campaign_row['subject']],
-                        'senderName'   => $campaign_row['sender_name'],
-                        'senderEmail'  => $campaign_row['sender_email'],
-                        'reportEmail'  => $campaign_row['report_email'],
+                        'name' => [$defaultLanguageCode => $campaign_row['subject']],
+                        'senderName' => $campaign_row['sender_name'],
+                        'senderEmail' => $campaign_row['sender_email'],
+                        'reportEmail' => $campaign_row['report_email'],
                         'mailing_list' => $campaign_row['destination_mailing_list'],
                     ]
                 )
@@ -160,13 +162,13 @@ class MigrateEzMailingCommand extends Command
 
         $user_rows = $this->runQuery($sql);
         foreach ($user_rows as $user_row) {
-            $sql               = 'SELECT mailinglist_id, state FROM ezmailingregistration WHERE mailing_user_id = ?';
+            $sql = 'SELECT mailinglist_id, state FROM ezmailingregistration WHERE mailing_user_id = ?';
             $subscription_rows = $this->runQuery($sql, [$user_row['id']]);
-            $subscriptions     = [];
+            $subscriptions = [];
             foreach ($subscription_rows as $subscription_row) {
                 $subscriptions[] = [
                     'mailinglist_id' => $subscription_row['mailinglist_id'],
-                    'approved'       => 20 === $subscription_row['state'],
+                    'approved' => 20 === $subscription_row['state'],
                 ];
                 ++$registrationCounter;
             }
@@ -175,15 +177,15 @@ class MigrateEzMailingCommand extends Command
                 self::DUMP_FOLDER."/user/user_{$user_row['id']}.json",
                 json_encode(
                     [
-                        'email'         => $user_row['email'],
-                        'firstName'     => $user_row['first_name'],
-                        'lastName'      => $user_row['last_name'],
-                        'origin'        => $user_row['origin'],
+                        'email' => $user_row['email'],
+                        'firstName' => $user_row['first_name'],
+                        'lastName' => $user_row['last_name'],
+                        'origin' => $user_row['origin'],
                         'subscriptions' => $subscriptions,
                     ]
                 )
             );
-            $users[]  = pathinfo($fileName)['filename'];
+            $users[] = pathinfo($fileName)['filename'];
         }
 
         $this->ioService->saveFile(
@@ -203,7 +205,7 @@ class MigrateEzMailingCommand extends Command
         $this->clean();
         $this->io->section('Importing from json files to new database.');
 
-        $manifest  = $this->ioService->readFile(self::DUMP_FOLDER.'/manifest.json');
+        $manifest = $this->ioService->readFile(self::DUMP_FOLDER.'/manifest.json');
         $fileNames = json_decode($manifest);
 
         // Lists
@@ -212,10 +214,10 @@ class MigrateEzMailingCommand extends Command
         $listIds = [];
 
         $mailingListRepository = $this->entityManager->getRepository(MailingList::class);
-        $userRepository        = $this->entityManager->getRepository(User::class);
+        $userRepository = $this->entityManager->getRepository(User::class);
 
         foreach ($fileNames->lists as $listFile) {
-            $listData    = json_decode($this->ioService->readFile(self::DUMP_FOLDER.'/list/'.$listFile.'.json'));
+            $listData = json_decode($this->ioService->readFile(self::DUMP_FOLDER.'/list/'.$listFile.'.json'));
             $mailingList = new MailingList();
             $mailingList->setNames((array) $listData);
             $mailingList->setWithApproval(false);
@@ -230,7 +232,7 @@ class MigrateEzMailingCommand extends Command
             $campaignData = json_decode(
                 $this->ioService->readFile(self::DUMP_FOLDER.'/campaign/'.$campaignFile.'.json')
             );
-            $campaign     = new Campaign();
+            $campaign = new Campaign();
             $campaign->setNames((array) $campaignData->name);
             $campaign->setReportEmail($campaignData->reportEmail);
             $campaign->setSenderEmail($campaignData->senderEmail);

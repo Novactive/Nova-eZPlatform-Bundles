@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Command;
@@ -40,11 +42,11 @@ class InstallCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $io->title('Update the Database with Custom Novactive eZ Mailing Table');
-        $command    = $this->getApplication()->find('doctrine:schema:update');
-        $arguments  = [
-            'command'    => 'doctrine:schema:update',
+        $command = $this->getApplication()->find('doctrine:schema:update');
+        $arguments = [
+            'command' => 'doctrine:schema:update',
             '--dump-sql' => true,
-            '--force'    => true,
+            '--force' => true,
         ];
         $arrayInput = new ArrayInput($arguments);
         $command->run($arrayInput, $output);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZRssFeedBundle.
  *
@@ -30,7 +31,7 @@ class MainMenuBuilderListener implements EventSubscriberInterface
     public function __construct(AuthorizationCheckerInterface $authorizationChecker, Repository $repository)
     {
         $this->authorizationChecker = $authorizationChecker;
-        $this->repository           = $repository;
+        $this->repository = $repository;
     }
 
     public static function getSubscribedEvents()
@@ -38,9 +39,6 @@ class MainMenuBuilderListener implements EventSubscriberInterface
         return [ConfigureMenuEvent::MAIN_MENU => 'onMainMenuBuild'];
     }
 
-    /**
-     * @param \EzSystems\EzPlatformAdminUi\Menu\Event\ConfigureMenuEvent $event
-     */
     public function onMainMenuBuild(ConfigureMenuEvent $event)
     {
         /**
@@ -53,9 +51,6 @@ class MainMenuBuilderListener implements EventSubscriberInterface
         }
     }
 
-    /**
-     * @return Repository
-     */
     public function getRepository(): Repository
     {
         return $this->repository;
@@ -63,8 +58,6 @@ class MainMenuBuilderListener implements EventSubscriberInterface
 
     /**
      * Adds the RSS submenu to eZ Platform admin interface.
-     *
-     * @param \Knp\Menu\ItemInterface $menu
      */
     private function addSubMenu(ItemInterface $menu)
     {

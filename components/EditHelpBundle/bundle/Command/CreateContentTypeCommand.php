@@ -2,16 +2,17 @@
 
 namespace Novactive\Bundle\NovaeZEditHelpBundle\Command;
 
+use eZ\Publish\API\Repository\Exceptions\ForbiddenException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
+use Novactive\Bundle\NovaeZEditHelpBundle\Services\FetchDocumentation;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
-use Novactive\Bundle\NovaeZEditHelpBundle\Services\FetchDocumentation;
-
 
 class CreateContentTypeCommand extends ContainerAwareCommand
 {
-
     protected function configure()
     {
         $this->setName('novahelptooltip:create');
@@ -29,18 +30,24 @@ class CreateContentTypeCommand extends ContainerAwareCommand
         try {
             $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
 
-            $output->writeln(sprintf('<error>Content Type with identifier %s already exists</error>', $contentTypeIdentifier));
-        } catch (\eZ\Publish\API\Repository\Exceptions\NotFoundException $e) {
-
+            $output->writeln(
+                sprintf('<error>Content Type with identifier %s already exists</error>', $contentTypeIdentifier)
+            );
+        } catch (NotFoundException $e) {
             $contentTypeGroupIdentifier = 'Help';
 
             try {
                 $contentTypeGroup = $contentTypeService->loadContentTypeGroupByIdentifier($contentTypeGroupIdentifier);
-            } catch (\eZ\Publish\API\Repository\Exceptions\NotFoundException $e) {
-                $contentTypeGroupCreateStruct = new ContentTypeGroupCreateStruct;
+            } catch (NotFoundException $e) {
+                $contentTypeGroupCreateStruct = new ContentTypeGroupCreateStruct();
                 $contentTypeGroupCreateStruct->identifier = $contentTypeGroupIdentifier;
                 $contentTypeGroup = $contentTypeService->createContentTypeGroup($contentTypeGroupCreateStruct);
-                $output->writeln(sprintf('<info>Content Type Group with name %s has been created</info>', $contentTypeGroupIdentifier));
+                $output->writeln(
+                    sprintf(
+                        '<info>Content Type Group with name %s has been created</info>',
+                        $contentTypeGroupIdentifier
+                    )
+                );
             }
 
             // instantiate a ContentTypeCreateStruct with the given content type identifier and set parameters
@@ -51,7 +58,7 @@ class CreateContentTypeCommand extends ContainerAwareCommand
 
             // set names for the content type
             $contentTypeCreateStruct->names = [
-                'eng-GB' => 'Nova Help Tooltip'
+                'eng-GB' => 'Nova Help Tooltip',
             ];
 
             $contentTypeCreateStruct->isContainer = true;
@@ -97,16 +104,23 @@ class CreateContentTypeCommand extends ContainerAwareCommand
             $contentTypeCreateStruct->addFieldDefinition($imageFieldCreateStruct);
 
             try {
-                $contentTypeDraft = $contentTypeService->createContentType($contentTypeCreateStruct, [$contentTypeGroup]);
+                $contentTypeDraft = $contentTypeService->createContentType(
+                    $contentTypeCreateStruct,
+                    [$contentTypeGroup]
+                );
                 $contentTypeService->publishContentTypeDraft($contentTypeDraft);
-                $output->writeln(sprintf('<info>Content type created %s with ID %s</info>', $contentTypeIdentifier, $contentTypeDraft->id));
-            } catch (\eZ\Publish\API\Repository\Exceptions\UnauthorizedException $e) {
+                $output->writeln(
+                    sprintf(
+                        '<info>Content type created %s with ID %s</info>',
+                        $contentTypeIdentifier,
+                        $contentTypeDraft->id
+                    )
+                );
+            } catch (UnauthorizedException $e) {
                 $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
-            } catch (\eZ\Publish\API\Repository\Exceptions\ForbiddenException $e) {
+            } catch (ForbiddenException $e) {
                 $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             }
-
         }
-
     }
 }

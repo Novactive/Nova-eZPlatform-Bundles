@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,10 +9,12 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\Helper\TranslationHelper;
@@ -47,11 +50,6 @@ class MailingController
      * @Route("/show/{mailing}", name="novaezmailing_mailing_show")
      * @Template()
      * @Security("is_granted('view', mailing)")
-     *
-     * @param Mailing                      $mailing
-     * @param ContentViewParameterSupplier $contentViewParameterSupplier
-     *
-     * @return array
      */
     public function showAction(
         Mailing $mailing,
@@ -69,21 +67,15 @@ class MailingController
         );
 
         return [
-            'item'                       => $mailing,
+            'item' => $mailing,
             'form_subitems_content_edit' => $subitemsContentEdit->createView(),
-            'subitems_module'            => $contentView->getParameter('subitems_module'),
+            'subitems_module' => $contentView->getParameter('subitems_module'),
         ];
     }
 
     /**
      * @Template()
      * @Security("is_granted('view', mailing)")
-     *
-     * @param Mailing    $mailing
-     * @param Repository $repository
-     * @param ContentTab $contentTab
-     *
-     * @return array
      */
     public function mailingTabsAction(
         Mailing $mailing,
@@ -91,24 +83,24 @@ class MailingController
         ContentTab $contentTab,
         EntityManagerInterface $entityManager
     ): array {
-        $content     = $mailing->getContent();
+        $content = $mailing->getContent();
         $contentType = $repository->getContentTypeService()->loadContentType(
             $content->contentInfo->contentTypeId
         );
-        $preview     = $contentTab->renderView(
+        $preview = $contentTab->renderView(
             [
-                'content'     => $content,
-                'location'    => $mailing->getLocation(),
+                'content' => $content,
+                'location' => $mailing->getLocation(),
                 'contentType' => $contentType,
             ]
         );
 
         return [
-            'item'            => $mailing,
+            'item' => $mailing,
             'totalRecipients' => $entityManager->getRepository(User::class)->countValidRecipients(
                 $mailing->getCampaign()->getMailingLists()
             ),
-            'preview'         => $preview,
+            'preview' => $preview,
         ];
     }
 
@@ -119,15 +111,6 @@ class MailingController
      * @ParamConverter("campaign", class="Novactive\Bundle\eZMailingBundle\Entity\Campaign", options={"id"="campaign"})
      * @Template()
      * @Security("is_granted('edit', mailing)")
-     *
-     * @param Mailing|null           $mailing
-     * @param Campaign|null          $campaign
-     * @param Request                $request
-     * @param RouterInterface        $router
-     * @param FormFactoryInterface   $formFactory
-     * @param EntityManagerInterface $entityManager
-     * @param Registry               $workflows
-     * @param TranslationHelper      $translationHelper
      *
      * @return array|RedirectResponse
      */
@@ -161,7 +144,7 @@ class MailingController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $machine->apply($mailing, 'edit');
-            $mailing->setUpdated(new \DateTime());
+            $mailing->setUpdated(new DateTime());
             $entityManager->persist($mailing);
             $entityManager->flush();
 
@@ -172,7 +155,7 @@ class MailingController
 
         if (null !== $mailing->getLocationId()) {
             $location = $repository->getLocationService()->loadLocation($mailing->getLocationId());
-            $content  = $repository->getContentService()->loadContentByContentInfo($location->contentInfo);
+            $content = $repository->getContentService()->loadContentByContentInfo($location->contentInfo);
             $mailing->setLocation($location);
             $mailing->setContent($content);
         }
@@ -188,14 +171,6 @@ class MailingController
      * @Route("/archive/{mailing}", name="novaezmailing_mailing_archive")
      * @Route("/abort/{mailing}",   name="novaezmailing_mailing_cancel")
      * @Security("is_granted('view', mailing)")
-     *
-     * @param Request                $request
-     * @param Mailing                $mailing
-     * @param RouterInterface        $router
-     * @param EntityManagerInterface $entityManager
-     * @param Registry               $workflows
-     *
-     * @return RedirectResponse
      */
     public function statusAction(
         Request $request,
@@ -204,7 +179,7 @@ class MailingController
         EntityManagerInterface $entityManager,
         Registry $workflows
     ): RedirectResponse {
-        $action  = substr($request->get('_route'), \strlen('novaezmailing_mailing_'));
+        $action = substr($request->get('_route'), \strlen('novaezmailing_mailing_'));
         $machine = $workflows->get($mailing);
         $machine->apply($mailing, $action);
         $entityManager->flush();
@@ -216,15 +191,6 @@ class MailingController
      * @Route("/test/{mailing}", name="novaezmailing_mailing_test")
      * @Security("is_granted('view', mailing)")
      * @Method({"POST"})
-     *
-     * @param Request                $request
-     * @param Mailing                $mailing
-     * @param TestMailing            $processor
-     * @param RouterInterface        $router
-     * @param EntityManagerInterface $entityManager
-     * @param Registry               $workflows
-     *
-     * @return RedirectResponse
      */
     public function testAction(
         Request $request,

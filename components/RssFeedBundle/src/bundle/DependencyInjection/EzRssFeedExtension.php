@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZRssFeedBundle.
  *
@@ -31,15 +32,13 @@ class EzRssFeedExtension extends Extension implements PrependExtensionInterface
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('PlatformAdminUI/services.yml');
     }
 
     /**
      * Allow an extension to prepend the extension configurations.
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function prepend(ContainerBuilder $container)
     {
@@ -48,8 +47,8 @@ class EzRssFeedExtension extends Extension implements PrependExtensionInterface
         ];
 
         foreach ($configs as $fileName => $extensionName) {
-            $configFile = __DIR__ . '/../Resources/config/' . $fileName;
-            $config     = Yaml::parse(file_get_contents($configFile));
+            $configFile = __DIR__.'/../Resources/config/'.$fileName;
+            $config = Yaml::parse(file_get_contents($configFile));
             $container->prependExtensionConfig($extensionName, $config);
             $container->addResource(new FileResource($configFile));
         }

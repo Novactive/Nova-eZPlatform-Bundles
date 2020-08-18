@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Command;
@@ -32,8 +34,6 @@ class SendMailingCommand extends Command
 
     /**
      * SendMailingCommand constructor.
-     *
-     * @param SendMailing $processor
      */
     public function __construct(SendMailing $processor)
     {

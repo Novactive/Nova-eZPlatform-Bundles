@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,10 +9,12 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Provider;
 
+use AppKernel;
 use Novactive\Bundle\eZMailingBundle\Core\Modifier\ModifierInterface;
 use Novactive\Bundle\eZMailingBundle\Entity\Broadcast as BroadcastEntity;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
@@ -49,40 +52,30 @@ class MailingContent
     public function __construct(iterable $modifiers, RouterInterface $router)
     {
         $this->modifiers = $modifiers;
-        $this->router    = $router;
+        $this->router = $router;
     }
 
-    /**
-     * @param Mailing $mailing
-     *
-     * @return string
-     */
     public function preFetchContent(Mailing $mailing): string
     {
-        $kernel = new \AppKernel('prod', false);
+        $kernel = new AppKernel('prod', false);
         $client = new Client($kernel);
-        $url    = $this->router->generate(
+        $url = $this->router->generate(
             '_novaezmailing_ez_content_view',
             [
                 'locationId' => $mailing->getLocation()->id,
-                'contentId'  => $mailing->getContent()->id,
-                'mailingId'  => $mailing->getId(),
+                'contentId' => $mailing->getContent()->id,
+                'mailingId' => $mailing->getId(),
                 'siteaccess' => $mailing->getSiteAccess(),
             ],
             UrlGeneratorInterface::ABSOLUTE_PATH
         );
 
-        $crawler                                        = $client->request('/GET', $url);
+        $crawler = $client->request('/GET', $url);
         $this->nativeContent[$mailing->getLocationId()] = "<!DOCTYPE html><html>{$crawler->html()}</html>";
 
         return $this->nativeContent[$mailing->getLocationId()];
     }
 
-    /**
-     * @param Mailing $mailing
-     *
-     * @return string
-     */
     private function getNativeContent(Mailing $mailing): string
     {
         if (!isset($this->nativeContent[$mailing->getLocationId()])) {
@@ -92,13 +85,6 @@ class MailingContent
         return $this->nativeContent[$mailing->getLocationId()];
     }
 
-    /**
-     * @param Mailing         $mailing
-     * @param UserEntity      $recipient
-     * @param BroadcastEntity $broadcast
-     *
-     * @return Swift_Message
-     */
     public function getContentMailing(
         Mailing $mailing,
         UserEntity $recipient,

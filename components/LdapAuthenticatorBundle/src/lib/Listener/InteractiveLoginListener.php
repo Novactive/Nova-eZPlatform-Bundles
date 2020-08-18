@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZLDAPAuthenticator Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZLdapAuthenticatorBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\eZLDAPAuthenticator\Listener;
@@ -43,7 +45,7 @@ class InteractiveLoginListener implements EventSubscriberInterface
 
     public function onInteractiveLogin(InteractiveLoginEvent $event): void
     {
-        $token        = $event->getAuthenticationToken();
+        $token = $event->getAuthenticationToken();
         $originalUser = $token->getUser();
 
         if (!$originalUser instanceof EzLdapUser) {

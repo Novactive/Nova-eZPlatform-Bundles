@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Entity\Compose;
@@ -32,17 +34,12 @@ trait Metadata
      */
     private $updated;
 
-    /**
-     * @return DateTime
-     */
     public function getCreated(): DateTime
     {
         return $this->created;
     }
 
     /**
-     * @param DateTime $created
-     *
      * @return Metadata
      */
     public function setCreated(DateTime $created): self
@@ -52,17 +49,12 @@ trait Metadata
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
     public function getUpdated(): DateTime
     {
         return $this->updated;
     }
 
     /**
-     * @param DateTime $updated
-     *
      * @return Metadata
      */
     public function setUpdated(DateTime $updated): self

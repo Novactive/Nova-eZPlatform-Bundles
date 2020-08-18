@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -16,6 +17,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\SPI\FieldType\Value as ValueInterface;
 use eZ\Publish\SPI\Persistence\Content\FieldValue as PersistenceValue;
 
 class Type extends FieldType
@@ -27,8 +29,6 @@ class Type extends FieldType
 
     /**
      * Type constructor.
-     *
-     * @param ValueConverter $valueConverter
      */
     public function __construct(ValueConverter $valueConverter)
     {
@@ -37,8 +37,6 @@ class Type extends FieldType
 
     /**
      * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
-     *
-     * @param mixed $validatorConfiguration
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
@@ -55,7 +53,6 @@ class Type extends FieldType
 
     /**
      * Validates a field based on the validators in the field definition.
-     *
      *
      * @param FieldDefinition $fieldDefinition The field definition of the field
      * @param Value           $fieldValue      The field value for which an action is performed
@@ -90,12 +87,8 @@ class Type extends FieldType
      *
      * It will be used to generate content name and url alias if current field is designated
      * to be used in the content name/urlAlias pattern.
-     *
-     * @param Value $value
-     *
-     * @return string
      */
-    public function getName(SPIValue $value)
+    public function getName(ValueInterface $value, FieldDefinition $fieldDefinition, string $languageCode): string
     {
         return (string) $value->menuItems;
     }
@@ -129,7 +122,6 @@ class Type extends FieldType
     /**
      * Throws an exception if value structure is not of expected format.
      *
-     *
      * @param Value $value
      *
      * @throws InvalidArgumentException if the value does not match the expected structure
@@ -137,11 +129,7 @@ class Type extends FieldType
     protected function checkValueStructure(BaseValue $value)
     {
         if (!is_array($value->menuItems)) {
-            throw new InvalidArgumentType(
-                '$value->menuItems',
-                'array',
-                $value->menuItems
-            );
+            throw new InvalidArgumentType('$value->menuItems', 'array', $value->menuItems);
         }
     }
 
@@ -160,8 +148,6 @@ class Type extends FieldType
     /**
      * Converts a persistence $fieldValue to a Value.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
-     *
      * @return \eZ\Publish\Core\FieldType\Value
      */
     public function fromPersistenceValue(PersistenceValue $fieldValue)
@@ -175,8 +161,6 @@ class Type extends FieldType
 
     /**
      * Converts an $hash to the Value defined by the field type.
-     *
-     * @param mixed $hash
      *
      * @return Value $value
      */
@@ -193,8 +177,6 @@ class Type extends FieldType
      * Converts a $Value to a hash.
      *
      * @param Value $value
-     *
-     * @return mixed
      */
     public function toHash(SPIValue $value)
     {

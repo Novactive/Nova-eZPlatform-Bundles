@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZProtectedContentBundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/eZProtectedContentBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Form;
@@ -27,7 +29,7 @@ class RequestProtectedAccessType extends AbstractType
             TextType::class,
             [
                 'required' => true,
-                'label'    => 'tab.table.th.password',
+                'label' => 'tab.table.th.password',
             ]
         );
         $builder->add('submit', SubmitType::class);

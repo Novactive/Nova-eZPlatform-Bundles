@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZProtectedContentBundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/eZProtectedContentBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Repository;
@@ -46,12 +48,12 @@ class ProtectedAccessRepository extends EntityRepository
     {
         $contentIds = $this->repository->sudo(
             function (Repository $repository) use ($content) {
-                $ids       = [$content->id];
+                $ids = [$content->id];
                 $locations = $repository->getLocationService()->loadLocations($content->contentInfo);
                 foreach ($locations as $location) {
                     /** @var Location $location */
                     $parent = $repository->getLocationService()->loadLocation($location->parentLocationId);
-                    $ids[]  = $parent->contentInfo->id;
+                    $ids[] = $parent->contentInfo->id;
                 }
 
                 return $ids;
@@ -64,7 +66,7 @@ class ProtectedAccessRepository extends EntityRepository
             $qb->expr()->in($this->getAlias().'.contentId', ':contentIds')
         );
         $qb->setParameter('contentIds', $contentIds);
-        $results         = $qb->getQuery()->getResult();
+        $results = $qb->getQuery()->getResult();
         $filteredResults = [];
         foreach ($results as $protection) {
             /** @var ProtectedAccess $protection */

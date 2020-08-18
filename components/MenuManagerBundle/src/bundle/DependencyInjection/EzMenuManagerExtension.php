@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -38,8 +39,6 @@ class EzMenuManagerExtension extends Extension implements PrependExtensionInterf
 
     /**
      * Allow an extension to prepend the extension configurations.
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function prepend(ContainerBuilder $container)
     {
@@ -61,7 +60,7 @@ class EzMenuManagerExtension extends Extension implements PrependExtensionInterf
         );
 
         $configs = [
-            'field_templates.yml'    => 'ezpublish',
+            'field_templates.yml' => 'ezpublish',
             'field_templates_ui.yml' => 'ezpublish',
         ];
 
@@ -73,7 +72,7 @@ class EzMenuManagerExtension extends Extension implements PrependExtensionInterf
 
         foreach ($configs as $fileName => $extensionName) {
             $configFile = __DIR__.'/../Resources/config/'.$fileName;
-            $config     = Yaml::parse(file_get_contents($configFile));
+            $config = Yaml::parse(file_get_contents($configFile));
             $container->prependExtensionConfig($extensionName, $config);
             $container->addResource(new FileResource($configFile));
         }

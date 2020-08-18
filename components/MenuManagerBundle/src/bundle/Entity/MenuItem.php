@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -105,14 +106,12 @@ class MenuItem
 
     /**
      * MenuItem constructor.
-     *
-     * @param string|null $remoteId
      */
     public function __construct(?string $remoteId = null)
     {
         $this->childrens = new ArrayCollection();
-        $this->options   = json_encode([]);
-        $this->remoteId  = $remoteId ?? md5(uniqid(get_class($this), true));
+        $this->options = json_encode([]);
+        $this->remoteId = $remoteId ?? md5(uniqid(get_class($this), true));
     }
 
     /**
@@ -125,8 +124,6 @@ class MenuItem
 
     /**
      * @param $language
-     *
-     * @return string|null
      */
     public function getTranslatedName($language): ?string
     {
@@ -135,9 +132,6 @@ class MenuItem
         return is_array($name) ? ($name[$language] ?? null) : $this->getName();
     }
 
-    /**
-     * @param string $name
-     */
     public function setName(string $name): void
     {
         $this->name = $name;
@@ -153,8 +147,6 @@ class MenuItem
 
     /**
      * @param $language
-     *
-     * @return string|null
      */
     public function getTranslatedUrl($language): ?string
     {
@@ -179,33 +171,21 @@ class MenuItem
         return $this->target;
     }
 
-    /**
-     * @param string $target
-     */
     public function setTarget(string $target): void
     {
         $this->target = $target;
     }
 
-    /**
-     * @return Menu
-     */
     public function getMenu(): Menu
     {
         return $this->menu;
     }
 
-    /**
-     * @param Menu $menu
-     */
     public function setMenu(Menu $menu): void
     {
         $this->menu = $menu;
     }
 
-    /**
-     * @return bool
-     */
     public function hasChildrens(): bool
     {
         return !$this->childrens->isEmpty();
@@ -228,8 +208,6 @@ class MenuItem
     }
 
     /**
-     * @param MenuItem $children
-     *
      * @return array
      */
     public function addChildren(MenuItem $children): void
@@ -240,9 +218,6 @@ class MenuItem
         }
     }
 
-    /**
-     * @param MenuItem $children
-     */
     public function removeChildren(MenuItem $children): void
     {
         $this->childrens->removeElement($children);
@@ -272,33 +247,21 @@ class MenuItem
         $this->parent = null;
     }
 
-    /**
-     * @return int
-     */
     public function getPosition(): int
     {
         return $this->position;
     }
 
-    /**
-     * @param int $position
-     */
     public function setPosition(int $position): void
     {
         $this->position = $position;
     }
 
-    /**
-     * @return array
-     */
     public function getOptions(): array
     {
         return json_decode($this->options, true);
     }
 
-    /**
-     * @param array $options
-     */
     public function setOptions(array $options): void
     {
         $this->options = json_encode($options);
@@ -306,8 +269,6 @@ class MenuItem
 
     /**
      * @param $name
-     *
-     * @return mixed
      */
     public function getOption($name, $default = false)
     {
@@ -322,7 +283,7 @@ class MenuItem
      */
     public function setOption($name, $value): void
     {
-        $options        = $this->getOptions();
+        $options = $this->getOptions();
         $options[$name] = $value;
         $this->setOptions($options);
     }
@@ -335,9 +296,6 @@ class MenuItem
         return (string) $this->id;
     }
 
-    /**
-     * @param array $properties
-     */
     public function update(array $properties)
     {
         foreach ($properties as $property => $value) {

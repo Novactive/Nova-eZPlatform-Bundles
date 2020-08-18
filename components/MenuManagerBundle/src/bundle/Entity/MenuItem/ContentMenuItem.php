@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -25,11 +26,8 @@ use Novactive\EzMenuManagerBundle\Entity\MenuItem;
  */
 class ContentMenuItem extends MenuItem
 {
-    const URL_PREFIX = 'content:';
+    public const URL_PREFIX = 'content:';
 
-    /**
-     * @return int
-     */
     public function getContentId(): int
     {
         return (int) ltrim($this->getUrl(), static::URL_PREFIX);

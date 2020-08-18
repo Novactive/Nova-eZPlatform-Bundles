@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
@@ -31,8 +33,6 @@ class UserController
     /**
      * @Route("/show/{user}", name="novaezmailing_user_show")
      * @Template()
-     *
-     * @return array
      */
     public function showAction(User $user): array
     {
@@ -47,11 +47,6 @@ class UserController
 
     /**
      * @Route("/delete/{user}", name="novaezmailing_user_remove")
-     *
-     * @param EntityManagerInterface $entityManager
-     * @param RouterInterface        $router
-     *
-     * @return RedirectResponse
      */
     public function deleteAction(
         User $user,
@@ -68,8 +63,6 @@ class UserController
      * @Route("/{status}/{page}/{limit}", name="novaezmailing_user_index",
      *                                              defaults={"page":1, "limit":10, "status":"all"})
      * @Template()
-     *
-     * @return array
      */
     public function indexAction(UserProvider $provider, string $status = 'all', int $page = 1, int $limit = 10): array
     {
@@ -78,8 +71,8 @@ class UserController
         ];
 
         return [
-            'pager'         => $provider->getPagerFilters($filters, $page, $limit),
-            'statuses'      => $provider->getStatusesData($filters),
+            'pager' => $provider->getPagerFilters($filters, $page, $limit),
+            'statuses' => $provider->getStatusesData($filters),
             'currentStatus' => $status,
         ];
     }

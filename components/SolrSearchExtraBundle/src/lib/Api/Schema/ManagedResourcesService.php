@@ -41,9 +41,9 @@ class ManagedResourcesService
         foreach ($response->managedResources as $infos) {
             $matches = [];
             if (preg_match('/^\/schema\/analysis\/([a-z]*)\/(.*)$/', $infos->resourceId, $matches)) {
-                $sets[]                = [
+                $sets[] = [
                     'type' => $matches[1],
-                    'id'   => $matches[2],
+                    'id' => $matches[2],
                 ];
             }
         }

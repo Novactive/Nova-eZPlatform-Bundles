@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZProtectedContentBundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/eZProtectedContentBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Form;
@@ -38,7 +40,7 @@ class ProtectedAccessType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class'         => ProtectedAccess::class,
+                'data_class' => ProtectedAccess::class,
                 'translation_domain' => 'ezprotectedcontent',
             ]
         );

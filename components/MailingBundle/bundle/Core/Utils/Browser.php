@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Utils;
@@ -39,12 +41,10 @@ class Browser
 
     /**
      * Constructor.
-     *
-     * @param string $userAgent
      */
     public function __construct(string $userAgent)
     {
-        $bname    = 'Unknown';
+        $bname = 'Unknown';
         $platform = 'Unknown';
 
         // First get the platform
@@ -58,27 +58,27 @@ class Browser
 
         // Next get the name of the useragent
         if (false !== stripos($userAgent, 'MSIE') && !false !== stripos($userAgent, 'Opera')) {
-            $bname          = 'Internet Explorer';
+            $bname = 'Internet Explorer';
             $userAgentBrand = 'MSIE';
         } elseif (false !== stripos($userAgent, 'Firefox')) {
-            $bname          = 'Mozilla Firefox';
+            $bname = 'Mozilla Firefox';
             $userAgentBrand = 'Firefox';
         } elseif (false !== stripos($userAgent, 'Chrome')) {
-            $bname          = 'Google Chrome';
+            $bname = 'Google Chrome';
             $userAgentBrand = 'Chrome';
         } elseif (false !== stripos($userAgent, 'Safari')) {
-            $bname          = 'Apple Safari';
+            $bname = 'Apple Safari';
             $userAgentBrand = 'Safari';
         } elseif (false !== stripos($userAgent, 'Opera')) {
-            $bname          = 'Opera';
+            $bname = 'Opera';
             $userAgentBrand = 'Opera';
         } elseif (false !== stripos($userAgent, 'Netscape')) {
-            $bname          = 'Netscape';
+            $bname = 'Netscape';
             $userAgentBrand = 'Netscape';
         }
 
         // finally get the correct version number
-        $known   = [
+        $known = [
             'Version',
             $userAgentBrand,
             'other',
@@ -106,30 +106,21 @@ class Browser
         }
 
         $this->userAgent = $userAgent;
-        $this->name      = $bname;
-        $this->version   = $version;
-        $this->platform  = $platform;
+        $this->name = $bname;
+        $this->version = $version;
+        $this->platform = $platform;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
     public function getFullName(): string
     {
         return "{$this->name} - ({$this->version})";
     }
 
-    /**
-     * @return string
-     */
     public function getPlatform(): string
     {
         return $this->platform;
@@ -143,9 +134,6 @@ class Browser
         return $this->userAgent;
     }
 
-    /**
-     * @return string
-     */
     public function getVersion(): string
     {
         return $this->version;

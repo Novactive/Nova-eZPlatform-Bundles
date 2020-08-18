@@ -38,17 +38,17 @@ class FocusedThumbnailFilterLoader implements LoaderInterface
     public function load(ImageInterface $image, array $options = []): ImageInterface
     {
         $imageSize = $image->getSize();
-        $cropSize  = $this->focusPointCalculator->calculateCropSize($imageSize, $options);
+        $cropSize = $this->focusPointCalculator->calculateCropSize($imageSize, $options);
         if (null === $cropSize) {
             return $image;
         }
 
-        $focusPoint   = $options['focusPoint'] ?? new FocusPoint($options['focus'][0] ?? 0, $options['focus'][1] ?? 0);
+        $focusPoint = $options['focusPoint'] ?? new FocusPoint($options['focus'][0] ?? 0, $options['focus'][1] ?? 0);
         $originalSize = $options['originalSize'] ?? $imageSize;
 
         if (
-            $originalSize->getWidth() !== $imageSize->getWidth()
-            || $originalSize->getHeight() !== $imageSize->getHeight()
+            $originalSize->getWidth() !== $imageSize->getWidth() ||
+            $originalSize->getHeight() !== $imageSize->getHeight()
         ) {
             $focusPoint = $this->focusPointCalculator->calculateCropFocusPoint(
                 $originalSize,
@@ -67,7 +67,7 @@ class FocusedThumbnailFilterLoader implements LoaderInterface
         $thumbnail->usePalette($image->palette());
         $thumbnail->strip();
 
-        $ratio     = max($ratios);
+        $ratio = max($ratios);
         $imageSize = $thumbnail->getSize()->scale($ratio);
         $thumbnail->resize($imageSize);
 

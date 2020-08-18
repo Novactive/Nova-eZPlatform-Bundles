@@ -55,9 +55,9 @@ class CustomFieldMapper extends ContentTranslationFieldMapper
         \eZ\Publish\Core\Search\Common\FieldNameGenerator $fieldNameGenerator,
         \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider $boostFactorProvider
     ) {
-        $this->contentTypeHandler  = $contentTypeHandler;
-        $this->fieldRegistry       = $fieldRegistry;
-        $this->fieldNameGenerator  = $fieldNameGenerator;
+        $this->contentTypeHandler = $contentTypeHandler;
+        $this->fieldRegistry = $fieldRegistry;
+        $this->fieldNameGenerator = $fieldNameGenerator;
         $this->boostFactorProvider = $boostFactorProvider;
     }
 
@@ -85,7 +85,7 @@ class CustomFieldMapper extends ContentTranslationFieldMapper
      */
     public function mapFields(Content $content, $languageCode)
     {
-        $fields      = [];
+        $fields = [];
         $contentType = $this->contentTypeHandler->load(
             $content->versionInfo->contentInfo->contentTypeId
         );
@@ -105,7 +105,7 @@ class CustomFieldMapper extends ContentTranslationFieldMapper
                     continue;
                 }
 
-                $fieldType   = $this->fieldRegistry->getType($field->type);
+                $fieldType = $this->fieldRegistry->getType($field->type);
                 $indexFields = $fieldType->getIndexData($field, $fieldDefinition);
 
                 foreach ($indexFields as $indexField) {
@@ -192,7 +192,7 @@ class CustomFieldMapper extends ContentTranslationFieldMapper
             return $fieldType;
         }
 
-        $fieldType        = clone $fieldType;
+        $fieldType = clone $fieldType;
         $fieldType->boost = $this->boostFactorProvider->getContentFieldBoostFactor(
             $contentType,
             $fieldDefinition

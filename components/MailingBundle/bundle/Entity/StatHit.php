@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,10 +9,12 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -71,20 +74,15 @@ class StatHit
 
     public function __construct()
     {
-        $this->created = new \DateTime();
+        $this->created = new DateTime();
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * @param int $id
-     *
      * @return $this
      */
     public function setId(int $id): self
@@ -94,17 +92,12 @@ class StatHit
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getUrl(): string
     {
         return $this->url;
     }
 
     /**
-     * @param string $url
-     *
      * @return $this
      */
     public function setUrl(string $url): self
@@ -114,17 +107,12 @@ class StatHit
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getUserKey(): string
     {
         return $this->userKey;
     }
 
     /**
-     * @param string $userKey
-     *
      * @return $this
      */
     public function setUserKey(string $userKey): self
@@ -134,17 +122,12 @@ class StatHit
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getOsName(): string
     {
         return $this->osName;
     }
 
     /**
-     * @param string $osName
-     *
      * @return $this
      */
     public function setOsName(string $osName): self
@@ -154,17 +137,12 @@ class StatHit
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getBrowserName(): string
     {
         return $this->browserName;
     }
 
     /**
-     * @param string $browserName
-     *
      * @return $this
      */
     public function setBrowserName(string $browserName): self
@@ -174,17 +152,12 @@ class StatHit
         return $this;
     }
 
-    /**
-     * @return Broadcast
-     */
     public function getBroadcast(): Broadcast
     {
         return $this->broadcast;
     }
 
     /**
-     * @param Broadcast $broadcast
-     *
      * @return $this
      */
     public function setBroadcast(Broadcast $broadcast): self

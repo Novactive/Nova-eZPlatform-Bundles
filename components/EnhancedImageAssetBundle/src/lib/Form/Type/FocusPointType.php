@@ -38,8 +38,8 @@ class FocusPointType extends AbstractType
                 'posX',
                 TextType::class,
                 [
-                    'label'      => /* @Desc("X") */ 'content.field_type.enhancedimage.focuspoint.posX',
-                    'attr'       => [
+                    'label' => /* @Desc("X") */ 'content.field_type.enhancedimage.focuspoint.posX',
+                    'attr' => [
                         'class' => 'focuspoint-helper--input-focus-x',
                     ],
                 ]
@@ -48,8 +48,8 @@ class FocusPointType extends AbstractType
                 'posY',
                 TextType::class,
                 [
-                    'label'      => /* @Desc("Y") */ 'content.field_type.enhancedimage.focuspoint.posY',
-                    'attr'       => [
+                    'label' => /* @Desc("Y") */ 'content.field_type.enhancedimage.focuspoint.posY',
+                    'attr' => [
                         'class' => 'focuspoint-helper--input-focus-y',
                     ],
                 ]

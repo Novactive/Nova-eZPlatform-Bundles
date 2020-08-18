@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Repository;
@@ -29,11 +31,6 @@ class Registration extends EntityRepository
         return 'reg';
     }
 
-    /**
-     * @param array $filters
-     *
-     * @return QueryBuilder
-     */
     public function createQueryBuilderForFilters(array $filters = []): QueryBuilder
     {
         $qb = parent::createQueryBuilderForFilters($filters);
@@ -44,7 +41,7 @@ class Registration extends EntityRepository
         $mailingLists = null;
         if (isset($filters['campaign'])) {
             /** @var CampaignEntity $campaign */
-            $campaign     = $filters['campaign'];
+            $campaign = $filters['campaign'];
             $mailingLists = $campaign->getMailingLists();
         }
         if (isset($filters['mailingLists'])) {

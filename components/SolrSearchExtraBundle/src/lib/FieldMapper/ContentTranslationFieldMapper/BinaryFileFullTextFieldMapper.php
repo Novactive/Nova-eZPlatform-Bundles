@@ -54,8 +54,8 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
         ContentTypePersistenceHandler $contentTypeHandler,
         array $binaryFileFieldTypeIndentifiers
     ) {
-        $this->binaryFileFieldMapper           = $binaryFileFieldMapper;
-        $this->contentTypeHandler              = $contentTypeHandler;
+        $this->binaryFileFieldMapper = $binaryFileFieldMapper;
+        $this->contentTypeHandler = $contentTypeHandler;
         $this->binaryFileFieldTypeIndentifiers = $binaryFileFieldTypeIndentifiers;
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
@@ -38,24 +40,18 @@ class DashboardController
     public function indexAction(EntityManagerInterface $entityManager): array
     {
         $repoBroadcast = $entityManager->getRepository(Broadcast::class);
-        $repoUsers     = $entityManager->getRepository(User::class);
-        $repoMailings  = $entityManager->getRepository(Mailing::class);
+        $repoUsers = $entityManager->getRepository(User::class);
+        $repoMailings = $entityManager->getRepository(Mailing::class);
 
         return [
             'broadcasts' => $repoBroadcast->findLastBroadcasts(5),
-            'mailings'   => $repoMailings->findLastUpdated(5),
-            'users'      => $repoUsers->findLastUpdated(5),
+            'mailings' => $repoMailings->findLastUpdated(5),
+            'users' => $repoUsers->findLastUpdated(5),
         ];
     }
 
     /**
      * @Route("/search/autocomplete", name="novaezmailing_dashboard_search_autocomplete")
-     *
-     * @param Request                $request
-     * @param RouterInterface        $router
-     * @param EntityManagerInterface $entityManager
-     *
-     * @return JsonResponse
      */
     public function autocompleteSearchAction(
         Request $request,
@@ -68,7 +64,7 @@ class DashboardController
 
         $query = $request->query->get('query');
 
-        $repo  = $entityManager->getRepository(User::class);
+        $repo = $entityManager->getRepository(User::class);
         $users = $repo->findByFilters(['query' => $query]);
 
         $userResults = array_map(
@@ -80,19 +76,19 @@ class DashboardController
 
                 return [
                     'value' => $userName,
-                    'data'  => $router->generate('novaezmailing_user_show', ['user' => $user->getId()]),
+                    'data' => $router->generate('novaezmailing_user_show', ['user' => $user->getId()]),
                 ];
             },
             $users
         );
 
-        $repo               = $entityManager->getRepository(MailingList::class);
-        $mailingLists       = $repo->findByFilters(['query' => $query]);
+        $repo = $entityManager->getRepository(MailingList::class);
+        $mailingLists = $repo->findByFilters(['query' => $query]);
         $mailingListResults = array_map(
             function (MailingList $mailingList) use ($router) {
                 return [
                     'value' => trim($mailingList->getName()),
-                    'data'  => $router->generate(
+                    'data' => $router->generate(
                         'novaezmailing_mailinglist_show',
                         ['mailingList' => $mailingList->getId()]
                     ),

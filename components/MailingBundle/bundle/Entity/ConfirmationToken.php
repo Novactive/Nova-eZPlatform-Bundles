@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,12 +9,13 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use DateTime;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class ConfirmationToken.
@@ -26,9 +28,9 @@ class ConfirmationToken
 {
     use Compose\Metadata;
 
-    const REGISTER = 'register';
+    public const REGISTER = 'register';
 
-    const UNREGISTER = 'unregister';
+    public const UNREGISTER = 'unregister';
 
     /**
      * @var string
@@ -62,9 +64,6 @@ class ConfirmationToken
         return $this->id;
     }
 
-    /**
-     * @param string $id
-     */
     public function setId(string $id): self
     {
         $this->id = $id;
@@ -72,17 +71,12 @@ class ConfirmationToken
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getPayload(): array
     {
         return $this->payload;
     }
 
     /**
-     * @param array $payload
-     *
      * @return $this
      */
     public function setPayload(array $payload): self

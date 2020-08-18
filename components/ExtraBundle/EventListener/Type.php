@@ -1,66 +1,68 @@
 <?php
+
 /**
- * NovaeZExtraBundle PreContentViewListener
+ * NovaeZExtraBundle PreContentViewListener.
  *
  * @package   Novactive\Bundle\eZExtraBundle
+ *
  * @author    Novactive <dir.tech@novactive.com>
  * @copyright 2015 Novactive
  * @license   https://github.com/Novactive/NovaeZExtraBundle/blob/master/LICENSE MIT Licence
  */
+
 namespace Novactive\Bundle\eZExtraBundle\EventListener;
 
-use eZ\Publish\Core\MVC\Symfony\View\ContentView;
-use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Repository;
-use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Content as ContentHelper;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver as ConfigResolver;
-use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\WrapperFactory;
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Content as ContentHelper;
+use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\WrapperFactory;
 
 /**
- * Class Type
+ * Class Type.
  */
 abstract class Type
 {
-
     /**
-     * The Content view
+     * The Content view.
      *
      * @var ContentView
      */
     protected $contentView;
 
     /**
-     * The Location
+     * The Location.
      *
      * @var Location
      */
     protected $location;
 
     /**
-     * The Content
+     * The Content.
      *
      * @var Content
      */
     protected $content;
 
     /**
-     * Repository eZ
+     * Repository eZ.
      *
      * @var Repository
      */
     protected $repository;
 
     /**
-     * Content Helper
+     * Content Helper.
      *
      * @var ContentHelper
      */
     protected $contentHelper;
 
     /**
-     * Config resolver
+     * Config resolver.
      *
      * @var ConfigResolver
      */
@@ -74,9 +76,7 @@ abstract class Type
     protected $wrapperFactory;
 
     /**
-     * Set the Content View
-     *
-     * @param ContentView $contentView
+     * Set the Content View.
      */
     public function setContentView(ContentView $contentView)
     {
@@ -84,9 +84,7 @@ abstract class Type
     }
 
     /**
-     * Set the Location
-     *
-     * @param Location $location
+     * Set the Location.
      */
     public function setLocation(Location $location)
     {
@@ -94,9 +92,7 @@ abstract class Type
     }
 
     /**
-     * Set the Content
-     *
-     * @param Content $content
+     * Set the Content.
      */
     public function setContent(Content $content)
     {
@@ -118,7 +114,7 @@ abstract class Type
     }
 
     /**
-     * Set the Repository
+     * Set the Repository.
      *
      * @param Repository $repository repository
      *
@@ -132,7 +128,7 @@ abstract class Type
     }
 
     /**
-     * Set the ContentHelper
+     * Set the ContentHelper.
      *
      * @param ContentHelper $contentHelper contentHelper
      *
@@ -146,7 +142,7 @@ abstract class Type
     }
 
     /**
-     * Set the ConfigResolver
+     * Set the ConfigResolver.
      *
      * @param ConfigResolver $configResolver configResolver
      *
@@ -160,13 +156,12 @@ abstract class Type
     }
 
     /**
-     * Get the Children
+     * Get the Children.
      *
      * @deprecated Now use dynamic children instead.
      *             Example : for full view children build a method getFullChildren
      *
      * @param array      $viewParameters
-     *
      * @param SiteAccess $siteAccess
      *
      * @return array

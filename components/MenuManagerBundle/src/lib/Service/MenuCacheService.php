@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -27,8 +28,6 @@ class MenuCacheService
 
     /**
      * MenuCacheService constructor.
-     *
-     * @param TagAwareAdapterInterface $cache
      */
     public function __construct(TagAwareAdapterInterface $cache)
     {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Entity\Compose;
@@ -47,8 +49,6 @@ trait Remote
     }
 
     /**
-     * @param string $remoteId
-     *
      * @return Remote
      */
     public function setRemoteId(string $remoteId): self
@@ -67,8 +67,6 @@ trait Remote
     }
 
     /**
-     * @param DateTime $lastSynchro
-     *
      * @return Remote
      */
     public function setLastSynchro(DateTime $lastSynchro): self
@@ -78,17 +76,12 @@ trait Remote
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getRemoteStatus(): int
     {
         return $this->remoteStatus;
     }
 
     /**
-     * @param int $remoteStatus
-     *
      * @return Remote
      */
     public function setRemoteStatus(int $remoteStatus): self

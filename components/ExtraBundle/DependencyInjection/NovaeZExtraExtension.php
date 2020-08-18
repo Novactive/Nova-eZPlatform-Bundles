@@ -1,21 +1,24 @@
 <?php
+
 /**
- * NovaeZExtraBundle Extension
+ * NovaeZExtraBundle Extension.
  *
  * @package   Novactive\Bundle\eZExtraBundle
+ *
  * @author    Novactive <dir.tech@novactive.com>
  * @copyright 2015 Novactive
  * @license   https://github.com/Novactive/NovaeZExtraBundle/blob/master/LICENSE MIT Licence
  */
+
 namespace Novactive\Bundle\eZExtraBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
- * NovaeZExtraExtension
+ * NovaeZExtraExtension.
  */
 class NovaeZExtraExtension extends Extension
 {
@@ -31,5 +34,3 @@ class NovaeZExtraExtension extends Extension
         $loader->load('services.yml');
     }
 }
-
-

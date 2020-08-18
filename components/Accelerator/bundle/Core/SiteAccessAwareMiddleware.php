@@ -28,8 +28,11 @@ class SiteAccessAwareMiddleware implements MiddlewareInterface, SiteAccessAwareI
     public function handle(Envelope $envelope, StackInterface $stack): Envelope
     {
         $message = $envelope->getMessage();
-        if ($message instanceof SiteAccessAwareInterface && null !== $this->siteAccess &&
-            null === $message->getSiteAccess()) {
+        if (
+            $message instanceof SiteAccessAwareInterface &&
+            null !== $this->siteAccess &&
+            null === $message->getSiteAccess()
+        ) {
             $message->setSiteAccess($this->siteAccess);
         }
 

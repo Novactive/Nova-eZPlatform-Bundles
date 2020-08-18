@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,12 +9,14 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Utils;
 
 use Carbon\Carbon;
 use DateTime;
+use LogicException;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 
 /**
@@ -28,93 +31,67 @@ class Clock
 
     /**
      * Clock constructor.
-     *
-     * @param DateTime $time
      */
     public function __construct(DateTime $time)
     {
         $this->time = Carbon::instance($time);
     }
 
-    /**
-     * @return int
-     */
     public function getHourOfDay(): int
     {
         return $this->time->hour;
     }
 
-    /**
-     * @return int
-     */
     public function getDayOfWeek(): int
     {
         return $this->time->dayOfWeekIso;
     }
 
-    /**
-     * @return int
-     */
     public function getDayOfMonth(): int
     {
         return $this->time->day;
     }
 
-    /**
-     * @return int
-     */
     public function getDayOfYear(): int
     {
         return $this->time->dayOfYear + 1;
     }
 
-    /**
-     * @return int
-     */
     public function getWeekOfMonth(): int
     {
         return $this->time->weekOfMonth;
     }
 
-    /**
-     * @return int
-     */
     public function getMonthOfYear(): int
     {
         return $this->time->month;
     }
 
-    /**
-     * @return int
-     */
     public function getWeekOfYear(): int
     {
         return $this->time->weekOfYear;
     }
 
-    /**
-     * @param Mailing $mailing
-     *
-     * @return bool
-     */
     public function match(Mailing $mailing): bool
     {
         // everything must match unless it is * which is a wilcard
         $testMethods = [
-            'getHourOfDay'   => 'getHoursOfDay',
-            'getDayOfWeek'   => 'getDaysOfWeek',
-            'getDayOfMonth'  => 'getDaysOfMonth',
-            'getDayOfYear'   => 'getDaysOfYear',
+            'getHourOfDay' => 'getHoursOfDay',
+            'getDayOfWeek' => 'getDaysOfWeek',
+            'getDayOfMonth' => 'getDaysOfMonth',
+            'getDayOfYear' => 'getDaysOfYear',
             'getWeekOfMonth' => 'getWeeksOfMonth',
             'getMonthOfYear' => 'getMonthsOfYear',
-            'getWeekOfYear'  => 'getWeeksOfYear',
+            'getWeekOfYear' => 'getWeeksOfYear',
         ];
 
         foreach ($testMethods as $testMethodClock => $testMethodMailing) {
-            $possibilities      = $mailing->$testMethodMailing();
+            $possibilities = $mailing->$testMethodMailing();
             $countPossibilities = count($possibilities);
-            if (0 === $countPossibilities ||
-                (1 === $countPossibilities && '' === $possibilities[0])) { // which means nothing then *
+            if (
+                0 === $countPossibilities ||
+                (1 === $countPossibilities && '' === $possibilities[0])
+            ) { // which means nothing then *
                 continue;
             }
             if (!\in_array($this->$testMethodClock(), $possibilities)) {
@@ -125,16 +102,11 @@ class Clock
         return true;
     }
 
-    /**
-     * @param Mailing $mailing
-     *
-     * @return DateTime
-     */
     public function nextTick(Mailing $mailing): DateTime
     {
         // Not sure that is great but it is a loop of 365 max, then might be the simplest and the best perf
-        $now   = $this->time;
-        $tick  = clone $now;
+        $now = $this->time;
+        $tick = clone $now;
         $hours = $mailing->getHoursOfDay();
 
         for ($i = 0; $i < 365; ++$i) {
@@ -163,6 +135,6 @@ class Clock
             }
             $tick->addDay();
         }
-        throw new \LogicException("There is not next tick for Mailing {$mailing->getName()}");
+        throw new LogicException("There is not next tick for Mailing {$mailing->getName()}");
     }
 }

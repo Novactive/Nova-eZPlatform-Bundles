@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -48,13 +49,6 @@ class MenuItemFieldType extends AbstractType
 
     /**
      * MenuItemFieldType constructor.
-     *
-     * @param FieldTypeService         $fieldTypeService
-     * @param MenuService              $menuService
-     * @param LocationService          $locationService
-     * @param MenuItemValueTransformer $fieldValueTransformer
-     * @param TranslationHelper        $translationHelper
-     * @param TranslatorInterface      $translator
      */
     public function __construct(
         FieldTypeService $fieldTypeService,
@@ -64,12 +58,12 @@ class MenuItemFieldType extends AbstractType
         TranslationHelper $translationHelper,
         TranslatorInterface $translator
     ) {
-        $this->fieldTypeService      = $fieldTypeService;
-        $this->menuService           = $menuService;
-        $this->locationService       = $locationService;
+        $this->fieldTypeService = $fieldTypeService;
+        $this->menuService = $menuService;
+        $this->locationService = $locationService;
         $this->fieldValueTransformer = $fieldValueTransformer;
-        $this->translationHelper     = $translationHelper;
-        $this->translator            = $translator;
+        $this->translationHelper = $translationHelper;
+        $this->translator = $translator;
     }
 
     public function getName()
@@ -93,10 +87,6 @@ class MenuItemFieldType extends AbstractType
     }
 
     /**
-     * @param FormView      $view
-     * @param FormInterface $form
-     * @param array         $options
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
@@ -104,11 +94,11 @@ class MenuItemFieldType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $attributes               = [];
-        $view->vars['attr']       = array_merge($view->vars['attr'], $attributes);
+        $attributes = [];
+        $view->vars['attr'] = array_merge($view->vars['attr'], $attributes);
         $view->vars['menu_items'] = $form->getData()->menuItems;
 
-        $formData          = $form->getParent()->getParent()->getParent()->getData();
+        $formData = $form->getParent()->getParent()->getParent()->getData();
         $parentLocationsId = [];
         if ($formData instanceof ContentCreateData) {
             $view->vars['content_name'] = $this->translator->trans(
@@ -140,7 +130,7 @@ class MenuItemFieldType extends AbstractType
                 foreach ($menus as $menu) {
                     if (!isset($availableMenus[$menu->getId()])) {
                         $availableMenus[$menu->getId()] = [
-                            'menu'                   => $menu,
+                            'menu' => $menu,
                             'defaultParentMenuItems' => [],
                         ];
                     }

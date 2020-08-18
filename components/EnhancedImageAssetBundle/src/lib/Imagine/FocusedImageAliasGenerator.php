@@ -89,10 +89,10 @@ class FocusedImageAliasGenerator implements VariationHandler
     {
         $isFocusedVariation = IORepositoryResolver::VARIATION_ORIGINAL !== $variationName
                               && $field->value instanceof EnhancedImageValue;
-        $focusPoint         = null;
+        $focusPoint = null;
 
         if ($isFocusedVariation) {
-            $variationConfig    = $this->filterConfiguration->get($variationName);
+            $variationConfig = $this->filterConfiguration->get($variationName);
             $isFocusedVariation = isset($variationConfig['filters']['focusedThumbnail']);
             if ($isFocusedVariation) {
                 /** @var FocusPoint $focusPoint */
@@ -100,7 +100,7 @@ class FocusedImageAliasGenerator implements VariationHandler
                 $parameters = [
                     'filters' => [
                         'focusedThumbnail' => [
-                            'focusPoint'   => $focusPoint,
+                            'focusPoint' => $focusPoint,
                             'originalSize' => new Box($field->value->width, $field->value->height),
                         ],
                     ],
@@ -136,7 +136,7 @@ class FocusedImageAliasGenerator implements VariationHandler
         }
 
         $reflectionClass = new ReflectionClass(get_class($variation));
-        $array           = [];
+        $array = [];
         foreach ($reflectionClass->getProperties() as $property) {
             $property->setAccessible(true);
             $array[$property->getName()] = $property->getValue($variation);

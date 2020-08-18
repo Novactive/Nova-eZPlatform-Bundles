@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\DependencyInjection;
@@ -25,9 +27,9 @@ class Configuration extends SiteAccessAware\Configuration
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode    = $treeBuilder->root('nova_ezmailing');
-        $systemNode  = $this->generateScopeBaseNode($rootNode);
+        $treeBuilder = new TreeBuilder('nova_ezmailing');
+        $rootNode = $treeBuilder->getRootNode();
+        $systemNode = $this->generateScopeBaseNode($rootNode);
 
         $systemNode
                 ->scalarNode('email_subject_prefix')->isRequired()->cannotBeEmpty()->end()

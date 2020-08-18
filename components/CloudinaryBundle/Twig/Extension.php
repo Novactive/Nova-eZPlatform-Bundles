@@ -1,8 +1,10 @@
 <?php
+
 /**
- * Novactive eZ Cloudinary Bundle
+ * Novactive eZ Cloudinary Bundle.
  *
  * @package   Novactive\Bundle\eZCloudinary
+ *
  * @author    Novactive <novacloudinarybundle@novactive.com>
  * @copyright 2015 Novactive
  * @license   https://github.com/Novactive/NovaeZCloudinaryBundle/blob/master/LICENSE MIT Licence
@@ -10,16 +12,15 @@
 
 namespace Novactive\Bundle\eZCloudinaryBundle\Twig;
 
+use Novactive\Bundle\eZCloudinaryBundle\Core\AliasGenerator;
 use Twig_Extension;
 use Twig_SimpleFunction;
-use Novactive\Bundle\eZCloudinaryBundle\Core\AliasGenerator;
 
 /**
- * Class Extension
+ * Class Extension.
  */
 class Extension extends Twig_Extension
 {
-
     /**
      * @var AliasGenerator
      */
@@ -27,8 +28,6 @@ class Extension extends Twig_Extension
 
     /**
      * Extension constructor.
-     *
-     * @param AliasGenerator $aliasGenerator
      */
     public function __construct(AliasGenerator $aliasGenerator)
     {
@@ -42,7 +41,9 @@ class Extension extends Twig_Extension
     {
         return [
             new Twig_SimpleFunction(
-                'nova_ezcloudinary_alias', [$this->aliasGenerator, 'getVariation'], ['is_safe' => ['html']]
+                'nova_ezcloudinary_alias',
+                [$this->aliasGenerator, 'getVariation'],
+                ['is_safe' => ['html']]
             ),
         ];
     }
@@ -54,5 +55,4 @@ class Extension extends Twig_Extension
     {
         return 'nova_ezloudinary_extension';
     }
-
 }

@@ -51,7 +51,7 @@ class Gateway
         EndpointResolver $endpointResolver,
         EndpointRegistry $endpointRegistry
     ) {
-        $this->client           = $client;
+        $this->client = $client;
         $this->endpointResolver = $endpointResolver;
         $this->endpointRegistry = $endpointRegistry;
     }
@@ -60,7 +60,7 @@ class Gateway
     {
         $endpoint = $this->getAdminEndpoint();
 
-        $response = $this->request(
+        $this->request(
             'GET',
             sprintf('&action=RELOAD'),
             null,
@@ -75,12 +75,12 @@ class Gateway
         return new AdminEndpoint(
             [
                 'scheme' => $endpoint->scheme,
-                'user'   => $endpoint->user,
-                'pass'   => $endpoint->pass,
-                'host'   => $endpoint->host,
-                'port'   => $endpoint->port,
-                'path'   => $endpoint->path,
-                'core'   => $endpoint->core,
+                'user' => $endpoint->user,
+                'pass' => $endpoint->pass,
+                'host' => $endpoint->host,
+                'port' => $endpoint->port,
+                'path' => $endpoint->path,
+                'core' => $endpoint->core,
             ]
         );
     }

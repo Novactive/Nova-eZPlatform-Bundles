@@ -23,7 +23,7 @@ final class Configuration extends SAConfiguration
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('nova_ezaccelerator');
-        $systemNode  = $this->generateScopeBaseNode($treeBuilder->getRootNode());
+        $systemNode = $this->generateScopeBaseNode($treeBuilder->getRootNode());
 
         $systemNode
             ->scalarNode('default_bus')->defaultNull()->end()

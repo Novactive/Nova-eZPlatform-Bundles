@@ -1,11 +1,10 @@
 <?php
 
-
 namespace Novactive\Bundle\NovaeZEditHelpBundle\Listener;
 
-use Novactive\Bundle\NovaeZEditHelpBundle\Services\FetchDocumentation;
 use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;
 use EzSystems\RepositoryForms\Content\View\ContentEditView;
+use Novactive\Bundle\NovaeZEditHelpBundle\Services\FetchDocumentation;
 
 class PreContentView
 {
@@ -26,7 +25,6 @@ class PreContentView
                 $mainLocationId = $documentation->valueObject->contentInfo->mainLocationId;
                 $children = $this->fetchDocumentation->getChildrenByLocationId($mainLocationId);
 
-
                 $items = [];
                 if (!empty($children)) {
                     foreach ($children as $child) {
@@ -37,10 +35,9 @@ class PreContentView
 
                 $event->getContentView()->addParameters([
                     'documentation' => $documentation,
-                    'items' => $items
+                    'items' => $items,
                 ]);
             }
         }
     }
-
 }

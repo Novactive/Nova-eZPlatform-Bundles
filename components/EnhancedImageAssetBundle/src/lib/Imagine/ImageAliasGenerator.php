@@ -78,10 +78,10 @@ class ImageAliasGenerator implements VariationHandler
         ResolverInterface $ioResolver,
         LoggerInterface $logger = null
     ) {
-        $this->dataLoader    = $dataLoader;
+        $this->dataLoader = $dataLoader;
         $this->filterManager = $filterManager;
-        $this->ioResolver    = $ioResolver;
-        $this->logger        = $logger ?? new NullLogger();
+        $this->ioResolver = $ioResolver;
+        $this->logger = $logger ?? new NullLogger();
     }
 
     /**
@@ -100,8 +100,8 @@ class ImageAliasGenerator implements VariationHandler
     public function getVariation(Field $field, VersionInfo $versionInfo, $variationName, array $parameters = [])
     {
         /** @var ImageValue $imageValue */
-        $imageValue         = $field->value;
-        $fieldId            = $field->id;
+        $imageValue = $field->value;
+        $fieldId = $field->id;
         $fieldDefIdentifier = $field->fieldDefIdentifier;
         if (!$this->supportsValue($imageValue)) {
             $message = "Value for field #$fieldId ($fieldDefIdentifier) cannot be used for image alias generation.";
@@ -137,7 +137,7 @@ class ImageAliasGenerator implements VariationHandler
             );
         } else {
             if (IORepositoryResolver::VARIATION_ORIGINAL === $variationName) {
-                $variationWidth  = $imageValue->width;
+                $variationWidth = $imageValue->width;
                 $variationHeight = $imageValue->height;
             }
             $this->logger->debug(
@@ -158,13 +158,13 @@ class ImageAliasGenerator implements VariationHandler
 
         return new ImageVariation(
             [
-                'name'     => $variationName,
+                'name' => $variationName,
                 'fileName' => $aliasInfo->getFilename(),
-                'dirPath'  => $aliasInfo->getPath(),
-                'uri'      => $aliasInfo->getPathname(),
-                'imageId'  => $imageValue->imageId,
-                'width'    => $variationWidth,
-                'height'   => $variationHeight,
+                'dirPath' => $aliasInfo->getPath(),
+                'uri' => $aliasInfo->getPathname(),
+                'imageId' => $imageValue->imageId,
+                'width' => $variationWidth,
+                'height' => $variationHeight,
             ]
         );
     }

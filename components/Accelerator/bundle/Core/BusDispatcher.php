@@ -39,7 +39,7 @@ final class BusDispatcher
 
     public function __construct(ConfigResolverInterface $configResolver, MessageBusInterface $defaultBus)
     {
-        $this->defaultBus     = $defaultBus;
+        $this->defaultBus = $defaultBus;
         $this->configResolver = $configResolver;
     }
 
@@ -87,7 +87,7 @@ final class BusDispatcher
         }
 
         $messageClass = $config['message'];
-        $message      = new $messageClass($event);
+        $message = new $messageClass($event);
         $bus->dispatch($message);
 
         if (true === $config['stop_propagation']) {

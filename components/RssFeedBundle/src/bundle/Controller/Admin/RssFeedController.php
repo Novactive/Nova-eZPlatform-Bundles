@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZRssFeedBundle.
  *
@@ -42,7 +43,7 @@ use Symfony\Component\HttpFoundation\Response;
 class RssFeedController extends Controller
 {
     use EntityManagerTrait;
-    
+
     private $defaultPaginationLimit = 10;
 
     private $notificationHandler;
@@ -54,8 +55,6 @@ class RssFeedController extends Controller
 
     /**
      * @Route("/", name="platform_admin_ui_rss_feeds_list")
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listAction(Request $request): Response
     {
@@ -78,7 +77,7 @@ class RssFeedController extends Controller
         return $this->render(
             '@ezdesign/rssfeed/list.html.twig',
             [
-                'pager'     => $pagerfanta,
+                'pager' => $pagerfanta,
                 'canCreate' => $permissionResolver->hasAccess('rss', 'create'),
                 'canDelete' => $permissionResolver->hasAccess('rss', 'delete'),
             ]
@@ -98,24 +97,20 @@ class RssFeedController extends Controller
         $permissionResolver = $this->getRepository()->getPermissionResolver();
 
         if (!$permissionResolver->hasAccess('rss', 'create')) {
-            throw new UnauthorizedException(
-                'rss',
-                'create',
-                []
-            );
+            throw new UnauthorizedException('rss', 'create', []);
         }
 
         $rssFeed = new RssFeeds();
-        $form    = $this->createForm(RssFeedsType::class, $rssFeed);
+        $form = $this->createForm(RssFeedsType::class, $rssFeed);
 
         $form->add(
             'submit',
             SubmitType::class,
             [
                 'label' => 'Create',
-                'attr'  => [
+                'attr' => [
                     'class' => 'btn btn-default pull-right',
-                    'id'    => 'rss_edit_edit',
+                    'id' => 'rss_edit_edit',
                 ],
             ]
         );
@@ -152,11 +147,7 @@ class RssFeedController extends Controller
         $permissionResolver = $this->getRepository()->getPermissionResolver();
 
         if (!$permissionResolver->hasAccess('rss', 'edit')) {
-            throw new UnauthorizedException(
-                'rss',
-                'edit',
-                []
-            );
+            throw new UnauthorizedException('rss', 'edit', []);
         }
 
         $originalFeedsItems = new ArrayCollection();
@@ -169,7 +160,7 @@ class RssFeedController extends Controller
             SubmitType::class,
             [
                 'label' => 'Create',
-                'attr'  => [
+                'attr' => [
                     'class' => 'btn-secondary btn',
                 ],
             ]
@@ -202,9 +193,6 @@ class RssFeedController extends Controller
         );
     }
 
-    /**
-     * @return NotificationHandlerInterface
-     */
     public function getNotificationHandler(): NotificationHandlerInterface
     {
         return $this->notificationHandler;
@@ -224,11 +212,7 @@ class RssFeedController extends Controller
         $permissionResolver = $this->getRepository()->getPermissionResolver();
 
         if (!$permissionResolver->hasAccess('rss', 'delete')) {
-            throw new UnauthorizedException(
-                'rss',
-                'delete',
-                []
-            );
+            throw new UnauthorizedException('rss', 'delete', []);
         }
 
         if ($request->request) {
@@ -252,11 +236,7 @@ class RssFeedController extends Controller
         $permissionResolver = $this->getRepository()->getPermissionResolver();
 
         if (!$permissionResolver->hasAccess('rss', 'edit')) {
-            throw new UnauthorizedException(
-                'rss',
-                'edit',
-                []
-            );
+            throw new UnauthorizedException('rss', 'edit', []);
         }
 
         $data = [];
@@ -266,14 +246,14 @@ class RssFeedController extends Controller
         }
 
         if ($locationId) {
-            $repository      = $this->getRepository();
+            $repository = $this->getRepository();
             $locationService = $repository->getLocationService();
-            $location        = $locationService->loadLocation($locationId);
+            $location = $locationService->loadLocation($locationId);
 
             $data = [
                 'location' => $locationId,
-                'content'  => [
-                    'id'   => $location->contentInfo->id,
+                'content' => [
+                    'id' => $location->contentInfo->id,
                     'name' => $location->contentInfo->name,
                 ],
             ];
@@ -295,11 +275,7 @@ class RssFeedController extends Controller
         $permissionResolver = $this->getRepository()->getPermissionResolver();
 
         if (!$permissionResolver->hasAccess('rss', 'edit')) {
-            throw new UnauthorizedException(
-                'rss',
-                'edit',
-                []
-            );
+            throw new UnauthorizedException('rss', 'edit', []);
         }
 
         $fieldsMap = [];
@@ -334,11 +310,7 @@ class RssFeedController extends Controller
         $permissionResolver = $this->getRepository()->getPermissionResolver();
 
         if (!$permissionResolver->hasAccess('rss', 'edit')) {
-            throw new UnauthorizedException(
-                'rss',
-                'edit',
-                []
-            );
+            throw new UnauthorizedException('rss', 'edit', []);
         }
         $repository = $this->entityManager->getRepository(RssFeeds::class);
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -31,17 +32,11 @@ class MenuItemTypeRegistry
         }
     }
 
-    /**
-     * @param MenuItemTypeInterface $menuItemType
-     */
     public function addMenuItemType(MenuItemTypeInterface $menuItemType): void
     {
         $this->menuItemTypes[$menuItemType->getEntityClassName()] = $menuItemType;
     }
 
-    /**
-     * @return array
-     */
     public function getMenuItemTypesIdentifier(): array
     {
         return array_keys($this->menuItemTypes);
@@ -56,8 +51,6 @@ class MenuItemTypeRegistry
     }
 
     /**
-     * @param MenuItem $entity
-     *
      * @throws MenuItemTypeNotFoundException
      *
      * @return MenuItemTypeInterface

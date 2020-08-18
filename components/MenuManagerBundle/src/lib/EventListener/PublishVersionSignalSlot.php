@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -33,10 +34,6 @@ class PublishVersionSignalSlot extends Slot
 
     /**
      * SignalListener constructor.
-     *
-     * @param Handler                $persistenceHandler
-     * @param EntityManagerInterface $em
-     * @param ValueConverter         $valueConverter
      */
     public function __construct(
         Handler $persistenceHandler,
@@ -44,13 +41,10 @@ class PublishVersionSignalSlot extends Slot
         ValueConverter $valueConverter
     ) {
         $this->persistenceHandler = $persistenceHandler;
-        $this->em                 = $em;
-        $this->valueConverter     = $valueConverter;
+        $this->em = $em;
+        $this->valueConverter = $valueConverter;
     }
 
-    /**
-     * @param Signal $signal
-     */
     public function receive(Signal $signal): void
     {
         if (!$signal instanceof PublishVersionSignal) {
@@ -58,7 +52,7 @@ class PublishVersionSignalSlot extends Slot
         }
 
         $content = $this->persistenceHandler->contentHandler()->load($signal->contentId, $signal->versionNo);
-        $fields  = $content->fields;
+        $fields = $content->fields;
         foreach ($fields as $field) {
             if ('menuitem' !== $field->type) {
                 continue;

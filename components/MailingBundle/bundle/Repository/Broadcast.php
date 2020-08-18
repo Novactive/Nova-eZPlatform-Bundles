@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Repository;
@@ -25,11 +27,6 @@ class Broadcast extends EntityRepository
         return 'broadcast';
     }
 
-    /**
-     * @param int $limit
-     *
-     * @return array
-     */
     public function findLastBroadcasts(int $limit = 4): array
     {
         $qb = $this->createQueryBuilderForFilters([]);

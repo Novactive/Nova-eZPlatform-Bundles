@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZRssFeedBundle.
  *
@@ -37,30 +38,26 @@ class RssFeedItemsType extends AbstractType
     /** @var array */
     protected $fieldTypeMap;
 
-    /**
-     * @param ContentTypeService $contentTypeService
-     * @param ConfigResolverInterface $configResolver
-     */
     public function __construct(ContentTypeService $contentTypeService, ConfigResolverInterface $configResolver)
     {
         $this->contentTypeService = $contentTypeService;
-        $this->configResolver     = $configResolver;
+        $this->configResolver = $configResolver;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $contentTypeList = $this->getContentTypeList();
-        $fieldTypeMap    = $this->fieldTypeMap;
+        $fieldTypeMap = $this->fieldTypeMap;
 
         $builder
             ->add(
                 'subtree_path',
                 TreeDiscoveryType::class,
                 [
-                    'label'    => 'ez_rss_feed.form.subtree_path',
+                    'label' => 'ez_rss_feed.form.subtree_path',
                     'compound' => true,
-                    'attr'     => [
-                        'class'                     => 'ez-button-tree 
+                    'attr' => [
+                        'class' => 'ez-button-tree 
                                                         pure-button 
                                                         ez-font-icon 
                                                         ez-button btn 
@@ -69,8 +66,8 @@ class RssFeedItemsType extends AbstractType
                         'data-starting-location-id' => $this->configResolver->getParameter(
                             'universal_discovery_widget_module.default_location_id'
                         ),
-                        'data-location-input-selector'         => 'input-location-' . uniqid(),
-                        'data-selected-location-list-selector' => 'location-values-' . uniqid(),
+                        'data-location-input-selector' => 'input-location-'.uniqid(),
+                        'data-selected-location-list-selector' => 'location-values-'.uniqid(),
                     ],
                 ]
             )
@@ -78,7 +75,7 @@ class RssFeedItemsType extends AbstractType
                 'include_subtree',
                 CheckboxType::class,
                 [
-                    'label'    => 'ez_rss_feed.form.include_subtree',
+                    'label' => 'ez_rss_feed.form.include_subtree',
                     'required' => false,
                 ]
             )
@@ -86,7 +83,7 @@ class RssFeedItemsType extends AbstractType
                 'contenttype_id',
                 ChoiceType::class,
                 [
-                    'label'   => 'ez_rss_feed.form.contenttype',
+                    'label' => 'ez_rss_feed.form.contenttype',
                     'choices' => $contentTypeList,
                 ]
             )
@@ -94,7 +91,7 @@ class RssFeedItemsType extends AbstractType
                 'title',
                 ChoiceType::class,
                 [
-                    'label'   => 'ez_rss_feed.form.title',
+                    'label' => 'ez_rss_feed.form.title',
                     'choices' => $this->fieldTypeMap,
                 ]
             )
@@ -102,9 +99,9 @@ class RssFeedItemsType extends AbstractType
                 'description',
                 ChoiceType::class,
                 [
-                    'label'      => 'ez_rss_feed.form.description',
-                    'required'   => false,
-                    'choices'    => $fieldTypeMap,
+                    'label' => 'ez_rss_feed.form.description',
+                    'required' => false,
+                    'choices' => $fieldTypeMap,
                     'empty_data' => null,
                 ]
             )
@@ -112,18 +109,18 @@ class RssFeedItemsType extends AbstractType
                 'category',
                 ChoiceType::class,
                 [
-                    'label'      => 'ez_rss_feed.form.category',
-                    'required'   => false,
-                    'choices'    => $fieldTypeMap,
+                    'label' => 'ez_rss_feed.form.category',
+                    'required' => false,
+                    'choices' => $fieldTypeMap,
                     'empty_data' => null,
                 ]
             )->add(
                 'media',
                 ChoiceType::class,
                 [
-                    'label'      => 'ez_rss_feed.form.media',
-                    'required'   => false,
-                    'choices'    => $fieldTypeMap,
+                    'label' => 'ez_rss_feed.form.media',
+                    'required' => false,
+                    'choices' => $fieldTypeMap,
                     'empty_data' => null,
                 ]
             );
@@ -134,7 +131,7 @@ class RssFeedItemsType extends AbstractType
                 'title',
                 ChoiceType::class,
                 [
-                    'label'   => 'ez_rss_feed.form.field.title',
+                    'label' => 'ez_rss_feed.form.field.title',
                     'choices' => $fieldTypeMap,
                 ]
             );
@@ -145,31 +142,32 @@ class RssFeedItemsType extends AbstractType
                 'description',
                 ChoiceType::class,
                 [
-                    'label'      => 'ez_rss_feed.form.field.description',
-                    'required'   => false,
-                    'choices'    => $fieldTypeMap,
+                    'label' => 'ez_rss_feed.form.field.description',
+                    'required' => false,
+                    'choices' => $fieldTypeMap,
                     'empty_data' => null,
                 ]
-            )
-                 ->add(
-                     'category',
-                     ChoiceType::class,
-                     [
-                         'label'      => 'ez_rss_feed.form.field.category',
-                         'required'   => false,
-                         'choices'    => $fieldTypeMap,
-                         'empty_data' => null,
-                     ]
-                 )->add(
-                     'media',
-                     ChoiceType::class,
-                     [
-                        'label'      => 'ez_rss_feed.form.field.media',
-                        'required'   => false,
-                        'choices'    => $fieldTypeMap,
-                        'empty_data' => null,
-                     ]
-                 );
+            );
+            $form->add(
+                'category',
+                ChoiceType::class,
+                [
+                    'label' => 'ez_rss_feed.form.field.category',
+                    'required' => false,
+                    'choices' => $fieldTypeMap,
+                    'empty_data' => null,
+                ]
+            );
+            $form->add(
+                'media',
+                ChoiceType::class,
+                [
+                    'label' => 'ez_rss_feed.form.field.media',
+                    'required' => false,
+                    'choices' => $fieldTypeMap,
+                    'empty_data' => null,
+                ]
+            );
         };
 
         $builder->addEventListener(
@@ -179,7 +177,7 @@ class RssFeedItemsType extends AbstractType
 
                 if (null != $data) {
                     $contentTypeId = $data->getContentTypeId();
-                    $contentType   = $this->contentTypeService->loadContentType($contentTypeId);
+                    $contentType = $this->contentTypeService->loadContentType($contentTypeId);
 
                     $formModifier($event->getForm(), $contentType);
                 }
@@ -190,7 +188,7 @@ class RssFeedItemsType extends AbstractType
             FormEvents::POST_SUBMIT,
             function (FormEvent $event) use ($formModifier) {
                 $contentTypeId = $event->getData();
-                $contentType   = $this->contentTypeService->loadContentType($contentTypeId);
+                $contentType = $this->contentTypeService->loadContentType($contentTypeId);
 
                 $formModifier($event->getForm()->getParent(), $contentType);
             }
@@ -205,23 +203,24 @@ class RssFeedItemsType extends AbstractType
             $contentGroup = 'Content';
         }
 
-        $contentTypesMap         = [];
+        $contentTypesMap = [];
         $contentTypeGroupContent = null;
 
-        /**
+        /*
          * Maybe the content type group does not exist
          */
         try {
             $contentTypeGroupContent = $this->contentTypeService->loadContentTypeGroupByIdentifier($contentGroup);
-        } catch (NotFoundException $e) { }
+        } catch (NotFoundException $e) {
+            $contentTypeGroupContent = null;
+        }
 
         try {
-            if ($contentTypeGroupContent === null)
-            {
+            if (null === $contentTypeGroupContent) {
                 $contentTypeGroupContent = $this->contentTypeService->loadContentTypeGroupByIdentifier('Contenu');
             }
 
-            $contentTypes            = $this->contentTypeService->loadContentTypes($contentTypeGroupContent);
+            $contentTypes = $this->contentTypeService->loadContentTypes($contentTypeGroupContent);
 
             foreach ($contentTypes as $contentType) {
                 $contentTypesMap[ucfirst($contentType->getName())] = $contentType->id;

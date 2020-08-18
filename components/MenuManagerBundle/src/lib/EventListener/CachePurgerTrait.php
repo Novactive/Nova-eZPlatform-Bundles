@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -29,7 +30,6 @@ trait CachePurgerTrait
     protected $em;
 
     /**
-     * @param TagHandler $httpCacheTagHandler
      * @required
      */
     public function setHttpCache(TagHandler $httpCacheTagHandler): void
@@ -38,7 +38,6 @@ trait CachePurgerTrait
     }
 
     /**
-     * @param TagAwareAdapterInterface $persistenceCacheAdapter
      * @required
      */
     public function setPersistenceCache(TagAwareAdapterInterface $persistenceCacheAdapter): void
@@ -47,7 +46,6 @@ trait CachePurgerTrait
     }
 
     /**
-     * @param EntityManagerInterface $em
      * @required
      */
     public function setEm(EntityManagerInterface $em): void
@@ -56,8 +54,6 @@ trait CachePurgerTrait
     }
 
     /**
-     * @param Menu $entity
-     *
      * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function purgeMenuCache(Menu $entity): void
@@ -67,8 +63,6 @@ trait CachePurgerTrait
     }
 
     /**
-     * @param MenuItem $entity
-     *
      * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function purgeMenuItemCache(MenuItem $entity): void
@@ -81,8 +75,6 @@ trait CachePurgerTrait
     }
 
     /**
-     * @param int $contentId
-     *
      * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function purgeContentMenuItemCache(int $contentId): void
@@ -98,8 +90,6 @@ trait CachePurgerTrait
     }
 
     /**
-     * @param array $tags
-     *
      * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function invalidateTags(array $tags): void

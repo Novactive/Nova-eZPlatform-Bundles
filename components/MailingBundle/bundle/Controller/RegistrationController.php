@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,11 +9,14 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller;
 
+use DateTime;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Novactive\Bundle\eZMailingBundle\Core\DataHandler\Registration;
 use Novactive\Bundle\eZMailingBundle\Core\DataHandler\Unregistration;
 use Novactive\Bundle\eZMailingBundle\Core\Registrar;
@@ -41,19 +45,13 @@ class RegistrationController
 
     /**
      * RegistrationController constructor.
-     *
-     * @param Registrar      $registrar
-     * @param ConfigResolver $configResolver
      */
-    public function __construct(Registrar $registrar, ConfigResolver $configResolver)
+    public function __construct(Registrar $registrar, ConfigResolverInterface $configResolver)
     {
-        $this->registrar      = $registrar;
+        $this->registrar = $registrar;
         $this->configResolver = $configResolver;
     }
 
-    /**
-     * @return string
-     */
     private function getPagelayout(): string
     {
         return $this->configResolver->getParameter('pagelayout');
@@ -63,17 +61,12 @@ class RegistrationController
      * @Route("/register", name="novaezmailing_registration_create")
      *
      * @Template()
-     *
-     * @param Request              $request
-     * @param FormFactoryInterface $formFactory
-     *
-     * @return array
      */
     public function registerAction(Request $request, FormFactoryInterface $formFactory): array
     {
         $params = [
             'pagelayout' => $this->getPagelayout(),
-            'title'      => 'Register to Mailing Lists',
+            'title' => 'Register to Mailing Lists',
         ];
 
         $registration = new Registration();
@@ -96,17 +89,12 @@ class RegistrationController
      * @Route("/register/default", name="novaezmailing_registration_default_create")
      *
      * @Template()
-     *
-     * @param Request              $request
-     * @param FormFactoryInterface $formFactory
-     *
-     * @return array
      */
     public function registerDefaultAction(Request $request, FormFactoryInterface $formFactory): array
     {
         $params = [
             'pagelayout' => $this->getPagelayout(),
-            'title'      => 'Register to Default Mailing List',
+            'title' => 'Register to Default Mailing List',
         ];
 
         $registration = new Registration();
@@ -133,14 +121,12 @@ class RegistrationController
      * @Route("/register/confirm/{id}", name="novaezmailing_registration_confirm")
      *
      * @Template()
-     *
-     * @return array
      */
     public function registerConfirmationAction(ConfirmationToken $token): array
     {
         return [
-            'pagelayout'  => $this->getPagelayout(),
-            'title'       => 'Confirm registration to Mailing Lists',
+            'pagelayout' => $this->getPagelayout(),
+            'title' => 'Confirm registration to Mailing Lists',
             'isConfirmed' => $this->registrar->confirm($token),
         ];
     }
@@ -149,17 +135,12 @@ class RegistrationController
      * @Route("/unregister/{email}", name="novaezmailing_registration_remove")
      *
      * @Template()
-     *
-     * @param Request              $request
-     * @param FormFactoryInterface $formFactory
-     *
-     * @return array
      */
     public function unregisterAction(string $email = null, Request $request, FormFactoryInterface $formFactory): array
     {
         $params = [
             'pagelayout' => $this->getPagelayout(),
-            'title'      => 'Unregister to Mailing Lists',
+            'title' => 'Unregister to Mailing Lists',
         ];
 
         $unregistration = new Unregistration();
@@ -168,7 +149,7 @@ class RegistrationController
             $user = new User();
             $user
                 ->setEmail($email)
-                ->setUpdated(new \DateTime());
+                ->setUpdated(new DateTime());
             $unregistration->setUser($user);
         }
 
@@ -192,14 +173,12 @@ class RegistrationController
      * @Route("/unregister/confirm/{id}", name="novaezmailing_unregistration_confirm")
      *
      * @Template()
-     *
-     * @return array
      */
     public function unregisterConfirmationAction(ConfirmationToken $token): array
     {
         return [
-            'pagelayout'  => $this->getPagelayout(),
-            'title'       => 'Confirm unregistration to Mailing Lists',
+            'pagelayout' => $this->getPagelayout(),
+            'title' => 'Confirm unregistration to Mailing Lists',
             'isConfirmed' => $this->registrar->confirm($token),
         ];
     }

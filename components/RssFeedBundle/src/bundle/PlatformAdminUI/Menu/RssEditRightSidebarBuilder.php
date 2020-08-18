@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZRssFeedBundle.
  *
@@ -20,9 +21,9 @@ use Knp\Menu\ItemInterface;
 class RssEditRightSidebarBuilder extends AbstractBuilder implements TranslationContainerInterface
 {
     /* Menu items */
-    const ITEM__EDIT             = 'content_edit__sidebar_right__publish';
-    const ITEM__CANCEL           = 'content_create__sidebar_right__cancel';
-    const RSS_EDIT_SIDEBAR_RIGHT = 'ezplatform_admin_ui.menu_configure.rss_edit_sidebar_right';
+    public const ITEM__EDIT = 'content_edit__sidebar_right__publish';
+    public const ITEM__CANCEL = 'content_create__sidebar_right__cancel';
+    public const RSS_EDIT_SIDEBAR_RIGHT = 'ezplatform_admin_ui.menu_configure.rss_edit_sidebar_right';
 
     /**
      * @return Message[]
@@ -36,13 +37,9 @@ class RssEditRightSidebarBuilder extends AbstractBuilder implements TranslationC
     }
 
     /**
-     * @param array $options
-     *
      * @throws ApiExceptions\InvalidArgumentException
      * @throws ApiExceptions\BadStateException
      * @throws InvalidArgumentException
-     *
-     * @return ItemInterface
      */
     public function createStructure(array $options): ItemInterface
     {
@@ -55,18 +52,18 @@ class RssEditRightSidebarBuilder extends AbstractBuilder implements TranslationC
                     self::ITEM__EDIT,
                     [
                         'attributes' => [
-                            'class'      => 'btn--trigger',
+                            'class' => 'btn--trigger',
                             'data-click' => '#rss_edit_edit',
                         ],
-                        'label'  => self::ITEM__EDIT,
+                        'label' => self::ITEM__EDIT,
                         'extras' => ['icon' => 'publish'],
                     ]
                 ),
                 self::ITEM__CANCEL => $this->createMenuItem(
                     self::ITEM__CANCEL,
                     [
-                        'route'  => 'platform_admin_ui_rss_feeds_list',
-                        'label'  => self::ITEM__CANCEL,
+                        'route' => 'platform_admin_ui_rss_feeds_list',
+                        'label' => self::ITEM__CANCEL,
                         'extras' => ['icon' => 'circle-close'],
                     ]
                 ),
@@ -76,9 +73,6 @@ class RssEditRightSidebarBuilder extends AbstractBuilder implements TranslationC
         return $menu;
     }
 
-    /**
-     * @return string
-     */
     protected function getConfigureEventName(): string
     {
         return self::RSS_EDIT_SIDEBAR_RIGHT;

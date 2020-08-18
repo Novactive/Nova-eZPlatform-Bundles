@@ -1,8 +1,10 @@
 <?php
+
 /**
- * Novactive eZ Cloudinary Bundle
+ * Novactive eZ Cloudinary Bundle.
  *
  * @package   Novactive\Bundle\eZCloudinary
+ *
  * @author    Novactive <novacloudinarybundle@novactive.com>
  * @copyright 2015 Novactive
  * @license   https://github.com/Novactive/NovaeZCloudinaryBundle/blob/master/LICENSE MIT Licence
@@ -10,17 +12,17 @@
 
 namespace Novactive\Bundle\eZCloudinaryBundle\Core;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Cloudinary;
-use eZ\Publish\SPI\Variation\Values\Variation;
-use eZ\Publish\SPI\Variation\VariationHandler as VariationService;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\SPI\Variation\Values\Variation;
+use eZ\Publish\SPI\Variation\VariationHandler as VariationService;
 use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class AliasGenerator
+ * Class AliasGenerator.
  */
 class AliasGenerator implements VariationService
 {
@@ -39,11 +41,6 @@ class AliasGenerator implements VariationService
 
     /**
      * AliasGenerator constructor.
-     *
-     * @param VariationService        $variationService
-     * @param ConfigResolverInterface $configResolver
-     * @param LoggerInterface         $logger
-     * @param array                   $auth
      */
     public function __construct(
         VariationService $variationService,
@@ -51,41 +48,43 @@ class AliasGenerator implements VariationService
         LoggerInterface $logger,
         array $auth
     ) {
-        $this->configResolver   = $configResolver;
+        $this->configResolver = $configResolver;
         $this->variationService = $variationService;
         $this->logger = $logger;
         Cloudinary::config(
             [
-                "cloud_name" => $auth['cloud_name'],
-                "api_key"    => $auth['api_key'],
-                "api_secret" => $auth['api_secret'],
+                'cloud_name' => $auth['cloud_name'],
+                'api_key' => $auth['api_key'],
+                'api_secret' => $auth['api_secret'],
             ]
         );
     }
 
     /**
-     * @param Field       $field
-     * @param VersionInfo $versionInfo
-     * @param string      $variationName
-     * @param array       $parameters
+     * @param string $variationName
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      *
      * @return ImageVariation|Variation
      */
-    public function getVariation(Field $field, VersionInfo $versionInfo, $variationName, array $parameters = array ())
+    public function getVariation(Field $field, VersionInfo $versionInfo, $variationName, array $parameters = [])
     {
-        $eZVariationsList         = $this->configResolver->getParameter('image_variations');
-        $cloudinaryDisabled       = $this->configResolver->getParameter('cloudinary_disabled', 'nova_ezcloudinary');
+        $eZVariationsList = $this->configResolver->getParameter('image_variations');
+        $cloudinaryDisabled = $this->configResolver->getParameter('cloudinary_disabled', 'nova_ezcloudinary');
 
         $cloudinaryVariationsList = [];
-        if(!$cloudinaryDisabled) {
-            $cloudinaryVariationsList = $this->configResolver->getParameter('cloudinary_variations', 'nova_ezcloudinary');
+        if (!$cloudinaryDisabled) {
+            $cloudinaryVariationsList = $this->configResolver->getParameter(
+                'cloudinary_variations',
+                'nova_ezcloudinary'
+            );
         }
 
         $cloudinaryCompliant = false;
-        $eZVariationName     = $variationName;
+        $eZVariationName = $variationName;
 
         if (array_key_exists($variationName, $cloudinaryVariationsList)) {
-            $eZVariationName     = $cloudinaryVariationsList[$variationName]['ezreference_variation'];
+            $eZVariationName = $cloudinaryVariationsList[$variationName]['ezreference_variation'];
             $cloudinaryCompliant = true;
             if (!array_key_exists($eZVariationName, $eZVariationsList)) {
                 $eZVariationName = 'original';
@@ -95,9 +94,20 @@ class AliasGenerator implements VariationService
         try {
             $variation = $this->variationService->getVariation($field, $versionInfo, $eZVariationName);
         } catch (NonExistingFilterException $exception) {
-            $cloudinaryFallbackVariation = $this->configResolver->getParameter('cloudinary_fallback_variation', 'nova_ezcloudinary');
+            $cloudinaryFallbackVariation = $this->configResolver->getParameter(
+                'cloudinary_fallback_variation',
+                'nova_ezcloudinary'
+            );
             if ($cloudinaryFallbackVariation) {
-                $this->logger->warning(sprintf('Tried to load variation "%s" which does not exists. Using fallback :"%s". It\'s ok in a dev environment which skip cloudinary variations, but maybe you\'ve missed a variation setting.', $eZVariationName, $cloudinaryFallbackVariation));
+                $this->logger->warning(
+                    sprintf(
+                        'Tried to load variation "%s" which does not exists. Using fallback :"%s". '.
+                        'It\'s ok in a dev environment which skip cloudinary variations, '.
+                        'but maybe you\'ve missed a variation setting.',
+                        $eZVariationName,
+                        $cloudinaryFallbackVariation
+                    )
+                );
                 $variation = $this->variationService->getVariation($field, $versionInfo, $cloudinaryFallbackVariation);
             } else {
                 throw $exception;
@@ -111,7 +121,7 @@ class AliasGenerator implements VariationService
         $components = parse_url($variation->uri);
 
         // Make it possible to fetch from Cloudinary
-        $proxy     = $this->configResolver->getParameter('cloudinary_fecth_proxy', 'nova_ezcloudinary');
+        $proxy = $this->configResolver->getParameter('cloudinary_fecth_proxy', 'nova_ezcloudinary');
         $fetchHost = $proxy['host'];
         $fetchPort = $proxy['port'];
 
@@ -122,26 +132,26 @@ class AliasGenerator implements VariationService
         if (!empty($fetchPort)) {
             $components['port'] = $fetchPort;
         }
-        $html       = fetch_image_tag(
+        $html = fetch_image_tag(
             $this->unparseUrl($components),
             $cloudinaryVariationsList[$variationName]['filters']
         );
         $attributes = [];
         foreach ($this->parseAttributes($html) as $key => $value) {
-            if ($key == 'img') {
+            if ('img' == $key) {
                 continue;
             }
-            if ($key == 'src') {
+            if ('src' == $key) {
                 $attributes['uri'] = $value;
                 continue;
             }
-            if ($key == 'width' || $key == 'height') {
+            if ('width' == $key || 'height' == $key) {
                 $attributes[$key] = $value;
                 continue;
             }
             $attributes['extraTags'][$key] = $value;
         }
-        $attributes['extraTags']['coucou'] = "GO";
+        $attributes['extraTags']['coucou'] = 'GO';
 
         return new ImageVariation($attributes);
     }
@@ -151,10 +161,10 @@ class AliasGenerator implements VariationService
      *
      * @return array
      */
-    function parseAttributes($tag)
+    public function parseAttributes($tag)
     {
         $attributes = [];
-        $pattern    = '#(?(DEFINE)
+        $pattern = '#(?(DEFINE)
             (?<name>[a-zA-Z][a-zA-Z0-9-:]*)
             (?<value_double>"[^"]+")
             (?<value_single>\'[^\']+\')
@@ -182,15 +192,15 @@ class AliasGenerator implements VariationService
             return isset($parsedUrl[$key]) ? $parsedUrl[$key] : null;
         };
 
-        $pass      = $get('pass');
-        $user      = $get('user');
-        $userinfo  = $pass !== null ? "{$user}:{$pass}" : $user;
-        $port      = $get('port');
-        $scheme    = $get('scheme');
-        $query     = $get('query');
-        $fragment  = $get('fragment');
+        $pass = $get('pass');
+        $user = $get('user');
+        $userinfo = null !== $pass ? "{$user}:{$pass}" : $user;
+        $port = $get('port');
+        $scheme = $get('scheme');
+        $query = $get('query');
+        $fragment = $get('fragment');
         $authority =
-            ($userinfo !== null ? "{$userinfo}@" : '').
+            (null !== $userinfo ? "{$userinfo}@" : '').
             $get('host').
             ($port ? ":{$port}" : '');
 

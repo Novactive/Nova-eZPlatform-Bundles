@@ -34,7 +34,7 @@ class IndexContentHandler implements MessageHandlerInterface
 
     public function __construct(Handler $searchHandler, PersistenceHandler $persistenceHandler)
     {
-        $this->searchHandler      = $searchHandler;
+        $this->searchHandler = $searchHandler;
         $this->persistenceHandler = $persistenceHandler;
     }
 

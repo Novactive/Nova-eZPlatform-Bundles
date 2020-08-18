@@ -1,12 +1,15 @@
 <?php
+
 /**
- * NovaeZExtraBundle ConentListTree Adapter
+ * NovaeZExtraBundle ConentListTree Adapter.
  *
  * @package   Novactive\Bundle\eZExtraBundle
+ *
  * @author    Novactive <dir.tech@novactive.com>
  * @copyright 2015 Novactive
  * @license   https://github.com/Novactive/NovaeZExtraBundle/blob/master/LICENSE MIT Licence
  */
+
 namespace Novactive\Bundle\eZExtraBundle\Core\Pagerfanta\Adapter;
 
 use eZ\Publish\Core\Pagination\Pagerfanta\LocationSearchAdapter;
@@ -14,22 +17,19 @@ use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Result;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\WrapperFactory;
 
 /**
- * Class Content
+ * Class Content.
  */
 class Content extends LocationSearchAdapter
 {
-
     /**
-     * The Wrapper Factory
+     * The Wrapper Factory.
      *
      * @var WrapperFactory
      */
     protected $wrapperFactory;
 
     /**
-     * Set The Wrapper Factory
-     *
-     * @param WrapperFactory $factory
+     * Set The Wrapper Factory.
      */
     public function setWrapperFactory(WrapperFactory $factory)
     {
@@ -37,10 +37,9 @@ class Content extends LocationSearchAdapter
     }
 
     /**
-     * Wrap into content/location
+     * Wrap into content/location.
      *
-     * @param mixed   $results
-     * @param integer $limit
+     * @param int $limit
      *
      * @return Result
      */

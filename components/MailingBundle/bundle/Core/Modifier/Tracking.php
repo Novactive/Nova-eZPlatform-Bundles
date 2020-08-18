@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Modifier;
@@ -30,8 +32,6 @@ class Tracking implements ModifierInterface
 
     /**
      * Tracker constructor.
-     *
-     * @param RouterInterface $router
      */
     public function __construct(RouterInterface $router)
     {
@@ -44,12 +44,12 @@ class Tracking implements ModifierInterface
     public function modify(Mailing $mailing, User $user, string $html, array $options = []): string
     {
         /** @var Broadcast $broadcast */
-        $broadcast  = $options['broadcast'];
-        $uniqId     = uniqid('novaezmailing-', true);
-        $readUrl    = $this->router->generate(
+        $broadcast = $options['broadcast'];
+        $uniqId = uniqid('novaezmailing-', true);
+        $readUrl = $this->router->generate(
             'novaezmailing_t_read',
             [
-                'salt'        => $uniqId,
+                'salt' => $uniqId,
                 'broadcastId' => $broadcast->getId(),
             ],
             UrlGeneratorInterface::ABSOLUTE_URL
@@ -64,9 +64,9 @@ class Tracking implements ModifierInterface
                 $continueUrl = $this->router->generate(
                     'novaezmailing_t_continue',
                     [
-                        'salt'        => $uniqId,
+                        'salt' => $uniqId,
                         'broadcastId' => $broadcast->getId(),
-                        'url'         => base64_encode('http'.trim($aInput[1]).trim($aInput[2]).trim($aInput[3])),
+                        'url' => base64_encode('http'.trim($aInput[1]).trim($aInput[2]).trim($aInput[3])),
                     ],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 );

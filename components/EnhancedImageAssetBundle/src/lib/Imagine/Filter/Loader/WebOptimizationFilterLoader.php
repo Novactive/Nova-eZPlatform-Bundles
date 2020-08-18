@@ -26,7 +26,7 @@ class WebOptimizationFilterLoader implements LoaderInterface
     public function load(ImageInterface $image, array $options = []): ImageInterface
     {
         $filter = new WebOptimization();
-        $image  = $filter->apply($image);
+        $image = $filter->apply($image);
 
         return $image;
     }

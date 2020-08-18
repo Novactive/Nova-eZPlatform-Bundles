@@ -45,7 +45,7 @@ class AliasFilterManager
      */
     public function __construct(FilterManager $filterManager, FilterConfiguration $filterConfiguration)
     {
-        $this->filterManager       = $filterManager;
+        $this->filterManager = $filterManager;
         $this->filterConfiguration = $filterConfiguration;
     }
 

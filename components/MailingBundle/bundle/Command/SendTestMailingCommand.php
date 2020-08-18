@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Command;
@@ -38,14 +40,11 @@ class SendTestMailingCommand extends Command
 
     /**
      * SendTestMailingCommand constructor.
-     *
-     * @param TestMailing            $processor
-     * @param EntityManagerInterface $entityManager
      */
     public function __construct(TestMailing $processor, EntityManagerInterface $entityManager)
     {
         parent::__construct();
-        $this->processor     = $processor;
+        $this->processor = $processor;
         $this->entityManager = $entityManager;
     }
 
@@ -67,8 +66,8 @@ class SendTestMailingCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $io             = new SymfonyStyle($input, $output);
-        $mailingId      = (int) $input->getArgument('mailingId');
+        $io = new SymfonyStyle($input, $output);
+        $mailingId = (int) $input->getArgument('mailingId');
         $recipientEmail = $input->getArgument('recipient');
         $io->title('Sending a Mailing for test');
         $io->writeln("Mailing ID: <comment>{$mailingId}</comment>");

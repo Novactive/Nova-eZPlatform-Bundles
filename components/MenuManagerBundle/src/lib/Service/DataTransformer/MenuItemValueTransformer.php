@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -26,8 +27,6 @@ class MenuItemValueTransformer implements DataTransformerInterface
 
     /**
      * FieldValueTransformer constructor.
-     *
-     * @param ValueConverter $valueConverter
      */
     public function __construct(ValueConverter $valueConverter)
     {
@@ -37,8 +36,6 @@ class MenuItemValueTransformer implements DataTransformerInterface
     /**
      * Transforms a FieldType Value into a hash using `FieldTpe::toHash()`.
      * This hash is compatible with `reverseTransform()`.
-     *
-     * @param mixed $value
      *
      * @return array|null the value's hash, or null if $value was not a FieldType Value
      */
@@ -50,8 +47,6 @@ class MenuItemValueTransformer implements DataTransformerInterface
     /**
      * Transforms a hash into a FieldType Value using `FieldType::fromHash()`.
      * The FieldValue is compatible with `transform()`.
-     *
-     * @param mixed $value
      *
      * @return \eZ\Publish\SPI\FieldType\Value
      */

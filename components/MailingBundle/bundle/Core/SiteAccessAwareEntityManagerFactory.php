@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core;
@@ -40,16 +42,17 @@ class SiteAccessAwareEntityManagerFactory
      * @var ContainerEntityListenerResolver
      */
     private $resolver;
+
     public function __construct(
         Registry $registry,
         RepositoryConfigurationProvider $repositoryConfigurationProvider,
         ContainerEntityListenerResolver $resolver,
         array $settings
     ) {
-        $this->registry                        = $registry;
+        $this->registry = $registry;
         $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
-        $this->settings                        = $settings;
-        $this->resolver                        = $resolver;
+        $this->settings = $settings;
+        $this->resolver = $resolver;
     }
 
     private function getConnectionName(): string
@@ -70,7 +73,7 @@ class SiteAccessAwareEntityManagerFactory
         $connection = $this->registry->getConnection($connectionName);
 
         /** @var \Doctrine\DBAL\Connection $connection */
-        $cache  = new ArrayCache();
+        $cache = new ArrayCache();
         $config = new Configuration();
         $config->setMetadataCacheImpl($cache);
         $driverImpl = $config->newDefaultAnnotationDriver(__DIR__.'/../Entity', false);

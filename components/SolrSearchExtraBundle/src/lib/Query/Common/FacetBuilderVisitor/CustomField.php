@@ -27,9 +27,9 @@ class CustomField extends FacetBuilderVisitor implements FacetFieldVisitor
     {
         return new CustomFieldFacet(
             [
-                'name'    => $facetBuilder->name,
+                'name' => $facetBuilder->name,
                 'entries' => $this->mapData($data),
-                'field'   => $facetBuilder->field,
+                'field' => $facetBuilder->field,
             ]
         );
     }
@@ -58,8 +58,8 @@ class CustomField extends FacetBuilderVisitor implements FacetFieldVisitor
         $excludeTags = implode(',', $excludeTags);
 
         return [
-            'facet.field'                             => "{!ex={$excludeTags} key=${fieldId}}$facetBuilder->field",
-            "f.{$facetBuilder->field}.facet.limit"    => $facetBuilder->limit,
+            'facet.field' => "{!ex={$excludeTags} key=${fieldId}}$facetBuilder->field",
+            "f.{$facetBuilder->field}.facet.limit" => $facetBuilder->limit,
             "f.{$facetBuilder->field}.facet.mincount" => $facetBuilder->minCount,
         ];
     }

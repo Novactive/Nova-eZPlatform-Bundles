@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Mailer;
@@ -37,59 +39,37 @@ class Simple extends Mailer
 
     /**
      * Simple constructor.
-     *
-     * @param MessageContent  $messageProvider
-     * @param LoggerInterface $logger
      */
     public function __construct(MessageContent $messageProvider, LoggerInterface $logger)
     {
         $this->messageProvider = $messageProvider;
-        $this->logger          = $logger;
+        $this->logger = $logger;
     }
 
-    /**
-     * @param MailingEntity $mailing
-     */
     public function sendStartSendingMailingMessage(MailingEntity $mailing): void
     {
         $message = $this->messageProvider->getStartSendingMailing($mailing);
         $this->sendMessage($message);
     }
 
-    /**
-     * @param MailingEntity $mailing
-     */
     public function sendStopSendingMailingMessage(MailingEntity $mailing): void
     {
         $message = $this->messageProvider->getStopSendingMailing($mailing);
         $this->sendMessage($message);
     }
 
-    /**
-     * @param Registration      $registration
-     * @param ConfirmationToken $token
-     */
     public function sendRegistrationConfirmation(Registration $registration, ConfirmationToken $token): void
     {
         $message = $this->messageProvider->getRegistrationConfirmation($registration, $token);
         $this->sendMessage($message);
     }
 
-    /**
-     * @param Unregistration    $unregistration
-     * @param ConfirmationToken $token
-     */
     public function sendUnregistrationConfirmation(Unregistration $unregistration, ConfirmationToken $token): void
     {
         $message = $this->messageProvider->getUnregistrationConfirmation($unregistration, $token);
         $this->sendMessage($message);
     }
 
-    /**
-     * @param Swift_Message $message
-     *
-     * @return int
-     */
     private function sendMessage(Swift_Message $message): int
     {
         $this->logger->debug("Simple Mailer sends {$message->getSubject()}.");

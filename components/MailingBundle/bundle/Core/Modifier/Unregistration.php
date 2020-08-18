@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Modifier;
@@ -29,8 +31,6 @@ class Unregistration
 
     /**
      * Tracker constructor.
-     *
-     * @param RouterInterface $router
      */
     public function __construct(RouterInterface $router)
     {
@@ -39,10 +39,10 @@ class Unregistration
 
     public function modify(Mailing $mailing, User $user, string $html, array $options = []): string
     {
-        $url  = $this->router->generate(
+        $url = $this->router->generate(
             'novaezmailing_registration_remove',
             [
-                'email'      => $user->getEmail(),
+                'email' => $user->getEmail(),
                 'siteaccess' => $mailing->getSiteAccess(),
             ],
             UrlGeneratorInterface::ABSOLUTE_URL

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZLDAPAuthenticator Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZLdapAuthenticatorBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\eZLDAPAuthenticator\User\Converter;
@@ -23,8 +25,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LdapEntryConverter
 {
-    public const EMAIL_ATTR_OPTION    = 'email_attr';
-    public const ATTRIBUTES_OPTION    = 'attributes';
+    public const EMAIL_ATTR_OPTION = 'email_attr';
+    public const ATTRIBUTES_OPTION = 'attributes';
     public const ADMIN_USER_ID_OPTION = 'admin_user_id';
     public const USER_GROUP_ID_OPTION = 'user_group_id';
 
@@ -91,7 +93,7 @@ class LdapEntryConverter
      */
     public function convert(string $username, Entry $entry): EzLdapUser
     {
-        $attributes    = [];
+        $attributes = [];
         $attributesMap = $this->options[self::ATTRIBUTES_OPTION];
         foreach ($attributesMap as $attributeIdentifier => $attributeValueIdentifier) {
             $attributes[$attributeIdentifier] = $this->getEntryAttribute($entry, $attributeValueIdentifier);
@@ -124,8 +126,8 @@ class LdapEntryConverter
         try {
             $eZUser = $userService->loadUserByLogin($username);
         } catch (NotFoundException $exception) {
-            $languages          = $this->configResolver->getParameter('languages');
-            $mainLanguage       = array_shift($languages);
+            $languages = $this->configResolver->getParameter('languages');
+            $mainLanguage = array_shift($languages);
             $eZUserCreateStruct = $userService->newUserCreateStruct(
                 $username,
                 $email,

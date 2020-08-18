@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Validator\Constraints;
@@ -20,10 +22,6 @@ use Symfony\Component\Validator\ConstraintValidator;
  */
 class ArrayRangeValidator extends ConstraintValidator
 {
-    /**
-     * @param mixed      $value
-     * @param Constraint $constraint
-     */
     public function validate($value, Constraint $constraint): void
     {
         /* @var ArrayRange $constraint */

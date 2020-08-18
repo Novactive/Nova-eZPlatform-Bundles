@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Listener;
@@ -46,11 +48,6 @@ class LocationViewGroupTab
 
     /**
      * LocationViewGroupTab constructor.
-     *
-     * @param TabRegistry            $tabRegistry
-     * @param CampaignsTab           $campaignsTab
-     * @param MailingsTab            $mailingsTab
-     * @param EntityManagerInterface $entityManager
      */
     public function __construct(
         TabRegistry $tabRegistry,
@@ -58,15 +55,12 @@ class LocationViewGroupTab
         MailingsTab $mailingsTab,
         EntityManagerInterface $entityManager
     ) {
-        $this->tabRegistry   = $tabRegistry;
-        $this->campaignsTab  = $campaignsTab;
-        $this->mailingsTab   = $mailingsTab;
+        $this->tabRegistry = $tabRegistry;
+        $this->campaignsTab = $campaignsTab;
+        $this->mailingsTab = $mailingsTab;
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * @param TabGroupEvent $event
-     */
     public function onTabGroupPreRender(TabGroupEvent $event): void
     {
         $tabGroup = $event->getData();
@@ -79,7 +73,7 @@ class LocationViewGroupTab
         $location = $parameters['location'];
 
         $campaignRepo = $this->entityManager->getRepository('NovaeZMailingBundle:Campaign');
-        $campaigns    = $campaignRepo->findBy(['locationId' => $location->id]);
+        $campaigns = $campaignRepo->findBy(['locationId' => $location->id]);
         if ($campaigns) {
             $this->campaignsTab->setCampaigns($campaigns);
             $this->tabRegistry->addTab($this->campaignsTab, 'location-view');
@@ -87,7 +81,7 @@ class LocationViewGroupTab
         }
 
         $mailingRepo = $this->entityManager->getRepository('NovaeZMailingBundle:Mailing');
-        $mailings    = $mailingRepo->findBy(['locationId' => $location->id]);
+        $mailings = $mailingRepo->findBy(['locationId' => $location->id]);
         if ($mailings) {
             $this->mailingsTab->setMailings($mailings);
             $this->tabRegistry->addTab($this->mailingsTab, 'location-view');

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -15,16 +16,8 @@ use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 
 interface MenuItemTypeInterface
 {
-    /**
-     * @return string
-     */
     public function getEntityClassName(): string;
 
-    /**
-     * @param MenuItem $menuItem
-     *
-     * @return array
-     */
     public function toHash(MenuItem $menuItem): array;
 
     /**
@@ -34,14 +27,9 @@ interface MenuItemTypeInterface
      */
     public function fromHash($hash): ?MenuItem;
 
-    /**
-     * @return MenuItem
-     */
     public function createEntity(): MenuItem;
 
     /**
-     * @param MenuItem $menuItem
-     *
      * @return MenuItemValue
      */
     public function toMenuItemLink(MenuItem $menuItem): ?MenuItemValue;

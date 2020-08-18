@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Provider;
@@ -45,27 +47,17 @@ class MessageContent
 
     /**
      * MessageContent constructor.
-     *
-     * @param Twig_Environment $twig
-     * @param ConfigResolver   $configResolver
-     * @param Translator       $translator
      */
     public function __construct(Twig_Environment $twig, ConfigResolver $configResolver, Translator $translator)
     {
-        $this->twig           = $twig;
+        $this->twig = $twig;
         $this->configResolver = $configResolver;
-        $this->translator     = $translator;
+        $this->translator = $translator;
     }
 
-    /**
-     * @param string        $subject
-     * @param Campaign|null $campaign
-     *
-     * @return Swift_Message
-     */
     private function createMessage(string $subject, ?Campaign $campaign = null): Swift_Message
     {
-        $prefix  = $this->configResolver->getParameter('email_subject_prefix', 'nova_ezmailing');
+        $prefix = $this->configResolver->getParameter('email_subject_prefix', 'nova_ezmailing');
         $message = new Swift_Message("{$prefix} {$subject}");
         if (null !== $campaign) {
             $message->setFrom($campaign->getSenderEmail(), $campaign->getSenderName());
@@ -82,16 +74,11 @@ class MessageContent
         return $message;
     }
 
-    /**
-     * @param Mailing $mailing
-     *
-     * @return Swift_Message
-     */
     public function getStartSendingMailing(Mailing $mailing): Swift_Message
     {
         $translated = $this->translator->trans('messages.start_sending.being_sent3', [], 'ezmailing');
-        $message    = $this->createMessage($translated, $mailing->getCampaign());
-        $campaign   = $mailing->getCampaign();
+        $message = $this->createMessage($translated, $mailing->getCampaign());
+        $campaign = $mailing->getCampaign();
         $message->setTo($campaign->getReportEmail());
         $message->setBody(
             $this->twig->render('NovaeZMailingBundle:messages:startsending.html.twig', ['item' => $mailing]),
@@ -102,16 +89,11 @@ class MessageContent
         return $message;
     }
 
-    /**
-     * @param Mailing $mailing
-     *
-     * @return Swift_Message
-     */
     public function getStopSendingMailing(Mailing $mailing): Swift_Message
     {
         $translated = $this->translator->trans('messages.stop_sending.sent3', [], 'ezmailing');
-        $message    = $this->createMessage($translated, $mailing->getCampaign());
-        $campaign   = $mailing->getCampaign();
+        $message = $this->createMessage($translated, $mailing->getCampaign());
+        $campaign = $mailing->getCampaign();
         $message->setTo($campaign->getReportEmail());
         $message->setBody(
             $this->twig->render('NovaeZMailingBundle:messages:stopsending.html.twig', ['item' => $mailing]),
@@ -122,17 +104,11 @@ class MessageContent
         return $message;
     }
 
-    /**
-     * @param Registration      $registration
-     * @param ConfirmationToken $token
-     *
-     * @return Swift_Message
-     */
     public function getRegistrationConfirmation(Registration $registration, ConfirmationToken $token): Swift_Message
     {
         $translated = $this->translator->trans('messages.confirm_registration.confirm', [], 'ezmailing');
-        $message    = $this->createMessage($translated);
-        $user       = $registration->getUser();
+        $message = $this->createMessage($translated);
+        $user = $registration->getUser();
         if (null === $user) {
             throw new RuntimeException('User cannot be empty.');
         }
@@ -142,7 +118,7 @@ class MessageContent
                 'NovaeZMailingBundle:messages:confirmregistration.html.twig',
                 [
                     'registration' => $registration,
-                    'token'        => $token,
+                    'token' => $token,
                 ]
             ),
             'text/html',
@@ -152,19 +128,13 @@ class MessageContent
         return $message;
     }
 
-    /**
-     * @param Unregistration    $unregistration
-     * @param ConfirmationToken $token
-     *
-     * @return Swift_Message
-     */
     public function getUnregistrationConfirmation(
         Unregistration $unregistration,
         ConfirmationToken $token
     ): Swift_Message {
         $translated = $this->translator->trans('messages.confirm_unregistration.confirmation', [], 'ezmailing');
-        $message    = $this->createMessage($translated);
-        $user       = $unregistration->getUser();
+        $message = $this->createMessage($translated);
+        $user = $unregistration->getUser();
         if (null === $user) {
             throw new RuntimeException('User cannot be empty.');
         }
@@ -174,7 +144,7 @@ class MessageContent
                 'NovaeZMailingBundle:messages:confirmunregistration.html.twig',
                 [
                     'unregistration' => $unregistration,
-                    'token'          => $token,
+                    'token' => $token,
                 ]
             ),
             'text/html',

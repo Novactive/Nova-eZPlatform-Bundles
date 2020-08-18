@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Form;
@@ -34,8 +36,6 @@ class MailingListType extends AbstractType
 
     /**
      * CampaignType constructor.
-     *
-     * @param SiteaccessResolver $siteAccessResolver
      */
     public function __construct(SiteaccessResolver $siteAccessResolver)
     {
@@ -56,16 +56,16 @@ class MailingListType extends AbstractType
                 'names',
                 CollectionType::class,
                 [
-                    'label'        => false,
-                    'allow_add'    => false,
+                    'label' => false,
+                    'allow_add' => false,
                     'allow_delete' => false,
-                    'entry_type'   => TextType::class,
-                    'required'     => true,
+                    'entry_type' => TextType::class,
+                    'required' => true,
                 ]
             )
             ->add('withApproval', CheckboxType::class, [
                 'required' => false,
-                'label'    => 'mailinglisttype.buildform.withapproval',
+                'label' => 'mailinglisttype.buildform.withapproval',
                 ])
             ->add(
                 'siteaccessLimit',
@@ -73,20 +73,17 @@ class MailingListType extends AbstractType
                 [
                     'expanded' => true,
                     'multiple' => true,
-                    'choices'  => $siteaccess,
-                    'label'    => 'mailinglisttype.buildform.siteaccess_limit',
+                    'choices' => $siteaccess,
+                    'label' => 'mailinglisttype.buildform.siteaccess_limit',
                 ]
             );
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [
-                'data_class'         => MailingList::class,
+                'data_class' => MailingList::class,
                 'translation_domain' => 'ezmailing',
             ]
         );

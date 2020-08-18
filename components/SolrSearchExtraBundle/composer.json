@@ -1,55 +1,36 @@
 {
-  "name": "novactive/ezsolrsearchextrabundle",
-  "type": "ezplatform-bundle",
-  "description": "A bundle which extend ezplatform solr search handler",
-  "keywords": [
-    "novactive",
-    "ezplatform",
-    "solr"
-  ],
-  "license": [
-    "MIT"
-  ],
-  "authors": [
-    {
-      "name": "Novactive",
-      "homepage": "http://www.novactive.com",
-      "email": "dir.tech@novactive.com"
-    }
-  ],
-  "require": {
-    "ezsystems/ezplatform-solr-search-engine": "^1.5",
-    "php": "^7.1"
-  },
-  "require-dev": {
-    "phpmd/phpmd": "^2.6",
-    "sebastian/phpcpd": "^4.0",
-    "friendsofphp/php-cs-fixer": "^2.10",
-    "squizlabs/php_codesniffer": "^3.2"
-  },
-  "autoload": {
-    "psr-4": {
-      "Novactive\\EzSolrSearchExtraBundle\\": "src/bundle",
-      "Novactive\\EzSolrSearchExtra\\": "src/lib"
-    }
-  },
-  "scripts": {
-    "fix-cs": [
-      "./vendor/bin/php-cs-fixer fix --config=.cs/.php_cs.php",
-      "./vendor/bin/phpmd src text .cs/md_ruleset.xml",
-      "./vendor/bin/phpcpd src",
-      "./vendor/bin/phpcbf -n src --standard=.cs/cs_ruleset.xml",
-      "./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src"
+    "name": "novactive/ezsolrsearchextrabundle",
+    "type": "ezplatform-bundle",
+    "description": "A bundle which extend ezplatform solr search handler",
+    "keywords": [
+        "novactive",
+        "ezplatform",
+        "solr"
     ],
-    "clean": [
-      "rm -f .php_cs.cache",
-      "rm -rf vendor",
-      "rm -f composer.lock"
+    "license": [
+        "MIT"
     ],
-    "tests": [
-      "./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src",
-      "./vendor/bin/phpmd src text .cs/md_ruleset.xml",
-      "./vendor/bin/phpcpd src"
-    ]
-  }
+    "authors": [
+        {
+            "name": "Novactive",
+            "homepage": "http://www.novactive.com",
+            "email": "dir.tech@novactive.com"
+        }
+    ],
+    "require": {
+        "ezsystems/ezplatform-solr-search-engine": "*",
+        "php": "^7.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Novactive\\EzSolrSearchExtraBundle\\": "src/bundle",
+            "Novactive\\EzSolrSearchExtra\\": "src/lib"
+        }
+    },
+    "extra": {
+        "thanks": {
+            "name": "ezsystems/ezplatform",
+            "url": "https://github.com/ezsystems/ezplatform"
+        }
+    }
 }

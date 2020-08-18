@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Entity;
@@ -44,37 +46,37 @@ class User
     /**
      * In the BD, weird fallback status (should not exist).
      */
-    const IN_BASE = 0;
+    public const IN_BASE = 0;
 
     /**
      * Did not confirmed the confirmation email.
      */
-    const PENDING = 'pending';
+    public const PENDING = 'pending';
 
     /**
      * Did confirme the confirmation email.
      */
-    const CONFIRMED = 'confirmed';
+    public const CONFIRMED = 'confirmed';
 
     /**
      * Flag as SOFT BOUNCE.
      */
-    const SOFT_BOUNCE = 'soft_bounce';
+    public const SOFT_BOUNCE = 'soft_bounce';
 
     /**
      * Flag as HARD BOUNCE.
      */
-    const HARD_BOUNCE = 'hard_bounce';
+    public const HARD_BOUNCE = 'hard_bounce';
 
     /**
      * Was blacklisted.
      */
-    const BLACKLISTED = 'blacklisted';
+    public const BLACKLISTED = 'blacklisted';
 
     /**
      * Statuses.
      */
-    const STATUSES = [
+    public const STATUSES = [
         self::PENDING,
         self::CONFIRMED,
         self::SOFT_BOUNCE,
@@ -85,9 +87,9 @@ class User
     /**
      * Styles.
      */
-    const STATUSES_STYLE = [
-        self::PENDING     => 'dark',
-        self::CONFIRMED   => 'success',
+    public const STATUSES_STYLE = [
+        self::PENDING => 'dark',
+        self::CONFIRMED => 'success',
         self::SOFT_BOUNCE => 'warning',
         self::HARD_BOUNCE => 'danger',
         self::BLACKLISTED => 'info',
@@ -99,9 +101,9 @@ class User
     public function __construct()
     {
         $this->registrations = new ArrayCollection();
-        $this->created       = new DateTime();
-        $this->restricted    = false;
-        $this->updated       = new DateTime();
+        $this->created = new DateTime();
+        $this->restricted = false;
+        $this->updated = new DateTime();
     }
 
     /**
@@ -213,17 +215,12 @@ class User
      */
     private $registrations;
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return (int) $this->id;
     }
 
     /**
-     * @param int $id
-     *
      * @return User
      */
     public function setId(int $id): self
@@ -242,8 +239,6 @@ class User
     }
 
     /**
-     * @param string $email
-     *
      * @return User
      */
     public function setEmail(string $email): self
@@ -262,8 +257,6 @@ class User
     }
 
     /**
-     * @param string $firstName
-     *
      * @return User
      */
     public function setFirstName(string $firstName): self
@@ -282,8 +275,6 @@ class User
     }
 
     /**
-     * @param string $lastName
-     *
      * @return User
      */
     public function setLastName(string $lastName): self
@@ -302,8 +293,6 @@ class User
     }
 
     /**
-     * @param string $gender
-     *
      * @return User
      */
     public function setGender(string $gender): self
@@ -342,8 +331,6 @@ class User
     }
 
     /**
-     * @param string $phone
-     *
      * @return User
      */
     public function setPhone(string $phone): self
@@ -362,8 +349,6 @@ class User
     }
 
     /**
-     * @param string $zipcode
-     *
      * @return User
      */
     public function setZipcode(string $zipcode): self
@@ -382,8 +367,6 @@ class User
     }
 
     /**
-     * @param string $city
-     *
      * @return User
      */
     public function setCity(string $city): self
@@ -402,8 +385,6 @@ class User
     }
 
     /**
-     * @param string $state
-     *
      * @return User
      */
     public function setState(string $state): self
@@ -422,8 +403,6 @@ class User
     }
 
     /**
-     * @param string $country
-     *
      * @return User
      */
     public function setCountry(string $country): self
@@ -442,8 +421,6 @@ class User
     }
 
     /**
-     * @param string $jobTitle
-     *
      * @return User
      */
     public function setJobTitle(string $jobTitle): self
@@ -462,8 +439,6 @@ class User
     }
 
     /**
-     * @param string $company
-     *
      * @return User
      */
     public function setCompany(string $company): self
@@ -473,17 +448,12 @@ class User
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getOrigin(): string
     {
         return $this->origin;
     }
 
     /**
-     * @param string $origin
-     *
      * @return User
      */
     public function setOrigin(string $origin): self
@@ -493,25 +463,17 @@ class User
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getStatus(): string
     {
         return $this->status;
     }
 
-    /**
-     * @return string
-     */
     public function getStatusStyle(): string
     {
         return self::STATUSES_STYLE[$this->status];
     }
 
     /**
-     * @param string $status
-     *
      * @return User
      */
     public function setStatus(string $status): self
@@ -521,17 +483,12 @@ class User
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isRestricted(): bool
     {
         return $this->restricted;
     }
 
     /**
-     * @param bool $restricted
-     *
      * @return User
      */
     public function setRestricted(bool $restricted): self
@@ -575,8 +532,6 @@ class User
     }
 
     /**
-     * @param Registration $registration
-     *
      * @return $this
      */
     public function addRegistration(Registration $registration): self
@@ -585,13 +540,15 @@ class User
             return $this;
         }
 
-        if ($this->registrations->exists(
-            function ($key, Registration $element) use ($registration) {
-                $key; //tricks phpmd
+        if (
+            $this->registrations->exists(
+                function ($key, Registration $element) use ($registration) {
+                    $key; //tricks phpmd
 
-                return $element->getMailingList()->getId() === $registration->getMailingList()->getId();
-            }
-        )) {
+                    return $element->getMailingList()->getId() === $registration->getMailingList()->getId();
+                }
+            )
+        ) {
             return $this;
         }
         $registration->setUser($this);
@@ -601,8 +558,6 @@ class User
     }
 
     /**
-     * @param Registration $registration
-     *
      * @return User
      */
     public function removeRegistration(Registration $registration): self
@@ -612,41 +567,26 @@ class User
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isConfirmed(): bool
     {
         return self::CONFIRMED === $this->status;
     }
 
-    /**
-     * @return bool
-     */
     public function isPending(): bool
     {
         return self::PENDING === $this->status;
     }
 
-    /**
-     * @return bool
-     */
     public function isBlacklisted(): bool
     {
         return self::BLACKLISTED === $this->status;
     }
 
-    /**
-     * @return bool
-     */
     public function isSoftBounce(): bool
     {
         return self::SOFT_BOUNCE === $this->status;
     }
 
-    /**
-     * @return bool
-     */
     public function isHardBounce(): bool
     {
         return self::HARD_BOUNCE === $this->status;

@@ -1,5 +1,0 @@
-vendor
-.php_cs.cache
-composer.lock
-ezplatform
-.web-server-pid

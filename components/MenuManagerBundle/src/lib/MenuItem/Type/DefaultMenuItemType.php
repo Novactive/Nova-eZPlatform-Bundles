@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -23,8 +24,6 @@ class DefaultMenuItemType extends AbstractMenuItemType
     protected $configResolver;
 
     /**
-     * @param ConfigResolverInterface $configResolver
-     *
      * @required
      */
     public function setConfigResolver(ConfigResolverInterface $configResolver): void
@@ -48,15 +47,15 @@ class DefaultMenuItemType extends AbstractMenuItemType
         $parent = $menuItem->getParent();
 
         return [
-            'id'       => $menuItem->getId(),
-            'menuId'   => $menuItem->getMenu()->getId(),
+            'id' => $menuItem->getId(),
+            'menuId' => $menuItem->getMenu()->getId(),
             'parentId' => $parent ? $parent->getId() : null,
             'position' => $menuItem->getPosition(),
-            'url'      => $menuItem->getUrl(),
-            'name'     => $menuItem->getName(),
-            'target'   => $menuItem->getTarget(),
-            'options'  => $menuItem->getOptions(),
-            'type'     => $this->getEntityClassName(),
+            'url' => $menuItem->getUrl(),
+            'name' => $menuItem->getName(),
+            'target' => $menuItem->getTarget(),
+            'options' => $menuItem->getOptions(),
+            'type' => $this->getEntityClassName(),
         ];
     }
 
@@ -70,13 +69,13 @@ class DefaultMenuItemType extends AbstractMenuItemType
         }
 
         $menuItemRepo = $this->em->getRepository(MenuItem::class);
-        $menuRepo     = $this->em->getRepository(Menu::class);
+        $menuRepo = $this->em->getRepository(Menu::class);
 
-        $menuItem   = $this->getEntity(isset($hash['id']) && $hash['id'] ? $hash['id'] : null);
+        $menuItem = $this->getEntity(isset($hash['id']) && $hash['id'] ? $hash['id'] : null);
         $updateData = [
-            'name'     => $hash['name'] ?? false,
-            'url'      => $hash['url'] ?? false,
-            'target'   => $hash['target'] ?? false,
+            'name' => $hash['name'] ?? false,
+            'url' => $hash['url'] ?? false,
+            'target' => $hash['target'] ?? false,
             'position' => $hash['position'] ?? 0,
         ];
         $menuItem->update(array_filter($updateData));
@@ -141,11 +140,6 @@ class DefaultMenuItemType extends AbstractMenuItemType
         return $link;
     }
 
-    /**
-     * @param MenuItem $menuItem
-     *
-     * @return string|null
-     */
     public function getName(MenuItem $menuItem): ?string
     {
         $languages = $this->getLanguages();
@@ -159,11 +153,6 @@ class DefaultMenuItemType extends AbstractMenuItemType
         return null;
     }
 
-    /**
-     * @param MenuItem $menuItem
-     *
-     * @return string|null
-     */
     public function getUrl(MenuItem $menuItem): ?string
     {
         $languages = $this->getLanguages();

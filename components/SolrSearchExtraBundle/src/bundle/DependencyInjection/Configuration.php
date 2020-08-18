@@ -29,8 +29,8 @@ class Configuration extends SiteAccessAware\Configuration
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode    = $treeBuilder->root('ez_solr_search_extra');
-        $systemNode  = $this->generateScopeBaseNode($rootNode);
+        $rootNode = $treeBuilder->root('ez_solr_search_extra');
+        $systemNode = $this->generateScopeBaseNode($rootNode);
         $systemNode
                 ->arrayNode('fulltext_fields')
                     ->info('List of fulltext fields')

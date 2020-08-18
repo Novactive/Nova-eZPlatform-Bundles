@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Repository;
@@ -27,11 +29,6 @@ class Mailing extends EntityRepository
         return 'mail';
     }
 
-    /**
-     * @param array $filters
-     *
-     * @return QueryBuilder
-     */
     public function createQueryBuilderForFilters(
         array $filters = [],
         ?string $orderBy = null,
@@ -52,11 +49,6 @@ class Mailing extends EntityRepository
         return $qb;
     }
 
-    /**
-     * @param int $limit
-     *
-     * @return array
-     */
     public function findLastUpdated(int $limit = 10): array
     {
         $qb = $this->createQueryBuilderForFilters([]);

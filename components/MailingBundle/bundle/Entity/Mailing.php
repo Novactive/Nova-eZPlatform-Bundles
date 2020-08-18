@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Entity;
@@ -37,42 +39,42 @@ class Mailing implements eZ\ContentInterface
     /**
      * Just created.
      */
-    const DRAFT = 'draft';
+    public const DRAFT = 'draft';
 
     /**
      * Tested.
      */
-    const TESTED = 'tested';
+    public const TESTED = 'tested';
 
     /**
      * Ready to be sent.
      */
-    const PENDING = 'pending';
+    public const PENDING = 'pending';
 
     /**
      * Currently Processing.
      */
-    const PROCESSING = 'processing';
+    public const PROCESSING = 'processing';
 
     /**
      * Sent, Processing over.
      */
-    const SENT = 'sent';
+    public const SENT = 'sent';
 
     /**
      * Aborted.
      */
-    const ABORTED = 'aborted';
+    public const ABORTED = 'aborted';
 
     /**
      * Archived.
      */
-    const ARCHIVED = 'archived';
+    public const ARCHIVED = 'archived';
 
     /**
      * Statuses.
      */
-    const STATUSES = [
+    public const STATUSES = [
         self::DRAFT,
         self::TESTED,
         self::PENDING,
@@ -186,30 +188,25 @@ class Mailing implements eZ\ContentInterface
      */
     public function __construct()
     {
-        $this->recurring    = false;
-        $this->statHits     = new ArrayCollection();
-        $this->broadcasts   = new ArrayCollection();
-        $this->created      = new DateTime();
-        $this->hoursOfDay   = [];
-        $this->daysOfWeek   = [];
-        $this->daysOfMonth  = [];
-        $this->daysOfYear   = [];
+        $this->recurring = false;
+        $this->statHits = new ArrayCollection();
+        $this->broadcasts = new ArrayCollection();
+        $this->created = new DateTime();
+        $this->hoursOfDay = [];
+        $this->daysOfWeek = [];
+        $this->daysOfMonth = [];
+        $this->daysOfYear = [];
         $this->weeksOfMonth = [];
         $this->monthsOfYear = [];
-        $this->weeksOfYear  = [];
+        $this->weeksOfYear = [];
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return (int) $this->id;
     }
 
     /**
-     * @param int $id
-     *
      * @return Mailing
      */
     public function setId(int $id): self
@@ -219,17 +216,12 @@ class Mailing implements eZ\ContentInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getStatus(): string
     {
         return $this->status;
     }
 
     /**
-     * @param string $status
-     *
      * @return Mailing
      */
     public function setStatus(string $status): self
@@ -266,17 +258,12 @@ class Mailing implements eZ\ContentInterface
         return $lastSent;
     }
 
-    /**
-     * @return bool
-     */
     public function isRecurring(): bool
     {
         return $this->recurring;
     }
 
     /**
-     * @param bool $recurring
-     *
      * @return Mailing
      */
     public function setRecurring(bool $recurring): self
@@ -286,17 +273,12 @@ class Mailing implements eZ\ContentInterface
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getHoursOfDay(): array
     {
         return $this->hoursOfDay;
     }
 
     /**
-     * @param array $hoursOfDay
-     *
      * @return Mailing
      */
     public function setHoursOfDay(array $hoursOfDay): self
@@ -306,17 +288,12 @@ class Mailing implements eZ\ContentInterface
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getDaysOfWeek(): array
     {
         return $this->daysOfWeek;
     }
 
     /**
-     * @param array $daysOfWeek
-     *
      * @return Mailing
      */
     public function setDaysOfWeek(array $daysOfWeek): self
@@ -326,17 +303,12 @@ class Mailing implements eZ\ContentInterface
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getDaysOfMonth(): array
     {
         return $this->daysOfMonth;
     }
 
     /**
-     * @param array $daysOfMonth
-     *
      * @return Mailing
      */
     public function setDaysOfMonth(array $daysOfMonth): self
@@ -346,17 +318,12 @@ class Mailing implements eZ\ContentInterface
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getDaysOfYear(): array
     {
         return $this->daysOfYear;
     }
 
     /**
-     * @param array $daysOfYear
-     *
      * @return Mailing
      */
     public function setDaysOfYear(array $daysOfYear): self
@@ -366,17 +333,12 @@ class Mailing implements eZ\ContentInterface
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getWeeksOfMonth(): array
     {
         return $this->weeksOfMonth;
     }
 
     /**
-     * @param array $weeksOfMonth
-     *
      * @return Mailing
      */
     public function setWeeksOfMonth(array $weeksOfMonth): self
@@ -386,17 +348,12 @@ class Mailing implements eZ\ContentInterface
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getMonthsOfYear(): array
     {
         return $this->monthsOfYear;
     }
 
     /**
-     * @param array $monthsOfYear
-     *
      * @return Mailing
      */
     public function setMonthsOfYear(array $monthsOfYear): self
@@ -406,17 +363,12 @@ class Mailing implements eZ\ContentInterface
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getWeeksOfYear(): array
     {
         return $this->weeksOfYear;
     }
 
     /**
-     * @param array $weeksOfYear
-     *
      * @return Mailing
      */
     public function setWeeksOfYear(array $weeksOfYear): self
@@ -426,9 +378,6 @@ class Mailing implements eZ\ContentInterface
         return $this;
     }
 
-    /**
-     * @return Campaign
-     */
     public function getCampaign(): Campaign
     {
         return $this->campaign;
@@ -460,9 +409,6 @@ class Mailing implements eZ\ContentInterface
         }
     }
 
-    /**
-     * @return bool
-     */
     public function hasBeenSent(): bool
     {
         return
@@ -470,57 +416,36 @@ class Mailing implements eZ\ContentInterface
             (true === $this->isRecurring() && null !== $this->getLastSent());
     }
 
-    /**
-     * @return bool
-     */
     public function isPending(): bool
     {
         return self::PENDING === $this->status;
     }
 
-    /**
-     * @return bool
-     */
     public function isDraft(): bool
     {
         return self::DRAFT === $this->status;
     }
 
-    /**
-     * @return bool
-     */
     public function isArchived(): bool
     {
         return self::ARCHIVED === $this->status;
     }
 
-    /**
-     * @return bool
-     */
     public function isAborted(): bool
     {
         return self::ABORTED === $this->status;
     }
 
-    /**
-     * @return bool
-     */
     public function isProcessing(): bool
     {
         return self::PROCESSING === $this->status;
     }
 
-    /**
-     * @return bool
-     */
     public function isTested(): bool
     {
         return self::TESTED === $this->status;
     }
 
-    /**
-     * @return mixed
-     */
     public function getBroadcasts()
     {
         return $this->broadcasts;
@@ -539,8 +464,6 @@ class Mailing implements eZ\ContentInterface
     }
 
     /**
-     * @param Broadcast $broadcast
-     *
      * @return $this
      */
     public function addBroadcast(Broadcast $broadcast): self
@@ -563,8 +486,6 @@ class Mailing implements eZ\ContentInterface
     }
 
     /**
-     * @param string $siteAccess
-     *
      * @return $this
      */
     public function setSiteAccess(string $siteAccess): self

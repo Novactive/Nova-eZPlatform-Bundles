@@ -47,7 +47,7 @@ class SynonymsController extends BaseController
     public function __construct(SynonymsService $synonymsService, FormFactory $formFactory)
     {
         $this->synonymsService = $synonymsService;
-        $this->formFactory     = $formFactory;
+        $this->formFactory = $formFactory;
     }
 
     /**
@@ -58,15 +58,15 @@ class SynonymsController extends BaseController
     {
         $this->permissionAccess('solradmin', 'synonyms.view');
 
-        $manageAccess   = $this->permissionManageAccess('solradmin', ['synonyms.create', 'synonyms.delete']);
+        $manageAccess = $this->permissionManageAccess('solradmin', ['synonyms.create', 'synonyms.delete']);
         $viewParameters = [];
 
         if ($this->permissionResolver->hasAccess('solradmin', 'synonyms.create')) {
             $addForm = $this->formFactory->create(AddSynonymsType::class, null);
             $addForm->handleRequest($request);
             if ($addForm->isSubmitted() && $addForm->isValid()) {
-                $data     = $addForm->getData();
-                $term     = $data['term'] ?? '';
+                $data = $addForm->getData();
+                $term = $data['term'] ?? '';
                 $synonyms = $data['synonyms'] ?? '';
                 $this->synonymsService->addMapping(
                     $setId,
@@ -98,10 +98,10 @@ class SynonymsController extends BaseController
         $pagerfanta->setCurrentPage(min($page, $pagerfanta->getNbPages()));
 
         $viewParameters += [
-            'pager'           => $pagerfanta,
-            'setId'           => $setId,
-            'noLayout'        => $noLayout,
-            'manageAccess'    => $manageAccess,
+            'pager' => $pagerfanta,
+            'setId' => $setId,
+            'noLayout' => $noLayout,
+            'manageAccess' => $manageAccess,
         ];
 
         return $viewParameters;
@@ -114,7 +114,7 @@ class SynonymsController extends BaseController
     {
         $this->permissionAccess('solradmin', 'synonyms.create');
 
-        $term     = $request->request->get('term');
+        $term = $request->request->get('term');
         $synonyms = $request->request->get('synonyms');
 
         $this->synonymsService->addMapping(
@@ -128,8 +128,8 @@ class SynonymsController extends BaseController
         return $this->redirectToRoute(
             'solr_admin.synonyms.index',
             [
-                'setId'    => $setId,
-                'page'     => 1,
+                'setId' => $setId,
+                'page' => 1,
                 'noLayout' => true,
             ]
         );
@@ -151,8 +151,8 @@ class SynonymsController extends BaseController
         return $this->redirectToRoute(
             'solr_admin.synonyms.index',
             [
-                'setId'    => $setId,
-                'page'     => 1,
+                'setId' => $setId,
+                'page' => 1,
                 'noLayout' => true,
             ]
         );

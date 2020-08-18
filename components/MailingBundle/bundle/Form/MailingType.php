@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Form;
@@ -40,8 +42,6 @@ class MailingType extends AbstractType
 
     /**
      * CampaignType constructor.
-     *
-     * @param SiteaccessResolver $siteAccessResolver
      */
     public function __construct(SiteaccessResolver $siteAccessResolver)
     {
@@ -53,7 +53,7 @@ class MailingType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $fromArray  = function ($array) {
+        $fromArray = function ($array) {
             return implode(',', $array);
         };
         $fromString = function ($string) {
@@ -70,12 +70,12 @@ class MailingType extends AbstractType
                 'names',
                 CollectionType::class,
                 [
-                    'label'        => false,
-                    'allow_add'    => false,
+                    'label' => false,
+                    'allow_add' => false,
                     'allow_delete' => false,
-                    'entry_type'   => TextType::class,
-                    'required'     => true,
-                    'constraints'  => [new NamesConstraint()],
+                    'entry_type' => TextType::class,
+                    'required' => true,
+                    'constraints' => [new NamesConstraint()],
                 ]
             )
             ->add('subject', TextType::class, ['required' => false, 'label' => 'form.subject'])
@@ -84,7 +84,7 @@ class MailingType extends AbstractType
                 'locationId',
                 HiddenType::class,
                 [
-                    'required'    => true,
+                    'required' => true,
                     'constraints' => [new LocationConstraint()],
                 ]
             )
@@ -93,7 +93,7 @@ class MailingType extends AbstractType
                 TextType::class,
                 [
                     'required' => true,
-                    'label'    => 'generic.details.hours_day',
+                    'label' => 'generic.details.hours_day',
                 ]
             )
             ->add('daysOfWeek', TextType::class, ['label' => 'generic.details.days_week'])
@@ -120,8 +120,8 @@ class MailingType extends AbstractType
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
             function (FormEvent $event) use ($siteaccesses) {
-                $form            = $event->getForm();
-                $mailing         = $event->getData();
+                $form = $event->getForm();
+                $mailing = $event->getData();
                 $siteaccessLimit = $mailing->getCampaign()->getSiteaccessLimit() ?? [];
                 $siteaccessLimit = array_combine(
                     array_values($siteaccessLimit),
@@ -132,8 +132,8 @@ class MailingType extends AbstractType
                     'siteAccess',
                     ChoiceType::class,
                     [
-                        'label'    => 'mailing.buildform.which_siteaccess',
-                        'choices'  => count($siteaccessLimit) > 0 ? $siteaccessLimit : $siteaccesses,
+                        'label' => 'mailing.buildform.which_siteaccess',
+                        'choices' => count($siteaccessLimit) > 0 ? $siteaccessLimit : $siteaccesses,
                         'expanded' => true,
                         'multiple' => false,
                         'required' => true,
@@ -143,14 +143,11 @@ class MailingType extends AbstractType
         );
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [
-                'data_class'         => Mailing::class,
+                'data_class' => Mailing::class,
                 'translation_domain' => 'ezmailing',
             ]
         );

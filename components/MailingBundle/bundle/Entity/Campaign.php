@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,10 +9,12 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -101,23 +104,18 @@ class Campaign implements eZ\ContentInterface
      */
     public function __construct()
     {
-        $this->mailingLists    = new ArrayCollection();
-        $this->mailings        = new ArrayCollection();
-        $this->created         = new \DateTime();
+        $this->mailingLists = new ArrayCollection();
+        $this->mailings = new ArrayCollection();
+        $this->created = new DateTime();
         $this->siteaccessLimit = [];
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return (int) $this->id;
     }
 
     /**
-     * @param int $id
-     *
      * @return Campaign
      */
     public function setId(int $id): self
@@ -136,8 +134,6 @@ class Campaign implements eZ\ContentInterface
     }
 
     /**
-     * @param string $senderName
-     *
      * @return Campaign
      */
     public function setSenderName(string $senderName): self
@@ -156,8 +152,6 @@ class Campaign implements eZ\ContentInterface
     }
 
     /**
-     * @param string $senderEmail
-     *
      * @return Campaign
      */
     public function setSenderEmail(string $senderEmail): self
@@ -176,8 +170,6 @@ class Campaign implements eZ\ContentInterface
     }
 
     /**
-     * @param string $reportEmail
-     *
      * @return Campaign
      */
     public function setReportEmail(string $reportEmail): self
@@ -196,8 +188,6 @@ class Campaign implements eZ\ContentInterface
     }
 
     /**
-     * @param array $siteaccessLimit
-     *
      * @return Campaign
      */
     public function setSiteaccessLimit(array $siteaccessLimit): self
@@ -230,8 +220,6 @@ class Campaign implements eZ\ContentInterface
     }
 
     /**
-     * @param MailingList $mailingList
-     *
      * @return $this
      */
     public function addMailingList(MailingList $mailingList): self
@@ -270,8 +258,6 @@ class Campaign implements eZ\ContentInterface
     }
 
     /**
-     * @param Mailing $mailing
-     *
      * @return $this
      */
     public function addMailing(Mailing $mailing): self
@@ -294,8 +280,6 @@ class Campaign implements eZ\ContentInterface
     }
 
     /**
-     * @param string $returnPathEmail
-     *
      * @return $this
      */
     public function setReturnPathEmail(string $returnPathEmail): self

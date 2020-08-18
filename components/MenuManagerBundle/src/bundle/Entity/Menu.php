@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -71,12 +72,10 @@ class Menu
 
     /**
      * Menu constructor.
-     *
-     * @param string|null $remoteId
      */
     public function __construct(?string $remoteId = null)
     {
-        $this->items    = new ArrayCollection();
+        $this->items = new ArrayCollection();
         $this->remoteId = $remoteId ?? md5(uniqid(get_class($this), true));
     }
 
@@ -88,9 +87,6 @@ class Menu
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
     public function setName(string $name): void
     {
         $this->name = $name;
@@ -104,9 +100,6 @@ class Menu
         return $this->rootLocationId;
     }
 
-    /**
-     * @param int $rootLocationId
-     */
     public function setRootLocationId(int $rootLocationId): void
     {
         $this->rootLocationId = $rootLocationId;
@@ -142,9 +135,6 @@ class Menu
         $this->items = $items;
     }
 
-    /**
-     * @param MenuItem $menuItem
-     */
     public function addItem(MenuItem $menuItem)
     {
         if (false === $this->items->indexOf($menuItem)) {
@@ -153,17 +143,11 @@ class Menu
         }
     }
 
-    /**
-     * @param MenuItem $menuItem
-     */
     public function removeItem(MenuItem $menuItem)
     {
         $this->items->removeElement($menuItem);
     }
 
-    /**
-     * @return string|null
-     */
     public function getType(): ?string
     {
         return $this->type;
@@ -177,17 +161,11 @@ class Menu
         $this->type = $type;
     }
 
-    /**
-     * @return null|string
-     */
     public function getRemoteId(): ?string
     {
         return $this->remoteId;
     }
 
-    /**
-     * @param null|string $remoteId
-     */
     public function setRemoteId(?string $remoteId): void
     {
         $this->remoteId = $remoteId;

@@ -49,7 +49,7 @@ class PublishDateFieldMapper extends ContentTranslationFieldMapper
     public function __construct(ContentTypeHandler $contentTypeHandler, FieldRegistry $fieldRegistry)
     {
         $this->contentTypeHandler = $contentTypeHandler;
-        $this->fieldRegistry      = $fieldRegistry;
+        $this->fieldRegistry = $fieldRegistry;
     }
 
     public function setFieldIdentifiers(array $fieldIdentifiers): void
@@ -102,7 +102,7 @@ class PublishDateFieldMapper extends ContentTranslationFieldMapper
                     continue;
                 }
 
-                $fieldType   = $this->fieldRegistry->getType($field->type);
+                $fieldType = $this->fieldRegistry->getType($field->type);
                 $indexFields = $fieldType->getIndexData($field, $fieldDefinition);
 
                 foreach ($indexFields as $indexField) {

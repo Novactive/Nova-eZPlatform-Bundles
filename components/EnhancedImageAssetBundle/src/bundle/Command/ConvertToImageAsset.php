@@ -222,14 +222,14 @@ class ConvertToImageAsset extends Command
             'ezimageasset'
         );
 
-        $createStruct->names           = $originalFieldDefinition->getNames();
-        $createStruct->descriptions    = $originalFieldDefinition->getDescriptions();
-        $createStruct->position        = $originalFieldDefinition->position;
-        $createStruct->isRequired      = $originalFieldDefinition->isRequired;
-        $createStruct->isSearchable    = $originalFieldDefinition->isSearchable;
+        $createStruct->names = $originalFieldDefinition->getNames();
+        $createStruct->descriptions = $originalFieldDefinition->getDescriptions();
+        $createStruct->position = $originalFieldDefinition->position;
+        $createStruct->isRequired = $originalFieldDefinition->isRequired;
+        $createStruct->isSearchable = $originalFieldDefinition->isSearchable;
         $createStruct->isInfoCollector = $originalFieldDefinition->isInfoCollector;
-        $createStruct->isTranslatable  = $originalFieldDefinition->isTranslatable;
-        $createStruct->fieldGroup      = $originalFieldDefinition->fieldGroup;
+        $createStruct->isTranslatable = $originalFieldDefinition->isTranslatable;
+        $createStruct->fieldGroup = $originalFieldDefinition->fieldGroup;
 
         return $createStruct;
     }
@@ -270,10 +270,10 @@ class ConvertToImageAsset extends Command
 
         $countQuery = clone $query;
         $countQuery->select('count(*)');
-        $totalCount  = $countQuery->execute()->fetch(FetchMode::COLUMN);
+        $totalCount = $countQuery->execute()->fetch(FetchMode::COLUMN);
         $progressBar = new ProgressBar($this->io, $totalCount);
 
-        $batch  = 500;
+        $batch = 500;
         $offset = 0;
         $query->select('id');
         $query->setMaxResults($batch);
@@ -305,7 +305,7 @@ class ConvertToImageAsset extends Command
         FieldDefinition $originalFieldDefinition,
         FieldDefinition $fieldDefinition
     ): void {
-        $versions        = $this->contentService->loadVersions($contentInfo);
+        $versions = $this->contentService->loadVersions($contentInfo);
         $invalidateCache = false;
         foreach ($versions as $versionInfo) {
             $content = $this->contentService->loadContent(

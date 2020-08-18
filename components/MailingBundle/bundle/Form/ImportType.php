@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -29,18 +30,15 @@ class ImportType extends AbstractType
     {
         $builder->add('file', FileType::class, [
             'required' => false,
-            'label'    => 'import.form.file',
+            'label' => 'import.form.file',
         ]);
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [
-                'data_class'         => UserImport::class,
+                'data_class' => UserImport::class,
                 'translation_domain' => 'ezmailing',
             ]
         );

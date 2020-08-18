@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -18,8 +19,11 @@ use Novactive\EzMenuManager\MenuItem\MenuItemConverter;
 use Novactive\EzMenuManager\Service\MenuBuilder;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
+use Twig_Extension;
+use Twig_SimpleFilter;
+use Twig_SimpleFunction;
 
-class MenuManagerExtension extends \Twig_Extension
+class MenuManagerExtension extends Twig_Extension
 {
     /** @var TranslationHelper */
     protected $translationHelper;
@@ -38,12 +42,6 @@ class MenuManagerExtension extends \Twig_Extension
 
     /**
      * MenuManagerExtension constructor.
-     *
-     * @param TranslationHelper $translationHelper
-     * @param ContentService    $contentService
-     * @param MenuBuilder       $menuBuilder
-     * @param Helper            $knpHelper
-     * @param MenuItemConverter $menuItemConverter
      */
     public function __construct(
         TranslationHelper $translationHelper,
@@ -53,9 +51,9 @@ class MenuManagerExtension extends \Twig_Extension
         MenuItemConverter $menuItemConverter
     ) {
         $this->translationHelper = $translationHelper;
-        $this->contentService    = $contentService;
-        $this->menuBuilder       = $menuBuilder;
-        $this->knpHelper         = $knpHelper;
+        $this->contentService = $contentService;
+        $this->menuBuilder = $menuBuilder;
+        $this->knpHelper = $knpHelper;
         $this->menuItemConverter = $menuItemConverter;
     }
 
@@ -64,9 +62,9 @@ class MenuManagerExtension extends \Twig_Extension
      */
     public function getFunctions()
     {
-        $functions   = parent::getFunctions();
-        $functions[] = new \Twig_SimpleFunction('ezmenumanager_menu_jstree', [$this, 'getMenuJstree']);
-        $functions[] = new \Twig_SimpleFunction('ezmenumanager_breadcrumb', [$this, 'buildBreadcrumb']);
+        $functions = parent::getFunctions();
+        $functions[] = new Twig_SimpleFunction('ezmenumanager_menu_jstree', [$this, 'getMenuJstree']);
+        $functions[] = new Twig_SimpleFunction('ezmenumanager_breadcrumb', [$this, 'buildBreadcrumb']);
 
         return $functions;
     }
@@ -76,17 +74,12 @@ class MenuManagerExtension extends \Twig_Extension
      */
     public function getFilters()
     {
-        $functions   = parent::getFunctions();
-        $functions[] = new \Twig_SimpleFilter('sort_menu_items_by_menu', [$this, 'sortMenuItemsByMenu']);
+        $functions = parent::getFunctions();
+        $functions[] = new Twig_SimpleFilter('sort_menu_items_by_menu', [$this, 'sortMenuItemsByMenu']);
 
         return $functions;
     }
 
-    /**
-     * @param MenuItem $menuItem
-     *
-     * @return mixed
-     */
     public function addMenuItemToBreadcrumb(MenuItem $menuItem, &$breadcrumb = [])
     {
         $breadcrumb[] = $this->menuBuilder->toMenuItemLink($menuItem);
@@ -106,8 +99,6 @@ class MenuManagerExtension extends \Twig_Extension
     }
 
     /**
-     * @param Menu $menu
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      *
@@ -117,27 +108,27 @@ class MenuManagerExtension extends \Twig_Extension
     {
         $list = [
             [
-                'id'     => 'root',
+                'id' => 'root',
                 'parent' => '#',
-                'text'   => $menu->getName(),
-                'state'  => [
+                'text' => $menu->getName(),
+                'state' => [
                     'disabled' => false,
-                    'opened'   => true,
+                    'opened' => true,
                 ],
                 'type' => 'root',
             ],
         ];
 
         foreach ($menu->getItems() as $menuItem) {
-            $hash   = $this->menuItemConverter->toHash($menuItem);
+            $hash = $this->menuItemConverter->toHash($menuItem);
             $list[] = [
-                'id'     => $hash['id'],
+                'id' => $hash['id'],
                 'parent' => $hash['parentId'] ? $hash['parentId'] : 'root',
-                'text'   => $hash['name'],
-                'type'   => $hash['type'],
-                'state'  => [
+                'text' => $hash['name'],
+                'type' => $hash['type'],
+                'state' => [
                     'disabled' => false,
-                    'opened'   => true,
+                    'opened' => true,
                 ],
             ];
         }
@@ -157,7 +148,7 @@ class MenuManagerExtension extends \Twig_Extension
             $menu = $menuItem->getMenu();
             if (!isset($menus[$menu->getId()])) {
                 $menus[$menu->getId()] = [
-                    'menu'  => $menu,
+                    'menu' => $menu,
                     'items' => [],
                 ];
             }

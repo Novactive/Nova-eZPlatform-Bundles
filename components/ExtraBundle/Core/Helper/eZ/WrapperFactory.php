@@ -1,8 +1,10 @@
 <?php
+
 /**
- * NovaeZExtraBundle Wrapper Factory
+ * NovaeZExtraBundle Wrapper Factory.
  *
  * @package   Novactive\Bundle\eZExtraBundle
+ *
  * @author    Novactive <dir.tech@novactive.com>
  * @copyright 2015 Novactive
  * @license   https://github.com/Novactive/NovaeZExtraBundle/blob/master/LICENSE MIT Licence
@@ -15,22 +17,19 @@ use eZ\Publish\API\Repository\Values\Content\Content as ValueContent;
 use eZ\Publish\API\Repository\Values\Content\Location as ValueLocation;
 
 /**
- * Class WrapperFactory
+ * Class WrapperFactory.
  */
 class WrapperFactory
 {
-
     /**
-     * Repository eZ
+     * Repository eZ.
      *
      * @var Repository
      */
     protected $repository;
 
     /**
-     * Constructor
-     *
-     * @param Repository $eZRepo
+     * Constructor.
      */
     public function __construct(Repository $eZRepo)
     {
@@ -38,11 +37,10 @@ class WrapperFactory
     }
 
     /**
-     * Create
+     * Create.
      *
-     * @param ValueContent|integer  $contentId
-     * @param ValueLocation|integer $locationId
-     * @param mixed                 $extra
+     * @param ValueContent|int  $contentId
+     * @param ValueLocation|int $locationId
      *
      * @return Wrapper
      */
@@ -54,9 +52,7 @@ class WrapperFactory
     }
 
     /**
-     * CreateByLocation
-     *
-     * @param ValueLocation $location
+     * CreateByLocation.
      *
      * @return Wrapper
      */
@@ -68,9 +64,9 @@ class WrapperFactory
     }
 
     /**
-     * CreateByLocationID
+     * CreateByLocationID.
      *
-     * @param integer $locationId
+     * @param int $locationId
      *
      * @return Wrapper
      */
@@ -82,9 +78,7 @@ class WrapperFactory
     }
 
     /**
-     * CreateByContent
-     *
-     * @param ValueContent $content
+     * CreateByContent.
      *
      * @return Wrapper
      */
@@ -96,9 +90,9 @@ class WrapperFactory
     }
 
     /**
-     * CreateByContentId
+     * CreateByContentId.
      *
-     * @param integer $contentId
+     * @param int $contentId
      *
      * @return Wrapper
      */

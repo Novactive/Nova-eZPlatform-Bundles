@@ -59,7 +59,7 @@ class TikaLocalClient implements TikaClientInterface
      */
     public function getText($fileName): ?string
     {
-        $file    = new SplFileInfo($fileName);
+        $file = new SplFileInfo($fileName);
         $command = sprintf('--text %s', $file->getRealPath());
 
         return $this->run($command);

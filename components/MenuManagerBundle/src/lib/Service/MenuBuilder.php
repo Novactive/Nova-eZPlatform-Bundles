@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -31,19 +32,15 @@ class MenuBuilder
 
     /**
      * MenuBuilder constructor.
-     *
-     * @param FactoryInterface     $factory
-     * @param MenuItemTypeRegistry $menuItemTypeRegistry
-     * @param MenuCacheService     $cache
      */
     public function __construct(
         FactoryInterface $factory,
         MenuItemTypeRegistry $menuItemTypeRegistry,
         MenuCacheService $cache
     ) {
-        $this->factory              = $factory;
+        $this->factory = $factory;
         $this->menuItemTypeRegistry = $menuItemTypeRegistry;
-        $this->cache                = $cache;
+        $this->cache = $cache;
     }
 
     public function build(Menu $menu, $parent = null)
@@ -60,7 +57,6 @@ class MenuBuilder
 
     /**
      * @param $name
-     * @param array $options
      *
      * @return \Knp\Menu\ItemInterface
      */
@@ -74,8 +70,6 @@ class MenuBuilder
     }
 
     /**
-     * @param MenuItem $menuItem
-     *
      * @throws \Novactive\EzMenuManager\Exception\MenuItemTypeNotFoundException
      *
      * @return \Knp\Menu\ItemInterface
@@ -92,11 +86,7 @@ class MenuBuilder
     }
 
     /**
-     * @param MenuItem $menuItem
-     *
      * @throws \Novactive\EzMenuManager\Exception\MenuItemTypeNotFoundException
-     *
-     * @return MenuItemValue|null
      */
     public function toMenuItemLink(MenuItem $menuItem): ?MenuItemValue
     {

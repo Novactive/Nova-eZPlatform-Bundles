@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\DataFixtures;
@@ -22,7 +24,7 @@ use Novactive\Bundle\eZMailingBundle\Entity\User;
 
 class UsersRegistrationsFixtures extends Fixture implements DependentFixtureInterface
 {
-    const FIXTURE_COUNT_USER = 100;
+    public const FIXTURE_COUNT_USER = 100;
 
     /**
      * {@inheritdoc}
@@ -50,9 +52,9 @@ class UsersRegistrationsFixtures extends Fixture implements DependentFixtureInte
 
             $nbRegistrations = $faker->numberBetween(0, MailingListFixtures::FIXTURE_COUNT_MAILINGLIST);
             for ($j = 0; $j <= $nbRegistrations; ++$j) {
-                $registration     = new Registration();
+                $registration = new Registration();
                 $mailingListIndex = $faker->numberBetween(1, MailingListFixtures::FIXTURE_COUNT_MAILINGLIST);
-                $mailingList      = $this->getReference("mailing-list-{$mailingListIndex}");
+                $mailingList = $this->getReference("mailing-list-{$mailingListIndex}");
                 /* @var MailingList $mailingList */
                 $registration->setMailingList($mailingList);
                 $registration->setApproved($mailingList->isWithApproval() ? $faker->boolean : true);

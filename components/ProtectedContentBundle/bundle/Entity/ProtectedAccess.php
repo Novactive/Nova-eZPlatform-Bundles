@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZProtectedContentBundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/eZProtectedContentBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Entity;
@@ -60,7 +62,7 @@ class ProtectedAccess implements ContentInterface
 
     public function __construct()
     {
-        $this->enabled         = true;
+        $this->enabled = true;
         $this->protectChildren = true;
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,10 +9,12 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\Helper\TranslationHelper;
@@ -38,8 +41,6 @@ class CampaignController
     /**
      * @Template()
      * @Security("is_granted('view', campaign)")
-     *
-     * @return array
      */
     public function campaignTabsAction(
         Campaign $campaign,
@@ -53,27 +54,27 @@ class CampaignController
             $contentType = $repository->getContentTypeService()->loadContentType(
                 $content->contentInfo->contentTypeId
             );
-            $preview     = $contentTab->renderView(
+            $preview = $contentTab->renderView(
                 [
-                    'content'     => $content,
-                    'location'    => $campaign->getLocation(),
+                    'content' => $content,
+                    'location' => $campaign->getLocation(),
                     'contentType' => $contentType,
                 ]
             );
         }
-        $repo     = $entityManager->getRepository(Mailing::class);
+        $repo = $entityManager->getRepository(Mailing::class);
         $mailings = $repo->findByFilters(
             [
                 'campaign' => $campaign,
-                'status'   => 'all' === $status ? null : $status,
+                'status' => 'all' === $status ? null : $status,
             ]
         );
 
         return [
-            'item'     => $campaign,
-            'status'   => $status,
+            'item' => $campaign,
+            'status' => $status,
             'children' => $mailings,
-            'preview'  => $preview ?? null,
+            'preview' => $preview ?? null,
         ];
     }
 
@@ -82,8 +83,6 @@ class CampaignController
      *                                              defaults={"page":1, "limit":10, "status":"all"})
      * @Template()
      * @Security("is_granted('view', campaign)")
-     *
-     * @return array
      */
     public function subscriptionsAction(
         Campaign $campaign,
@@ -94,14 +93,14 @@ class CampaignController
     ): array {
         $filers = [
             'campaign' => $campaign,
-            'status'   => 'all' === $status ? null : $status,
+            'status' => 'all' === $status ? null : $status,
         ];
 
         return [
-            'pager'         => $provider->getPagerFilters($filers, $page, $limit),
-            'statuses'      => $provider->getStatusesData($filers),
+            'pager' => $provider->getPagerFilters($filers, $page, $limit),
+            'statuses' => $provider->getStatusesData($filers),
             'currentStatus' => $status,
-            'item'          => $campaign,
+            'item' => $campaign,
         ];
     }
 
@@ -109,26 +108,20 @@ class CampaignController
      * @Route("/show/mailings/{campaign}/{status}", name="novaezmailing_campaign_mailings")
      * @Template()
      * @Security("is_granted('view', campaign)")
-     *
-     * @param Campaign               $campaign
-     * @param EntityManagerInterface $entityManager
-     * @param string                 $status
-     *
-     * @return array
      */
     public function mailingsAction(Campaign $campaign, EntityManagerInterface $entityManager, string $status): array
     {
-        $repo    = $entityManager->getRepository(Mailing::class);
+        $repo = $entityManager->getRepository(Mailing::class);
         $results = $repo->findByFilters(
             [
                 'campaign' => $campaign,
-                'status'   => $status,
+                'status' => $status,
             ]
         );
 
         return [
-            'item'     => $campaign,
-            'status'   => $status,
+            'item' => $campaign,
+            'status' => $status,
             'children' => $results,
         ];
     }
@@ -138,13 +131,6 @@ class CampaignController
      * @Route("/create", name="novaezmailing_campaign_create")
      * @Security("is_granted('edit', campaign)")
      * @Template()
-     *
-     * @param Campaign|null          $campaign
-     * @param Request                $request
-     * @param RouterInterface        $router
-     * @param EntityManagerInterface $entityManager
-     * @param FormFactoryInterface   $formFactory
-     * @param TranslationHelper      $translationHelper
      *
      * @return array|RedirectResponse
      */
@@ -157,7 +143,7 @@ class CampaignController
         TranslationHelper $translationHelper
     ) {
         if (null === $campaign) {
-            $campaign  = new Campaign();
+            $campaign = new Campaign();
             $languages = array_filter($translationHelper->getAvailableLanguages());
             $campaign->setNames(array_combine($languages, array_pad([], count($languages), '')));
         }
@@ -166,7 +152,7 @@ class CampaignController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $campaign->setUpdated(new \DateTime());
+            $campaign->setUpdated(new DateTime());
             $entityManager->persist($campaign);
             $entityManager->flush();
 
@@ -184,12 +170,6 @@ class CampaignController
     /**
      * @Route("/delete/{campaign}", name="novaezmailing_campaign_remove")
      * @Security("is_granted('edit', campaign)")
-     *
-     * @param Campaign               $campaign
-     * @param EntityManagerInterface $entityManager
-     * @param RouterInterface        $router
-     *
-     * @return RedirectResponse
      */
     public function deleteAction(
         Campaign $campaign,

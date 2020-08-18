@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -33,18 +34,14 @@ class MenuService
 
     /**
      * MenuService constructor.
-     *
-     * @param EntityManagerInterface $em
-     * @param LocationService        $locationService
-     * @param MenuItemTypeRegistry   $menuItemTypeRegistry
      */
     public function __construct(
         EntityManagerInterface $em,
         LocationService $locationService,
         MenuItemTypeRegistry $menuItemTypeRegistry
     ) {
-        $this->em                   = $em;
-        $this->locationService      = $locationService;
+        $this->em = $em;
+        $this->locationService = $locationService;
         $this->menuItemTypeRegistry = $menuItemTypeRegistry;
     }
 
@@ -70,9 +67,6 @@ class MenuService
     }
 
     /**
-     * @param Location $location
-     * @param Menu     $menu
-     *
      * @return MenuItem[]|ArrayCollection
      */
     public function getLocationMenuItemsInMenu(Location $location, Menu $menu)

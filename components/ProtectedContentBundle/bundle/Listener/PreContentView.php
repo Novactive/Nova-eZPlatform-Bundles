@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZProtectedContentBundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/eZProtectedContentBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Listener;
@@ -50,9 +52,9 @@ class PreContentView
         RequestStack $requestStack
     ) {
         $this->permissionResolver = $permissionResolver;
-        $this->entityManager      = $manager;
-        $this->formFactory        = $factory;
-        $this->requestStack       = $requestStack;
+        $this->entityManager = $manager;
+        $this->formFactory = $factory;
+        $this->requestStack = $requestStack;
     }
 
     public function onPreContentView(PreContentViewEvent $event)

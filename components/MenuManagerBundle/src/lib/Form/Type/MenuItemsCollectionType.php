@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -24,8 +25,6 @@ class MenuItemsCollectionType extends AbstractType
 
     /**
      * MenuItemsCollectionType constructor.
-     *
-     * @param MenuItemsCollectionTransformer $menuItemsCollectionTransformer
      */
     public function __construct(MenuItemsCollectionTransformer $menuItemsCollectionTransformer)
     {

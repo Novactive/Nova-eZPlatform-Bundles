@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\DataFixtures;
@@ -22,7 +24,7 @@ use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
  */
 class MailingListFixtures extends Fixture
 {
-    const FIXTURE_COUNT_MAILINGLIST = 10;
+    public const FIXTURE_COUNT_MAILINGLIST = 10;
 
     /**
      * {@inheritdoc}

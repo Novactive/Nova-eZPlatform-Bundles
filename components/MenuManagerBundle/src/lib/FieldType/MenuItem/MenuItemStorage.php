@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -23,13 +24,6 @@ class MenuItemStorage extends GatewayBasedStorage
      */
     protected $gateway;
 
-    /**
-     * @param VersionInfo $versionInfo
-     * @param Field       $field
-     * @param array       $context
-     *
-     * @return mixed
-     */
     public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
         // VersionInfo return STATUS_DRAFT when publish Content
@@ -39,13 +33,6 @@ class MenuItemStorage extends GatewayBasedStorage
         //}
     }
 
-    /**
-     * @param VersionInfo $versionInfo
-     * @param Field       $field
-     * @param array       $context
-     *
-     * @return mixed
-     */
     public function getFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
         if (VersionInfo::STATUS_PUBLISHED === $versionInfo->status) {
@@ -54,10 +41,6 @@ class MenuItemStorage extends GatewayBasedStorage
     }
 
     /**
-     * @param VersionInfo $versionInfo
-     * @param array       $fieldIds
-     * @param array       $context
-     *
      * @return bool
      */
     public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds, array $context)
@@ -76,10 +59,6 @@ class MenuItemStorage extends GatewayBasedStorage
     }
 
     /**
-     * @param VersionInfo $versionInfo
-     * @param Field       $field
-     * @param array       $context
-     *
      * @return bool|\eZ\Publish\SPI\Search\Field[]
      */
     public function getIndexData(VersionInfo $versionInfo, Field $field, array $context)
@@ -93,11 +72,6 @@ class MenuItemStorage extends GatewayBasedStorage
      *
      * By default the method falls back to the {@link \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()}.
      * External storages implement this method as needed.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
-     * @param \eZ\Publish\SPI\Persistence\Content\Field       $field
-     * @param \eZ\Publish\SPI\Persistence\Content\Field       $originalField
-     * @param array                                           $context
      *
      * @return bool|null same as {@link \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()}
      */

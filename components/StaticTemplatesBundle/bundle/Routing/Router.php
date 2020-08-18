@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZStaticTemplatesBundle.
  *
@@ -35,40 +36,33 @@ class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAcc
 
     /**
      * Router constructor.
-     *
-     * @param array $siteAccessGroups
      */
     public function __construct(array $siteAccessGroups)
     {
         $this->siteAccessGroups = $siteAccessGroups;
     }
 
-    /**
-     * @param SiteAccess|null $siteAccess
-     */
     public function setSiteAccess(SiteAccess $siteAccess = null)
     {
         $this->siteAccess = $siteAccess;
     }
 
     /**
-     * @param Request $request
-     *
      * @return array
      */
     public function matchRequest(Request $request)
     {
-        if (!isset($this->siteAccessGroups['static_group']) || !in_array(
-            $this->siteAccess->name,
-            $this->siteAccessGroups['static_group']
-        )) {
+        if (
+            !isset($this->siteAccessGroups['static_group']) ||
+            !in_array($this->siteAccess->name, $this->siteAccessGroups['static_group'])
+        ) {
             throw new ResourceNotFoundException();
         }
         $requestedPath = rawurldecode($request->attributes->get('semanticPathinfo', $request->getPathInfo()));
         $requestedPath = trim($requestedPath, '/');
 
         $params = [
-            '_route'      => 'static_template',
+            '_route' => 'static_template',
             '_controller' => 'EzStaticTemplatesBundle:EzStaticTemplates:index',
         ];
         if (!empty($requestedPath)) {
@@ -78,17 +72,11 @@ class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAcc
         return $params;
     }
 
-    /**
-     * @return RequestContext
-     */
     public function getContext(): RequestContext
     {
         return $this->context;
     }
 
-    /**
-     * @param RequestContext $context
-     */
     public function setContext(RequestContext $context)
     {
         $this->context = $context;

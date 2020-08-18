@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Form;
@@ -37,8 +39,6 @@ class CampaignType extends AbstractType
 
     /**
      * CampaignType constructor.
-     *
-     * @param SiteaccessResolver $siteAccessResolver
      */
     public function __construct(SiteaccessResolver $siteAccessResolver)
     {
@@ -59,11 +59,11 @@ class CampaignType extends AbstractType
                 'names',
                 CollectionType::class,
                 [
-                    'label'        => false,
-                    'allow_add'    => false,
+                    'label' => false,
+                    'allow_add' => false,
                     'allow_delete' => false,
-                    'entry_type'   => TextType::class,
-                    'required'     => true,
+                    'entry_type' => TextType::class,
+                    'required' => true,
                 ]
             )
             ->add('senderName', TextType::class, ['required' => true, 'label' => 'campaign.form.sender_name'])
@@ -81,31 +81,28 @@ class CampaignType extends AbstractType
                 [
                     'expanded' => true,
                     'multiple' => true,
-                    'choices'  => $siteaccesses,
-                    'label'    => 'campaign.form.siteaccess_limit',
+                    'choices' => $siteaccesses,
+                    'label' => 'campaign.form.siteaccess_limit',
                 ]
             )
             ->add(
                 'mailingLists',
                 EntityType::class,
                 [
-                    'class'    => MailingList::class,
+                    'class' => MailingList::class,
                     'expanded' => true,
                     'multiple' => true,
                     'required' => true,
-                    'label'    => 'campaign.form.mailinglists',
+                    'label' => 'campaign.form.mailinglists',
                 ]
             );
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [
-                'data_class'         => Campaign::class,
+                'data_class' => Campaign::class,
                 'translation_domain' => 'ezmailing',
             ]
         );

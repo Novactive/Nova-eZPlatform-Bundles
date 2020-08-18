@@ -35,7 +35,7 @@ class TikaTextExtractor implements TextExtractorInterface
     public function __construct(TikaClientInterface $tikaClient, LoggerInterface $logger)
     {
         $this->tikaClient = $tikaClient;
-        $this->logger     = $logger;
+        $this->logger = $logger;
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZLDAPAuthenticator Bundle.
  *
@@ -34,10 +35,10 @@ class EzLdapUser implements UserInterface
      */
     public function __construct(string $username, string $email, array $attributes, array $roles)
     {
-        $this->username   = $username;
-        $this->email      = $email;
+        $this->username = $username;
+        $this->email = $email;
         $this->attributes = $attributes;
-        $this->roles      = $roles;
+        $this->roles = $roles;
     }
 
     /**

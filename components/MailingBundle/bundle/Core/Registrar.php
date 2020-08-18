@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core;
@@ -35,7 +37,7 @@ class Registrar
     /**
      * 5 hours.
      */
-    const TOKEN_EXPIRATION_HOURS = 5;
+    public const TOKEN_EXPIRATION_HOURS = 5;
 
     /**
      * @var EntityManagerInterface
@@ -59,10 +61,6 @@ class Registrar
 
     /**
      * Registrar constructor.
-     *
-     * @param EntityManagerInterface $entityManager
-     * @param SiteAccess             $siteAccess
-     * @param SimpleMailer           $mailer
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -70,22 +68,19 @@ class Registrar
         SimpleMailer $mailer,
         ConfigResolver $configResolver
     ) {
-        $this->entityManager  = $entityManager;
-        $this->siteAccess     = $siteAccess;
-        $this->mailer         = $mailer;
+        $this->entityManager = $entityManager;
+        $this->siteAccess = $siteAccess;
+        $this->mailer = $mailer;
         $this->configResolver = $configResolver;
     }
 
-    /**
-     * @param Registration $registration
-     */
     public function askForConfirmation(Registration $registration): void
     {
         $user = $registration->getUser();
         if (null === $user) {
             throw new RuntimeException('User cannot be empty.');
         }
-        $userRepo  = $this->entityManager->getRepository(User::class);
+        $userRepo = $this->entityManager->getRepository(User::class);
         $fetchUser = $userRepo->findOneByEmail($user->getEmail());
 
         if (!$fetchUser instanceof User) {
@@ -104,16 +99,13 @@ class Registrar
         $this->mailer->sendRegistrationConfirmation($registration, $token);
     }
 
-    /**
-     * @param Unregistration $unregistration
-     */
     public function askForUnregisterConfirmation(Unregistration $unregistration): bool
     {
         $user = $unregistration->getUser();
         if (null === $user) {
             throw new RuntimeException('User cannot be empty.');
         }
-        $userRepo  = $this->entityManager->getRepository(User::class);
+        $userRepo = $this->entityManager->getRepository(User::class);
         $fetchUser = $userRepo->findOneByEmail($user->getEmail());
 
         if (!$fetchUser instanceof User) {
@@ -131,13 +123,6 @@ class Registrar
         return true;
     }
 
-    /**
-     * @param string          $action
-     * @param User            $user
-     * @param ArrayCollection $mailingLists
-     *
-     * @return ConfirmationToken
-     */
     private function createConfirmationToken(
         string $action,
         User $user,
@@ -153,8 +138,8 @@ class Registrar
         $confirmationToken = new ConfirmationToken();
         $confirmationToken->setPayload(
             [
-                'action'         => $action,
-                'userId'         => $user->getId(),
+                'action' => $action,
+                'userId' => $user->getId(),
                 'mailingListIds' => $mailingListIds->toArray(),
             ]
         );
@@ -164,9 +149,6 @@ class Registrar
         return $confirmationToken;
     }
 
-    /**
-     * @param ConfirmationToken $token
-     */
     public function confirm(ConfirmationToken $token): bool
     {
         $created = Carbon::instance($token->getCreated());
@@ -180,8 +162,8 @@ class Registrar
             return false;
         }
         $mailingListRepo = $this->entityManager->getRepository(MailingList::class);
-        $userRepo        = $this->entityManager->getRepository(User::class);
-        $user            = $userRepo->findOneById($userId);
+        $userRepo = $this->entityManager->getRepository(User::class);
+        $user = $userRepo->findOneById($userId);
         if (!$user instanceof User) {
             return false;
         }
@@ -230,7 +212,7 @@ class Registrar
      */
     public function cleanup(): void
     {
-        $repo     = $this->entityManager->getRepository(ConfirmationToken::class);
+        $repo = $this->entityManager->getRepository(ConfirmationToken::class);
         $criteria = new Criteria();
         $criteria->where(Criteria::expr()->lt('created', Carbon::now()->subHours(static::TOKEN_EXPIRATION_HOURS)));
         $results = $repo->matching($criteria);

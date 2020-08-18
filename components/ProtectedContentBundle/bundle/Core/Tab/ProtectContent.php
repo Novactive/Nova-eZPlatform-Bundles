@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZProtectedContentBundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/eZProtectedContentBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Core\Tab;
@@ -53,8 +55,8 @@ class ProtectContent extends AbstractTab implements OrderedTabInterface
 
     public function renderView(array $parameters): string
     {
-        $location      = $parameters['location'];
-        $content       = $parameters['content'];
+        $location = $parameters['location'];
+        $content = $parameters['content'];
         $privateAccess = new ProtectedAccess();
         $privateAccess->setLocation($location);
         $privateAccess->setContent($content);
@@ -66,8 +68,8 @@ class ProtectContent extends AbstractTab implements OrderedTabInterface
         return $this->twig->render(
             '@NovaeZProtectedContent/tabs/protected_content.html.twig',
             [
-                'form'     => $form->createView(),
-                'items'    => $items,
+                'form' => $form->createView(),
+                'items' => $items,
                 'location' => $location,
             ]
         );

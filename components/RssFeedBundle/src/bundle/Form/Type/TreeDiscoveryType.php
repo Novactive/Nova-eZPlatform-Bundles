@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZRssFeedBundle.
  *
@@ -27,16 +28,13 @@ class TreeDiscoveryType extends AbstractType
                 'location',
                 IntegerType::class,
                 [
-                    'attr'       => ['hidden' => true],
+                    'attr' => ['hidden' => true],
                     'empty_data' => [],
                 ]
             )
             ->addModelTransformer($this->getDataTransformer());
     }
 
-    /**
-     * @return DataTransformerInterface
-     */
     private function getDataTransformer(): DataTransformerInterface
     {
         return new CallbackTransformer(

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -21,19 +22,12 @@ class MenuItemConverter
 
     /**
      * MenuItemConverter constructor.
-     *
-     * @param MenuItemTypeRegistry $menuItemTypeRegistry
      */
     public function __construct(MenuItemTypeRegistry $menuItemTypeRegistry)
     {
         $this->menuItemTypeRegistry = $menuItemTypeRegistry;
     }
 
-    /**
-     * @param MenuItem $menuItem
-     *
-     * @return array
-     */
     public function toHash(MenuItem $menuItem): array
     {
         $type = $this->menuItemTypeRegistry->getMenuItemEntityType($menuItem);
@@ -57,8 +51,6 @@ class MenuItemConverter
      * @param $menuItems
      *
      * @throws UnexpectedTypeException
-     *
-     * @return array
      */
     public function toHashArray($menuItems): array
     {
@@ -74,7 +66,6 @@ class MenuItemConverter
     }
 
     /**
-     * @param array  $hashArray
      * @param string $defaultClass
      *
      * @return MenuItem[]
@@ -87,7 +78,8 @@ class MenuItemConverter
             $menuItem = $this->fromHash($hashItem, isset($hashItem['type']) ? $hashItem['type'] : $defaultClass);
             if ($menuItem) {
                 $menuItems[$hashItem['id']] = $menuItem;
-                if (!$menuItem->getParent()
+                if (
+                    !$menuItem->getParent()
                     && 0 === strpos($hashItem['parentId'], '_')
                     && ($parent = $menuItems[$hashItem['parentId']] ?? null)
                 ) {

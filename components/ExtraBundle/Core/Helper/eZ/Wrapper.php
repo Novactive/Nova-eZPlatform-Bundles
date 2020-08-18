@@ -1,8 +1,10 @@
 <?php
+
 /**
- * NovaeZExtraBundle Wrapper
+ * NovaeZExtraBundle Wrapper.
  *
  * @package   Novactive\Bundle\eZExtraBundle
+ *
  * @author    Novactive <dir.tech@novactive.com>
  * @copyright 2015 Novactive
  * @license   https://github.com/Novactive/NovaeZExtraBundle/blob/master/LICENSE MIT Licence
@@ -10,99 +12,93 @@
 
 namespace Novactive\Bundle\eZExtraBundle\Core\Helper\eZ;
 
+use Exception;
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
 use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Content as ValueContent;
 use eZ\Publish\API\Repository\Values\Content\Location as ValueLocation;
-use eZ\Publish\API\Repository\Repository;
-use Exception;
 
 /**
- * Class Wrapper
+ * Class Wrapper.
  *
- * @property-read ValueLocation $location
- * @property-read ValueContent  $content
+ * @property ValueLocation $location
+ * @property ValueContent  $content
  */
 class Wrapper implements \ArrayAccess
 {
     /**
-     * The Content
+     * The Content.
      *
      * @var ValueContent
      */
     protected $content;
 
     /**
-     * The Location
+     * The Location.
      *
      * @var ValueLocation
      */
     protected $location;
 
     /**
-     * Extra Data
-     *
-     * @var mixed
+     * Extra Data.
      */
     protected $extraData;
 
     /**
-     * Repository eZ
+     * Repository eZ.
      *
      * @var Repository
      */
     protected $repository;
 
     /**
-     * Location Id
+     * Location Id.
      *
-     * @var integer
+     * @var int
      */
     protected $locationId;
 
     /**
-     * Content Id
+     * Content Id.
      *
-     * @var integer
+     * @var int
      */
     protected $contentId;
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param ValueContent|integer  $contentId
-     * @param ValueLocation|integer $location
-     * @param mixed                 $extraData
+     * @param ValueContent|int $contentId
      */
     public function __construct($contentId = null, $locationId = null, $extraData = null)
     {
-        if ($contentId == null && $locationId == null) {
-            throw new Exception("NovaExtraWrapper: you must provide at least contentId or locationId");
+        if (null == $contentId && null == $locationId) {
+            throw new Exception('NovaExtraWrapper: you must provide at least contentId or locationId');
         }
 
-        $this->contentId  = $contentId;
+        $this->contentId = $contentId;
         $this->locationId = $locationId;
 
         // Ensure the backward compatibility
         if ($contentId instanceof ValueContent) {
             $this->contentId = $contentId->id;
-            $this->content   = $contentId;
-            if ($locationId === null) {
+            $this->content = $contentId;
+            if (null === $locationId) {
                 $this->locationId = $contentId->contentInfo->mainLocationId;
             }
         }
         if ($locationId instanceof ValueLocation) {
             $this->locationId = $locationId->id;
-            $this->contentId  = $locationId->contentInfo->id;
-            $this->location   = $locationId;
+            $this->contentId = $locationId->contentInfo->id;
+            $this->location = $locationId;
         }
         $this->extraData = $extraData;
     }
 
     /**
-     * Set the eZ Repository
-     *
-     * @param Repository $repository
+     * Set the eZ Repository.
      *
      * @return $this
      */
@@ -114,17 +110,15 @@ class Wrapper implements \ArrayAccess
     }
 
     /**
-     * Has Extra
+     * Has Extra.
      */
     public function hasExtraData()
     {
-        return $this->extraData !== null;
+        return null !== $this->extraData;
     }
 
     /**
-     * Set Extra Data
-     *
-     * @param mixed $data
+     * Set Extra Data.
      *
      * @return $this
      */
@@ -136,9 +130,7 @@ class Wrapper implements \ArrayAccess
     }
 
     /**
-     * Get the ExtraData
-     *
-     * @return mixed
+     * Get the ExtraData.
      */
     public function getExtraData()
     {
@@ -146,7 +138,7 @@ class Wrapper implements \ArrayAccess
     }
 
     /**
-     * Get the Location
+     * Get the Location.
      *
      * @return ValueLocation
      */
@@ -156,7 +148,7 @@ class Wrapper implements \ArrayAccess
     }
 
     /**
-     * Get the Content
+     * Get the Content.
      *
      * @return ValueContent
      */
@@ -166,7 +158,7 @@ class Wrapper implements \ArrayAccess
     }
 
     /**
-     * Get the Location
+     * Get the Location.
      *
      * @return ValueLocation
      */
@@ -175,7 +167,7 @@ class Wrapper implements \ArrayAccess
         if ($this->location instanceof ValueLocation) {
             return $this->location;
         }
-        if ($this->locationId == null && $this->contentId > 0) {
+        if (null == $this->locationId && $this->contentId > 0) {
             $this->location = $this->repository->getLocationService()->loadLocation(
                 $this->getContent()->contentInfo->mainLocationId
             );
@@ -189,7 +181,7 @@ class Wrapper implements \ArrayAccess
     }
 
     /**
-     * Get the Content
+     * Get the Content.
      *
      * @return ValueContent
      */
@@ -199,7 +191,7 @@ class Wrapper implements \ArrayAccess
             return $this->content;
         }
         if (!$this->content instanceof ValueContent) {
-            if ($this->contentId == null && $this->locationId > 0) {
+            if (null == $this->contentId && $this->locationId > 0) {
                 $this->content = $this->repository->getContentService()->loadContent(
                     $this->getLocation()->contentInfo->id
                 );
@@ -212,20 +204,21 @@ class Wrapper implements \ArrayAccess
     }
 
     /**
-     * Getter
+     * Getter.
      *
      * @param string $name
      *
-     * @return ValueContent|ValueLocation
      * @throws PropertyNotFoundException
+     *
+     * @return ValueContent|ValueLocation
      */
     public function __get($name)
     {
         switch ($name) {
-            case "content":
+            case 'content':
                 return $this->getContent();
                 break;
-            case "location":
+            case 'location':
                 return $this->getLocation();
                 break;
         }
@@ -233,10 +226,9 @@ class Wrapper implements \ArrayAccess
     }
 
     /**
-     * Setter
+     * Setter.
      *
      * @param string $name
-     * @param mixed  $value
      *
      * @throws PropertyReadOnlyException
      */

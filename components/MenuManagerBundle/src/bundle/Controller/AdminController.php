@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -36,7 +37,7 @@ use Symfony\Component\Translation\TranslatorInterface;
  */
 class AdminController extends Controller
 {
-    const RESULTS_PER_PAGE = 20;
+    public const RESULTS_PER_PAGE = 20;
 
     /** @var TranslatorInterface */
     protected $translator;
@@ -52,11 +53,6 @@ class AdminController extends Controller
 
     /**
      * AdminController constructor.
-     *
-     * @param TranslatorInterface          $translator
-     * @param NotificationHandlerInterface $notificationHandler
-     * @param EntityManagerInterface       $em
-     * @param ConfigResolverInterface      $configResolver
      */
     public function __construct(
         TranslatorInterface $translator,
@@ -64,17 +60,16 @@ class AdminController extends Controller
         EntityManagerInterface $em,
         ConfigResolverInterface $configResolver
     ) {
-        $this->translator          = $translator;
+        $this->translator = $translator;
         $this->notificationHandler = $notificationHandler;
-        $this->em                  = $em;
-        $this->configResolver      = $configResolver;
+        $this->em = $em;
+        $this->configResolver = $configResolver;
     }
 
     /**
      * @Route("/list/{page}", name="menu_manager.menu_list", requirements={"page" = "\d+"})
      *
-     * @param int     $page
-     * @param Request $request
+     * @param int $page
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -85,8 +80,8 @@ class AdminController extends Controller
                            ->from(Menu::class, 'm')
                             ->orderBy('m.name');
 
-        $search     = new MenuSearch();
-        $searchForm = $this->createForm(MenuSearchType::class, $search, ['method'=> 'get']);
+        $search = new MenuSearch();
+        $searchForm = $this->createForm(MenuSearchType::class, $search, ['method' => 'get']);
         $searchForm->handleRequest($request);
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             /** @var MenuSearch $search */
@@ -109,8 +104,8 @@ class AdminController extends Controller
         $pagerfanta->setCurrentPage(min($page, $pagerfanta->getNbPages()));
 
         /** @var Menu[] $menus */
-        $menus    = $pagerfanta->getCurrentPageResults();
-        $menuIds  = $this->getMenusIds($menus);
+        $menus = $pagerfanta->getCurrentPageResults();
+        $menuIds = $this->getMenusIds($menus);
         $formData = [
             'menus' => array_combine($menuIds, array_fill_keys($menuIds, false)),
         ];
@@ -120,10 +115,10 @@ class AdminController extends Controller
         return $this->render(
             '@EzMenuManager/themes/standard/menu_manager/admin/list.html.twig',
             [
-                'search_form'      => $searchForm->createView(),
-                'pager'            => $pagerfanta,
+                'search_form' => $searchForm->createView(),
+                'pager' => $pagerfanta,
                 'menu_delete_form' => $menuDeleteForm->createView(),
-                'menu_types'       => $this->configResolver->getParameter('menu_types', 'nova_menu_manager') ?? [],
+                'menu_types' => $this->configResolver->getParameter('menu_types', 'nova_menu_manager') ?? [],
             ]
         );
     }
@@ -146,8 +141,6 @@ class AdminController extends Controller
     /**
      * @Route("/new", name="menu_manager.menu_new")
      *
-     * @param Request $request
-     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function newAction(Request $request)
@@ -162,9 +155,6 @@ class AdminController extends Controller
 
     /**
      * @Route("/edit/{menu}", name="menu_manager.menu_edit")
-     *
-     * @param Request $request
-     * @param Menu    $menu
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
@@ -190,8 +180,8 @@ class AdminController extends Controller
         return $this->render(
             '@EzMenuManager/themes/standard/menu_manager/admin/edit.html.twig',
             [
-                'form'    => $form->createView(),
-                'title'   => $menu->getId() ? $menu->getName() : 'menu.new',
+                'form' => $form->createView(),
+                'title' => $menu->getId() ? $menu->getName() : 'menu.new',
                 'lastUrl' => $lastAccessedUrl,
             ]
         );
@@ -199,9 +189,6 @@ class AdminController extends Controller
 
     /**
      * @Route("/delete", name="menu_manager.menu_delete", methods={"POST"})
-     *
-     * @param Request $request
-     * @param Menu    $menu
      */
     public function deleteAction(Request $request)
     {
@@ -210,7 +197,7 @@ class AdminController extends Controller
 
         if ($form->isSubmitted()) {
             $formData = $form->getData();
-            $menuIds  = array_keys($formData['menus']);
+            $menuIds = array_keys($formData['menus']);
             foreach ($menuIds as $menuId) {
                 $menu = $this->em->find(Menu::class, $menuId);
                 $this->em->remove($menu);
@@ -226,8 +213,6 @@ class AdminController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return string
      */
     protected function lastAccessedUrl(Request $request)

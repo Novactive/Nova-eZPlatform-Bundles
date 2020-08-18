@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZRssFeedBundle.
  *
@@ -48,9 +49,9 @@ class RssFeedsType extends AbstractType
                     'number_of_object',
                     ChoiceType::class,
                     [
-                        'label'   => 'ez_rss_feed.form.number_of_object',
+                        'label' => 'ez_rss_feed.form.number_of_object',
                         'choices' => [
-                            '5'  => 5,
+                            '5' => 5,
                             '10' => 10,
                             '20' => 20,
                             '30' => 30,
@@ -63,11 +64,11 @@ class RssFeedsType extends AbstractType
                     'sort_type',
                     ChoiceType::class,
                     [
-                        'label'   => 'ez_rss_feed.form.sort_type',
+                        'label' => 'ez_rss_feed.form.sort_type',
                         'choices' => [
-                            'Date de publication'  => RssFeeds::SORT_TYPE_PUBLICATION,
+                            'Date de publication' => RssFeeds::SORT_TYPE_PUBLICATION,
                             'Date de modification' => RssFeeds::SORT_TYPE_MODIFICATION,
-                            'Par nom'              => RssFeeds::SORT_TYPE_NAME,
+                            'Par nom' => RssFeeds::SORT_TYPE_NAME,
                         ],
                     ]
                 )
@@ -75,10 +76,10 @@ class RssFeedsType extends AbstractType
                     'sort_direction',
                     ChoiceType::class,
                     [
-                        'label'   => 'ez_rss_feed.form.sort_direction',
+                        'label' => 'ez_rss_feed.form.sort_direction',
                         'choices' => [
                             'Desc' => RssFeeds::SORT_DIRECTION_DESC,
-                            'Asc'  => RssFeeds::SORT_DIRECTION_ASC,
+                            'Asc' => RssFeeds::SORT_DIRECTION_ASC,
                         ],
                     ]
                 )
@@ -86,8 +87,8 @@ class RssFeedsType extends AbstractType
                     'feed_items',
                     CollectionType::class,
                     [
-                        'entry_type'   => RssFeedItemsType::class,
-                        'allow_add'    => true,
+                        'entry_type' => RssFeedItemsType::class,
+                        'allow_add' => true,
                         'allow_delete' => true,
                         'delete_empty' => true,
                         'by_reference' => false,

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,10 +9,12 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Command;
 
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\Repository\Repository;
@@ -71,9 +74,9 @@ class MigrateCjwnlCommand extends Command
         ConfigResolverInterface $configResolver
     ) {
         parent::__construct();
-        $this->ioService      = $ioService;
-        $this->entityManager  = $entityManager;
-        $this->ezRepository   = $ezRepository;
+        $this->ioService = $ioService;
+        $this->entityManager = $entityManager;
+        $this->ezRepository = $ezRepository;
         $this->configResolver = $configResolver;
     }
 
@@ -111,11 +114,11 @@ class MigrateCjwnlCommand extends Command
         $this->io->section('Cleaned the folder with json files.');
         $this->io->section('Exporting from old database to json files.');
 
-        $contentService         = $this->ezRepository->getContentService();
+        $contentService = $this->ezRepository->getContentService();
         $contentLanguageService = $this->ezRepository->getContentLanguageService();
-        $languages              = $contentLanguageService->loadLanguages();
-        $defaultLanguageCode    = $contentLanguageService->getDefaultLanguageCode();
-        $siteAccessList         = $this->configResolver->getParameter('list', 'ezpublish', 'siteaccess');
+        $languages = $contentLanguageService->loadLanguages();
+        $defaultLanguageCode = $contentLanguageService->getDefaultLanguageCode();
+        $siteAccessList = $this->configResolver->getParameter('list', 'ezpublish', 'siteaccess');
 
         $lists = $campaigns = [];
 
@@ -159,7 +162,7 @@ class MigrateCjwnlCommand extends Command
                     ['names' => $listNames, 'withApproval' => $list_row['auto_approve_registered_user']]
                 )
             );
-            $lists[]  = pathinfo($fileName)['filename'];
+            $lists[] = pathinfo($fileName)['filename'];
 
             $mailings = [];
 
@@ -209,28 +212,28 @@ class MigrateCjwnlCommand extends Command
                 ) ? $mailing_row['siteaccess'] : $siteAccessList[0];
 
                 $mailings[] = [
-                    'names'        => $mailingNames,
-                    'status'       => $status,
-                    'siteAccess'   => $siteAccess,
-                    'locationId'   => $mailingContent->contentInfo->mainLocationId,
-                    'hoursOfDay'   => (int) date('H', (int) $mailing_row['mailqueue_process_finished']),
-                    'daysOfMonth'  => (int) date('d', (int) $mailing_row['mailqueue_process_finished']),
+                    'names' => $mailingNames,
+                    'status' => $status,
+                    'siteAccess' => $siteAccess,
+                    'locationId' => $mailingContent->contentInfo->mainLocationId,
+                    'hoursOfDay' => (int) date('H', (int) $mailing_row['mailqueue_process_finished']),
+                    'daysOfMonth' => (int) date('d', (int) $mailing_row['mailqueue_process_finished']),
                     'monthsOfYear' => (int) date('m', (int) $mailing_row['mailqueue_process_finished']),
-                    'subject'      => $mailingContent->getName($defaultLanguageCode) ?? array_shift($mailingNames),
+                    'subject' => $mailingContent->getName($defaultLanguageCode) ?? array_shift($mailingNames),
                 ];
                 ++$mailingCounter;
             }
 
-            $fileName    = $this->ioService->saveFile(
+            $fileName = $this->ioService->saveFile(
                 self::DUMP_FOLDER."/campaign/campaign_{$list_row['contentobject_id']}.json",
                 json_encode(
                     [
-                        'names'       => $listNames,
-                        'locationId'  => $listContent->contentInfo->mainLocationId,
-                        'senderName'  => $list_row['email_sender_name'],
+                        'names' => $listNames,
+                        'locationId' => $listContent->contentInfo->mainLocationId,
+                        'senderName' => $list_row['email_sender_name'],
                         'senderEmail' => $list_row['email_sender'],
                         'reportEmail' => $list_row['email_receiver_test'],
-                        'mailings'    => $mailings,
+                        'mailings' => $mailings,
                     ]
                 )
             );
@@ -266,17 +269,17 @@ class MigrateCjwnlCommand extends Command
             if ($user_row['blacklisted']) {
                 $status = User::BLACKLISTED;
             }
-            $birthdate = empty($user_row['birthday']) ? null : new \DateTime('2018-12-11');
+            $birthdate = empty($user_row['birthday']) ? null : new DateTime('2018-12-11');
 
             // Registrations
-            $sql               = 'SELECT list_contentobject_id, approved FROM'.
+            $sql = 'SELECT list_contentobject_id, approved FROM'.
                                  ' cjwnl_subscription WHERE newsletter_user_id = ?';
             $subscription_rows = $this->runQuery($sql, [$user_row['id']]);
-            $subscriptions     = [];
+            $subscriptions = [];
             foreach ($subscription_rows as $subscription_row) {
                 $subscriptions[] = [
                     'list_contentobject_id' => $subscription_row['list_contentobject_id'],
-                    'approved'              => (bool) $subscription_row['approved'],
+                    'approved' => (bool) $subscription_row['approved'],
                 ];
                 ++$registrationCounter;
             }
@@ -285,17 +288,17 @@ class MigrateCjwnlCommand extends Command
                 self::DUMP_FOLDER."/user/user_{$user_row['id']}.json",
                 json_encode(
                     [
-                        'email'         => $user_row['email'],
-                        'firstName'     => $user_row['first_name'],
-                        'lastName'      => $user_row['last_name'],
-                        'birthDate'     => $birthdate,
-                        'status'        => $status,
-                        'company'       => $user_row['organisation'],
+                        'email' => $user_row['email'],
+                        'firstName' => $user_row['first_name'],
+                        'lastName' => $user_row['last_name'],
+                        'birthDate' => $birthdate,
+                        'status' => $status,
+                        'company' => $user_row['organisation'],
                         'subscriptions' => $subscriptions,
                     ]
                 )
             );
-            $users[]  = pathinfo($fileName)['filename'];
+            $users[] = pathinfo($fileName)['filename'];
 
             $this->io->progressAdvance();
         }
@@ -320,7 +323,7 @@ class MigrateCjwnlCommand extends Command
         $this->clean();
         $this->io->section('Importing from json files to new database.');
 
-        $manifest  = $this->ioService->readFile(self::DUMP_FOLDER.'/manifest.json');
+        $manifest = $this->ioService->readFile(self::DUMP_FOLDER.'/manifest.json');
         $fileNames = json_decode($manifest);
 
         // Lists
@@ -328,14 +331,14 @@ class MigrateCjwnlCommand extends Command
         $this->io->progressStart(count($fileNames->lists));
 
         $listCounter = $campaignCounter = $mailingCounter = $userCounter = $registrationCounter = 0;
-        $listIds     = [];
+        $listIds = [];
 
         $mailingListRepository = $this->entityManager->getRepository(MailingList::class);
-        $userRepository        = $this->entityManager->getRepository(User::class);
+        $userRepository = $this->entityManager->getRepository(User::class);
 
         $n = 0;
         foreach ($fileNames->lists as $listFile) {
-            $listData    = json_decode($this->ioService->readFile(self::DUMP_FOLDER.'/list/'.$listFile.'.json'));
+            $listData = json_decode($this->ioService->readFile(self::DUMP_FOLDER.'/list/'.$listFile.'.json'));
             $mailingList = new MailingList();
             $mailingList->setNames((array) $listData->names);
             $mailingList->setWithApproval((bool) $listData->withApproval);
@@ -360,7 +363,7 @@ class MigrateCjwnlCommand extends Command
             $campaignData = json_decode(
                 $this->ioService->readFile(self::DUMP_FOLDER.'/campaign/'.$campaignFile.'.json')
             );
-            $campaign     = new Campaign();
+            $campaign = new Campaign();
             $campaign->setNames((array) $campaignData->names);
             $campaign->setReportEmail($campaignData->reportEmail);
             $campaign->setSenderEmail($campaignData->senderEmail);

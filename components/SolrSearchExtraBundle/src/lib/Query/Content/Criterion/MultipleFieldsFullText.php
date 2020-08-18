@@ -109,8 +109,6 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
      * Analyzer configuration.
      *
      * @TODO: Define how this could look like
-     *
-     * @var mixed
      */
     public $analyzers;
 
@@ -118,8 +116,6 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
      * Analyzer wildcard handling configuration.
      *
      * @TODO: Define how this could look like
-     *
-     * @var mixed
      */
     public $wildcards;
 

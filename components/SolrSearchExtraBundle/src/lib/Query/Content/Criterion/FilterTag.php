@@ -29,7 +29,7 @@ class FilterTag extends Criterion
      */
     public function __construct(string $tag, Criterion $criterion)
     {
-        $this->tag       = $tag;
+        $this->tag = $tag;
         $this->criterion = $criterion;
     }
 

@@ -1,44 +1,44 @@
 <?php
+
 /**
- * NovaeZExtraBundle ContentType Manager
+ * NovaeZExtraBundle ContentType Manager.
  *
  * @package   Novactive\Bundle\eZExtraBundle
+ *
  * @author    Novactive <dir.tech@novactive.com>
  * @copyright 2015 Novactive
  * @license   https://github.com/Novactive/NovaeZExtraBundle/blob/master/LICENSE MIT Licence
  */
+
 namespace Novactive\Bundle\eZExtraBundle\Core\Manager\eZ;
 
-use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
-use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct;
-use eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct;
-use eZ\Publish\API\Repository\Values\ContentType\ContentType as ValueContentType;
-use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
-use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\Core\Base\Exceptions\BadStateException;
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType as ValueContentType;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
-use eZ\Publish\Core\FieldType\FieldSettings;
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
 
 /**
- * Class ContentType
+ * Class ContentType.
  */
 class ContentType
 {
     /**
-     * Repository eZ
+     * Repository eZ.
      *
      * @var Repository
      */
     protected $eZPublishRepository;
 
     /**
-     * Constructor
-     *
-     * @param Repository $api
+     * Constructor.
      */
     public function __construct(Repository $api)
     {
@@ -46,7 +46,7 @@ class ContentType
     }
 
     /**
-     * Get eZ Repository
+     * Get eZ Repository.
      *
      * @return Repository
      */
@@ -56,7 +56,7 @@ class ContentType
     }
 
     /**
-     * Easy access to the ContentService
+     * Easy access to the ContentService.
      *
      * @return ContentService
      */
@@ -66,7 +66,7 @@ class ContentType
     }
 
     /**
-     * Easy access to the ContentTypeService
+     * Easy access to the ContentTypeService.
      *
      * @return ContentTypeService
      */
@@ -77,7 +77,7 @@ class ContentType
 
     /**
      * Change the user of the repository
-     * Note: you need to keep the current user if you want to go back on the current user
+     * Note: you need to keep the current user if you want to go back on the current user.
      */
     public function sudoRoot()
     {
@@ -85,7 +85,7 @@ class ContentType
     }
 
     /**
-     * Create ContentType Wrapper
+     * Create ContentType Wrapper.
      *
      * @param string $contentTypeIdentifier
      * @param string $contentTypeGroupIdentifier
@@ -102,8 +102,8 @@ class ContentType
         $options = [],
         $lang = 'eng-US'
     ) {
-        $contentTypeService      = $this->getContentTypeService();
-        $contentTypeGroup        = $contentTypeService->loadContentTypeGroupByIdentifier($contentTypeGroupIdentifier);
+        $contentTypeService = $this->getContentTypeService();
+        $contentTypeGroup = $contentTypeService->loadContentTypeGroupByIdentifier($contentTypeGroupIdentifier);
         $contentTypeCreateStruct = $contentTypeService->newContentTypeCreateStruct($contentTypeIdentifier);
 
         if (!empty($options['remoteId'])) {
@@ -117,13 +117,12 @@ class ContentType
     }
 
     /**
-     * Update ContentType Wrapper
+     * Update ContentType Wrapper.
      *
-     * @param ValueContentType $contentType
-     * @param array            $contentTypeData
-     * @param array            $contentTypeFieldDefinitionsData
-     * @param array            $options
-     * @param string           $lang
+     * @param array  $contentTypeData
+     * @param array  $contentTypeFieldDefinitionsData
+     * @param array  $options
+     * @param string $lang
      */
     public function updateContentType(
         ValueContentType $contentType,
@@ -151,7 +150,7 @@ class ContentType
     }
 
     /**
-     * Fill the Struct according to the Public API
+     * Fill the Struct according to the Public API.
      *
      * @param ContentTypeCreateStruct|ContentTypeUpdateStruct $struct
      * @param array                                           $contentTypeData
@@ -160,9 +159,9 @@ class ContentType
     protected function fillContentTypeStruct($struct, $contentTypeData, $lang)
     {
         $struct->mainLanguageCode = $lang;
-        $struct->nameSchema       = $contentTypeData['nameSchema'];
-        $struct->isContainer      = $contentTypeData['isContainer'];
-        $struct->urlAliasSchema   = $contentTypeData['urlAliasSchema'];
+        $struct->nameSchema = $contentTypeData['nameSchema'];
+        $struct->isContainer = $contentTypeData['isContainer'];
+        $struct->urlAliasSchema = $contentTypeData['urlAliasSchema'];
 
         if (!is_array($contentTypeData['names'])) {
             $contentTypeData['names'] = [$lang => $contentTypeData['names']];
@@ -176,11 +175,10 @@ class ContentType
     }
 
     /**
-     * Create and assign the fieldDefinition to the Structure
+     * Create and assign the fieldDefinition to the Structure.
      *
-     * @param ContentTypeCreateStruct $contentTypeCreateStruct
-     * @param array                   $contentTypeFieldDefinitionsData
-     * @param string                  $lang
+     * @param array  $contentTypeFieldDefinitionsData
+     * @param string $lang
      */
     protected function createFieldDefinitions(
         ContentTypeCreateStruct $contentTypeCreateStruct,
@@ -199,11 +197,10 @@ class ContentType
     }
 
     /**
-     * Add/Update or remove FieldDefinitions from/to/in the Structure
+     * Add/Update or remove FieldDefinitions from/to/in the Structure.
      *
-     * @param ContentTypeDraft $contentTypeDraft
-     * @param array            $contentTypeFieldDefinitionsData
-     * @param string           $lang
+     * @param array  $contentTypeFieldDefinitionsData
+     * @param string $lang
      */
     protected function updateFieldDefinitions(
         ContentTypeDraft $contentTypeDraft,
@@ -242,7 +239,7 @@ class ContentType
     }
 
     /**
-     * Fill the Struct according to the Public API
+     * Fill the Struct according to the Public API.
      *
      * @param FieldDefinitionCreateStruct|FieldDefinitionUpdateStruct $struct
      * @param array                                                   $definition
@@ -250,11 +247,11 @@ class ContentType
      */
     protected function fillFieldDefinitionStruct($struct, $definition, $lang)
     {
-        $struct->fieldGroup     = $definition['fieldGroup'];
-        $struct->position       = $definition['position'];
+        $struct->fieldGroup = $definition['fieldGroup'];
+        $struct->position = $definition['position'];
         $struct->isTranslatable = $definition['isTranslatable'];
-        $struct->isRequired     = $definition['isRequired'];
-        $struct->isSearchable   = $definition['isSearchable'];
+        $struct->isRequired = $definition['isRequired'];
+        $struct->isSearchable = $definition['isSearchable'];
 
         if (!is_array($definition['names'])) {
             $definition['names'] = [$lang => $definition['names']];
@@ -268,18 +265,18 @@ class ContentType
 
         if ($definition['settings']) {
             $settings = [];
-            $lines    = explode("\n", $definition['settings']);
+            $lines = explode("\n", $definition['settings']);
             foreach ($lines as $line) {
-                preg_match("/(\\s*)([a-zA-Z]*)(\\s*):(\\s*)\\[?([^\\[\\]]*)\\]?(\\s*)/uisx", $line, $matches);
-                $key   = trim($matches[2]);
-                $value = explode(",", trim($matches[5]));
+                preg_match('/(\\s*)([a-zA-Z]*)(\\s*):(\\s*)\\[?([^\\[\\]]*)\\]?(\\s*)/uisx', $line, $matches);
+                $key = trim($matches[2]);
+                $value = explode(',', trim($matches[5]));
                 array_walk(
                     $value,
                     function (&$value, &$key) {
                         $value = trim($value);
                     }
                 );
-                if ($key != '') {
+                if ('' != $key) {
                     $settings[$key] = $value;
                 }
             }
@@ -288,28 +285,27 @@ class ContentType
     }
 
     /**
-     * Fill the Extra Struct according to the Public API
+     * Fill the Extra Struct according to the Public API.
      *
      * @param FieldDefinitionCreateStruct|FieldDefinitionUpdateStruct $struct
-     * @param array                                                   $definition
      * @param string                                                  $lang
      */
     protected function fillExtraSettings($struct, $settings, $fieldTypeIdentifier, $lang)
     {
-        if ($fieldTypeIdentifier == "ezselection") {
+        if ('ezselection' == $fieldTypeIdentifier) {
             $isMultiple = false;
             if (isset($settings['Multiple']) && ($isM = $settings['Multiple'])) {
-                $isMultiple = $isM[0] == "Y" ? true : false;
+                $isMultiple = 'Y' == $isM[0] ? true : false;
             }
             if (isset($settings['List']) && ($list = $settings['List'])) {
                 $struct->fieldSettings = [
                     'isMultiple' => $isMultiple,
-                    'options'    => $list
+                    'options' => $list,
                 ];
             }
         }
 
-        if ($fieldTypeIdentifier == "ezobjectrelationlist") {
+        if ('ezobjectrelationlist' == $fieldTypeIdentifier) {
             if ($to = $settings['To']) {
                 $struct->fieldSettings['selectionContentTypes'] = $to;
             }
@@ -317,18 +313,18 @@ class ContentType
                 // just the first is used
                 if ($alias = $defaultLocation[0]) {
                     try {
-                        $urlAlias                                          = $this->getRepository()->getURLAliasService(
-                        )->lookup($alias);
+                        $urlAlias = $this->getRepository()->getURLAliasService()->lookup($alias);
                         $struct->fieldSettings['selectionDefaultLocation'] = $urlAlias->destination;
                     } catch (NotFoundException $e) {
-                        // do nothing then
+                        unset($struct->fieldSettings['selectionDefaultLocation']);
                     }
                 }
             }
         }
-        if ($fieldTypeIdentifier == "ezobjectrelation") {
-            if (isset($settings['BrowseMode']) &&
-                (strpos(strtolower(implode('', $settings['BrowseMode'])), 'dropdownlist') !== false)
+        if ('ezobjectrelation' == $fieldTypeIdentifier) {
+            if (
+                isset($settings['BrowseMode']) &&
+                (false !== strpos(strtolower(implode('', $settings['BrowseMode'])), 'dropdownlist'))
             ) {
                 $struct->fieldSettings['selectionMethod'] = 1;
             } else {
@@ -339,12 +335,12 @@ class ContentType
                 // just the first is used
                 if ($alias = $defaultLocation[0]) {
                     try {
-                        $urlAlias                               = $this->getRepository()->getURLAliasService()->lookup(
+                        $urlAlias = $this->getRepository()->getURLAliasService()->lookup(
                             $alias
                         );
                         $struct->fieldSettings['selectionRoot'] = $urlAlias->destination;
                     } catch (NotFoundException $e) {
-                        // do nothing then
+                        unset($struct->fieldSettings['selectionRoot']);
                     }
                 }
             }
@@ -352,9 +348,7 @@ class ContentType
     }
 
     /**
-     * Publish/Save a ContentTypeDraft
-     *
-     * @param ContentTypeDraft $contentTypeDraft
+     * Publish/Save a ContentTypeDraft.
      */
     public function publishContentType(ContentTypeDraft $contentTypeDraft)
     {
@@ -362,7 +356,7 @@ class ContentType
     }
 
     /**
-     * Create/Update Sugar for trying to update else to create
+     * Create/Update Sugar for trying to update else to create.
      *
      * @param string $contentTypeIdentifier
      * @param string $contentTypeGroupIdentifier
@@ -383,7 +377,7 @@ class ContentType
 
         try {
             $contentType = $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
-            if ((array_key_exists('do_no_update', $options)) && ($options['do_no_update'] == true)) {
+            if ((array_key_exists('do_no_update', $options)) && (true == $options['do_no_update'])) {
                 return;
             }
             $this->updateContentType(
@@ -414,7 +408,7 @@ class ContentType
     }
 
     /**
-     * Get + Create (no update) Sugar for trying to update else to create
+     * Get + Create (no update) Sugar for trying to update else to create.
      *
      * @param string $contentTypeIdentifier
      * @param string $contentTypeGroupIdentifier
@@ -434,7 +428,7 @@ class ContentType
         $lang = 'eng-US'
     ) {
         $options['do_no_update'] = true;
-        $contentTypeService      = $this->getContentTypeService();
+        $contentTypeService = $this->getContentTypeService();
         $this->createUpdateContentType(
             $contentTypeIdentifier,
             $contentTypeGroupIdentifier,

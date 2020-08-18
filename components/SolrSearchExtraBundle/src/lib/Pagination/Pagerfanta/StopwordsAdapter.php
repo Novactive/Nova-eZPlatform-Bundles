@@ -33,7 +33,7 @@ class StopwordsAdapter implements AdapterInterface
      */
     public function __construct(string $setId, StopwordsService $stopwordsService)
     {
-        $this->setId            = $setId;
+        $this->setId = $setId;
         $this->stopwordsService = $stopwordsService;
     }
 

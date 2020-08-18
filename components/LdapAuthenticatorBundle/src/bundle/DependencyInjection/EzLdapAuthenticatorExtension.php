@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZLDAPAuthenticator Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZLdapAuthenticatorBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZLDAPAuthenticatorBundle\DependencyInjection;
@@ -33,13 +35,13 @@ class EzLdapAuthenticatorExtension extends Extension implements PrependExtension
     public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
-        $config        = $this->processConfiguration($configuration, $configs);
+        $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
         if (empty($config['default_connection'])) {
-            $keys                         = array_keys($config['connections']);
+            $keys = array_keys($config['connections']);
             $config['default_connection'] = reset($keys);
         }
         $this->defaultConnection = $config['default_connection'];
@@ -83,12 +85,12 @@ class EzLdapAuthenticatorExtension extends Extension implements PrependExtension
         $container->setDefinition($ldapUserProviderId, new ChildDefinition(EzLdapUserProvider::class))
                   ->setArguments(
                       [
-                          '$ldap'              => new Reference($ldapId),
-                          '$baseDn'            => $userProviderConfig['base_dn'],
-                          '$searchDn'          => $userProviderConfig['search_dn'],
-                          '$searchPassword'    => $userProviderConfig['search_password'],
-                          '$uidKey'            => $userProviderConfig['uid_key'],
-                          '$filter'            => $userProviderConfig['filter'],
+                          '$ldap' => new Reference($ldapId),
+                          '$baseDn' => $userProviderConfig['base_dn'],
+                          '$searchDn' => $userProviderConfig['search_dn'],
+                          '$searchPassword' => $userProviderConfig['search_password'],
+                          '$uidKey' => $userProviderConfig['uid_key'],
+                          '$filter' => $userProviderConfig['filter'],
                       ]
                   )
                   ->addMethodCall('setLdapEntryConverter', [new Reference($ldapEntryConverterId)]);
@@ -98,14 +100,14 @@ class EzLdapAuthenticatorExtension extends Extension implements PrependExtension
                   ->setPublic(true)
                   ->setArguments(
                       [
-                          '$ldap'             => new Reference($ldapId),
+                          '$ldap' => new Reference($ldapId),
                           '$ldapUserProvider' => new Reference($ldapUserProviderId),
-                          '$configs'          => [
-                              'ez_user'            => $ezuserConfig,
-                              'adapter'            => $ldapConfig['adapter'],
+                          '$configs' => [
+                              'ez_user' => $ezuserConfig,
+                              'adapter' => $ldapConfig['adapter'],
                               'ldap_user_provider' => $ldapConfig['user_provider'],
-                              'ldap_auth'          => [
-                                  'dn_string'    => $ldapConfig['user_provider']['base_dn'],
+                              'ldap_auth' => [
+                                  'dn_string' => $ldapConfig['user_provider']['base_dn'],
                                   'query_string' => str_replace(
                                       '{uid_key}',
                                       $userProviderConfig['uid_key'],
@@ -128,7 +130,7 @@ class EzLdapAuthenticatorExtension extends Extension implements PrependExtension
     private function prependSecurity(ContainerBuilder $container): void
     {
         $configFile = __DIR__.'/../Resources/config/security.yml';
-        $config     = Yaml::parse((string) file_get_contents($configFile));
+        $config = Yaml::parse((string) file_get_contents($configFile));
         $container->prependExtensionConfig('security', $config);
         $container->addResource(new FileResource($configFile));
     }

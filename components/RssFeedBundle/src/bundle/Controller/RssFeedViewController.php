@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZRssFeedBundle.
  *
@@ -30,10 +31,9 @@ use Symfony\Component\HttpFoundation\Response;
 class RssFeedViewController extends Controller
 {
     use EntityManagerTrait;
+
     /**
      * @Route("/{urlSlug}", name="rss_feed_view_index")
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request): Response
     {
@@ -43,11 +43,7 @@ class RssFeedViewController extends Controller
         $permissionResolver = $this->container->get('ezpublish.api.repository')->getPermissionResolver();
 
         if (!$permissionResolver->hasAccess('rss', 'read')) {
-            throw new UnauthorizedException(
-                'rss',
-                'read',
-                []
-            );
+            throw new UnauthorizedException('rss', 'read', []);
         }
 
         $rssFeedRepository = $this->entityManager->getRepository(RssFeeds::class);
@@ -55,7 +51,7 @@ class RssFeedViewController extends Controller
         $rssFeed = $rssFeedRepository->findOneBy(
             [
                 'urlSlug' => $request->get('urlSlug'),
-                'status'  => RssFeeds::STATUS_ENABLED,
+                'status' => RssFeeds::STATUS_ENABLED,
             ]
         );
 
@@ -73,8 +69,8 @@ class RssFeedViewController extends Controller
                     [
                         'rssFeed' => [
                             'meta' => [
-                                'title'       => $rssFeed->getTitle(),
-                                'link'        => $request->getUri(),
+                                'title' => $rssFeed->getTitle(),
+                                'link' => $request->getUri(),
                                 'description' => $rssFeed->getDescription(),
                             ],
                             'feedItems' => $feedItems,

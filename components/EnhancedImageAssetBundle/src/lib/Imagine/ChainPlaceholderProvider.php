@@ -35,7 +35,7 @@ class ChainPlaceholderProvider implements PlaceholderProvider
     public function __construct(PlaceholderProviderRegistry $providerRegistry, LoggerInterface $logger)
     {
         $this->providerRegistry = $providerRegistry;
-        $this->logger           = $logger;
+        $this->logger = $logger;
     }
 
     /**
@@ -43,7 +43,7 @@ class ChainPlaceholderProvider implements PlaceholderProvider
      */
     public function getPlaceholder(ImageValue $value, array $options = []): string
     {
-        $options          = $this->resolveOptions($options);
+        $options = $this->resolveOptions($options);
         $providersConfigs = $options['providers'];
         foreach ($providersConfigs as $providersConfig) {
             $provider = $this->providerRegistry->getProvider($providersConfig['provider']);

@@ -35,7 +35,7 @@ class EnhancedImage extends FileFieldHandler implements FieldValueConverterInter
      */
     public function hashToFieldValue($fieldValue, array $context = []): EnhancedImageValue
     {
-        $altText  = '';
+        $altText = '';
         $fileName = '';
 
         if (null === $fieldValue) {
@@ -77,11 +77,11 @@ class EnhancedImage extends FileFieldHandler implements FieldValueConverterInter
 
         return new EnhancedImageValue(
             [
-                'path'            => $realFilePath,
-                'fileSize'        => filesize($realFilePath),
-                'fileName'        => '' !== $fileName ? $fileName : basename($realFilePath),
+                'path' => $realFilePath,
+                'fileSize' => filesize($realFilePath),
+                'fileName' => '' !== $fileName ? $fileName : basename($realFilePath),
                 'alternativeText' => $altText,
-                'focusPoint'      => $focusPoint,
+                'focusPoint' => $focusPoint,
             ]
         );
     }
@@ -98,14 +98,14 @@ class EnhancedImage extends FileFieldHandler implements FieldValueConverterInter
         }
 
         return [
-            'path'            => sprintf(
+            'path' => sprintf(
                 '%s/%s',
                 realpath($this->ioRootDir),
                 ($this->ioDecorator ? $this->ioDecorator->undecorate($fieldValue->uri) : $fieldValue->uri)
             ),
-            'filename'        => $fieldValue->fileName,
+            'filename' => $fieldValue->fileName,
             'alternativeText' => $fieldValue->alternativeText,
-            'focuspoint'      => [
+            'focuspoint' => [
                 $fieldValue->focusPoint->getPosX(),
                 $fieldValue->focusPoint->getPosY(),
             ],

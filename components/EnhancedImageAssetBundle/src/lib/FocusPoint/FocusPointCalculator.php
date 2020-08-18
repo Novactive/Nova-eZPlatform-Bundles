@@ -32,9 +32,9 @@ class FocusPointCalculator
         ];
 
         $resizeRation = max($ratios);
-        $resizedSize  = $imageSize->scale($resizeRation);
+        $resizedSize = $imageSize->scale($resizeRation);
 
-        $cropStartPoint  = $this->calculateCropStartPoint($resizedSize, $cropSize, $focusPoint);
+        $cropStartPoint = $this->calculateCropStartPoint($resizedSize, $cropSize, $focusPoint);
         $imageFocusPoint = $this->toPixel($focusPoint, $resizedSize);
 
         return $this->toCoordinate(
@@ -52,8 +52,8 @@ class FocusPointCalculator
         FocusPoint $focusPoint
     ): Point {
         $imageFocusPoint = $this->toPixel($focusPoint, $imageSize);
-        $posX            = $imageFocusPoint->getPosX() - ($cropSize->getWidth() / 2);
-        $posY            = $imageFocusPoint->getPosY() - ($cropSize->getHeight() / 2);
+        $posX = $imageFocusPoint->getPosX() - ($cropSize->getWidth() / 2);
+        $posY = $imageFocusPoint->getPosY() - ($cropSize->getHeight() / 2);
         if ($posX < 0) {
             $posX = 0;
         }
@@ -98,10 +98,10 @@ class FocusPointCalculator
 
     public function calculateCropSize(BoxInterface $imageSize, array $options): ?Box
     {
-        $width  = $options['size'][0] ?? null;
+        $width = $options['size'][0] ?? null;
         $height = $options['size'][1] ?? null;
 
-        $origWidth  = $imageSize->getWidth();
+        $origWidth = $imageSize->getWidth();
         $origHeight = $imageSize->getHeight();
 
         if (null === $width || null === $height) {

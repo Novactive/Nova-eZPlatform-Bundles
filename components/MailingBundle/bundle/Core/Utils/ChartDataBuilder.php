@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Utils;
@@ -44,17 +46,13 @@ class ChartDataBuilder
 
     /**
      * ChartDataBuilder constructor.
-     *
-     * @param string $title
-     * @param array  $options
-     * @param string $type
      */
     public function __construct(string $title, string $type, array $options = [])
     {
-        $this->title      = $title;
-        $this->type       = $type;
-        $this->options    = $options;
-        $this->dataSets   = [];
+        $this->title = $title;
+        $this->type = $type;
+        $this->options = $options;
+        $this->dataSets = [];
         $this->colorsSets = [
             '#ff6384', '#36a2eb', '#cc65fe', '#ffce56', '#EC644B', '#DB0A5B', '#E26A6A', '#DCC6E0', '#663399',
             '#913D88', '#BF55EC', '#9B59B6', '#446CB3', '#59ABE3', '#19B5FE', '#A2DED0', '#66CC99', '#00B16A',
@@ -63,18 +61,13 @@ class ChartDataBuilder
     }
 
     /**
-     * @param array       $data
-     * @param array       $labels
-     * @param array|null  $colors
-     * @param string|null $type
-     *
      * @return ChartDataBuilder
      */
     public function addDataSet(array $data, array $labels, ?array $colors = null, ?string $type = null): self
     {
         if (null === $type) {
             $this->dataSets[] = [
-                'data'   => $data,
+                'data' => $data,
                 'labels' => $labels,
                 'colors' => $colors,
             ];
@@ -83,10 +76,10 @@ class ChartDataBuilder
         }
 
         $this->dataSets[] = [
-            'data'   => $data,
+            'data' => $data,
             'labels' => $labels,
             'colors' => $colors,
-            'type'   => $type,
+            'type' => $type,
         ];
 
         return $this;
@@ -98,32 +91,32 @@ class ChartDataBuilder
     public function __invoke()
     {
         $datasets = [];
-        $labels   = [];
+        $labels = [];
         foreach ($this->dataSets as $dataSet) {
             $exportedDataset = [
-                'data'            => $dataSet['data'],
+                'data' => $dataSet['data'],
                 'backgroundColor' => $dataSet['colors'] ?? $this->colorsSets,
             ];
             if (isset($dataSet['type'])) {
-                $exportedDataset['type']        = $dataSet['type'];
-                $exportedDataset['fill']        = false;
+                $exportedDataset['type'] = $dataSet['type'];
+                $exportedDataset['fill'] = false;
                 $exportedDataset['borderColor'] = $dataSet['colors'] ?? $this->colorsSets;
             }
 
             $datasets[] = $exportedDataset;
-            $labels     = $dataSet['labels'];
+            $labels = $dataSet['labels'];
         }
 
-        $options                     = $this->options;
+        $options = $this->options;
         $options['title']['display'] = true;
-        $options['title']['text']    = $this->title;
+        $options['title']['text'] = $this->title;
 
         if ('bar' === $this->type) {
-            $options['legend']          = false;
+            $options['legend'] = false;
             $options['scales']['yAxes'] = [
                 [
                     'ticks' => [
-                        'stepSize'    => 1,
+                        'stepSize' => 1,
                         'beginAtZero' => true,
                     ],
                 ],
@@ -136,11 +129,11 @@ class ChartDataBuilder
         }
 
         return [
-            'type'    => $this->type,
+            'type' => $this->type,
             'options' => $options,
-            'data'    => [
+            'data' => [
                 'datasets' => $datasets,
-                'labels'   => $labels,
+                'labels' => $labels,
             ],
         ];
     }

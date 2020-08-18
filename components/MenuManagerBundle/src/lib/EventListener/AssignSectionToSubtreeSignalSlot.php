@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -31,19 +32,14 @@ class AssignSectionToSubtreeSignalSlot extends Slot
 
     /**
      * AssignSectionToSubtreeSignalSlot constructor.
-     *
-     * @param Connection $connection
-     * @param Handler    $locationHandler
      */
     public function __construct(Connection $connection, Handler $locationHandler)
     {
-        $this->connection      = $connection;
+        $this->connection = $connection;
         $this->locationHandler = $locationHandler;
     }
 
     /**
-     * @param Signal $signal
-     *
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
@@ -54,7 +50,7 @@ class AssignSectionToSubtreeSignalSlot extends Slot
             return;
         }
 
-        $loadedSubtree         = $this->locationHandler->load($signal->locationId);
+        $loadedSubtree = $this->locationHandler->load($signal->locationId);
         $selectContentIdsQuery = $this->connection->createQueryBuilder();
         $selectContentIdsQuery
             ->select('t.contentobject_id')

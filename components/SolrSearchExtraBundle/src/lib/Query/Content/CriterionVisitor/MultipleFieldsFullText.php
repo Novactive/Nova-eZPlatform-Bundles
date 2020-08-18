@@ -54,9 +54,9 @@ class MultipleFieldsFullText extends CriterionVisitor
         ExtendedDisMax $generator
     ) {
         $this->fieldNameResolver = $fieldNameResolver;
-        $this->tokenizer         = $tokenizer;
-        $this->parser            = $parser;
-        $this->generator         = $generator;
+        $this->tokenizer = $tokenizer;
+        $this->parser = $parser;
+        $this->generator = $generator;
     }
 
     /**
@@ -92,23 +92,23 @@ class MultipleFieldsFullText extends CriterionVisitor
     {
         /** @var \Novactive\EzSolrSearchExtra\Query\Content\Criterion\MultipleFieldsFullText $criterion */
         $tokenSequence = $this->tokenizer->tokenize($criterion->value);
-        $syntaxTree    = $this->parser->parse($tokenSequence);
+        $syntaxTree = $this->parser->parse($tokenSequence);
 
         $options = [];
         if ($criterion->fuzziness < 1) {
             $options['fuzziness'] = $criterion->fuzziness;
         }
 
-        $queryString        = $this->generator->generate($syntaxTree, $options);
+        $queryString = $this->generator->generate($syntaxTree, $options);
         $queryStringEscaped = $this->escapeQuote($queryString);
-        $queryFields        = $this->getQueryFields($criterion);
+        $queryFields = $this->getQueryFields($criterion);
 
         $queryParams = [
-            'v'   => $queryStringEscaped,
-            'qf'  => $queryFields,
-            'pf'  => $queryFields,
+            'v' => $queryStringEscaped,
+            'qf' => $queryFields,
+            'pf' => $queryFields,
             'tie' => 0.1,
-            'uf'  => '-*',
+            'uf' => '-*',
         ];
         $boostFunction = $criterion->boostFunctions;
         if ($criterion->boostPublishDate) {

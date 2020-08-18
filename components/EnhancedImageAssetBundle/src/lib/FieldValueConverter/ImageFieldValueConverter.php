@@ -160,7 +160,7 @@ class ImageFieldValueConverter implements FieldValueConverterInterface
             $this->mappings['content_type_identifier']
         );
 
-        $contentCreateStruct           = $this->contentService->newContentCreateStruct($contentType, $languageCode);
+        $contentCreateStruct = $this->contentService->newContentCreateStruct($contentType, $languageCode);
         $contentCreateStruct->remoteId = $remoteId;
         $contentCreateStruct->setField($this->mappings['name_field_identifier'], $name, $languageCode);
         $contentCreateStruct->setField($this->mappings['content_field_identifier'], $image, $languageCode);

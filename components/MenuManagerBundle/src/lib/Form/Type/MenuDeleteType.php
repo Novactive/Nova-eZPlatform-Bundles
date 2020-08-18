@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -32,10 +33,10 @@ class MenuDeleteType extends AbstractType
                 'menus',
                 CollectionType::class,
                 [
-                    'entry_type'    => CheckboxType::class,
-                    'required'      => false,
-                    'allow_add'     => true,
-                    'label'         => false,
+                    'entry_type' => CheckboxType::class,
+                    'required' => false,
+                    'allow_add' => true,
+                    'label' => false,
                     'entry_options' => ['label' => false],
                 ]
             )
@@ -43,7 +44,7 @@ class MenuDeleteType extends AbstractType
                 'delete',
                 SubmitType::class,
                 [
-                    'attr'  => ['hidden' => true],
+                    'attr' => ['hidden' => true],
                     'label' => 'menu.action.delete',
                 ]
             );

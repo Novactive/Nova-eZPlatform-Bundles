@@ -1,27 +1,28 @@
 <?php
+
 /**
- * NovaeZExtraBundle ChildrenProviderPass
+ * NovaeZExtraBundle ChildrenProviderPass.
  *
  * @package   Novactive\Bundle\eZExtraBundle
+ *
  * @author    Novactive <dir.tech@novactive.com>
  * @copyright 2015 Novactive
  * @license   https://github.com/Novactive/NovaeZExtraBundle/blob/master/LICENSE MIT Licence
  */
+
 namespace Novactive\Bundle\eZExtraBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Class ChildrenProviderPass
+ * Class ChildrenProviderPass.
  */
 class ChildrenProviderPass implements CompilerPassInterface
 {
     /**
-     * Process the configuration
-     *
-     * @param ContainerBuilder $container
+     * Process the configuration.
      */
     public function process(ContainerBuilder $container)
     {
@@ -40,7 +41,7 @@ class ChildrenProviderPass implements CompilerPassInterface
             foreach ($tags as $attributes) {
                 $definition->addMethodCall(
                     'addManagedType',
-                    [new Reference($id), $attributes["contentTypeIdentifier"]]
+                    [new Reference($id), $attributes['contentTypeIdentifier']]
                 );
             }
         }

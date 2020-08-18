@@ -58,10 +58,10 @@ class BinaryFileFieldMapper
         TextExtractorInterface $textExtractor,
         LoggerInterface $logger
     ) {
-        $this->ioService           = $ioService;
+        $this->ioService = $ioService;
         $this->boostFactorProvider = $boostFactorProvider;
-        $this->textExtractor       = $textExtractor;
-        $this->logger              = $logger;
+        $this->textExtractor = $textExtractor;
+        $this->logger = $logger;
     }
 
     /**
@@ -81,7 +81,7 @@ class BinaryFileFieldMapper
 
             try {
                 $binaryFile = $this->ioService->loadBinaryFile($field->value->externalData['id']);
-                $plaintext  = $this->getBinaryFileText($binaryFile);
+                $plaintext = $this->getBinaryFileText($binaryFile);
 
                 return new SPISearchField(
                     self::$fieldName,
@@ -103,7 +103,7 @@ class BinaryFileFieldMapper
      */
     private function getBinaryFileText(BinaryFile $binaryFile)
     {
-        $resource         = $this->ioService->getFileInputStream($binaryFile);
+        $resource = $this->ioService->getFileInputStream($binaryFile);
         $resourceMetadata = stream_get_meta_data($resource);
 
         return $this->textExtractor->extract($resourceMetadata['uri']);
@@ -116,7 +116,7 @@ class BinaryFileFieldMapper
      */
     private function getIndexFieldType(SPIContentType $contentType)
     {
-        $newFieldType        = new SPISearchFieldType\TextField();
+        $newFieldType = new SPISearchFieldType\TextField();
         $newFieldType->boost = $this->boostFactorProvider->getContentMetaFieldBoostFactor(
             $contentType,
             'text'

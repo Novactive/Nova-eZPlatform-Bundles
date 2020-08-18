@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core;
@@ -36,21 +38,13 @@ class AjaxGuard
 
     /**
      * AjaxGuard constructor.
-     *
-     * @param CsrfTokenManagerInterface $csrfTokenManager
-     * @param EntityManagerInterface    $entityManager
      */
     public function __construct(CsrfTokenManagerInterface $csrfTokenManager, EntityManagerInterface $entityManager)
     {
         $this->csrfTokenManager = $csrfTokenManager;
-        $this->entityManager    = $entityManager;
+        $this->entityManager = $entityManager;
     }
 
-    /**
-     * @param mixed $class
-     *
-     * @return bool
-     */
     private function isEntity($class): bool
     {
         if (\is_object($class)) {
@@ -62,20 +56,15 @@ class AjaxGuard
         return !$this->entityManager->getMetadataFactory()->isTransient($class);
     }
 
-    /**
-     * @param Request  $request
-     * @param mixed    $subject
-     * @param callable $callback
-     *
-     * @return array
-     */
     public function execute(Request $request, $subject, callable $callback): array
     {
         $token = $request->request->get('token');
-        if (!$request->isXmlHttpRequest() || null === $token ||
+        if (
+            !$request->isXmlHttpRequest() || null === $token ||
             !$this->isEntity($subject) ||
             !method_exists($subject, 'getId') ||
-            !$this->csrfTokenManager->isTokenValid(new CsrfToken($subject->getId(), $token))) {
+            !$this->csrfTokenManager->isTokenValid(new CsrfToken($subject->getId(), $token))
+        ) {
             throw new AccessDeniedHttpException('Not Allowed');
         }
         $results = $callback($subject);

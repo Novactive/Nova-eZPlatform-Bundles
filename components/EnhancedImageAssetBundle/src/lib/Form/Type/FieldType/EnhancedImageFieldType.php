@@ -67,9 +67,9 @@ class EnhancedImageFieldType extends AbstractType
                 'isNewFocusPoint',
                 CheckboxType::class,
                 [
-                    'label'      => /* @Desc("Is new focus point ?") */
+                    'label' => /* @Desc("Is new focus point ?") */
                     'content.field_type.enhancedimage.isNewFocusPoint',
-                    'attr'       => [
+                    'attr' => [
                         'class' => 'focuspoint-helper--cb-is-new',
                     ],
                 ]

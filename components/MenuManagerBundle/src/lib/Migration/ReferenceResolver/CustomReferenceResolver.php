@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -31,14 +32,11 @@ class CustomReferenceResolver extends AbstractResolver
 
     /**
      * CustomReferenceResolver constructor.
-     *
-     * @param EntityManagerInterface $em
-     * @param LocationService        $locationService
      */
     public function __construct(EntityManagerInterface $em, LocationService $locationService)
     {
         parent::__construct();
-        $this->em              = $em;
+        $this->em = $em;
         $this->locationService = $locationService;
     }
 

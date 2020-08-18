@@ -32,7 +32,7 @@ class QueryConverter extends BaseQueryConverter
      */
     public function __construct(BaseQueryConverter $baseConverter, CriterionVisitor $criterionVisitor)
     {
-        $this->baseConverter    = $baseConverter;
+        $this->baseConverter = $baseConverter;
         $this->criterionVisitor = $criterionVisitor;
     }
 

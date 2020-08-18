@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZProtectedContentBundle.
  *
@@ -8,10 +9,12 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/eZProtectedContentBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle;
 
+use LogicException;
 use Novactive\Bundle\eZProtectedContentBundle\DependencyInjection\Security\PolicyProvider;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
@@ -37,12 +40,11 @@ class NovaeZProtectedContentBundle extends Bundle
             $extension = $this->createContainerExtension();
             if (null !== $extension) {
                 if (!$extension instanceof ExtensionInterface) {
-                    throw new \LogicException(
-                        sprintf(
-                            'Extension %s must implement '.ExtensionInterface::class.'.',
-                            \get_class($extension)
-                        )
+                    $message = sprintf(
+                        'Extension %s must implement '.ExtensionInterface::class.'.',
+                        \get_class($extension)
                     );
+                    throw new LogicException($message);
                 }
                 $this->extension = $extension;
             } else {

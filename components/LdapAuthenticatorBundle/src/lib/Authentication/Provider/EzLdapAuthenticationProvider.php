@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZLDAPAuthenticator Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZLdapAuthenticatorBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\eZLDAPAuthenticator\Authentication\Provider;
@@ -62,12 +64,12 @@ class EzLdapAuthenticationProvider extends LdapBindAuthenticationProvider
     ) {
         if ($ldapConnection) {
             $authConfig = $ldapConnection->getConfig('ldap_auth');
-            $dnString   = $authConfig['dn_string'] ?? $dnString;
+            $dnString = $authConfig['dn_string'] ?? $dnString;
             $this->setQueryString($authConfig['query_string']);
         }
         $this->userProvider = $userProvider;
-        $this->ldap         = $ldap;
-        $this->dnString     = $dnString;
+        $this->ldap = $ldap;
+        $this->dnString = $dnString;
         parent::__construct(
             $userProvider,
             $userChecker,
@@ -136,7 +138,7 @@ class EzLdapAuthenticationProvider extends LdapBindAuthenticationProvider
             $username = $this->ldap->escape($username, '', LdapInterface::ESCAPE_DN);
 
             if ($this->queryString) {
-                $query  = str_replace('{username}', $username, $this->queryString);
+                $query = str_replace('{username}', $username, $this->queryString);
                 $result = $this->ldap->query($this->dnString, $query)->execute();
                 if (1 !== $result->count()) {
                     throw new BadCredentialsException('The presented username is invalid.');

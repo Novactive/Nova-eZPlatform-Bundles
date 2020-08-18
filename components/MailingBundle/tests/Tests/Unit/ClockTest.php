@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Tests\Tests\Unit;
@@ -24,9 +26,6 @@ class ClockTest extends TestCase
 {
     /**
      * $hoursOfDay $daysOfWeek $daysOfMonth $daysOfYear $weeksOfMonth $monthsOfYear $weeksOfYear.
-     *
-     *
-     * @return array
      */
     public function timesMatchProvider(): array
     {
@@ -106,9 +105,6 @@ class ClockTest extends TestCase
 
     /**
      * $hoursOfDay $daysOfWeek $daysOfMonth $daysOfYear $weeksOfMonth $monthsOfYear $weeksOfYear.
-     *
-     *
-     * @return array
      */
     public function nextTimesMatchProvider(): array
     {
@@ -168,11 +164,6 @@ class ClockTest extends TestCase
         ];
     }
 
-    /**
-     * @param array $data
-     *
-     * @return Mailing
-     */
     private function createMailing(array $data): Mailing
     {
         $mailing = new Mailing();
@@ -205,7 +196,7 @@ class ClockTest extends TestCase
                 $data
             );
 
-            $clock   = new Clock($dateReference);
+            $clock = new Clock($dateReference);
             $mailing = $this->createMailing($data);
             $this->assertEquals(
                 $expected,
@@ -220,9 +211,9 @@ class ClockTest extends TestCase
      */
     public function testNextTickClock(Carbon $dateReference, array $data, Carbon $expected): void
     {
-        $clock      = new Clock($dateReference);
-        $mailing    = $this->createMailing($data);
-        $nextTick   = $clock->nextTick($mailing);
+        $clock = new Clock($dateReference);
+        $mailing = $this->createMailing($data);
+        $nextTick = $clock->nextTick($mailing);
         $dataForLog = array_map(
             function ($value) {
                 return '' === $value ? '*' : $value;

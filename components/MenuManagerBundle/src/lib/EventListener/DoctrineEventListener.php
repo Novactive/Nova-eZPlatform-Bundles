@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -21,33 +22,22 @@ class DoctrineEventListener
 {
     use CachePurgerTrait;
 
-    /**
-     * @param LifecycleEventArgs $args
-     */
     public function postPersist(LifecycleEventArgs $args)
     {
         $this->lifecycleEventHandler($args);
     }
 
-    /**
-     * @param LifecycleEventArgs $args
-     */
     public function postUpdate(LifecycleEventArgs $args)
     {
         $this->lifecycleEventHandler($args);
     }
 
-    /**
-     * @param LifecycleEventArgs $args
-     */
     public function postRemove(LifecycleEventArgs $args)
     {
         $this->lifecycleEventHandler($args);
     }
 
     /**
-     * @param LifecycleEventArgs $args
-     *
      * @throws \Psr\Cache\InvalidArgumentException
      */
     protected function lifecycleEventHandler(LifecycleEventArgs $args): void

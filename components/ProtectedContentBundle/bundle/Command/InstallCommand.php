@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZProtectedContentBundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/eZProtectedContentBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Command;
@@ -34,11 +36,11 @@ class InstallCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $io->title('Update the Database with Custom Novactive eZ Protected Content Tables');
-        $command    = $this->getApplication()->find('doctrine:schema:update');
-        $arguments  = [
-            'command'    => 'doctrine:schema:update',
+        $command = $this->getApplication()->find('doctrine:schema:update');
+        $arguments = [
+            'command' => 'doctrine:schema:update',
             '--dump-sql' => true,
-            '--force'    => true,
+            '--force' => true,
         ];
         $arrayInput = new ArrayInput($arguments);
         $command->run($arrayInput, $output);

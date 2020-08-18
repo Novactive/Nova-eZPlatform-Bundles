@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Listener;
@@ -30,8 +32,6 @@ class EntityContentLink
 
     /**
      * EntityContentLink constructor.
-     *
-     * @param Repository $repository
      */
     public function __construct(Repository $repository)
     {
@@ -43,7 +43,7 @@ class EntityContentLink
     {
         if (null !== $entity->getLocationId()) {
             $location = $this->repository->getLocationService()->loadLocation($entity->getLocationId());
-            $content  = $this->repository->getContentService()->loadContentByContentInfo($location->contentInfo);
+            $content = $this->repository->getContentService()->loadContentByContentInfo($location->contentInfo);
             $entity->setLocation($location);
             $entity->setContent($content);
         }

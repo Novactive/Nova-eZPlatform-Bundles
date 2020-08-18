@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -23,8 +24,6 @@ class MenuItemFieldHandler extends AbstractFieldHandler implements FieldValueImp
 
     /**
      * MenuItemFieldHandler constructor.
-     *
-     * @param ValueConverter $valueConverter
      */
     public function __construct(ValueConverter $valueConverter)
     {

@@ -51,7 +51,7 @@ class CustomFulltextFieldMapper extends CustomFieldMapper
      */
     private function getIndexFieldType(ContentType $contentType, $fieldName = 'text')
     {
-        $newFieldType        = new FieldType\TextField();
+        $newFieldType = new FieldType\TextField();
         $newFieldType->boost = $this->boostFactorProvider->getContentMetaFieldBoostFactor(
             $contentType,
             $fieldName

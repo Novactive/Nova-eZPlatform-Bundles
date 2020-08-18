@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -13,6 +14,7 @@ namespace Novactive\EzMenuManager\MenuItem;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
+use ReflectionClass;
 
 abstract class AbstractMenuItemType implements MenuItemTypeInterface
 {
@@ -21,8 +23,6 @@ abstract class AbstractMenuItemType implements MenuItemTypeInterface
 
     /**
      * AbstractMenuItemType constructor.
-     *
-     * @param EntityManagerInterface $em
      */
     public function __construct(EntityManagerInterface $em)
     {
@@ -31,12 +31,10 @@ abstract class AbstractMenuItemType implements MenuItemTypeInterface
 
     /**
      * @throws \ReflectionException
-     *
-     * @return MenuItem
      */
     public function createEntity(): MenuItem
     {
-        $class = new \ReflectionClass($this->getEntityClassName());
+        $class = new ReflectionClass($this->getEntityClassName());
 
         return $class->newInstance();
     }

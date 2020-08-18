@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,12 +9,13 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use DateTime;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Registration.
@@ -64,21 +66,16 @@ class Registration
     public function __construct()
     {
         $this->approved = false;
-        $this->created  = new \DateTime();
-        $this->updated  = new \DateTime();
+        $this->created = new DateTime();
+        $this->updated = new DateTime();
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return (int) $this->id;
     }
 
     /**
-     * @param int $id
-     *
      * @return Registration
      */
     public function setId(int $id): self
@@ -117,8 +114,6 @@ class Registration
     }
 
     /**
-     * @param User $user
-     *
      * @return Registration
      */
     public function setUser(User $user): self
@@ -128,17 +123,12 @@ class Registration
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isApproved(): bool
     {
         return $this->approved;
     }
 
     /**
-     * @param bool $approved
-     *
      * @return Registration
      */
     public function setApproved(bool $approved): self

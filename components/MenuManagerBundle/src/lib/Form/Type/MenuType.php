@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -26,7 +27,6 @@ class MenuType extends AbstractType
     protected $configResolver;
 
     /**
-     * @param ConfigResolverInterface $configResolver
      * @required
      */
     public function setConfigResolver(ConfigResolverInterface $configResolver): void
@@ -52,7 +52,7 @@ class MenuType extends AbstractType
                 'name',
                 TextType::class,
                 [
-                    'label'              => 'menu.property.name',
+                    'label' => 'menu.property.name',
                     'translation_domain' => 'menu_manager',
                 ]
             )
@@ -60,7 +60,7 @@ class MenuType extends AbstractType
                 'remoteId',
                 HiddenType::class,
                 [
-                    'label'              => 'menu.property.remote_id',
+                    'label' => 'menu.property.remote_id',
                     'translation_domain' => 'menu_manager',
                 ]
             )
@@ -68,8 +68,8 @@ class MenuType extends AbstractType
                 'rootLocationId',
                 MenuRootLocationType::class,
                 [
-                    'required'           => false,
-                    'label'              => 'menu.property.root_location',
+                    'required' => false,
+                    'label' => 'menu.property.root_location',
                     'translation_domain' => 'menu_manager',
                 ]
             )
@@ -77,8 +77,8 @@ class MenuType extends AbstractType
                 'items',
                 MenuItemsCollectionType::class,
                 [
-                    'required'           => false,
-                    'label'              => 'menu.property.items',
+                    'required' => false,
+                    'label' => 'menu.property.items',
                     'translation_domain' => 'menu_manager',
                 ]
             );
@@ -88,11 +88,11 @@ class MenuType extends AbstractType
                     'type',
                     ChoiceType::class,
                     [
-                        'label'                     => 'menu.property.type',
-                        'translation_domain'        => 'menu_manager',
-                        'choices'                   => array_combine(array_values($menuTypes), array_keys($menuTypes)),
+                        'label' => 'menu.property.type',
+                        'translation_domain' => 'menu_manager',
+                        'choices' => array_combine(array_values($menuTypes), array_keys($menuTypes)),
                         'choice_translation_domain' => 'menu_manager',
-                        'required'                  => false,
+                        'required' => false,
                     ]
                 );
         }

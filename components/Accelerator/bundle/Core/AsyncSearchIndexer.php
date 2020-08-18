@@ -41,7 +41,7 @@ class AsyncSearchIndexer implements Handler
 
     public function __construct(Handler $handler, BusDispatcher $dispatcher)
     {
-        $this->syncHandler   = $handler;
+        $this->syncHandler = $handler;
         $this->busDispatcher = $dispatcher;
     }
 

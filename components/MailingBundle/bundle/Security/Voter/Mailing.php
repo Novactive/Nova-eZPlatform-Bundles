@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Security\Voter;
@@ -22,8 +24,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  */
 class Mailing extends Voter
 {
-    const VIEW = 'view';
-    const EDIT = 'edit';
+    public const VIEW = 'view';
+    public const EDIT = 'edit';
 
     /**
      * @var AccessDecisionManagerInterface
@@ -32,8 +34,6 @@ class Mailing extends Voter
 
     /**
      * Mailing constructor.
-     *
-     * @param AccessDecisionManagerInterface $decisionManager
      */
     public function __construct(AccessDecisionManagerInterface $decisionManager)
     {

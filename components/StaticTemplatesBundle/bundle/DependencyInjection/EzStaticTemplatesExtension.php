@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZStaticTemplatesBundle.
  *
@@ -40,7 +41,7 @@ class EzStaticTemplatesExtension extends Extension implements PrependExtensionIn
         if (!empty($siteaccessList)) {
             $ezpublishConfig = [
                 'siteaccess' => [
-                    'list'   => [],
+                    'list' => [],
                     'groups' => [
                         'static_group' => [],
                     ],
@@ -50,16 +51,16 @@ class EzStaticTemplatesExtension extends Extension implements PrependExtensionIn
                 ],
                 'system' => [],
             ];
-            $ezdesignConfig  = [
+            $ezdesignConfig = [
                 'design_list' => [],
             ];
             foreach ($siteaccessList as $theme) {
-                $uri                                                       = str_replace('_', '-', $theme);
-                $ezpublishConfig['siteaccess']['list'][]                   = $theme;
+                $uri = str_replace('_', '-', $theme);
+                $ezpublishConfig['siteaccess']['list'][] = $theme;
                 $ezpublishConfig['siteaccess']['groups']['static_group'][] = $theme;
-                $ezpublishConfig['siteaccess']['match']['Map\URI'][$uri]   = $theme;
-                $ezpublishConfig['system'][$theme]                         = ['design' => "{$theme}_design"];
-                $ezdesignConfig['design_list']["{$theme}_design"]          = [$theme];
+                $ezpublishConfig['siteaccess']['match']['Map\URI'][$uri] = $theme;
+                $ezpublishConfig['system'][$theme] = ['design' => "{$theme}_design"];
+                $ezdesignConfig['design_list']["{$theme}_design"] = [$theme];
             }
             $container->prependExtensionConfig('ezpublish', $ezpublishConfig);
             $container->prependExtensionConfig('ezdesign', $ezdesignConfig);
@@ -67,16 +68,12 @@ class EzStaticTemplatesExtension extends Extension implements PrependExtensionIn
     }
 
     /**
-     * @param ContainerBuilder $container
-     *
      * @throws \ReflectionException
-     *
-     * @return array
      */
     protected function getSiteaccessIdentifierList(ContainerBuilder $container): array
     {
         $StaticTemplatesThemePrefix = 'static_';
-        $siteaccessList             = [];
+        $siteaccessList = [];
 
         $globalViewsDir = $container->getParameter('kernel.root_dir').'/Resources/views';
         if (!is_dir($globalViewsDir)) {
@@ -86,8 +83,8 @@ class EzStaticTemplatesExtension extends Extension implements PrependExtensionIn
         // Look for themes in bundles.
         foreach ($container->getParameter('kernel.bundles') as $bundleClass) {
             $bundleReflection = new ReflectionClass($bundleClass);
-            $bundleViewsDir   = dirname($bundleReflection->getFileName()).'/Resources/views';
-            $themeDir         = $bundleViewsDir.'/themes';
+            $bundleViewsDir = dirname($bundleReflection->getFileName()).'/Resources/views';
+            $themeDir = $bundleViewsDir.'/themes';
             if (!is_dir($themeDir)) {
                 continue;
             }

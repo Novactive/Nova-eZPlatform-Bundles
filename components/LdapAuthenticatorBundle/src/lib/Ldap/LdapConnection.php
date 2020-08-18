@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZLDAPAuthenticator Bundle.
  *
@@ -35,9 +36,9 @@ class LdapConnection
         LdapUserProvider $ldapUserProvider,
         array $configs
     ) {
-        $this->ldap             = $ldap;
+        $this->ldap = $ldap;
         $this->ldapUserProvider = $ldapUserProvider;
-        $this->configs          = $configs;
+        $this->configs = $configs;
     }
 
     public function getLdap(): Ldap

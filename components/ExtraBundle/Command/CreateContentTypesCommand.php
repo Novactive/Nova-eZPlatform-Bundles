@@ -1,31 +1,34 @@
 <?php
+
 /**
- * NovaeZExtraBundle CheckController
+ * NovaeZExtraBundle CheckController.
  *
  * @package   Novactive\Bundle\eZExtraBundle
+ *
  * @author    Novactive <dir.tech@novactive.com>
  * @copyright 2015 Novactive
  * @license   https://github.com/Novactive/NovaeZSEOBundle/blob/master/LICENSE MIT Licence
  */
+
 namespace Novactive\Bundle\eZExtraBundle\Command;
 
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\Base\Exceptions\ContentTypeFieldDefinitionValidationException;
+use eZ\Publish\Core\FieldType\ValidationError;
+use PHPExcel_Cell;
+use PHPExcel_IOFactory;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use eZ\Publish\API\Repository\Repository;
-use PHPExcel_IOFactory;
-use PHPExcel_Cell;
-use eZ\Publish\Core\Base\Exceptions\ContentTypeFieldDefinitionValidationException;
-use eZ\Publish\Core\FieldType\ValidationError;
 
 /**
- * Class CreateContentTypesCommand
+ * Class CreateContentTypesCommand.
  */
 class CreateContentTypesCommand extends ContainerAwareCommand
 {
     /**
-     * Repository eZ Publish
+     * Repository eZ Publish.
      *
      * @var Repository
      */
@@ -53,11 +56,11 @@ class CreateContentTypesCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $translation       = $input->getArgument('tr');
+        $translation = $input->getArgument('tr');
         $translationHelper = $this->getContainer()->get('ezpublish.translation_helper');
         $availableLanguage = $translationHelper->getAvailableLanguages();
         if (is_null($translation) || !in_array($translation, $availableLanguage)) {
-            $translation = "eng-GB";
+            $translation = 'eng-GB';
         }
 
         $filepath = $input->getArgument('file');
@@ -69,15 +72,15 @@ class CreateContentTypesCommand extends ContainerAwareCommand
 
         $oPHPExcel = PHPExcel_IOFactory::load($filepath);
         if (!$oPHPExcel) {
-            $output->writeln("<error>Failed to load data</error>");
+            $output->writeln('<error>Failed to load data</error>');
 
             return false;
         }
 
-        $contentTypeManager = $this->getContainer()->get("novactive.ezextra.content_type.manager");
+        $contentTypeManager = $this->getContainer()->get('novactive.ezextra.content_type.manager');
 
         foreach ($oPHPExcel->getWorksheetIterator() as $oWorksheet) {
-            $excludedTemplatesSheets = ["ContentType Template", "FieldTypes"];
+            $excludedTemplatesSheets = ['ContentType Template', 'FieldTypes'];
             if (in_array($oWorksheet->getTitle(), $excludedTemplatesSheets)) {
                 continue;
             }
@@ -85,29 +88,29 @@ class CreateContentTypesCommand extends ContainerAwareCommand
 
             // Mapping
 
-            $lang                     = $translation;
-            $contentTypeName          = $oWorksheet->getCell("B2")->getValue();
-            $contentTypeIdentifier    = $oWorksheet->getCell("B3")->getValue();
-            $contentTypeDescription   = $oWorksheet->getCell("B4")->getValue();
-            $contentTypeObjectPattern = $oWorksheet->getCell("B5")->getValue();
-            $contentTypeURLPattern    = $oWorksheet->getCell("B6")->getValue();
-            $contentTypeContainer     = $oWorksheet->getCell("B7")->getValue() == "yes" ? true : false;
+            $lang = $translation;
+            $contentTypeName = $oWorksheet->getCell('B2')->getValue();
+            $contentTypeIdentifier = $oWorksheet->getCell('B3')->getValue();
+            $contentTypeDescription = $oWorksheet->getCell('B4')->getValue();
+            $contentTypeObjectPattern = $oWorksheet->getCell('B5')->getValue();
+            $contentTypeURLPattern = $oWorksheet->getCell('B6')->getValue();
+            $contentTypeContainer = 'yes' == $oWorksheet->getCell('B7')->getValue() ? true : false;
 
             if (!$contentTypeDescription) {
-                $contentTypeDescription = "Content Type Description - To be defined";
+                $contentTypeDescription = 'Content Type Description - To be defined';
             }
-            $contentTypeData                 = [
-                'nameSchema'     => $contentTypeObjectPattern,
+            $contentTypeData = [
+                'nameSchema' => $contentTypeObjectPattern,
                 'urlAliasSchema' => $contentTypeURLPattern,
-                'isContainer'    => $contentTypeContainer,
-                'names'          => $contentTypeName,
-                'descriptions'   => $contentTypeDescription,
+                'isContainer' => $contentTypeContainer,
+                'names' => $contentTypeName,
+                'descriptions' => $contentTypeDescription,
             ];
             $contentTypeFieldDefinitionsData = [];
             foreach ($oWorksheet->getRowIterator() as $row) {
-                $rowIndex        = $row->getRowIndex();
+                $rowIndex = $row->getRowIndex();
                 $fieldIdentifier = $oWorksheet->getCell("B{$rowIndex}")->getValue();
-                if (($rowIndex) >= 11 && ($fieldIdentifier != '')) {
+                if (($rowIndex) >= 11 && ('' != $fieldIdentifier)) {
                     $cellIterator = $row->getCellIterator();
                     $cellIterator->setIterateOnlyExistingCells(false); // Loop all cells, even if it is not set
                     $contentTypeFieldsData = [];
@@ -116,37 +119,37 @@ class CreateContentTypesCommand extends ContainerAwareCommand
                         if (!is_null($cell)) {
                             $cellValue = trim($cell->getValue());
                             switch ($cell->getColumn()) {
-                                case "A":
+                                case 'A':
                                     $contentTypeFieldsData['names'] = [$lang => $cellValue];
                                     break;
-                                case "B":
+                                case 'B':
                                     $contentTypeFieldsData['identifier'] = $cellValue;
                                     break;
-                                case "C":
+                                case 'C':
                                     $contentTypeFieldsData['type'] = $cellValue;
                                     break;
-                                case "D":
+                                case 'D':
                                     if (!$cellValue) {
-                                        $cellValue = "";
+                                        $cellValue = '';
                                     }
                                     $contentTypeFieldsData['descriptions'] = [$lang => $cellValue];
                                     break;
-                                case "E":
-                                    $contentTypeFieldsData['isRequired'] = $cellValue == "yes" ? true : false;
+                                case 'E':
+                                    $contentTypeFieldsData['isRequired'] = 'yes' == $cellValue ? true : false;
                                     break;
-                                case "F":
-                                    $contentTypeFieldsData['isSearchable'] = $cellValue == "yes" ? true : false;
+                                case 'F':
+                                    $contentTypeFieldsData['isSearchable'] = 'yes' == $cellValue ? true : false;
                                     break;
-                                case "G":
-                                    $contentTypeFieldsData['isTranslatable'] = $cellValue == "yes" ? true : false;
+                                case 'G':
+                                    $contentTypeFieldsData['isTranslatable'] = 'yes' == $cellValue ? true : false;
                                     break;
-                                case "H":
+                                case 'H':
                                     $contentTypeFieldsData['fieldGroup'] = $cellValue;
                                     break;
-                                case "I":
+                                case 'I':
                                     $contentTypeFieldsData['position'] = intval($cellValue);
                                     break;
-                                case "J":
+                                case 'J':
                                     $contentTypeFieldsData['settings'] = $cellValue;
                                     break;
                             }
@@ -156,10 +159,11 @@ class CreateContentTypesCommand extends ContainerAwareCommand
                 }
             }
             $contentTypeGroupIdentifierParam = $input->getArgument('content_type_group_identifier');
-            $contentTypeGroups               = $contentTypeManager->getContentTypeService()->loadContentTypeGroups();
-            $contentTypeGroupIdentifier      = null;
+            $contentTypeGroups = $contentTypeManager->getContentTypeService()->loadContentTypeGroups();
+            $contentTypeGroupIdentifier = null;
             foreach ($contentTypeGroups as $contentTypeGroup) {
-                if (!is_null($contentTypeGroupIdentifierParam) &&
+                if (
+                    !is_null($contentTypeGroupIdentifierParam) &&
                     $contentTypeGroup->attribute('identifier') == $contentTypeGroupIdentifierParam
                 ) {
                     $contentTypeGroupIdentifier = $contentTypeGroupIdentifierParam;
@@ -191,8 +195,9 @@ class CreateContentTypesCommand extends ContainerAwareCommand
                 }
             }
         }
-        $output->writeln("Done");
+        $output->writeln('Done');
         unset($input); // phpmd tricks
+
         return true;
     }
 
@@ -201,9 +206,9 @@ class CreateContentTypesCommand extends ContainerAwareCommand
      */
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
-        $input;// phpmd trick
-        $output;// phpmd trick
-        $this->eZPublishRepository = $this->getContainer()->get("ezpublish.api.repository");
+        $input; // phpmd trick
+        $output; // phpmd trick
+        $this->eZPublishRepository = $this->getContainer()->get('ezpublish.api.repository');
         $this->eZPublishRepository->setCurrentUser($this->eZPublishRepository->getUserService()->loadUser(14));
     }
 }

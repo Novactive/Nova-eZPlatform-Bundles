@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -39,16 +40,13 @@ class NovaeZMailingExtension extends Extension implements PrependExtensionInterf
     public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = $this->getConfiguration($configs, $container);
-        $config        = $this->processConfiguration($configuration, $configs);
+        $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('ezadminui.yml');
         $loader->load('default_settings.yml');
         $loader->load('services.yml');
         $loader->load('services_nonautowired.yaml');
-        $asseticBundles   = $container->getParameter('assetic.bundles');
-        $asseticBundles[] = 'NovaeZMailingBundle';
-        $container->setParameter('assetic.bundles', $asseticBundles);
 
         $processor = new ConfigurationProcessor($container, $this->getAlias());
         $processor->mapSetting('simple_mailer', $config);
@@ -62,23 +60,21 @@ class NovaeZMailingExtension extends Extension implements PrependExtensionInterf
 
     /**
      * Loads configuration.
-     *
-     * @param ContainerBuilder $container
      */
     public function prepend(ContainerBuilder $container): void
     {
         $configFile = __DIR__.'/../Resources/config/views.yml';
-        $config     = Yaml::parse(file_get_contents($configFile));
+        $config = Yaml::parse(file_get_contents($configFile));
         $container->prependExtensionConfig('ezpublish', $config);
         $container->addResource(new FileResource($configFile));
 
         $loggerFile = __DIR__.'/../Resources/config/logger.yml';
-        $config     = Yaml::parse(file_get_contents($loggerFile));
+        $config = Yaml::parse(file_get_contents($loggerFile));
         $container->prependExtensionConfig('monolog', $config);
         $container->addResource(new FileResource($loggerFile));
 
         $workflowFile = __DIR__.'/../Resources/config/workflow.yml';
-        $config       = Yaml::parse(file_get_contents($workflowFile));
+        $config = Yaml::parse(file_get_contents($workflowFile));
         $container->prependExtensionConfig('framework', $config);
         $container->addResource(new FileResource($workflowFile));
     }

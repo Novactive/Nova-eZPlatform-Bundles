@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Mailer;
@@ -52,12 +54,6 @@ class Mailing extends Mailer
 
     /**
      * Mailing constructor.
-     *
-     * @param Simple                 $simpleMailer
-     * @param MailingContent         $contentProvider
-     * @param LoggerInterface        $logger
-     * @param Broadcast              $broadcastProvider
-     * @param EntityManagerInterface $entityManager
      */
     public function __construct(
         Simple $simpleMailer,
@@ -66,20 +62,17 @@ class Mailing extends Mailer
         Broadcast $broadcastProvider,
         EntityManagerInterface $entityManager
     ) {
-        $this->simpleMailer      = $simpleMailer;
-        $this->contentProvider   = $contentProvider;
-        $this->logger            = $logger;
+        $this->simpleMailer = $simpleMailer;
+        $this->contentProvider = $contentProvider;
+        $this->logger = $logger;
         $this->broadcastProvider = $broadcastProvider;
-        $this->entityManager     = $entityManager;
+        $this->entityManager = $entityManager;
     }
 
-    /**
-     * @param MailingEntity $mailing
-     */
     public function sendMailing(MailingEntity $mailing, string $forceRecipient = null): void
     {
         $nativeHtml = $this->contentProvider->preFetchContent($mailing);
-        $broadcast  = $this->broadcastProvider->start($mailing, $nativeHtml);
+        $broadcast = $this->broadcastProvider->start($mailing, $nativeHtml);
 
         $this->simpleMailer->sendStartSendingMailingMessage($mailing);
         if ($forceRecipient) {
@@ -94,8 +87,8 @@ class Mailing extends Mailer
             $campaign = $mailing->getCampaign();
             $this->logger->notice("Mailing Mailer starts to send Mailing {$mailing->getName()}");
             $recipientCounts = 0;
-            $userRepo        = $this->entityManager->getRepository(User::class);
-            $recipients      = $userRepo->findValidRecipients($campaign->getMailingLists());
+            $userRepo = $this->entityManager->getRepository(User::class);
+            $recipients = $userRepo->findValidRecipients($campaign->getMailingLists());
             foreach ($recipients as $user) {
                 /** @var User $user */
                 $contentMessage = $this->contentProvider->getContentMailing($mailing, $user, $broadcast);
@@ -114,11 +107,6 @@ class Mailing extends Mailer
         $this->broadcastProvider->end($broadcast);
     }
 
-    /**
-     * @param Swift_Message $message
-     *
-     * @return int
-     */
     private function sendMessage(Swift_Message $message): int
     {
         return $this->mailer->send($message);

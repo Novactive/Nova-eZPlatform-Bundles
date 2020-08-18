@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Repository;
@@ -28,11 +30,6 @@ class StatHit extends EntityRepository
         return 'stathit';
     }
 
-    /**
-     * @param array $filters
-     *
-     * @return QueryBuilder
-     */
     public function createQueryBuilderForFilters(array $filters = []): QueryBuilder
     {
         $qb = parent::createQueryBuilderForFilters($filters);
@@ -51,15 +48,13 @@ class StatHit extends EntityRepository
 
     /**
      * @param BroadcastEntity[] $broadcasts
-     *
-     * @return array
      */
     public function getBrowserMapCount($broadcasts): array
     {
         $qb = $this->createQueryBuilderForFilters(['broadcasts' => $broadcasts]);
         $qb->select($qb->expr()->count($this->getAlias().'.id').' as nb', $this->getAlias().'.browserName');
         $qb->groupBy($this->getAlias().'.userKey', $this->getAlias().'.browserName');
-        $results       = $qb->getQuery()->getArrayResult();
+        $results = $qb->getQuery()->getArrayResult();
         $mappedResults = [];
 
         foreach ($results as $result) {
@@ -71,15 +66,13 @@ class StatHit extends EntityRepository
 
     /**
      * @param BroadcastEntity[] $broadcasts
-     *
-     * @return array
      */
     public function getOSMapCount($broadcasts): array
     {
         $qb = $this->createQueryBuilderForFilters(['broadcasts' => $broadcasts]);
         $qb->select($qb->expr()->count($this->getAlias().'.id').' as nb', $this->getAlias().'.osName');
         $qb->groupBy($this->getAlias().'.userKey', $this->getAlias().'.osName');
-        $results       = $qb->getQuery()->getArrayResult();
+        $results = $qb->getQuery()->getArrayResult();
         $mappedResults = [];
 
         foreach ($results as $result) {
@@ -91,8 +84,6 @@ class StatHit extends EntityRepository
 
     /**
      * @param BroadcastEntity[] $broadcasts
-     *
-     * @return array
      */
     public function getURLMapCount($broadcasts): array
     {
@@ -100,7 +91,7 @@ class StatHit extends EntityRepository
         $qb->select($qb->expr()->count($this->getAlias().'.id').' as nb', $this->getAlias().'.url');
         $qb->andWhere($qb->expr()->notIn($this->getAlias().'.url', ':url'))->setParameter('url', '-');
         $qb->groupBy($this->getAlias().'.userKey', $this->getAlias().'.url');
-        $results       = $qb->getQuery()->getArrayResult();
+        $results = $qb->getQuery()->getArrayResult();
         $mappedResults = [];
 
         foreach ($results as $result) {
@@ -126,8 +117,6 @@ class StatHit extends EntityRepository
 
     /**
      * @param BroadcastEntity[] $broadcasts
-     *
-     * @return array
      */
     public function getOpenedCountPerDay($broadcasts): array
     {
@@ -139,7 +128,7 @@ class StatHit extends EntityRepository
         $qb->andWhere($qb->expr()->eq($this->getAlias().'.url', ':url'))->setParameter('url', '-');
         $qb->groupBy('day');
         $qb->orderBy('day', 'DESC');
-        $results       = $qb->getQuery()->getArrayResult();
+        $results = $qb->getQuery()->getArrayResult();
         $mappedResults = [];
 
         foreach ($results as $result) {

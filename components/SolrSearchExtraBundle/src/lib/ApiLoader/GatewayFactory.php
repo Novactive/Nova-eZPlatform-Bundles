@@ -40,7 +40,7 @@ class GatewayFactory implements ContainerAwareInterface
         $defaultConnection
     ) {
         $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
-        $this->defaultConnection               = $defaultConnection;
+        $this->defaultConnection = $defaultConnection;
     }
 
     public function buildGateway(HttpClient $client, EndpointRegistry $endpointRegistry)

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,10 +9,12 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle;
 
+use LogicException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -21,9 +24,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class NovaeZMailingBundle extends Bundle
 {
-    /**
-     * @param ContainerBuilder $container
-     */
     public function build(ContainerBuilder $container): void
     {
         parent::build($container);
@@ -38,11 +38,8 @@ class NovaeZMailingBundle extends Bundle
             $extension = $this->createContainerExtension();
             if (null !== $extension) {
                 if (!$extension instanceof ExtensionInterface) {
-                    throw new \LogicException(
-                        sprintf(
-                            'Extension %s must implement '.ExtensionInterface::class.'.',
-                            \get_class($extension)
-                        )
+                    throw new LogicException(
+                        sprintf('Extension %s must implement '.ExtensionInterface::class.'.', \get_class($extension))
                     );
                 }
                 $this->extension = $extension;

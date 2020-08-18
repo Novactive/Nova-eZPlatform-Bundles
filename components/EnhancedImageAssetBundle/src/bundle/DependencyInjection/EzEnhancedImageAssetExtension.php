@@ -66,10 +66,10 @@ class EzEnhancedImageAssetExtension extends Extension implements PrependExtensio
         );
 
         $configs = [
-            'field_templates.yml'   => 'ezpublish',
-            'admin_ui_forms.yml'    => 'ezpublish',
-            'image_variations.yml'  => 'ezpublish',
-            'twig.yml'              => 'twig',
+            'field_templates.yml' => 'ezpublish',
+            'admin_ui_forms.yml' => 'ezpublish',
+            'image_variations.yml' => 'ezpublish',
+            'twig.yml' => 'twig',
         ];
 
         $activatedBundles = array_keys($container->getParameter('kernel.bundles'));
@@ -80,7 +80,7 @@ class EzEnhancedImageAssetExtension extends Extension implements PrependExtensio
 
         foreach ($configs as $fileName => $extensionName) {
             $configFile = __DIR__.'/../Resources/config/'.$fileName;
-            $config     = Yaml::parse((string) file_get_contents($configFile));
+            $config = Yaml::parse((string) file_get_contents($configFile));
             $container->prependExtensionConfig($extensionName, $config);
             $container->addResource(new FileResource($configFile));
         }

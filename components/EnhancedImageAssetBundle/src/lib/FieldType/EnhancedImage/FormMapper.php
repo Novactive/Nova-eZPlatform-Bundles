@@ -40,10 +40,10 @@ class FormMapper extends ImageFormMapper
     public function mapFieldValueForm(FormInterface $fieldForm, FieldData $data)
     {
         $fieldDefinition = $data->fieldDefinition;
-        $formConfig      = $fieldForm->getConfig();
-        $fieldType       = $this->fieldTypeService->getFieldType($fieldDefinition->fieldTypeIdentifier);
-        $names           = $fieldDefinition->getNames();
-        $label           = $fieldDefinition->getName($formConfig->getOption('mainLanguageCode')) ?: reset($names);
+        $formConfig = $fieldForm->getConfig();
+        $fieldType = $this->fieldTypeService->getFieldType($fieldDefinition->fieldTypeIdentifier);
+        $names = $fieldDefinition->getNames();
+        $label = $fieldDefinition->getName($formConfig->getOption('mainLanguageCode')) ?: reset($names);
 
         $fieldForm
             ->add(
@@ -53,7 +53,7 @@ class FormMapper extends ImageFormMapper
                                EnhancedImageFieldType::class,
                                [
                                    'required' => $fieldDefinition->isRequired,
-                                   'label'    => $label,
+                                   'label' => $label,
                                ]
                            )
                            ->addModelTransformer(new ValueTransformer($fieldType, $data->value, Value::class))

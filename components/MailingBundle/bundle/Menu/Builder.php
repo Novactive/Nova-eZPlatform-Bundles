@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Menu;
@@ -42,34 +44,25 @@ class Builder
 
     /**
      * Builder constructor.
-     *
-     * @param FactoryInterface              $factory
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param TranslatorInterface           $translator
      */
     public function __construct(
         FactoryInterface $factory,
         AuthorizationCheckerInterface $authorizationChecker,
         TranslatorInterface $translator
     ) {
-        $this->factory              = $factory;
+        $this->factory = $factory;
         $this->authorizationChecker = $authorizationChecker;
-        $this->translator           = $translator;
+        $this->translator = $translator;
     }
 
-    /**
-     * @param RequestStack $requestStack
-     *
-     * @return ItemInterface
-     */
     public function createAdminMenu(RequestStack $requestStack): ItemInterface
     {
-        $request      = $requestStack->getMasterRequest();
-        $route        = null !== $request ? $request->attributes->get('_route') : null;
+        $request = $requestStack->getMasterRequest();
+        $route = null !== $request ? $request->attributes->get('_route') : null;
         $mailingRoute = 'novaezmailing_mailinglist';
-        $userRoute    = 'novaezmailing_user';
+        $userRoute = 'novaezmailing_user';
 
-        $menu  = $this->factory->createItem('root');
+        $menu = $this->factory->createItem('root');
         $child = $menu->addChild(
             'mailinglists',
             [
@@ -96,21 +89,15 @@ class Builder
         return $menu;
     }
 
-    /**
-     * @param RequestStack           $requestStack
-     * @param EntityManagerInterface $entityManager
-     *
-     * @return ItemInterface
-     */
     public function createCampaignMenu(RequestStack $requestStack, EntityManagerInterface $entityManager): ItemInterface
     {
         $menu = $this->factory->createItem('root');
         $repo = $entityManager->getRepository(Campaign::class);
 
-        $campaigns       = $repo->findAll();
+        $campaigns = $repo->findAll();
         $mailingStatuses = Mailing::STATUSES;
 
-        $userRepo    = $entityManager->getRepository(User::class);
+        $userRepo = $entityManager->getRepository(User::class);
         $mailingRepo = $entityManager->getRepository(Mailing::class);
         foreach ($campaigns as $campaign) {
             if (!$this->authorizationChecker->isGranted([CampaignVoter::VIEW], $campaign)) {
@@ -128,11 +115,11 @@ class Builder
             $child->addChild(
                 "camp_{$campaign->getId()}_subsciptions",
                 [
-                    'route'           => 'novaezmailing_campaign_subscriptions',
+                    'route' => 'novaezmailing_campaign_subscriptions',
                     'routeParameters' => ['campaign' => $campaign->getId()],
-                    'label'           => $this->translator->trans('menu.campaign_menu.subscriptions', [], 'ezmailing').
+                    'label' => $this->translator->trans('menu.campaign_menu.subscriptions', [], 'ezmailing').
                                          " ({$count})",
-                    'attributes'      => [
+                    'attributes' => [
                         'class' => 'leaf subscriptions',
                     ],
                 ]
@@ -142,23 +129,23 @@ class Builder
                 $count = $mailingRepo->countByFilters(
                     [
                         'campaign' => $campaign,
-                        'status'   => $status,
+                        'status' => $status,
                     ]
                 );
                 $child->addChild(
                     "mailing_status_{$status}",
                     [
-                        'route'           => 'novaezmailing_campaign_mailings',
+                        'route' => 'novaezmailing_campaign_mailings',
                         'routeParameters' => [
                             'campaign' => $campaign->getId(),
-                            'status'   => $status,
+                            'status' => $status,
                         ],
-                        'label'           => $this->translator->trans(
+                        'label' => $this->translator->trans(
                             'generic.mailing_statuses.'.$status,
                             [],
                             'ezmailing'
                         )." ({$count})",
-                        'attributes'      => [
+                        'attributes' => [
                             'class' => "leaf {$status}",
                         ],
                     ]
@@ -169,16 +156,13 @@ class Builder
         return $menu;
     }
 
-    /**
-     * @return ItemInterface
-     */
     public function createSaveCancelMenu(): ItemInterface
     {
         $menu = $this->factory->createItem('root');
         $menu->addChild(
             'novaezmailing_save',
             [
-                'label'  => $this->translator->trans('menu.savecancel.save', [], 'ezmailing'),
+                'label' => $this->translator->trans('menu.savecancel.save', [], 'ezmailing'),
                 'extras' => [
                     'icon' => 'save',
                 ],
@@ -188,9 +172,9 @@ class Builder
         $menu->addChild(
             'novaezmailing_cancel',
             [
-                'label'      => $this->translator->trans('menu.savecancel.cancel', [], 'ezmailing'),
+                'label' => $this->translator->trans('menu.savecancel.cancel', [], 'ezmailing'),
                 'attributes' => ['class' => 'btn-danger'],
-                'extras'     => [
+                'extras' => [
                     'icon' => 'circle-close',
                 ],
             ]

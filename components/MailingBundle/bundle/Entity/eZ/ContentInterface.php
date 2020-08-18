@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Entity\eZ;
@@ -25,32 +27,13 @@ interface ContentInterface
      */
     public function getLocationId(): ?int;
 
-    /**
-     * @param int $locationId
-     *
-     * @return ContentInterface
-     */
     public function setLocationId(int $locationId): ContentInterface;
 
-    /**
-     * @return eZContent|null
-     */
     public function getContent(): ?eZContent;
 
-    /**
-     * @param eZContent $content
-     *
-     * @return ContentInterface
-     */
     public function setContent(eZContent $content): ContentInterface;
 
-    /**
-     * @return eZLocation|null
-     */
     public function getLocation(): ?eZLocation;
 
-    /**
-     * @param eZLocation $location
-     */
     public function setLocation(eZLocation $location): ContentInterface;
 }

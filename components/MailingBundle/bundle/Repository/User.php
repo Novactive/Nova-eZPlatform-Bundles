@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Repository;
@@ -30,11 +32,6 @@ class User extends EntityRepository
         return 'u';
     }
 
-    /**
-     * @param array $filters
-     *
-     * @return QueryBuilder
-     */
     public function createQueryBuilderForFilters(array $filters = []): QueryBuilder
     {
         $qb = parent::createQueryBuilderForFilters($filters);
@@ -43,7 +40,7 @@ class User extends EntityRepository
         $mailingLists = null;
         if (isset($filters['campaign'])) {
             /** @var CampaignEntity $campaign */
-            $campaign     = $filters['campaign'];
+            $campaign = $filters['campaign'];
             $mailingLists = $campaign->getMailingLists();
         }
         if (isset($filters['mailingLists'])) {
@@ -97,33 +94,26 @@ class User extends EntityRepository
         return $this->findByFilters(
             [
                 'mailingLists' => $mailingLists,
-                'isApproved'   => true,
-                'status'       => [UserEntity::CONFIRMED, UserEntity::SOFT_BOUNCE],
+                'isApproved' => true,
+                'status' => [UserEntity::CONFIRMED, UserEntity::SOFT_BOUNCE],
             ]
         );
     }
 
     /**
      * @param $mailingLists
-     *
-     * @return int
      */
     public function countValidRecipients($mailingLists): int
     {
         return $this->countByFilters(
             [
                 'mailingLists' => $mailingLists,
-                'isApproved'   => true,
-                'status'       => [UserEntity::CONFIRMED, UserEntity::SOFT_BOUNCE],
+                'isApproved' => true,
+                'status' => [UserEntity::CONFIRMED, UserEntity::SOFT_BOUNCE],
             ]
         );
     }
 
-    /**
-     * @param int $limit
-     *
-     * @return array
-     */
     public function findLastUpdated(int $limit = 10): array
     {
         $qb = $this->createQueryBuilderForFilters([]);

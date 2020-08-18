@@ -10,7 +10,6 @@ trait EntityManagerTrait
     public $entityManager;
 
     /**
-     * @param EntityManagerInterface $entityManager
      * @required
      */
     public function setEntityManager(EntityManagerInterface $entityManager)

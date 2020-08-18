@@ -1,0 +1,2 @@
+_novaezextraRoutes:
+    resource: "@NovaeZExtraBundle/Resources/config/routing/main.yml"

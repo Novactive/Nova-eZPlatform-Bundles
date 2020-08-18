@@ -1,64 +1,37 @@
 {
-  "name": "novactive/ezldapauthenticatorbundle",
-  "type": "ezplatform-bundle",
-  "description": "Novactive eZ LDAP Authenticator Bundle, A bundle to authenticate users against LDAP server",
-  "keywords": [
-    "novactive",
-    "ezplatform",
-    "ldap",
-    "user",
-    "authenticator"
-  ],
-  "license": [
-    "MIT"
-  ],
-  "authors": [
-    {
-      "name": "Novactive",
-      "homepage": "http://www.novactive.com",
-      "email": "dir.tech@novactive.com"
-    }
-  ],
-  "require": {
-    "ezsystems/ezpublish-kernel": "^7.1",
-    "php": "^7.1"
-  },
-  "require-dev": {
-    "friendsofphp/php-cs-fixer": "^2.14",
-    "phpmd/phpmd": "^2.6",
-    "phpstan/phpstan": "^0.11.5",
-    "phpstan/phpstan-symfony": "^0.11.5",
-    "roave/security-advisories": "dev-master",
-    "sebastian/phpcpd": "^4.1",
-    "squizlabs/php_codesniffer": "^3.4"
-  },
-  "autoload": {
-    "psr-4": {
-      "Novactive\\Bundle\\eZLDAPAuthenticatorBundle\\": "src/bundle",
-      "Novactive\\eZLDAPAuthenticator\\": "src/lib"
-    }
-  },
-  "config": {
-    "sort-packages": true
-  },
-  "scripts": {
-    "fix-cs": [
-      "./vendor/bin/php-cs-fixer fix --config=.cs/.php_cs.php",
-      "./vendor/bin/phpmd src text .cs/md_ruleset.xml",
-      "./vendor/bin/phpcpd src",
-      "./vendor/bin/phpcbf -n src --standard=.cs/cs_ruleset.xml",
-      "./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src",
-      "./vendor/bin/phpstan analyze src -l 7"
+    "name": "novactive/ezldapauthenticatorbundle",
+    "type": "ezplatform-bundle",
+    "description": "Novactive eZ LDAP Authenticator Bundle, A bundle to authenticate users against LDAP server",
+    "keywords": [
+        "novactive",
+        "ezplatform",
+        "ldap",
+        "user",
+        "authenticator"
     ],
-    "clean": [
-      "rm -f .php_cs.cache",
-      "rm -rf vendor",
-      "rm -f composer.lock"
+    "license": [
+        "MIT"
     ],
-    "tests": [
-      "./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src",
-      "./vendor/bin/phpmd src text .cs/md_ruleset.xml",
-      "./vendor/bin/phpcpd src"
-    ]
-  }
+    "authors": [
+        {
+            "name": "Novactive",
+            "homepage": "http://www.novactive.com",
+            "email": "dir.tech@novactive.com"
+        }
+    ],
+    "require": {
+        "php": "^7.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Novactive\\Bundle\\eZLDAPAuthenticatorBundle\\": "src/bundle",
+            "Novactive\\eZLDAPAuthenticator\\": "src/lib"
+        }
+    },
+    "extra": {
+        "thanks": {
+            "name": "ezsystems/ezplatform",
+            "url": "https://github.com/ezsystems/ezplatform"
+        }
+    }
 }

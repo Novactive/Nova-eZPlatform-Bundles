@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZRssFeedBundle.
  *
@@ -28,43 +29,34 @@ class RssFeedsService
 
     public function __construct(Repository $repository, UrlAliasRouter $urlAliasRouter, RequestContext $request)
     {
-        $this->repository     = $repository;
+        $this->repository = $repository;
         $this->urlAliasRouter = $urlAliasRouter;
-        $this->request        = $request;
+        $this->request = $request;
     }
 
-    /**
-     * @return mixed
-     */
     public function getUrlDecorator()
     {
         return $this->urlDecorator;
     }
 
-    /**
-     * @param mixed $urlDecorator
-     */
     public function setUrlDecorator($urlDecorator): void
     {
         $this->urlDecorator = $urlDecorator;
     }
 
-    /**
-     * @param $filter
-     */
     public function fetchContent(RssFeeds $rssFeed)
     {
-        $results                = [];
-        $locationService        = $this->getRepository()->getLocationService();
-        $searchService          = $this->getRepository()->getSearchService();
-        $numberObjects          = $rssFeed->getNumberOfObject();
-        $queryFilter            = [];
+        $results = [];
+        $locationService = $this->getRepository()->getLocationService();
+        $searchService = $this->getRepository()->getSearchService();
+        $numberObjects = $rssFeed->getNumberOfObject();
+        $queryFilter = [];
         $mappingFieldIdentifier = [];
 
         foreach ($rssFeed->getFeedItems()->toArray() as $filter) {
-            $filter                                           = $filter->toArray();
-            $criterion                                        = [];
-            $query                                            = new Query();
+            $filter = $filter->toArray();
+            $criterion = [];
+            $query = new Query();
             $mappingFieldIdentifier[$filter['contentTypeId']] = $filter['fieldTypesIdentifier'];
 
             if ($filter['includeSubtreePath']) {
@@ -83,7 +75,7 @@ class RssFeedsService
         }
 
         $query->filter = new Query\Criterion\LogicalOr($queryFilter);
-        $query->limit  = $numberObjects;
+        $query->limit = $numberObjects;
 
         switch ($rssFeed->getSortType()) {
             case RssFeeds::SORT_TYPE_PUBLICATION:
@@ -122,17 +114,11 @@ class RssFeedsService
         return $results;
     }
 
-    /**
-     * @return Repository
-     */
     public function getRepository(): Repository
     {
         return $this->repository;
     }
 
-    /**
-     * @return UrlAliasRouter
-     */
     public function getUrlAliasRouter(): UrlAliasRouter
     {
         return $this->urlAliasRouter;

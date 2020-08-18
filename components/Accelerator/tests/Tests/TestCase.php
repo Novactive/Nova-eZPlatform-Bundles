@@ -21,17 +21,17 @@ use Symfony\Component\Panther\PantherTestCaseTrait;
 
 class TestCase extends BaseTestCase
 {
-    public const CHROME   = 'chrome';
-    public const FIREFOX  = 'firefox';
-    public const BASE_URI = 'https://127.0.0.1:8000';
-
     use PantherTestCaseTrait;
+
+    public const CHROME = 'chrome';
+    public const FIREFOX = 'firefox';
+    public const BASE_URI = 'https://127.0.0.1:8000';
 
     protected function getPantherClient(): PantherClient
     {
         return self::createPantherClient(
             [
-                'browser'           => 'chrome',
+                'browser' => 'chrome',
                 'external_base_uri' => getenv('PANTHER_EXTERNAL_BASE_URI') ?:
                     $_SERVER['PANTHER_EXTERNAL_BASE_URI'] ?? self::BASE_URI,
             ]

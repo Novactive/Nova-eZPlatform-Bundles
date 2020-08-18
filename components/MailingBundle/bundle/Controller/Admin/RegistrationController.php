@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMailingBundle Bundle.
  *
@@ -8,6 +9,7 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
+
 declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
@@ -29,8 +31,6 @@ class RegistrationController
     /**
      * @Route("/accept/{registration}", name="novaezmailing_registration_accept")
      * @Method({"POST"})
-     *
-     * @return JsonResponse
      */
     public function acceptAction(
         Request $request,
@@ -52,8 +52,6 @@ class RegistrationController
 
     /**
      * @Route("/deny/{registration}", name="novaezmailing_registration_deny")
-     *
-     * @return JsonResponse
      */
     public function denyAction(
         Request $request,

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -21,8 +22,6 @@ class AssignSectionSignalSlot extends Slot
     use CachePurgerTrait;
 
     /**
-     * @param Signal $signal
-     *
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function receive(Signal $signal): void

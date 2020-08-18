@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZRssFeedBundle.
  *
@@ -152,8 +153,6 @@ class RssFeedItems
     /**
      * Set rssFeeds.
      *
-     * @param \Novactive\EzRssFeedBundle\Entity\RssFeeds|null $rssFeeds
-     *
      * @return RssFeedItems
      */
     public function setRssFeeds(\Novactive\EzRssFeedBundle\Entity\RssFeeds $rssFeeds = null)
@@ -166,14 +165,14 @@ class RssFeedItems
     public function toArray()
     {
         return [
-            'locationId'           => $this->getSubtreePath(),
-            'includeSubtreePath'   => $this->getIncludeSubtree(),
-            'contentTypeId'        => $this->getContentTypeId(),
+            'locationId' => $this->getSubtreePath(),
+            'includeSubtreePath' => $this->getIncludeSubtree(),
+            'contentTypeId' => $this->getContentTypeId(),
             'fieldTypesIdentifier' => [
-                'title'       => $this->getTitle(),
+                'title' => $this->getTitle(),
                 'description' => $this->getDescription(),
-                'category'    => $this->getCategory(),
-                'media'       => $this->getMedia(),
+                'category' => $this->getCategory(),
+                'media' => $this->getMedia(),
             ],
         ];
     }

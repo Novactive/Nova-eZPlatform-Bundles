@@ -1,43 +1,42 @@
 <?php
+
 /**
- * NovaeZExtraBundle Content Manager
+ * NovaeZExtraBundle Content Manager.
  *
  * @package   Novactive\Bundle\eZExtraBundle
+ *
  * @author    Novactive <dir.tech@novactive.com>
  * @copyright 2015 Novactive
  * @license   https://github.com/Novactive/NovaeZExtraBundle/blob/master/LICENSE MIT Licence
  */
+
 namespace Novactive\Bundle\eZExtraBundle\Core\Manager\eZ;
 
-use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Content as ValueContent;
+use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType as eZContentType;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
-use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
-use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 
 /**
- * Class Content
+ * Class Content.
  */
 class Content
 {
     /**
-     * Repository eZ
+     * Repository eZ.
      *
      * @var Repository
      */
     protected $eZPublishRepository;
 
     /**
-     * Constructor
-     *
-     * @param Repository $api
+     * Constructor.
      */
     public function __construct(Repository $api)
     {
@@ -45,7 +44,7 @@ class Content
     }
 
     /**
-     * Get eZ Repository
+     * Get eZ Repository.
      *
      * @return Repository
      */
@@ -55,7 +54,7 @@ class Content
     }
 
     /**
-     * Easy access to the ContentService
+     * Easy access to the ContentService.
      *
      * @return ContentService
      */
@@ -65,7 +64,7 @@ class Content
     }
 
     /**
-     * Easy access to the ContentTypeService
+     * Easy access to the ContentTypeService.
      *
      * @return ContentTypeService
      */
@@ -75,7 +74,7 @@ class Content
     }
 
     /**
-     * Easy access to the LocationService
+     * Easy access to the LocationService.
      *
      * @return LocationService
      */
@@ -86,7 +85,7 @@ class Content
 
     /**
      * Change the user of the repository
-     * Note: you need to keep the current user if you want to go back on the current user
+     * Note: you need to keep the current user if you want to go back on the current user.
      */
     public function sudoRoot()
     {
@@ -94,7 +93,7 @@ class Content
     }
 
     /**
-     * Create Content Wrapper
+     * Create Content Wrapper.
      *
      * @param string $contentTypeIdentifier
      * @param int    $parentLocationId
@@ -106,8 +105,8 @@ class Content
      */
     public function createContent($contentTypeIdentifier, $parentLocationId, $data, $options = [], $lang = 'eng-US')
     {
-        $contentService      = $this->getContentService();
-        $contentType         = $this->getContentTypeService()->loadContentTypeByIdentifier($contentTypeIdentifier);
+        $contentService = $this->getContentService();
+        $contentType = $this->getContentTypeService()->loadContentTypeByIdentifier($contentTypeIdentifier);
         $contentCreateStruct = $contentService->newContentCreateStruct($contentType, $lang);
 
         if (!empty($options['remoteId'])) {
@@ -138,26 +137,25 @@ class Content
             $locationCreateStruct->priority = $options['priority'];
         }
 
-        $draft = $contentService->createContent($contentCreateStruct, array ($locationCreateStruct));
+        $draft = $contentService->createContent($contentCreateStruct, [$locationCreateStruct]);
 
         return $this->publishVersion($draft, $options);
     }
 
     /**
-     * Update Content Wrapper
+     * Update Content Wrapper.
      *
-     * @param ValueContent $content
-     * @param array        $data
-     * @param array        $options
-     * @param string       $lang
+     * @param array  $data
+     * @param array  $options
+     * @param string $lang
      *
      * @return ValueContent
      */
     public function updateContent(ValueContent $content, $data, $options = [], $lang = 'eng-US')
     {
-        $contentService                           = $this->getContentService();
-        $contentDraft                             = $contentService->createContentDraft($content->contentInfo);
-        $contentUpdateStruct                      = $contentService->newContentUpdateStruct();
+        $contentService = $this->getContentService();
+        $contentDraft = $contentService->createContentDraft($content->contentInfo);
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
         $contentUpdateStruct->initialLanguageCode = $lang;
 
         $this->autoFillStruct(
@@ -172,19 +170,19 @@ class Content
     }
 
     /**
-     * Publish a version wrapper
+     * Publish a version wrapper.
      *
-     * @param ValueContent $draft
-     * @param array        $options
+     * @param array $options
      *
      * @return ValueContent
      */
     protected function publishVersion(ValueContent $draft, $options = [])
     {
-        if ((array_key_exists('callback_before_publish', $options)) &&
+        if (
+            (array_key_exists('callback_before_publish', $options)) &&
             (is_callable($options['callback_before_publish']))
         ) {
-            $contentService      = $this->getContentService();
+            $contentService = $this->getContentService();
             $contentUpdateStruct = $contentService->newContentUpdateStruct();
             $options['callback_before_publish']($draft, $contentUpdateStruct);
             $draft = $contentService->updateContent($draft->versionInfo, $contentUpdateStruct);
@@ -193,12 +191,13 @@ class Content
         $content = $this->getContentService()->publishVersion($draft->versionInfo);
 
         if (count($options) > 0) {
-            $doUpdate       = false;
+            $doUpdate = false;
             $contentService = $this->getContentService();
             $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
             if (!empty($options['created'])) {
                 $metadataUpdate->publishedDate = $options['created'];
-                if ($content->contentInfo->publishedDate->getTimestamp() !=
+                if (
+                    $content->contentInfo->publishedDate->getTimestamp() !=
                     $metadataUpdate->publishedDate->getTimestamp()
                 ) {
                     $doUpdate = true;
@@ -207,13 +206,14 @@ class Content
 
             if (!empty($options['modified'])) {
                 $metadataUpdate->modificationDate = $options['modified'];
-                if ($content->contentInfo->modificationDate->getTimestamp() !=
+                if (
+                    $content->contentInfo->modificationDate->getTimestamp() !=
                     $metadataUpdate->modificationDate->getTimestamp()
                 ) {
                     $doUpdate = true;
                 }
             }
-            if ($doUpdate === true) {
+            if (true === $doUpdate) {
                 $contentService->updateContentMetadata($content->contentInfo, $metadataUpdate);
             }
         }
@@ -222,15 +222,13 @@ class Content
     }
 
     /**
-     * Autofill the Struct with the available field in $data
+     * Autofill the Struct with the available field in $data.
      *
-     * @param eZContentType $contentType
-     * @param ValueObject   $contentStruct
-     * @param array         $data
+     * @param array $data
      */
     protected function autoFillStruct(eZContentType $contentType, ValueObject $contentStruct, $data)
     {
-        /** @var ContentUpdateStruct|ContentUpdateStruct $contentStruct */
+        /* @var ContentUpdateStruct|ContentUpdateStruct $contentStruct */
 
         foreach ($contentType->getFieldDefinitions() as $field) {
             /** @var FieldDefinition $field */
@@ -244,14 +242,14 @@ class Content
     }
 
     /**
-     * Create/Update Sugar for trying to update else to create
+     * Create/Update Sugar for trying to update else to create.
      *
-     * @param string  $contentTypeIdentifier
-     * @param integer $parentLocationId
-     * @param array   $data
-     * @param string  $remoteId
-     * @param array   $options
-     * @param string  $lang
+     * @param string $contentTypeIdentifier
+     * @param int    $parentLocationId
+     * @param array  $data
+     * @param string $remoteId
+     * @param array  $options
+     * @param string $lang
      *
      * @return ValueContent
      */
@@ -266,7 +264,7 @@ class Content
         $options['remoteId'] = $remoteId;
         try {
             $content = $this->getContentService()->loadContentByRemoteId($remoteId);
-            if ((array_key_exists('do_no_update', $options)) && ($options['do_no_update'] == true)) {
+            if ((array_key_exists('do_no_update', $options)) && (true == $options['do_no_update'])) {
                 return $content;
             }
             $newContent = $this->updateContent($content, $data, $options, $lang);
@@ -284,14 +282,14 @@ class Content
     }
 
     /**
-     * Get + Create (no update) Sugar for trying to update else to create
+     * Get + Create (no update) Sugar for trying to update else to create.
      *
-     * @param string  $contentTypeIdentifier
-     * @param integer $parentLocationId
-     * @param array   $data
-     * @param string  $remoteId
-     * @param array   $options
-     * @param string  $lang
+     * @param string $contentTypeIdentifier
+     * @param int    $parentLocationId
+     * @param array  $data
+     * @param string $remoteId
+     * @param array  $options
+     * @param string $lang
      *
      * @return ValueContent
      */
@@ -316,14 +314,13 @@ class Content
     }
 
     /**
-     * Add Location(s) to the content
+     * Add Location(s) to the content.
      *
-     * @param ValueContent $content
-     * @param array        $destinationLocationIds
+     * @param array $destinationLocationIds
      */
     public function addLocation(ValueContent $content, $destinationLocationIds = [])
     {
-        $existingLocations    = $this->getLocationService()->loadLocations($content->contentInfo);
+        $existingLocations = $this->getLocationService()->loadLocations($content->contentInfo);
         $existingLocationsIds = [];
         foreach ($existingLocations as $existingLocation) {
             $existingLocationsIds[] = $existingLocation->parentLocationId;
@@ -335,6 +332,5 @@ class Content
                 $this->getLocationService()->createLocation($content->contentInfo, $locationCreateStruct);
             }
         }
-
     }
 }
