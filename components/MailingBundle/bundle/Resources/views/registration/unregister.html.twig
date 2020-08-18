@@ -1,0 +1,14 @@
+{% trans_default_domain "ezmailing" %}
+{% extends pagelayout %}
+
+{% block content %}
+    {% if form is defined %}
+        {{ form_start(form) }}
+        {{ form_row(form.user) }}
+        {{ form_row(form.mailingLists) }}
+        <input type="submit" value="Unregister" name="Unregister"/>
+        {{ form_end(form) }}
+    {% else %}
+        <p>{{ "register.unregister.confirmation_email_message"|trans }}</p>
+    {% endif %}
+{% endblock %}

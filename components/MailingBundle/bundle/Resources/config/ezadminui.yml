@@ -1,0 +1,32 @@
+services:
+
+    nova_ezmailing.ezadminui.component.stylesheets:
+         parent: EzSystems\EzPlatformAdminUi\Component\TwigComponent
+         public: false
+         arguments:
+            $template: "@@NovaeZMailing/ezadminui/stylesheets.html.twig"
+         tags:
+             - { name: ezplatform.admin_ui.component, group: 'stylesheet-head' }
+
+    nova_ezmailing.ezadminui.component.javascripts:
+         parent: EzSystems\EzPlatformAdminUi\Component\TwigComponent
+         public: false
+         arguments:
+             $template: "@@NovaeZMailing/ezadminui/javascripts.html.twig"
+         tags:
+             - { name: ezplatform.admin_ui.component, group: 'script-body' }
+
+    Novactive\Bundle\eZMailingBundle\Listener\TopMenu:
+        tags:
+            - { name: kernel.event_listener, event: "ezplatform_admin_ui.menu_configure.main_menu", method: "onMenuConfigure" }
+
+    Novactive\Bundle\eZMailingBundle\Listener\LocationViewGroupTab:
+        autowire: true
+        tags:
+            - { name: kernel.event_listener, event: "ezplatform.tab.group.pre_render", method: "onTabGroupPreRender" }
+
+    Novactive\Bundle\eZMailingBundle\Core\Tab\Campaigns:
+        parent: EzSystems\EzPlatformAdminUi\Tab\AbstractTab
+
+    Novactive\Bundle\eZMailingBundle\Core\Tab\Mailings:
+        parent: EzSystems\EzPlatformAdminUi\Tab\AbstractTab

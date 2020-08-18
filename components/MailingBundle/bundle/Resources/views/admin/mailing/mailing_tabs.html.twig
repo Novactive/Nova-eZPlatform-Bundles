@@ -1,0 +1,140 @@
+{% trans_default_domain 'ezmailing' %}
+<div class="item-tabs-content">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" href="#novaezmailing-campaign-preview" data-toggle="tab" role="tab">{{"mailing.mailing_tabs.mailing"|trans}}</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#novaezmailing-content-preview" data-toggle="tab" role="tab">{{"mailing.mailing_tabs.associated_content"|trans}}</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#novaezmailing-mailings-preview" data-toggle="tab" role="tab">{{"mailing.mailing_tabs.campaign"|trans}}</a>
+        </li>
+        {% if item.broadcasts|length > 0 %}
+            <li class="nav-item">
+                <a class="nav-link" href="#novaezmailing-mailings-broadcasts" data-toggle="tab" role="tab">{{"mailing.mailing_tabs.broadcasts"|trans}}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#novaezmailing-mailings-stats" data-toggle="tab" role="tab">{{"mailing.mailing_tabs.stats"|trans}}</a>
+            </li>
+        {% endif %}
+    </ul>
+    <div class="novaezmailing-tabs-content tab-content">
+        <div class="novaezmailing-ez-campaign-view tab-pane active" role="tabpanel" id="novaezmailing-campaign-preview">
+            {% include "@NovaeZMailing/admin/mailing/details.html.twig" with { item: item} only %}
+        </div>
+        <div class="novaezmailing-ez-content-view tab-pane" role="tabpanel" id="novaezmailing-content-preview">
+            {{ preview|raw }}
+        </div>
+
+        <div class="novaezmailing-ez-mailings-view tab-pane" role="tabpanel" id="novaezmailing-mailings-preview">
+            {% include "@NovaeZMailing/admin/campaign/details.html.twig" with { item: item.campaign} only %}
+        </div>
+        {% if item.broadcasts|length > 0 %}
+            <div class="novaezmailing-ez-mailings-view tab-pane" role="tabpanel" id="novaezmailing-mailings-broadcasts">
+                {% include "@NovaeZMailing/admin/common/list/broadcasts.html.twig" with { items: item.broadcasts} only %}
+            </div>
+            <div class="novaezmailing-ez-mailings-view tab-pane" role="tabpanel" id="novaezmailing-mailings-stats">
+                {% include "NovaeZMailingBundle:admin/common/list:broadcast_graphs.html.twig" with { items: item.broadcasts } %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="novaezmailing-button-actions float-right">
+        <a target="_blank" href="{{ url('_novaezmailing_ez_content_view', { locationId: item.location.id, contentId: item.content.id, mailingId: item.id, siteaccess: item.siteaccess }) }}" class="btn btn-sm btn-info">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#view"></use>
+            </svg>
+            <span>{{"mailing.mailing_tabs.views"|trans}}</span>
+        </a>
+        <a {% if workflow_can(item,'edit') %} href="{{ path("novaezmailing_mailing_edit", {mailing: item.id}) }}" {% else %} disabled {% endif %} class="btn btn-sm btn-secondary">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#edit"></use>
+            </svg>
+            <span>{{"mailing.mailing_tabs.edit"|trans}}</span>
+        </a>
+        <a {% if workflow_can(item,'archive') %} href="{{ path("novaezmailing_mailing_archive", {mailing: item.id}) }}" {% else %} disabled {% endif %} class="btn btn-sm btn-warning">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#move"></use>
+            </svg>
+            <span>{{"mailing.mailing_tabs.archive"|trans}}</span>
+        </a>
+        <a {% if workflow_can(item,'cancel') %} href="{{ path("novaezmailing_mailing_cancel", {mailing: item.id}) }}" {% else %} disabled {% endif %} class="btn btn-sm btn-danger">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#trash"></use>
+            </svg>
+            <span>{{"mailing.mailing_tabs.abort"|trans}}</span>
+        </a>
+    </div>
+    <div class="novaezmailing-button-actions float-left">
+        <button type="button" {% if not workflow_can(item,'test') %} disabled {% endif %} class="btn btn-sm btn-dark" data-toggle="modal" data-target="#novaezmailingmailingtestmodal">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#checkmark"></use>
+            </svg>
+            <span>{{"mailing.mailing_tabs.test"|trans}}</span>
+        </button>
+        <button type="button" {% if not workflow_can(item,'confirm') %} disabled {% endif %} class="btn btn-sm btn-success" data-toggle="modal" data-target="#novaezmailingmailingconfirmmodal">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#publish"></use>
+            </svg>
+            <span>{{"mailing.mailing_tabs.confirm"|trans}}</span>
+        </button>
+        <button type="button" class="btn btn-sm btn-primary js-novaezmailing-create-content" data-parent-location-id="{{ item.location.id }}">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#create"></use>
+            </svg>
+            <span>{{"mailing.mailing_tabs.create_content"|trans}}</span>
+        </button>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="novaezmailingmailingtestmodal">
+        <div class="modal-dialog" role="document">
+            <form class="modal-content" action="{{ path("novaezmailing_mailing_test", {mailing: item.id}) }}" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{"mailing.mailing_tabs.test_mailing"|trans}}: {{ item.name }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>{{ "mailing.mailing_tabs.report_mail1"|trans }} <strong>{{ item.campaign.reportEmail }}</strong> {{"mailing.mailing_tabs.report_mail2"|trans}}.</p>
+                    <p>{{ "mailing.mailing_tabs.add_cc"|trans|raw }}</p>
+                    <label class="sr-only" for="ccEmailTest">{{"mailing.mailing_tabs.email"|trans}}</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">@</div>
+                        </div>
+                        <input type="email" name="cc" class="form-control" id="ccEmailTest" placeholder={{"mailing.mailing_tabs.email"|trans}}/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">{{"mailing.mailing_tabs.send_test"|trans}}</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{"mailing.mailing_tabs.cancel"|trans}}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="novaezmailingmailingconfirmmodal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{"mailing.mailing_tabs.confirm_sending"|trans}}: {{ item.name }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>{{"mailing.mailing_tabs.mailing_lists_count1"|trans}} {{ item.campaign.mailingLists|length }} {{"mailing.mailing_tabs.mailing_lists_count2"|trans}}:</p>
+                    <ul>
+                        {% for mailingList in item.campaign.mailingLists %}
+                            <li>{{ mailingList.name }}</li>
+                        {% endfor %}
+                    </ul>
+                    <p>{{"mailing.mailing_tabs.mailing_list_reach"|trans}} {{ totalRecipients }}.</p>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-success" href="{{ path("novaezmailing_mailing_confirm", {mailing: item.id}) }}">{{"mailing.mailing_tabs.confirm"|trans}}</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{"mailing.mailing_tabs.cancel"|trans}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

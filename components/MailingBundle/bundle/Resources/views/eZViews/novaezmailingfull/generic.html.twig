@@ -1,0 +1,32 @@
+{% trans_default_domain 'ezmailing' %}
+{% extends "@NovaeZMailing/eZViews/mailing_base.html.twig" %}
+
+{% block preheader_message %}##FIRSTNAME## ##LASTNAME## (##EMAIL##){% endblock %}
+
+{% block body %}
+    <h2>{{ "novaezmailingfull.generic.hello"|trans }} ##FIRSTNAME## ##LASTNAME## (##EMAIL##)</h2>
+
+    <p>{{ "novaezmailingfull.generic.generic_view"|trans }}</p>
+    <hr/>
+    <a href="http://www.novactive.us">{{ "novaezmailingfull.generic.nova_test_tracking_link"|trans }}</a><br/>
+    <a href="http://ez.no">{{ "novaezmailingfull.generic.ez_test_tracking_link"|trans }}</a><br/>
+    <p><strong>{{ "novaezmailingfull.generic.mailing"|trans }}</strong>: {{ mailing.name }}</p>
+    <p><strong>{{ "novaezmailingfull.generic.associated_content"|trans }}</strong>: {{ ez_content_name(mailing.content) }}</p>
+    <p><strong>{{ "novaezmailingfull.generic.campaign"|trans }}</strong>: {{ mailing.campaign.name }}</p>
+    {% if mailing.campaign.content is not null %}
+        <p><strong>{{ "novaezmailingfull.generic.associated_content"|trans }}</strong>: {{ ez_content_name(mailing.campaign.content) }}</p>
+    {% endif %}
+    <hr/>
+
+    <p>{{ "novaezmailingfull.generic.define_a_view1"|trans }}</p>
+    <p>{{ "novaezmailingfull.generic.define_a_view2"|trans }}</p>
+    <pre style="background: #aaa; padding: 10px">
+content_view:
+    novaezmailingfull:
+        folder:
+            template: novaezmailingfull\folder.html.twig
+            match:
+                Identifier\ContentType: [folder]
+</pre>
+    <hr/>
+{% endblock %}

@@ -1,0 +1,6 @@
+<canvas
+        class="nova-ezmailing-chart"
+        data-type="{{ chart.type }}"
+        data-data="{{ chart.data|json_encode|e('html_attr') }}"
+        data-options="{{ chart.options|json_encode|e('html_attr') }}"
+></canvas>

@@ -1,0 +1,42 @@
+workflows:
+    mailing:
+        type: 'state_machine'
+        marking_store:
+            type: 'single_state'
+            arguments:
+                - 'status'
+        supports:
+            - Novactive\Bundle\eZMailingBundle\Entity\Mailing
+        places:
+            - draft
+            - tested
+            - pending
+            - processing
+            - sent
+            - aborted
+            - archived
+        transitions:
+            edit:
+                from: [draft, tested, aborted, archived]
+                to: draft
+            test:
+                from: [draft,tested]
+                to: tested
+            confirm:
+                from: tested
+                to: pending
+            process:
+                from: pending
+                to: processing
+            finish:
+                from: processing
+                to: sent
+            cancel:
+                from: pending
+                to: aborted
+            archive:
+                from: [draft, sent]
+                to : archived
+            reloop:
+                from: sent
+                to: pending

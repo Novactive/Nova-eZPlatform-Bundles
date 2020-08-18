@@ -1,0 +1,22 @@
+{% trans_default_domain "ezmailing" %}
+{% extends "@NovaeZMailing/eZViews/mailing_base.html.twig" %}
+
+{% block unregistrer %}{% endblock %}
+
+{% block preheader_message %}
+    {{ "messages.start_sending.being_sent1"|trans }} {{ item.name }} #{{ item.id }} {{ "messages.start_sending.being_sent2"|trans }}.
+{% endblock %}
+
+{% block body %}
+    <p>{{ "messages.start_sending.being_sent1"|trans }} {{ item.name }} #{{ item.id }} {{ "messages.start_sending.being_sent2"|trans }}.</p>
+    <p>{{ "messages.start_sending.associated_content"|trans }} {{ ez_content_name(item.content) }}</p>
+
+    <p>{{ "messages.start_sending.part_of_campaign"|trans }} {{ item.campaign.name }} #{{ item.campaign.id }}</p>
+
+    <p>{{ "messages.start_sending.campaign_ml_count1"|trans }} {{ item.campaign.mailingLists|length }} {{ "messages.start_sending.campaign_ml_count2"|trans }}:</p>
+    <ul>
+        {% for mailingList in item.campaign.mailingLists %}
+            <li>{{ mailingList.name }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

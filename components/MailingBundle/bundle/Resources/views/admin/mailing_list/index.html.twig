@@ -1,0 +1,57 @@
+{% extends "@NovaeZMailing/admin/layout/pagelayout.html.twig" %}
+{% trans_default_domain 'ezmailing' %}
+
+{% block novezmailing_breadcrumb %}
+    <ol class="breadcrumb px-4">
+        <li class="breadcrumb-item"><a href="{{ path("novaezmailing_dashboard_index") }}">Nova eZ Mailing</a></li>
+        <li class="breadcrumb-item active">{{"campaign.breadcrumb.mailing_list"|trans}}</li>
+    </ol>
+{% endblock %}
+{% block novezmailing_title %}<img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/mailinglist.png") }}" class="nova-icon" /> {{"mailing_list.index.title"|trans}}{% endblock %}
+{% block novezmailing_subtitle %}{{"mailing_list.index.subtitle"|trans}}{% endblock %}
+
+{% block content %}
+    <table class="table table-hover table-sm">
+        <thead>
+        <tr>
+            <th class="text-center">ID</th>
+            <th>{{"mailing_list.index.name"|trans}}</th>
+            <th class="text-center">{{"mailing_list.index.approbation"|trans}}</th>
+            <th class="text-center">{{"generic.users.table.updated"|trans}}</th>
+            <th class="text-center">{{"generic.users.table.created"|trans}}</th>
+            <th class="text-center">{{"mailing_list.index.registrations_count"|trans}}</th>
+            <th class="text-center"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in items if is_granted('view', item) %}
+            <tr>
+                <td class="text-center">{{ item.id }}</td>
+                <td><a href="{{ path('novaezmailing_mailinglist_show', {'mailingList':item.id}) }}">{{ item.name }}</a>
+                </td>
+                {% set yesText = 'mailing_list.index.yes'|trans() %}
+                {% set noText = 'mailing_list.index.no'|trans() %}
+                <td class="text-center">{{ item.withApproval ? yesText : noText }}</td>
+                <td class="text-center">{{ item.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                <td class="text-center">{{ item.updated|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                <td class="text-center">{{ item.registrations|length }}</td>
+                <td class="text-center">
+                    <a href="{{ path("novaezmailing_mailinglist_edit", {'mailinglist': item.id} ) }}" class="edit-button">
+                        <svg class="ez-icon">
+                            <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#edit"></use>
+                        </svg>
+                    </a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="novaezmailing-button-actions float-right">
+        <a class="btn btn-sm btn-secondary" href="{{ path('novaezmailing_mailinglist_create') }}">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#create"></use>
+            </svg>
+            <span>{{"mailing_list.index.create_mailing_list"|trans}}</span>
+        </a>
+    </div>
+{% endblock %}

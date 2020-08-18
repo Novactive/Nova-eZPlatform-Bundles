@@ -1,0 +1,8 @@
+system:
+    default:
+        content_view:
+            novaezmailingfull:
+                generic:
+                    template: "@NovaeZMailing/eZViews/novaezmailingfull/generic.html.twig"
+                    match:
+                        Identifier\ContentType: ['-']

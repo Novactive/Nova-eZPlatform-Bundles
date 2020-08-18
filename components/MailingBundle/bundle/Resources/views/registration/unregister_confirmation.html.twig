@@ -1,0 +1,11 @@
+{% trans_default_domain "ezmailing" %}
+{% extends pagelayout %}
+
+{% block content %}
+
+    {% if isConfirmed %}
+        <p>{{ "register.unregister_confirmation.confirmed"|trans }}</p>
+    {% else %}
+        <p>{{ "register.unregister_confirmation.failed"|trans }}</p>
+    {% endif %}
+{% endblock %}

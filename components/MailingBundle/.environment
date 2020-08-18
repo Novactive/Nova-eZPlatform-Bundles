@@ -1,0 +1,2 @@
+# Manage
+export MAILER_HOST=$PLATFORM_SMTP_HOST

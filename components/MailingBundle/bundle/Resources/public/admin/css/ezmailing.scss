@@ -1,0 +1,197 @@
+$eZDarkBackground: #555555;
+$eZMediumBackground: #E5E3E3;
+$eZLightBackground: #F5F5F5;
+
+.novaezmailing-app {
+
+    h1, h2, h3 {
+        color: rgba(51, 51, 51, .9);
+    }
+
+    a[data-toggle="popover"] {
+        cursor: pointer;
+    }
+
+    header {
+        .navbar.ez-page-title {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            display:flex;
+        }
+        .ez-header-container {
+            background: $eZMediumBackground;
+        }
+        border-bottom: 2px solid $eZMediumBackground;
+        .novaezmailing-search {
+            padding-top: 35px;
+        }
+        input[type="search"] {
+            background: #fff;
+            color: #000;
+        }
+    }
+    .sidebar {
+        padding-top: 5px;
+        li.current {
+            a {
+                font-weight: bold;
+                color: #F05A22;
+            }
+        }
+    }
+    .innercontent {
+        padding-left: 0;
+        padding-right: 0;
+        .novaezmailing-tabs-content {
+            padding: 10px;
+            border: 2px solid #E5E3E3;
+            border-top: none;
+            max-height: 400px;
+            height: 400px;
+            overflow: auto;
+        }
+        .novaezmailing-ez-content-view {
+
+            .container {
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 0;
+            }
+            .ez-raw-content-title, .ez-fieldgroup-name {
+                display: none !important;
+            }
+
+            .ez-fieldgroup .ez-content-field {
+                padding: 0;
+            }
+        }
+
+        .novaezmailing-registration-approbation {
+            button:not([disabled]) {
+                cursor: pointer;
+            }
+        }
+
+    }
+    .novaezmailing-broadcast-charts-group {
+        clear: both;
+    }
+
+    .ez-context-menu {
+        padding-top: 30px;
+    }
+
+    form {
+        .form-check {
+            .form-check-label {
+                display: inline-block;
+            }
+        }
+
+        .form-group {
+            .d-block {
+                display: inline !important;
+            }
+        }
+        fieldset.form-group legend {
+            font-weight: 700;
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 0;
+            margin-top: 20px;
+        }
+
+    }
+    .item-tabs-content {
+        padding-bottom: 35px;
+    }
+    .novaezmailing-button-actions {
+        padding: 5px;
+        a, button {
+            svg {
+                fill: #fff;
+            }
+            span {
+                color: #fff;
+                margin-top: 7px;
+                padding-left: 5px;
+                display: block;
+                float: right;
+            }
+        }
+    }
+
+    .edit-button svg {
+        fill: #f15a10;
+        width: 20px;
+        height: 20px;
+    }
+
+    table.excel-example {
+        th, td {
+            padding: 0;
+        }
+        font-size: 10px;
+
+    }
+    footer {
+        p {
+            padding-top: 25px;
+            font-size: 0.75em;
+            color: #ddd;
+            text-align: center;
+            width: 100%;
+        }
+    }
+}
+
+.novaezmailing-ez-mailings-view {
+    .edit-button svg {
+        fill: #f15a10;
+        width: 20px;
+        height: 20px;
+    }
+
+    .edit-button.disabled svg {
+        fill: #ccc;
+    }
+}
+
+.autocomplete-suggestions {
+    border: 1px solid #999;
+    background: #FFF;
+    overflow: auto;
+    .autocomplete-suggestion {
+        padding: 2px 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        cursor: pointer;
+    }
+    .autocomplete-selected {
+        background: #F0F0F0;
+    }
+    .autocomplete-suggestions strong {
+        font-weight: normal;
+        color: #3399FF;
+    }
+    .autocomplete-group {
+        padding: 2px 5px;
+    }
+    .autocomplete-group strong {
+        display: block;
+        border-bottom: 1px solid #000;
+    }
+}
+
+.tab-pane {
+    .novaezmailing-broadcast-charts-group .graph-broadcast {
+        width: 600px;
+        height: 300px;
+        float: left;
+        margin: 20px 10px 10px 10px;
+    }
+}
+
+.campaigns > ul > li > label:hover {
+    font-weight: bold;
+}

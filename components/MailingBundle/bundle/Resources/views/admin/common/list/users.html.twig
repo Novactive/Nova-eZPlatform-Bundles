@@ -1,0 +1,94 @@
+{% set withRegistrations = withRegistrations is defined ? withRegistrations : true %}
+{% set withStatus = withStatus is defined ? withStatus : true %}
+{% import "@NovaeZMailing/admin/common/registration_approbation_button.html.twig" as ApprobationButton %}
+{% trans_default_domain 'ezmailing' %}
+
+<table class="table table-striped table-hover table-sm">
+    <thead>
+    <tr>
+        <th class="text-center">ID</th>
+        <th>{{"generic.users.table.email"|trans}}</th>
+        {% if withStatus %}
+            <th>{{"generic.users.table.status"|trans}}</th>
+        {% endif %}
+        <th class="text-center">{{"generic.users.table.country"|trans}}</th>
+        <th class="text-center">{{"generic.users.table.origin"|trans}}</th>
+        {% if currentMailingList is defined and currentMailingList.withApproval %}
+            <th class="text-center">{{"generic.users.table.approbation"|trans}}</th>
+        {% endif %}
+
+        {% if not withRegistrations %}
+            <th class="text-center">{{"generic.users.table.updated"|trans}}</th>
+            <th class="text-center">{{"generic.users.table.created"|trans}}</th>
+        {% else %}
+            <th class="text-center">{{"generic.users.table.registrations"|trans}}</th>
+        {% endif %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in items %}
+        <tr>
+            <td class="text-center">{{ item.id }}</td>
+            <td><a href="{{ path('novaezmailing_user_show', {user:item.id}) }}" data-toggle="popover"
+                   title="{{ item.gender }} {{ item.firstname }} {{ item.lastName }}"
+                   data-content="
+                        {% if item.birthDate is not empty %}<p><strong>{{"generic.users.table.birthdate"|trans}}</strong>: {{ item.birthDate|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date)|default('') }}</p>{% endif %}
+                        {% if item.phone is not empty %}<p><strong>{{"generic.users.table.phone"|trans}}</strong>: {{ item.phone }}</p>{% endif %}
+                        {% if item.zipcode is not empty or item.city is not empty or item.city is not empty or item.state is not empty %}<p><strong>{{"generic.users.table.location"|trans}}</strong>:{{ item.zipcode }} {{ item.city }} {{ item.state }}</p>{% endif %}
+                        {% if item.jobTitle is not empty or item.company is not empty %}<p><strong>{{"generic.users.table.job"|trans}}</strong>: {{ item.jobTitle }} {{ item.company }}</p>{% endif %}
+                   "
+                   data-html="true"
+                   data-trigger="hover"
+                >{{ item.email }}</a></td>
+            {% if withStatus %}
+                <td><span class="badge badge-{{ item.statusStyle }}">{{ ("generic.users.status."~item.status)|trans }}</span></td>
+            {% endif %}
+            <td class="text-center">{{ item.country|country_name }}</td>
+            <td class="text-center">{{ item.origin }}</td>
+            {% if currentMailingList is defined %}
+                {% for registration in item.registrations %}
+                    {% if registration.mailingList.id == currentMailingList.id %}
+                        {% if currentMailingList is defined and currentMailingList.withApproval %}
+                            <td class="text-center">{{ ApprobationButton.show(registration) }}</td>
+                        {% endif %}
+                        <td class="text-center">{{ registration.updated|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                        <td class="text-center">{{ registration.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                    {% endif %}
+                {% endfor %}
+            {% elseif not withRegistrations %}
+                <td class="text-center">{{ item.updated|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                <td class="text-center">{{ item.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+            {% endif %}
+            {% if withRegistrations %}
+                <td>
+                    {% if item.registrations|length > 0 %}
+                        <table class="table table-striped table-hover table-sm">
+                            <tr>
+                                <th class="text-center">{{"generic.users.table.mailing_list"|trans}}</th>
+                                <th align="center">{{"generic.users.table.approbation"|trans}}</th>
+                                <th align="center">{{"generic.users.table.updated"|trans}}</th>
+                                <th align="center">{{"generic.users.table.created"|trans}}</th>
+                            </tr>
+                            {% for registration in item.registrations %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ path('novaezmailing_mailinglist_show',{mailingList:registration.mailinglist.id}) }}">
+                                            <img src="{{ asset("/bundles/novaezmailing/admin/images/16x16/mailinglist.png") }}" class="nova-icon" />
+                                            {{ registration.mailinglist.name }}
+                                        </a>
+                                    </td>
+                                    <td align="center">{{ ApprobationButton.show(registration) }}</td>
+                                    <td align="center">{{ registration.updated|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                                    <td align="center">{{ registration.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% else %}
+                        {{"common.list.users.no_registrations"|trans}}.
+                    {% endif %}
+                </td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

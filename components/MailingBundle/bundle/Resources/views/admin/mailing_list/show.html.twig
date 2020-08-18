@@ -1,0 +1,86 @@
+{% extends '@NovaeZMailing/admin/layout/pagelayout.html.twig' %}
+{% trans_default_domain 'ezmailing' %}
+
+{% block novezmailing_breadcrumb %}
+    <ol class="breadcrumb px-4">
+        <li class="breadcrumb-item"><a href="{{ path("novaezmailing_dashboard_index") }}">Nova eZ Mailing</a></li>
+        <li class="breadcrumb-item"><a href="{{ path("novaezmailing_mailinglist_index") }}">{{"campaign.breadcrumb.mailing_list"|trans}}</a></li>
+        <li class="breadcrumb-item active">{{ item.name }}</li>
+    </ol>
+{% endblock %}
+{% block novezmailing_title %}
+    <img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/mailinglist.png") }}" class="nova-icon"/> {{ item.name }}
+{% endblock %}
+{% block novezmailing_subtitle %}
+    {{"mailing_list.show.subtitle"|trans}}
+{% endblock %}
+
+{% block content %}
+    {% if pager.nbResults > 0 %}
+
+        {% include "@NovaeZMailing/admin/common/list/users_filterer.html.twig" with {
+            route: "novaezmailing_mailinglist_show",
+            limit: pager.maxPerPage,
+            currentStatus: currentStatus,
+            statuses: statuses,
+            extraParams: {mailingList: item.id}
+        } only %}
+        {% include "@NovaeZMailing/admin/common/list/users.html.twig" with {items:pager.currentPageResults,currentMailingList: item, withRegistrations: false} only %}
+        <div class="pagerfanta">
+            {{ pagerfanta(pager, 'twitter_bootstrap4') }}
+        </div>
+    {% else %}
+        <p>{{"mailing_list.show.mailing_list_empty"|trans}}</p>
+    {% endif %}
+    <div class="novaezmailing-button-actions float-right">
+        <a class="btn btn-sm btn-secondary" href="{{ path("novaezmailing_mailinglist_edit", {mailinglist: item.id}) }}">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#edit"></use>
+            </svg>
+            <span>{{"button.actions.edit"|trans}}</span>
+        </a>
+        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#novaezmailingconfirmremovemailinglistmodal">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#trash"></use>
+            </svg>
+            <span>{{"button.actions.delete"|trans}}</span>
+        </button>
+    </div>
+    <div class="novaezmailing-button-actions float-left">
+        <a class="btn btn-sm btn-success" href="{{ path('novaezmailing_mailinglist_import', {mailinglist:item.id}) }}">
+            <svg class="ez-icon">
+                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#catalog"></use>
+            </svg>
+            <span>{{"button.actions.import_users"|trans}}</span>
+        </a>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="novaezmailingconfirmremovemailinglistmodal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{"generic.confirm_removal"|trans}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>{{"mailing_list.show.removal_details1"|trans}}</p>
+                    <p>{{"mailing_list.show.removal_details2"|trans}}:</p>
+                    <ul>
+                        <li>{{"mailing_list.show.removal_details3"|trans}}</li>
+                        <li>{{ item.registrations|length }} {{"mailing_list.show.registrations"|trans}}</li>
+                        <li>{{ item.campaigns|length }} {{"mailing_list.show.assignation_to_campagin"|trans}}</li>
+                    </ul>
+
+                    <p>{{"mailing_list.show.note"|trans}}</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="{{ path('novaezmailing_mailinglist_remove', {mailinglist:item.id}) }}" type="button" class="btn btn-danger">{{"button.confirm"|trans}}</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{"button.cancel"|trans}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

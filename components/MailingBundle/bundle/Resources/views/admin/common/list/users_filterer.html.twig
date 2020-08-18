@@ -1,0 +1,21 @@
+{% set styles = constant('Novactive\\Bundle\\eZMailingBundle\\Entity\\User::STATUSES_STYLE') %}
+{% set extraParams = extraParams|default({}) %}
+{% trans_default_domain 'ezmailing' %}
+
+<div class="d-flex">
+    <div class="p-2">
+        <div class="btn-group btn-group-sm">
+            <a href="{{ path(route, {limit:10, status: currentStatus}|merge(extraParams)) }}" class="btn {% if limit == 10 %}btn-primary{% else %}btn-secondary{% endif %}">10</a>
+            <a href="{{ path(route, {limit:25, status: currentStatus}|merge(extraParams)) }}" class="btn {% if limit == 25 %}btn-primary{% else %}btn-secondary{% endif %}">25</a>
+            <a href="{{ path(route, {limit:50, status: currentStatus}|merge(extraParams)) }}" class="btn {% if limit == 50 %}btn-primary{% else %}btn-secondary{% endif %}">50</a>
+        </div>
+    </div>
+    <div class="ml-auto p-2">
+        <div class="btn-group btn-group-sm">
+            <a href="{{ path(route, {limit: limit}|merge(extraParams)) }}" class="btn btn-{% if currentStatus == 'all' %}primary{% else %}secondary{% endif %}">{{"common.list.users_filterer.all"|trans}} <span class="badge badge-light">{{ statuses.count }}</span></a>
+            {% for statusId, statusCount in statuses.results %}
+                <a href="{{ path(route, {limit: limit, status:statusId}|merge(extraParams)) }}" class="btn btn-{% if currentStatus == statusId %}primary{% else %}secondary{% endif %}">{{ statusId }} <span class="badge badge-{{ styles[statusId] }}">{{ statusCount }}</span></a>
+            {% endfor %}
+        </div>
+    </div>
+</div>

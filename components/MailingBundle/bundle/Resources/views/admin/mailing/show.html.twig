@@ -1,0 +1,24 @@
+{% extends '@NovaeZMailing/admin/layout/pagelayout.html.twig' %}
+{% trans_default_domain 'ezmailing' %}
+
+{% block novezmailing_breadcrumb %}
+    <ol class="breadcrumb px-4">
+        <li class="breadcrumb-item"><a href="{{ path("novaezmailing_dashboard_index") }}">Nova eZ Mailing</a></li>
+        <li class="breadcrumb-item">{{"campaign.breadcrumb.campaigns"|trans}}</li>
+        <li class="breadcrumb-item"><a href="{{ path('novaezmailing_campaign_subscriptions', {campaign: item.campaign.id}) }}">{{ item.campaign.name }}</a></li>
+        <li class="breadcrumb-item active">{{ item.name }}</li>
+    </ol>
+{% endblock %}
+{% block novezmailing_title %}
+    <img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/"~item.status~".png") }}" class="nova-icon"/> {{ item.name }}{% endblock %}
+
+{% block novezmailing_subtitle %}{{"mailing.edit.mailing"|trans}}{% endblock %}
+{% block content %}
+    {{ render_esi(controller("Novactive\\Bundle\\eZMailingBundle\\Controller\\Admin\\MailingController::mailingTabsAction", {mailing: item.id})) }}
+    <br/>
+    {{ form_start(form_subitems_content_edit, { 'action': path('ezplatform.content.edit'), 'attr': { 'hidden': 'hidden' }}) }}
+    {{ form_end(form_subitems_content_edit) }}
+
+    <div class="ezmailing-subitem-children" data-location="{{ item.locationId }}" data-items="{{ subitems_module.items }}" data-content-types="{{ subitems_module.content_type_info_list }}" data-limit="{{ subitems_module.limit }}"></div>
+{% endblock %}
+

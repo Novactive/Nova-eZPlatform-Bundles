@@ -1,0 +1,7 @@
+parameters:
+    nova_ezmailing.default.simple_mailer: ~
+    nova_ezmailing.default.mailing_mailer: ~
+    nova_ezmailing.default.email_subject_prefix: ~
+    nova_ezmailing.default.email_from_address: ~
+    nova_ezmailing.default.email_from_name: ~
+    nova_ezmailing.default.email_return_path: ~

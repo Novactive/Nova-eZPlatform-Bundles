@@ -1,0 +1,47 @@
+{% extends '@NovaeZMailing/admin/layout/pagelayout.html.twig' %}
+{% trans_default_domain 'ezmailing' %}
+
+{% form_theme form with ['@EzPlatformAdminUi/form_fields.html.twig', _self ] %}
+
+{% block _campaign_names_entry_label %}
+    <label class="form-control-label">{{"campaign.edit.name"|trans}} {{ name }}</label>
+{% endblock %}
+
+{% block _campaign_locationId_row %}
+    <label class="form-control-label">{{"campaign.edit.location"|trans}}</label>
+    {{ form_widget(form) }}
+    <p id="{{ id }}_name">
+        {% if value > 0 and form.parent.vars.value.content is not null %}
+            {{ ez_content_name(form.parent.vars.value.content) }}
+        {% endif %}
+    </p>
+    <button data-target-id="#{{ id }}"
+            data-target-name="#{{ id }}_name"
+            type="button"
+            class="btn btn-sm btn-primary js-novaezmailing-select-location-id">
+        {% if value > 0 %}
+            {{"campaign.edit.change_content"|trans}}
+        {% else %}{{"campaign.edit.select_content"|trans}}{% endif %}
+    </button>
+{% endblock %}
+
+{% block novezmailing_breadcrumb %}
+    <ol class="breadcrumb px-4">
+        <li class="breadcrumb-item"><a href="{{ path("novaezmailing_dashboard_index") }}">Nova eZ Mailing</a></li>
+        <li class="breadcrumb-item">{{"campaign.breadcrumb.campaigns"|trans}}</li>
+        <li class="breadcrumb-item">{{ item.name }}</li>
+        <li class="breadcrumb-item active">{{"campaign.breadcrumb.edit"|trans}}</li>
+    </ol>
+{% endblock %}
+{% block novezmailing_title %}
+    <img src="{{ asset("/bundles/novaezmailing/admin/images/32x32/campaign.png") }}" class="nova-icon"/>{{"campaign.edit.edit"|trans}} {{ item.name }}{% endblock %}
+{% block novezmailing_subtitle %}{{"campaign.edit.edition"|trans}}{% endblock %}
+{% block content %}
+    {{ form_start(form, {attr: {class:'col-11', novaezmailing:'mainform'}}) }}
+    {{ form(form) }}
+    {{ form_end(form) }}
+{% endblock %}
+{% block rightbar %}
+    {% set content_create_sidebar_right = knp_menu_get('novaezmailing.menu.save_cancel', [], {}) %}
+    {{ knp_menu_render(content_create_sidebar_right, {'template': '@EzPlatformAdminUi/parts/menu/sidebar_right.html.twig'}) }}
+{% endblock %}

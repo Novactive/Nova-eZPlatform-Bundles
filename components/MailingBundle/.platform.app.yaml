@@ -1,0 +1,61 @@
+# Install an eZ Platform
+name: app
+type: php:7.2
+build:
+    flavor: "none"
+
+relationships:
+    database: 'mysqldb:user'
+variables:
+    env:
+        SYMFONY_ENV: dev
+web:
+    locations:
+        "/":
+            root: "ezplatform/web"
+            passthru: "/app.php"
+            expires: 600
+disk: 2048
+mounts:
+    "/ezplatform/var/cache": "shared:files/cache"
+    "/ezplatform/var/logs": "shared:files/logs"
+    "/ezplatform/web/var": "shared:files/files"
+    "/ezplatform/var/sessions": "shared:files/sessions"
+hooks:
+    build: |
+        set -e
+        composer create-project ezsystems/ezplatform:2.4.2 --prefer-dist --no-progress --no-interaction --no-scripts
+        curl -o tests/provisioning/wrap.php https://raw.githubusercontent.com/Plopix/symfony-bundle-app-wrapper/master/wrap-bundle.php
+        WRAP_APP_DIR=./ezplatform WRAP_BUNDLE_DIR=./ php tests/provisioning/wrap.php
+        cd ezplatform
+        COMPOSER_MEMORY_LIMIT=-1 composer update --lock
+        COMPOSER_MEMORY_LIMIT=-1 composer require ezplatform-i18n/ezplatform-i18n-fr_fr
+    deploy: |
+        set -e
+        cd ezplatform
+        bin/console ezplatform:install clean
+        bin/console novaezmailing:install
+        bin/console doctrine:fixtures:load --no-interaction
+        mv var/cache/$SYMFONY_ENV var/cache/oldcache
+        bin/console cache:clear
+    post_deploy: |
+        set -e
+        rm -rf ezplatform/var/cache/oldcache
+
+dependencies:
+    nodejs:
+        yarn: "*"
+
+runtime:
+    extensions:
+        - xsl
+        - imagick
+        - readline
+
+crons:
+    sendmailing:
+        spec: '18 * * * *'
+        cmd: 'cd ezplatform && bin/console novaezmailing:send:mailing'
+    removecache:
+        spec: "0 */1 * * *"
+        cmd: "rm -rf ezplatform/var/cache/dev && rm -rf ezplatform/var/cache/prod"
