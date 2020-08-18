@@ -81,7 +81,7 @@ Go to : */_novaezextra/dev/test*
 #### eznova_parentcontent_by_contentinfo( content )
 
 ``` twig
-{% set contentType = eznova_parentcontent_by_contentinfo( content ) %}
+{% set content = eznova_parentcontent_by_contentinfo( content ) %}
 ```
 
 > Note : you get the content of the parent on the main location
