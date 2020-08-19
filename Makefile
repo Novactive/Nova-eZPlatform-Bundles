@@ -61,7 +61,7 @@ installez: install ## Install eZ as the local project
 
 	@echo "..:: Do bundle specifics ::.."
 	@$(MYSQL) < components/SEOBundle/bundle/Resources/sql/schema.sql
-	@cd $(EZ_DIR) && bin/console novaezextra:contenttypes:create ../tests/vmcd.xls
+	@cd $(EZ_DIR) && bin/console novaezextra:contenttypes:create ../tests/vmcd.xlsx
 
 	@echo "..:: Final Cleaning Cache ::.."
 	@cd $(EZ_DIR) && bin/console cache:clear
