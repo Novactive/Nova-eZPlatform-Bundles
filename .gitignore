@@ -2,3 +2,4 @@ vendor
 ezplatform
 chromedriver
 .php_cs.cache
+bin/do.bash
