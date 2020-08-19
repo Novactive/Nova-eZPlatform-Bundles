@@ -1,21 +1,18 @@
 <?php
 
 /**
- * Nova eZ Accelerator.
+ * eZ Platform Bundles Mono Repo Project.
  *
- * @package   Novactive\Bundle\eZAccelerator
- *
- * @author    Novactive <dir.tech@novactive.com>
- * @author    Sébastien Morel (Plopix) <morel.seb@gmail.com>
+ * @author    Novactive - Sébastien Morel <s.morel@novactive.com> aka Plopix <morel.seb@gmail.com>
  * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZAccelerator/blob/master/LICENSE MIT Licence
+ * @license   MIT
  */
 
 declare(strict_types=1);
 
-namespace Novactive\Bundle\eZAccelerator\Tests;
+namespace Novactive\eZPlatform\Bundles\Tests;
 
-final class LoginTest extends TestCase
+final class LoginPantherTest extends PantherTestCase
 {
     public function testAdminLogin(): void
     {

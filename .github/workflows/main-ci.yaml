@@ -118,6 +118,7 @@ jobs:
 
                     echo ::group::..:: Do bundle specifics ::..
                     mysql -u root -h 127.0.0.1 -P 3306 ezplatform < ../components/SEOBundle/bundle/Resources/sql/schema.sql
+                    bin/console novaezextra:contenttypes:create ../tests/vmcd.xls
                     echo ::endgroup::
 
                     echo ::group::..:: Final Steps ::..
@@ -129,6 +130,9 @@ jobs:
 
             -   name: Finally Run the tests
                 run: |
+                    echo  echo ::group::..:: Global Mono Repo Testing ::..
+                    php ./vendor/bin/phpunit -c "tests" "tests" --exclude-group behat
+                    echo ::endgroup::
                     for COMPONENT in `ls components`; do
                         if COMPONENT=${COMPONENT} bin/ci-should test; then
                             echo ::group::..:: ${COMPONENT} ::..

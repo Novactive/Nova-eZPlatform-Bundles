@@ -43,12 +43,12 @@ class Content
     /**
      * Wrap into content/location.
      */
-    protected function wrapResults(SearchResult $results, int $limit): Result
+    protected function wrapResults(SearchResult $results, ?int $limit = null): Result
     {
         $contentResults = new Result();
         $contentResults->setResultTotalCount($results->totalCount);
         $contentResults->setResultLimit($limit);
-        foreach ($results->c as $hit) {
+        foreach ($results->searchHits as $hit) {
             $contentResults->addResult($this->wrapperFactory->createByLocation($hit->valueObject));
         }
 
@@ -229,6 +229,8 @@ class Content
         $notSameLocation = new Criterion\LogicalNot(
             new Criterion\LocationId($location->id)
         );
+
+        $criterion = $sortClause = [];
 
         $criterion[] = $sameTypeCriterion;
         $criterion[] = $sameParentLocationCriterion;

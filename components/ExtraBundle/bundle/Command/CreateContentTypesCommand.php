@@ -15,12 +15,11 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZExtraBundle\Command;
 
 use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\Core\Base\Exceptions\ContentTypeFieldDefinitionValidationException;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\ContentType as ContentTypeManager;
-use PHPExcel_Cell;
-use PHPExcel_IOFactory;
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -70,6 +69,10 @@ final class CreateContentTypesCommand extends Command
             );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $translation = $input->getArgument('tr');
@@ -85,7 +88,7 @@ final class CreateContentTypesCommand extends Command
             return false;
         }
 
-        $oPHPExcel = PHPExcel_IOFactory::load($filepath);
+        $oPHPExcel = IOFactory::load($filepath);
         if (!$oPHPExcel) {
             $output->writeln('<error>Failed to load data</error>');
 
@@ -130,9 +133,9 @@ final class CreateContentTypesCommand extends Command
                     $cellIterator->setIterateOnlyExistingCells(false); // Loop all cells, even if it is not set
                     $contentTypeFieldsData = [];
                     foreach ($cellIterator as $cell) {
-                        /** @var PHPExcel_Cell $cell */
+                        /** @var Cell $cell */
                         if (!\is_null($cell)) {
-                            $cellValue = trim($cell->getValue());
+                            $cellValue = trim((string) $cell->getValue());
                             switch ($cell->getColumn()) {
                                 case 'A':
                                     $contentTypeFieldsData['names'] = [$lang => $cellValue];
@@ -197,7 +200,7 @@ final class CreateContentTypesCommand extends Command
                     [],
                     $lang
                 );
-            } catch (ContentTypeFieldDefinitionValidationException $e) {
+            } catch (\Exception $e) {
                 $output->writeln("<error>{$e->getMessage()}</error>");
                 $errors = $e->getFieldErrors();
                 foreach ($errors as $attrIdentifier => $errorArray) {
@@ -212,7 +215,7 @@ final class CreateContentTypesCommand extends Command
         }
         $output->writeln('Done');
 
-        return true;
+        return Command::SUCCESS;
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output): void

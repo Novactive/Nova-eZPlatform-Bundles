@@ -73,7 +73,7 @@ class Content
         int $parentLocationId,
         array $data,
         array $options = [],
-        string $lang = 'eng-US'
+        string $lang = 'eng-GB'
     ): ValueContent {
         $contentService = $this->getContentService();
         $contentType = $this->getContentTypeService()->loadContentTypeByIdentifier($contentTypeIdentifier);
@@ -116,7 +116,7 @@ class Content
         ValueContent $content,
         array $data,
         array $options = [],
-        string $lang = 'eng-US'
+        string $lang = 'eng-GB'
     ): ValueContent {
         $contentService = $this->getContentService();
         $contentDraft = $contentService->createContentDraft($content->contentInfo);
@@ -186,7 +186,7 @@ class Content
         foreach ($contentType->getFieldDefinitions() as $field) {
             /** @var FieldDefinition $field */
             $fieldName = $field->identifier;
-            if (!array_key_exists($fieldName, $data)) {
+            if (!\array_key_exists($fieldName, $data)) {
                 continue;
             }
             $fieldValue = $data[$fieldName];
@@ -200,7 +200,7 @@ class Content
         array $data,
         string $remoteId,
         array $options = [],
-        string $lang = 'eng-US'
+        string $lang = 'eng-GB'
     ): ValueContent {
         $options['remoteId'] = $remoteId;
         try {
@@ -209,12 +209,12 @@ class Content
                 return $content;
             }
             $newContent = $this->updateContent($content, $data, $options, $lang);
-            if ((\array_key_exists('callback_update', $options)) && (is_callable($options['callback_update']))) {
+            if ((\array_key_exists('callback_update', $options)) && (\is_callable($options['callback_update']))) {
                 $options['callback_update']($newContent);
             }
         } catch (NotFoundException $e) {
             $newContent = $this->createContent($contentTypeIdentifier, $parentLocationId, $data, $options, $lang);
-            if ((\array_key_exists('callback_create', $options)) && (is_callable($options['callback_create']))) {
+            if ((\array_key_exists('callback_create', $options)) && (\is_callable($options['callback_create']))) {
                 $options['callback_create']($newContent);
             }
         }
@@ -228,7 +228,7 @@ class Content
         array $data,
         string $remoteId,
         array $options = [],
-        string $lang = 'eng-US'
+        string $lang = 'eng-GB'
     ): ValueContent {
         $options['do_no_update'] = true;
 

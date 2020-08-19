@@ -89,7 +89,7 @@ class Result extends Collection
         return $this->toArray();
     }
 
-    public function setResultLimit(int $resultLimit): self
+    public function setResultLimit(?int $resultLimit = null): self
     {
         $this->resultLimit = $resultLimit;
 

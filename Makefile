@@ -64,6 +64,7 @@ installez: install ## Install eZ as the local project
 
 	@echo "..:: Do bundle specifics ::.."
 	@$(MYSQL) < components/SEOBundle/bundle/Resources/sql/schema.sql
+	@cd $(EZ_DIR) && bin/console novaezextra:contenttypes:create ../tests/vmcd.xls
 
 	@echo "..:: Final Cleaning Cache ::.."
 	@cd $(EZ_DIR) && bin/console cache:clear
@@ -84,11 +85,13 @@ stopez: ## Stop the web server if it is running
 
 
 .PHONY: tests
-tests: serveez ## Run the tests
+tests: ## Run the tests
+	@echo " ..:: Global Mono Repo Testing ::.."
+	@DATABASE_URL="mysql://root:ezplatform@127.0.0.1:3300/ezplatform" PANTHER_EXTERNAL_BASE_URI="https://127.0.0.1:11083" PANTHER_CHROME_DRIVER_BINARY=$(CHROMEDRIVER) $(PHP_BIN) ./vendor/bin/phpunit -c "tests" "tests" --exclude-group behat
 	@for COMPONENT in $(shell ls components); do \
     	if COMPONENT=$${COMPONENT} bin/ci-should test; then \
     		echo " ..:: Testing $${COMPONENT} ::.."; \
-    		PANTHER_EXTERNAL_BASE_URI="https://127.0.0.1:11083" PANTHER_CHROME_DRIVER_BINARY=$(CHROMEDRIVER) $(PHP_BIN) ./vendor/bin/phpunit "components/$${COMPONENT}/tests" --exclude-group behat; \
+    		DATABASE_URL="mysql://root:ezplatform@127.0.0.1:3300/ezplatform" PANTHER_EXTERNAL_BASE_URI="https://127.0.0.1:11083" PANTHER_CHROME_DRIVER_BINARY=$(CHROMEDRIVER) $(PHP_BIN) ./vendor/bin/phpunit -c "components/$${COMPONENT}/tests" "components/$${COMPONENT}/tests" --exclude-group behat; \
 		fi \
 	done
 

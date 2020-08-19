@@ -1,24 +1,22 @@
 <?php
 
 /**
- * NovaeZSEOBundle Bundle.
+ * eZ Platform Bundles Mono Repo Project.
  *
- * @package   Novactive\Bundle\eZSEOBundle
- *
- * @author    Novactive <novaseobundle@novactive.com>
- * @copyright 2015 Novactive
- * @license   https://github.com/Novactive/NovaeZSEOBundle/blob/master/LICENSE MIT Licence
+ * @author    Novactive - Sébastien Morel <s.morel@novactive.com> aka Plopix <morel.seb@gmail.com>
+ * @copyright 2020 Novactive
+ * @license   MIT
  */
 
 declare(strict_types=1);
 
-namespace Novactive\Bundle\eZSEOBundle\Tests;
+namespace Novactive\eZPlatform\Bundles\Tests;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use Symfony\Component\Panther\Client as PantherClient;
 use Symfony\Component\Panther\PantherTestCaseTrait;
 
-class TestCase extends BaseTestCase
+class PantherTestCase extends BaseTestCase
 {
     use PantherTestCaseTrait;
 
@@ -31,7 +29,7 @@ class TestCase extends BaseTestCase
         return self::createPantherClient(
             [
                 'browser' => 'chrome',
-                'external_base_uri' => getenv('PANTHER_EXTERNAL_BASE_URI') ?:
+                'external_base_uri' => getenv('PANTHER_EXTERNAL_BASE_URI') ? :
                     $_SERVER['PANTHER_EXTERNAL_BASE_URI'] ?? self::BASE_URI,
             ]
         );

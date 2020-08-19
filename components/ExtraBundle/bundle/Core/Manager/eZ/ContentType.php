@@ -70,7 +70,7 @@ class ContentType
         array $contentTypeData,
         array $contentTypeFieldDefinitionsData,
         array $options = [],
-        string $lang = 'eng-US'
+        string $lang = 'eng-GB'
     ): void {
         $contentTypeService = $this->getContentTypeService();
         $contentTypeGroup = $contentTypeService->loadContentTypeGroupByIdentifier($contentTypeGroupIdentifier);
@@ -91,7 +91,7 @@ class ContentType
         array $contentTypeData,
         array $contentTypeFieldDefinitionsData,
         array $options = [],
-        string $lang = 'eng-US'
+        string $lang = 'eng-GB'
     ): void {
         $contentTypeService = $this->getContentTypeService();
 
@@ -176,7 +176,7 @@ class ContentType
             unset($remainingFieldDefinitions[$definition['identifier']]);
         }
         // delete the remaining
-        foreach ($remainingFieldDefinitions as $fieldDefinitionIdentifier => $v) {
+        foreach (array_keys($remainingFieldDefinitions) as $fieldDefinitionIdentifier) {
             $contentTypeService->removeFieldDefinition(
                 $contentTypeDraft,
                 $contentTypeDraft->getFieldDefinition($fieldDefinitionIdentifier)
@@ -211,6 +211,7 @@ class ContentType
             $settings = [];
             $lines = explode("\n", $definition['settings']);
             foreach ($lines as $line) {
+                $matches = null;
                 preg_match('/(\\s*)([a-zA-Z]*)(\\s*):(\\s*)\\[?([^\\[\\]]*)\\]?(\\s*)/uisx', $line, $matches);
                 $key = trim($matches[2]);
                 $value = explode(',', trim($matches[5]));
@@ -230,6 +231,10 @@ class ContentType
 
     /**
      * Fill the Extra Struct according to the Public API.
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.IfStatementAssignment)
      *
      * @param FieldDefinitionCreateStruct|FieldDefinitionUpdateStruct $struct
      */
@@ -301,7 +306,7 @@ class ContentType
         array $contentTypeData,
         array $contentTypeFieldDefinitionsData,
         array $options = [],
-        string $lang = 'eng-US'
+        string $lang = 'eng-GB'
     ): void {
         $contentTypeService = $this->getContentTypeService();
 
@@ -343,7 +348,7 @@ class ContentType
         array $contentTypeData,
         array $contentTypeFieldDefinitionsData,
         array $options = [],
-        string $lang = 'eng-US'
+        string $lang = 'eng-GB'
     ): ValueContentType {
         $options['do_no_update'] = true;
         $contentTypeService = $this->getContentTypeService();

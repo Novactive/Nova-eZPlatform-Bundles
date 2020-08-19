@@ -19,7 +19,7 @@
     "require": {
         "php": ">7.3",
         "novactive/collection": "1.*",
-        "phpoffice/phpexcel": "*"
+        "phpoffice/phpspreadsheet": "*"
     },
     "autoload": {
         "psr-4": {

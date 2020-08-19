@@ -16,15 +16,9 @@ use Novactive\Bundle\eZExtraBundle\DependencyInjection\Compiler\ChildrenProvider
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-/**
- * Class NovaeZExtraBundle.
- */
 class NovaeZExtraBundle extends Bundle
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         parent::build($container);
 

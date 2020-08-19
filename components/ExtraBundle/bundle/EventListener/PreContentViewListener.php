@@ -87,7 +87,9 @@ class PreContentViewListener
                 $location->contentInfo->contentTypeId
             )->identifier;
 
-            if ($type = $this->getType($identifier)) {
+            $type = $this->getType($identifier);
+
+            if (false !== $type) {
                 $type->setContentView($contentView);
                 $type->setLocation($location);
                 $type->setContent($content);
