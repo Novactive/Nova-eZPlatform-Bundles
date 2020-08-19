@@ -31,7 +31,7 @@ class MenuItemFieldHandler extends AbstractFieldHandler implements FieldValueImp
     }
 
     /**
-     * @inheritDoc
+     * @SuppressWarnings(PHPMD.UndefinedVariable)
      */
     public function hashToFieldValue($fieldHash, array $context = [])
     {

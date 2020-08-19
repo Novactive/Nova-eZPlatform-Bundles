@@ -73,7 +73,7 @@ final class CreateContentTypesCommand extends Command
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $translation = $input->getArgument('tr');
         $availableLanguage = $this->translationHelper->getAvailableLanguages();
@@ -85,14 +85,14 @@ final class CreateContentTypesCommand extends Command
         if (!file_exists($filepath)) {
             $output->writeln("<error>{$filepath} not found.</error>");
 
-            return false;
+            return Command::FAILURE;
         }
 
         $oPHPExcel = IOFactory::load($filepath);
         if (!$oPHPExcel) {
             $output->writeln('<error>Failed to load data</error>');
 
-            return false;
+            return Command::FAILURE;
         }
 
         $contentTypeManager = $this->contentTypeManager;

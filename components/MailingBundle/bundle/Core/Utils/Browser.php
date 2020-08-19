@@ -40,7 +40,7 @@ class Browser
     private $platform;
 
     /**
-     * Constructor.
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(string $userAgent)
     {
@@ -83,6 +83,7 @@ class Browser
             $userAgentBrand,
             'other',
         ];
+        $matches = null;
         $pattern = '#(?<browser>'.join('|', $known).')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
         preg_match_all($pattern, $userAgent, $matches);
 

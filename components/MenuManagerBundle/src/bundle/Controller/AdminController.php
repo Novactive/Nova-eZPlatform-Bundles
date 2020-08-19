@@ -71,6 +71,8 @@ class AdminController extends Controller
      *
      * @param int $page
      *
+     * @SuppressWarnings(PHPMD.IfStatementAssignment)
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listAction(Request $request, $page = 1)

@@ -21,8 +21,8 @@ jobs:
             -   name: Check Sources
                 run: php vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src/ components/ bin/
 
-            #-   name: Check Mess Sources
-            #    run: php vendor/bin/phpmd src,components,bin text .cs/md_ruleset.xml
+            -   name: Check Mess Sources
+                run: php vendor/bin/phpmd src,components,bin text .cs/md_ruleset.xml
     tests:
         name: Tests
         runs-on: ubuntu-latest
@@ -118,7 +118,7 @@ jobs:
 
                     echo ::group::..:: Do bundle specifics ::..
                     mysql -u root -h 127.0.0.1 -P 3306 ezplatform < ../components/SEOBundle/bundle/Resources/sql/schema.sql
-                    bin/console novaezextra:contenttypes:create ../tests/vmcd.xls
+                    bin/console novaezextra:contenttypes:create ../tests/vmcd.xlsx
                     echo ::endgroup::
 
                     echo ::group::..:: Final Steps ::..

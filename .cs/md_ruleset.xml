@@ -16,7 +16,7 @@
     <rule ref="rulesets/naming.xml/ShortVariable">
         <priority>1</priority>
         <properties>
-            <property name="exceptions" value="em,id,fs,qb,i,mm,dd,yy,e,aa,io,dm,j,k,n,to"/>
+            <property name="exceptions" value="em,id,fs,qb,i,mm,dd,yy,e,aa,io,dm,j,k,n,to,o,a"/>
         </properties>
     </rule>
     <rule ref="rulesets/codesize.xml/CyclomaticComplexity">
@@ -70,7 +70,7 @@
     <rule ref="rulesets/design.xml/CouplingBetweenObjects">
         <priority>1</priority>
         <properties>
-            <property name="maximum" value="25"/>
+            <property name="maximum" value="30"/>
         </properties>
     </rule>
     <rule ref="rulesets/cleancode.xml">

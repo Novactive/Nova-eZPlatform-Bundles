@@ -35,10 +35,7 @@ list:
 codeclean: ## Coding Standard checks
 	$(PHP_BIN) ./vendor/bin/php-cs-fixer fix --config=.cs/.php_cs.php
 	$(PHP_BIN) ./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src/ components/ bin/
-
-.PHONY: codecheckmess
-codecheckmess: codeclean ## Mess checking
-	$(PHP_BIN) ./vendor/bin/phpmd src,components,bin text .cs/md_ruleset.xml # not enable yet, needs to review all
+	$(PHP_BIN) ./vendor/bin/phpmd src,components,bin text .cs/md_ruleset.xml
 
 .PHONY: install
 install: ## Install vendors

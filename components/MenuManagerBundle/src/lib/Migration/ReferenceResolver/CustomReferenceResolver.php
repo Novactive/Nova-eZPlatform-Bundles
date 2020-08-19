@@ -51,6 +51,7 @@ class CustomReferenceResolver extends AbstractResolver
     public function getReferenceValue($stringIdentifier)
     {
         $prefixMatchRegexp = '/^(menu_items):(location_remote_id):(.*)$/';
+        $matches = null;
         preg_match($prefixMatchRegexp, $stringIdentifier, $matches);
         list(, , $refType, $value) = $matches;
         switch ($refType) {
