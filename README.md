@@ -22,23 +22,23 @@ Please comply with `make codeclean` and `make tests` before to push, your PR won
 
 ## Managed Repositories
 
-| Bundles                                                       | Compatibility (via tags) | CI Config |
-|--------------------------------------------------------------|--------------------------|-----------|
-| https://github.com/Novactive/NovaeZAccelerator               |       ![eZ-Platform-3.x-OK] | ![auto-install] ![auto-test] |
-| https://github.com/Novactive/NovaeZSEOBundle                 |       ![eZ-Platform-1.x-OK] ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK] | ![auto-install] ![auto-test] | 
-| https://github.com/Novactive/NovaeZMailingBundle             |       ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
-| https://github.com/Novactive/NovaeZProtectedContentBundle    |       ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
-| https://github.com/Novactive/NovaeZSlackBundle               |       ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-NOK] |
-| https://github.com/Novactive/NovaeZExtraBundle               |       ![eZ-Platform-1.x-OK] ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK] | ![auto-install] ![auto-test] |
-| https://github.com/Novactive/NovaeZLdapAuthenticatorBundle   |       ![eZ-Platform-2.x-UNSURE] ![eZ-Platform-3.x-UNSURE] |
-| https://github.com/Novactive/NovaeZStaticTemplatesBundle     |       ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
-| https://github.com/Novactive/NovaeZSolrSearchExtraBundle     |       ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
-| https://github.com/Novactive/NovaeZCloudinaryBundle          |       ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
-| https://github.com/Novactive/NovaeZResponsiveImagesBundle    |       ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
-| https://github.com/Novactive/NovaeZMenuManagerBundle         |       ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
-| https://github.com/Novactive/NovaeZEnhancedImageAssetBundle  |       ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
-| https://github.com/Novactive/NovaeZEditHelpBundle            |       ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
-| https://github.com/Novactive/NovaeZRssFeedBundle             |       ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
+| Bundles                                                                                 | Compatibility (via tags) | CI Config |
+|-----------------------------------------------------------------------------------------|--------------------------|-----------|
+| [Accelerator](https://github.com/Novactive/NovaeZAccelerator)                           | ![eZ-Platform-3.x-OK] | ![auto-install] ![auto-test] |
+| [SEOBundle](https://github.com/Novactive/NovaeZSEOBundle)                               | ![eZ-Platform-1.x-OK] ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK] | ![auto-install] ![auto-test] | 
+| [MailingBundle](https://github.com/Novactive/NovaeZMailingBundle)                       | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
+| [ProtectedContentBundle](https://github.com/Novactive/NovaeZProtectedContentBundle)     | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
+| [SlackBundle](https://github.com/Novactive/NovaeZSlackBundle)                           | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-NOK] |
+| [ExtraBundle](https://github.com/Novactive/NovaeZExtraBundle)                           | ![eZ-Platform-1.x-OK] ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK] | ![auto-install] ![auto-test] |
+| [LdapAuthenticatorBundle](https://github.com/Novactive/NovaeZLdapAuthenticatorBundle)   | ![eZ-Platform-2.x-UNSURE] ![eZ-Platform-3.x-UNSURE] |
+| [StaticTemplatesBundle](https://github.com/Novactive/NovaeZStaticTemplatesBundle)       | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
+| [SolrSearchExtraBundle](https://github.com/Novactive/NovaeZSolrSearchExtraBundle)       | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
+| [CloudinaryBundle](https://github.com/Novactive/NovaeZCloudinaryBundle)                 | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
+| [ResponsiveImagesBundle](https://github.com/Novactive/NovaeZResponsiveImagesBundle)     | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
+| [MenuManagerBundle](https://github.com/Novactive/NovaeZMenuManagerBundle)               | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
+| [EnhancedImageAssetBundle](https://github.com/Novactive/NovaeZEnhancedImageAssetBundle) | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
+| [EditHelpBundle](https://github.com/Novactive/NovaeZEditHelpBundle)                     | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
+| [RssFeedBundle](https://github.com/Novactive/NovaeZRssFeedBundle)                       | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
 
 
 ## For Maintainers
@@ -86,3 +86,20 @@ bin/releaser tag
 
 [auto-install]: https://img.shields.io/badge/CI-install-green?style=flat-square&labelColor=black&logo=github-actions
 [auto-test]: https://img.shields.io/badge/CI-tests-green?style=flat-square&labelColor=black&logo=github-actions
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
