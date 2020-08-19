@@ -9,7 +9,7 @@ git clone
 make installez
 ```
 
-This will install eZ Platform and all the bundle on top of it.
+This will install eZ Platform and bundles on top of it.
 
 ## Contribution
 
@@ -37,7 +37,7 @@ Please comply with `make codeclean` and `make tests` before to push, your PR won
 - https://github.com/Novactive/NovaeZRssFeedBundle
 
 
-## For Mainteners
+## For Maintainers
 
 > "With great power comes great responsabilities" - Spiderman's uncle Ben.
 
