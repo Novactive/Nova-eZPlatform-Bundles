@@ -149,6 +149,10 @@ class Registrar
         return $confirmationToken;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UndefinedVariable)
+     */
     public function confirm(ConfirmationToken $token): bool
     {
         $created = Carbon::instance($token->getCreated());

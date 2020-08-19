@@ -1,6 +1,5 @@
 # Novactive eZ Accelerator
 
-[![Build Status](https://github.com/Novactive/NovaeZAccelerator/workflows/CI/badge.svg?branch=master)](https://github.com/Novactive/NovaeZAccelerator/actions)
 [![Downloads](https://img.shields.io/packagist/dt/novactive/ezaccelerator.svg?style=flat-square)](https://packagist.org/packages/novactive/ezaccelerator)
 [![Latest version](https://img.shields.io/github/release/Novactive/NovaeZAccelerator.svg?style=flat-square)](https://github.com/Novactive/NovaeZAccelerator/releases)
 [![License](https://img.shields.io/packagist/l/novactive/ezaccelerator.svg?style=flat-square)](LICENSE)

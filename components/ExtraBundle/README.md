@@ -1,5 +1,9 @@
 # Novactive Extra Bundle for eZ Publish Platform
 
+[![Downloads](https://img.shields.io/packagist/dt/novactive/ezextrabundle.svg?style=flat-square)](https://packagist.org/packages/novactive/ezextrabundle)
+[![Latest version](https://img.shields.io/github/release/Novactive/NovaeZExtraBundle.svg?style=flat-square)](https://github.com/Novactive/NovaeZExtraBundle/releases)
+[![License](https://img.shields.io/packagist/l/novactive/ezextrabundle.svg?style=flat-square)](LICENSE)
+
 ## Installation
 
 ### Step 1: Download Nova eZExtra Bundle using composer
@@ -38,14 +42,7 @@ public function registerBundles() {
 
 ### Step 3: Add the default routes
 
-Activate the "dev" routes:
-
-``` yml
-_novaezetraRoutesDev:
-    resource: "@NovaeZExtraBundle/Resources/config/routing/dev.yml"
-```
-
-Activate the "prod" routes:
+Activate the sroutes:
 
 ``` yml
 _novaezextraRoutes:

@@ -31,6 +31,8 @@ class EnhancedImage extends FileFieldHandler implements FieldValueConverterInter
      *
      * @throws InvalidArgumentType
      *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
      * @todo resolve refs more
      */
     public function hashToFieldValue($fieldValue, array $context = []): EnhancedImageValue
@@ -91,7 +93,7 @@ class EnhancedImage extends FileFieldHandler implements FieldValueConverterInter
      *
      * @todo check out if this works in ezplatform
      */
-    public function fieldValueToHash($fieldValue, array $context = []): array
+    public function fieldValueToHash($fieldValue, array $context = []): ?array
     {
         if (null === $fieldValue->uri) {
             return null;

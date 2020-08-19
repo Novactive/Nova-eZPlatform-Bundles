@@ -57,7 +57,10 @@ class PreContentView
         $this->requestStack = $requestStack;
     }
 
-    public function onPreContentView(PreContentViewEvent $event)
+    /**
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    public function onPreContentView(PreContentViewEvent $event): void
     {
         $contentView = $event->getContentView();
 

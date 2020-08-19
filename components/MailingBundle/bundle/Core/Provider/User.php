@@ -50,6 +50,7 @@ class User
         unset($filters['status']);
         $repo = $this->entityManager->getRepository(UserEntity::class);
         $total = 0;
+        $statuses = [];
         foreach (UserEntity::STATUSES as $status) {
             $statuses[$status] = $repo->countByFilters($filters + ['status' => $status]);
 

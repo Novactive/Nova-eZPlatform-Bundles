@@ -44,6 +44,9 @@ class RssFeedItemsType extends AbstractType
         $this->configResolver = $configResolver;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $contentTypeList = $this->getContentTypeList();

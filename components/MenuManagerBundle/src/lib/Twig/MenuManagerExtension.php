@@ -80,6 +80,9 @@ class MenuManagerExtension extends Twig_Extension
         return $functions;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.IfStatementAssignment)
+     */
     public function addMenuItemToBreadcrumb(MenuItem $menuItem, &$breadcrumb = [])
     {
         $breadcrumb[] = $this->menuBuilder->toMenuItemLink($menuItem);

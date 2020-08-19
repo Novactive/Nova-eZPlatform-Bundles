@@ -27,6 +27,9 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class EzLdapAuthenticatorExtension extends Extension implements PrependExtensionInterface
 {
     /** @var string */

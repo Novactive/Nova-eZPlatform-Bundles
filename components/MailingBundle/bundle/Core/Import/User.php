@@ -65,6 +65,8 @@ class User
     /**
      * Hydrate user.
      *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
      * @return User
      */
     public function hydrateUser(array $cells): UserEntity

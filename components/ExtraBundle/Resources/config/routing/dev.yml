@@ -1,4 +1,0 @@
-novaezextra_check:
-    resource: "@NovaeZExtraBundle/Controller/CheckController.php"
-    type:     annotation
-    prefix:   /_novaezextra/dev

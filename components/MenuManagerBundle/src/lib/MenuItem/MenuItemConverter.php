@@ -68,6 +68,8 @@ class MenuItemConverter
     /**
      * @param string $defaultClass
      *
+     * @SuppressWarnings(PHPMD.IfStatementAssignment)
+     *
      * @return MenuItem[]
      */
     public function fromHashArray(array $hashArray, $defaultClass = MenuItem::class): array

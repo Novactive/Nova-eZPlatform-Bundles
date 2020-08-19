@@ -5,6 +5,7 @@
     "autoload": {
         "psr-4": {
             "Novactive\\eZPlatform\\Bundles\\": "src/",
+            "Novactive\\eZPlatform\\Bundles\\Tests\\": "tests/Tests",
             "Novactive\\Bundle\\eZAccelerator\\": "components/Accelerator/bundle",
             "Novactive\\Bundle\\eZAccelerator\\Tests\\": "components/Accelerator/tests/Tests",
             "Novactive\\Bundle\\eZSEOBundle\\": "components/SEOBundle/bundle",
@@ -13,7 +14,8 @@
             "Novactive\\Bundle\\NovaeZEditHelpBundle\\": "components/EditHelpBundle/bundle",
             "Novactive\\EzEnhancedImageAssetBundle\\": "components/EnhancedImageAssetBundle/src/bundle",
             "Novactive\\EzEnhancedImageAsset\\": "components/EnhancedImageAssetBundle/src/lib",
-            "Novactive\\Bundle\\eZExtraBundle\\": "components/ExtraBundle",
+            "Novactive\\Bundle\\eZExtraBundle\\": "components/ExtraBundle/bundle",
+            "Novactive\\Bundle\\eZExtraBundle\\Tests\\": "components/ExtraBundle/tests/Tests",
             "Novactive\\Bundle\\eZLDAPAuthenticatorBundle\\": "components/LDAPAuthenticatorBundle/src/bundle",
             "Novactive\\eZLDAPAuthenticator\\": "components/LDAPAuthenticatorBundle/src/lib",
             "Novactive\\Bundle\\eZMailingBundle\\": "components/MailingBundle/bundle",
@@ -44,6 +46,9 @@
         "phpunit/phpunit": "^8.0",
         "symfony/panther": "^0.7.1",
         "fzaninotto/faker": "*",
-        "symfony/yaml": "^5.1"
+        "symfony/yaml": "^5.1",
+        "symfony/phpunit-bridge": "^5.1",
+        "symfony/browser-kit": "^5.1",
+        "symfony/css-selector": "^5.1"
     }
 }
