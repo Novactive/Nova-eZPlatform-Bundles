@@ -136,7 +136,7 @@ jobs:
                     for COMPONENT in `ls components`; do
                         if COMPONENT=${COMPONENT} bin/ci-should test; then
                             echo ::group::..:: ${COMPONENT} ::..
-                            APP_ENV=test php ./vendor/bin/phpunit "components/${COMPONENT}/tests" --exclude-group behat;
+                            APP_ENV=test php ./vendor/bin/phpunit -c "components/${COMPONENT}/tests" "components/${COMPONENT}/tests" --exclude-group behat;
                             echo ::endgroup::
                         fi
                     done
