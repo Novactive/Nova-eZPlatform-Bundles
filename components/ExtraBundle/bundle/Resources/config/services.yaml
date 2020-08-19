@@ -1,0 +1,20 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\WrapperFactory: ~
+    Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\Content: ~
+    Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\ContentType: ~
+    Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Content: ~
+
+    Novactive\Bundle\eZExtraBundle\EventListener\PreContentViewListener:
+        arguments: ['@ezpublish.api.repository', '@ezpublish.templating.global_helper']
+        tags:
+            - {name: kernel.event_listener, event: ezpublish.pre_content_view, method: onPreContentView}
+
+    novactive.ezextra.abstract.children.provider:
+        class: Novactive\Bundle\eZExtraBundle\EventListener\Type
+        abstract: true
+

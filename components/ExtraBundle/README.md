@@ -38,14 +38,7 @@ public function registerBundles() {
 
 ### Step 3: Add the default routes
 
-Activate the "dev" routes:
-
-``` yml
-_novaezetraRoutesDev:
-    resource: "@NovaeZExtraBundle/Resources/config/routing/dev.yml"
-```
-
-Activate the "prod" routes:
+Activate the sroutes:
 
 ``` yml
 _novaezextraRoutes:

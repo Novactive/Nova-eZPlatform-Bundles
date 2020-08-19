@@ -13,7 +13,7 @@
             "Novactive\\Bundle\\NovaeZEditHelpBundle\\": "components/EditHelpBundle/bundle",
             "Novactive\\EzEnhancedImageAssetBundle\\": "components/EnhancedImageAssetBundle/src/bundle",
             "Novactive\\EzEnhancedImageAsset\\": "components/EnhancedImageAssetBundle/src/lib",
-            "Novactive\\Bundle\\eZExtraBundle\\": "components/ExtraBundle",
+            "Novactive\\Bundle\\eZExtraBundle\\": "components/ExtraBundle/bundle",
             "Novactive\\Bundle\\eZLDAPAuthenticatorBundle\\": "components/LDAPAuthenticatorBundle/src/bundle",
             "Novactive\\eZLDAPAuthenticator\\": "components/LDAPAuthenticatorBundle/src/lib",
             "Novactive\\Bundle\\eZMailingBundle\\": "components/MailingBundle/bundle",
