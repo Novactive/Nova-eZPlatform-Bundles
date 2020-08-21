@@ -8,6 +8,9 @@ services:
         bind:
             $httpCachePurgeClient: '@ezplatform.http_cache.purge_client'
 
+    Novactive\Bundle\eZProtectedContentBundle\Command\:
+        resource: '../../Command'
+
     Novactive\Bundle\eZProtectedContentBundle\Repository\:
         resource: '../../Repository'
 

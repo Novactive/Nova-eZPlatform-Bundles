@@ -12,27 +12,15 @@ declare(strict_types=1);
 
 namespace Novactive\eZPlatform\Bundles\Tests;
 
+use Novactive\eZPlatform\Bundles\Tests\Contracts\LoginPanther;
+
 final class LoginPantherTest extends PantherTestCase
 {
+    use LoginPanther;
+
     public function testAdminLogin(): void
     {
         $helper = new BrowserHelper($this->getPantherClient());
-        $crawler = $helper->get('/admin/login');
-
-        $this->assertStringContainsString('ez-login__form-wrapper', $helper->client()->getPageSource());
-
-        $form = $crawler->filter('.ez-login__form-wrapper form');
-        $form->form(
-            [
-                '_username' => 'admin',
-                '_password' => 'publish',
-            ]
-        );
-        $form->submit();
-
-        $tab = '.nav.nav-tabs .nav-item.last';
-        $crawler = $helper->waitFor($tab);
-        $crawler->filter($tab)->count();
-        $this->assertEquals(1, $crawler->filter($tab)->count());
+        $this->logAdmin($helper);
     }
 }

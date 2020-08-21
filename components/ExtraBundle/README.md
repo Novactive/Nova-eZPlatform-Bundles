@@ -28,7 +28,7 @@ $ composer.phar update novactive/ezextrabundle
 
 #### Enable the bundle in the kernel:
 
-``` php
+```php
 <?php
 // ezpublish/EzPublishKernel.php
 
@@ -44,14 +44,14 @@ public function registerBundles() {
 
 Activate the sroutes:
 
-``` yml
+```yml
 _novaezextraRoutes:
     resource: "@NovaeZExtraBundle/Resources/config/routing/main.yml"
 ```
 
 ### Step 4: Clear the cache and check
 
-``` bash
+```bash
 php app|ezpublish/console cache:clear --env=dev
 ```
 
@@ -64,7 +64,7 @@ Go to : */_novaezextra/dev/test*
 
 #### eznova_parentcontent_by_contentinfo( content )
 
-``` twig
+```twig
 {% set content = eznova_parentcontent_by_contentinfo( content ) %}
 ```
 
@@ -72,13 +72,13 @@ Go to : */_novaezextra/dev/test*
 
 #### eznova_location_by_content( content )
 
-``` twig
+```twig
 {% set contentType = eznova_location_by_content( content ) %}
 ```
 
 #### eznova_relation_field_to_content( fieldValue )
 
-``` twig
+```twig
 {% set content = eznova_relation_field_to_content( ez_field_value( content, 'internal_link' ) ) %}
 ```
 
@@ -86,7 +86,7 @@ Go to : */_novaezextra/dev/test*
 
 #### eznova_relationlist_field_to_content_list( fieldValue )
 
-``` twig
+```twig
 {% set content = eznova_relationlist_field_to_content_list( ez_field_value( content, 'internal_links' ) ) %}
 ```
 
@@ -94,7 +94,7 @@ Go to : */_novaezextra/dev/test*
 
 ### Picture Controller
 
-``` twig
+```twig
 {{ render( controller( "eZNovaExtraBundle:Picture:alias", { "contentId": content.getField('picture').value.destinationContentId, "fieldIdentifier": "image", "alias": "large" })) }}
 ```
 
@@ -127,7 +127,7 @@ Simply inject the children ( and potentially other things on a view Full )
 
 Add your provider in a folder of your bundle
 
-```yml
+```yaml
 project.home_page.children.provider:
     class: Project\Bundle\GeneralBundle\ChildrenProvider\YOUCONTENTIDENTIFIERPROVIDERCLASS
     parent: novactive.ezextra.abstract.children.provider

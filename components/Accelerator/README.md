@@ -25,11 +25,11 @@ For now, eZ Accelerator allows you to:
 
 > Bonus! You can inject Middleware into the game!
 
-# How does that work
+## How does that work
 
 First you need to understand the [Symony Messenger Component](https://symfony.com/doc/current/components/messenger.html).
 
-## Asynchronous HTTP Cache Purge
+### Asynchronous HTTP Cache Purge
 
 eZ Accelerator decorates the eZ Platform purger to dispatch the corresponding messages.
 To enable the asynchronicity, you just need to know the Message FQDN
@@ -39,7 +39,7 @@ To enable the asynchronicity, you just need to know the Message FQDN
 
 > that's it! See the config example below
 
-## Asynchronous Search Index
+### Asynchronous Search Index
 
 eZ Accelerator decorates the eZ Platform Search Handler to dispatch the corresponding messages.
 To enable the asynchronicity, you just need to know the Message FQDN
@@ -52,7 +52,7 @@ To enable the asynchronicity, you just need to know the Message FQDN
 
 > that's it! See the config example below
 
-## Asynchronous Event handling
+### Asynchronous Event handling
 
 The concept is simple, everytime eZ Platform is doing something an event is triggered. eZ Accelerator gives you the 
 opportunity to handle the event through a bus which gives you the opportunity to handle that event via a message 
@@ -60,9 +60,9 @@ synchronously or asynchronicity using the transport of your choice.
 
 Everything is opt-in, you can still use the default event dispatcher or you can switch to the bus approach.
 
-# Configuration example
+## Configuration example
 
-## Handle the Event: eZ\Publish\API\Repository\Events\Bookmark\CreateBookmarkEvent through a bus SYNCHRONOUSLY
+### Handle the Event: eZ\Publish\API\Repository\Events\Bookmark\CreateBookmarkEvent through a bus SYNCHRONOUSLY
 
 ```yaml
 nova_ezaccelerator:
@@ -78,7 +78,7 @@ nova_ezaccelerator:
 
 > You can decide to stop the event propagation as well if it makes sense.
 
-## Transport Configuration
+### Transport Configuration
 
 ```yaml
 framework:
@@ -148,9 +148,10 @@ But you can also specify the `bus` and the `receiver`
 
 [Installation](documentation/INSTALL.md)
 
-Change and License
-------------------
+## Changelog 
 
 [Changelog](documentation/CHANGELOG.md)
+
+## License
 
 [License](LICENSE)

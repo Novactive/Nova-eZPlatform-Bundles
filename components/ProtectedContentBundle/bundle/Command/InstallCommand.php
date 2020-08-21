@@ -29,10 +29,7 @@ class InstallCommand extends Command
             ->setDescription('Install what necessary in the DB');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $io->title('Update the Database with Custom Novactive eZ Protected Content Tables');
@@ -46,5 +43,7 @@ class InstallCommand extends Command
         $command->run($arrayInput, $output);
 
         $io->success('Done.');
+
+        return Command::SUCCESS;
     }
 }

@@ -18,7 +18,7 @@ use Novactive\Bundle\eZProtectedContentBundle\Form\RequestProtectedAccessType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class PasswordProvided
 {
@@ -33,7 +33,7 @@ class PasswordProvided
         $this->formFactory = $formFactory;
     }
 
-    public function onKernelRequest(GetResponseEvent $event): void
+    public function onKernelRequest(RequestEvent $event): void
     {
         if (!$event->isMasterRequest()) {
             return;

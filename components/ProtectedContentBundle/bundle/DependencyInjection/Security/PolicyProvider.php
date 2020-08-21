@@ -18,7 +18,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider\Ya
 
 class PolicyProvider extends YamlPolicyProvider
 {
-    protected function getFiles()
+    protected function getFiles(): array
     {
         return [
             __DIR__.'/../../Resources/config/policies.yaml',
