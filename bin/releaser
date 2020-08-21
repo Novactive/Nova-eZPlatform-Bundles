@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 use Novactive\eZPlatform\Bundles\Command\SyncCommand;
 use Novactive\eZPlatform\Bundles\Command\TagCommand;
+use Novactive\eZPlatform\Bundles\Command\DocumentationCommand;
 use Novactive\eZPlatform\Bundles\Console\Application;
 
 set_time_limit(0);
@@ -20,8 +21,8 @@ set_time_limit(0);
 require dirname(__DIR__).'/vendor/autoload.php';
 
 $application = new Application();
-
 $application->add(new SyncCommand());
 $application->add(new TagCommand());
+$application->add(new DocumentationCommand());
 $application->setName('Novactive eZ Platform Bundles Releaser');
 $application->run();

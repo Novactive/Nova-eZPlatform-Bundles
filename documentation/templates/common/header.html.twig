@@ -1,0 +1,26 @@
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+    <h5 class="my-0 mr-md-auto font-weight-normal">
+        <img src="https://avatars0.githubusercontent.com/u/710363?s=45&v=4" alt="Novactive"/>
+        Nova eZ Platform Bundles
+    </h5>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="" id="components-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Bundles
+            </a>
+            <div class="dropdown-menu" aria-labelledby="components-menu">
+
+                {% for component in components %}
+                    <a class="dropdown-item" href="/{{ branch }}/{{ component }}/README.md.html">{{ component }}</a>
+                {% endfor %}
+            </div>
+        </li>
+    </ul>
+    <nav class="my-2 my-md-0 mr-md-3">
+        <a class="p-2 text-dark" target="_blank" href="https://www.novactive.com">France</a>
+        <a class="p-2 text-dark" target="_blank" href="https://www.novactive.us">California</a>
+        <a class="p-2 text-dark" target="_blank" href="https://www.nextedia.com">Nextedia</a>
+        <a class="p-2 text-dark icon" target="_blank" href="https://github.com/Novactive/Nova-eZPlatform-Bundles"><i class="fab fa-github fa-2x" aria-hidden="true"></i>&nbsp;&nbsp;</a>
+    </nav>
+</div>
+

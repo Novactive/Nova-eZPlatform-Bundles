@@ -30,6 +30,6 @@ final class Tagger
             ['git', 'update-ref', '-d', "refs/tags/{$tag}"],
         ];
 
-        (new Runner())($commands);
+        (new Process\Runner())($commands);
     }
 }

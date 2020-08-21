@@ -4,3 +4,4 @@ chromedriver
 .php_cs.cache
 bin/do.bash
 .phpunit.result.cache
+documentation/export

@@ -98,6 +98,12 @@ ps: ## Show docker-compose services
 	@echo "\n!!!${RED}careful${RESTORE}!!!, if you change files outside the watched folders, you need to ${YELLOW}kill $PID${RESTORE} and re-rerun ${YELLOW}make consume${RESTORE}."
 
 
+.PHONY: documentation
+documentation: ## Generate the documention
+	@$(SYMFONY) run --watch src,documentation/templates,components  bin/releaser doc -n
+
+
+
 .PHONY: clean
 clean: stopez ## Removes the vendors, and caches
 	@-rm -f .php_cs.cache

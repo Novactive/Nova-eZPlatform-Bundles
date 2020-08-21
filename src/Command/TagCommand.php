@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace Novactive\eZPlatform\Bundles\Command;
 
-use Novactive\eZPlatform\Bundles\Core\Components;
-use Novactive\eZPlatform\Bundles\Core\TagFetcher;
+use Novactive\eZPlatform\Bundles\Core\Collection\Components;
+use Novactive\eZPlatform\Bundles\Core\Collection\RemoteTags;
 use Novactive\eZPlatform\Bundles\Core\Tagger;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
@@ -44,7 +44,7 @@ final class TagCommand extends Command
         $question->setAutocompleterValues($components);
         $question->setValidator(
             function ($answer) use ($components) {
-                if (!\is_string($answer) || !\in_array($answer, $components)) {
+                if (!\is_string($answer) || !\in_array($answer, $components, true)) {
                     throw new RuntimeException('This component does not exist.');
                 }
 
@@ -59,7 +59,7 @@ final class TagCommand extends Command
             $output
         );
 
-        $existingTags = array_map(fn ($data) => $data['name'], (new TagFetcher())($component));
+        $existingTags = array_map(fn ($data) => $data['name'], (new RemoteTags())($component));
         $io->writeln('<comment>Existing tags</comment>: '.implode('<fg=yellow>,</>', $existingTags));
 
         $tag = $io->ask(

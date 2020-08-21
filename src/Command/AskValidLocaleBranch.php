@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Novactive\eZPlatform\Bundles\Command;
 
-use Novactive\eZPlatform\Bundles\Core\Branches;
+use Novactive\eZPlatform\Bundles\Core\Collection\Branches;
 use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

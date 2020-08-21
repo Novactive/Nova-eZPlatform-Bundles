@@ -28,6 +28,6 @@ final class Splitter
             ['git', 'update-ref', '-d', "refs/heads/{$localBranchName}"],
         ];
 
-        (new Runner())($commands);
+        (new Process\Runner())($commands);
     }
 }

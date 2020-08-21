@@ -10,7 +10,7 @@
 
 Add NovaeZExtraBundle in your composer.json: 
 
-``` js
+```json
 {
     "require": {
         "novactive/ezextrabundle": "dev-master"
@@ -20,7 +20,7 @@ Add NovaeZExtraBundle in your composer.json:
 
 Now tell composer to download the bundle by running the command:
 
-``` bash
+```bash
 $ composer.phar update novactive/ezextrabundle
 ```
 

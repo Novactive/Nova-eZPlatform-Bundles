@@ -10,21 +10,22 @@
 
 declare(strict_types=1);
 
-namespace Novactive\eZPlatform\Bundles\Core;
+namespace Novactive\eZPlatform\Bundles\Core\Collection;
 
 use Symfony\Component\Finder\Finder;
 
-final class Branches
+final class Components
 {
     public function __invoke(): array
     {
-        $branches = [];
+        $components = [];
         $finder = new Finder();
-        $finder->depth(0)->files()->in('.git/refs/heads');
-        foreach ($finder as $file) {
-            $branches[] = $file->getBasename();
+        $finder->directories()->in(__DIR__.'/../../../components')->ignoreUnreadableDirs()->depth(0);
+        foreach ($finder as $component) {
+            $components[] = $component->getBasename();
         }
+        sort($components);
 
-        return $branches;
+        return $components;
     }
 }

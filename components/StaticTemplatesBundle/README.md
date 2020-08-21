@@ -1,5 +1,4 @@
-Novactive eZ Static Templates bundle
-==========================
+# Novactive eZ Static Templates bundle
 
 Novactive eZ Static Templates bundle is an eZ Platform bundle providing a way to access twig templates from an url.
 

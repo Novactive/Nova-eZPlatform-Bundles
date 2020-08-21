@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace Novactive\eZPlatform\Bundles\Core;
+namespace Novactive\eZPlatform\Bundles\Core\Process;
 
 use Symfony\Component\Process\Process;
 

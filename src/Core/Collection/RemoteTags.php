@@ -10,11 +10,11 @@
 
 declare(strict_types=1);
 
-namespace Novactive\eZPlatform\Bundles\Core;
+namespace Novactive\eZPlatform\Bundles\Core\Collection;
 
 use Symfony\Component\HttpClient\HttpClient;
 
-final class TagFetcher
+final class RemoteTags
 {
     public function __invoke(string $component): array
     {
