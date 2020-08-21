@@ -1,0 +1,39 @@
+name: Documentation
+
+on:
+    push:
+        branches:
+            - master
+jobs:
+    documentation:
+        name: Generate the documentation
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@master
+                with:
+                    php-version: 7.4
+                id: php
+
+            -   name: Install dependencies
+                run: composer install --prefer-dist --no-progress --no-suggest --no-interaction
+
+            -   name: Generate the HTML
+                run: bin/releaser doc
+
+            -   uses: actions/checkout@v2
+                with:
+                    ref: gh-pages
+                    clean: false
+
+            -   name: Update the branch
+                run: |
+                    rsync -avzcC documentation/export/ docs/
+                    git add docs
+                    git config --global user.email "github-actions-bot@novactive.io"
+                    git config --global user.name "Github Actions Bot"
+                    git commit -m "Change in the documation"
+                    git push origin gh-pages:gh-pages
+
