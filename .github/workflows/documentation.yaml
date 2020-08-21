@@ -31,9 +31,10 @@ jobs:
             -   name: Update the branch
                 run: |
                     rsync -avzcC documentation/export/ docs/
-                    git add docs
+                    mv docs/master/README.md.html docs/master/index.html
+                    git add docs/
                     git config --global user.email "github-actions-bot@novactive.io"
                     git config --global user.name "Github Actions Bot"
-                    git commit -m "Change in the documation"
-                    git push origin gh-pages:gh-pages
+                    git commit -m "Changes in the documentation"
+                    git push -f origin gh-pages:gh-pages
 

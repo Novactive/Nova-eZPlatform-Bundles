@@ -33,8 +33,14 @@ final class Documenter
 
     public function __invoke(string $branch): void
     {
+        $export = __DIR__.'/../../documentation/export';
+
+        // Main
+        $this->generatePage($branch, 'README.md', $export);
+
+        // Components
         foreach ($this->components as $component) {
-            $this->generatePage($component, $branch, 'README.md', __DIR__.'/../../documentation/export');
+            $this->generatePage($branch, 'README.md', $export, $component);
         }
     }
 
@@ -70,21 +76,30 @@ final class Documenter
     /**
      * @SuppressWarnings(PHPMD.UndefinedVariable)
      */
-    private function generatePage(string $component, string $branch, string $filePath, string $folder): void
+    private function generatePage(string $branch, string $filePath, string $folder, ?string $component = null): void
     {
-        $componentFolder = __DIR__."/../../components/{$component}";
+        if (null === $component) {
+            $markdownFolder = __DIR__.'/../../';
+        } else {
+            $markdownFolder = __DIR__."/../../components/{$component}";
+        }
+
         $fs = new Filesystem();
-        $source = "{$componentFolder}/{$filePath}";
+        $source = "{$markdownFolder}/{$filePath}";
         if (!$fs->exists($source)) {
             return;
         }
         [$content, $links] = $this->renderPage($branch, $source);
 
-        $filePath = str_replace($componentFolder, '', $source);
-        $fs->dumpFile(
-            "{$folder}/{$branch}/{$component}/{$filePath}.html",
-            $content
-        );
+        $filePath = str_replace($markdownFolder, '', $source);
+
+        if (null === $component) {
+            $destination = "{$folder}/{$branch}/{$filePath}.html";
+        } else {
+            $destination = "{$folder}/{$branch}/{$component}/{$filePath}.html";
+        }
+
+        $fs->dumpFile($destination, $content);
 
         foreach ($links as $subPage) {
             $this->generatePage(
