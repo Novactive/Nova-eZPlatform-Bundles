@@ -1,5 +1,16 @@
 # Novactive eZ Menu Manager Bundle
 
+----
+
+This repository is what we call a "subtree split": a read-only copy of one directory of the main repository. 
+It is used by Composer to allow developers to depend on specific bundles.
+
+If you want to report or contribute, you should instead open your issue on the main repository: https://github.com/Novactive/Nova-eZPlatform-Bundles
+
+Documentation is available in this repository via `.md` files but also packaged here: https://novactive.github.io/Nova-eZPlatform-Bundles/master/MenuManagerBundle/README.md.html
+
+----
+
 [![Build Status](https://img.shields.io/travis/Novactive/NovaeZMenuManagerBundle.svg?style=flat-square&branch=master)](https://travis-ci.org/Novactive/NovaeZMenuManagerBundle)
 [![Latest version](https://img.shields.io/github/release/Novactive/NovaeZMenuManagerBundle.svg?style=flat-square)](https://github.com/Novactive/NovaeZMenuManagerBundle/releases)
 

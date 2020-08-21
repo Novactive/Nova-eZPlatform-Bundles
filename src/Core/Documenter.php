@@ -50,7 +50,15 @@ final class Documenter
         $factory = new MenuFactory();
         $menu = $factory->createItem('root');
         $markdown = new Parser($menu);
-        $content = $markdown->text(file_get_contents($source));
+
+        $mdFileContentLines = file($source);
+
+        // we remove the cartouche
+        if (trim($mdFileContentLines[2]).trim($mdFileContentLines[11]) === '----'.'----') {
+            \array_splice($mdFileContentLines, 2, 9);
+        }
+
+        $content = $markdown->text(implode('', $mdFileContentLines));
         $renderer = new ListRenderer(new Matcher());
         $renderedMenu = $renderer->render(
             $menu->getRoot(),
