@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <style type="text/css">
+        * {
+    font-family: 'Open Sans', sans-serif;
+}
+
+a, a:hover, footer .fa {
+    color: #E99749;
+}
+
+a.icon {
+    text-decoration: none;
+}
+
+pre {
+    padding: 5px;
+    border: 2px solid #E99749;
+    background: #F8F9FA;
+}
+
+pre code {
+    font-family: 'Courier', sans-serif;
+    font-size: 0.9em;
+}
+
+
+.nav-link {
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar p {
+    padding: 0;
+    margin: 0;
+}
+    </style>
+</head>
+<body>
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+    <h5 class="my-0 mr-md-auto font-weight-normal">
+        <img src="https://avatars0.githubusercontent.com/u/710363?s=45&v=4" alt="Novactive"/>
+        Nova eZ Platform Bundles
+    </h5>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="" id="components-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Bundles
+            </a>
+            <div class="dropdown-menu" aria-labelledby="components-menu">
+
+                                    <a class="dropdown-item" href="master/Accelerator/README.md.html">Accelerator</a>
+                                    <a class="dropdown-item" href="master/CloudinaryBundle/README.md.html">CloudinaryBundle</a>
+                                    <a class="dropdown-item" href="master/EditHelpBundle/README.md.html">EditHelpBundle</a>
+                                    <a class="dropdown-item" href="master/EnhancedImageAssetBundle/README.md.html">EnhancedImageAssetBundle</a>
+                                    <a class="dropdown-item" href="master/ExtraBundle/README.md.html">ExtraBundle</a>
+                                    <a class="dropdown-item" href="master/LdapAuthenticatorBundle/README.md.html">LdapAuthenticatorBundle</a>
+                                    <a class="dropdown-item" href="master/MailingBundle/README.md.html">MailingBundle</a>
+                                    <a class="dropdown-item" href="master/MenuManagerBundle/README.md.html">MenuManagerBundle</a>
+                                    <a class="dropdown-item" href="master/ProtectedContentBundle/README.md.html">ProtectedContentBundle</a>
+                                    <a class="dropdown-item" href="master/ResponsiveImagesBundle/README.md.html">ResponsiveImagesBundle</a>
+                                    <a class="dropdown-item" href="master/RssFeedBundle/README.md.html">RssFeedBundle</a>
+                                    <a class="dropdown-item" href="master/SEOBundle/README.md.html">SEOBundle</a>
+                                    <a class="dropdown-item" href="master/SlackBundle/README.md.html">SlackBundle</a>
+                                    <a class="dropdown-item" href="master/SolrSearchExtraBundle/README.md.html">SolrSearchExtraBundle</a>
+                                    <a class="dropdown-item" href="master/StaticTemplatesBundle/README.md.html">StaticTemplatesBundle</a>
+                            </div>
+        </li>
+    </ul>
+    <nav class="my-2 my-md-0 mr-md-3">
+        <a class="p-2 text-dark" target="_blank" href="https://www.novactive.com">France</a>
+        <a class="p-2 text-dark" target="_blank" href="https://www.novactive.us">California</a>
+        <a class="p-2 text-dark" target="_blank" href="https://www.nextedia.com">Nextedia</a>
+        <a class="p-2 text-dark icon" target="_blank" href="https://github.com/Novactive/Nova-eZPlatform-Bundles"><i class="fab fa-github fa-2x" aria-hidden="true"></i>&nbsp;&nbsp;</a>
+    </nav>
+</div>
+
+<div class="container-fluid">
+        <div class="row flex-column-reverse flex-md-row">
+        <div class="col-md-8 col-sm-12">
+            <h1 name="95536d93cae558fe11e2218673d6cc18"><i class="fa fa-3x fa-rocket"></i><br /> Usage</h1>
+<h2 name="b5a7adde1af5c87d7fd797b6245c2a39">Description</h2>
+<p>The main idea is to avoid you to manage the <strong>&lt;meta&gt;</strong> and <strong>&lt;link&gt;</strong> tag.
+If there is a content when the view is rendered then the template will take care of the html tags according to the configuration and to the content.</p>
+<p>If there is no content and if the content doesn't have the NovaSEO Field Type, the default <strong>&lt;meta&gt;</strong>, <strong>&lt;title&gt;</strong> and <strong>&lt;link&gt;</strong> will be set.
+But you will have to manage yourself. ( we can't do that for you, but we'd simplified the process.</p>
+<blockquote>
+<p>All the configuration is SiteAccessAware then you can have different one depending on the SiteAccess</p>
+</blockquote>
+<h2 name="1115b855bb2a508bc2ca0609cc2d0f65">Integration</h2>
+<pre><code class=" twig"># in your pagelayout
+{% block seo_metas %}
+    {% include "@NovaeZSEO/seometas_metaslinks.html.twig" %}
+{% endblock %}
+
+# in a template which extends the pagelayout (not required, useful when you want to do something special)
+{% block seo_metas %}
+    &lt;title&gt;.....&lt;/title&gt;
+    &lt;meta name="..." /&gt;
+    {{ parent() }}
+{% endblock %}</code></pre>
+<blockquote>
+<p>As this template handles a lot of &lt;meta&gt; and &lt;link&gt; and the &lt;title&gt; tag you have to be careful in your code to avoid duplicate tags.</p>
+</blockquote>
+<h2 name="48948fc1ff92a8c1a9645f49e57ce57f"><i class="fa fa-3x fa-wrench"></i><br /> Configuration</h2>
+<h3 name="d6f89fb04f407fcd086f900704aecdfa">&lt;meta&gt; Configuration</h3>
+<pre><code class=" yml">nova_ezseo:
+    system:
+        default:
+            default_metas:
+                author: "eZ Community Bundle Nova eZ SEO Bundle"
+                copyright: ~
+                generator: "eZ Platform"
+                MSSmartTagsPreventParsing: "TRUE"</code></pre>
+<blockquote>
+<p>You can add your own <meta> here</p>
+</blockquote>
+<h3 name="755f7363c571ff5d425e069c6c0cb034">&lt;link&gt; Configuration</h3>
+<pre><code class=" yml">nova_ezseo:
+    system:
+        default:
+            default_links:
+                Index:
+                    href: { location_id: 2 }
+                    title: 'Home'
+                Top:
+                    href: { route : 'yourproject_home' }
+                    title: 'Home'
+                Search:
+                    href: { route: 'yourproject_search_route' }
+                    title: 'Search'
+                'Shortcut icon':
+                    href: { asset: '/bundles/sitebundle/images/favicon.ico' }
+                    type: 'image/x-icon'
+                Alternate:
+                    href: { route: 'yourproject_rss_feed_route' }
+                    title: 'RSS'
+                    type: 'application/rss+xml'
+                'Other package asset':
+                    href: { asset: { path: 'images/favicon.ico', package: 'ezdesign' } }
+                    type: 'image/x-icon'</code></pre>
+<blockquote>
+<p>You can add your own <link> here</p>
+</blockquote>
+<h3 name="5549ece879c8c3b2fca0c0fe1f2a1f4d">FieldType Configuration</h3>
+<p>You can add your Metas in your configuration</p>
+<pre><code class=" yml">nova_ezseo:
+    system:
+        default:
+            fieldtype_metas_identifier: "metas"
+            fieldtype_metas:
+                title:
+                    label: 'Title'
+                    default_pattern: "&lt;title|name&gt;"
+                description:
+                    label: 'Description'
+                    default_pattern: "&lt;description|short_description|title|name&gt;"
+                keywords:
+                    label: 'Keywords'
+                    default_pattern: ~
+</code></pre>
+<p>This configuration defines 3 metas, <em>title</em>, <em>description</em> and <em>keywords</em></p>
+<blockquote>
+<p>You can add what you want to here.</p>
+</blockquote>
+<h2 name="51dff010f8fb8fb4e13e404b4fb7ab6c"><i class="fa fa-3x fa-file"></i><br /> sitemap.xml</h2>
+<p>Your sitemap is automatically generated on the fly.</p>
+<pre><code class=" yml">nova_ezseo:
+    system:
+        default:
+            sitemap_excludes:
+                locations: [2]
+                subtrees: [45,89,343]
+                contentTypeIdentifiers: ['footer','something']</code></pre>
+<p>Set &quot;limit_to_rootlocation&quot; to true to automatically generate sitemap.xml per rootlocation.</p>
+<pre><code class=" yml">nova_ezseo:
+    system:
+        default:
+            limit_to_rootlocation: true
+            sitemap_excludes:
+                subtrees: [45,89,343]
+                contentTypeIdentifiers: ['footer','something']</code></pre>
+<h2 name="b9102224b1f1c665a0635cac4ad78e10">Google Site Verification file</h2>
+<p>You can manage the Google Verification file in the configuration</p>
+<pre><code class=" yml">nova_ezseo:
+    system:
+        default:
+            google_verification: 1234567890</code></pre>
+<blockquote>
+<p>Simpler way, nothing to put on your server, no need to add a new RewriteRules</p>
+</blockquote>
+<h2 name="9eda26507d982a747101d6a328541e99">Google Analytics Integration Marker</h2>
+<p>You can insert the GA Marker by just adding your id: UA-XXXXXXXX-X</p>
+<pre><code class=" yml">nova_ezseo:
+    system:
+        default:
+            google_gatracker: UA-XXXXXXXX-X</code></pre>
+<h2 name="54e13dd1484005ac55613bff4719276c">Google Analyitcs anonymizeIp</h2>
+<p>The default behavior is to set Google Analytics to anonymize all ip, set 'google_anonymizeIp' to false to turn this of.</p>
+<pre><code class=" yml">nova_ezseo:
+    system:
+        default:
+            google_anonymizeIp: false</code></pre>
+<h2 name="2b7015055e9b4e93a3c2edac61252145">Robots.txt file</h2>
+<p>You can manage the Robots.txt file</p>
+<pre><code class=" yml">nova_ezseo:
+    system:
+        default:
+            google_verification: 1234567890
+            robots_disallow:
+                - "/admin"
+                - "/specials"</code></pre>
+<blockquote>
+<p>Nothing to put on your server, no need to add a new RewriteRules, and there is also a security, the Disallow / is automatically set when you're not in &quot;prod&quot; mode.</p>
+</blockquote>
+<h2 name="3ff96f304fb084e2a4b8401995ece453">How the Field Type works</h2>
+<p>There are 5 levels of fallback which allow you to set the good value for the metas.</p>
+<ul>
+<li>1: in configuration (Yaml only)</li>
+<li>2: in the Field Type Definition (Administration Interface, on the Content Type)</li>
+<li>3: in the Content  (Administration Interface, on the Content)</li>
+<li>4: Plus: same 3 previous rules but on the Root Content</li>
+</ul>
+<p>Wait, you read 5 !</p>
+<p>There is a transverse abstract level based on a feature similar to the Object/Url Name Pattern.</p>
+<h3 name="7004bade5e74261401a5d40af329a1d0"><i class="fa fa-3x fa-magic"></i><br /> Object Pattern like feature</h3>
+<p>At each level mentioned above, you can set a <strong>default_pattern</strong> value.</p>
+<p>This pattern allows you to define a fallback on optional Field, <em>&lt;title|name&gt;</em> means it will try to take the title Field, if it finds nothing it will try the name.
+Depending where you have set this pattern, the system will fallback to the other level</p>
+<h3 name="c25dcbe370adfc2d929f9bb6509f60e4">Do what you want to</h3>
+<p>That's really powerful, and you can do almost what you want to.</p>
+<p>If it's not enough, you can also add a sixth level with Twig manipulation!</p>
+<blockquote>
+<p>You can use a image and and object_relation to an image ( needed for facebook image url for example )</p>
+</blockquote>
+<h3 name="359907d947ee1b987783e84c56242b38">Even better !</h3>
+<p>Started at the version 1.1.0, you can define a CustomFallback service</p>
+<p>Ex:</p>
+<pre><code class=" yml">nova_ezseo:
+    system:
+        default:
+            custom_fallback_service: yourname.seo.fallback</code></pre>
+<p>This service must be declare and MUST implement the CustomFallbackInterface</p>
+<pre><code class=" php">public function getMetaContent( $metaName, ContentInfo $contentInfo );</code></pre>
+<p>Then here, you can inject whatever you want into this service and manage specific values and condition for empty meta.
+Just return the Value of the given metaName. </p>
+<blockquote>
+<p>Tip: You can force the meta to be empty (~) to enter in this Service ;)</p>
+</blockquote>
+<p>No more limits!</p>
+<h2 name="3ff36e3ace57913fc71f431b4c190b93">Add the FieldType to your Content Type</h2>
+<p>A command is provided to simply add the FieldType, you can always do it by the Administration Inferface</p>
+<pre><code class=" bash">$ php bin/console nova_ezseo:addnovaseometasfieldtype -h
+Usage:
+ nova_ezseo:addnovaseometasfieldtype [--identifier="..."] [--identifiers="..."] [--group_identifier="..."]
+
+Options:
+ --identifier          a content type identifier
+ --identifiers         some content types identifier, separated by a comma
+ --group_identifier    a content type group identifier
+ ...
+ --siteaccess          SiteAccess to use for operations. If not provided, default siteaccess will be used
+
+Help:
+ The command nova_ezseo:addnovaseometasfieldtype add the FieldType 'novaseometas'.
+ You can select the Content Type via the identifier, identifiers, group_identifier option.
+     - Identifier will be: %nova_ezseo.default.fieldtype_metas_identifier%
+     - Name will be: Metas
+     - Category will be: SEO</code></pre>
+        </div>
+        <div class="col-md-4 col-sm-12 d-print-none sidebar">
+                            <p><strong>In this page</strong>:</p>
+                <ul class="nav flex-column"><li class="nav-item first last"><a href="#95536d93cae558fe11e2218673d6cc18" class="nav-link">&lt;i class=&quot;fa fa-3x fa-rocket&quot;&gt;&lt;/i&gt;&lt;br /&gt; Usage</a><ul class="menu_level_1"><li class="nav-item first"><a href="#b5a7adde1af5c87d7fd797b6245c2a39" class="nav-link">Description</a></li><li class="nav-item"><a href="#1115b855bb2a508bc2ca0609cc2d0f65" class="nav-link">Integration</a></li><li class="nav-item"><a href="#48948fc1ff92a8c1a9645f49e57ce57f" class="nav-link">&lt;i class=&quot;fa fa-3x fa-wrench&quot;&gt;&lt;/i&gt;&lt;br /&gt; Configuration</a><ul class="menu_level_2"><li class="nav-item first"><a href="#d6f89fb04f407fcd086f900704aecdfa" class="nav-link">&lt;meta&gt; Configuration</a></li><li class="nav-item"><a href="#755f7363c571ff5d425e069c6c0cb034" class="nav-link">&lt;link&gt; Configuration</a></li><li class="nav-item last"><a href="#5549ece879c8c3b2fca0c0fe1f2a1f4d" class="nav-link">FieldType Configuration</a></li></ul></li><li class="nav-item"><a href="#51dff010f8fb8fb4e13e404b4fb7ab6c" class="nav-link">&lt;i class=&quot;fa fa-3x fa-file&quot;&gt;&lt;/i&gt;&lt;br /&gt; sitemap.xml</a></li><li class="nav-item"><a href="#b9102224b1f1c665a0635cac4ad78e10" class="nav-link">Google Site Verification file</a></li><li class="nav-item"><a href="#9eda26507d982a747101d6a328541e99" class="nav-link">Google Analytics Integration Marker</a></li><li class="nav-item"><a href="#54e13dd1484005ac55613bff4719276c" class="nav-link">Google Analyitcs anonymizeIp</a></li><li class="nav-item"><a href="#2b7015055e9b4e93a3c2edac61252145" class="nav-link">Robots.txt file</a></li><li class="nav-item"><a href="#3ff96f304fb084e2a4b8401995ece453" class="nav-link">How the Field Type works</a><ul class="menu_level_2"><li class="nav-item first"><a href="#7004bade5e74261401a5d40af329a1d0" class="nav-link">&lt;i class=&quot;fa fa-3x fa-magic&quot;&gt;&lt;/i&gt;&lt;br /&gt; Object Pattern like feature</a></li><li class="nav-item"><a href="#c25dcbe370adfc2d929f9bb6509f60e4" class="nav-link">Do what you want to</a></li><li class="nav-item last"><a href="#359907d947ee1b987783e84c56242b38" class="nav-link">Even better !</a></li></ul></li><li class="nav-item last"><a href="#3ff36e3ace57913fc71f431b4c190b93" class="nav-link">Add the FieldType to your Content Type</a></li></ul></li></ul>
+                    </div>
+    </div>
+    <footer class="pt-4 my-md-5 pt-md-5 border-top">
+    <div class="row">
+        <div class="col-2">
+            <img class="mb-2" src="https://avatars0.githubusercontent.com/u/710363?s=60&v=4" width="24" height="24" alt="Novactive"/>
+            <small class="d-block mb-3 text-muted">&copy; 2020</small>
+        </div>
+        <div class="col-8">
+            <p class="text-center">
+                <i class="fas fa-code"></i> with
+                <i class="fas fa-heart"></i> in Paris, Toulon, Nantes, Bordeaux and California.
+            </p>
+        </div>
+        <div class="col-2">
+            <p class="text-right">
+                <a href="#">
+                    Back to top
+                </a>
+            </p>
+        </div>
+    </div>
+</footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+<link rel="stylesheet"  href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/github.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        function _scrollToName (hash) {
+            var name = hash.substr(1);
+            var to = (name === '') ? 0 : $("[name=" + name + "]").offset().top - 10;
+            $('html, body').animate({
+                scrollTop: to
+            }, 'slow');
+        }
+
+        $('a[href^="#"]').click(function () {
+            var selector = $(this).attr("href");
+            _scrollToName(selector);
+            return false;
+        });
+
+        if (location.hash) {
+            _scrollToName(location.hash);
+        }
+    });
+    hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>

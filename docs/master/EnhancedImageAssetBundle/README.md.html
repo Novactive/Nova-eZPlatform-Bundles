@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <style type="text/css">
+        * {
+    font-family: 'Open Sans', sans-serif;
+}
+
+a, a:hover, footer .fa {
+    color: #E99749;
+}
+
+a.icon {
+    text-decoration: none;
+}
+
+pre {
+    padding: 5px;
+    border: 2px solid #E99749;
+    background: #F8F9FA;
+}
+
+pre code {
+    font-family: 'Courier', sans-serif;
+    font-size: 0.9em;
+}
+
+
+.nav-link {
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar p {
+    padding: 0;
+    margin: 0;
+}
+    </style>
+</head>
+<body>
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+    <h5 class="my-0 mr-md-auto font-weight-normal">
+        <img src="https://avatars0.githubusercontent.com/u/710363?s=45&v=4" alt="Novactive"/>
+        Nova eZ Platform Bundles
+    </h5>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="" id="components-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Bundles
+            </a>
+            <div class="dropdown-menu" aria-labelledby="components-menu">
+
+                                    <a class="dropdown-item" href="master/Accelerator/README.md.html">Accelerator</a>
+                                    <a class="dropdown-item" href="master/CloudinaryBundle/README.md.html">CloudinaryBundle</a>
+                                    <a class="dropdown-item" href="master/EditHelpBundle/README.md.html">EditHelpBundle</a>
+                                    <a class="dropdown-item" href="master/EnhancedImageAssetBundle/README.md.html">EnhancedImageAssetBundle</a>
+                                    <a class="dropdown-item" href="master/ExtraBundle/README.md.html">ExtraBundle</a>
+                                    <a class="dropdown-item" href="master/LdapAuthenticatorBundle/README.md.html">LdapAuthenticatorBundle</a>
+                                    <a class="dropdown-item" href="master/MailingBundle/README.md.html">MailingBundle</a>
+                                    <a class="dropdown-item" href="master/MenuManagerBundle/README.md.html">MenuManagerBundle</a>
+                                    <a class="dropdown-item" href="master/ProtectedContentBundle/README.md.html">ProtectedContentBundle</a>
+                                    <a class="dropdown-item" href="master/ResponsiveImagesBundle/README.md.html">ResponsiveImagesBundle</a>
+                                    <a class="dropdown-item" href="master/RssFeedBundle/README.md.html">RssFeedBundle</a>
+                                    <a class="dropdown-item" href="master/SEOBundle/README.md.html">SEOBundle</a>
+                                    <a class="dropdown-item" href="master/SlackBundle/README.md.html">SlackBundle</a>
+                                    <a class="dropdown-item" href="master/SolrSearchExtraBundle/README.md.html">SolrSearchExtraBundle</a>
+                                    <a class="dropdown-item" href="master/StaticTemplatesBundle/README.md.html">StaticTemplatesBundle</a>
+                            </div>
+        </li>
+    </ul>
+    <nav class="my-2 my-md-0 mr-md-3">
+        <a class="p-2 text-dark" target="_blank" href="https://www.novactive.com">France</a>
+        <a class="p-2 text-dark" target="_blank" href="https://www.novactive.us">California</a>
+        <a class="p-2 text-dark" target="_blank" href="https://www.nextedia.com">Nextedia</a>
+        <a class="p-2 text-dark icon" target="_blank" href="https://github.com/Novactive/Nova-eZPlatform-Bundles"><i class="fab fa-github fa-2x" aria-hidden="true"></i>&nbsp;&nbsp;</a>
+    </nav>
+</div>
+
+<div class="container-fluid">
+        <div class="row flex-column-reverse flex-md-row">
+        <div class="col-md-8 col-sm-12">
+            <h1 name="b7e308dbe38ea527fde2d1d0292af1bd">NovaeZEnhancedImageAssetBundle</h1>
+<p>An eZPlatform bundle providing new field type with enhanced features related to image management</p>
+<h2 name="98f770b0af18ca763421bac22b4b6805">Features</h2>
+<ul>
+<li>Focus point managment in admin UI</li>
+<li>Lazy loading</li>
+<li>Responsive loading</li>
+<li>Progressive loading</li>
+</ul>
+<h2 name="5a2ebfb8baa378cfcfcba58bbb1380c2">Requirements</h2>
+<ul>
+<li>eZ Platform Admin UI</li>
+<li>PHP 7.1+</li>
+</ul>
+<h2 name="7cd8fb6e31cc946c078d2740c76a9899">Installation</h2>
+<h3 name="6065c97227a6214bc68bad0f15ff16d1">Use Composer</h3>
+<p>Add NovaeZEnhancedImageAssetBundle in your composer.json:</p>
+<pre><code class=" bash">composer require novactive/ezenhancedimageassetbundle</code></pre>
+<h3 name="040da9acc61145e551bcf66b54f44420">Register the bundle</h3>
+<p>Register the bundle in your application's kernel class:</p>
+<pre><code class=" php">// app/AppKernel.php
+public function registerBundles()
+{
+    $bundles = array(
+        // ...
+        new Novactive\EzEnhancedImageAssetBundle\EzEnhancedImageAssetBundle(),
+        // ...
+    );
+}</code></pre>
+<h2 name="98f770b0af18ca763421bac22b4b6805">Features</h2>
+<h3 name="1dec521f2b31fcdf89ad06a3b6f9c72e">1. Default image configuration</h3>
+<p>Added to siteaccess aware parameters which allow to define the default post processors and configuration to use when generating image alias</p>
+<pre><code class=" yaml">parameters:
+  ez_enhanced_image_asset.default.image_default_post_processors: 
+    pngquant:
+        quality: '40-85'
+    jpegoptim:
+        strip_all: true
+        max: 70
+        progressive: true
+  ez_enhanced_image_asset.default.image_default_config: 
+    animated: true
+    quality: 80</code></pre>
+<h3 name="16629dd92f36c84a71c2820442e3d8f6">2. LazyLoading</h3>
+<p>Lazy loading is controlled globaly by the following settings (default to true) and can be overriden at field level.</p>
+<pre><code class=" yaml">parameters: 
+  ez_enhanced_image_asset.default.enable_lazy_load: true</code></pre>
+<h4 name="57fc5188dec93f8548df2cc755d32af4">3. Retina variations</h4>
+<p>Retina variations should suffixed by <code>_retina</code> will be used automatically (if enabled) when using the provided field template.
+To be displayed, the generated variation width should be two time the width of the default variation.</p>
+<p>Considering a variation named <code>my_alias</code>, the variation named <code>my_alias_retina</code> will be used and displayed on retina screens.</p>
+<pre><code class=" yaml"> - { name: my_alias, params: {size: [&lt;width&gt;, &lt;height&gt;], focus: [0, 0]} }
+ - { name: my_alias_retina, params: {size: [&lt;width*2&gt;, &lt;height*2&gt;], focus: [0, 0]} }</code></pre>
+<p>The automatic use of retina variations is controlled by this setting</p>
+<pre><code class=" yaml">parameters: 
+  ez_enhanced_image_asset.default.enable_retina: true</code></pre>
+<h3 name="8effdf1f281f147ebf235368eeacb931">4. Twig render field parameters</h3>
+<p>You can now specify the <code>alternativeAlias</code> parameter to define alternative image alias depending the screen size</p>
+<pre><code class=" twig">
+{{ ez_render_field(content, fieldIdentifier, {
+    parameters: {
+        alias: 'desktop_alias',
+        alternativeAlias: [
+            {
+                alias: 'mobile_alias',
+                media: '(max-width: 320px)'
+            }
+        ]
+        lazyLoad: true|false // optionnal
+        retina: true|false // optionnal
+    }
+}) }}</code></pre>
+<h3 name="f9b279793879b6339dba3a75214156f8">4. Focus point</h3>
+<p>This bundle provide a new <code>enhancedimage</code> field type which extend the <code>ezimage</code> field type.
+This field type allow the user to select a focus point on the uploaded image.
+Variation can then be created based on the selected focus point.</p>
+<p><img src="doc/images/image-focus-demo.gif" alt="Demo" class="img-fluid" /></p>
+<p><a href="https://image-focus.stackblitz.io/">Check out the demo</a></p>
+<h4 name="6182ea0872fd89f503b457bf91eeaadc">Variations configuration</h4>
+<p>Focused variations require the use of a &quot;focusedThumbnail&quot; filter to generate thumbnail based on the contributed focus point.</p>
+<pre><code class=" yaml"> - { name: focusedThumbnail, params: {size: [&lt;width&gt;, &lt;height&gt;], focus: [0, 0]} }</code></pre>
+<p>NB: the <code>focus</code> parameter is automaticaly updated for each image based on what has been contributed</p>
+<h4 name="60865b597447dd898ce52486f00c632c">Migrate existing ezimage fields</h4>
+<p>As the new <code>enhancedimage</code> field type is an extend of the <code>ezimage</code> field type, you just need to update the <code>data_type_string</code> column in the database for the fields you want.</p>
+<p>Example :</p>
+<pre><code class=" sql">UPDATE ezcontentclass_attribute ca
+INNER JOIN ezcontentclass c ON c.id = ca.contentclass_id
+SET data_type_string = "enhancedimage"
+WHERE ca.data_type_string = "ezimage" AND c.identifier="my_content_type" AND ca.identifier="my_field_identifier";
+
+UPDATE ezcontentobject_attribute oa
+INNER JOIN ezcontentclass_attribute ca ON oa.contentclassattribute_id = ca.id
+SET oa.data_type_string = "enhancedimage"
+WHERE oa.data_type_string = "ezimage" AND ca.data_type_string="enhancedimage";</code></pre>
+<h2 name="c64518704ce0c0d5501a45763f464276">Usage</h2>
+<p>Some feature will require the following assets</p>
+<pre><code class=" twig">&lt;link rel="stylesheet" href="{{ asset("bundles/ezenhancedimageasset/css/enhancedimage.css") }}" /&gt;</code></pre>
+<pre><code class=" twig">&lt;script src="{{ asset("bundles/ezenhancedimageasset/js/enhancedimage.js") }}"&gt;&lt;/script&gt;</code></pre>
+        </div>
+        <div class="col-md-4 col-sm-12 d-print-none sidebar">
+                            <p><strong>In this page</strong>:</p>
+                <ul class="nav flex-column"><li class="nav-item first last"><a href="#b7e308dbe38ea527fde2d1d0292af1bd" class="nav-link">NovaeZEnhancedImageAssetBundle</a><ul class="menu_level_1"><li class="nav-item first"><a href="#98f770b0af18ca763421bac22b4b6805" class="nav-link">Features</a><ul class="menu_level_2"><li class="nav-item first"><a href="#1dec521f2b31fcdf89ad06a3b6f9c72e" class="nav-link">1. Default image configuration</a></li><li class="nav-item"><a href="#16629dd92f36c84a71c2820442e3d8f6" class="nav-link">2. LazyLoading</a><ul class="menu_level_3"><li class="nav-item first last"><a href="#57fc5188dec93f8548df2cc755d32af4" class="nav-link">3. Retina variations</a></li></ul></li><li class="nav-item"><a href="#8effdf1f281f147ebf235368eeacb931" class="nav-link">4. Twig render field parameters</a></li><li class="nav-item last"><a href="#f9b279793879b6339dba3a75214156f8" class="nav-link">4. Focus point</a><ul class="menu_level_3"><li class="nav-item first"><a href="#6182ea0872fd89f503b457bf91eeaadc" class="nav-link">Variations configuration</a></li><li class="nav-item last"><a href="#60865b597447dd898ce52486f00c632c" class="nav-link">Migrate existing ezimage fields</a></li></ul></li></ul></li><li class="nav-item"><a href="#5a2ebfb8baa378cfcfcba58bbb1380c2" class="nav-link">Requirements</a></li><li class="nav-item"><a href="#7cd8fb6e31cc946c078d2740c76a9899" class="nav-link">Installation</a><ul class="menu_level_2"><li class="nav-item first"><a href="#6065c97227a6214bc68bad0f15ff16d1" class="nav-link">Use Composer</a></li><li class="nav-item last"><a href="#040da9acc61145e551bcf66b54f44420" class="nav-link">Register the bundle</a></li></ul></li><li class="nav-item last"><a href="#c64518704ce0c0d5501a45763f464276" class="nav-link">Usage</a></li></ul></li></ul>
+                    </div>
+    </div>
+    <footer class="pt-4 my-md-5 pt-md-5 border-top">
+    <div class="row">
+        <div class="col-2">
+            <img class="mb-2" src="https://avatars0.githubusercontent.com/u/710363?s=60&v=4" width="24" height="24" alt="Novactive"/>
+            <small class="d-block mb-3 text-muted">&copy; 2020</small>
+        </div>
+        <div class="col-8">
+            <p class="text-center">
+                <i class="fas fa-code"></i> with
+                <i class="fas fa-heart"></i> in Paris, Toulon, Nantes, Bordeaux and California.
+            </p>
+        </div>
+        <div class="col-2">
+            <p class="text-right">
+                <a href="#">
+                    Back to top
+                </a>
+            </p>
+        </div>
+    </div>
+</footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+<link rel="stylesheet"  href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/github.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        function _scrollToName (hash) {
+            var name = hash.substr(1);
+            var to = (name === '') ? 0 : $("[name=" + name + "]").offset().top - 10;
+            $('html, body').animate({
+                scrollTop: to
+            }, 'slow');
+        }
+
+        $('a[href^="#"]').click(function () {
+            var selector = $(this).attr("href");
+            _scrollToName(selector);
+            return false;
+        });
+
+        if (location.hash) {
+            _scrollToName(location.hash);
+        }
+    });
+    hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>

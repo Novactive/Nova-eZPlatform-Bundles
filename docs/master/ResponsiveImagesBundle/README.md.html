@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <style type="text/css">
+        * {
+    font-family: 'Open Sans', sans-serif;
+}
+
+a, a:hover, footer .fa {
+    color: #E99749;
+}
+
+a.icon {
+    text-decoration: none;
+}
+
+pre {
+    padding: 5px;
+    border: 2px solid #E99749;
+    background: #F8F9FA;
+}
+
+pre code {
+    font-family: 'Courier', sans-serif;
+    font-size: 0.9em;
+}
+
+
+.nav-link {
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar p {
+    padding: 0;
+    margin: 0;
+}
+    </style>
+</head>
+<body>
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+    <h5 class="my-0 mr-md-auto font-weight-normal">
+        <img src="https://avatars0.githubusercontent.com/u/710363?s=45&v=4" alt="Novactive"/>
+        Nova eZ Platform Bundles
+    </h5>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="" id="components-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Bundles
+            </a>
+            <div class="dropdown-menu" aria-labelledby="components-menu">
+
+                                    <a class="dropdown-item" href="master/Accelerator/README.md.html">Accelerator</a>
+                                    <a class="dropdown-item" href="master/CloudinaryBundle/README.md.html">CloudinaryBundle</a>
+                                    <a class="dropdown-item" href="master/EditHelpBundle/README.md.html">EditHelpBundle</a>
+                                    <a class="dropdown-item" href="master/EnhancedImageAssetBundle/README.md.html">EnhancedImageAssetBundle</a>
+                                    <a class="dropdown-item" href="master/ExtraBundle/README.md.html">ExtraBundle</a>
+                                    <a class="dropdown-item" href="master/LdapAuthenticatorBundle/README.md.html">LdapAuthenticatorBundle</a>
+                                    <a class="dropdown-item" href="master/MailingBundle/README.md.html">MailingBundle</a>
+                                    <a class="dropdown-item" href="master/MenuManagerBundle/README.md.html">MenuManagerBundle</a>
+                                    <a class="dropdown-item" href="master/ProtectedContentBundle/README.md.html">ProtectedContentBundle</a>
+                                    <a class="dropdown-item" href="master/ResponsiveImagesBundle/README.md.html">ResponsiveImagesBundle</a>
+                                    <a class="dropdown-item" href="master/RssFeedBundle/README.md.html">RssFeedBundle</a>
+                                    <a class="dropdown-item" href="master/SEOBundle/README.md.html">SEOBundle</a>
+                                    <a class="dropdown-item" href="master/SlackBundle/README.md.html">SlackBundle</a>
+                                    <a class="dropdown-item" href="master/SolrSearchExtraBundle/README.md.html">SolrSearchExtraBundle</a>
+                                    <a class="dropdown-item" href="master/StaticTemplatesBundle/README.md.html">StaticTemplatesBundle</a>
+                            </div>
+        </li>
+    </ul>
+    <nav class="my-2 my-md-0 mr-md-3">
+        <a class="p-2 text-dark" target="_blank" href="https://www.novactive.com">France</a>
+        <a class="p-2 text-dark" target="_blank" href="https://www.novactive.us">California</a>
+        <a class="p-2 text-dark" target="_blank" href="https://www.nextedia.com">Nextedia</a>
+        <a class="p-2 text-dark icon" target="_blank" href="https://github.com/Novactive/Nova-eZPlatform-Bundles"><i class="fab fa-github fa-2x" aria-hidden="true"></i>&nbsp;&nbsp;</a>
+    </nav>
+</div>
+
+<div class="container-fluid">
+        <div class="row flex-column-reverse flex-md-row">
+        <div class="col-md-8 col-sm-12">
+            <h1 name="12fc618006c50ebe277cbfc3728bcb6d">Novactive eZ Responsive Images Bundle</h1>
+<p>Novactive eZ Responsive Images is a lightweight eZ Publish 5.x|6.x bundle for Responsive Images management.</p>
+<h2 name="5a2ebfb8baa378cfcfcba58bbb1380c2">Requirements</h2>
+<ul>
+<li>eZ Publish 5.4+ / eZ Publish Community Project 2014.07+</li>
+<li>PHP 5.4+</li>
+</ul>
+<h2 name="349838fb1d851d3e2014b9fe39203275">Install</h2>
+<h3 name="d5529bb2b676e5d2d3a6936064c7532d">Usage and main feature</h3>
+<p>By default this bundle will use <a href="https://github.com/scottjehl/picturefill">picturefill</a> to load the good version of the your variations.</p>
+<p>You can also decide to lazy load the images, in this case the bundle uses <a href="https://github.com/luis-almeida/unveil">unveil.js</a> to load the good version of the variation alias name.</p>
+<p>Today it handles 3 versions:</p>
+<ul>
+<li>Mobile: viewport width &lt; 640px</li>
+<li>Desktop: default choice</li>
+<li>Retina: devicePixelRatio &gt; 1,</li>
+</ul>
+<p>Then it is really interesting to understand that only the good version will be loaded in the browser.
+The Lazy loading is based on the view port too, if an image is not visible on the screen it will be pre-loaded and loaded on the scroll action.</p>
+<p>It means:</p>
+<ul>
+<li>it reduces drastically the size and the load time of the page by not loading the non visible images</li>
+<li>when an image is loaded, it ensures that is the adapted one.</li>
+</ul>
+<pre><code class=" twig">        {{ ez_render_field(content, 'image', {
+            parameters: {
+                alias: 'blog_post_line_home',
+                class: 'img-responsive img-rounded',
+                unveiled: true,
+            }
+        }) }}</code></pre>
+<blockquote>
+<p>Unveiled means &quot;Lazy Loading&quot;</p>
+<p>Read below, you will need 2 more aliases for each current alias that you have.</p>
+</blockquote>
+<h3 name="6065c97227a6214bc68bad0f15ff16d1">Use Composer</h3>
+<pre><code class=" bash">$ php composer.phar require novactive/ezresponsiveimagesbundle</code></pre>
+<h3 name="040da9acc61145e551bcf66b54f44420">Register the bundle</h3>
+<p>Activate the bundle in <code>app\Appkernel.php</code> file.</p>
+<pre><code class=" php">// ezpublish\EzPublishKernel.php
+
+public function registerBundles()
+{
+   ...
+   $bundles = array(
+       new FrameworkBundle(),
+       ...
+       new Novactive\Bundle\eZResponsiveImagesBundle\NovaeZResponsiveImagesBundle(),
+   );
+   ...
+}</code></pre>
+<h3 name="50f5ab40d990b0bdcd329f95cdc5ca2c">Create the _mobile and _retina Alias Name</h3>
+<p>The bundle requires that you create 2 more alias for each alias you are using. Ex:</p>
+<pre><code class=" yaml">    gallery_full_thumbnail:
+        reference: ~
+        filters:
+            - { name: geometry/scaledownonly, params: [354, 224] }
+
+    gallery_full_thumbnail_mobile:
+        reference: gallery_full_thumbnail
+        filters:
+            - { name: geometry/scalewidthdownonly, params: [175] }
+
+    gallery_full_thumbnail_retina:
+        reference: ~
+        filters:
+            - { name: geometry/scaledownonly, params: [708, 448] }</code></pre>
+<h3 name="98211190869ce87ff6b1ae6320bdd19f">Load the resources in your pagelayout</h3>
+<pre><code class=" twig">    &lt;head&gt;
+        ...
+        {% include 'NovaeZResponsiveImagesBundle::novaezresponsiveimages.html.twig' %}
+    &lt;/head&gt;</code></pre>
+<h2>License</h2>
+<p><a href="LICENSE.html">License</a></p>
+        </div>
+        <div class="col-md-4 col-sm-12 d-print-none sidebar">
+                            <p><strong>In this page</strong>:</p>
+                <ul class="nav flex-column"><li class="nav-item first last"><a href="#12fc618006c50ebe277cbfc3728bcb6d" class="nav-link">Novactive eZ Responsive Images Bundle</a><ul class="menu_level_1"><li class="nav-item first"><a href="#5a2ebfb8baa378cfcfcba58bbb1380c2" class="nav-link">Requirements</a></li><li class="nav-item last"><a href="#349838fb1d851d3e2014b9fe39203275" class="nav-link">Install</a><ul class="menu_level_2"><li class="nav-item first"><a href="#d5529bb2b676e5d2d3a6936064c7532d" class="nav-link">Usage and main feature</a></li><li class="nav-item"><a href="#6065c97227a6214bc68bad0f15ff16d1" class="nav-link">Use Composer</a></li><li class="nav-item"><a href="#040da9acc61145e551bcf66b54f44420" class="nav-link">Register the bundle</a></li><li class="nav-item"><a href="#50f5ab40d990b0bdcd329f95cdc5ca2c" class="nav-link">Create the _mobile and _retina Alias Name</a></li><li class="nav-item last"><a href="#98211190869ce87ff6b1ae6320bdd19f" class="nav-link">Load the resources in your pagelayout</a></li></ul></li></ul></li></ul>
+                    </div>
+    </div>
+    <footer class="pt-4 my-md-5 pt-md-5 border-top">
+    <div class="row">
+        <div class="col-2">
+            <img class="mb-2" src="https://avatars0.githubusercontent.com/u/710363?s=60&v=4" width="24" height="24" alt="Novactive"/>
+            <small class="d-block mb-3 text-muted">&copy; 2020</small>
+        </div>
+        <div class="col-8">
+            <p class="text-center">
+                <i class="fas fa-code"></i> with
+                <i class="fas fa-heart"></i> in Paris, Toulon, Nantes, Bordeaux and California.
+            </p>
+        </div>
+        <div class="col-2">
+            <p class="text-right">
+                <a href="#">
+                    Back to top
+                </a>
+            </p>
+        </div>
+    </div>
+</footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+<link rel="stylesheet"  href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/github.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        function _scrollToName (hash) {
+            var name = hash.substr(1);
+            var to = (name === '') ? 0 : $("[name=" + name + "]").offset().top - 10;
+            $('html, body').animate({
+                scrollTop: to
+            }, 'slow');
+        }
+
+        $('a[href^="#"]').click(function () {
+            var selector = $(this).attr("href");
+            _scrollToName(selector);
+            return false;
+        });
+
+        if (location.hash) {
+            _scrollToName(location.hash);
+        }
+    });
+    hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>

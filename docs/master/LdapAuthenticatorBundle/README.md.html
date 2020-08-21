@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <style type="text/css">
+        * {
+    font-family: 'Open Sans', sans-serif;
+}
+
+a, a:hover, footer .fa {
+    color: #E99749;
+}
+
+a.icon {
+    text-decoration: none;
+}
+
+pre {
+    padding: 5px;
+    border: 2px solid #E99749;
+    background: #F8F9FA;
+}
+
+pre code {
+    font-family: 'Courier', sans-serif;
+    font-size: 0.9em;
+}
+
+
+.nav-link {
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar p {
+    padding: 0;
+    margin: 0;
+}
+    </style>
+</head>
+<body>
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+    <h5 class="my-0 mr-md-auto font-weight-normal">
+        <img src="https://avatars0.githubusercontent.com/u/710363?s=45&v=4" alt="Novactive"/>
+        Nova eZ Platform Bundles
+    </h5>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="" id="components-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Bundles
+            </a>
+            <div class="dropdown-menu" aria-labelledby="components-menu">
+
+                                    <a class="dropdown-item" href="master/Accelerator/README.md.html">Accelerator</a>
+                                    <a class="dropdown-item" href="master/CloudinaryBundle/README.md.html">CloudinaryBundle</a>
+                                    <a class="dropdown-item" href="master/EditHelpBundle/README.md.html">EditHelpBundle</a>
+                                    <a class="dropdown-item" href="master/EnhancedImageAssetBundle/README.md.html">EnhancedImageAssetBundle</a>
+                                    <a class="dropdown-item" href="master/ExtraBundle/README.md.html">ExtraBundle</a>
+                                    <a class="dropdown-item" href="master/LdapAuthenticatorBundle/README.md.html">LdapAuthenticatorBundle</a>
+                                    <a class="dropdown-item" href="master/MailingBundle/README.md.html">MailingBundle</a>
+                                    <a class="dropdown-item" href="master/MenuManagerBundle/README.md.html">MenuManagerBundle</a>
+                                    <a class="dropdown-item" href="master/ProtectedContentBundle/README.md.html">ProtectedContentBundle</a>
+                                    <a class="dropdown-item" href="master/ResponsiveImagesBundle/README.md.html">ResponsiveImagesBundle</a>
+                                    <a class="dropdown-item" href="master/RssFeedBundle/README.md.html">RssFeedBundle</a>
+                                    <a class="dropdown-item" href="master/SEOBundle/README.md.html">SEOBundle</a>
+                                    <a class="dropdown-item" href="master/SlackBundle/README.md.html">SlackBundle</a>
+                                    <a class="dropdown-item" href="master/SolrSearchExtraBundle/README.md.html">SolrSearchExtraBundle</a>
+                                    <a class="dropdown-item" href="master/StaticTemplatesBundle/README.md.html">StaticTemplatesBundle</a>
+                            </div>
+        </li>
+    </ul>
+    <nav class="my-2 my-md-0 mr-md-3">
+        <a class="p-2 text-dark" target="_blank" href="https://www.novactive.com">France</a>
+        <a class="p-2 text-dark" target="_blank" href="https://www.novactive.us">California</a>
+        <a class="p-2 text-dark" target="_blank" href="https://www.nextedia.com">Nextedia</a>
+        <a class="p-2 text-dark icon" target="_blank" href="https://github.com/Novactive/Nova-eZPlatform-Bundles"><i class="fab fa-github fa-2x" aria-hidden="true"></i>&nbsp;&nbsp;</a>
+    </nav>
+</div>
+
+<div class="container-fluid">
+        <div class="row flex-column-reverse flex-md-row">
+        <div class="col-md-8 col-sm-12">
+            <h1 name="f5f6a17c314dc8a0ec68c51b27012214">Novactive eZ LDAP Authenticator Bundle</h1>
+<p>A bundle to authenticate users against LDAP server</p>
+<h2 name="7cd8fb6e31cc946c078d2740c76a9899">Installation</h2>
+<p>First of all you must enable this bundle:</p>
+<pre><code class=" php">&lt;?php
+// app/AppKernel.php
+
+public function registerBundles()
+{
+    $bundles = [
+        //..
+        new Novactive\Bundle\eZLDAPAuthenticatorBundle\EzLdapAuthenticatorBundle(),
+    ];
+}</code></pre>
+<h2 name="254f642527b45bc260048e30704edb39">Configuration</h2>
+<h3 name="004c892689513b0a0f915a42e77c87ab">Bundle configuration</h3>
+<p>To configure this bundle you should add new section <code>nova_ez_ldap</code> into your <code>config.yml</code> file.
+Basic config might be like this one:</p>
+<pre><code class=" yaml">nova_ez_ldap:
+  connections:
+    default:
+      ldap:
+        adapter:
+          connection_string: '%ldap_connection_string%'
+        user_provider:
+          base_dn: '%ldap_base_dn%'
+          search_dn: '%ldap_read_only_user%'
+          search_password: '%ldap_read_only_password%'
+          uid_key:              uid
+      ezuser:
+        admin_user_id:  '%admin_user_id%'
+        user_group_id:  '%target_usergroup%'
+        email_attr: mail
+        attributes:
+          first_name: givenName
+          last_name: sn</code></pre>
+<p>Instead of <code>connection_string</code> you are able to set <code>host</code>, <code>port</code>, <code>encryption</code> and <code>version</code> separately.
+Also you can set <code>options</code> array that will be passed directly to the Symfony Ldap component.</p>
+<h4 name="2e34fc6bbc1b7ec63f1af5e1b79465e6">LDAP attributes mapping</h4>
+<p>To be able to store user who came from LDAP you have to configure mapping between LDAP attributes and eZPublish user fields.
+You must map all required fields in the <code>ezuser</code> part.
+By default eZPublish needs user credentials and email but you may have any additional fields in you <code>User</code> content class so you should fill all of them.</p>
+<h4 name="bd84c97010bfcc491b38540bc2b171f4">Target group</h4>
+<p>All users will be stored in the group <code>user_group_id</code>. You must put group content id here.</p>
+<h4 name="61445ca397ef1bea2d0ec80062c257a2">Full default config</h4>
+<p>Here is full default bundle configuration:</p>
+<pre><code class=" yaml">nova_ez_ldap:
+  connections:
+    default:
+      ldap:
+        adapter:
+          connection_string: ~
+          host: localhost
+          port: 389
+          version: 3
+          encryption: none # One of "none"; "ssl"; "tls"
+          options: []
+
+        user_provider:
+          base_dn: ~ # Required
+          search_dn: ~ # Required
+          search_password: ~ # Required
+          uid_key: uid
+          filter: '({uid_key}={username})'
+
+      ezuser:
+        admin_user_id:  ~ # Required
+        user_group_id:  ~ # Required
+        email_attr:  ~ # Required
+        attributes:
+          user_attr: ldap_attr</code></pre>
+<h3 name="5275f0a437279e155f1bc8f4ff952bf6">Security configuration</h3>
+<p>Besides common bundle configuration you will have to add some parameters in <code>security</code> section:</p>
+<pre><code class=" yaml">security:
+    providers:
+        chain_provider:
+            chain:
+                providers: [nova_ldap, ezpublish]
+        ezpublish:
+            id: ezpublish.security.user_provider
+        nova_ldap:
+            id: nova_ez.ldap.user_provider
+    firewalls:
+        ezpublish_front:
+            form_login_ldap:
+                service: nova_ez.ldap
+                provider: chain_provider</code></pre>
+        </div>
+        <div class="col-md-4 col-sm-12 d-print-none sidebar">
+                            <p><strong>In this page</strong>:</p>
+                <ul class="nav flex-column"><li class="nav-item first last"><a href="#f5f6a17c314dc8a0ec68c51b27012214" class="nav-link">Novactive eZ LDAP Authenticator Bundle</a><ul class="menu_level_1"><li class="nav-item first"><a href="#7cd8fb6e31cc946c078d2740c76a9899" class="nav-link">Installation</a></li><li class="nav-item last"><a href="#254f642527b45bc260048e30704edb39" class="nav-link">Configuration</a><ul class="menu_level_2"><li class="nav-item first"><a href="#004c892689513b0a0f915a42e77c87ab" class="nav-link">Bundle configuration</a><ul class="menu_level_3"><li class="nav-item first"><a href="#2e34fc6bbc1b7ec63f1af5e1b79465e6" class="nav-link">LDAP attributes mapping</a></li><li class="nav-item"><a href="#bd84c97010bfcc491b38540bc2b171f4" class="nav-link">Target group</a></li><li class="nav-item last"><a href="#61445ca397ef1bea2d0ec80062c257a2" class="nav-link">Full default config</a></li></ul></li><li class="nav-item last"><a href="#5275f0a437279e155f1bc8f4ff952bf6" class="nav-link">Security configuration</a></li></ul></li></ul></li></ul>
+                    </div>
+    </div>
+    <footer class="pt-4 my-md-5 pt-md-5 border-top">
+    <div class="row">
+        <div class="col-2">
+            <img class="mb-2" src="https://avatars0.githubusercontent.com/u/710363?s=60&v=4" width="24" height="24" alt="Novactive"/>
+            <small class="d-block mb-3 text-muted">&copy; 2020</small>
+        </div>
+        <div class="col-8">
+            <p class="text-center">
+                <i class="fas fa-code"></i> with
+                <i class="fas fa-heart"></i> in Paris, Toulon, Nantes, Bordeaux and California.
+            </p>
+        </div>
+        <div class="col-2">
+            <p class="text-right">
+                <a href="#">
+                    Back to top
+                </a>
+            </p>
+        </div>
+    </div>
+</footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+<link rel="stylesheet"  href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/github.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        function _scrollToName (hash) {
+            var name = hash.substr(1);
+            var to = (name === '') ? 0 : $("[name=" + name + "]").offset().top - 10;
+            $('html, body').animate({
+                scrollTop: to
+            }, 'slow');
+        }
+
+        $('a[href^="#"]').click(function () {
+            var selector = $(this).attr("href");
+            _scrollToName(selector);
+            return false;
+        });
+
+        if (location.hash) {
+            _scrollToName(location.hash);
+        }
+    });
+    hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>

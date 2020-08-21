@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <style type="text/css">
+        * {
+    font-family: 'Open Sans', sans-serif;
+}
+
+a, a:hover, footer .fa {
+    color: #E99749;
+}
+
+a.icon {
+    text-decoration: none;
+}
+
+pre {
+    padding: 5px;
+    border: 2px solid #E99749;
+    background: #F8F9FA;
+}
+
+pre code {
+    font-family: 'Courier', sans-serif;
+    font-size: 0.9em;
+}
+
+
+.nav-link {
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar p {
+    padding: 0;
+    margin: 0;
+}
+    </style>
+</head>
+<body>
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+    <h5 class="my-0 mr-md-auto font-weight-normal">
+        <img src="https://avatars0.githubusercontent.com/u/710363?s=45&v=4" alt="Novactive"/>
+        Nova eZ Platform Bundles
+    </h5>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="" id="components-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Bundles
+            </a>
+            <div class="dropdown-menu" aria-labelledby="components-menu">
+
+                                    <a class="dropdown-item" href="master/Accelerator/README.md.html">Accelerator</a>
+                                    <a class="dropdown-item" href="master/CloudinaryBundle/README.md.html">CloudinaryBundle</a>
+                                    <a class="dropdown-item" href="master/EditHelpBundle/README.md.html">EditHelpBundle</a>
+                                    <a class="dropdown-item" href="master/EnhancedImageAssetBundle/README.md.html">EnhancedImageAssetBundle</a>
+                                    <a class="dropdown-item" href="master/ExtraBundle/README.md.html">ExtraBundle</a>
+                                    <a class="dropdown-item" href="master/LdapAuthenticatorBundle/README.md.html">LdapAuthenticatorBundle</a>
+                                    <a class="dropdown-item" href="master/MailingBundle/README.md.html">MailingBundle</a>
+                                    <a class="dropdown-item" href="master/MenuManagerBundle/README.md.html">MenuManagerBundle</a>
+                                    <a class="dropdown-item" href="master/ProtectedContentBundle/README.md.html">ProtectedContentBundle</a>
+                                    <a class="dropdown-item" href="master/ResponsiveImagesBundle/README.md.html">ResponsiveImagesBundle</a>
+                                    <a class="dropdown-item" href="master/RssFeedBundle/README.md.html">RssFeedBundle</a>
+                                    <a class="dropdown-item" href="master/SEOBundle/README.md.html">SEOBundle</a>
+                                    <a class="dropdown-item" href="master/SlackBundle/README.md.html">SlackBundle</a>
+                                    <a class="dropdown-item" href="master/SolrSearchExtraBundle/README.md.html">SolrSearchExtraBundle</a>
+                                    <a class="dropdown-item" href="master/StaticTemplatesBundle/README.md.html">StaticTemplatesBundle</a>
+                            </div>
+        </li>
+    </ul>
+    <nav class="my-2 my-md-0 mr-md-3">
+        <a class="p-2 text-dark" target="_blank" href="https://www.novactive.com">France</a>
+        <a class="p-2 text-dark" target="_blank" href="https://www.novactive.us">California</a>
+        <a class="p-2 text-dark" target="_blank" href="https://www.nextedia.com">Nextedia</a>
+        <a class="p-2 text-dark icon" target="_blank" href="https://github.com/Novactive/Nova-eZPlatform-Bundles"><i class="fab fa-github fa-2x" aria-hidden="true"></i>&nbsp;&nbsp;</a>
+    </nav>
+</div>
+
+<div class="container-fluid">
+        <div class="row flex-column-reverse flex-md-row">
+        <div class="col-md-8 col-sm-12">
+            <h1 name="f07343aabd824fedcaa7297beb39e9dd">Novactive eZ Accelerator</h1>
+<p><a href="https://packagist.org/packages/novactive/ezaccelerator"><img src="https://img.shields.io/packagist/dt/novactive/ezaccelerator.svg?style=flat-square" alt="Downloads" class="img-fluid" /></a>
+<a href="https://github.com/Novactive/NovaeZAccelerator/releases"><img src="https://img.shields.io/github/release/Novactive/NovaeZAccelerator.svg?style=flat-square" alt="Latest version" class="img-fluid" /></a>
+<a href="LICENSE.html"><img src="https://img.shields.io/packagist/l/novactive/ezaccelerator.svg?style=flat-square" alt="License" class="img-fluid" /></a></p>
+<p>Accelerate your Ibexa DXP (eZ Platform)</p>
+<p>This bundles helps and aims to accelerate:</p>
+<ul>
+<li>the overhall performances</li>
+<li>your developments</li>
+<li>productivity of your marketing/content creation teams</li>
+<li>your business </li>
+</ul>
+<p>eZ Accelerator leverages Symfony Messenger and adds asynchronoucity to eZ Platform allowing many things
+with NO OVERHEAD and quite the opposite accelerating native actions.</p>
+<p>For now, eZ Accelerator allows you to:</p>
+<ul>
+<li>catch and dispatch asynchronously <strong>any Events</strong>. (<em>Careful though not all can be handle asynchronously</em>)</li>
+<li>handle HTTP Cache Purge asynchronously</li>
+<li>handle Search Indexation asynchronously</li>
+</ul>
+<blockquote>
+<p>Bonus! You can inject Middleware into the game!</p>
+</blockquote>
+<h1 name="e3d052bcdf5084c9be0c6a5bcf5c35e2">How does that work</h1>
+<p>First you need to understand the <a href="https://symfony.com/doc/current/components/messenger.html">Symony Messenger Component</a>.</p>
+<h2 name="7b013cef59d04d8ae0d69768063cb0fd">Asynchronous HTTP Cache Purge</h2>
+<p>eZ Accelerator decorates the eZ Platform purger to dispatch the corresponding messages.
+To enable the asynchronicity, you just need to know the Message FQDN</p>
+<ul>
+<li><strong>Tag Purge</strong>: Novactive\Bundle\eZAccelerator\Message\PurgeHttpCacheTags</li>
+<li><strong>Purge All</strong>: Novactive\Bundle\eZAccelerator\Message\PurgeAllHttpCache</li>
+</ul>
+<blockquote>
+<p>that's it! See the config example below</p>
+</blockquote>
+<h2 name="0ffdb4884f674bf0d23f7eaa562b89cf">Asynchronous Search Index</h2>
+<p>eZ Accelerator decorates the eZ Platform Search Handler to dispatch the corresponding messages.
+To enable the asynchronicity, you just need to know the Message FQDN</p>
+<ul>
+<li><strong>Index Content</strong>: Novactive\Bundle\eZAccelerator\Message\Search\IndexContent</li>
+<li><strong>Index Location</strong>: Novactive\Bundle\eZAccelerator\Message\Search\IndexLocation</li>
+<li><strong>Remove Content</strong>: Novactive\Bundle\eZAccelerator\Message\Search\UnindexContent</li>
+<li><strong>Remove Location</strong>: Novactive\Bundle\eZAccelerator\Message\Search\UnindexLocation</li>
+<li><strong>Purge All</strong>: Novactive\Bundle\eZAccelerator\Message\Search\PurgeIndex</li>
+</ul>
+<blockquote>
+<p>that's it! See the config example below</p>
+</blockquote>
+<h2 name="a0e2f7d45d6cafe9adaf1e1f1016dfe7">Asynchronous Event handling</h2>
+<p>The concept is simple, everytime eZ Platform is doing something an event is triggered. eZ Accelerator gives you the
+opportunity to handle the event through a bus which gives you the opportunity to handle that event via a message
+synchronously or asynchronicity using the transport of your choice.</p>
+<p>Everything is opt-in, you can still use the default event dispatcher or you can switch to the bus approach.</p>
+<h1 name="e748420f41e5cba4a0408c1b11df005b">Configuration example</h1>
+<h2 name="feaa0e39f429eaa2eff1e98cb8b99230">Handle the Event: eZ\Publish\API\Repository\Events\Bookmark\CreateBookmarkEvent through a bus SYNCHRONOUSLY</h2>
+<pre><code class=" yaml">nova_ezaccelerator:
+    system:
+        default:
+            # default_bus: a.default.bus.for.this.siteaccess.config
+            event_to_message:
+                eZ\Publish\API\Repository\Events\Bookmark\CreateBookmarkEvent:
+                    message: Novactive\Bundle\eZAccelerator\Message\VoidEventMessage # should be your own
+                    # stop_propagation: false # default
+                    # bus: a.specific.bus.for.this.siteaccess.config.and.that.event</code></pre>
+<blockquote>
+<p>You can decide to stop the event propagation as well if it makes sense.</p>
+</blockquote>
+<h2 name="708618bd98a35e3d482fd5c187eb1d8e">Transport Configuration</h2>
+<pre><code class=" yaml">framework:
+    messenger:
+        buses:
+            my.bus: # could be anything and you can have many
+                middleware:
+                    - Novactive\Bundle\eZAccelerator\Core\SiteAccessAwareMiddleware
+
+        transports:
+            ezaccelerator: 'doctrine://default?queue_name=nova_ezaccelerator' # you decide the name does not matter
+
+        routing:
+            Novactive\Bundle\eZAccelerator\Message\VoidEventMessage: ezaccelerator
+            Novactive\Bundle\eZAccelerator\Message\HTTPCache\PurgeAllHttpCache: ezaccelerator
+            Novactive\Bundle\eZAccelerator\Message\HTTPCache\PurgeHttpCacheTags: ezaccelerator
+            Novactive\Bundle\eZAccelerator\Message\Search\IndexContent: ezaccelerator
+            Novactive\Bundle\eZAccelerator\Message\Search\IndexLocation: ezaccelerator
+            Novactive\Bundle\eZAccelerator\Message\Search\UnindexContent: ezaccelerator
+            Novactive\Bundle\eZAccelerator\Message\Search\UnindexLocation: ezaccelerator
+            Novactive\Bundle\eZAccelerator\Message\Search\PurgeIndex: ezaccelerator</code></pre>
+<p>With this configuration you can handle <strong>asynchronously</strong> whatever you want when you want.</p>
+<blockquote>
+<p>Again, careful when all the AfterEvent can probably all be handle asynchronously the main work has to be synchronous
+for most of the case. (Ex: Content Creation, etc.)</p>
+</blockquote>
+<h2 name="ea61e2c2ff507048203824add1eb7c21">Considerations</h2>
+<h3 name="6fff8ca1fcff814e89350180f878b333">Consumers and SiteAccesses in complex MultiSiteAccess situation</h3>
+<p>When running the consumers, you will probably run them via <strong>1</strong> siteaccess (<code>default</code> maybe).</p>
+<p>Thing is you might want to know the original SiteAccess. That's why eZ Accelerator injects the <code>SiteAccessAwareMiddleware</code>
+which tags the Message with the Orginal SiteAccess.</p>
+<p>Nevertheless, and even more importantly, in your handler you need to handle according to the correct configuration.</p>
+<p>Let's imagine a situation where you have 2 siteaccess:</p>
+<ul>
+<li><strong>A</strong>: where the Varnish server is <code>V.IP.A</code> and database <code>DB.A</code> (default)</li>
+<li><strong>B</strong>: where the Varnish server is <code>V.IP.B</code> and database <code>DB.B</code></li>
+</ul>
+<p>When you run your consumer, it will use <code>default</code> siteaccess which is setup for Varnish host <code>V.IP.A</code>
+A message from the siteaccess <code>B</code> is dispatched, it will be handle by the only consumer you ran connected in-memory to siteaccess <code>A</code>
+Therefore in this situation <code>V.IP.B</code> won't never be purged.</p>
+<p>To handle those situations you can run and setup different consumers and transports and play with eZ Accelerator / Messsenger config.</p>
+<p>Ex: </p>
+<ul>
+<li>All default <code>config bin/console messenger:consume</code></li>
+<li>SiteAccess <code>A</code> <code>bin/console messenger:consume --siteaccess=A</code></li>
+</ul>
+<p>But you can also specify the <code>bus</code> and the <code>receiver</code></p>
+<ul>
+<li><code>bin/console messenger:consume ezaccelerator --siteaccess=A --bus=something</code></li>
+</ul>
+<h2 name="98f770b0af18ca763421bac22b4b6805">Features</h2>
+<p><a href="documentation/FEATURES.md.html">Implemented</a></p>
+<h2 name="2d47cf3488a7efd40a67c29fbcae0845">Installation instructions</h2>
+<p><a href="documentation/INSTALL.md.html">Installation</a></p>
+<h2>Change and License</h2>
+<p><a href="documentation/CHANGELOG.md.html">Changelog</a></p>
+<p><a href="LICENSE.html">License</a></p>
+        </div>
+        <div class="col-md-4 col-sm-12 d-print-none sidebar">
+                            <p><strong>In this page</strong>:</p>
+                <ul class="nav flex-column"><li class="nav-item first"><a href="#f07343aabd824fedcaa7297beb39e9dd" class="nav-link">Novactive eZ Accelerator</a></li><li class="nav-item"><a href="#e3d052bcdf5084c9be0c6a5bcf5c35e2" class="nav-link">How does that work</a><ul class="menu_level_1"><li class="nav-item first"><a href="#7b013cef59d04d8ae0d69768063cb0fd" class="nav-link">Asynchronous HTTP Cache Purge</a></li><li class="nav-item"><a href="#0ffdb4884f674bf0d23f7eaa562b89cf" class="nav-link">Asynchronous Search Index</a></li><li class="nav-item last"><a href="#a0e2f7d45d6cafe9adaf1e1f1016dfe7" class="nav-link">Asynchronous Event handling</a></li></ul></li><li class="nav-item last"><a href="#e748420f41e5cba4a0408c1b11df005b" class="nav-link">Configuration example</a><ul class="menu_level_1"><li class="nav-item first"><a href="#feaa0e39f429eaa2eff1e98cb8b99230" class="nav-link">Handle the Event: eZ\Publish\API\Repository\Events\Bookmark\CreateBookmarkEvent through a bus SYNCHRONOUSLY</a></li><li class="nav-item"><a href="#708618bd98a35e3d482fd5c187eb1d8e" class="nav-link">Transport Configuration</a></li><li class="nav-item"><a href="#ea61e2c2ff507048203824add1eb7c21" class="nav-link">Considerations</a><ul class="menu_level_2"><li class="nav-item first last"><a href="#6fff8ca1fcff814e89350180f878b333" class="nav-link">Consumers and SiteAccesses in complex MultiSiteAccess situation</a></li></ul></li><li class="nav-item"><a href="#98f770b0af18ca763421bac22b4b6805" class="nav-link">Features</a></li><li class="nav-item last"><a href="#2d47cf3488a7efd40a67c29fbcae0845" class="nav-link">Installation instructions</a></li></ul></li></ul>
+                    </div>
+    </div>
+    <footer class="pt-4 my-md-5 pt-md-5 border-top">
+    <div class="row">
+        <div class="col-2">
+            <img class="mb-2" src="https://avatars0.githubusercontent.com/u/710363?s=60&v=4" width="24" height="24" alt="Novactive"/>
+            <small class="d-block mb-3 text-muted">&copy; 2020</small>
+        </div>
+        <div class="col-8">
+            <p class="text-center">
+                <i class="fas fa-code"></i> with
+                <i class="fas fa-heart"></i> in Paris, Toulon, Nantes, Bordeaux and California.
+            </p>
+        </div>
+        <div class="col-2">
+            <p class="text-right">
+                <a href="#">
+                    Back to top
+                </a>
+            </p>
+        </div>
+    </div>
+</footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+<link rel="stylesheet"  href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/github.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        function _scrollToName (hash) {
+            var name = hash.substr(1);
+            var to = (name === '') ? 0 : $("[name=" + name + "]").offset().top - 10;
+            $('html, body').animate({
+                scrollTop: to
+            }, 'slow');
+        }
+
+        $('a[href^="#"]').click(function () {
+            var selector = $(this).attr("href");
+            _scrollToName(selector);
+            return false;
+        });
+
+        if (location.hash) {
+            _scrollToName(location.hash);
+        }
+    });
+    hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>
