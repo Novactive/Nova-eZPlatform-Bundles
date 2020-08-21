@@ -13,7 +13,7 @@ Documentation is available in this repository via `.md` files but also packaged 
 
 Novactive eZ Static Templates bundle is an eZ Platform bundle providing a way to access twig templates from an url.
 
-It use the [siteaccess](https://doc.ezplatform.com/en/latest/guide/siteaccess/) and the [design engine](https://doc.ezplatform.com/en/latest/guide/design_engine/) provided by eZ Platform.
+It uses the [siteaccess](https://doc.ezplatform.com/en/latest/guide/siteaccess/) and the [design engine](https://doc.ezplatform.com/en/latest/guide/design_engine/) provided by eZ Platform.
 
 ## Features
 
@@ -26,11 +26,6 @@ As we are using the siteaccess feature, u can also use the [permissions](https:/
 ### Example
 
 Considering a theme `static_test`, a siteaccess `static-test` is automatically generated. The siteaccess is then matched by URI, the url `http://localhost/static-test/news/details` will show the template in `Resources\views\themes\static_test\news\details.html.twig`
-
-## Requirements
-
-* eZ Platform 2+
-* PHP 7.1+
 
 ## Installation
 

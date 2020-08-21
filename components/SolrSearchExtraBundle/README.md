@@ -32,12 +32,6 @@ An eZPlatform bundle which extend the solr search handler.
 - **[WIP]** Highlighting 
 - **[Implemented]** Manage stopwords and synonyms from eZ Platform admin interface
 
-## Requirements
-
-- eZ Platform
-- Solr Search Engine Bundle for eZ Platform
-- PHP 7.1+
-
 ## Installation
 
 ### Use Composer

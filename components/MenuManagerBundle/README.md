@@ -22,12 +22,6 @@ An eZPlatform bundle to let your contributor manage their website menus.
 - Manage and organize links from menu edit interface
 - Add an ezpublish content to a menu when publishing a content
 
-## Requirements
-
-- eZ Platform Admin UI
-- PHP 7.1+
-- Webpack Encore
-
 ## Installation
 
 ### Use Composer

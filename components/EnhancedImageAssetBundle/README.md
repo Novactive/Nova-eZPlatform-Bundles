@@ -20,11 +20,6 @@ An eZPlatform bundle providing new field type with enhanced features related to 
 - Responsive loading
 - Progressive loading
 
-## Requirements
-
-- eZ Platform Admin UI
-- PHP 7.1+
-
 ## Installation
 
 ### Use Composer
