@@ -1,0 +1,16 @@
+{% extends '@ezdesign/pagelayout.html.twig' %}
+
+{% block content %}
+    <h2>{{ ez_content_name(content) }}</h2>
+    {% if not canReadProtectedContent %}
+        <p>This content has been protected by a password</p>
+        <div class="protected-content-form">
+            {{ form(requestProtectedContentPasswordForm) }}
+        </div>
+    {% else %}
+        {% for field in content.fieldsByLanguage(language|default(null)) %}
+            <h3>{{ field.fieldDefIdentifier }}</h3>
+            {{ ez_render_field(content, field.fieldDefIdentifier) }}
+        {% endfor %}
+    {% endif %}
+{% endblock %}

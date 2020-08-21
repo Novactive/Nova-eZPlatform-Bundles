@@ -35,6 +35,7 @@ final class BrowserHelper
     public function __construct(Client $client)
     {
         $this->client = $client;
+        $client->getWebDriver()->manage()->window()->maximize();
     }
 
     public function client(): Client

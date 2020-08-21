@@ -17,13 +17,13 @@ namespace Novactive\Bundle\eZProtectedContentBundle\Repository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Persistence\ManagerRegistry;
 
 abstract class EntityRepository extends ServiceEntityRepository
 {
     abstract protected function getAlias(): string;
 
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, $this->getEntityClass());
     }

@@ -76,7 +76,7 @@ class PreContentView
 
         $protections = $this->entityManager->getRepository(ProtectedAccess::class)->findByContent($content);
 
-        if (0 == count($protections)) {
+        if (0 === count($protections)) {
             return;
         }
         $contentView->setCacheEnabled(false);

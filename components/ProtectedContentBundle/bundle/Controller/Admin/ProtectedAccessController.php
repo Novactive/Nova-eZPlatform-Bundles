@@ -20,10 +20,10 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use EzSystems\PlatformHttpCacheBundle\PurgeClient\PurgeClientInterface;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
 use Novactive\Bundle\eZProtectedContentBundle\Form\ProtectedAccessType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
 
 class ProtectedAccessController
@@ -35,7 +35,7 @@ class ProtectedAccessController
     public function handle(
         Location $location,
         Request $request,
-        FormFactory $formFactory,
+        FormFactoryInterface $formFactory,
         EntityManagerInterface $entityManager,
         RouterInterface $router,
         PurgeClientInterface $httpCachePurgeClient,
@@ -63,7 +63,10 @@ class ProtectedAccessController
             }
         }
 
-        return new RedirectResponse($router->generate($location).'#ez-tab-location-view-protect-content#tab');
+        return new RedirectResponse(
+            $router->generate('_ez_content_view', ['contentId' => $location->contentId, 'locationId' => $location->id]).
+            '#ez-tab-location-view-protect-content#tab'
+        );
     }
 
     /**
@@ -86,6 +89,9 @@ class ProtectedAccessController
             ]
         );
 
-        return new RedirectResponse($router->generate($location).'#ez-tab-location-view-protect-content#tab');
+        return new RedirectResponse(
+            $router->generate('_ez_content_view', ['contentId' => $location->contentId, 'locationId' => $location->id]).
+            '#ez-tab-location-view-protect-content#tab'
+        );
     }
 }

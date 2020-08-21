@@ -2,12 +2,13 @@
 
 A bundle that provides quick password protection on Contents.
 
-# How it works
+## How it works
 
 Allows you to add 1 on N password on a Content in the Admin UI.
 
 Once a Password is set, the Content becomes Protected. In this situation you will have 2 new variables in the view full.
 Allowing you do:
+
 ```twig
 <h2>{{ ez_content_name(content) }}</h2>
 {% if not canReadProtectedContent %}
@@ -30,12 +31,12 @@ Once you have unlocked the content, __canReadProtectedContent__ will be __true__
 > HTTP Cache is disabled for Protected Content.
 
 
-# Installation
+## Installation
 
 ### Requirements
 
 * eZ Platform 2+
-* PHP 7.1+
+* PHP 7.3+
 * MySQL 5.7.8+ / Maria DB 10.1+
 
 ### Installation steps
@@ -102,6 +103,3 @@ Change and License
 
 [License](LICENSE)
 
-
-----
-Made with <3 by novactive.
