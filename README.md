@@ -4,6 +4,9 @@
 
 This is the Mono Repo that manages all the Novactive eZ Bundle that have each an independant sub repository.
 
+
+🎀 **DOCUMENTATION** 📖: https://novactive.github.io/Nova-eZPlatform-Bundles/master/index.html
+
 ## Installation instructions
 
 ```bash
