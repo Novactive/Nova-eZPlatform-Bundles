@@ -64,8 +64,8 @@ installez: install ## Install eZ as the local project
 	@cd $(EZ_DIR) && bin/console novaezextra:contenttypes:create ../tests/vmcd.xlsx
 	@cd $(EZ_DIR) && bin/console novaezprotectedcontent:install
 	@cd $(EZ_DIR) && bin/console doctrine:schema:update --dump-sql --force
-	@cp  components/ProtectedContentBundle/tests/provisioning/article.html.twig $(EZ_DIR)/templates/themes/standard/full/
-
+	@cp -rp components/ProtectedContentBundle/tests/provisioning/article.html.twig $(EZ_DIR)/templates/themes/standard/full/
+	@cp -rp components/StaticTemplatesBundle/tests/provisioning/static_ultimatenova $(EZ_DIR)/templates/
 
 	@echo "..:: Final Cleaning Cache ::.."
 	@cd $(EZ_DIR) && bin/console cache:clear
@@ -85,7 +85,7 @@ stopez: ## Stop the web server if it is running
 	@-$(DOCKER) stop $(DOCKER_DB_CONTAINER)
 
 
-# PANTHER_NO_HEADLESS=1 DATABASE_URL="mysql://root:ezplatform@127.0.0.1:3300/ezplatform" PANTHER_EXTERNAL_BASE_URI="https://127.0.0.1:11083" PANTHER_CHROME_DRIVER_BINARY=/Users/plopix/DOCKFILES/NOVACTIVE/OSS/eZ-Platform-Bundles/chromedriver php ./vendor/bin/phpunit -c "components/ProtectedContentBundle/tests" "components/ProtectedContentBundle/tests"
+# PANTHER_NO_HEADLESS=1 DATABASE_URL="mysql://root:ezplatform@127.0.0.1:3300/ezplatform" PANTHER_EXTERNAL_BASE_URI="https://127.0.0.1:11083" PANTHER_CHROME_DRIVER_BINARY=/Users/plopix/DOCKFILES/NOVACTIVE/OSS/eZ-Platform-Bundles/chromedriver php ./vendor/bin/phpunit -c "components/StaticTemplatesBundle/tests" "components/StaticTemplatesBundle/tests"
 .PHONY: tests
 tests: ## Run the tests
 	@echo " ..:: Global Mono Repo Testing ::.."

@@ -40,7 +40,7 @@ Please comply with `make codeclean` and `make tests` before to push, your PR won
 | [RssFeedBundle](https://github.com/Novactive/NovaeZRssFeedBundle)                       | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE]     |
 | [SEOBundle](https://github.com/Novactive/NovaeZSEOBundle)                               | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK]         | ![auto-install] ![auto-test] | 
 | [SlackBundle](https://github.com/Novactive/NovaeZSlackBundle)                           | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-NOK]        |
-| [StaticTemplatesBundle](https://github.com/Novactive/NovaeZStaticTemplatesBundle)       | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE]     |
+| [StaticTemplatesBundle](https://github.com/Novactive/NovaeZStaticTemplatesBundle)       | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK]         | ![auto-install] ![auto-test] | 
 | [SolrSearchExtraBundle](https://github.com/Novactive/NovaeZSolrSearchExtraBundle)       | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE]     |
 
 

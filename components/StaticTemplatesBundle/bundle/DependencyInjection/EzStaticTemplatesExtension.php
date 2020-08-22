@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZStaticTemplatesBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\Bundle\EzStaticTemplatesBundle\DependencyInjection;
 
 use ReflectionClass;
@@ -19,23 +21,18 @@ use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class EzStaticTemplatesExtension extends Extension implements PrependExtensionInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.yml');
+        $loader->load('services.yaml');
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function prepend(ContainerBuilder $container)
+    public function prepend(ContainerBuilder $container): void
     {
         $siteaccessList = $this->getSiteaccessIdentifierList($container);
         if (!empty($siteaccessList)) {
@@ -67,29 +64,24 @@ class EzStaticTemplatesExtension extends Extension implements PrependExtensionIn
         }
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getSiteaccessIdentifierList(ContainerBuilder $container): array
     {
         $StaticTemplatesThemePrefix = 'static_';
         $siteaccessList = [];
 
-        $globalViewsDir = $container->getParameter('kernel.root_dir').'/Resources/views';
-        if (!is_dir($globalViewsDir)) {
-            ( new Filesystem() )->mkdir($globalViewsDir);
-        }
+        $fs = new Filesystem();
         $finder = new Finder();
+
         // Look for themes in bundles.
         foreach ($container->getParameter('kernel.bundles') as $bundleClass) {
             $bundleReflection = new ReflectionClass($bundleClass);
-            $bundleViewsDir = dirname($bundleReflection->getFileName()).'/Resources/views';
+            $bundleViewsDir = \dirname($bundleReflection->getFileName()).'/Resources/views';
             $themeDir = $bundleViewsDir.'/themes';
-            if (!is_dir($themeDir)) {
+            if (!$fs->exists($themeDir)) {
                 continue;
             }
 
-            /** @var \Symfony\Component\Finder\SplFileInfo $directoryInfo */
+            /** @var SplFileInfo $directoryInfo */
             foreach ($finder->directories()->in($themeDir)->depth('== 0') as $directoryInfo) {
                 if (preg_match("/^{$StaticTemplatesThemePrefix}(.*)$/", $directoryInfo->getBasename())) {
                     $siteaccessList[] = $directoryInfo->getBasename();
@@ -98,9 +90,9 @@ class EzStaticTemplatesExtension extends Extension implements PrependExtensionIn
         }
 
         // Now look for themes at application level (app/Resources/views/themes)
-        $appLevelThemesDir = $globalViewsDir.'/themes';
-        if (is_dir($appLevelThemesDir)) {
-            foreach (( new Finder() )->directories()->in($appLevelThemesDir)->depth('== 0') as $directoryInfo) {
+        $appLevelThemesDir = $container->getParameter('kernel.project_dir').'/templates/themes';
+        if ($fs->exists($appLevelThemesDir)) {
+            foreach ((new Finder())->directories()->in($appLevelThemesDir)->depth('== 0') as $directoryInfo) {
                 if (preg_match("/^{$StaticTemplatesThemePrefix}(.*)$/", $directoryInfo->getBasename())) {
                     $siteaccessList[] = $directoryInfo->getBasename();
                 }

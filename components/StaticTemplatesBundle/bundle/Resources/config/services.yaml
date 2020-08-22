@@ -1,0 +1,13 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Novactive\Bundle\EzStaticTemplatesBundle\Routing\Router:
+        arguments:
+            - "%ezpublish.siteaccess.groups%"
+        calls:
+            - [setSiteaccess, ["@ezpublish.siteaccess"]]
+        tags:
+            - {name: router, priority: 300}

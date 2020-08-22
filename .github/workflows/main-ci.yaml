@@ -121,7 +121,8 @@ jobs:
                     bin/console novaezextra:contenttypes:create ../tests/vmcd.xlsx
                     bin/console novaezprotectedcontent:install
                     bin/console doctrine:schema:update
-                    cp ../components/ProtectedContentBundle/tests/provisioning/article.html.twig templates/themes/standard/full/
+                    cp -rp ../components/ProtectedContentBundle/tests/provisioning/article.html.twig templates/themes/standard/full/
+                    cp -rp ../components/StaticTemplatesBundle/tests/provisioning/static_ultimatenova templates/
                     echo ::endgroup::
 
                     echo ::group::..:: Final Steps ::..

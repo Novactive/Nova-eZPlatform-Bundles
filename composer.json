@@ -30,7 +30,8 @@
             "Novactive\\Bundle\\eZSlackBundle\\Tests\\": "components/SlackBundle/tests/Tests",
             "Novactive\\EzSolrSearchExtraBundle\\": "components/SolrSearchExtraBundle/src/bundle",
             "Novactive\\EzSolrSearchExtra\\": "components/SolrSearchExtraBundle/src/lib",
-            "Novactive\\Bundle\\EzStaticTemplatesBundle\\": "components/StaticTemplatesBundle/bundle"
+            "Novactive\\Bundle\\EzStaticTemplatesBundle\\": "components/StaticTemplatesBundle/bundle",
+            "Novactive\\Bundle\\EzStaticTemplatesBundle\\Tests\\": "components/StaticTemplatesBundle/tests/Tests"
         }
     },
     "require": {

@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZStaticTemplatesBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\Bundle\EzStaticTemplatesBundle\Routing;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
@@ -17,44 +19,52 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use Symfony\Cmf\Component\Routing\ChainedRouterInterface;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route as SymfonyRoute;
 use Symfony\Component\Routing\RouteCollection;
+use Twig\Environment;
 
 class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAccessAware
 {
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $siteAccessGroups;
 
-    /** @var SiteAccess */
+    /**
+     * @var SiteAccess
+     */
     protected $siteAccess;
 
-    /** @var RequestContext */
+    /**
+     * @var RequestContext
+     */
     protected $context;
 
     /**
-     * Router constructor.
+     * @var Environment
      */
-    public function __construct(array $siteAccessGroups)
+    protected $twig;
+
+    public function __construct(array $siteAccessGroups, Environment $twig)
     {
         $this->siteAccessGroups = $siteAccessGroups;
+        $this->twig = $twig;
     }
 
-    public function setSiteAccess(SiteAccess $siteAccess = null)
+    public function setSiteAccess(SiteAccess $siteAccess = null): void
     {
         $this->siteAccess = $siteAccess;
     }
 
-    /**
-     * @return array
-     */
-    public function matchRequest(Request $request)
+    public function matchRequest(Request $request): array
     {
         if (
             !isset($this->siteAccessGroups['static_group']) ||
-            !in_array($this->siteAccess->name, $this->siteAccessGroups['static_group'])
+            !\in_array($this->siteAccess->name, $this->siteAccessGroups['static_group'])
         ) {
             throw new ResourceNotFoundException();
         }
@@ -63,7 +73,9 @@ class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAcc
 
         $params = [
             '_route' => 'static_template',
-            '_controller' => 'EzStaticTemplatesBundle:EzStaticTemplates:index',
+            '_controller' => function (string $template = 'index') {
+                return new Response($this->twig->render("@ezdesign/{$template}.html.twig"));
+            },
         ];
         if (!empty($requestedPath)) {
             $params['template'] = $requestedPath;
@@ -77,37 +89,31 @@ class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAcc
         return $this->context;
     }
 
-    public function setContext(RequestContext $context)
+    public function setContext(RequestContext $context): void
     {
         $this->context = $context;
     }
 
-    public function getRouteCollection()
+    public function getRouteCollection(): RouteCollection
     {
         return new RouteCollection();
     }
 
     public function generate($name, $parameters = [], $referenceType = self::ABSOLUTE_PATH)
     {
-        // TODO: Implement generate() method.
+        // nothing to do
     }
 
     public function match($pathinfo)
     {
-        @trigger_error(
-            __METHOD__.'() is deprecated since version 1.3 and will be removed in 2.0. Use matchRequest() instead.',
-            E_USER_DEPRECATED
-        );
+        // nothing to do
     }
 
-    public function supports($name)
+    public function supports($name): bool
     {
         return 'maquette' === $name;
     }
 
-    /**
-     * @see \Symfony\Cmf\Component\Routing\VersatileGeneratorInterface::getRouteDebugMessage()
-     */
     public function getRouteDebugMessage($name, array $parameters = [])
     {
         if ($name instanceof RouteObjectInterface) {

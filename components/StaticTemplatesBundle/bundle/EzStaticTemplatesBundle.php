@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZStaticTemplatesBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\Bundle\EzStaticTemplatesBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
