@@ -41,6 +41,10 @@ pre code {
     padding: 0;
     margin: 0;
 }
+
+img.img-fluid {
+    max-width: 500px;
+}
     </style>
 </head>
 <body>
@@ -87,8 +91,7 @@ pre code {
         <div class="col-md-8 col-sm-12">
             <h1 name="abd40138071876c3b647ea3f8242b628">Novactive eZ Solr Search Extra Bundle</h1>
 <hr />
-<p><a href="https://travis-ci.org/Novactive/NovaeZSolrSearchExtraBundle"><img src="https://img.shields.io/travis/Novactive/NovaeZSolrSearchExtraBundle.svg?style=flat-square&amp;branch=develop-ezplatform" alt="Build Status" class="img-fluid" /></a>
-<a href="https://packagist.org/packages/novactive/ezsolrsearchextrabundle"><img src="https://img.shields.io/packagist/dt/novactive/ezsolrsearchextrabundle.svg?style=flat-square" alt="Downloads" class="img-fluid" /></a>
+<p><a href="https://packagist.org/packages/novactive/ezsolrsearchextrabundle"><img src="https://img.shields.io/packagist/dt/novactive/ezsolrsearchextrabundle.svg?style=flat-square" alt="Downloads" class="img-fluid" /></a>
 <a href="https://github.com/Novactive/NovaeZSolrSearchExtraBundle/releases"><img src="https://img.shields.io/github/release/Novactive/NovaeZSolrSearchExtraBundle.svg?style=flat-square" alt="Latest version" class="img-fluid" /></a>
 <a href="LICENSE.html"><img src="https://img.shields.io/packagist/l/novactive/ezsolrsearchextrabundle.svg?style=flat-square" alt="License" class="img-fluid" /></a></p>
 <p>An eZPlatform bundle which extend the solr search handler.</p>
@@ -103,7 +106,7 @@ pre code {
 <li>boost on exact matches</li>
 </ul></li>
 <li><strong>[Implemented]</strong> <a href="./doc/custom_fields.md.html">Custom field configuration</a></li>
-<li><strong>[Implemented]</strong> <a href="./doc/custom_meta_fields.md.html">Exact matches boosting configuration</a></li>
+<li><strong>[Implemented]</strong> <a href="./doc/exact_match_boost.md.html">Exact matches boosting configuration</a></li>
 <li><strong>[WIP]</strong> Boost doc based on publish date (newer docs score higher)</li>
 <li><strong>[WIP]</strong> Highlighting </li>
 <li><strong>[Implemented]</strong> Manage stopwords and synonyms from eZ Platform admin interface</li>
@@ -140,8 +143,8 @@ public function registerBundles()
 
             <p class="text-right">
                 <img width="204" height="20"
-                     src='https://img.shields.io/badge/Updated on-08--21--2020 22:59:14-green?style=flat-square&labelColor=black'
-                     alt='Updated on 08--21--2020 22:59:14'
+                     src='https://img.shields.io/badge/Updated on-08--22--2020 00:22:50-green?style=flat-square&labelColor=black'
+                     alt='Updated on 08--22--2020 00:22:50'
                 />
             </p>
         </div>

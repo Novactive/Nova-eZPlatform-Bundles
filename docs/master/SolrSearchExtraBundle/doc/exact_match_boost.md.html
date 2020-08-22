@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <style type="text/css">
+        * {
+    font-family: 'Open Sans', sans-serif;
+}
+
+a, a:hover, footer .fa {
+    color: #E99749;
+}
+
+a.icon {
+    text-decoration: none;
+}
+
+pre {
+    padding: 5px;
+    border: 2px solid #E99749;
+    background: #F8F9FA;
+}
+
+pre code {
+    font-family: 'Courier', sans-serif;
+    font-size: 0.9em;
+}
+
+
+.nav-link {
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar p {
+    padding: 0;
+    margin: 0;
+}
+
+img.img-fluid {
+    max-width: 500px;
+}
+    </style>
+</head>
+<body>
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+    <h5 class="my-0 mr-md-auto font-weight-normal">
+        <img src="https://avatars0.githubusercontent.com/u/710363?s=45&v=4" alt="Novactive"/>
+        Nova eZ Platform Bundles
+    </h5>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="" id="components-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Bundles
+            </a>
+            <div class="dropdown-menu" aria-labelledby="components-menu">
+
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/Accelerator/README.md.html">Accelerator</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/CloudinaryBundle/README.md.html">CloudinaryBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/EditHelpBundle/README.md.html">EditHelpBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/EnhancedImageAssetBundle/README.md.html">EnhancedImageAssetBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/ExtraBundle/README.md.html">ExtraBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/LdapAuthenticatorBundle/README.md.html">LdapAuthenticatorBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/MailingBundle/README.md.html">MailingBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/MenuManagerBundle/README.md.html">MenuManagerBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/ProtectedContentBundle/README.md.html">ProtectedContentBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/ResponsiveImagesBundle/README.md.html">ResponsiveImagesBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/RssFeedBundle/README.md.html">RssFeedBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/SEOBundle/README.md.html">SEOBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/SlackBundle/README.md.html">SlackBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/SolrSearchExtraBundle/README.md.html">SolrSearchExtraBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/StaticTemplatesBundle/README.md.html">StaticTemplatesBundle</a>
+                            </div>
+        </li>
+    </ul>
+    <nav class="my-2 my-md-0 mr-md-3">
+        <a class="p-2 text-dark" target="_blank" href="https://www.novactive.com">France</a>
+        <a class="p-2 text-dark" target="_blank" href="https://www.novactive.us">California</a>
+        <a class="p-2 text-dark" target="_blank" href="https://www.nextedia.com">Nextedia</a>
+        <a class="p-2 text-dark icon" target="_blank" href="https://github.com/Novactive/Nova-eZPlatform-Bundles"><i class="fab fa-github fa-2x" aria-hidden="true"></i>&nbsp;&nbsp;</a>
+    </nav>
+</div>
+
+<div class="container-fluid">
+        <div class="row flex-column-reverse flex-md-row">
+        <div class="col-md-8 col-sm-12">
+            <h1 name="abd40138071876c3b647ea3f8242b628">Novactive eZ Solr Search Extra Bundle</h1>
+<h1 name="7a28c135f630ea67904a54b8d3fe74f7">Exact matches boosting</h1>
+<p>To allow boosting content where the search is exactly matched (accent, case, ...) you need to add the following settings to your solr schema.xml</p>
+<p>Add a new fieldtyp &quot;rawtext&quot;, copy of the &quot;text&quot; fieldtype and remove the filter with are supposed to modify the text :</p>
+<ul>
+<li>LowerCaseFilterFactory</li>
+<li>FrenchLightStemFilterFactory</li>
+<li>ASCIIFoldingFilterFactory</li>
+<li>...</li>
+</ul>
+<p>Example for the french language</p>
+<pre><code class=" xml">&lt;!-- French --&gt;
+&lt;fieldType name="text" class="solr.TextField" positionIncrementGap="100"&gt;
+&lt;analyzer&gt;
+    &lt;tokenizer class="solr.StandardTokenizerFactory"/&gt;
+    &lt;filter class="solr.LowerCaseFilterFactory"/&gt;
+    &lt;!-- removes l', etc --&gt;
+    &lt;filter class="solr.ElisionFilterFactory" ignoreCase="true" articles="contractions_fr.txt"/&gt;
+    &lt;filter class="solr.WordDelimiterFilterFactory"
+            generateWordParts="1"
+            generateNumberParts="1"
+            catenateWords="0"
+            catenateNumbers="0"
+            catenateAll="0"
+            preserveOriginal="1"
+    /&gt;
+    &lt;filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords_fr.txt" format="snowball" /&gt;
+    &lt;filter class="solr.FrenchLightStemFilterFactory"/&gt;
+    &lt;!-- less aggressive: &lt;filter class="solr.FrenchMinimalStemFilterFactory"/&gt; --&gt;
+    &lt;!-- more aggressive: &lt;filter class="solr.SnowballPorterFilterFactory" language="French"/&gt; --&gt;
+&lt;/analyzer&gt;
+&lt;/fieldType&gt;
+
+&lt;fieldType name="rawtext" class="solr.TextField" positionIncrementGap="100"&gt;
+&lt;analyzer&gt;
+    &lt;tokenizer class="solr.StandardTokenizerFactory"/&gt;
+    &lt;!-- removes l', etc --&gt;
+    &lt;filter class="solr.ElisionFilterFactory" ignoreCase="true" articles="contractions_fr.txt"/&gt;
+    &lt;filter class="solr.WordDelimiterFilterFactory"
+            generateWordParts="1"
+            generateNumberParts="1"
+            catenateWords="0"
+            catenateNumbers="0"
+            catenateAll="0"
+            preserveOriginal="1"
+    /&gt;
+    &lt;filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords_fr.txt" format="snowball" /&gt;
+&lt;/analyzer&gt;
+&lt;/fieldType&gt;</code></pre>
+<p>And lastly, add the following dynamic and copy field declaration :</p>
+<pre><code class=" xml">&lt;dynamicField name="*_t_raw" type="rawtext" indexed="true" stored="true" multiValued="true" omitNorms="false"/&gt;
+&lt;copyField source="*_t" dest="*_t_raw"/&gt;</code></pre>
+
+            <p class="text-right">
+                <img width="204" height="20"
+                     src='https://img.shields.io/badge/Updated on-08--22--2020 00:22:50-green?style=flat-square&labelColor=black'
+                     alt='Updated on 08--22--2020 00:22:50'
+                />
+            </p>
+        </div>
+        <div class="col-md-4 col-sm-12 d-print-none sidebar">
+                            <p><strong>In this page</strong>:</p>
+                <ul class="nav flex-column"><li class="nav-item first"><a href="#abd40138071876c3b647ea3f8242b628" class="nav-link">Novactive eZ Solr Search Extra Bundle</a></li><li class="nav-item last"><a href="#7a28c135f630ea67904a54b8d3fe74f7" class="nav-link">Exact matches boosting</a></li></ul>
+                    </div>
+    </div>
+    <footer class="pt-4 my-md-5 pt-md-5 border-top">
+    <div class="row">
+        <div class="col-2">
+            <img class="mb-2" src="https://avatars0.githubusercontent.com/u/710363?s=60&v=4" width="24" height="24" alt="Novactive"/>
+            <small class="d-block mb-3 text-muted">&copy; 2020</small>
+        </div>
+        <div class="col-8">
+            <p class="text-center">
+                <i class="fas fa-code"></i> with
+                <i class="fas fa-heart"></i> in Paris, Toulon, Nantes, Bordeaux and California.
+            </p>
+        </div>
+        <div class="col-2">
+            <p class="text-right">
+                <a href="#">
+                    Back to top
+                </a>
+            </p>
+        </div>
+    </div>
+</footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+<link rel="stylesheet"  href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/github.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        function _scrollToName (hash) {
+            var name = hash.substr(1);
+            var to = (name === '') ? 0 : $("[name=" + name + "]").offset().top - 10;
+            $('html, body').animate({
+                scrollTop: to
+            }, 'slow');
+        }
+
+        $('a[href^="#"]').click(function () {
+            var selector = $(this).attr("href");
+            _scrollToName(selector);
+            return false;
+        });
+
+        if (location.hash) {
+            _scrollToName(location.hash);
+        }
+    });
+    hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>

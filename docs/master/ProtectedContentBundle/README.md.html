@@ -41,6 +41,10 @@ pre code {
     padding: 0;
     margin: 0;
 }
+
+img.img-fluid {
+    max-width: 500px;
+}
     </style>
 </head>
 <body>
@@ -87,6 +91,9 @@ pre code {
         <div class="col-md-8 col-sm-12">
             <h1 name="651af2f776a32dd1e6006e67a82946a6">Novactive eZ Protected Content Bundle</h1>
 <hr />
+<p><a href="https://packagist.org/packages/novactive/ezprotectedcontentbundle"><img src="https://img.shields.io/packagist/dt/novactive/ezprotectedcontentbundle.svg?style=flat-square" alt="Downloads" class="img-fluid" /></a>
+<a href="https://github.com/Novactive/NovaeZProtectedContentBundle/releases"><img src="https://img.shields.io/github/release/Novactive/NovaeZProtectedContentBundle.svg?style=flat-square" alt="Latest version" class="img-fluid" /></a>
+<a href="LICENSE.html"><img src="https://img.shields.io/packagist/l/novactive/ezprotectedcontentbundle.svg?style=flat-square" alt="License" class="img-fluid" /></a></p>
 <p>A bundle that provides quick password protection on Contents.</p>
 <h2 name="9ffdb95250e26c7a6b468126ac7c75b0">How it works</h2>
 <p>Allows you to add 1 on N password on a Content in the Admin UI.</p>
@@ -110,12 +117,6 @@ Allowing you do:</p>
 <p>HTTP Cache is disabled for Protected Content.</p>
 </blockquote>
 <h2 name="7cd8fb6e31cc946c078d2740c76a9899">Installation</h2>
-<h3 name="5a2ebfb8baa378cfcfcba58bbb1380c2">Requirements</h3>
-<ul>
-<li>eZ Platform 2+</li>
-<li>PHP 7.3+</li>
-<li>MySQL 5.7.8+ / Maria DB 10.1+</li>
-</ul>
 <h3 name="fa9f2b3fde8a1ecd921517ebbf88a4fb">Installation steps</h3>
 <p>Run <code>composer require novactive/ezprotectedcontentbundle</code> to install the bundle and its dependencies:</p>
 <h3 name="396accb4c1d976d37928dd59aa881395">Register the bundles</h3>
@@ -152,14 +153,14 @@ starts with PasswordProvided::COOKIE_PREFIX (i.e: <strong>protected-content-</st
 
             <p class="text-right">
                 <img width="204" height="20"
-                     src='https://img.shields.io/badge/Updated on-08--21--2020 22:59:14-green?style=flat-square&labelColor=black'
-                     alt='Updated on 08--21--2020 22:59:14'
+                     src='https://img.shields.io/badge/Updated on-08--22--2020 00:22:50-green?style=flat-square&labelColor=black'
+                     alt='Updated on 08--22--2020 00:22:50'
                 />
             </p>
         </div>
         <div class="col-md-4 col-sm-12 d-print-none sidebar">
                             <p><strong>In this page</strong>:</p>
-                <ul class="nav flex-column"><li class="nav-item first last"><a href="#651af2f776a32dd1e6006e67a82946a6" class="nav-link">Novactive eZ Protected Content Bundle</a><ul class="menu_level_1"><li class="nav-item first"><a href="#9ffdb95250e26c7a6b468126ac7c75b0" class="nav-link">How it works</a></li><li class="nav-item last"><a href="#7cd8fb6e31cc946c078d2740c76a9899" class="nav-link">Installation</a><ul class="menu_level_2"><li class="nav-item first"><a href="#5a2ebfb8baa378cfcfcba58bbb1380c2" class="nav-link">Requirements</a></li><li class="nav-item"><a href="#fa9f2b3fde8a1ecd921517ebbf88a4fb" class="nav-link">Installation steps</a></li><li class="nav-item"><a href="#396accb4c1d976d37928dd59aa881395" class="nav-link">Register the bundles</a></li><li class="nav-item"><a href="#814b1401d1a609253b98ac549a68a493" class="nav-link">Add routes</a></li><li class="nav-item"><a href="#01d14a4140a6b3d140a1a6be593d7a92" class="nav-link">Install the database schema</a></li><li class="nav-item last"><a href="#bca419786bc45882479485b80b66c913" class="nav-link">Varnish</a></li></ul></li></ul></li></ul>
+                <ul class="nav flex-column"><li class="nav-item first last"><a href="#651af2f776a32dd1e6006e67a82946a6" class="nav-link">Novactive eZ Protected Content Bundle</a><ul class="menu_level_1"><li class="nav-item first"><a href="#9ffdb95250e26c7a6b468126ac7c75b0" class="nav-link">How it works</a></li><li class="nav-item last"><a href="#7cd8fb6e31cc946c078d2740c76a9899" class="nav-link">Installation</a><ul class="menu_level_2"><li class="nav-item first"><a href="#fa9f2b3fde8a1ecd921517ebbf88a4fb" class="nav-link">Installation steps</a></li><li class="nav-item"><a href="#396accb4c1d976d37928dd59aa881395" class="nav-link">Register the bundles</a></li><li class="nav-item"><a href="#814b1401d1a609253b98ac549a68a493" class="nav-link">Add routes</a></li><li class="nav-item"><a href="#01d14a4140a6b3d140a1a6be593d7a92" class="nav-link">Install the database schema</a></li><li class="nav-item last"><a href="#bca419786bc45882479485b80b66c913" class="nav-link">Varnish</a></li></ul></li></ul></li></ul>
                     </div>
     </div>
     <footer class="pt-4 my-md-5 pt-md-5 border-top">

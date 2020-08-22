@@ -41,6 +41,10 @@ pre code {
     padding: 0;
     margin: 0;
 }
+
+img.img-fluid {
+    max-width: 500px;
+}
     </style>
 </head>
 <body>
@@ -56,21 +60,21 @@ pre code {
             </a>
             <div class="dropdown-menu" aria-labelledby="components-menu">
 
-                                    <a class="dropdown-item" href="master/Accelerator/README.md.html">Accelerator</a>
-                                    <a class="dropdown-item" href="master/CloudinaryBundle/README.md.html">CloudinaryBundle</a>
-                                    <a class="dropdown-item" href="master/EditHelpBundle/README.md.html">EditHelpBundle</a>
-                                    <a class="dropdown-item" href="master/EnhancedImageAssetBundle/README.md.html">EnhancedImageAssetBundle</a>
-                                    <a class="dropdown-item" href="master/ExtraBundle/README.md.html">ExtraBundle</a>
-                                    <a class="dropdown-item" href="master/LdapAuthenticatorBundle/README.md.html">LdapAuthenticatorBundle</a>
-                                    <a class="dropdown-item" href="master/MailingBundle/README.md.html">MailingBundle</a>
-                                    <a class="dropdown-item" href="master/MenuManagerBundle/README.md.html">MenuManagerBundle</a>
-                                    <a class="dropdown-item" href="master/ProtectedContentBundle/README.md.html">ProtectedContentBundle</a>
-                                    <a class="dropdown-item" href="master/ResponsiveImagesBundle/README.md.html">ResponsiveImagesBundle</a>
-                                    <a class="dropdown-item" href="master/RssFeedBundle/README.md.html">RssFeedBundle</a>
-                                    <a class="dropdown-item" href="master/SEOBundle/README.md.html">SEOBundle</a>
-                                    <a class="dropdown-item" href="master/SlackBundle/README.md.html">SlackBundle</a>
-                                    <a class="dropdown-item" href="master/SolrSearchExtraBundle/README.md.html">SolrSearchExtraBundle</a>
-                                    <a class="dropdown-item" href="master/StaticTemplatesBundle/README.md.html">StaticTemplatesBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/Accelerator/README.md.html">Accelerator</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/CloudinaryBundle/README.md.html">CloudinaryBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/EditHelpBundle/README.md.html">EditHelpBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/EnhancedImageAssetBundle/README.md.html">EnhancedImageAssetBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/ExtraBundle/README.md.html">ExtraBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/LdapAuthenticatorBundle/README.md.html">LdapAuthenticatorBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/MailingBundle/README.md.html">MailingBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/MenuManagerBundle/README.md.html">MenuManagerBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/ProtectedContentBundle/README.md.html">ProtectedContentBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/ResponsiveImagesBundle/README.md.html">ResponsiveImagesBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/RssFeedBundle/README.md.html">RssFeedBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/SEOBundle/README.md.html">SEOBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/SlackBundle/README.md.html">SlackBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/SolrSearchExtraBundle/README.md.html">SolrSearchExtraBundle</a>
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/StaticTemplatesBundle/README.md.html">StaticTemplatesBundle</a>
                             </div>
         </li>
     </ul>
@@ -85,17 +89,13 @@ pre code {
 <div class="container-fluid">
         <div class="row flex-column-reverse flex-md-row">
         <div class="col-md-8 col-sm-12">
-            <h1 name="7cd8fb6e31cc946c078d2740c76a9899">Installation</h1>
-<h2 name="5a2ebfb8baa378cfcfcba58bbb1380c2">Requirements</h2>
-<ul>
-<li>eZ Platform 2+</li>
-<li>PHP 7.1+</li>
-</ul>
+            <h1 name="f0aa4737d0ee5d5870a8556ee8b1fbbf">Novactive eZ Slack Bundle</h1>
+<h1 name="7cd8fb6e31cc946c078d2740c76a9899">Installation</h1>
 <h2 name="fa9f2b3fde8a1ecd921517ebbf88a4fb">Installation steps</h2>
 <p>There are 2 phases:</p>
 <ul>
-<li><a href="#slack-application.html">create the Slack Application</a> for your workspace.</li>
-<li><a href="#bundle.html">install the Bundle and configure it</a> according to the Slack application.</li>
+<li>Create the Slack Application for your workspace.</li>
+<li>Install the Bundle and configure it according to the Slack application.</li>
 </ul>
 <h3 name="5746ba9e1e63baaa5f7e604768021270">Slack Application</h3>
 <p>First you need to create a Slack app here: <a href="https://api.slack.com/apps">https://api.slack.com/apps</a></p>
@@ -207,10 +207,17 @@ knpu_oauth2_client:
 <p>A simplication to run all the good commands (assets, dumps etc.).</p>
 <pre><code class=" bash">composer install</code></pre>
 <p>Awesome! Your are done!</p>
+
+            <p class="text-right">
+                <img width="204" height="20"
+                     src='https://img.shields.io/badge/Updated on-08--22--2020 00:22:50-green?style=flat-square&labelColor=black'
+                     alt='Updated on 08--22--2020 00:22:50'
+                />
+            </p>
         </div>
         <div class="col-md-4 col-sm-12 d-print-none sidebar">
                             <p><strong>In this page</strong>:</p>
-                <ul class="nav flex-column"><li class="nav-item first last"><a href="#7cd8fb6e31cc946c078d2740c76a9899" class="nav-link">Installation</a><ul class="menu_level_1"><li class="nav-item first"><a href="#5a2ebfb8baa378cfcfcba58bbb1380c2" class="nav-link">Requirements</a></li><li class="nav-item last"><a href="#fa9f2b3fde8a1ecd921517ebbf88a4fb" class="nav-link">Installation steps</a><ul class="menu_level_2"><li class="nav-item first"><a href="#5746ba9e1e63baaa5f7e604768021270" class="nav-link">Slack Application</a><ul class="menu_level_3"><li class="nav-item first"><a href="#ea7a6d5f2fb27a555890b9c23bc60551" class="nav-link">Incoming Webhooks</a></li><li class="nav-item"><a href="#56c7959d7f6307015e579e5da89e7928" class="nav-link">Interactive Components</a></li><li class="nav-item"><a href="#0968d06f1172e2781b0ae5afc313431d" class="nav-link">Slash Commands</a></li><li class="nav-item last"><a href="#a88c23d6b481a79e243e4224537a5f0d" class="nav-link">OAuth &amp; Permissions</a></li></ul></li><li class="nav-item"><a href="#94c51f19c37f96ed231f5a0ae512b2a8" class="nav-link">Bundle</a></li><li class="nav-item"><a href="#040da9acc61145e551bcf66b54f44420" class="nav-link">Register the bundle</a></li><li class="nav-item"><a href="#814b1401d1a609253b98ac549a68a493" class="nav-link">Add routes</a></li><li class="nav-item"><a href="#bc9e10a00544709382dc60c2081632ec" class="nav-link">Add configuration</a></li><li class="nav-item"><a href="#93341fbc8c3b030825f554a22aa3a400" class="nav-link">Add a Guard Authenticator to your Firewall</a></li><li class="nav-item last"><a href="#dc2236df4af05b697617af97916572fa" class="nav-link">Add Rebuild the CSS etc.</a></li></ul></li></ul></li></ul>
+                <ul class="nav flex-column"><li class="nav-item first"><a href="#f0aa4737d0ee5d5870a8556ee8b1fbbf" class="nav-link">Novactive eZ Slack Bundle</a></li><li class="nav-item last"><a href="#7cd8fb6e31cc946c078d2740c76a9899" class="nav-link">Installation</a><ul class="menu_level_1"><li class="nav-item first last"><a href="#fa9f2b3fde8a1ecd921517ebbf88a4fb" class="nav-link">Installation steps</a><ul class="menu_level_2"><li class="nav-item first"><a href="#5746ba9e1e63baaa5f7e604768021270" class="nav-link">Slack Application</a><ul class="menu_level_3"><li class="nav-item first"><a href="#ea7a6d5f2fb27a555890b9c23bc60551" class="nav-link">Incoming Webhooks</a></li><li class="nav-item"><a href="#56c7959d7f6307015e579e5da89e7928" class="nav-link">Interactive Components</a></li><li class="nav-item"><a href="#0968d06f1172e2781b0ae5afc313431d" class="nav-link">Slash Commands</a></li><li class="nav-item last"><a href="#a88c23d6b481a79e243e4224537a5f0d" class="nav-link">OAuth &amp; Permissions</a></li></ul></li><li class="nav-item"><a href="#94c51f19c37f96ed231f5a0ae512b2a8" class="nav-link">Bundle</a></li><li class="nav-item"><a href="#040da9acc61145e551bcf66b54f44420" class="nav-link">Register the bundle</a></li><li class="nav-item"><a href="#814b1401d1a609253b98ac549a68a493" class="nav-link">Add routes</a></li><li class="nav-item"><a href="#bc9e10a00544709382dc60c2081632ec" class="nav-link">Add configuration</a></li><li class="nav-item"><a href="#93341fbc8c3b030825f554a22aa3a400" class="nav-link">Add a Guard Authenticator to your Firewall</a></li><li class="nav-item last"><a href="#dc2236df4af05b697617af97916572fa" class="nav-link">Add Rebuild the CSS etc.</a></li></ul></li></ul></li></ul>
                     </div>
     </div>
     <footer class="pt-4 my-md-5 pt-md-5 border-top">
