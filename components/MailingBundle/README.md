@@ -11,6 +11,10 @@ Documentation is available in this repository via `.md` files but also packaged 
 
 ----
 
+[![Downloads](https://img.shields.io/packagist/dt/novactive/ezmailingbundle.svg?style=flat-square)](https://packagist.org/packages/novactive/ezmailingbundle)
+[![Latest version](https://img.shields.io/github/release/Novactive/NovaeZMailingBundle.svg?style=flat-square)](https://github.com/Novactive/NovaeZMailingBundle/releases)
+[![License](https://img.shields.io/packagist/l/novactive/ezmailingbundle.svg?style=flat-square)](LICENSE)
+
 Send eZ Contents by email based on the Mailing + Campaign configuration to a group of users (Mailing Lists)
 
 Wording
@@ -101,18 +105,11 @@ Usage and installation instructions
 
 [Usage](bundle/Resources/doc/USAGE.md)
 
-Contributing
-----------------
 
-[Usage](CONTRIBUTING.md)
-
-
-Change and License
-------------------
+Change
+------
 
 [Changelog](bundle/Resources/doc/CHANGELOG.md)
-
-[License](LICENSE)
 
 
 Special Mentions and Credits

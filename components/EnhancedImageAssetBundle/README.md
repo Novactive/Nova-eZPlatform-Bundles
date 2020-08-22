@@ -11,6 +11,10 @@ Documentation is available in this repository via `.md` files but also packaged 
 
 ----
 
+[![Downloads](https://img.shields.io/packagist/dt/novactive/ezenhancedimageassetbundle.svg?style=flat-square)](https://packagist.org/packages/novactive/ezenhancedimageassetbundle)
+[![Latest version](https://img.shields.io/github/release/Novactive/NovaeZEnhancedImageAssetBundle.svg?style=flat-square)](https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/releases)
+[![License](https://img.shields.io/packagist/l/novactive/ezenhancedimageassetbundle.svg?style=flat-square)](LICENSE)
+
 An eZPlatform bundle providing new field type with enhanced features related to image management
 
 ## Features

@@ -11,6 +11,10 @@ Documentation is available in this repository via `.md` files but also packaged 
 
 ----
 
+[![Downloads](https://img.shields.io/packagist/dt/novactive/ezstatictemplatesbundle.svg?style=flat-square)](https://packagist.org/packages/novactive/ezstatictemplatesbundle)
+[![Latest version](https://img.shields.io/github/release/Novactive/NovaeZStaticTemplatesBundle.svg?style=flat-square)](https://github.com/Novactive/NovaeZStaticTemplatesBundle/releases)
+[![License](https://img.shields.io/packagist/l/novactive/ezseobundle.svg?style=flat-square)](LICENSE)
+
 Novactive eZ Static Templates bundle is an eZ Platform bundle providing a way to access twig templates from an url.
 
 It uses the [siteaccess](https://doc.ezplatform.com/en/latest/guide/siteaccess/) and the [design engine](https://doc.ezplatform.com/en/latest/guide/design_engine/) provided by eZ Platform.

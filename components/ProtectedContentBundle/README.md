@@ -11,6 +11,10 @@ Documentation is available in this repository via `.md` files but also packaged 
 
 ----
 
+[![Downloads](https://img.shields.io/packagist/dt/novactive/ezprotectedcontentbundle.svg?style=flat-square)](https://packagist.org/packages/novactive/ezprotectedcontentbundle)
+[![Latest version](https://img.shields.io/github/release/Novactive/NovaeZProtectedContentBundle.svg?style=flat-square)](https://github.com/Novactive/NovaeZProtectedContentBundle/releases)
+[![License](https://img.shields.io/packagist/l/novactive/ezprotectedcontentbundle.svg?style=flat-square)](LICENSE)
+
 A bundle that provides quick password protection on Contents.
 
 ## How it works
@@ -43,12 +47,6 @@ Once you have unlocked the content, __canReadProtectedContent__ will be __true__
 
 
 ## Installation
-
-### Requirements
-
-* eZ Platform 2+
-* PHP 7.3+
-* MySQL 5.7.8+ / Maria DB 10.1+
 
 ### Installation steps
 

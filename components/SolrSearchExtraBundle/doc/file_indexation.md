@@ -1,3 +1,5 @@
+# Novactive eZ Solr Search Extra Bundle
+
 # Binary file plain text content indexation
 
 Disabled per default

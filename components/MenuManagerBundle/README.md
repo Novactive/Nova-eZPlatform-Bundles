@@ -11,8 +11,9 @@ Documentation is available in this repository via `.md` files but also packaged 
 
 ----
 
-[![Build Status](https://img.shields.io/travis/Novactive/NovaeZMenuManagerBundle.svg?style=flat-square&branch=master)](https://travis-ci.org/Novactive/NovaeZMenuManagerBundle)
+[![Downloads](https://img.shields.io/packagist/dt/novactive/ezmenumanagerbundle.svg?style=flat-square)](https://packagist.org/packages/novactive/ezmenumanagerbundle)
 [![Latest version](https://img.shields.io/github/release/Novactive/NovaeZMenuManagerBundle.svg?style=flat-square)](https://github.com/Novactive/NovaeZMenuManagerBundle/releases)
+[![License](https://img.shields.io/packagist/l/novactive/ezmenumanagerbundle.svg?style=flat-square)](LICENSE)
 
 An eZPlatform bundle to let your contributor manage their website menus.
  

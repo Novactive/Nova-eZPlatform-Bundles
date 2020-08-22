@@ -11,6 +11,10 @@ Documentation is available in this repository via `.md` files but also packaged 
 
 ----
 
+[![Downloads](https://img.shields.io/packagist/dt/novactive/ezldapauthenticatorbundle.svg?style=flat-square)](https://packagist.org/packages/novactive/ezldapauthenticatorbundle)
+[![Latest version](https://img.shields.io/github/release/Novactive/NovaeZLdapAuthenticatorBundle.svg?style=flat-square)](https://github.com/Novactive/NovaeZLdapAuthenticatorBundle/releases)
+[![License](https://img.shields.io/packagist/l/novactive/ezldapauthenticatorbundle.svg?style=flat-square)](LICENSE)
+
 A bundle to authenticate users against LDAP server
 
 ## Installation

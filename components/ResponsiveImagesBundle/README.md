@@ -11,14 +11,12 @@ Documentation is available in this repository via `.md` files but also packaged 
 
 ----
 
+[![Downloads](https://img.shields.io/packagist/dt/novactive/ezresponsiveimagesbundle.svg?style=flat-square)](https://packagist.org/packages/novactive/ezresponsiveimagesbundle)
+[![Latest version](https://img.shields.io/github/release/Novactive/NovaeZResponsiveImagesBundle.svg?style=flat-square)](https://github.com/Novactive/NovaeZResponsiveImagesBundle/releases)
+[![License](https://img.shields.io/packagist/l/novactive/ezresponsiveimagesbundle.svg?style=flat-square)](LICENSE)
+
+
 Novactive eZ Responsive Images is a lightweight eZ Publish 5.x|6.x bundle for Responsive Images management.
-
-
-## Requirements
-
-* eZ Publish 5.4+ / eZ Publish Community Project 2014.07+
-* PHP 5.4+
-
 
 ##  Install
 
@@ -113,7 +111,3 @@ The bundle requires that you create 2 more alias for each alias you are using. E
     </head>
 ```
 
-License
--------
-
-[License](LICENSE)

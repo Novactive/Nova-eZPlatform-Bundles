@@ -15,7 +15,6 @@ Documentation is available in this repository via `.md` files but also packaged 
 [![Latest version](https://img.shields.io/github/release/Novactive/NovaeZAccelerator.svg?style=flat-square)](https://github.com/Novactive/NovaeZAccelerator/releases)
 [![License](https://img.shields.io/packagist/l/novactive/ezaccelerator.svg?style=flat-square)](LICENSE)
 
-
 Accelerate your Ibexa DXP (eZ Platform)
 
 This bundles helps and aims to accelerate:
@@ -163,6 +162,3 @@ But you can also specify the `bus` and the `receiver`
 
 [Changelog](documentation/CHANGELOG.md)
 
-## License
-
-[License](LICENSE)

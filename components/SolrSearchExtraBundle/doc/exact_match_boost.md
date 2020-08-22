@@ -1,3 +1,5 @@
+# Novactive eZ Solr Search Extra Bundle
+
 # Exact matches boosting
 
 To allow boosting content where the search is exactly matched (accent, case, ...) you need to add the following settings to your solr schema.xml

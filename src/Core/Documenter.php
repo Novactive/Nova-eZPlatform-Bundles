@@ -36,12 +36,15 @@ final class Documenter
         $export = __DIR__.'/../../documentation/export';
 
         // Main
-        $this->generatePage($branch, 'README.md', $export);
+        $this->generatePage($branch, 'README.md', $export, '/');
 
         // Components
         foreach ($this->components as $component) {
-            $this->generatePage($branch, 'README.md', $export, $component);
+            $this->generatePage($branch, 'README.md', $export, '/', $component);
         }
+
+        $fs = new Filesystem();
+        $fs->copy("{$export}/master/README.md.html", "{$export}/index.html");
     }
 
     private function renderPage(string $branch, string $source): array
@@ -54,7 +57,7 @@ final class Documenter
         $mdFileContentLines = file($source);
 
         // we remove the cartouche
-        if (trim($mdFileContentLines[2]).trim($mdFileContentLines[11]) === '----'.'----') {
+        if (trim($mdFileContentLines[2] ?? '').trim($mdFileContentLines[11] ?? '') === '----'.'----') {
             \array_splice($mdFileContentLines, 2, 9);
         }
 
@@ -78,14 +81,20 @@ final class Documenter
                 ]
             ),
             $markdown->getLocalLinks(),
+            $markdown->getLocalImages(),
         ];
     }
 
     /**
      * @SuppressWarnings(PHPMD.UndefinedVariable)
      */
-    private function generatePage(string $branch, string $filePath, string $folder, ?string $component = null): void
-    {
+    private function generatePage(
+        string $branch,
+        string $filePath,
+        string $folder,
+        string $from,
+        ?string $component = null
+    ): void {
         if (null === $component) {
             $markdownFolder = __DIR__.'/../../';
         } else {
@@ -93,29 +102,36 @@ final class Documenter
         }
 
         $fs = new Filesystem();
-        $source = "{$markdownFolder}/{$filePath}";
+        $source = "{$markdownFolder}{$from}{$filePath}";
         if (!$fs->exists($source)) {
             return;
         }
-        [$content, $links] = $this->renderPage($branch, $source);
+        [$content, $links, $images] = $this->renderPage($branch, $source);
 
         $filePath = str_replace($markdownFolder, '', $source);
 
         if (null === $component) {
-            $destination = "{$folder}/{$branch}/{$filePath}.html";
+            $destination = "{$folder}/{$branch}";
         } else {
-            $destination = "{$folder}/{$branch}/{$component}/{$filePath}.html";
+            $destination = "{$folder}/{$branch}/{$component}";
         }
 
-        $fs->dumpFile($destination, $content);
+        $fs->dumpFile("{$destination}/{$filePath}.html", $content);
+
+        $from = rtrim(implode('/', \array_slice(explode('/', $filePath), 0, -1)), '/').'/';
 
         foreach ($links as $subPage) {
             $this->generatePage(
-                $component,
                 $branch,
                 trim($subPage, ' ./'),
-                $folder
+                $folder,
+                $from,
+                $component
             );
+        }
+
+        foreach ($images as $image) {
+            $fs->copy("{$markdownFolder}{$from}{$image}", "{$destination}/{$from}/{$image}");
         }
     }
 }

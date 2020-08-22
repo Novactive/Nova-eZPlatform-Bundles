@@ -1,3 +1,5 @@
+# Novactive eZ Solr Search Extra Bundle
+
 # Custom meta field
 
 ## Fulltext fields

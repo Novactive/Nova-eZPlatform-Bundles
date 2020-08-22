@@ -11,6 +11,10 @@ Documentation is available in this repository via `.md` files but also packaged 
 
 ----
 
+[![Downloads](https://img.shields.io/packagist/dt/novactive/ezcloudinarybundle.svg?style=flat-square)](https://packagist.org/packages/novactive/ezcloudinarybundle)
+[![Latest version](https://img.shields.io/github/release/Novactive/NovaeZCloudinaryBundle.svg?style=flat-square)](https://github.com/Novactive/NovaeZCloudinaryBundle/releases)
+[![License](https://img.shields.io/packagist/l/novactive/ezcloudinarybundle.svg?style=flat-square)](LICENSE)
+
 Novactive eZ Cloudinary Bundle is an eZPlatform bundle for Images optimizations and manipulations.
 
 This bundle brings the power of [Cloudinary](https://demo.cloudinary.com/?mode=default) in your eZ Platform project.
@@ -164,8 +168,3 @@ parameters:
     nova_ezcloudinary.default.cloudinary_fallback_variation: original # Will replace all unknown variation by original
 ```
 
-
-License
--------
-
-[License](LICENSE)

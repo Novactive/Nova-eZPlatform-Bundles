@@ -11,6 +11,10 @@ Documentation is available in this repository via `.md` files but also packaged 
 
 ----
 
+[![Downloads](https://img.shields.io/packagist/dt/novactive/ezrssfeedbundle.svg?style=flat-square)](https://packagist.org/packages/novactive/ezrssfeedbundle)
+[![Latest version](https://img.shields.io/github/release/Novactive/NovaeZRssFeedBundle.svg?style=flat-square)](https://github.com/Novactive/NovaeZRssFeedBundle/releases)
+[![License](https://img.shields.io/packagist/l/novactive/ezrssfeedbundle.svg?style=flat-square)](LICENSE)
+
 ## Installation steps
 
 ### Use Composer

@@ -1,10 +1,6 @@
+# Novactive eZ Accelerator
+
 # Install
-
-## Requirements
-
-* eZ Platform 3.1+
-* PHP 7.3
-
 
 ## Installation steps
 

@@ -21,6 +21,8 @@ final class Parser extends Parsedown
 
     private array $localLinks = [];
 
+    private array $localImages = [];
+
     public function __construct(ItemInterface $menu)
     {
         $this->menuPointer = $menu;
@@ -31,11 +33,17 @@ final class Parser extends Parsedown
     protected function inlineImage($Excerpt): ?array
     {
         $element = parent::inlineImage($Excerpt);
+
         if (null === $element) {
             return $element;
         }
 
         $element['element']['attributes']['class'] = 'img-fluid';
+        $src = $element['element']['attributes']['src'];
+
+        if (!strpos($src, '://')) {
+            $this->localImages[] = $src;
+        }
 
         return $element;
     }
@@ -48,8 +56,15 @@ final class Parser extends Parsedown
             $href = $element['element']['attributes']['href'];
             if (!strpos($href, '://') && (false !== strpos($href, '.md') || false === strpos($href, '.'))) {
                 $anchor = strpos($href, '#');
-                $this->localLinks[] = $anchor ? substr($href, 0, $anchor) : $href;
-                $element['element']['attributes']['href'] = "{$href}.html";
+                if ($anchor) {
+                    $this->localLinks[] = substr($href, 0, $anchor);
+                    $element['element']['attributes']['href'] = substr($href, 0, $anchor).'.html'.
+                                                                substr($href, $anchor);
+
+                    return $element;
+                }
+                $this->localLinks[] = $href;
+                $element['element']['attributes']['href'] = $href.'.html';
             }
         }
 
@@ -64,7 +79,7 @@ final class Parser extends Parsedown
         }
         $level = (int) substr($element['element']['name'], 1);
 
-        $value = $element['element']['text'];
+        $value = strip_tags($element['element']['text']);
         $element['element']['attributes']['name'] = md5($value);
 
         while (null !== $this->menuPointer->getParent() && $this->menuPointer->getExtra('level') !== $level - 1) {
@@ -83,6 +98,11 @@ final class Parser extends Parsedown
     public function getLocalLinks(): array
     {
         return $this->localLinks;
+    }
+
+    public function getLocalImages(): array
+    {
+        return $this->localImages;
     }
 
     protected function blockFencedCode($Line): ?array
