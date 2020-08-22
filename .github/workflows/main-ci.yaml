@@ -122,7 +122,7 @@ jobs:
                     bin/console novaezprotectedcontent:install
                     bin/console doctrine:schema:update
                     cp -rp ../components/ProtectedContentBundle/tests/provisioning/article.html.twig templates/themes/standard/full/
-                    cp -rp ../components/StaticTemplatesBundle/tests/provisioning/static_ultimatenova templates/
+                    cp -rp ../components/StaticTemplatesBundle/tests/provisioning/static_ultimatenova templates/themes/
                     echo ::endgroup::
 
                     echo ::group::..:: Final Steps ::..
