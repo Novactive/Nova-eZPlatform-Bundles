@@ -19,9 +19,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-/**
- * Class NovaeZMailingBundle.
- */
 class NovaeZMailingBundle extends Bundle
 {
     public function build(ContainerBuilder $container): void
@@ -29,9 +26,6 @@ class NovaeZMailingBundle extends Bundle
         parent::build($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getContainerExtension()
     {
         if (null === $this->extension) {

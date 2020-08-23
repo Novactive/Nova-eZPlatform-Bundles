@@ -20,9 +20,6 @@ use Novactive\Bundle\eZMailingBundle\Entity\Broadcast;
 use Novactive\Bundle\eZMailingBundle\Entity\StatHit;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-/**
- * Class ChartController.
- */
 class ChartController
 {
     /**

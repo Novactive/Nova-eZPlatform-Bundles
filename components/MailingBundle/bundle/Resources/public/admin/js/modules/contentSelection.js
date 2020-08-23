@@ -1,5 +1,5 @@
-var eZMailingContentSelectionModule = function () {
-    function _init($, $app) {
+export const eZMailingContentSelectionModule = function () {
+    function _init ($, $app) {
         $("button.js-novaezmailing-select-location-id", $app).click(function () {
             var token = document.querySelector('meta[name="CSRF-Token"]').content;
             var siteaccess = document.querySelector('meta[name="SiteAccess"]').content;
@@ -12,8 +12,9 @@ var eZMailingContentSelectionModule = function () {
                     ReactDOM.unmountComponentAtNode(udwContainer)
                 },
                 multiple: false,
+                tabs: window.eZ.adminUiConfig.universalDiscoveryWidget.tabs,
                 startingLocationId: startingLocationId,
-                restInfo: {token: token, siteaccess: siteaccess},
+                restInfo: { token: token, siteaccess: siteaccess },
                 onConfirm: function (response) {
                     $(targetSelector).val(response[0].id);
                     $(targetSelectorName).text(response[0].ContentInfo.Content.Name);
@@ -42,7 +43,7 @@ var eZMailingContentSelectionModule = function () {
                     }
                     $('button.m-ud__action--create-content').prop("disabled", contentDisabled);
                 },
-                restInfo: {token: token, siteaccess: siteaccess},
+                restInfo: { token: token, siteaccess: siteaccess },
                 visibleTabs: ['create'],
                 activeTab: 'create',
                 onConfirm: function (response) {
@@ -53,5 +54,5 @@ var eZMailingContentSelectionModule = function () {
         });
     }
 
-    return {init: _init};
+    return { init: _init };
 }();

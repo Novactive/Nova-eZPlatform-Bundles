@@ -1,4 +1,4 @@
-var eZMailingEditFormModule = function () {
+export const eZMailingEditFormModule = function () {
     function _init($, $app) {
         var $form = $('form[novaezmailing]', $app);
         var $saveButton = $("#novaezmailing_save-tab", $app);

@@ -7,6 +7,7 @@ services:
         bind:
             $logger: "@monolog.logger.novaezmailing"
             $entityManager: "@novaezmailing.doctrine.entity_manager"
+            $translationHelper: "@ezpublish.translation_helper"
 
     Novactive\Bundle\eZMailingBundle\Command\:
         resource: '../../Command'
@@ -48,21 +49,21 @@ services:
 
     novaezmailing.menu.main:
         class: Knp\Menu\MenuItem
-        factory: 'Novactive\Bundle\eZMailingBundle\Menu\Builder:createAdminMenu'
+        factory: ['@Novactive\Bundle\eZMailingBundle\Menu\Builder','createAdminMenu']
         arguments: ["@request_stack"]
         tags:
             - { name: knp_menu.menu, alias: novaezmailing.menu.admin }
 
     novaezmailing.menu.campaigns:
         class: Knp\Menu\MenuItem
-        factory: 'Novactive\Bundle\eZMailingBundle\Menu\Builder:createCampaignMenu'
+        factory: ['@Novactive\Bundle\eZMailingBundle\Menu\Builder','createCampaignMenu']
         arguments: ["@request_stack", "@novaezmailing.doctrine.entity_manager"]
         tags:
             - { name: knp_menu.menu, alias: novaezmailing.menu.campaigns }
 
     novaezmailing.menu.save_cancel:
         class: Knp\Menu\MenuItem
-        factory: 'Novactive\Bundle\eZMailingBundle\Menu\Builder:createSaveCancelMenu'
+        factory: ['@Novactive\Bundle\eZMailingBundle\Menu\Builder','createSaveCancelMenu']
         tags:
             - { name: knp_menu.menu, alias: novaezmailing.menu.save_cancel }
 
@@ -85,11 +86,11 @@ services:
 
     Novactive\Bundle\eZMailingBundle\Core\Mailer\Simple:
         public: true
-        factory: 'Novactive\Bundle\eZMailingBundle\Core\Mailer\Factory:get'
+        factory: ['@Novactive\Bundle\eZMailingBundle\Core\Mailer\Factory','get']
         arguments: ['simple_mailer']
 
     Novactive\Bundle\eZMailingBundle\Core\Mailer\Mailing:
-        factory: 'Novactive\Bundle\eZMailingBundle\Core\Mailer\Factory:get'
+        factory: ['@Novactive\Bundle\eZMailingBundle\Core\Mailer\Factory','get']
         arguments: ['mailing_mailer']
 
     # Twig
@@ -101,8 +102,7 @@ services:
         resource: '../../DataFixtures'
         tags: ['doctrine.fixture.orm']
 
-    ez_mailing.io_service:
-        class: Novactive\Bundle\eZMailingBundle\Core\IOService
+    Novactive\Bundle\eZMailingBundle\Core\IOService:
         arguments: ['@ez_mailing.ezpublish.core.io_service']
 
     Novactive\Bundle\eZMailingBundle\Core\SiteAccessAwareEntityManagerFactory:
@@ -110,4 +110,4 @@ services:
 
     novaezmailing.doctrine.entity_manager:
         class: Doctrine\ORM\EntityManagerInterface
-        factory: 'Novactive\Bundle\eZMailingBundle\Core\SiteAccessAwareEntityManagerFactory:get'
+        factory: ['@Novactive\Bundle\eZMailingBundle\Core\SiteAccessAwareEntityManagerFactory','get']

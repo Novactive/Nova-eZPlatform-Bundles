@@ -5,7 +5,7 @@
 {% set novezmailing_breadcrumb = block('novezmailing_breadcrumb') %}
 {% set rightbar = block('rightbar') ?? '' %}
 
-{% embed '@EzPlatformAdminUi/layout.html.twig' %}
+{% embed '@ezdesign/ui/layout.html.twig' %}
     {% block content %}
         {% trans_default_domain 'ezmailing' %}
         <div class="novaezmailing-app row" data-search-endpoint="{{ path('novaezmailing_dashboard_search_autocomplete') }}">

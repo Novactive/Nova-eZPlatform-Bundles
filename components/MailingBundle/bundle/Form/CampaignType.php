@@ -27,9 +27,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Class CampaignType.
- */
 class CampaignType extends AbstractType
 {
     /**
@@ -37,17 +34,11 @@ class CampaignType extends AbstractType
      */
     private $siteAccessResolver;
 
-    /**
-     * CampaignType constructor.
-     */
     public function __construct(SiteaccessResolver $siteAccessResolver)
     {
         $this->siteAccessResolver = $siteAccessResolver;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $siteaccesses = array_combine(

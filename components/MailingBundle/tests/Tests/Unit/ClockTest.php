@@ -19,9 +19,6 @@ use Novactive\Bundle\eZMailingBundle\Core\Utils\Clock;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class ClockTest.
- */
 class ClockTest extends TestCase
 {
     /**

@@ -21,9 +21,6 @@ use EzSystems\EzPlatformAdminUi\Tab\TabRegistry;
 use Novactive\Bundle\eZMailingBundle\Core\Tab\Campaigns as CampaignsTab;
 use Novactive\Bundle\eZMailingBundle\Core\Tab\Mailings as MailingsTab;
 
-/**
- * Class CampaignTab.
- */
 class LocationViewGroupTab
 {
     /**
@@ -46,9 +43,6 @@ class LocationViewGroupTab
      */
     private $entityManager;
 
-    /**
-     * LocationViewGroupTab constructor.
-     */
     public function __construct(
         TabRegistry $tabRegistry,
         CampaignsTab $campaignsTab,

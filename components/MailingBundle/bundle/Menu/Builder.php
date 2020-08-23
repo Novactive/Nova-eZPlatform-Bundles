@@ -23,11 +23,8 @@ use Novactive\Bundle\eZMailingBundle\Entity\User;
 use Novactive\Bundle\eZMailingBundle\Security\Voter\Campaign as CampaignVoter;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * Class Builder.
- */
 class Builder
 {
     private $translator;
@@ -42,9 +39,6 @@ class Builder
      */
     private $authorizationChecker;
 
-    /**
-     * Builder constructor.
-     */
     public function __construct(
         FactoryInterface $factory,
         AuthorizationCheckerInterface $authorizationChecker,

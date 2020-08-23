@@ -14,9 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Utils;
 
-/**
- * Class ChartDataBuilder.
- */
 class ChartDataBuilder
 {
     /**
@@ -44,9 +41,6 @@ class ChartDataBuilder
      */
     private $colorsSets;
 
-    /**
-     * ChartDataBuilder constructor.
-     */
     public function __construct(string $title, string $type, array $options = [])
     {
         $this->title = $title;
@@ -60,9 +54,6 @@ class ChartDataBuilder
         ];
     }
 
-    /**
-     * @return ChartDataBuilder
-     */
     public function addDataSet(array $data, array $labels, ?array $colors = null, ?string $type = null): self
     {
         if (null === $type) {
@@ -85,10 +76,7 @@ class ChartDataBuilder
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    public function __invoke()
+    public function __invoke(): array
     {
         $datasets = [];
         $labels = [];

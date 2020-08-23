@@ -20,9 +20,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZMailingBundle\Entity\Broadcast as BroadcastEntity;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 
-/**
- * Class Broadcast.
- */
 class Broadcast
 {
     /**
@@ -30,9 +27,6 @@ class Broadcast
      */
     private $entityManager;
 
-    /**
-     * Broadcast constructor.
-     */
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;

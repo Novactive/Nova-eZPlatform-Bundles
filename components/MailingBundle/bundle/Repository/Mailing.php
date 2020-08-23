@@ -16,14 +16,8 @@ namespace Novactive\Bundle\eZMailingBundle\Repository;
 
 use Doctrine\ORM\QueryBuilder;
 
-/**
- * Class Mailing.
- */
 class Mailing extends EntityRepository
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function getAlias(): string
     {
         return 'mail';

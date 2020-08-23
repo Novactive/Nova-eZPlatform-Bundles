@@ -14,14 +14,8 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Repository;
 
-/**
- * Class Campaign.
- */
 class Campaign extends EntityRepository
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function getAlias(): string
     {
         return 'camp';

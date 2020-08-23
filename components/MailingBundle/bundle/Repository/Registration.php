@@ -18,14 +18,8 @@ use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign as CampaignEntity;
 
-/**
- * Class Registration.
- */
 class Registration extends EntityRepository
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function getAlias(): string
     {
         return 'reg';

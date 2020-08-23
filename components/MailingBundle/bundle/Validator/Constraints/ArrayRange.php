@@ -17,8 +17,6 @@ namespace Novactive\Bundle\eZMailingBundle\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
 
 /**
- * Class ArrayRange.
- *
  * @Annotation
  */
 class ArrayRange extends Constraint

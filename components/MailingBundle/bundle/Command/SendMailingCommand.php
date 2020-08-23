@@ -22,9 +22,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * Class CronRunCommand.
- */
 class SendMailingCommand extends Command
 {
     /**
@@ -32,18 +29,12 @@ class SendMailingCommand extends Command
      */
     private $processor;
 
-    /**
-     * SendMailingCommand constructor.
-     */
     public function __construct(SendMailing $processor)
     {
         parent::__construct();
         $this->processor = $processor;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configure(): void
     {
         $this
@@ -57,10 +48,7 @@ class SendMailingCommand extends Command
             ->setDescription('Send all the mailings according to their sending rules.');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $io->title('Process the mailings');
@@ -71,5 +59,7 @@ class SendMailingCommand extends Command
         }
         $this->processor->execute($overrideDatetime);
         $io->success('Done.');
+
+        return Command::SUCCESS;
     }
 }

@@ -23,9 +23,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * Class SendTestMailingCommand.
- */
 class SendTestMailingCommand extends Command
 {
     /**
@@ -38,9 +35,6 @@ class SendTestMailingCommand extends Command
      */
     private $entityManager;
 
-    /**
-     * SendTestMailingCommand constructor.
-     */
     public function __construct(TestMailing $processor, EntityManagerInterface $entityManager)
     {
         parent::__construct();
@@ -48,9 +42,6 @@ class SendTestMailingCommand extends Command
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configure(): void
     {
         $this
@@ -61,10 +52,7 @@ class SendTestMailingCommand extends Command
             ->addArgument('recipient', InputArgument::REQUIRED, "The recipient's email address");
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $mailingId = (int) $input->getArgument('mailingId');
@@ -75,5 +63,7 @@ class SendTestMailingCommand extends Command
         $mailing = $this->entityManager->getRepository(Mailing::class)->findOneById($mailingId);
         $this->processor->execute($mailing, $recipientEmail);
         $io->success('Done.');
+
+        return Command::SUCCESS;
     }
 }

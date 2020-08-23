@@ -17,9 +17,6 @@ namespace Novactive\Bundle\eZMailingBundle\Entity\Compose;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Trait Remote.
- */
 trait Remote
 {
     /**
@@ -40,17 +37,11 @@ trait Remote
      */
     private $remoteStatus;
 
-    /**
-     * @return string
-     */
     public function getRemoteId(): ?string
     {
         return $this->remoteId;
     }
 
-    /**
-     * @return Remote
-     */
     public function setRemoteId(string $remoteId): self
     {
         $this->remoteId = $remoteId;
@@ -58,17 +49,11 @@ trait Remote
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
     public function getLastSynchro(): ?DateTime
     {
         return $this->lastSynchro;
     }
 
-    /**
-     * @return Remote
-     */
     public function setLastSynchro(DateTime $lastSynchro): self
     {
         $this->lastSynchro = $lastSynchro;
@@ -81,9 +66,6 @@ trait Remote
         return $this->remoteStatus;
     }
 
-    /**
-     * @return Remote
-     */
     public function setRemoteStatus(int $remoteStatus): self
     {
         $this->remoteStatus = $remoteStatus;

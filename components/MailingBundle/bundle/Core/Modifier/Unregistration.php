@@ -19,9 +19,6 @@ use Novactive\Bundle\eZMailingBundle\Entity\User;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
-/**
- * Class Unregistration.
- */
 class Unregistration
 {
     /**
@@ -29,9 +26,6 @@ class Unregistration
      */
     private $router;
 
-    /**
-     * Tracker constructor.
-     */
     public function __construct(RouterInterface $router)
     {
         $this->router = $router;

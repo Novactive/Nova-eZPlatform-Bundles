@@ -16,8 +16,8 @@ namespace Novactive\Bundle\eZMailingBundle\Command;
 
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use eZ\Publish\Core\Repository\Repository;
 use Novactive\Bundle\eZMailingBundle\Core\IOService;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
@@ -64,9 +64,6 @@ class MigrateCjwnlCommand extends Command
 
     public const DUMP_FOLDER = 'migrate/cjwnl';
 
-    /**
-     * MigrateCommand constructor.
-     */
     public function __construct(
         IOService $ioService,
         EntityManagerInterface $entityManager,
@@ -91,7 +88,7 @@ class MigrateCjwnlCommand extends Command
             ->setHelp('Run novaezmailing:migrate:cjwnl --export|--import|--clean');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
         $this->io->title('Update the Database with Custom Novactive EzMailing Tables');
@@ -105,6 +102,8 @@ class MigrateCjwnlCommand extends Command
         } else {
             $this->io->error('No export or import option found. Run novaezmailing:migrate:cjwnl --export|--import');
         }
+
+        return Command::SUCCESS;
     }
 
     private function export(): void
@@ -273,7 +272,7 @@ class MigrateCjwnlCommand extends Command
 
             // Registrations
             $sql = 'SELECT list_contentobject_id, approved FROM'.
-                                 ' cjwnl_subscription WHERE newsletter_user_id = ?';
+                   ' cjwnl_subscription WHERE newsletter_user_id = ?';
             $subscription_rows = $this->runQuery($sql, [$user_row['id']]);
             $subscriptions = [];
             foreach ($subscription_rows as $subscription_row) {

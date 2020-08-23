@@ -23,18 +23,16 @@ use Novactive\Bundle\eZMailingBundle\Core\Provider\User as UserProvider;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
 use Novactive\Bundle\eZMailingBundle\Form\ImportType;
 use Novactive\Bundle\eZMailingBundle\Form\MailingListType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * Class MailingListController.
- *
  * @Route("/mailinglist")
  */
 class MailingListController

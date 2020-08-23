@@ -22,8 +22,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class User.
- *
  * @ORM\Table(name="novaezmailing_user",
  *            uniqueConstraints={ @ORM\UniqueConstraint(name="unique_email",columns={"USER_email"})},
  *            indexes={
@@ -95,9 +93,6 @@ class User
         self::BLACKLISTED => 'info',
     ];
 
-    /**
-     * User constructor.
-     */
     public function __construct()
     {
         $this->registrations = new ArrayCollection();
@@ -220,9 +215,6 @@ class User
         return (int) $this->id;
     }
 
-    /**
-     * @return User
-     */
     public function setId(int $id): self
     {
         $this->id = $id;
@@ -230,17 +222,11 @@ class User
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    /**
-     * @return User
-     */
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -248,17 +234,11 @@ class User
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getFirstName(): ?string
     {
         return $this->firstName;
     }
 
-    /**
-     * @return User
-     */
     public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
@@ -266,17 +246,11 @@ class User
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLastName(): ?string
     {
         return $this->lastName;
     }
 
-    /**
-     * @return User
-     */
     public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
@@ -284,17 +258,11 @@ class User
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getGender(): ?string
     {
         return $this->gender;
     }
 
-    /**
-     * @return User
-     */
     public function setGender(string $gender): self
     {
         $this->gender = $gender;
@@ -302,19 +270,11 @@ class User
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
     public function getBirthDate(): ?DateTime
     {
         return $this->birthDate;
     }
 
-    /**
-     * @param DateTime $birthDate
-     *
-     * @return User
-     */
     public function setBirthDate(?DateTime $birthDate): self
     {
         $this->birthDate = $birthDate;
@@ -322,17 +282,11 @@ class User
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPhone(): ?string
     {
         return $this->phone;
     }
 
-    /**
-     * @return User
-     */
     public function setPhone(string $phone): self
     {
         $this->phone = $phone;
@@ -340,17 +294,11 @@ class User
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getZipcode(): ?string
     {
         return $this->zipcode;
     }
 
-    /**
-     * @return User
-     */
     public function setZipcode(string $zipcode): self
     {
         $this->zipcode = $zipcode;
@@ -358,17 +306,11 @@ class User
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getCity(): ?string
     {
         return $this->city;
     }
 
-    /**
-     * @return User
-     */
     public function setCity(string $city): self
     {
         $this->city = $city;
@@ -376,17 +318,11 @@ class User
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getState(): ?string
     {
         return $this->state;
     }
 
-    /**
-     * @return User
-     */
     public function setState(string $state): self
     {
         $this->state = $state;
@@ -394,17 +330,11 @@ class User
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getCountry(): ?string
     {
         return $this->country;
     }
 
-    /**
-     * @return User
-     */
     public function setCountry(string $country): self
     {
         $this->country = $country;
@@ -412,17 +342,11 @@ class User
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getJobTitle(): ?string
     {
         return $this->jobTitle;
     }
 
-    /**
-     * @return User
-     */
     public function setJobTitle(string $jobTitle): self
     {
         $this->jobTitle = $jobTitle;
@@ -430,17 +354,11 @@ class User
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getCompany(): ?string
     {
         return $this->company;
     }
 
-    /**
-     * @return User
-     */
     public function setCompany(string $company): self
     {
         $this->company = $company;
@@ -453,9 +371,6 @@ class User
         return $this->origin;
     }
 
-    /**
-     * @return User
-     */
     public function setOrigin(string $origin): self
     {
         $this->origin = $origin;
@@ -473,9 +388,6 @@ class User
         return self::STATUSES_STYLE[$this->status];
     }
 
-    /**
-     * @return User
-     */
     public function setStatus(string $status): self
     {
         $this->status = $status;
@@ -488,9 +400,6 @@ class User
         return $this->restricted;
     }
 
-    /**
-     * @return User
-     */
     public function setRestricted(bool $restricted): self
     {
         $this->restricted = $restricted;
@@ -531,9 +440,6 @@ class User
         return $this;
     }
 
-    /**
-     * @return $this
-     */
     public function addRegistration(Registration $registration): self
     {
         if ($this->registrations->contains($registration)) {
@@ -557,9 +463,6 @@ class User
         return $this;
     }
 
-    /**
-     * @return User
-     */
     public function removeRegistration(Registration $registration): self
     {
         $this->registrations->removeElement($registration);

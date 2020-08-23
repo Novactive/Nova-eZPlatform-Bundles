@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZMailingBundle/blob/master/LICENSE MIT Licence
  */
 
+declare(strict_types=1);
+
 namespace Novactive\Bundle\eZMailingBundle\DependencyInjection;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ConfigurationProcessor;
@@ -21,22 +23,13 @@ use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Yaml\Yaml;
 
-/**
- * Class NovaeZMailingExtension.
- */
 class NovaeZMailingExtension extends Extension implements PrependExtensionInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getAlias(): string
     {
         return 'nova_ezmailing';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = $this->getConfiguration($configs, $container);
@@ -58,9 +51,6 @@ class NovaeZMailingExtension extends Extension implements PrependExtensionInterf
         $processor->mapSetting('default_mailinglist_id', $config);
     }
 
-    /**
-     * Loads configuration.
-     */
     public function prepend(ContainerBuilder $container): void
     {
         $configFile = __DIR__.'/../Resources/config/views.yml';

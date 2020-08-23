@@ -20,9 +20,6 @@ use Novactive\Bundle\eZMailingBundle\Entity\User;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
-/**
- * Class Tracking.
- */
 class Tracking implements ModifierInterface
 {
     /**
@@ -30,17 +27,11 @@ class Tracking implements ModifierInterface
      */
     private $router;
 
-    /**
-     * Tracker constructor.
-     */
     public function __construct(RouterInterface $router)
     {
         $this->router = $router;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function modify(Mailing $mailing, User $user, string $html, array $options = []): string
     {
         /** @var Broadcast $broadcast */

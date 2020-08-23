@@ -1,4 +1,4 @@
-var eZMailingChartsModule = function () {
+export const eZMailingChartsModule = function () {
 
     function _render($chart) {
         var ctx = $chart.get(0);

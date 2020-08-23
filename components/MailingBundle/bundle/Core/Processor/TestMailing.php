@@ -17,9 +17,6 @@ namespace Novactive\Bundle\eZMailingBundle\Core\Processor;
 use Novactive\Bundle\eZMailingBundle\Core\Mailer\Mailing as MailingMailer;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 
-/**
- * Class SendMailing.
- */
 class TestMailing extends Processor implements TestMailingProcessorInterface
 {
     /**
@@ -27,9 +24,6 @@ class TestMailing extends Processor implements TestMailingProcessorInterface
      */
     private $mailingMailer;
 
-    /**
-     * SendMailingCommand constructor.
-     */
     public function __construct(MailingMailer $mailingMailer)
     {
         $this->mailingMailer = $mailingMailer;

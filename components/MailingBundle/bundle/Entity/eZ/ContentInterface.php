@@ -17,14 +17,8 @@ namespace Novactive\Bundle\eZMailingBundle\Entity\eZ;
 use eZ\Publish\API\Repository\Values\Content\Content as eZContent;
 use eZ\Publish\API\Repository\Values\Content\Location as eZLocation;
 
-/**
- * Interface ContentInterface.
- */
 interface ContentInterface
 {
-    /**
-     * @return int
-     */
     public function getLocationId(): ?int;
 
     public function setLocationId(int $locationId): ContentInterface;

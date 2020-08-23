@@ -32,7 +32,7 @@
             <td><a href="{{ path('novaezmailing_user_show', {user:item.id}) }}" data-toggle="popover"
                    title="{{ item.gender }} {{ item.firstname }} {{ item.lastName }}"
                    data-content="
-                        {% if item.birthDate is not empty %}<p><strong>{{"generic.users.table.birthdate"|trans}}</strong>: {{ item.birthDate|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date)|default('') }}</p>{% endif %}
+                        {% if item.birthDate is not empty %}<p><strong>{{"generic.users.table.birthdate"|trans}}</strong>: {{ item.birthDate|format_datetime(novaezmailing.dateformat.date, novaezmailing.dateformat.date)|default('') }}</p>{% endif %}
                         {% if item.phone is not empty %}<p><strong>{{"generic.users.table.phone"|trans}}</strong>: {{ item.phone }}</p>{% endif %}
                         {% if item.zipcode is not empty or item.city is not empty or item.city is not empty or item.state is not empty %}<p><strong>{{"generic.users.table.location"|trans}}</strong>:{{ item.zipcode }} {{ item.city }} {{ item.state }}</p>{% endif %}
                         {% if item.jobTitle is not empty or item.company is not empty %}<p><strong>{{"generic.users.table.job"|trans}}</strong>: {{ item.jobTitle }} {{ item.company }}</p>{% endif %}
@@ -51,13 +51,13 @@
                         {% if currentMailingList is defined and currentMailingList.withApproval %}
                             <td class="text-center">{{ ApprobationButton.show(registration) }}</td>
                         {% endif %}
-                        <td class="text-center">{{ registration.updated|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
-                        <td class="text-center">{{ registration.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                        <td class="text-center">{{ registration.updated|format_datetime(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                        <td class="text-center">{{ registration.created|format_datetime(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
                     {% endif %}
                 {% endfor %}
             {% elseif not withRegistrations %}
-                <td class="text-center">{{ item.updated|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
-                <td class="text-center">{{ item.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                <td class="text-center">{{ item.updated|format_datetime(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                <td class="text-center">{{ item.created|format_datetime(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
             {% endif %}
             {% if withRegistrations %}
                 <td>
@@ -78,8 +78,8 @@
                                         </a>
                                     </td>
                                     <td align="center">{{ ApprobationButton.show(registration) }}</td>
-                                    <td align="center">{{ registration.updated|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
-                                    <td align="center">{{ registration.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                                    <td align="center">{{ registration.updated|format_datetime(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                                    <td align="center">{{ registration.created|format_datetime(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
                                 </tr>
                             {% endfor %}
                         </table>

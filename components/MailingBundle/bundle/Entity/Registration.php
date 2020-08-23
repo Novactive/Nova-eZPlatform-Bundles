@@ -18,8 +18,6 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class Registration.
- *
  * @ORM\Table(name="novaezmailing_registrations",
  *            uniqueConstraints={ @ORM\UniqueConstraint(name="unique_registration",columns={"ML_id","USER_id"})},
  *            indexes={

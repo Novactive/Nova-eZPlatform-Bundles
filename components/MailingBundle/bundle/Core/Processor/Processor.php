@@ -16,9 +16,6 @@ namespace Novactive\Bundle\eZMailingBundle\Core\Processor;
 
 use Psr\Log\LoggerInterface;
 
-/**
- * Class Processor.
- */
 abstract class Processor
 {
     /**
@@ -28,8 +25,6 @@ abstract class Processor
 
     /**
      * @required
-     *
-     * @return $this
      */
     public function setLogger(LoggerInterface $logger): self
     {

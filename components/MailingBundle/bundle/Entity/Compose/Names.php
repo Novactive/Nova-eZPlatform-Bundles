@@ -16,9 +16,6 @@ namespace Novactive\Bundle\eZMailingBundle\Entity\Compose;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Trait Names.
- */
 trait Names
 {
     /**
@@ -36,9 +33,6 @@ trait Names
         return $this->names;
     }
 
-    /**
-     * @return Names
-     */
     public function setNames(array $names): self
     {
         $this->names = $names;
@@ -46,9 +40,6 @@ trait Names
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getName(?string $lang = null): ?string
     {
         if (null === $this->names) {

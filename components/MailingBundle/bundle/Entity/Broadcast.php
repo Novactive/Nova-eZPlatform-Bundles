@@ -18,12 +18,10 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class Broadcast.
- *
  * A Broadcast is a record of a Mailing "sending" at a certain point in time
  * to a certain number of approved registrations
  * with a certain html contents (we will backup here)
- * It's really a record of a Mailing broadcast
+ * It's really a record of a Mailing broadcast.
  *
  * @ORM\Table(name="novaezmailing_broadcast")
  *
@@ -80,9 +78,6 @@ class Broadcast
      */
     private $statHits;
 
-    /**
-     * Broadcast constructor.
-     */
     public function __construct()
     {
         $this->emailSentCount = 0;
@@ -94,9 +89,6 @@ class Broadcast
         return (int) $this->id;
     }
 
-    /**
-     * @return $this
-     */
     public function setId(int $id): self
     {
         $this->id = $id;
@@ -109,9 +101,6 @@ class Broadcast
         return $this->started;
     }
 
-    /**
-     * @return $this
-     */
     public function setStarted(DateTime $started): self
     {
         $this->started = $started;
@@ -119,17 +108,11 @@ class Broadcast
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
     public function getEnded(): ?DateTime
     {
         return $this->ended;
     }
 
-    /**
-     * @return $this
-     */
     public function setEnded(DateTime $ended): self
     {
         $this->ended = $ended;
@@ -142,9 +125,6 @@ class Broadcast
         return $this->emailSentCount;
     }
 
-    /**
-     * @return $this
-     */
     public function setEmailSentCount(int $emailSentCount): self
     {
         $this->emailSentCount = $emailSentCount;
@@ -157,9 +137,6 @@ class Broadcast
         return $this->mailing;
     }
 
-    /**
-     * @return $this
-     */
     public function setMailing(Mailing $mailing): self
     {
         $this->mailing = $mailing;
@@ -172,9 +149,6 @@ class Broadcast
         return $this->html;
     }
 
-    /**
-     * @return $this
-     */
     public function setHtml(string $html): self
     {
         $this->html = $html;
@@ -182,9 +156,6 @@ class Broadcast
         return $this;
     }
 
-    /**
-     * @return StatHit[]
-     */
     public function getStatHits(): array
     {
         return $this->statHits;

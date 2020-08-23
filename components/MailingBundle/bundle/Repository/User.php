@@ -19,14 +19,8 @@ use Doctrine\ORM\QueryBuilder;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign as CampaignEntity;
 use Novactive\Bundle\eZMailingBundle\Entity\User as UserEntity;
 
-/**
- * Class User.
- */
 class User extends EntityRepository
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function getAlias(): string
     {
         return 'u';
@@ -100,9 +94,6 @@ class User extends EntityRepository
         );
     }
 
-    /**
-     * @param $mailingLists
-     */
     public function countValidRecipients($mailingLists): int
     {
         return $this->countByFilters(

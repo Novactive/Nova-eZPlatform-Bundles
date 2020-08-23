@@ -18,9 +18,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
 
-/**
- * Class Unregistration.
- */
 class Unregistration
 {
     /**
@@ -33,25 +30,16 @@ class Unregistration
      */
     private $mailingLists;
 
-    /**
-     * Registration constructor.
-     */
     public function __construct()
     {
         $this->mailingLists = new ArrayCollection();
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): ?User
     {
         return $this->user;
     }
 
-    /**
-     * @return $this
-     */
     public function setUser(User $user): self
     {
         $this->user = $user;
@@ -69,10 +57,8 @@ class Unregistration
 
     /**
      * @param MailingList[] $mailingLists
-     *
-     * @return $this
      */
-    public function setMailingLists($mailingLists): self
+    public function setMailingLists(array $mailingLists): self
     {
         $this->mailingLists = $mailingLists;
 

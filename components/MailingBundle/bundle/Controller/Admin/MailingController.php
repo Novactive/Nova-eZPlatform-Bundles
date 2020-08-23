@@ -27,21 +27,18 @@ use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
 use Novactive\Bundle\eZMailingBundle\Form\MailingType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Workflow\Registry;
 
 /**
- * Class MailingController.
- *
  * @Route("/mailing")
  */
 class MailingController
@@ -49,7 +46,7 @@ class MailingController
     /**
      * @Route("/show/{mailing}", name="novaezmailing_mailing_show")
      * @Template()
-     * @Security("is_granted('view', mailing)")
+     * @IsGranted("view", subject="mailing")
      */
     public function showAction(
         Mailing $mailing,
@@ -75,7 +72,7 @@ class MailingController
 
     /**
      * @Template()
-     * @Security("is_granted('view', mailing)")
+     * @IsGranted("view", subject="mailing")
      */
     public function mailingTabsAction(
         Mailing $mailing,
@@ -110,7 +107,7 @@ class MailingController
      * @Route("/create/{campaign}", name="novaezmailing_mailing_create")
      * @ParamConverter("campaign", class="Novactive\Bundle\eZMailingBundle\Entity\Campaign", options={"id"="campaign"})
      * @Template()
-     * @Security("is_granted('edit', mailing)")
+     * @IsGranted("edit", subject="mailing")
      *
      * @return array|RedirectResponse
      */
@@ -170,7 +167,7 @@ class MailingController
      * @Route("/confirm/{mailing}", name="novaezmailing_mailing_confirm")
      * @Route("/archive/{mailing}", name="novaezmailing_mailing_archive")
      * @Route("/abort/{mailing}",   name="novaezmailing_mailing_cancel")
-     * @Security("is_granted('view', mailing)")
+     * @IsGranted("view", subject="mailing")
      */
     public function statusAction(
         Request $request,
@@ -188,9 +185,8 @@ class MailingController
     }
 
     /**
-     * @Route("/test/{mailing}", name="novaezmailing_mailing_test")
-     * @Security("is_granted('view', mailing)")
-     * @Method({"POST"})
+     * @Route("/test/{mailing}", name="novaezmailing_mailing_test", methods={"POST"})
+     * @IsGranted("view", subject="mailing")
      */
     public function testAction(
         Request $request,

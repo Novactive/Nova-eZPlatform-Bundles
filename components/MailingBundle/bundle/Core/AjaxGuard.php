@@ -21,9 +21,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
-/**
- * Class AjaxGuard.
- */
 class AjaxGuard
 {
     /**
@@ -36,9 +33,6 @@ class AjaxGuard
      */
     private $entityManager;
 
-    /**
-     * AjaxGuard constructor.
-     */
     public function __construct(CsrfTokenManagerInterface $csrfTokenManager, EntityManagerInterface $entityManager)
     {
         $this->csrfTokenManager = $csrfTokenManager;

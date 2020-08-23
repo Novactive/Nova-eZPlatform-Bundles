@@ -21,9 +21,6 @@ use Novactive\Bundle\eZMailingBundle\Entity\MailingList as MailingListEntity;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
-/**
- * Class MailingList.
- */
 class MailingList extends Voter
 {
     public const VIEW = 'view';
@@ -39,18 +36,12 @@ class MailingList extends Voter
      */
     private $siteAccess;
 
-    /**
-     * Campaign constructor.
-     */
     public function __construct(Repository $repository, SiteAccess $siteAccess)
     {
         $this->repository = $repository;
         $this->siteAccess = $siteAccess;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function supports($attribute, $subject): bool
     {
         if (!\in_array($attribute, [self::VIEW, self::EDIT])) {
@@ -64,9 +55,6 @@ class MailingList extends Voter
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();

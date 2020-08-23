@@ -23,9 +23,6 @@ use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
-/**
- * Class Factory.
- */
 class Factory
 {
     /**

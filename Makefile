@@ -65,6 +65,7 @@ installez: install ## Install eZ as the local project
 	@cd $(EZ_DIR) && bin/console novaezprotectedcontent:install
 	@cd $(EZ_DIR) && bin/console novaezhelptooltip:create
 	@cd $(EZ_DIR) && bin/console doctrine:schema:update --dump-sql --force
+	@cd $(EZ_DIR) && bin/console novaezmailing:install
 	@cp -rp components/ProtectedContentBundle/tests/provisioning/article.html.twig $(EZ_DIR)/templates/themes/standard/full/
 	@cp -rp components/StaticTemplatesBundle/tests/provisioning/static_ultimatenova $(EZ_DIR)/templates/
 

@@ -17,14 +17,8 @@ namespace Novactive\Bundle\eZMailingBundle\DependencyInjection;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
-/**
- * Class Configuration.
- */
 class Configuration extends SiteAccessAware\Configuration
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('nova_ezmailing');

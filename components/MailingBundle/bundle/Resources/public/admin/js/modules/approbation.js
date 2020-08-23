@@ -1,4 +1,4 @@
-var eZMailingApprobationModule = function () {
+export const eZMailingApprobationModule = function () {
     function _init($, $app) {
         $(".novaezmailing-registration-approbation button", $app).click(function () {
                 var $button = $(this);

@@ -22,9 +22,6 @@ use Novactive\Bundle\eZMailingBundle\Core\Utils\Clock;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Symfony\Component\Workflow\Registry;
 
-/**
- * Class SendMailing.
- */
 class SendMailing extends Processor implements SendMailingProcessorInterface
 {
     /**
@@ -42,9 +39,6 @@ class SendMailing extends Processor implements SendMailingProcessorInterface
      */
     private $workflows;
 
-    /**
-     * SendMailingCommand constructor.
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         MailingMailer $mailingMailer,
@@ -55,9 +49,6 @@ class SendMailing extends Processor implements SendMailingProcessorInterface
         $this->workflows = $workflows;
     }
 
-    /**
-     * Send the mailing.
-     */
     public function execute(?DateTime $overrideDatetime = null): void
     {
         $mailingRepository = $this->entityManager->getRepository('NovaeZMailingBundle:Mailing');

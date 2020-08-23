@@ -26,9 +26,6 @@ use Novactive\Bundle\eZMailingBundle\Entity\User as UserEntity;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
-/**
- * Class Importer.
- */
 class User
 {
     /**
@@ -36,9 +33,6 @@ class User
      */
     private $entityManager;
 
-    /**
-     * Importer constructor.
-     */
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
@@ -66,8 +60,6 @@ class User
      * Hydrate user.
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     *
-     * @return User
      */
     public function hydrateUser(array $cells): UserEntity
     {
@@ -127,8 +119,6 @@ class User
 
     /**
      * Register the user to the MailingList.
-     *
-     * @return User
      */
     public function registerUser(UserEntity $user, MailingList $mailingList): UserEntity
     {

@@ -18,8 +18,6 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class StatHit.
- *
  * @ORM\Table(name="novaezmailing_stats_hit")
  *
  * @ORM\Entity(repositoryClass="Novactive\Bundle\eZMailingBundle\Repository\StatHit")
@@ -82,9 +80,6 @@ class StatHit
         return $this->id;
     }
 
-    /**
-     * @return $this
-     */
     public function setId(int $id): self
     {
         $this->id = $id;
@@ -97,9 +92,6 @@ class StatHit
         return $this->url;
     }
 
-    /**
-     * @return $this
-     */
     public function setUrl(string $url): self
     {
         $this->url = $url;
@@ -112,9 +104,6 @@ class StatHit
         return $this->userKey;
     }
 
-    /**
-     * @return $this
-     */
     public function setUserKey(string $userKey): self
     {
         $this->userKey = $userKey;
@@ -127,9 +116,6 @@ class StatHit
         return $this->osName;
     }
 
-    /**
-     * @return $this
-     */
     public function setOsName(string $osName): self
     {
         $this->osName = $osName;
@@ -142,9 +128,6 @@ class StatHit
         return $this->browserName;
     }
 
-    /**
-     * @return $this
-     */
     public function setBrowserName(string $browserName): self
     {
         $this->browserName = $browserName;
@@ -157,9 +140,6 @@ class StatHit
         return $this->broadcast;
     }
 
-    /**
-     * @return $this
-     */
     public function setBroadcast(Broadcast $broadcast): self
     {
         $this->broadcast = $broadcast;

@@ -17,14 +17,8 @@ namespace Novactive\Bundle\eZMailingBundle\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-/**
- * Class LocationValidator.
- */
 class LocationValidator extends ConstraintValidator
 {
-    /**
-     * {@inheritdoc}
-     */
     public function validate($value, Constraint $constraint): void
     {
         if (null === $value) {

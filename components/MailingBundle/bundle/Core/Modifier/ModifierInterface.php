@@ -17,9 +17,6 @@ namespace Novactive\Bundle\eZMailingBundle\Core\Modifier;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
 
-/**
- * Interface ModifierInterface.
- */
 interface ModifierInterface
 {
     public function modify(Mailing $mailing, User $user, string $html, array $options = []): string;

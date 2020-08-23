@@ -17,9 +17,6 @@ namespace Novactive\Bundle\eZMailingBundle\Listener;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Workflow\Event\Event;
 
-/**
- * Class MailingWorkflow.
- */
 class MailingWorkflow
 {
     /**
@@ -27,9 +24,6 @@ class MailingWorkflow
      */
     private $logger;
 
-    /**
-     * MailingWorkflow constructor.
-     */
     public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;

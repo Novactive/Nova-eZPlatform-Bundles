@@ -20,8 +20,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class Campaign.
- *
  * A Campaign contains generic information shared between the Mailings it contains.
  * It owns also a Link to a eZ Content that is going to be injected in the template.
  *
@@ -83,7 +81,7 @@ class Campaign implements eZ\ContentInterface
 
     /**
      * @var MailingList[]
-     * @ORM\ManyToMany(targetEntity="Novactive\Bundle\eZMailingBundle\Entity\MailingList")
+     * @ORM\ManyToMany(targetEntity="Novactive\Bundle\eZMailingBundle\Entity\MailingList", inversedBy="campaigns")
      * @ORM\JoinTable(name="novaezmailing_campaign_mailinglists_destination",
      *      joinColumns={@ORM\JoinColumn(name="ML_id", referencedColumnName="CAMP_id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="CAMP_id", referencedColumnName="ML_id")}
@@ -99,9 +97,6 @@ class Campaign implements eZ\ContentInterface
      */
     private $mailings;
 
-    /**
-     * Campaign constructor.
-     */
     public function __construct()
     {
         $this->mailingLists = new ArrayCollection();
@@ -115,9 +110,6 @@ class Campaign implements eZ\ContentInterface
         return (int) $this->id;
     }
 
-    /**
-     * @return Campaign
-     */
     public function setId(int $id): self
     {
         $this->id = $id;
@@ -125,17 +117,11 @@ class Campaign implements eZ\ContentInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSenderName(): ?string
     {
         return $this->senderName;
     }
 
-    /**
-     * @return Campaign
-     */
     public function setSenderName(string $senderName): self
     {
         $this->senderName = $senderName;
@@ -143,17 +129,11 @@ class Campaign implements eZ\ContentInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSenderEmail(): ?string
     {
         return $this->senderEmail;
     }
 
-    /**
-     * @return Campaign
-     */
     public function setSenderEmail(string $senderEmail): self
     {
         $this->senderEmail = $senderEmail;
@@ -161,17 +141,11 @@ class Campaign implements eZ\ContentInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getReportEmail(): ?string
     {
         return $this->reportEmail;
     }
 
-    /**
-     * @return Campaign
-     */
     public function setReportEmail(string $reportEmail): self
     {
         $this->reportEmail = $reportEmail;
@@ -179,17 +153,11 @@ class Campaign implements eZ\ContentInterface
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getSiteaccessLimit(): ?array
     {
         return $this->siteaccessLimit;
     }
 
-    /**
-     * @return Campaign
-     */
     public function setSiteaccessLimit(array $siteaccessLimit): self
     {
         $this->siteaccessLimit = $siteaccessLimit;
@@ -205,11 +173,6 @@ class Campaign implements eZ\ContentInterface
         return $this->mailingLists;
     }
 
-    /**
-     * @param MailingList[] $mailingLists
-     *
-     * @return Campaign
-     */
     public function setMailingLists(array $mailingLists): self
     {
         foreach ($mailingLists as $mailingList) {
@@ -219,9 +182,6 @@ class Campaign implements eZ\ContentInterface
         return $this;
     }
 
-    /**
-     * @return $this
-     */
     public function addMailingList(MailingList $mailingList): self
     {
         if ($this->mailingLists->contains($mailingList)) {
@@ -241,11 +201,6 @@ class Campaign implements eZ\ContentInterface
         return $this->mailings;
     }
 
-    /**
-     * @param Mailing[] $mailings
-     *
-     * @return Campaign
-     */
     public function setMailings(array $mailings): self
     {
         foreach ($mailings as $mailing) {
@@ -257,9 +212,6 @@ class Campaign implements eZ\ContentInterface
         return $this;
     }
 
-    /**
-     * @return $this
-     */
     public function addMailing(Mailing $mailing): self
     {
         if ($this->mailings->contains($mailing)) {
@@ -271,17 +223,11 @@ class Campaign implements eZ\ContentInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getReturnPathEmail(): ?string
     {
         return $this->returnPathEmail;
     }
 
-    /**
-     * @return $this
-     */
     public function setReturnPathEmail(string $returnPathEmail): self
     {
         $this->returnPathEmail = $returnPathEmail;

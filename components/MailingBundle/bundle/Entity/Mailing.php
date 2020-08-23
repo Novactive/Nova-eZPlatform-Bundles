@@ -23,8 +23,6 @@ use Novactive\Bundle\eZMailingBundle\Validator\Constraints as NovaEzMailingAsser
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class Mailing.
- *
  * @ORM\Table(name="novaezmailing_mailing")
  *
  * @ORM\Entity(repositoryClass="Novactive\Bundle\eZMailingBundle\Repository\Mailing")
@@ -183,9 +181,6 @@ class Mailing implements eZ\ContentInterface
      */
     private $siteAccess;
 
-    /**
-     * Mailing constructor.
-     */
     public function __construct()
     {
         $this->recurring = false;
@@ -206,9 +201,6 @@ class Mailing implements eZ\ContentInterface
         return (int) $this->id;
     }
 
-    /**
-     * @return Mailing
-     */
     public function setId(int $id): self
     {
         $this->id = $id;
@@ -221,9 +213,6 @@ class Mailing implements eZ\ContentInterface
         return $this->status;
     }
 
-    /**
-     * @return Mailing
-     */
     public function setStatus(string $status): self
     {
         $this->status = $status;
@@ -231,9 +220,6 @@ class Mailing implements eZ\ContentInterface
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
     public function getLastSent(): ?DateTime
     {
         if (0 == $this->broadcasts->count()) {
@@ -263,9 +249,6 @@ class Mailing implements eZ\ContentInterface
         return $this->recurring;
     }
 
-    /**
-     * @return Mailing
-     */
     public function setRecurring(bool $recurring): self
     {
         $this->recurring = $recurring;
@@ -278,9 +261,6 @@ class Mailing implements eZ\ContentInterface
         return $this->hoursOfDay;
     }
 
-    /**
-     * @return Mailing
-     */
     public function setHoursOfDay(array $hoursOfDay): self
     {
         $this->hoursOfDay = $hoursOfDay;
@@ -293,9 +273,6 @@ class Mailing implements eZ\ContentInterface
         return $this->daysOfWeek;
     }
 
-    /**
-     * @return Mailing
-     */
     public function setDaysOfWeek(array $daysOfWeek): self
     {
         $this->daysOfWeek = $daysOfWeek;
@@ -308,9 +285,6 @@ class Mailing implements eZ\ContentInterface
         return $this->daysOfMonth;
     }
 
-    /**
-     * @return Mailing
-     */
     public function setDaysOfMonth(array $daysOfMonth): self
     {
         $this->daysOfMonth = $daysOfMonth;
@@ -323,9 +297,6 @@ class Mailing implements eZ\ContentInterface
         return $this->daysOfYear;
     }
 
-    /**
-     * @return Mailing
-     */
     public function setDaysOfYear(array $daysOfYear): self
     {
         $this->daysOfYear = $daysOfYear;
@@ -338,9 +309,6 @@ class Mailing implements eZ\ContentInterface
         return $this->weeksOfMonth;
     }
 
-    /**
-     * @return Mailing
-     */
     public function setWeeksOfMonth(array $weeksOfMonth): self
     {
         $this->weeksOfMonth = $weeksOfMonth;
@@ -353,9 +321,6 @@ class Mailing implements eZ\ContentInterface
         return $this->monthsOfYear;
     }
 
-    /**
-     * @return Mailing
-     */
     public function setMonthsOfYear(array $monthsOfYear): self
     {
         $this->monthsOfYear = $monthsOfYear;
@@ -368,9 +333,6 @@ class Mailing implements eZ\ContentInterface
         return $this->weeksOfYear;
     }
 
-    /**
-     * @return Mailing
-     */
     public function setWeeksOfYear(array $weeksOfYear): self
     {
         $this->weeksOfYear = $weeksOfYear;
@@ -383,11 +345,6 @@ class Mailing implements eZ\ContentInterface
         return $this->campaign;
     }
 
-    /**
-     * @param Campaign $campaign
-     *
-     * @return Mailing
-     */
     public function setCampaign(?Campaign $campaign): self
     {
         $this->campaign = $campaign;
@@ -395,9 +352,6 @@ class Mailing implements eZ\ContentInterface
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
     public function nextTick(): ?DateTime
     {
         try {
@@ -451,11 +405,6 @@ class Mailing implements eZ\ContentInterface
         return $this->broadcasts;
     }
 
-    /**
-     * @param Broadcast[] $broadcasts
-     *
-     * @return $this
-     */
     public function setBroadcasts(array $broadcasts): self
     {
         $this->broadcasts = $broadcasts;
@@ -463,9 +412,6 @@ class Mailing implements eZ\ContentInterface
         return $this;
     }
 
-    /**
-     * @return $this
-     */
     public function addBroadcast(Broadcast $broadcast): self
     {
         if ($this->broadcasts->contains($broadcast)) {
@@ -477,17 +423,11 @@ class Mailing implements eZ\ContentInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSiteAccess(): ?string
     {
         return $this->siteAccess;
     }
 
-    /**
-     * @return $this
-     */
     public function setSiteAccess(string $siteAccess): self
     {
         $this->siteAccess = $siteAccess;
@@ -495,19 +435,11 @@ class Mailing implements eZ\ContentInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSubject(): ?string
     {
         return $this->subject;
     }
 
-    /**
-     * @param string $subject
-     *
-     * @return $this
-     */
     public function setSubject(?string $subject): self
     {
         $this->subject = $subject;

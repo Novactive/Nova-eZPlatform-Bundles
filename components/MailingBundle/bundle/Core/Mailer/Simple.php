@@ -22,9 +22,6 @@ use Novactive\Bundle\eZMailingBundle\Entity\Mailing as MailingEntity;
 use Psr\Log\LoggerInterface;
 use Swift_Message;
 
-/**
- * Class Simple.
- */
 class Simple extends Mailer
 {
     /**
@@ -37,9 +34,6 @@ class Simple extends Mailer
      */
     private $logger;
 
-    /**
-     * Simple constructor.
-     */
     public function __construct(MessageContent $messageProvider, LoggerInterface $logger)
     {
         $this->messageProvider = $messageProvider;

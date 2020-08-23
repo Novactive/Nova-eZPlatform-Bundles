@@ -19,16 +19,10 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Faker;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
 
-/**
- * Class MailingListFixtures.
- */
 class MailingListFixtures extends Fixture
 {
     public const FIXTURE_COUNT_MAILINGLIST = 10;
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ObjectManager $manager): void
     {
         $faker = Faker\Factory::create();

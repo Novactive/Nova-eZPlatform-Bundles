@@ -17,14 +17,8 @@ namespace Novactive\Bundle\eZMailingBundle\Repository;
 use Doctrine\ORM\QueryBuilder;
 use Novactive\Bundle\eZMailingBundle\Entity\Broadcast as BroadcastEntity;
 
-/**
- * Class StatHit.
- */
 class StatHit extends EntityRepository
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function getAlias(): string
     {
         return 'stathit';
@@ -103,8 +97,6 @@ class StatHit extends EntityRepository
 
     /**
      * @param BroadcastEntity[] $broadcasts
-     *
-     * @return array
      */
     public function getOpenedCount($broadcasts): int
     {

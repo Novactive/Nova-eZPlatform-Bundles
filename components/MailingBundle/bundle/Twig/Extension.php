@@ -15,20 +15,16 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Twig;
 
 use Symfony\Component\Intl\Intl;
-use Twig_SimpleFilter;
+use Twig\Extension\AbstractExtension as TwigExtension;
+use Twig\Extension\GlobalsInterface;
+use Twig\TwigFilter;
 
-/**
- * Class Extension.
- */
-class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
+class Extension extends TwigExtension implements GlobalsInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getFilters(): array
     {
         return [
-            new Twig_SimpleFilter(
+            new TwigFilter(
                 'country_name',
                 function ($value) {
                     return Intl::getRegionBundle()->getCountryName($value);
@@ -37,9 +33,6 @@ class Extension extends \Twig_Extension implements \Twig_Extension_GlobalsInterf
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getGlobals(): array
     {
         return [
