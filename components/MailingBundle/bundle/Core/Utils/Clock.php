@@ -48,7 +48,7 @@ class Clock
 
     public function getDayOfYear(): int
     {
-        return $this->time->dayOfYear + 1;
+        return $this->time->dayOfYear;
     }
 
     public function getWeekOfMonth(): int

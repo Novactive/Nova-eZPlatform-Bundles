@@ -193,8 +193,20 @@ class ClockTest extends TestCase
                 $data
             );
 
+
+
+
             $clock = new Clock($dateReference);
             $mailing = $this->createMailing($data);
+
+            if ($expected !== $clock->match($mailing)) {
+                dump($dateReference->format('Y-m-d H:i:s'));
+                dump($dataForLog);
+                dump($expected);
+                dump($mailing);
+                dd($clock->match($mailing));
+            }
+
             $this->assertEquals(
                 $expected,
                 $clock->match($mailing),
