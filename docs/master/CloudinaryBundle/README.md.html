@@ -103,12 +103,7 @@ Images stay on your servers but the SRC is adapted to make Cloudinary rendering/
 </blockquote>
 <h2 name="6a755e7d228a2b491321dbae0a7a248b">INSTALL</h2>
 <h3 name="6065c97227a6214bc68bad0f15ff16d1">Use Composer</h3>
-<p>Add the following to your composer.json and run <code>composer require novactive/ezcloudinarybundle</code> to refresh dependencies:</p>
-<pre><code class=" json"># composer.json
-
-"require": {
-    "novactive/ezcloudinarybundle": "dev-master",
-}</code></pre>
+<p>Add the lib to your composer.json, run <code>composer require novactive/ezcloudinarybundle</code> to refresh dependencies:</p>
 <h3 name="040da9acc61145e551bcf66b54f44420">Register the bundle</h3>
 <p>Activate the bundle in <code>app\AppKernel.php</code> file.</p>
 <pre><code class=" php">// app\AppKernel.php
@@ -162,7 +157,7 @@ public function registerBundles()
 The bundle fallback on the native Variation system if the alias name does not exist in <code>cloudinary_variations</code></p>
 <p>Then basically there is no change in your code, just yaml configuration for your Variation.</p>
 <blockquote>
-<p>if you have override the content_fields, be sure to update the call to <code>nova_ezcloudinary_alias</code></p>
+<p>if you have overrided the content_fields, be sure to update the call to <code>nova_ezcloudinary_alias</code></p>
 </blockquote>
 <h3 name="747142bc06840020539579f230092d87">Chained Transformations</h3>
 <p>Chained transformations can be done by adding an array to the configuration like so:</p>
@@ -205,8 +200,8 @@ And you can set up that in the configuration:</p>
 
             <p class="text-right">
                 <img width="204" height="20"
-                     src='https://img.shields.io/badge/Updated on-08--22--2020 01:23:56-green?style=flat-square&labelColor=black'
-                     alt='Updated on 08--22--2020 01:23:56'
+                     src='https://img.shields.io/badge/Updated on-08--24--2020 20:15:01-green?style=flat-square&labelColor=black'
+                     alt='Updated on 08--24--2020 20:15:01'
                 />
             </p>
         </div>
