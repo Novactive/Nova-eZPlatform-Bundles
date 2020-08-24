@@ -1,6 +1,0 @@
-assets:
-    novaezresponsiveimages:
-        inputs:
-            - '@NovaeZResponsiveImagesBundle/Resources/public/js/jquery.unveil.js'
-            - '@NovaeZResponsiveImagesBundle/Resources/public/js/picturefill.min.js'
-            - '@NovaeZResponsiveImagesBundle/Resources/public/js/novaezresponsiveimages.js'

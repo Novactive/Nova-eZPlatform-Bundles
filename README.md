@@ -36,7 +36,7 @@ Please comply with `make codeclean` and `make tests` before to push, your PR won
 | [MailingBundle](https://github.com/Novactive/NovaeZMailingBundle)                       | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE]     |
 | [MenuManagerBundle](https://github.com/Novactive/NovaeZMenuManagerBundle)               | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE]     |
 | [ProtectedContentBundle](https://github.com/Novactive/NovaeZProtectedContentBundle)     | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK]         | ![auto-install] ![auto-test] |
-| [ResponsiveImagesBundle](https://github.com/Novactive/NovaeZResponsiveImagesBundle)     | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE]     |
+| [ResponsiveImagesBundle](https://github.com/Novactive/NovaeZResponsiveImagesBundle)     | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK]         | ![auto-install] |
 | [RssFeedBundle](https://github.com/Novactive/NovaeZRssFeedBundle)                       | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE]     |
 | [SEOBundle](https://github.com/Novactive/NovaeZSEOBundle)                               | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK]         | ![auto-install] ![auto-test] | 
 | [SlackBundle](https://github.com/Novactive/NovaeZSlackBundle)                           | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-NOK]        |

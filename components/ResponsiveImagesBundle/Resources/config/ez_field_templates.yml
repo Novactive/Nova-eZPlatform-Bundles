@@ -1,4 +1,4 @@
 system:
     default:
         field_templates:
-            - {template: NovaeZResponsiveImagesBundle:content_fields.html.twig, priority: 200}
+            - { template: '@NovaeZResponsiveImages/content_fields.html.twig', priority: 200 }

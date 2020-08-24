@@ -12,45 +12,30 @@
 
 namespace Novactive\Bundle\eZResponsiveImagesBundle\DependencyInjection;
 
-use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Yaml\Yaml;
 
-/**
- * This is the class that loads and manages your bundle configuration.
- *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
- */
 class NovaeZResponsiveImagesExtension extends Extension implements PrependExtensionInterface
 {
-    /**
-     * Add configuration.
-     */
-    public function prepend(ContainerBuilder $container)
+    public function getAlias(): string
     {
-        $config = Yaml::parse(__DIR__.'/../Resources/config/ez_field_templates.yml');
-        $container->prependExtensionConfig('ezpublish', $config);
-
-        $config = Yaml::parse(__DIR__.'/../Resources/config/assetic.yml');
-        $container->prependExtensionConfig('assetic', $config);
+        return 'novaez_responsive_images';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function load(array $configs, ContainerBuilder $container)
+    public function prepend(ContainerBuilder $container): void
+    {
+        $fieldOverrideFile = __DIR__.'/../Resources/config/ez_field_templates.yml';
+        $config = Yaml::parse(file_get_contents($fieldOverrideFile));
+        $container->prependExtensionConfig('ezpublish', $config);
+        $container->addResource(new FileResource($fieldOverrideFile));
+    }
+
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
         $this->processConfiguration($configuration, $configs);
-
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.yml');
-
-        $asseticBundles = $container->getParameter('assetic.bundles');
-        $asseticBundles[] = 'NovaeZResponsiveImagesBundle';
-        $container->setParameter('assetic.bundles', $asseticBundles);
     }
 }

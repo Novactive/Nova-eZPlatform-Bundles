@@ -22,6 +22,8 @@ Novactive eZ Responsive Images is a lightweight eZ Publish 5.x|6.x bundle for Re
 
 ### Usage and main feature
 
+Add the lib to your composer.json, run `composer require novactive/ezresponsiveimagesbundle` to refresh dependencies.
+
 By default this bundle will use [picturefill](https://github.com/scottjehl/picturefill) to load the good version of the your variations.
 
 You can also decide to lazy load the images, in this case the bundle uses [unveil.js](https://github.com/luis-almeida/unveil) to load the good version of the variation alias name.
@@ -57,9 +59,7 @@ It means:
 
 ### Use Composer
 
-``` bash
-$ php composer.phar require novactive/ezresponsiveimagesbundle
-```
+Add the lib to your composer.json, run `composer require novactive/ezprotectedcontentbundle` to refresh dependencies.
 
 ### Register the bundle
 

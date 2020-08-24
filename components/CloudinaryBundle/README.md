@@ -28,7 +28,7 @@ Images stay on your servers but the SRC is adapted to make Cloudinary rendering/
 
 ### Use Composer
 
-Add the lib to your composer.json, run `composer require novactive/ezcloudinarybundle` to refresh dependencies:
+Add the lib to your composer.json, run `composer require novactive/ezcloudinarybundle` to refresh dependencies.
 
 ### Register the bundle
 

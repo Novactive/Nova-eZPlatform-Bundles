@@ -4,7 +4,7 @@
 
 ## Installation steps
 
-Add the lib to your composer.json, run `composer require novactive/ezaccelerator` to refresh dependencies:
+Add the lib to your composer.json, run `composer require novactive/ezaccelerator` to refresh dependencies.
 
 ## Configuration
 

@@ -50,7 +50,8 @@ Once you have unlocked the content, __canReadProtectedContent__ will be __true__
 
 ### Installation steps
 
-Run `composer require novactive/ezprotectedcontentbundle` to install the bundle and its dependencies:
+Add the lib to your composer.json, run `composer require novactive/ezprotectedcontentbundle` to refresh dependencies.
+
 
 ### Register the bundles
 

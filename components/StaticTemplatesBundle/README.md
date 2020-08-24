@@ -37,7 +37,8 @@ That's it!
 
 ### Get the bundle
 
-Run `composer require novactive/ezstatictemplatesbundle` to install the bundle and its dependencies.
+Add the lib to your composer.json, run `composer require novactive/ezstatictemplatesbundle` to refresh dependencies.
+
 
 ### Register the bundle
 

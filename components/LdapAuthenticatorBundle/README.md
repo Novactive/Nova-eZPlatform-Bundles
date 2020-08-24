@@ -18,6 +18,9 @@ Documentation is available in this repository via `.md` files but also packaged 
 A bundle to authenticate users against LDAP server
 
 ## Installation
+
+Add the lib to your composer.json, run `composer require novactive/ezldapauthenticatorbundle` to refresh dependencies.
+
 First of all you must enable this bundle:
 ```php
 <?php

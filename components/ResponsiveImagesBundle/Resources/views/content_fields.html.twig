@@ -1,7 +1,7 @@
-{% use 'EzPublishCoreBundle::content_fields.html.twig' %}
+{% use "@EzPublishCore/content_fields.html.twig" %}
 
 {% block ezimage_inner %}
-    {% spaceless %}
+    {% apply spaceless %}
         <img
                 src="{{ src }}"
                 {{ block( 'field_attributes' ) }}
@@ -9,40 +9,12 @@
                 {% if height %} height="{{ height }}"{% endif %}
                 alt="{{ alt }}"
         />
-    {% endspaceless %}
-{% endblock %}
-
-{% block ezimage_inner_picturefill %}
-    {% spaceless %}
-        <picture>
-            <!--[if IE 9]>
-            <video style="display: none;"><![endif]-->
-            <source srcset="{{ src }}, {{ retinaSrc }} 2x"
-                    media="(min-width: 641px)" alt="{{ alt }}">
-            <!--[if IE 9]></video><![endif]-->
-
-            {% set src = "//:0" %}
-            {% set attr = attr|merge({ 'srcset': mobileSrc }) %}
-            {{ block( 'ezimage_inner' ) }}
-        </picture>
-    {% endspaceless %}
-{% endblock %}
-
-{% block ezimage_inner_unveiled %}
-    {% spaceless %}
-        {% set attr = attr|merge({ 'unveiled': '' }) %}
-        {% set attr = attr|merge({ 'data-desktop': src }) %}
-        {% set attr = attr|merge({ 'data-mobile': mobileSrc }) %}
-        {% set attr = attr|merge({ 'data-retina': retinaSrc }) %}
-        {% set attr = attr|merge({ 'class': attr.class ~ " unveiled" }) %}
-        {% set src = "//:0" %}
-        {{ block( 'ezimage_inner' ) }}
-    {% endspaceless %}
+    {% endapply %}
 {% endblock %}
 
 {% block ezimage_field %}
-    {% spaceless %}
-        {% if not ez_is_field_empty( content, field ) %}
+    {% apply spaceless %}
+        {% if not ez_field_is_empty( content, field ) %}
             {% set imageAliasName = parameters.alias|default( 'original' ) %}
             {% set retinaAlias = ez_image_alias( field, versionInfo, imageAliasName ~ "_retina" ) %}
             {% set mobileAlias = ez_image_alias( field, versionInfo, imageAliasName ~ "_mobile" ) %}
@@ -55,20 +27,19 @@
             {% set alt = parameters.alt|default(field.value.alternativeText) %}
             {% set classes = attr.class|default('') ~ " " ~ parameters.class|default('') %}
             {% set attr = attr|merge({'class':classes}) %}
+            {% apply spaceless %}
+                <picture>
+                    <!--[if IE 9]>
+                    <video style="display: none;"><![endif]-->
+                    <source srcset="{{ src }}, {{ retinaSrc }} 2x"
+                            media="(min-width: 641px)" alt="{{ alt }}">
+                    <!--[if IE 9]></video><![endif]-->
 
-            {# Kind of a decision to make here, maybe in the configuratoin, do we want this figure tag #}
-            {# Let's put false by default for now #}
-            {% set unveiled = (parameters.unveiled is defined) ? parameters.unveiled : false %}
-
-
-            {% if unveiled %}
-                {{ block( 'ezimage_inner_unveiled' ) }}
-                <noscript>
+                    {% set src = "//:0" %}
+                    {% set attr = attr|merge({ 'srcset': mobileSrc }) %}
                     {{ block( 'ezimage_inner' ) }}
-                </noscript>
-            {% else %}
-                {{ block( 'ezimage_inner_picturefill' ) }}
-            {% endif %}
+                </picture>
+            {% endapply %}
         {% endif %}
-    {% endspaceless %}
+    {% endapply %}
 {% endblock %}

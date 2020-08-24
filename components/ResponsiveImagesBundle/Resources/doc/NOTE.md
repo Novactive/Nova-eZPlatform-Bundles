@@ -1,1 +1,0 @@
-- insert the nova bundle in assetic
