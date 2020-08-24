@@ -21,15 +21,9 @@ use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Yaml\Yaml;
 
-/**
- * Class NovaeZCloudinaryExtension.
- */
 class NovaeZCloudinaryExtension extends Extension implements PrependExtensionInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
@@ -45,10 +39,7 @@ class NovaeZCloudinaryExtension extends Extension implements PrependExtensionInt
         $processor->mapConfigArray('cloudinary_fecth_proxy', $config);
     }
 
-    /**
-     * Loads configuration.
-     */
-    public function prepend(ContainerBuilder $container)
+    public function prepend(ContainerBuilder $container): void
     {
         $fieldOverrideFile = __DIR__.'/../Resources/config/field_override.yml';
         $config = Yaml::parse(file_get_contents($fieldOverrideFile));
@@ -56,10 +47,7 @@ class NovaeZCloudinaryExtension extends Extension implements PrependExtensionInt
         $container->addResource(new FileResource($fieldOverrideFile));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getAlias()
+    public function getAlias(): string
     {
         return 'nova_ezcloudinary';
     }

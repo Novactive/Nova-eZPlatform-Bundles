@@ -28,16 +28,7 @@ Images stay on your servers but the SRC is adapted to make Cloudinary rendering/
 
 ### Use Composer
 
-Add the following to your composer.json and run `composer require novactive/ezcloudinarybundle` to refresh dependencies:
-
-```json
-# composer.json
-
-"require": {
-    "novactive/ezcloudinarybundle": "dev-master",
-}
-```
-
+Add the lib to your composer.json, run `composer require novactive/ezcloudinarybundle` to refresh dependencies:
 
 ### Register the bundle
 
@@ -111,7 +102,7 @@ The bundle fallback on the native Variation system if the alias name does not ex
 
 Then basically there is no change in your code, just yaml configuration for your Variation.
 
-> if you have override the content_fields, be sure to update the call to `nova_ezcloudinary_alias`
+> if you have overrided the content_fields, be sure to update the call to `nova_ezcloudinary_alias`
 
 
 ### Chained Transformations

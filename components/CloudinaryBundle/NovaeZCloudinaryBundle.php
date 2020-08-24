@@ -16,14 +16,8 @@ use LogicException;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-/**
- * Class NovaeZCloudinaryBundle.
- */
 class NovaeZCloudinaryBundle extends Bundle
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getContainerExtension()
     {
         if (null === $this->extension) {

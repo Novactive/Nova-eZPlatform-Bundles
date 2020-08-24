@@ -1,7 +1,7 @@
 {% extends "@EzPublishCore/content_fields.html.twig" %}
 {% block ezimage_field %}
-    {% spaceless %}
-        {% if not ez_is_field_empty( content, field ) %}
+    {% apply spaceless %}
+        {% if not ez_field_is_empty( content, field ) %}
             <figure {{ block( 'field_attributes' ) }}>
                 {% set imageAlias = nova_ezcloudinary_alias(field, versionInfo, parameters.alias|default( 'original' )) %}
                 {% set src = imageAlias ? asset( imageAlias.uri ) : "//:0" %}
@@ -18,5 +18,5 @@
                 />
             </figure>
         {% endif %}
-    {% endspaceless %}
+    {% endapply %}
 {% endblock %}

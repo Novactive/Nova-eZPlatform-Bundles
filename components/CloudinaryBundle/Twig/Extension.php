@@ -13,34 +13,25 @@
 namespace Novactive\Bundle\eZCloudinaryBundle\Twig;
 
 use Novactive\Bundle\eZCloudinaryBundle\Core\AliasGenerator;
-use Twig_Extension;
-use Twig_SimpleFunction;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-/**
- * Class Extension.
- */
-class Extension extends Twig_Extension
+class Extension extends AbstractExtension
 {
     /**
      * @var AliasGenerator
      */
     protected $aliasGenerator;
 
-    /**
-     * Extension constructor.
-     */
     public function __construct(AliasGenerator $aliasGenerator)
     {
         $this->aliasGenerator = $aliasGenerator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
-            new Twig_SimpleFunction(
+            new TwigFunction(
                 'nova_ezcloudinary_alias',
                 [$this->aliasGenerator, 'getVariation'],
                 ['is_safe' => ['html']]
@@ -48,10 +39,7 @@ class Extension extends Twig_Extension
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
+    public function getName(): string
     {
         return 'nova_ezloudinary_extension';
     }

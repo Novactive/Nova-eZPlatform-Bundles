@@ -1,0 +1,26 @@
+nova_ezcloudinary:
+    authentification:
+        cloud_name: 'demo'
+        api_key: "xxxxx"
+        api_secret: "xxxx"
+
+parameters:
+    nova_ezcloudinary.default.cloudinary_variations:
+        simpletest1:
+            ezreference_variation: ~
+            filters: # look at the documentation on Cloudinary
+                width: 200
+                height: 200
+                gravity: 'face'
+                radius: 'max'
+                effect: 'sepia'
+        simpletest2: # look at the documentation on Cloudinary
+            ezreference_variation: 'medium' # Cloudinary manipulation are going to be base on the medium alias
+            filters: # look at the documentation on Cloudinary
+                transformation:
+                    width: 300
+                    height: 300
+                    effect: 'sepia'
+                    radius: 'max'
+                    fetch_format: 'auto'
+                    angle: 45

@@ -21,9 +21,6 @@ use eZ\Publish\SPI\Variation\VariationHandler as VariationService;
 use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class AliasGenerator.
- */
 class AliasGenerator implements VariationService
 {
     /**
@@ -36,12 +33,11 @@ class AliasGenerator implements VariationService
      */
     protected $variationService;
 
-    /** @var LoggerInterface */
+    /**
+     * @var LoggerInterface
+     */
     private $logger;
 
-    /**
-     * AliasGenerator constructor.
-     */
     public function __construct(
         VariationService $variationService,
         ConfigResolverInterface $configResolver,
@@ -83,10 +79,10 @@ class AliasGenerator implements VariationService
         $cloudinaryCompliant = false;
         $eZVariationName = $variationName;
 
-        if (array_key_exists($variationName, $cloudinaryVariationsList)) {
+        if (\array_key_exists($variationName, $cloudinaryVariationsList)) {
             $eZVariationName = $cloudinaryVariationsList[$variationName]['ezreference_variation'];
             $cloudinaryCompliant = true;
-            if (!array_key_exists($eZVariationName, $eZVariationsList)) {
+            if (!\array_key_exists($eZVariationName, $eZVariationsList)) {
                 $eZVariationName = 'original';
             }
         }
@@ -138,14 +134,14 @@ class AliasGenerator implements VariationService
         );
         $attributes = [];
         foreach ($this->parseAttributes($html) as $key => $value) {
-            if ('img' == $key) {
+            if ('img' === $key) {
                 continue;
             }
-            if ('src' == $key) {
+            if ('src' === $key) {
                 $attributes['uri'] = $value;
                 continue;
             }
-            if ('width' == $key || 'height' == $key) {
+            if ('width' === $key || 'height' === $key) {
                 $attributes[$key] = $value;
                 continue;
             }
@@ -156,12 +152,7 @@ class AliasGenerator implements VariationService
         return new ImageVariation($attributes);
     }
 
-    /**
-     * @param string $tag
-     *
-     * @return array
-     */
-    public function parseAttributes($tag)
+    public function parseAttributes(string $tag): array
     {
         $attributes = [];
         $pattern = '#(?(DEFINE)
@@ -181,15 +172,10 @@ class AliasGenerator implements VariationService
         return $attributes;
     }
 
-    /**
-     * @param $parsedUrl
-     *
-     * @return string
-     */
-    protected function unparseUrl(array $parsedUrl)
+    protected function unparseUrl(array $parsedUrl): string
     {
         $get = function ($key) use ($parsedUrl) {
-            return isset($parsedUrl[$key]) ? $parsedUrl[$key] : null;
+            return $parsedUrl[$key] ?? null;
         };
 
         $pass = $get('pass');

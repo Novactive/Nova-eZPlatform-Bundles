@@ -4,16 +4,7 @@
 
 ## Installation steps
 
-
-Add the following to your composer.json and run `php composer.phar update novactive/ezaccelerator` to refresh dependencies:
-
-```json
-# composer.json
-
-"require": {
-    "novactive/ezaccelerator": "^1.0.0",
-}
-```
+Add the lib to your composer.json, run `composer require novactive/ezaccelerator` to refresh dependencies:
 
 ## Configuration
 

@@ -16,7 +16,7 @@
     ],
     "require": {
         "php": "^7.3",
-        "cloudinary/cloudinary_php": "^1.8"
+        "cloudinary/cloudinary_php": "*"
     },
     "autoload": {
         "psr-4": {

@@ -19,21 +19,7 @@ Documentation is available in this repository via `.md` files but also packaged 
 
 ### Step 1: Download Nova eZExtra Bundle using composer
 
-Add NovaeZExtraBundle in your composer.json: 
-
-```json
-{
-    "require": {
-        "novactive/ezextrabundle": "dev-master"
-    }
-}
-```
-
-Now tell composer to download the bundle by running the command:
-
-```bash
-$ composer.phar update novactive/ezextrabundle
-```
+Add the lib to your composer.json, run `composer require novactive/ezextrabundle` to refresh dependencies.
 
 ### Step 2: Enable the bundle
 
