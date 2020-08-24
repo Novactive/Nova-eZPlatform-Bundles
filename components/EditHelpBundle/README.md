@@ -15,3 +15,8 @@ Documentation is available in this repository via `.md` files but also packaged 
 [![Latest version](https://img.shields.io/github/release/Novactive/NovaeZEditHelpBundle.svg?style=flat-square)](https://github.com/Novactive/NovaeZEditHelpBundle/releases)
 [![License](https://img.shields.io/packagist/l/novactive/ezedithelpbundle.svg?style=flat-square)](LICENSE)
 
+
+Add a helper when editing an object. This helper allows to display personalised text for the object (info on the class) itself and for each attribute.
+
+
+This bundle actually uses the eZ Content Repository to self-document the Content edition form!

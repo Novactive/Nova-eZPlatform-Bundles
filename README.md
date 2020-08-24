@@ -25,24 +25,23 @@ Please comply with `make codeclean` and `make tests` before to push, your PR won
 
 ## Managed Repositories
 
-| Bundles                                                                                 | Compatibility (via tags) | CI Config |
+| Bundles                                                                                 | Compatibility | CI Config |
 |-----------------------------------------------------------------------------------------|--------------------------|-----------|
-| [Accelerator](https://github.com/Novactive/NovaeZAccelerator)                           | ![eZ-Platform-3.x-OK]                               | ![auto-install] |
-| [CloudinaryBundle](https://github.com/Novactive/NovaeZCloudinaryBundle)                 | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK]         | ![auto-install] |
-| [EditHelpBundle](https://github.com/Novactive/NovaeZEditHelpBundle)                     | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE]     |
-| [EnhancedImageAssetBundle](https://github.com/Novactive/NovaeZEnhancedImageAssetBundle) | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE]     |
-| [ExtraBundle](https://github.com/Novactive/NovaeZExtraBundle)                           | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK]         | ![auto-install] ![auto-test] |
-| [LdapAuthenticatorBundle](https://github.com/Novactive/NovaeZLdapAuthenticatorBundle)   | ![eZ-Platform-2.x-UNSURE] ![eZ-Platform-3.x-UNSURE] |
-| [MailingBundle](https://github.com/Novactive/NovaeZMailingBundle)                       | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE]     |
-| [MenuManagerBundle](https://github.com/Novactive/NovaeZMenuManagerBundle)               | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE]     |
-| [ProtectedContentBundle](https://github.com/Novactive/NovaeZProtectedContentBundle)     | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK]         | ![auto-install] ![auto-test] |
+| [Accelerator](https://github.com/Novactive/NovaeZAccelerator): Performance optimizations. It brings Asynchronicity using Symfony Messenger. | ![eZ-Platform-3.x-OK] | ![auto-install] |
+| [CloudinaryBundle](https://github.com/Novactive/NovaeZCloudinaryBundle): Images optimizations and manipulations by Cloudinary on top of eZ variatons. It brings the power of Cloudinary in your project. | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK] | ![auto-install] |
+| [EditHelpBundle](https://github.com/Novactive/NovaeZEditHelpBundle):                     | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
+| [EnhancedImageAssetBundle](https://github.com/Novactive/NovaeZEnhancedImageAssetBundle):  | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
+| [ExtraBundle](https://github.com/Novactive/NovaeZExtraBundle): It provides helpers (twig, controllers, children provider) and a great Wrapper class to simplify Content and Location management. | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK] | ![auto-install] ![auto-test] |
+| [LdapAuthenticatorBundle](https://github.com/Novactive/NovaeZLdapAuthenticatorBundle): LDAP authenticator. It allows you to connect your project and your LDAP server. | ![eZ-Platform-2.x-UNSURE] ![eZ-Platform-3.x-UNSURE] |
+| [MailingBundle](https://github.com/Novactive/NovaeZMailingBundle): Campaigns, Registrations, Mailings, Users etc. all you need. It provides a complete set of tools to manage, build, test and send your mailings and newsletters. | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
+| [MenuManagerBundle](https://github.com/Novactive/NovaeZMenuManagerBundle):               | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE]     |
+| [ProtectedContentBundle](https://github.com/Novactive/NovaeZProtectedContentBundle): Protect contents via a simple password without changing the Content Type. Simplest paywall-like mechanism to protect a content. It just works and no session used! | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK] | ![auto-install] ![auto-test] |
 | [ResponsiveImagesBundle](https://github.com/Novactive/NovaeZResponsiveImagesBundle)     | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK]         | ![auto-install] |
-| [RssFeedBundle](https://github.com/Novactive/NovaeZRssFeedBundle)                       | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE]     |
-| [SEOBundle](https://github.com/Novactive/NovaeZSEOBundle)                               | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK]         | ![auto-install] ![auto-test] | 
-| [SlackBundle](https://github.com/Novactive/NovaeZSlackBundle)                           | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-NOK]        |
-| [StaticTemplatesBundle](https://github.com/Novactive/NovaeZStaticTemplatesBundle)       | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK]         | ![auto-install] ![auto-test] | 
-| [SolrSearchExtraBundle](https://github.com/Novactive/NovaeZSolrSearchExtraBundle)       | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE]     |
-
+| [RssFeedBundle](https://github.com/Novactive/NovaeZRssFeedBundle):                       | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE]     |
+| [SEOBundle](https://github.com/Novactive/NovaeZSEOBundle): Optimized SEO management. Bundle that provides and simplifies all your SEO management, metas, sitemaps, robots.txt, etc. | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK] | ![auto-install] ![auto-test] | 
+| [SlackBundle](https://github.com/Novactive/NovaeZSlackBundle): Control your DXP with this complete Slack integration. It allows a 2-way communication between your Slack workspace and your eZ Content Repository. Build custom publication workflow and use them from your mobile! | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-NOK] |
+| [StaticTemplatesBundle](https://github.com/Novactive/NovaeZStaticTemplatesBundle): Render twig templates via their paths through the design engine mechanism. Simple and perfect tiny bundle to build your Front-end first using Twig. | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK] | ![auto-install] ![auto-test] | 
+| [SolrSearchExtraBundle](https://github.com/Novactive/NovaeZSolrSearchExtraBundle): Solr search handler additions. It adds many things, binary file plain text content indexation, fullText criterion, custom field configuration, exact matches boosting configuration, etc. | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] |
 
 ## For Maintainers
 
