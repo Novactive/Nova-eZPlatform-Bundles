@@ -14,9 +14,6 @@ namespace Novactive\Bundle\eZCloudinaryBundle\Core;
 
 use eZ\Publish\SPI\Variation\Values\ImageVariation as eZImageVariation;
 
-/**
- * Class ImageVariation.
- */
 class ImageVariation extends eZImageVariation
 {
     /**

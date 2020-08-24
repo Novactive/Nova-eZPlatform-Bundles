@@ -15,18 +15,12 @@ namespace Novactive\Bundle\eZCloudinaryBundle\DependencyInjection;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\Configuration as SAConfiguration;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
-/**
- * Class Configuration.
- */
 class Configuration extends SAConfiguration
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('nova_ezcloudinary');
+        $treeBuilder = new TreeBuilder('nova_ezcloudinary');
+        $rootNode = $treeBuilder->getRootNode();
         $rootNode
             ->children()
                 ->arrayNode('authentification')

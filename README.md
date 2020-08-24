@@ -28,7 +28,7 @@ Please comply with `make codeclean` and `make tests` before to push, your PR won
 | Bundles                                                                                 | Compatibility (via tags) | CI Config |
 |-----------------------------------------------------------------------------------------|--------------------------|-----------|
 | [Accelerator](https://github.com/Novactive/NovaeZAccelerator)                           | ![eZ-Platform-3.x-OK]                               | ![auto-install] |
-| [CloudinaryBundle](https://github.com/Novactive/NovaeZCloudinaryBundle)                 | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE]     |
+| [CloudinaryBundle](https://github.com/Novactive/NovaeZCloudinaryBundle)                 | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK]         | ![auto-install] |
 | [EditHelpBundle](https://github.com/Novactive/NovaeZEditHelpBundle)                     | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE]     |
 | [EnhancedImageAssetBundle](https://github.com/Novactive/NovaeZEnhancedImageAssetBundle) | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE]     |
 | [ExtraBundle](https://github.com/Novactive/NovaeZExtraBundle)                           | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK]         | ![auto-install] ![auto-test] |

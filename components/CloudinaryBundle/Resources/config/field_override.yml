@@ -1,4 +1,4 @@
 system:
     default:
         field_templates:
-            - {template: NovaeZCloudinaryBundle::content_fields.html.twig, priority: 10}
+            - { template: "@NovaeZCloudinary/content_fields.html.twig", priority: 10 }
