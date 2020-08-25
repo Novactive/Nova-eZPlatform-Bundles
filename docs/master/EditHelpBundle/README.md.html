@@ -94,19 +94,35 @@ img.img-fluid {
 <p><a href="https://packagist.org/packages/novactive/ezedithelpbundle"><img src="https://img.shields.io/packagist/dt/novactive/ezedithelpbundle.svg?style=flat-square" alt="Downloads" class="img-fluid" /></a>
 <a href="https://github.com/Novactive/NovaeZEditHelpBundle/releases"><img src="https://img.shields.io/github/release/Novactive/NovaeZEditHelpBundle.svg?style=flat-square" alt="Latest version" class="img-fluid" /></a>
 <a href="LICENSE.html"><img src="https://img.shields.io/packagist/l/novactive/ezedithelpbundle.svg?style=flat-square" alt="License" class="img-fluid" /></a></p>
-<p>Add a helper when editing an object. This helper allows to display personalised text for the object (info on the class) itself and for each attribute.</p>
-<p>This bundle actually uses the eZ Content Repository to self-document the Content edition form!</p>
+<p>Add a helper when editing or creating a Content. This helper allows you to display personalised text for the Content creation/edition.</p>
+<p>This bundle actually uses the eZ Content Repository to self-document the Content form!</p>
+<h2 name="349838fb1d851d3e2014b9fe39203275">Install</h2>
+<p>Add the lib to your composer.json, run <code>composer require novactive/ezedithelpbundle</code> to refresh dependencies.</p>
+<p>Then inject the bundle in the <code>bundles.php</code> of your application.</p>
+<pre><code class=" php">    Novactive\Bundle\eZResponsiveImagesBundle\NovaeZResponsiveImagesBundle::class =&gt; [ 'all'=&gt; true ],</code></pre>
+<p>Create the Nova eZ Help Tooltip content type:</p>
+<pre><code class=" bash">bin/console novaezhelptooltip:create</code></pre>
+<h2 name="c64518704ce0c0d5501a45763f464276">Usage</h2>
+<p>Just create a sub tree of <code>Nova eZ Help Tooltip</code> anywhere in your Content Tree. (Media is probably recommanded).
+And start describing your Content Type:</p>
+<p><img src="bundle/Resources/doc/tree.png" alt="tree" class="img-fluid" /></p>
+<blockquote>
+<p>Just follow your Content Type logic, Content &gt; Field </p>
+</blockquote>
+<p>Then the result is a alert message on the form page!</p>
+<p><img src="bundle/Resources/doc/result.png" alt="example" class="img-fluid" /></p>
+<p>That's eZ helping eZ using eZ!</p>
 
             <p class="text-right">
                 <img width="204" height="20"
-                     src='https://img.shields.io/badge/Updated on-08--24--2020 22:13:14-green?style=flat-square&labelColor=black'
-                     alt='Updated on 08--24--2020 22:13:14'
+                     src='https://img.shields.io/badge/Updated on-08--25--2020 21:24:34-green?style=flat-square&labelColor=black'
+                     alt='Updated on 08--25--2020 21:24:34'
                 />
             </p>
         </div>
         <div class="col-md-4 col-sm-12 d-print-none sidebar">
                             <p><strong>In this page</strong>:</p>
-                <ul class="nav flex-column"><li class="nav-item first last"><a href="#ffc0b36cfb12d022d2c701bbbdf299c5" class="nav-link">EditHelpBundle</a></li></ul>
+                <ul class="nav flex-column"><li class="nav-item first last"><a href="#ffc0b36cfb12d022d2c701bbbdf299c5" class="nav-link">EditHelpBundle</a><ul class="menu_level_1"><li class="nav-item first"><a href="#349838fb1d851d3e2014b9fe39203275" class="nav-link">Install</a></li><li class="nav-item last"><a href="#c64518704ce0c0d5501a45763f464276" class="nav-link">Usage</a></li></ul></li></ul>
                     </div>
     </div>
     <footer class="pt-4 my-md-5 pt-md-5 border-top">

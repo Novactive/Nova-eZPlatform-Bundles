@@ -97,17 +97,8 @@ img.img-fluid {
 <p>A bundle to authenticate users against LDAP server</p>
 <h2 name="7cd8fb6e31cc946c078d2740c76a9899">Installation</h2>
 <p>Add the lib to your composer.json, run <code>composer require novactive/ezldapauthenticatorbundle</code> to refresh dependencies.</p>
-<p>First of all you must enable this bundle:</p>
-<pre><code class=" php">&lt;?php
-// app/AppKernel.php
-
-public function registerBundles()
-{
-    $bundles = [
-        //..
-        new Novactive\Bundle\eZLDAPAuthenticatorBundle\EzLdapAuthenticatorBundle(),
-    ];
-}</code></pre>
+<p>Then inject the bundle in the <code>bundles.php</code> of your application.</p>
+<pre><code class=" php">    Novactive\Bundle\eZLDAPAuthenticatorBundle\EzLdapAuthenticatorBundle::class =&gt; [ 'all'=&gt; true ],</code></pre>
 <h2 name="254f642527b45bc260048e30704edb39">Configuration</h2>
 <h3 name="004c892689513b0a0f915a42e77c87ab">Bundle configuration</h3>
 <p>To configure this bundle you should add new section <code>nova_ez_ldap</code> into your <code>config.yml</code> file.
@@ -184,8 +175,8 @@ By default eZPublish needs user credentials and email but you may have any addit
 
             <p class="text-right">
                 <img width="204" height="20"
-                     src='https://img.shields.io/badge/Updated on-08--24--2020 22:13:14-green?style=flat-square&labelColor=black'
-                     alt='Updated on 08--24--2020 22:13:14'
+                     src='https://img.shields.io/badge/Updated on-08--25--2020 21:24:34-green?style=flat-square&labelColor=black'
+                     alt='Updated on 08--25--2020 21:24:34'
                 />
             </p>
         </div>

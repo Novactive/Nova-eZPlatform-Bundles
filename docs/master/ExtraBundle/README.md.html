@@ -98,16 +98,8 @@ img.img-fluid {
 <h3 name="337488b89bd401c0d64191d51436e2e2">Step 1: Download Nova eZExtra Bundle using composer</h3>
 <p>Add the lib to your composer.json, run <code>composer require novactive/ezextrabundle</code> to refresh dependencies.</p>
 <h3 name="bb6c5087283397e44b9b10981a83dad6">Step 2: Enable the bundle</h3>
-<h4 name="3fe1de1049b38a23dcdf3b88dc6dca14">Enable the bundle in the kernel:</h4>
-<pre><code class=" php">&lt;?php
-// ezpublish/EzPublishKernel.php
-
-public function registerBundles() {
-    $bundles = array(
-        // ...
-        new Novactive\Bundle\eZExtraBundle\NovaeZExtraBundle(),
-    );
-}</code></pre>
+<p>Then inject the bundle in the <code>bundles.php</code> of your application.</p>
+<pre><code class=" php">    Novactive\Bundle\eZExtraBundle\NovaeZExtraBundle::class =&gt; [ 'all'=&gt; true ],</code></pre>
 <h3 name="448bc62803172f41bfddb22d9d8c14ff">Step 3: Add the default routes</h3>
 <p>Activate the sroutes:</p>
 <pre><code class=" yml">_novaezextraRoutes:
@@ -184,14 +176,14 @@ class PersonalizationEngine extends Type
 
             <p class="text-right">
                 <img width="204" height="20"
-                     src='https://img.shields.io/badge/Updated on-08--24--2020 22:13:14-green?style=flat-square&labelColor=black'
-                     alt='Updated on 08--24--2020 22:13:14'
+                     src='https://img.shields.io/badge/Updated on-08--25--2020 21:24:34-green?style=flat-square&labelColor=black'
+                     alt='Updated on 08--25--2020 21:24:34'
                 />
             </p>
         </div>
         <div class="col-md-4 col-sm-12 d-print-none sidebar">
                             <p><strong>In this page</strong>:</p>
-                <ul class="nav flex-column"><li class="nav-item first last"><a href="#381599d6d227cc5be1ed3045e9cda12a" class="nav-link">Novactive Extra Bundle for eZ Publish Platform</a><ul class="menu_level_1"><li class="nav-item first"><a href="#7cd8fb6e31cc946c078d2740c76a9899" class="nav-link">Installation</a><ul class="menu_level_2"><li class="nav-item first"><a href="#337488b89bd401c0d64191d51436e2e2" class="nav-link">Step 1: Download Nova eZExtra Bundle using composer</a></li><li class="nav-item"><a href="#bb6c5087283397e44b9b10981a83dad6" class="nav-link">Step 2: Enable the bundle</a><ul class="menu_level_3"><li class="nav-item first last"><a href="#3fe1de1049b38a23dcdf3b88dc6dca14" class="nav-link">Enable the bundle in the kernel:</a></li></ul></li><li class="nav-item"><a href="#448bc62803172f41bfddb22d9d8c14ff" class="nav-link">Step 3: Add the default routes</a></li><li class="nav-item last"><a href="#08cc9578c88dbf3eee20917aa63aed47" class="nav-link">Step 4: Clear the cache and check</a></li></ul></li><li class="nav-item last"><a href="#5b6cf869265c13af8566f192b4ab3d2a" class="nav-link">Documentation</a><ul class="menu_level_2"><li class="nav-item first"><a href="#4b62d75765b784b48dfca9ff7221a9f0" class="nav-link">Twig Helper</a><ul class="menu_level_3"><li class="nav-item first"><a href="#288878195dbfe4e44c395bbcf8b6be78" class="nav-link">eznova_parentcontent_by_contentinfo( content )</a></li><li class="nav-item"><a href="#b7dab7393523892a719577c80895fbd4" class="nav-link">eznova_location_by_content( content )</a></li><li class="nav-item"><a href="#9194c9329403628270bc30253a72faaa" class="nav-link">eznova_relation_field_to_content( fieldValue )</a></li><li class="nav-item last"><a href="#69db770f88907a07aeeedc128f446c09" class="nav-link">eznova_relationlist_field_to_content_list( fieldValue )</a></li></ul></li><li class="nav-item"><a href="#006c2ac8f59e621f3c110896f6beb8bd" class="nav-link">Picture Controller</a></li><li class="nav-item"><a href="#d9363efcaaeb49d15c26523708d3c57d" class="nav-link">Content/Location Helper</a></li><li class="nav-item last"><a href="#90374846a70d03c0c963e1a6cf74e132" class="nav-link">Children Provider</a></li></ul></li></ul></li></ul>
+                <ul class="nav flex-column"><li class="nav-item first last"><a href="#381599d6d227cc5be1ed3045e9cda12a" class="nav-link">Novactive Extra Bundle for eZ Publish Platform</a><ul class="menu_level_1"><li class="nav-item first"><a href="#7cd8fb6e31cc946c078d2740c76a9899" class="nav-link">Installation</a><ul class="menu_level_2"><li class="nav-item first"><a href="#337488b89bd401c0d64191d51436e2e2" class="nav-link">Step 1: Download Nova eZExtra Bundle using composer</a></li><li class="nav-item"><a href="#bb6c5087283397e44b9b10981a83dad6" class="nav-link">Step 2: Enable the bundle</a></li><li class="nav-item"><a href="#448bc62803172f41bfddb22d9d8c14ff" class="nav-link">Step 3: Add the default routes</a></li><li class="nav-item last"><a href="#08cc9578c88dbf3eee20917aa63aed47" class="nav-link">Step 4: Clear the cache and check</a></li></ul></li><li class="nav-item last"><a href="#5b6cf869265c13af8566f192b4ab3d2a" class="nav-link">Documentation</a><ul class="menu_level_2"><li class="nav-item first"><a href="#4b62d75765b784b48dfca9ff7221a9f0" class="nav-link">Twig Helper</a><ul class="menu_level_3"><li class="nav-item first"><a href="#288878195dbfe4e44c395bbcf8b6be78" class="nav-link">eznova_parentcontent_by_contentinfo( content )</a></li><li class="nav-item"><a href="#b7dab7393523892a719577c80895fbd4" class="nav-link">eznova_location_by_content( content )</a></li><li class="nav-item"><a href="#9194c9329403628270bc30253a72faaa" class="nav-link">eznova_relation_field_to_content( fieldValue )</a></li><li class="nav-item last"><a href="#69db770f88907a07aeeedc128f446c09" class="nav-link">eznova_relationlist_field_to_content_list( fieldValue )</a></li></ul></li><li class="nav-item"><a href="#006c2ac8f59e621f3c110896f6beb8bd" class="nav-link">Picture Controller</a></li><li class="nav-item"><a href="#d9363efcaaeb49d15c26523708d3c57d" class="nav-link">Content/Location Helper</a></li><li class="nav-item last"><a href="#90374846a70d03c0c963e1a6cf74e132" class="nav-link">Children Provider</a></li></ul></li></ul></li></ul>
                     </div>
     </div>
     <footer class="pt-4 my-md-5 pt-md-5 border-top">

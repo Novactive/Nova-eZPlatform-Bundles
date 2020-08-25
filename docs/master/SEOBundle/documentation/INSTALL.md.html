@@ -94,17 +94,8 @@ img.img-fluid {
 <h2 name="49a5e0e6037920b9d7a75d8d6e3149cc"><i class="fa fa-spinner"></i> Installation steps</h2>
 <h3 name="6065c97227a6214bc68bad0f15ff16d1">Use Composer</h3>
 <p>Add the lib to your composer.json, run <code>composer require novactive/ezseobundle</code> to refresh dependencies.</p>
-<h3 name="040da9acc61145e551bcf66b54f44420">Register the bundle</h3>
-<p>Activate the bundle in <code>config\bundles.php</code> file.</p>
-<pre><code class=" php">// config\bundles.php
-
-&lt;?php
-
-return [
-    Symfony\Bundle\FrameworkBundle\FrameworkBundle::class =&gt; ['all' =&gt; true],
-    ...
-    Novactive\Bundle\eZSEOBundle\NovaeZSEOBundle::class =&gt; ['all' =&gt; true],
-];</code></pre>
+<p>Then inject the bundle in the <code>bundles.php</code> of your application.</p>
+<pre><code class=" php">    Novactive\Bundle\eZSEOBundle\NovaeZSEOBundle::class =&gt; [ 'all'=&gt; true ],</code></pre>
 <h3 name="814b1401d1a609253b98ac549a68a493">Add routes</h3>
 <p>Make sure you add this route to your routing:</p>
 <pre><code class=" yml"># config/routes.yaml
@@ -125,14 +116,14 @@ _novaezseo_routes:
 
             <p class="text-right">
                 <img width="204" height="20"
-                     src='https://img.shields.io/badge/Updated on-08--24--2020 22:13:14-green?style=flat-square&labelColor=black'
-                     alt='Updated on 08--24--2020 22:13:14'
+                     src='https://img.shields.io/badge/Updated on-08--25--2020 21:24:34-green?style=flat-square&labelColor=black'
+                     alt='Updated on 08--25--2020 21:24:34'
                 />
             </p>
         </div>
         <div class="col-md-4 col-sm-12 d-print-none sidebar">
                             <p><strong>In this page</strong>:</p>
-                <ul class="nav flex-column"><li class="nav-item first"><a href="#b9f746c3d440bdb30f659ad8a1e95388" class="nav-link">Novactive eZ SEO Bundle</a></li><li class="nav-item last"><a href="#efedcdd40ad2ef06865f207a261866f4" class="nav-link"> Install</a><ul class="menu_level_1"><li class="nav-item first last"><a href="#49a5e0e6037920b9d7a75d8d6e3149cc" class="nav-link"> Installation steps</a><ul class="menu_level_2"><li class="nav-item first"><a href="#6065c97227a6214bc68bad0f15ff16d1" class="nav-link">Use Composer</a></li><li class="nav-item"><a href="#040da9acc61145e551bcf66b54f44420" class="nav-link">Register the bundle</a></li><li class="nav-item"><a href="#814b1401d1a609253b98ac549a68a493" class="nav-link">Add routes</a></li><li class="nav-item"><a href="#f9fa38cd5d0231d44a37c0d9241fce05" class="nav-link">Create the table</a></li><li class="nav-item last"><a href="#0f18e1ec0b7b342c9efee905730584d3" class="nav-link">Remove the Robots.txt (native RewriteRules )</a><ul class="menu_level_3"><li class="nav-item first"><a href="#62e0b5b350c9e3d2c19aa801d9442ba9" class="nav-link">Nginx</a></li><li class="nav-item last"><a href="#e9713ae04a02a810d6f33dd956f42794" class="nav-link">Apache</a></li></ul></li></ul></li></ul></li></ul>
+                <ul class="nav flex-column"><li class="nav-item first"><a href="#b9f746c3d440bdb30f659ad8a1e95388" class="nav-link">Novactive eZ SEO Bundle</a></li><li class="nav-item last"><a href="#efedcdd40ad2ef06865f207a261866f4" class="nav-link"> Install</a><ul class="menu_level_1"><li class="nav-item first last"><a href="#49a5e0e6037920b9d7a75d8d6e3149cc" class="nav-link"> Installation steps</a><ul class="menu_level_2"><li class="nav-item first"><a href="#6065c97227a6214bc68bad0f15ff16d1" class="nav-link">Use Composer</a></li><li class="nav-item"><a href="#814b1401d1a609253b98ac549a68a493" class="nav-link">Add routes</a></li><li class="nav-item"><a href="#f9fa38cd5d0231d44a37c0d9241fce05" class="nav-link">Create the table</a></li><li class="nav-item last"><a href="#0f18e1ec0b7b342c9efee905730584d3" class="nav-link">Remove the Robots.txt (native RewriteRules )</a><ul class="menu_level_3"><li class="nav-item first"><a href="#62e0b5b350c9e3d2c19aa801d9442ba9" class="nav-link">Nginx</a></li><li class="nav-item last"><a href="#e9713ae04a02a810d6f33dd956f42794" class="nav-link">Apache</a></li></ul></li></ul></li></ul></li></ul>
                     </div>
     </div>
     <footer class="pt-4 my-md-5 pt-md-5 border-top">

@@ -93,6 +93,8 @@ img.img-fluid {
 <h1 name="349838fb1d851d3e2014b9fe39203275">Install</h1>
 <h2 name="fa9f2b3fde8a1ecd921517ebbf88a4fb">Installation steps</h2>
 <p>Add the lib to your composer.json, run <code>composer require novactive/ezaccelerator</code> to refresh dependencies.</p>
+<p>Then inject the bundle in the <code>bundles.php</code> of your application.</p>
+<pre><code class=" php">    Novactive\Bundle\eZAccelerator\NovaeZAccelerator::class =&gt; [ 'all'=&gt; true ],</code></pre>
 <h2 name="254f642527b45bc260048e30704edb39">Configuration</h2>
 <p>First you need to instruct Messenger</p>
 <pre><code class=" yaml"># config/packages/messenger.yaml
@@ -145,8 +147,8 @@ return [
 
             <p class="text-right">
                 <img width="204" height="20"
-                     src='https://img.shields.io/badge/Updated on-08--24--2020 22:13:14-green?style=flat-square&labelColor=black'
-                     alt='Updated on 08--24--2020 22:13:14'
+                     src='https://img.shields.io/badge/Updated on-08--25--2020 21:24:34-green?style=flat-square&labelColor=black'
+                     alt='Updated on 08--25--2020 21:24:34'
                 />
             </p>
         </div>

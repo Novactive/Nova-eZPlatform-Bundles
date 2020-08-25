@@ -126,20 +126,8 @@ The Lazy loading is based on the view port too, if an image is not visible on th
 </blockquote>
 <h3 name="6065c97227a6214bc68bad0f15ff16d1">Use Composer</h3>
 <p>Add the lib to your composer.json, run <code>composer require novactive/ezprotectedcontentbundle</code> to refresh dependencies.</p>
-<h3 name="040da9acc61145e551bcf66b54f44420">Register the bundle</h3>
-<p>Activate the bundle in <code>app\Appkernel.php</code> file.</p>
-<pre><code class=" php">// ezpublish\EzPublishKernel.php
-
-public function registerBundles()
-{
-   ...
-   $bundles = array(
-       new FrameworkBundle(),
-       ...
-       new Novactive\Bundle\eZResponsiveImagesBundle\NovaeZResponsiveImagesBundle(),
-   );
-   ...
-}</code></pre>
+<p>Then inject the bundle in the <code>bundles.php</code> of your application.</p>
+<pre><code class=" php">    Novactive\Bundle\eZResponsiveImagesBundle\NovaeZResponsiveImagesBundle::class =&gt; [ 'all'=&gt; true ],</code></pre>
 <h3 name="50f5ab40d990b0bdcd329f95cdc5ca2c">Create the _mobile and _retina Alias Name</h3>
 <p>The bundle requires that you create 2 more alias for each alias you are using. Ex:</p>
 <pre><code class=" yaml">    gallery_full_thumbnail:
@@ -164,14 +152,14 @@ public function registerBundles()
 
             <p class="text-right">
                 <img width="204" height="20"
-                     src='https://img.shields.io/badge/Updated on-08--24--2020 22:13:14-green?style=flat-square&labelColor=black'
-                     alt='Updated on 08--24--2020 22:13:14'
+                     src='https://img.shields.io/badge/Updated on-08--25--2020 21:24:34-green?style=flat-square&labelColor=black'
+                     alt='Updated on 08--25--2020 21:24:34'
                 />
             </p>
         </div>
         <div class="col-md-4 col-sm-12 d-print-none sidebar">
                             <p><strong>In this page</strong>:</p>
-                <ul class="nav flex-column"><li class="nav-item first last"><a href="#12fc618006c50ebe277cbfc3728bcb6d" class="nav-link">Novactive eZ Responsive Images Bundle</a><ul class="menu_level_1"><li class="nav-item first last"><a href="#349838fb1d851d3e2014b9fe39203275" class="nav-link">Install</a><ul class="menu_level_2"><li class="nav-item first"><a href="#d5529bb2b676e5d2d3a6936064c7532d" class="nav-link">Usage and main feature</a></li><li class="nav-item"><a href="#6065c97227a6214bc68bad0f15ff16d1" class="nav-link">Use Composer</a></li><li class="nav-item"><a href="#040da9acc61145e551bcf66b54f44420" class="nav-link">Register the bundle</a></li><li class="nav-item"><a href="#50f5ab40d990b0bdcd329f95cdc5ca2c" class="nav-link">Create the _mobile and _retina Alias Name</a></li><li class="nav-item last"><a href="#98211190869ce87ff6b1ae6320bdd19f" class="nav-link">Load the resources in your pagelayout</a></li></ul></li></ul></li></ul>
+                <ul class="nav flex-column"><li class="nav-item first last"><a href="#12fc618006c50ebe277cbfc3728bcb6d" class="nav-link">Novactive eZ Responsive Images Bundle</a><ul class="menu_level_1"><li class="nav-item first last"><a href="#349838fb1d851d3e2014b9fe39203275" class="nav-link">Install</a><ul class="menu_level_2"><li class="nav-item first"><a href="#d5529bb2b676e5d2d3a6936064c7532d" class="nav-link">Usage and main feature</a></li><li class="nav-item"><a href="#6065c97227a6214bc68bad0f15ff16d1" class="nav-link">Use Composer</a></li><li class="nav-item"><a href="#50f5ab40d990b0bdcd329f95cdc5ca2c" class="nav-link">Create the _mobile and _retina Alias Name</a></li><li class="nav-item last"><a href="#98211190869ce87ff6b1ae6320bdd19f" class="nav-link">Load the resources in your pagelayout</a></li></ul></li></ul></li></ul>
                     </div>
     </div>
     <footer class="pt-4 my-md-5 pt-md-5 border-top">
