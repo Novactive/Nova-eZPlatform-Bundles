@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZCloudinaryBundle/blob/master/LICENSE MIT Licence
  */
 
+declare(strict_types=1);
+
 namespace Novactive\Bundle\eZCloudinaryBundle\Core;
 
 use Cloudinary;

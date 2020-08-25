@@ -120,6 +120,7 @@ jobs:
                     mysql -u root -h 127.0.0.1 -P 3306 ezplatform < ../components/SEOBundle/bundle/Resources/sql/schema.sql
                     bin/console novaezextra:contenttypes:create ../tests/vmcd.xlsx
                     bin/console novaezprotectedcontent:install
+                    bin/console novaezhelptooltip:create
                     bin/console doctrine:schema:update
                     cp -rp ../components/ProtectedContentBundle/tests/provisioning/article.html.twig templates/themes/standard/full/
                     cp -rp ../components/StaticTemplatesBundle/tests/provisioning/static_ultimatenova templates/themes/

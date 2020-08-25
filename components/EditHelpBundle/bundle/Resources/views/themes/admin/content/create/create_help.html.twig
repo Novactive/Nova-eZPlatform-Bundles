@@ -1,0 +1,8 @@
+{% extends extend_from_template %}
+
+{% trans_default_domain 'content_create' %}
+
+{% block form_before %}
+    {{ parent() }}
+    {% include "@ezdesign/content/edit/tophelp.html.twig" %}
+{% endblock %}

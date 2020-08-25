@@ -30,23 +30,10 @@ Images stay on your servers but the SRC is adapted to make Cloudinary rendering/
 
 Add the lib to your composer.json, run `composer require novactive/ezcloudinarybundle` to refresh dependencies.
 
-### Register the bundle
-
-Activate the bundle in `app\AppKernel.php` file.
+Then inject the bundle in the `bundles.php` of your application.
 
 ```php
-// app\AppKernel.php
-
-public function registerBundles()
-{
-   ...
-   $bundles = array(
-       new FrameworkBundle(),
-       ...
-       new Novactive\Bundle\eZCloudinaryBundle\NovaeZCloudinaryBundle(),
-   );
-   ...
-}
+    Novactive\Bundle\eZCloudinaryBundle\NovaeZCloudinaryBundle::class => [ 'all'=> true ],
 ```
 
 ### Setup your credentials

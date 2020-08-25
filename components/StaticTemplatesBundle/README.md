@@ -39,24 +39,10 @@ That's it!
 
 Add the lib to your composer.json, run `composer require novactive/ezstatictemplatesbundle` to refresh dependencies.
 
-
-### Register the bundle
-
-Activate the bundle in `app\AppKernel.php` file.
+Then inject the bundle in the `bundles.php` of your application.
 
 ```php
-// app\AppKernel.php
-
-public function registerBundles()
-{
-   ...
-   $bundles = array(
-       new FrameworkBundle(),
-       ...
-       new Novactive\Bundle\EzStaticTemplatesBundle\EzStaticTemplatesBundle(),
-   );
-   ...
-}
+    Novactive\Bundle\EzStaticTemplatesBundle\EzStaticTemplatesBundle::class => [ 'all'=> true ],
 ```
 
 ### Configuration

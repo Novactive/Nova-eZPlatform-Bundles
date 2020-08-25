@@ -61,23 +61,10 @@ It means:
 
 Add the lib to your composer.json, run `composer require novactive/ezprotectedcontentbundle` to refresh dependencies.
 
-### Register the bundle
-
-Activate the bundle in `app\Appkernel.php` file.
+Then inject the bundle in the `bundles.php` of your application.
 
 ```php
-// ezpublish\EzPublishKernel.php
-
-public function registerBundles()
-{
-   ...
-   $bundles = array(
-       new FrameworkBundle(),
-       ...
-       new Novactive\Bundle\eZResponsiveImagesBundle\NovaeZResponsiveImagesBundle(),
-   );
-   ...
-}
+    Novactive\Bundle\eZResponsiveImagesBundle\NovaeZResponsiveImagesBundle::class => [ 'all'=> true ],
 ```
 
 ### Create the _mobile and _retina Alias Name

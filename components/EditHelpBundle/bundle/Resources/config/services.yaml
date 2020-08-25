@@ -4,6 +4,8 @@ services:
     autoconfigure: true
     public: false
 
+  Novactive\Bundle\NovaeZEditHelpBundle\Command\CreateContentTypeCommand: ~
+
   Novactive\Bundle\NovaeZEditHelpBundle\Listener\PreContentView:
     tags:
       - { name: kernel.event_listener, event: ezpublish.pre_content_view, method: onPreContentView }

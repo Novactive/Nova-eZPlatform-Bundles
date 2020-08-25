@@ -23,18 +23,10 @@ Add the lib to your composer.json, run `composer require novactive/ezextrabundle
 
 ### Step 2: Enable the bundle
 
-#### Enable the bundle in the kernel:
+Then inject the bundle in the `bundles.php` of your application.
 
 ```php
-<?php
-// ezpublish/EzPublishKernel.php
-
-public function registerBundles() {
-    $bundles = array(
-        // ...
-		new Novactive\Bundle\eZExtraBundle\NovaeZExtraBundle(),
-    );
-}
+    Novactive\Bundle\eZExtraBundle\NovaeZExtraBundle::class => [ 'all'=> true ],
 ```
 
 ### Step 3: Add the default routes

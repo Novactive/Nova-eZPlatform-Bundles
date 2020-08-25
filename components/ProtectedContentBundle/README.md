@@ -52,25 +52,10 @@ Once you have unlocked the content, __canReadProtectedContent__ will be __true__
 
 Add the lib to your composer.json, run `composer require novactive/ezprotectedcontentbundle` to refresh dependencies.
 
-
-### Register the bundles
-
-Activate the bundle in `app\AppKernel.php` file.
+Then inject the bundle in the `bundles.php` of your application.
 
 ```php
-// app\AppKernel.php
-
-public function registerBundles()
-{
-   ...
-   $bundles = array(
-        new FrameworkBundle(),
-        ...
-        // Novactive eZ Protected Content Bundle
-        new Novactive\Bundle\eZProtectedContentBundle\NovaeZProtectedContentBundle()
-   );
-   ...
-}
+    Novactive\Bundle\eZProtectedContentBundle\NovaeZProtectedContentBundle::class => [ 'all'=> true ],
 ```
 
 ### Add routes

@@ -1,28 +1,52 @@
 <?php
 
+/**
+ * NovaeZEditHelpBundle.
+ *
+ * @package   Novactive\Bundle\NovaeZEditHelpBundle
+ *
+ * @author    sergmike
+ * @copyright 2019
+ * @license   https://github.com/Novactive/NovaeZEditHelpBundle MIT Licence
+ */
+
+declare(strict_types=1);
+
 namespace Novactive\Bundle\NovaeZEditHelpBundle\Command;
 
 use eZ\Publish\API\Repository\Exceptions\ForbiddenException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 use Novactive\Bundle\NovaeZEditHelpBundle\Services\FetchDocumentation;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CreateContentTypeCommand extends ContainerAwareCommand
+final class CreateContentTypeCommand extends Command
 {
-    protected function configure()
+    /**
+     * @var Repository
+     */
+    private $repository;
+
+    /**
+     * @required
+     */
+    public function setDependencies(Repository $eZPublishRepository): void
     {
-        $this->setName('novahelptooltip:create');
+        $this->repository = $eZPublishRepository;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function configure(): void
     {
-        /** @var $repository \eZ\Publish\API\Repository\Repository */
-        $repository = $this->getContainer()->get('ezpublish.api.repository');
-        $repository->setCurrentUser($repository->getUserService()->loadUser(14));
+        $this->setName('novaezhelptooltip:create');
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $repository = $this->repository;
 
         $contentTypeService = $repository->getContentTypeService();
         $contentTypeIdentifier = FetchDocumentation::TOOLTIP_CONTENT_TYPE;
@@ -58,7 +82,7 @@ class CreateContentTypeCommand extends ContainerAwareCommand
 
             // set names for the content type
             $contentTypeCreateStruct->names = [
-                'eng-GB' => 'Nova Help Tooltip',
+                'eng-GB' => 'Nova eZ Help Tooltip',
             ];
 
             $contentTypeCreateStruct->isContainer = true;
@@ -122,5 +146,14 @@ class CreateContentTypeCommand extends ContainerAwareCommand
                 $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             }
         }
+
+        return Command::SUCCESS;
+    }
+
+    protected function initialize(InputInterface $input, OutputInterface $output): void
+    {
+        $this->repository->getPermissionResolver()->setCurrentUserReference(
+            $this->repository->getUserService()->loadUser(14)
+        );
     }
 }

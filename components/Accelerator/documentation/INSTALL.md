@@ -6,6 +6,12 @@
 
 Add the lib to your composer.json, run `composer require novactive/ezaccelerator` to refresh dependencies.
 
+Then inject the bundle in the `bundles.php` of your application.
+
+```php
+    Novactive\Bundle\eZAccelerator\NovaeZAccelerator::class => [ 'all'=> true ],
+```
+
 ## Configuration
 
 First you need to instruct Messenger

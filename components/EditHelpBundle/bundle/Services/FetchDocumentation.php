@@ -1,21 +1,36 @@
 <?php
 
+/**
+ * NovaeZEditHelpBundle.
+ *
+ * @package   Novactive\Bundle\NovaeZEditHelpBundle
+ *
+ * @author    sergmike
+ * @copyright 2019
+ * @license   https://github.com/Novactive/NovaeZEditHelpBundle MIT Licence
+ */
+
+declare(strict_types=1);
+
 namespace Novactive\Bundle\NovaeZEditHelpBundle\Services;
 
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
-use eZ\Publish\Core\SignalSlot\Repository;
 
 class FetchDocumentation
 {
     public const TOOLTIP_CONTENT_TYPE = 'nova_help_tooltip';
 
+    /**
+     * @var Repository
+     */
     protected $repository;
 
     public function __construct(Repository $repository)
@@ -23,7 +38,7 @@ class FetchDocumentation
         $this->repository = $repository;
     }
 
-    public function getByContentType(ContentType $contentType): ?SearchHit
+    public function getByContentType(ContentType $contentType): ?Content
     {
         $query = new Query(
             [
@@ -40,13 +55,13 @@ class FetchDocumentation
         $searchResult = $searchService->findContent($query);
         // Content is found
         if ($searchResult->totalCount > 0) {
-            $documentation = $searchResult->searchHits[0];
+            return $searchResult->searchHits[0]->valueObject;
         }
 
-        return $documentation ?? null;
+        return null;
     }
 
-    public function getChildrenByLocationId(int $locationId): ?array
+    public function getChildrenByLocationId(int $locationId): array
     {
         $query = new LocationQuery(
             [
@@ -65,6 +80,6 @@ class FetchDocumentation
             $children = $searchResult->searchHits;
         }
 
-        return $children ?? null;
+        return $children ?? [];
     }
 }

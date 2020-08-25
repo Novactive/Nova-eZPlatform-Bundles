@@ -21,21 +21,16 @@ A bundle to authenticate users against LDAP server
 
 Add the lib to your composer.json, run `composer require novactive/ezldapauthenticatorbundle` to refresh dependencies.
 
-First of all you must enable this bundle:
-```php
-<?php
-// app/AppKernel.php
+Then inject the bundle in the `bundles.php` of your application.
 
-public function registerBundles()
-{
-    $bundles = [
-        //..
-        new Novactive\Bundle\eZLDAPAuthenticatorBundle\EzLdapAuthenticatorBundle(),
-    ];
-}
+```php
+    Novactive\Bundle\eZLDAPAuthenticatorBundle\EzLdapAuthenticatorBundle::class => [ 'all'=> true ],
 ```
+
 ## Configuration
+
 ### Bundle configuration
+
 To configure this bundle you should add new section `nova_ez_ldap` into your `config.yml` file.
 Basic config might be like this one:
 
@@ -64,15 +59,19 @@ Instead of `connection_string` you are able to set `host`, `port`, `encryption` 
 Also you can set `options` array that will be passed directly to the Symfony Ldap component.
 
 #### LDAP attributes mapping
+
 To be able to store user who came from LDAP you have to configure mapping between LDAP attributes and eZPublish user fields.
 You must map all required fields in the `ezuser` part.
 By default eZPublish needs user credentials and email but you may have any additional fields in you `User` content class so you should fill all of them.
 
 #### Target group
+
 All users will be stored in the group `user_group_id`. You must put group content id here.
 
 #### Full default config
+
 Here is full default bundle configuration:
+
 ```yaml
 nova_ez_ldap:
   connections:
@@ -102,7 +101,9 @@ nova_ez_ldap:
 ```
 
 ### Security configuration
+
 Besides common bundle configuration you will have to add some parameters in `security` section:
+
 ```yaml
 security:
     providers:
