@@ -19,6 +19,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Novactive\Bundle\eZMailingBundle\Core\DataHandler\Registration;
 use Novactive\Bundle\eZMailingBundle\Core\DataHandler\Unregistration;
@@ -29,9 +30,6 @@ use Novactive\Bundle\eZMailingBundle\Entity\Registration as RegistrationEntity;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
 use RuntimeException;
 
-/**
- * Class Registrar.
- */
 class Registrar
 {
     /**
@@ -59,14 +57,11 @@ class Registrar
      */
     protected $configResolver;
 
-    /**
-     * Registrar constructor.
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         SiteAccess $siteAccess,
         SimpleMailer $mailer,
-        ConfigResolver $configResolver
+        ConfigResolverInterface $configResolver
     ) {
         $this->entityManager = $entityManager;
         $this->siteAccess = $siteAccess;

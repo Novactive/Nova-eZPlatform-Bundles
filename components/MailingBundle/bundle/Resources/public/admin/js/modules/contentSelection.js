@@ -1,5 +1,6 @@
-var eZMailingContentSelectionModule = function () {
-    function _init($, $app) {
+export const eZMailingContentSelectionModule = function () {
+    function _init ($, $app) {
+
         $("button.js-novaezmailing-select-location-id", $app).click(function () {
             var token = document.querySelector('meta[name="CSRF-Token"]').content;
             var siteaccess = document.querySelector('meta[name="SiteAccess"]').content;
@@ -7,13 +8,15 @@ var eZMailingContentSelectionModule = function () {
             var startingLocationId = 1;
             var targetSelector = $(this).data('target-id');
             var targetSelectorName = $(this).data('target-name');
+            var configFromYaml = $(this).data('udw-config');
             ReactDOM.render(React.createElement(eZ.modules.UniversalDiscovery, {
+                ...configFromYaml,
                 onCancel: function () {
                     ReactDOM.unmountComponentAtNode(udwContainer)
                 },
                 multiple: false,
                 startingLocationId: startingLocationId,
-                restInfo: {token: token, siteaccess: siteaccess},
+                restInfo: { token: token, siteaccess: siteaccess },
                 onConfirm: function (response) {
                     $(targetSelector).val(response[0].id);
                     $(targetSelectorName).text(response[0].ContentInfo.Content.Name);
@@ -22,13 +25,16 @@ var eZMailingContentSelectionModule = function () {
             }), udwContainer);
         });
 
+
         $("button.js-novaezmailing-create-content", $app).click(function () {
             var token = document.querySelector('meta[name="CSRF-Token"]').content;
             var siteaccess = document.querySelector('meta[name="SiteAccess"]').content;
             var udwContainer = $("#react-udw").get(0);
             var parentLocationId = $(this).data('parent-location-id');
             var title = $(this).find('span').html();
+            var configFromYaml = $(this).data('udw-config');
             ReactDOM.render(React.createElement(eZ.modules.UniversalDiscovery, {
+                ...configFromYaml,
                 onCancel: function () {
                     ReactDOM.unmountComponentAtNode(udwContainer)
                 },
@@ -42,7 +48,7 @@ var eZMailingContentSelectionModule = function () {
                     }
                     $('button.m-ud__action--create-content').prop("disabled", contentDisabled);
                 },
-                restInfo: {token: token, siteaccess: siteaccess},
+                restInfo: { token: token, siteaccess: siteaccess },
                 visibleTabs: ['create'],
                 activeTab: 'create',
                 onConfirm: function (response) {
@@ -53,5 +59,5 @@ var eZMailingContentSelectionModule = function () {
         });
     }
 
-    return {init: _init};
+    return { init: _init };
 }();

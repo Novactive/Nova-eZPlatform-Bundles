@@ -30,9 +30,6 @@ class EntityContentLink
      */
     private $repository;
 
-    /**
-     * EntityContentLink constructor.
-     */
     public function __construct(Repository $repository)
     {
         $this->repository = $repository;

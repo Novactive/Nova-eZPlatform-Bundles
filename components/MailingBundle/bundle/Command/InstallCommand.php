@@ -20,14 +20,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * Class InstallCommand.
- */
 class InstallCommand extends Command
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function configure(): void
     {
         $this
@@ -35,10 +29,7 @@ class InstallCommand extends Command
             ->setDescription('Install what necessary in the DB');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $io->title('Update the Database with Custom Novactive eZ Mailing Table');
@@ -52,5 +43,7 @@ class InstallCommand extends Command
         $command->run($arrayInput, $output);
 
         $io->success('Done.');
+
+        return Command::SUCCESS;
     }
 }

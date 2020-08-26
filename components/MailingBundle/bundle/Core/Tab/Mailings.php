@@ -17,9 +17,6 @@ namespace Novactive\Bundle\eZMailingBundle\Core\Tab;
 use EzSystems\EzPlatformAdminUi\Tab\AbstractTab;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing as MailingEntity;
 
-/**
- * Class Mailing.
- */
 class Mailings extends AbstractTab
 {
     /**
@@ -27,26 +24,17 @@ class Mailings extends AbstractTab
      */
     private $mailings;
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIdentifier(): string
     {
         return 'novaezmailing-mailings-tab';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return /* @Desc("Nova eZ Mailing - Mailings Tab") */
-            $this->translator->transChoice('mailings.tab.name', count($this->mailings), [], 'ezmailing');
+            $this->translator->trans('mailings.tab.name', ['count' => count($this->mailings)], 'ezmailing');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function renderView(array $parameters): string
     {
         return $this->twig->render(

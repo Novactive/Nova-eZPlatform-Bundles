@@ -16,8 +16,8 @@
                 <a href="{{ showMailingLink }}">{{ item.mailing.name }}</a>
             </td>
             <td>{{ item.emailSentCount }}</td>
-            <td>{{ item.started|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
-            <td>{{ item.ended|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+            <td>{{ item.started|format_datetime(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+            <td>{{ item.ended|format_datetime(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
         </tr>
     {% endfor %}
 </table>

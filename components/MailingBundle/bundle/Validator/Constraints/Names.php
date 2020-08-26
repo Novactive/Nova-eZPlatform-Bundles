@@ -17,25 +17,17 @@ namespace Novactive\Bundle\eZMailingBundle\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
 
 /**
- * Class Names.
- *
  * @Annotation
  */
 class Names extends Constraint
 {
     public $message = 'The Name should be NOT empty.';
 
-    /**
-     * {@inheritdoc}
-     */
     public function validatedBy(): string
     {
         return NamesValidator::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTargets()
     {
         return self::CLASS_CONSTRAINT;

@@ -17,9 +17,6 @@ namespace Novactive\Bundle\eZMailingBundle\Core\DataHandler;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Class UserImport.
- */
 class UserImport
 {
     /**
@@ -32,17 +29,11 @@ class UserImport
      */
     private $file;
 
-    /**
-     * @return File
-     */
     public function getFile(): ?File
     {
         return $this->file;
     }
 
-    /**
-     * @return $this
-     */
     public function setFile(File $file): self
     {
         $this->file = $file;

@@ -23,14 +23,11 @@ use Novactive\Bundle\eZMailingBundle\Core\Registrar;
 use Novactive\Bundle\eZMailingBundle\Entity\ConfirmationToken;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
 use Novactive\Bundle\eZMailingBundle\Form\RegistrationType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class RegistrationController.
- */
 class RegistrationController
 {
     /**
@@ -43,9 +40,6 @@ class RegistrationController
      */
     protected $configResolver;
 
-    /**
-     * RegistrationController constructor.
-     */
     public function __construct(Registrar $registrar, ConfigResolverInterface $configResolver)
     {
         $this->registrar = $registrar;

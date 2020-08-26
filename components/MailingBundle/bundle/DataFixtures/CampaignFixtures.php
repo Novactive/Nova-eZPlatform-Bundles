@@ -25,16 +25,10 @@ use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Novactive\Bundle\eZMailingBundle\Entity\StatHit;
 
-/**
- * Class CampaignFixtures.
- */
 class CampaignFixtures extends Fixture implements DependentFixtureInterface
 {
     public const FIXTURE_COUNT_CAMPAIGN = 10;
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ObjectManager $manager): void
     {
         $faker = Faker\Factory::create();

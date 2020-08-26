@@ -14,9 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Utils;
 
-/**
- * Class Browser.
- */
 class Browser
 {
     /**
@@ -127,9 +124,6 @@ class Browser
         return $this->platform;
     }
 
-    /**
-     * @return mixed
-     */
     public function getUserAgent(): string
     {
         return $this->userAgent;

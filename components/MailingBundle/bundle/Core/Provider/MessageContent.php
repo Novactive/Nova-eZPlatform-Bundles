@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Core\Provider;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Novactive\Bundle\eZMailingBundle\Core\DataHandler\Registration;
 use Novactive\Bundle\eZMailingBundle\Core\DataHandler\Unregistration;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
@@ -22,16 +23,13 @@ use Novactive\Bundle\eZMailingBundle\Entity\ConfirmationToken;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use RuntimeException;
 use Swift_Message;
-use Symfony\Component\Translation\Translator;
-use Twig_Environment;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment;
 
-/**
- * Class MessageContent.
- */
 class MessageContent
 {
     /**
-     * @var Twig_Environment;
+     * @var Environment;
      */
     private $twig;
 
@@ -41,15 +39,15 @@ class MessageContent
     private $configResolver;
 
     /**
-     * @var Translator
+     * @var TranslatorInterface
      */
     private $translator;
 
-    /**
-     * MessageContent constructor.
-     */
-    public function __construct(Twig_Environment $twig, ConfigResolver $configResolver, Translator $translator)
-    {
+    public function __construct(
+        Environment $twig,
+        ConfigResolverInterface $configResolver,
+        TranslatorInterface $translator
+    ) {
         $this->twig = $twig;
         $this->configResolver = $configResolver;
         $this->translator = $translator;

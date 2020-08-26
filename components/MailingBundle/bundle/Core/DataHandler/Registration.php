@@ -18,9 +18,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
 
-/**
- * Class Registration.
- */
 class Registration
 {
     /**
@@ -33,9 +30,6 @@ class Registration
      */
     private $mailingLists;
 
-    /**
-     * Registration constructor.
-     */
     public function __construct()
     {
         $this->mailingLists = new ArrayCollection();

@@ -20,8 +20,6 @@ use Doctrine\ORM\Mapping as ORM;
 use RuntimeException;
 
 /**
- * Class MailingList.
- *
  * @ORM\Table(name="novaezmailing_mailing_list")
  *
  * @ORM\Entity(repositoryClass="Novactive\Bundle\eZMailingBundle\Repository\MailingList")
@@ -72,9 +70,6 @@ class MailingList
      */
     private $campaigns;
 
-    /**
-     * MailingList constructor.
-     */
     public function __construct()
     {
         $this->registrations = new ArrayCollection();
@@ -87,9 +82,6 @@ class MailingList
         return (int) $this->id;
     }
 
-    /**
-     * @return MailingList
-     */
     public function setId(int $id): self
     {
         $this->id = $id;
@@ -105,11 +97,6 @@ class MailingList
         return $this->registrations;
     }
 
-    /**
-     * @param Registration[] $registrations
-     *
-     * @return MailingList
-     */
     public function setRegistrations(array $registrations): self
     {
         foreach ($registrations as $registration) {
@@ -127,9 +114,6 @@ class MailingList
         return $this->withApproval;
     }
 
-    /**
-     * @return MailingList
-     */
     public function setWithApproval(bool $withApproval): self
     {
         $this->withApproval = $withApproval;
@@ -137,17 +121,11 @@ class MailingList
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getSiteaccessLimit(): ?array
     {
         return $this->siteaccessLimit;
     }
 
-    /**
-     * @return MailingList
-     */
     public function setSiteaccessLimit(array $siteaccessLimit): self
     {
         $this->siteaccessLimit = $siteaccessLimit;

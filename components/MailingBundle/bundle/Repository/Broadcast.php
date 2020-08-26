@@ -14,14 +14,8 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Repository;
 
-/**
- * Class Broadcast.
- */
 class Broadcast extends EntityRepository
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function getAlias(): string
     {
         return 'broadcast';

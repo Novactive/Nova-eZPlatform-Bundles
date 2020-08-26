@@ -39,7 +39,7 @@
                 </tr>
                 <tr>
                     <th>{{"generic.users.table.birthdate"|trans}}</th>
-                    <td>{{ item.birthDate|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                    <td>{{ item.birthDate|format_datetime(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
                 </tr>
                 <tr>
                     <th>{{"generic.users.table.phone"|trans}}</th>
@@ -88,8 +88,8 @@
                         <td>
                             <a href="{{ path('novaezmailing_mailinglist_show', {mailingList: registration.mailingList.id }) }}">{{ registration.mailingList.name }}</a>
                         </td>
-                        <td>{{ registration.updated|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
-                        <td>{{ registration.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                        <td>{{ registration.updated|format_datetime(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                        <td>{{ registration.created|format_datetime(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
                     </tr>
                 {% endfor %}
             </table>

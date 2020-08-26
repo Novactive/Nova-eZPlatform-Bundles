@@ -19,9 +19,6 @@ use Novactive\Bundle\eZMailingBundle\Core\Utils\Clock;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class ClockTest.
- */
 class ClockTest extends TestCase
 {
     /**
@@ -198,6 +195,15 @@ class ClockTest extends TestCase
 
             $clock = new Clock($dateReference);
             $mailing = $this->createMailing($data);
+
+            if ($expected !== $clock->match($mailing)) {
+                dump($dateReference->format('Y-m-d H:i:s'));
+                dump($dataForLog);
+                dump($expected);
+                dump($mailing);
+                dd($clock->match($mailing));
+            }
+
             $this->assertEquals(
                 $expected,
                 $clock->match($mailing),

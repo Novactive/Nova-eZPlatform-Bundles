@@ -26,9 +26,6 @@ class User
      */
     private $entityManager;
 
-    /**
-     * User constructor.
-     */
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;

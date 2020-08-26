@@ -16,9 +16,6 @@ namespace Novactive\Bundle\eZMailingBundle\Listener;
 
 use EzSystems\EzPlatformAdminUi\Menu\Event\ConfigureMenuEvent;
 
-/**
- * Class TopMenu.
- */
 class TopMenu
 {
     public function onMenuConfigure(ConfigureMenuEvent $event): void

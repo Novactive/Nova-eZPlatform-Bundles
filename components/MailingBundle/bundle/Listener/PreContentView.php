@@ -20,11 +20,8 @@ use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Novactive\Bundle\eZMailingBundle\Security\Voter\Mailing as MailingVoter;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-/**
- * Class PreContentView.
- */
 class PreContentView
 {
     /**
@@ -38,17 +35,14 @@ class PreContentView
     private $requestStack;
 
     /**
-     * @var AuthorizationChecker
+     * @var AuthorizationCheckerInterface
      */
     private $authorizationChecker;
 
-    /**
-     * PreContentView constructor.
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         RequestStack $requestStack,
-        AuthorizationChecker $authorizationChecker
+        AuthorizationCheckerInterface $authorizationChecker
     ) {
         $this->entityManager = $entityManager;
         $this->requestStack = $requestStack;

@@ -17,9 +17,6 @@ namespace Novactive\Bundle\eZMailingBundle\Entity\Compose;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Trait Metadata.
- */
 trait Metadata
 {
     /**
@@ -39,9 +36,6 @@ trait Metadata
         return $this->created;
     }
 
-    /**
-     * @return Metadata
-     */
     public function setCreated(DateTime $created): self
     {
         $this->created = $created;
@@ -54,9 +48,6 @@ trait Metadata
         return $this->updated;
     }
 
-    /**
-     * @return Metadata
-     */
     public function setUpdated(DateTime $updated): self
     {
         $this->updated = $updated;

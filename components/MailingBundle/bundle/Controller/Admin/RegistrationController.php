@@ -16,21 +16,17 @@ namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
 use Novactive\Bundle\eZMailingBundle\Core\AjaxGuard;
 use Novactive\Bundle\eZMailingBundle\Entity\Registration;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class RegistrationController.
- *
  * @Route("/registration")
  */
 class RegistrationController
 {
     /**
-     * @Route("/accept/{registration}", name="novaezmailing_registration_accept")
-     * @Method({"POST"})
+     * @Route("/accept/{registration}", name="novaezmailing_registration_accept", methods={"POST"})
      */
     public function acceptAction(
         Request $request,

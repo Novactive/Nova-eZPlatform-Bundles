@@ -30,9 +30,6 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Class MailingType.
- */
 class MailingType extends AbstractType
 {
     /**
@@ -40,17 +37,11 @@ class MailingType extends AbstractType
      */
     private $siteAccessResolver;
 
-    /**
-     * CampaignType constructor.
-     */
     public function __construct(SiteaccessResolver $siteAccessResolver)
     {
         $this->siteAccessResolver = $siteAccessResolver;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $fromArray = function ($array) {

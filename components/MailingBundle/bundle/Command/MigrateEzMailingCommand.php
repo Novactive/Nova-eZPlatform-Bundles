@@ -15,8 +15,8 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use eZ\Publish\Core\Repository\Repository;
 use Novactive\Bundle\eZMailingBundle\Core\IOService;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
@@ -59,9 +59,6 @@ class MigrateEzMailingCommand extends Command
 
     public const DUMP_FOLDER = 'migrate/ezmailing';
 
-    /**
-     * MigrateCommand constructor.
-     */
     public function __construct(
         IOService $ioService,
         EntityManagerInterface $entityManager,
@@ -86,7 +83,7 @@ class MigrateEzMailingCommand extends Command
             ->setHelp('Run novaezmailing:migrate:ezmailing --export|--import|--clean');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
         $this->io->title('Update the Database with Custom Novactive EzMailing Tables');
@@ -100,6 +97,8 @@ class MigrateEzMailingCommand extends Command
         } else {
             $this->io->error('No export or import option found. Run novaezmailing:migrate:ezmailing --export|--import');
         }
+
+        return Command::SUCCESS;
     }
 
     private function export(): void

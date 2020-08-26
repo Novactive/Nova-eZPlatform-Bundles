@@ -18,9 +18,6 @@ use Doctrine\ORM\Mapping as ORM;
 use eZ\Publish\API\Repository\Values\Content\Content as eZContent;
 use eZ\Publish\API\Repository\Values\Content\Location as eZLocation;
 
-/**
- * Trait Content.
- */
 trait Content
 {
     /**
@@ -39,17 +36,11 @@ trait Content
      */
     private $location;
 
-    /**
-     * {@inheritdoc}
-     */
     public function getContent(): ?eZContent
     {
         return $this->content;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setContent(eZContent $content): ContentInterface
     {
         $this->content = $content;
@@ -57,9 +48,6 @@ trait Content
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getLocationId(): ?int
     {
         return $this->locationId;
@@ -72,9 +60,6 @@ trait Content
         return $this;
     }
 
-    /**
-     * @return eZLocation
-     */
     public function getLocation(): ?eZLocation
     {
         return $this->location;

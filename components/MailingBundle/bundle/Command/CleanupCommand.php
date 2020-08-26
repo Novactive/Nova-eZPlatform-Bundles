@@ -20,9 +20,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * Class CleanupCommand.
- */
 class CleanupCommand extends Command
 {
     /**
@@ -30,18 +27,12 @@ class CleanupCommand extends Command
      */
     private $registrar;
 
-    /**
-     * CleanupCommand constructor.
-     */
     public function __construct(Registrar $registrar)
     {
         parent::__construct();
         $this->registrar = $registrar;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configure(): void
     {
         $this
@@ -49,14 +40,13 @@ class CleanupCommand extends Command
             ->setDescription('Clean expired items');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $io->title('Remove the expired ConfirmationToken');
         $this->registrar->cleanup();
         $io->success('Done.');
+
+        return Command::SUCCESS;
     }
 }

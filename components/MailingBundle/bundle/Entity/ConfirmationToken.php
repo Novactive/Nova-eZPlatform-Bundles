@@ -18,8 +18,6 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class ConfirmationToken.
- *
  * @ORM\Table(name="novaezmailing_confirmation_token")
  *
  * @ORM\Entity(repositoryClass="Novactive\Bundle\eZMailingBundle\Repository\ConfirmationToken")
@@ -47,18 +45,12 @@ class ConfirmationToken
      */
     private $payload;
 
-    /**
-     * ConfirmationToken constructor.
-     */
     public function __construct()
     {
         $this->created = new DateTime();
         $this->updated = new DateTime();
     }
 
-    /**
-     * @return string
-     */
     public function getId(): ?string
     {
         return $this->id;
@@ -76,9 +68,6 @@ class ConfirmationToken
         return $this->payload;
     }
 
-    /**
-     * @return $this
-     */
     public function setPayload(array $payload): self
     {
         $this->payload = $payload;

@@ -1,7 +1,7 @@
 {% extends '@NovaeZMailing/admin/layout/pagelayout.html.twig' %}
 {% trans_default_domain 'ezmailing' %}
 
-{% form_theme form with ['@EzPlatformAdminUi/form_fields.html.twig', _self ] %}
+{% form_theme form with ['@ezdesign/content/form_fields.html.twig', _self ] %}
 
 {% block _campaign_names_entry_label %}
     <label class="form-control-label">{{"campaign.edit.name"|trans}} {{ name }}</label>
@@ -18,7 +18,9 @@
     <button data-target-id="#{{ id }}"
             data-target-name="#{{ id }}_name"
             type="button"
-            class="btn btn-sm btn-primary js-novaezmailing-select-location-id">
+            class="btn btn-sm btn-primary js-novaezmailing-select-location-id"
+            data-udw-config="{{ ez_udw_config('plop') }}"
+    >
         {% if value > 0 %}
             {{"campaign.edit.change_content"|trans}}
         {% else %}{{"campaign.edit.select_content"|trans}}{% endif %}
@@ -43,5 +45,5 @@
 {% endblock %}
 {% block rightbar %}
     {% set content_create_sidebar_right = knp_menu_get('novaezmailing.menu.save_cancel', [], {}) %}
-    {{ knp_menu_render(content_create_sidebar_right, {'template': '@EzPlatformAdminUi/parts/menu/sidebar_right.html.twig'}) }}
+    {{ knp_menu_render(content_create_sidebar_right, {'template': '@ezdesign/ui/menu/sidebar_right.html.twig'}) }}
 {% endblock %}

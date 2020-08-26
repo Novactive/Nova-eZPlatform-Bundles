@@ -24,9 +24,6 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-/**
- * Class RegistrationType.
- */
 class RegistrationType extends AbstractType
 {
     /**
@@ -39,9 +36,6 @@ class RegistrationType extends AbstractType
      */
     private $entityManager;
 
-    /**
-     * RegistrationType constructor.
-     */
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
         EntityManagerInterface $entityManager
@@ -50,9 +44,6 @@ class RegistrationType extends AbstractType
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('user', UserType::class);

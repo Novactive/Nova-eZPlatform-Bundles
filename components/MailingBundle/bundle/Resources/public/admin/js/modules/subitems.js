@@ -1,4 +1,4 @@
-var eZMailingSubItemsModule = function () {
+export const eZMailingSubItemsModule = function () {
     var token, siteaccess;
 
     function _init($, $app) {

@@ -19,9 +19,6 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
-/**
- * Class Mailing.
- */
 class Mailing extends Voter
 {
     public const VIEW = 'view';
@@ -32,17 +29,11 @@ class Mailing extends Voter
      */
     private $decisionManager;
 
-    /**
-     * Mailing constructor.
-     */
     public function __construct(AccessDecisionManagerInterface $decisionManager)
     {
         $this->decisionManager = $decisionManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function supports($attribute, $subject): bool
     {
         if (!\in_array($attribute, [self::VIEW, self::EDIT])) {
@@ -56,9 +47,6 @@ class Mailing extends Voter
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
         /* @var MailingEntity $subject */

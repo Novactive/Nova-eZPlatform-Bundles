@@ -16,9 +16,6 @@ namespace Novactive\Bundle\eZMailingBundle\Core\Mailer;
 
 use Swift_Mailer;
 
-/**
- * Class Mailer.
- */
 abstract class Mailer
 {
     /**
@@ -26,9 +23,6 @@ abstract class Mailer
      */
     protected $mailer;
 
-    /**
-     * @return Mailer
-     */
     public function setMailer(Swift_Mailer $mailer): self
     {
         $this->mailer = $mailer;

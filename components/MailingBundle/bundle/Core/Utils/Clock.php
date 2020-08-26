@@ -19,9 +19,6 @@ use DateTime;
 use LogicException;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 
-/**
- * Class Clock.
- */
 class Clock
 {
     /**
@@ -29,9 +26,6 @@ class Clock
      */
     private $time;
 
-    /**
-     * Clock constructor.
-     */
     public function __construct(DateTime $time)
     {
         $this->time = Carbon::instance($time);
@@ -54,7 +48,7 @@ class Clock
 
     public function getDayOfYear(): int
     {
-        return $this->time->dayOfYear + 1;
+        return $this->time->dayOfYear;
     }
 
     public function getWeekOfMonth(): int

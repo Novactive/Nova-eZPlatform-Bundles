@@ -18,14 +18,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository as BaseEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
-/**
- * Class EntityRepository.
- */
 abstract class EntityRepository extends BaseEntityRepository
 {
-    /**
-     * Get the Alias.
-     */
     abstract protected function getAlias(): string;
 
     public function createQueryBuilderForFilters(array $filters = []): QueryBuilder

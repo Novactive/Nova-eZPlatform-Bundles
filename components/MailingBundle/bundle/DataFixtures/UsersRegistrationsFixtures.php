@@ -26,9 +26,6 @@ class UsersRegistrationsFixtures extends Fixture implements DependentFixtureInte
 {
     public const FIXTURE_COUNT_USER = 100;
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ObjectManager $manager): void
     {
         $faker = Faker\Factory::create();
@@ -65,9 +62,6 @@ class UsersRegistrationsFixtures extends Fixture implements DependentFixtureInte
         $manager->flush();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDependencies(): array
     {
         return [

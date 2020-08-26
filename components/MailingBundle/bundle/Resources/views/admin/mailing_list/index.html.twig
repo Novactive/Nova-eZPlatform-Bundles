@@ -24,24 +24,26 @@
         </tr>
         </thead>
         <tbody>
-        {% for item in items if is_granted('view', item) %}
-            <tr>
-                <td class="text-center">{{ item.id }}</td>
-                <td><a href="{{ path('novaezmailing_mailinglist_show', {'mailingList':item.id}) }}">{{ item.name }}</a>
-                </td>
-                {% set yesText = 'mailing_list.index.yes'|trans() %}
-                {% set noText = 'mailing_list.index.no'|trans() %}
-                <td class="text-center">{{ item.withApproval ? yesText : noText }}</td>
-                <td class="text-center">{{ item.created|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
-                <td class="text-center">{{ item.updated|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
-                <td class="text-center">{{ item.registrations|length }}</td>
-                <td class="text-center">
-                    <a href="{{ path("novaezmailing_mailinglist_edit", {'mailinglist': item.id} ) }}" class="edit-button">
-                        <svg class="ez-icon">
-                            <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#edit"></use>
-                        </svg>
-                    </a></td>
-            </tr>
+        {% for item in items %}
+            {% if is_granted('view', item) %}
+                <tr>
+                    <td class="text-center">{{ item.id }}</td>
+                    <td><a href="{{ path('novaezmailing_mailinglist_show', {'mailingList':item.id}) }}">{{ item.name }}</a>
+                    </td>
+                    {% set yesText = 'mailing_list.index.yes'|trans() %}
+                    {% set noText = 'mailing_list.index.no'|trans() %}
+                    <td class="text-center">{{ item.withApproval ? yesText : noText }}</td>
+                    <td class="text-center">{{ item.created|format_datetime(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                    <td class="text-center">{{ item.updated|format_datetime(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}</td>
+                    <td class="text-center">{{ item.registrations|length }}</td>
+                    <td class="text-center">
+                        <a href="{{ path("novaezmailing_mailinglist_edit", {'mailinglist': item.id} ) }}" class="edit-button">
+                            <svg class="ez-icon">
+                                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#edit"></use>
+                            </svg>
+                        </a></td>
+                </tr>
+            {% endif %}
         {% endfor %}
         </tbody>
     </table>

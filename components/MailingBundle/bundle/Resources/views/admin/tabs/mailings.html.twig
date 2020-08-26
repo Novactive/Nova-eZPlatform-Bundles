@@ -34,7 +34,7 @@
                         <th>{{"mailing.details.next_sending_date"|trans}}</th>
                         <td colspan="5">
                             {% if nextTick is not null %}
-                                {{ nextTick|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}
+                                {{ nextTick|format_datetime(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}
                             {% else %}
                                 n/a
                             {% endif %}
@@ -45,7 +45,7 @@
                         <th>{{"mailing.details.sending_date"|trans}}</th>
                         <td colspan="5">
                             {% if nextTick is not null %}
-                                {{ nextTick|localizeddate(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}
+                                {{ nextTick|format_datetime(novaezmailing.dateformat.date, novaezmailing.dateformat.date) }}
                             {% else %}
                                 n/a
                             {% endif %}
