@@ -193,9 +193,6 @@ class ClockTest extends TestCase
                 $data
             );
 
-
-
-
             $clock = new Clock($dateReference);
             $mailing = $this->createMailing($data);
 

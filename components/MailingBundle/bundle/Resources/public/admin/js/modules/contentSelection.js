@@ -1,5 +1,6 @@
 export const eZMailingContentSelectionModule = function () {
     function _init ($, $app) {
+
         $("button.js-novaezmailing-select-location-id", $app).click(function () {
             var token = document.querySelector('meta[name="CSRF-Token"]').content;
             var siteaccess = document.querySelector('meta[name="SiteAccess"]').content;
@@ -7,12 +8,13 @@ export const eZMailingContentSelectionModule = function () {
             var startingLocationId = 1;
             var targetSelector = $(this).data('target-id');
             var targetSelectorName = $(this).data('target-name');
+            var configFromYaml = $(this).data('udw-config');
             ReactDOM.render(React.createElement(eZ.modules.UniversalDiscovery, {
+                ...configFromYaml,
                 onCancel: function () {
                     ReactDOM.unmountComponentAtNode(udwContainer)
                 },
                 multiple: false,
-                tabs: window.eZ.adminUiConfig.universalDiscoveryWidget.tabs,
                 startingLocationId: startingLocationId,
                 restInfo: { token: token, siteaccess: siteaccess },
                 onConfirm: function (response) {
@@ -23,13 +25,16 @@ export const eZMailingContentSelectionModule = function () {
             }), udwContainer);
         });
 
+
         $("button.js-novaezmailing-create-content", $app).click(function () {
             var token = document.querySelector('meta[name="CSRF-Token"]').content;
             var siteaccess = document.querySelector('meta[name="SiteAccess"]').content;
             var udwContainer = $("#react-udw").get(0);
             var parentLocationId = $(this).data('parent-location-id');
             var title = $(this).find('span').html();
+            var configFromYaml = $(this).data('udw-config');
             ReactDOM.render(React.createElement(eZ.modules.UniversalDiscovery, {
+                ...configFromYaml,
                 onCancel: function () {
                     ReactDOM.unmountComponentAtNode(udwContainer)
                 },

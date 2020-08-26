@@ -18,7 +18,9 @@
     <button data-target-id="#{{ id }}"
             data-target-name="#{{ id }}_name"
             type="button"
-            class="btn btn-sm btn-primary js-novaezmailing-select-location-id">
+            class="btn btn-sm btn-primary js-novaezmailing-select-location-id"
+            data-udw-config="{{ ez_udw_config('plop') }}"
+    >
         {% if value > 0 %}
             {{"campaign.edit.change_content"|trans}}
         {% else %}{{"campaign.edit.select_content"|trans}}{% endif %}
