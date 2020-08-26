@@ -32,7 +32,7 @@ class Mailings extends AbstractTab
     public function getName(): string
     {
         return /* @Desc("Nova eZ Mailing - Mailings Tab") */
-            $this->translator->transChoice('mailings.tab.name', count($this->mailings), [], 'ezmailing');
+            $this->translator->trans('mailings.tab.name', ['count' => count($this->mailings)], 'ezmailing');
     }
 
     public function renderView(array $parameters): string

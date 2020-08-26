@@ -27,7 +27,7 @@
         </tr>
     {% endif %}
     <tr>
-        <th>{{"campaign.details.mailing_lists"|transchoice(item.mailingLists|length, {})}}</th>
+        <th>{{"campaign.details.mailing_lists"|trans({count:item.mailingLists|length})}}</th>
         <td>
             <div class="list-group">
                 {% for mailingList in item.mailingLists %}

@@ -107,7 +107,6 @@ class MailingController
      * @Route("/create/{campaign}", name="novaezmailing_mailing_create")
      * @ParamConverter("campaign", class="Novactive\Bundle\eZMailingBundle\Entity\Campaign", options={"id"="campaign"})
      * @Template()
-     * @IsGranted("edit", subject="mailing")
      *
      * @return array|RedirectResponse
      */
