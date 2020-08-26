@@ -3,6 +3,8 @@ services:
     autowire: true
     autoconfigure: true
     public: true
+    bind:
+      $entityManager: "@novaezrssfeed.doctrine.entity_manager"
 
   Novactive\EzRssFeedBundle\Controller\Admin\RssFeedController:
     tags: ['controller.service_arguments']
