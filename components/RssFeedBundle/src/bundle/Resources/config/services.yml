@@ -3,8 +3,12 @@ services:
     autowire: true
     autoconfigure: true
     public: true
+    bind:
+      $entityManager: "@novaezrssfeed.doctrine.entity_manager"
 
-  Novactive\EzRssFeedBundle\Controller\RssFeedViewController: ~
+  Novactive\EzRssFeedBundle\Controller\RssFeedViewController:
+    autowire: true
+    tags: ['controller.service_arguments']
 
   Novactive\EzRssFeedBundle\Form\RssFeedItemsType:
     tags:
@@ -15,3 +19,13 @@ services:
     - { name: form.type, alias: field.tree_discovery }
 
   Novactive\EzRssFeedBundle\Services\RssFeedsService:
+
+  Novactive\EzRssFeedBundle\Core\SiteAccessAwareEntityManagerFactory:
+    arguments:
+      $repositoryConfigurationProvider: "@ezpublish.api.repository_configuration_provider"
+      $resolver: "@doctrine.orm.default_entity_listener_resolver"
+      $settings: { debug: "%kernel.debug%", cache_dir: "%kernel.cache_dir%" }
+
+  novaezrssfeed.doctrine.entity_manager:
+    class: Doctrine\ORM\EntityManagerInterface
+    factory: ['@Novactive\EzRssFeedBundle\Core\SiteAccessAwareEntityManagerFactory', 'get']
