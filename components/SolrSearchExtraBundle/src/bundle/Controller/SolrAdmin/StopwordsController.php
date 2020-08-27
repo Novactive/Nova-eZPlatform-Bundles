@@ -75,17 +75,19 @@ class StopwordsController extends BaseController
             $addForm->handleRequest($request);
             if ($addForm->isSubmitted() && $addForm->isValid()) {
                 $data = $addForm->getData();
-                $words = $data['words'] ?? '';
+                $words = $data['words'] ?? [];
                 $this->stopwordsService->addWords(
                     $setId,
                     array_map('trim', explode(',', $words))
                 );
 
                 $this->notificationHandler->success(
-                    $this->translator->transChoice(
+                    $this->translator->trans(
                         'solr_admin.action.stopwords.added',
-                        count($words),
-                        ['%words%' => $words],
+                        [
+                            '%words%' => $words,
+                            'count' => count($words)
+                        ],
                         'solr_admin'
                     )
                 );
