@@ -55,9 +55,11 @@ class PreContentView
         if (!$contentView instanceof ContentView) {
             return;
         }
+
         if ('novaezmailingfull' !== $contentView->getViewType()) {
             return;
         }
+
         $masterRequest = $this->requestStack->getMasterRequest();
         if (null === $masterRequest) {
             return;
@@ -66,16 +68,18 @@ class PreContentView
         if (!$masterRequest->attributes->has('mailingId')) {
             return;
         }
+
         $mailing = $this->entityManager->getRepository(Mailing::class)->findOneById(
-            $masterRequest->attributes->get('mailingId')
+            (int) $masterRequest->attributes->get('mailingId')
         );
 
         if (!$mailing instanceof Mailing) {
             return;
         }
-        if (!$this->authorizationChecker->isGranted([MailingVoter::VIEW], $mailing)) {
+        if (!$this->authorizationChecker->isGranted(MailingVoter::VIEW, $mailing)) {
             return;
         }
+
         $contentView->addParameters(['mailing' => $mailing]);
     }
 }

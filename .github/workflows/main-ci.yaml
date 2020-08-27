@@ -86,10 +86,12 @@ jobs:
             -   name: Install dependencies of the Mono Repo
                 run: composer install --prefer-dist --no-progress --no-suggest --no-interaction
 
-            -   name: Install eZ Platform
+            -   name: Install eZ Platform and Yarn deps
                 run: |
                     composer create-project ezsystems/ezplatform --prefer-dist --no-progress --no-interaction --no-scripts ezplatform
+                    mkdir -p ezplatform/node_modules && ln -s ezplatform/node_modules
                     cd ezplatform
+
                     rm -rf var/cache
                     composer ezplatform-install
 

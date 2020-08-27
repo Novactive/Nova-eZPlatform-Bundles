@@ -6,3 +6,4 @@ bin/do.bash
 .phpunit.result.cache
 documentation/export
 .idea
+node_modules
