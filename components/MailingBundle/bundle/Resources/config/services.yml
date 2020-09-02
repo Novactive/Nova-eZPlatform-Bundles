@@ -106,7 +106,10 @@ services:
         arguments: ['@ez_mailing.ezpublish.core.io_service']
 
     Novactive\Bundle\eZMailingBundle\Core\SiteAccessAwareEntityManagerFactory:
-        $settings: { debug: "%kernel.debug%", cache_dir: "%kernel.cache_dir%" }
+        arguments:
+            $repositoryConfigurationProvider: "@ezpublish.api.repository_configuration_provider"
+            $resolver: "@doctrine.orm.default_entity_listener_resolver"
+            $settings: { debug: "%kernel.debug%", cache_dir: "%kernel.cache_dir%" }
 
     novaezmailing.doctrine.entity_manager:
         class: Doctrine\ORM\EntityManagerInterface
