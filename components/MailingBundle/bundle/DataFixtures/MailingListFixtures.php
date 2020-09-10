@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Faker;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
 

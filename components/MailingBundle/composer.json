@@ -30,7 +30,8 @@
         "nesbot/carbon": "*",
         "phpoffice/phpspreadsheet": "*",
         "symfony/workflow": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "doctrine/persistence": "^2.0.0"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.0"
