@@ -64,7 +64,7 @@ jobs:
 
             -   name: Install Latest Chrome Driver
                 run: |
-                    wget https://chromedriver.storage.googleapis.com/86.0.4240.22/chromedriver_linux64.zip -P /home/runner/
+                    wget https://chromedriver.storage.googleapis.com/85.0.4183.87/chromedriver_linux64.zip -P /home/runner/
                     unzip /home/runner/chromedriver_linux64.zip -d /home/runner/.chrome
 
             -   name: Install Symfony Server
