@@ -18,7 +18,7 @@ use Carbon\Carbon;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Faker;
 use Novactive\Bundle\eZMailingBundle\Entity\Broadcast;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
