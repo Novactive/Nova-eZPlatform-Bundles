@@ -79,7 +79,7 @@ class MessageContent
         $campaign = $mailing->getCampaign();
         $message->setTo($campaign->getReportEmail());
         $message->setBody(
-            $this->twig->render('NovaeZMailingBundle:messages:startsending.html.twig', ['item' => $mailing]),
+            $this->twig->render('@NovaeZMailing/messages/startsending.html.twig', ['item' => $mailing]),
             'text/html',
             'utf8'
         );
@@ -94,7 +94,7 @@ class MessageContent
         $campaign = $mailing->getCampaign();
         $message->setTo($campaign->getReportEmail());
         $message->setBody(
-            $this->twig->render('NovaeZMailingBundle:messages:stopsending.html.twig', ['item' => $mailing]),
+            $this->twig->render('@NovaeZMailing/messages/stopsending.html.twig', ['item' => $mailing]),
             'text/html',
             'utf8'
         );
@@ -113,7 +113,7 @@ class MessageContent
         $message->setTo($user->getEmail());
         $message->setBody(
             $this->twig->render(
-                'NovaeZMailingBundle:messages:confirmregistration.html.twig',
+                '@NovaeZMailing/messages/confirmregistration.html.twig',
                 [
                     'registration' => $registration,
                     'token' => $token,
@@ -139,7 +139,7 @@ class MessageContent
         $message->setTo($user->getEmail());
         $message->setBody(
             $this->twig->render(
-                'NovaeZMailingBundle:messages:confirmunregistration.html.twig',
+                '@NovaeZMailing/messages/confirmunregistration.html.twig',
                 [
                     'unregistration' => $unregistration,
                     'token' => $token,

@@ -35,7 +35,7 @@
                 {% include "@NovaeZMailing/admin/common/list/broadcasts.html.twig" with { items: item.broadcasts} only %}
             </div>
             <div class="novaezmailing-ez-mailings-view tab-pane" role="tabpanel" id="novaezmailing-mailings-stats">
-                {% include "NovaeZMailingBundle:admin/common/list:broadcast_graphs.html.twig" with { items: item.broadcasts } %}
+                {% include "@NovaeZMailing/admin/common/list/broadcast_graphs.html.twig" with { items: item.broadcasts } %}
             </div>
         {% endif %}
     </div>

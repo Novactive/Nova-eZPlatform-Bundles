@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core;
 
-use Doctrine\Common\Persistence\Proxy;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Proxy\Proxy;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Csrf\CsrfToken;
@@ -57,7 +57,7 @@ class AjaxGuard
             !$request->isXmlHttpRequest() || null === $token ||
             !$this->isEntity($subject) ||
             !method_exists($subject, 'getId') ||
-            !$this->csrfTokenManager->isTokenValid(new CsrfToken($subject->getId(), $token))
+            !$this->csrfTokenManager->isTokenValid(new CsrfToken((string) $subject->getId(), $token))
         ) {
             throw new AccessDeniedHttpException('Not Allowed');
         }
@@ -65,6 +65,6 @@ class AjaxGuard
         $this->entityManager->persist($subject);
         $this->entityManager->flush();
 
-        return ['token' => $this->csrfTokenManager->getToken($subject->getId())->getValue()] + $results;
+        return ['token' => $this->csrfTokenManager->getToken((string) $subject->getId())->getValue()] + $results;
     }
 }

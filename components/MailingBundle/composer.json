@@ -29,6 +29,7 @@
         "php": "^7.3",
         "nesbot/carbon": "*",
         "phpoffice/phpspreadsheet": "*",
+        "symfony/browser-kit": "*",
         "symfony/workflow": "*",
         "ext-json": "*",
         "doctrine/persistence": "^2.0.0"

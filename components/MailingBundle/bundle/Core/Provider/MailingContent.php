@@ -14,13 +14,13 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Core\Provider;
 
-use AppKernel;
+use App\Kernel;
 use Novactive\Bundle\eZMailingBundle\Core\Modifier\ModifierInterface;
 use Novactive\Bundle\eZMailingBundle\Entity\Broadcast as BroadcastEntity;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Novactive\Bundle\eZMailingBundle\Entity\User as UserEntity;
 use Swift_Message;
-use Symfony\Component\HttpKernel\Client;
+use Symfony\Component\HttpKernel\HttpKernelBrowser;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -54,8 +54,8 @@ class MailingContent
 
     public function preFetchContent(Mailing $mailing): string
     {
-        $kernel = new AppKernel('prod', false);
-        $client = new Client($kernel);
+        $kernel = new Kernel('prod', false);
+        $client = new HttpKernelBrowser($kernel);
         $url = $this->router->generate(
             '_novaezmailing_ez_content_view',
             [

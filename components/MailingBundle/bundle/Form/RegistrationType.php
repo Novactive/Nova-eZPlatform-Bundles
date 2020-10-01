@@ -17,6 +17,8 @@ namespace Novactive\Bundle\eZMailingBundle\Form;
 use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
+use Novactive\Bundle\eZMailingBundle\Security\Voter\Campaign as CampaignVoter;
+use Novactive\Bundle\eZMailingBundle\Security\Voter\Mailing as MailingVoter;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -55,9 +57,9 @@ class RegistrationType extends AbstractType
                 $campaignRepository = $this->entityManager->getRepository(Campaign::class);
                 // permissions on Campaing can be more complex, then we don't filter in SQL
                 foreach ($campaignRepository->findAll() as $campaign) {
-                    if ($this->authorizationChecker->isGranted('view', $campaign)) {
+                    if ($this->authorizationChecker->isGranted(CampaignVoter::VIEW, $campaign)) {
                         foreach ($campaign->getMailingLists() as $mailingList) {
-                            if ($this->authorizationChecker->isGranted('view', $mailingList)) {
+                            if ($this->authorizationChecker->isGranted(MailingVoter::VIEW, $mailingList)) {
                                 $allowedMailingList[] = $mailingList;
                             }
                         }

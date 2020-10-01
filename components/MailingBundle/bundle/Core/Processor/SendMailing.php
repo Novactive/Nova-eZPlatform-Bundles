@@ -51,7 +51,7 @@ class SendMailing extends Processor implements SendMailingProcessorInterface
 
     public function execute(?DateTime $overrideDatetime = null): void
     {
-        $mailingRepository = $this->entityManager->getRepository('NovaeZMailingBundle:Mailing');
+        $mailingRepository = $this->entityManager->getRepository(Mailing::class);
         $pendingMailings = $mailingRepository->findByStatus(Mailing::PENDING);
         $clockDate = $overrideDatetime ?? Carbon::now();
         $clock = new Clock($clockDate);

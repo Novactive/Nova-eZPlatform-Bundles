@@ -17,6 +17,7 @@ namespace Novactive\Bundle\eZMailingBundle\Controller;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZMailingBundle\Core\Utils\Browser;
+use Novactive\Bundle\eZMailingBundle\Entity\Broadcast;
 use Novactive\Bundle\eZMailingBundle\Entity\StatHit;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,7 +42,7 @@ class TrackController
         EntityManagerInterface $entityManager,
         Request $request
     ): RedirectResponse {
-        $broadcast = $entityManager->getRepository('NovaeZMailingBundle:Broadcast')->findOneByid($broadcastId);
+        $broadcast = $entityManager->getRepository(Broadcast::class)->findOneByid($broadcastId);
         $browser = new Browser($request->headers->get('User-Agent'));
         $stat = new StatHit();
         $decodedUrl = base64_decode($url);
@@ -67,7 +68,7 @@ class TrackController
         EntityManagerInterface $entityManager,
         Request $request
     ): Response {
-        $broadcast = $entityManager->getRepository('NovaeZMailingBundle:Broadcast')->findOneByid($broadcastId);
+        $broadcast = $entityManager->getRepository(Broadcast::class)->findOneByid($broadcastId);
         $browser = new Browser($request->headers->get('User-Agent'));
         $stat = new StatHit();
         $stat

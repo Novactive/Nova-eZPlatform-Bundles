@@ -94,7 +94,7 @@ class Builder
         $userRepo = $entityManager->getRepository(User::class);
         $mailingRepo = $entityManager->getRepository(Mailing::class);
         foreach ($campaigns as $campaign) {
-            if (!$this->authorizationChecker->isGranted([CampaignVoter::VIEW], $campaign)) {
+            if (!$this->authorizationChecker->isGranted(CampaignVoter::VIEW, $campaign)) {
                 continue;
             }
             $child = $menu->addChild(

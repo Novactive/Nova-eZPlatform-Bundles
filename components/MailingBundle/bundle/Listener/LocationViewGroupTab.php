@@ -20,6 +20,8 @@ use EzSystems\EzPlatformAdminUi\Tab\Event\TabGroupEvent;
 use EzSystems\EzPlatformAdminUi\Tab\TabRegistry;
 use Novactive\Bundle\eZMailingBundle\Core\Tab\Campaigns as CampaignsTab;
 use Novactive\Bundle\eZMailingBundle\Core\Tab\Mailings as MailingsTab;
+use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
+use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 
 class LocationViewGroupTab
 {
@@ -66,7 +68,7 @@ class LocationViewGroupTab
         /** @var Location $location */
         $location = $parameters['location'];
 
-        $campaignRepo = $this->entityManager->getRepository('NovaeZMailingBundle:Campaign');
+        $campaignRepo = $this->entityManager->getRepository(Campaign::class);
         $campaigns = $campaignRepo->findBy(['locationId' => $location->id]);
         if ($campaigns) {
             $this->campaignsTab->setCampaigns($campaigns);
@@ -74,7 +76,7 @@ class LocationViewGroupTab
             $tabGroup->addTab($this->campaignsTab);
         }
 
-        $mailingRepo = $this->entityManager->getRepository('NovaeZMailingBundle:Mailing');
+        $mailingRepo = $this->entityManager->getRepository(Mailing::class);
         $mailings = $mailingRepo->findBy(['locationId' => $location->id]);
         if ($mailings) {
             $this->mailingsTab->setMailings($mailings);

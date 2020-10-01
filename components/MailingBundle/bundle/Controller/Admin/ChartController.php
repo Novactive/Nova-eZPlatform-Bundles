@@ -23,7 +23,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class ChartController
 {
     /**
-     * @Template("NovaeZMailingBundle:admin/chart:generic.html.twig")
+     * @Template("@NovaeZMailing/admin/chart/generic.html.twig")
      */
     public function browserChart(int $broadcastId, EntityManagerInterface $entityManager): array
     {
@@ -40,7 +40,7 @@ class ChartController
     }
 
     /**
-     * @Template("NovaeZMailingBundle:admin/chart:generic.html.twig")
+     * @Template("@NovaeZMailing/admin/chart/generic.html.twig")
      */
     public function osChart(int $broadcastId, EntityManagerInterface $entityManager): array
     {
@@ -58,7 +58,7 @@ class ChartController
     }
 
     /**
-     * @Template("NovaeZMailingBundle:admin/chart:generic.html.twig")
+     * @Template("@NovaeZMailing/admin/chart/generic.html.twig")
      */
     public function urlChart(int $broadcastId, EntityManagerInterface $entityManager): array
     {
@@ -76,7 +76,7 @@ class ChartController
     }
 
     /**
-     * @Template("NovaeZMailingBundle:admin/chart:generic.html.twig")
+     * @Template("@NovaeZMailing/admin/chart/generic.html.twig")
      */
     public function openedChart(int $broadcastId, EntityManagerInterface $entityManager): array
     {
@@ -98,7 +98,7 @@ class ChartController
     }
 
     /**
-     * @Template("NovaeZMailingBundle:admin/chart:generic.html.twig")
+     * @Template("@NovaeZMailing/admin/chart/generic.html.twig")
      */
     public function openedTimeChart(int $broadcastId, EntityManagerInterface $entityManager): array
     {
