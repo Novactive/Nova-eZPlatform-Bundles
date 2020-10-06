@@ -12,7 +12,6 @@
 
 namespace Novactive\EzRssFeedBundle\PlatformAdminUI\Menu;
 
-use eZ\Publish\API\Repository\Exceptions as ApiExceptions;
 use EzSystems\EzPlatformAdminUi\Menu\AbstractBuilder;
 use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Translation\TranslationContainerInterface;
@@ -36,11 +35,6 @@ class RssEditRightSidebarBuilder extends AbstractBuilder implements TranslationC
         ];
     }
 
-    /**
-     * @throws ApiExceptions\InvalidArgumentException
-     * @throws ApiExceptions\BadStateException
-     * @throws InvalidArgumentException
-     */
     public function createStructure(array $options): ItemInterface
     {
         /** @var ItemInterface|ItemInterface[] $menu */

@@ -17,11 +17,10 @@ use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TreeDiscoveryType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add(
@@ -55,11 +54,7 @@ class TreeDiscoveryType extends AbstractType
         );
     }
 
-    public function configureOptions(OptionsResolver $resolver)
-    {
-    }
-
-    public function getName()
+    public function getName(): string
     {
         return 'tree_discovery';
     }

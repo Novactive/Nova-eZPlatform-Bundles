@@ -36,5 +36,4 @@ trait LoginPanther
         $crawler->filter($tab)->count();
         $this->assertEquals(1, $crawler->filter($tab)->count());
     }
-
 }

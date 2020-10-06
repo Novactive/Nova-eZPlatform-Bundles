@@ -15,23 +15,20 @@ namespace Novactive\EzRssFeedBundle\Controller\Admin;
 use Doctrine\Common\Collections\ArrayCollection;
 use eZ\Bundle\EzPublishCoreBundle\Controller;
 use eZ\Publish\API\Repository\PermissionResolver;
-use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use EzSystems\EzPlatformAdminUi\Notification\NotificationHandlerInterface;
 use Novactive\EzRssFeedBundle\Controller\EntityManagerTrait;
 use Novactive\EzRssFeedBundle\Entity\RssFeeds;
 use Novactive\EzRssFeedBundle\Form\RssFeedsType;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/rssfeeds")
@@ -86,10 +83,8 @@ class RssFeedController extends Controller
 
     /**
      * @Route("/add", name="platform_admin_ui_rss_feeds_create")
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request): Response
     {
         /**
          * @var PermissionResolver
@@ -136,10 +131,8 @@ class RssFeedController extends Controller
     /**
      * @Route("/edit/{id}", name="platform_admin_ui_rss_feeds_edit")
      * @ParamConverter("rssFeed", class="EzRssFeedBundle:RssFeeds")
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editAction(Request $request, RssFeeds $rssFeed)
+    public function editAction(Request $request, RssFeeds $rssFeed): Response
     {
         /**
          * @var PermissionResolver
@@ -167,7 +160,7 @@ class RssFeedController extends Controller
         );
         $feedForm->handleRequest($request);
 
-        if ($feedForm->isValid()) {
+        if ($feedForm->isSubmitted() && $feedForm->isValid()) {
             $this->entityManager->persist($rssFeed);
 
             foreach ($originalFeedsItems as $originalChild) {
@@ -201,10 +194,8 @@ class RssFeedController extends Controller
     /**
      * @Route("/delete/{id}", name="platform_admin_ui_rss_feeds_delete")
      * @ParamConverter("rssFeed", class="EzRssFeedBundle:RssFeeds")
-     *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction(Request $request, RssFeeds $rssFeed)
+    public function deleteAction(Request $request, RssFeeds $rssFeed): RedirectResponse
     {
         /**
          * @var PermissionResolver
@@ -225,10 +216,8 @@ class RssFeedController extends Controller
 
     /**
      * @Route("/rss_feed/ajx/location/{locationId}", name="platform_admin_ui_rss_feeds_ajx_load_location")
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function loadLocationAjaxAction(Request $request, $locationId = null)
+    public function loadLocationAjaxAction(Request $request, $locationId = null): Response
     {
         /**
          * @var PermissionResolver
@@ -264,10 +253,8 @@ class RssFeedController extends Controller
 
     /**
      * @Route("/edit/ajax/get_rss_field_by_contenttype_id", name="platform_admin_ui_rss_ajax_get_fields_by_contenttype_id")
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function getAjaxFieldByContentTypeIdAction(Request $request)
+    public function getAjaxFieldByContentTypeIdAction(Request $request): JsonResponse
     {
         /**
          * @var PermissionResolver
@@ -297,12 +284,10 @@ class RssFeedController extends Controller
     }
 
     /**
-     * @Route("/ajax/change_visibility_feed", name="platform_admin_ui_rss_ajax_change_visibility_feed")
-     * @Method({"POST"})
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @Route("/ajax/change_visibility_feed", methods={"POST"},
+     *                                        name="platform_admin_ui_rss_ajax_change_visibility_feed")
      */
-    public function changeAjaxVisibilityFeed(Request $request)
+    public function changeAjaxVisibilityFeed(Request $request): JsonResponse
     {
         /**
          * @var PermissionResolver
@@ -320,7 +305,7 @@ class RssFeedController extends Controller
         $rssFeed = $repository->find($request->get('feedId'));
 
         if (!empty($rssFeed)) {
-            $status = RssFeeds::STATUS_ENABLED == $rssFeed->getStatus() ?
+            $status = RssFeeds::STATUS_ENABLED === $rssFeed->getStatus() ?
                 RssFeeds::STATUS_DISABLED : RssFeeds::STATUS_ENABLED;
 
             $rssFeed->setStatus($status);

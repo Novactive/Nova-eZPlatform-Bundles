@@ -16,10 +16,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider\Ya
 
 class RssPolicyProvider extends YamlPolicyProvider
 {
-    /**
-     * @return array
-     */
-    public function getFiles()
+    public function getFiles(): array
     {
         return [
             __DIR__.'/../../../Resources/config/policies.yml',

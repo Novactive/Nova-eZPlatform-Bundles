@@ -17,14 +17,12 @@ use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use Novactive\EzRssFeedBundle\Entity\RssFeeds;
 use Novactive\EzRssFeedBundle\Services\RssFeedsService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/rss/feed")
- *
- * Class RssFeedController
  *
  * @package Novactive\EzRssFeedBundle\Controller
  */
@@ -35,7 +33,7 @@ class RssFeedViewController extends Controller
     /**
      * @Route("/{urlSlug}", name="rss_feed_view_index")
      */
-    public function indexAction(Request $request): Response
+    public function indexAction(Request $request, RssFeedsService $rssFeedsService): Response
     {
         /**
          * @var PermissionResolver
@@ -56,11 +54,6 @@ class RssFeedViewController extends Controller
         );
 
         if ($rssFeed) {
-            /**
-             * @var RssFeedsService
-             */
-            $rssFeedsService = $this->get('Novactive\EzRssFeedBundle\Services\RssFeedsService');
-
             $feedItems = $rssFeedsService->fetchContent($rssFeed);
 
             $response = new Response(
@@ -82,8 +75,8 @@ class RssFeedViewController extends Controller
             $response->headers->set('Content-Type', 'application/rss+xml; charset=utf-8');
 
             return $response;
-        } else {
-            throw $this->createNotFoundException();
         }
+
+        throw $this->createNotFoundException();
     }
 }

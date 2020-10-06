@@ -14,37 +14,39 @@ namespace Novactive\EzRssFeedBundle\Services;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use Novactive\EzRssFeedBundle\Entity\RssFeeds;
 use Novactive\EzRssFeedBundle\Repository\Values\FeedValueObject;
-use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\RouterInterface;
 
 class RssFeedsService
 {
+    /**
+     * @var Repository
+     */
     private $repository;
 
+    /**
+     * @var RouterInterface
+     */
     private $urlAliasRouter;
 
-    private $urlDecorator;
-
-    public function __construct(Repository $repository, UrlAliasRouter $urlAliasRouter, RequestContext $request)
+    public function __construct(Repository $repository, RouterInterface $urlAliasRouter)
     {
         $this->repository = $repository;
         $this->urlAliasRouter = $urlAliasRouter;
-        $this->request = $request;
     }
 
-    public function getUrlDecorator()
+    public function getRepository(): Repository
     {
-        return $this->urlDecorator;
+        return $this->repository;
     }
 
-    public function setUrlDecorator($urlDecorator): void
+    public function getUrlAliasRouter(): RouterInterface
     {
-        $this->urlDecorator = $urlDecorator;
+        return $this->urlAliasRouter;
     }
 
-    public function fetchContent(RssFeeds $rssFeed)
+    public function fetchContent(RssFeeds $rssFeed): array
     {
         $results = [];
         $locationService = $this->getRepository()->getLocationService();
@@ -52,11 +54,11 @@ class RssFeedsService
         $numberObjects = $rssFeed->getNumberOfObject();
         $queryFilter = [];
         $mappingFieldIdentifier = [];
+        $query = new Query();
 
         foreach ($rssFeed->getFeedItems()->toArray() as $filter) {
             $filter = $filter->toArray();
             $criterion = [];
-            $query = new Query();
             $mappingFieldIdentifier[$filter['contentTypeId']] = $filter['fieldTypesIdentifier'];
 
             if ($filter['includeSubtreePath']) {
@@ -112,15 +114,5 @@ class RssFeedsService
         }
 
         return $results;
-    }
-
-    public function getRepository(): Repository
-    {
-        return $this->repository;
-    }
-
-    public function getUrlAliasRouter(): UrlAliasRouter
-    {
-        return $this->urlAliasRouter;
     }
 }

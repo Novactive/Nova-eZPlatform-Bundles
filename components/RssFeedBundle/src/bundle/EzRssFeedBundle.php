@@ -22,10 +22,8 @@ class EzRssFeedBundle extends Bundle
      * Builds the bundle.
      *
      * It is only ever called once when the cache is empty.
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container A ContainerBuilder instance
      */
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         parent::build($container);
         $eZExtension = $container->getExtension('ezpublish');

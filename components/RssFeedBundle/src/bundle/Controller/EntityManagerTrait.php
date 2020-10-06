@@ -12,7 +12,7 @@ trait EntityManagerTrait
     /**
      * @required
      */
-    public function setEntityManager(EntityManagerInterface $entityManager)
+    public function setEntityManager(EntityManagerInterface $entityManager): void
     {
         $this->entityManager = $entityManager;
     }

@@ -14,9 +14,9 @@ namespace Novactive\EzRssFeedBundle\Core;
 
 use Doctrine\Bundle\DoctrineBundle\Mapping\ContainerEntityListenerResolver;
 use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Doctrine\Persistence\ManagerRegistry as Registry;
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
@@ -62,7 +62,7 @@ class SiteAccessAwareEntityManagerFactory
         return $config['storage']['connection'] ?? 'default';
     }
 
-    public function get(): EntityManagerInterface
+    public function get()
     {
         $connectionName = $this->getConnectionName();
         // If it is the default connection then we don't bother we can directly use the default entity Manager
@@ -72,7 +72,7 @@ class SiteAccessAwareEntityManagerFactory
 
         $connection = $this->registry->getConnection($connectionName);
 
-        /** @var \Doctrine\DBAL\Connection $connection */
+        /** @var Connection $connection */
         $cache = new ArrayCache();
         $config = new Configuration();
         $config->setMetadataCacheImpl($cache);
