@@ -1,0 +1,2 @@
+EzRssFeedBundle:
+    resource: '@EzRssFeedBundle/Resources/config/routing.yml'

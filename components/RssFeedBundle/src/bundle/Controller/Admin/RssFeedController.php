@@ -12,6 +12,7 @@
 
 namespace Novactive\EzRssFeedBundle\Controller\Admin;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use eZ\Bundle\EzPublishCoreBundle\Controller;
 use eZ\Publish\API\Repository\PermissionResolver;
@@ -29,7 +30,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use DateTime;
 
 /**
  * @Route("/rssfeeds")
