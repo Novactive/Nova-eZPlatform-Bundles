@@ -1,10 +1,4 @@
-{% extends '@EzPlatformAdminUi/admin/base.html.twig' %}
-
- {% block stylesheets %}
-     <link rel="stylesheet" href="{{ asset("css/custom.css", "ezdesign") }}" media="screen" />
-
-     {{ parent() }}
- {% endblock %}
+{% extends '@EzPlatformAdminUi/themes/admin/ui/base.html.twig' %}
 
 {% form_theme form '@EzRssFeed/Form/form_fields.html.twig' %}
 {% set itemIndexes = [] %}
@@ -76,7 +70,8 @@
 
 
                 <div class="rss-toolbar">
-                    <div class="pull-left"><span class="rss-toolbar-title">{{ 'ez_rss_feed.form.fields.title' | trans }}</span></div>
+                    <div class="pull-left">
+                        <span class="rss-toolbar-title">{{ 'ez_rss_feed.form.fields.title' | trans }}</span></div>
                     <div class="pull-right">
                         <a id="open-child-form" class="btn btn-primary btn-add-rss">
                             <svg>
@@ -108,33 +103,16 @@
             </div>
         </div>
     </section>
-    <script>
-        var TWIG = {};
-        TWIG.getRssFieldsIndexes = {{ itemIndexes|json_encode|raw }};
-        TWIG.getRssFieldsPath = "{{ path('platform_admin_ui_rss_ajax_get_fields_by_contenttype_id') }}";
-        TWIG.loadLocationRssInfo = "{{ path('platform_admin_ui_rss_feeds_ajx_load_location') }}";
-        TWIG.PathLoader = "{{ asset('bundles/rss/images/preloader.gif') }}";
-    </script>
+
+    <div id="template-values"
+         data-rss-fields-indexes="{{ itemIndexes|json_encode }}"
+         data-rss-fields-path="{{ path('platform_admin_ui_rss_ajax_get_fields_by_contenttype_id') }}"
+         data-rss-info-location="{{ path('platform_admin_ui_rss_feeds_ajx_load_location') }}"
+         data-loader-path="{{ asset('bundles/ezrssfeed/admin/images/preloader.gif') }}"
+    ></div>
 {% endblock %}
 
 {% block right_sidebar %}
     {% set rss_edit_sidebar_right = knp_menu_get('ezplatform_admin_ui.menu.rss_edit.sidebar_right') %}
-    {{ knp_menu_render(rss_edit_sidebar_right, {'template': '@EzPlatformAdminUi/parts/menu/sidebar_right.html.twig'}) }}
-{% endblock %}
-
-{% block javascripts %}
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="{{ asset("js/admin.rss.subtree.pick.js", "ezdesign") }}"></script>
-    <script src="{{ asset("js/collection_rss.js", "ezdesign") }}"></script>
-
-    <script>
-		jQuery(document).ready(function () {
-			$('#delete-rest').hide();
-			$('.col-form-label').each(function () {
-				if ($(this).html().length < 2) {
-					$(this).hide();
-				}
-			});
-		});
-    </script>
+    {{ knp_menu_render(rss_edit_sidebar_right, {'template': '@EzPlatformAdminUi/themes/admin/ui/menu/sidebar_right.html.twig'}) }}
 {% endblock %}

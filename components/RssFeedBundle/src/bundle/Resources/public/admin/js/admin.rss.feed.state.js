@@ -12,21 +12,20 @@
 (function (global, doc) {
 
     const updateVisibility = (event) => {
-        urlChangeVisibilityFeed = TWIG.urlChangeVisibilityFeed;
-        rssFeedId = event.currentTarget.value;
+        let urlChangeVisibilityFeed = doc.getElementById('template-values').dataset.changeVisibilityFeedUrl;
 
         const params = {
-            "feedId": rssFeedId
+            "feedId": event.currentTarget.value
         };
 
-        var queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
+        let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
 
-        var request = new XMLHttpRequest();
+        let request = new XMLHttpRequest();
 
         request.onload = function (response) {
-            data = JSON.parse(response.target.responseText);
+            const data = JSON.parse(response.target.responseText);
 
-            if (data.success == true) {
+            if (data.success === true) {
                 event.target.closest('.ez-checkbox-icon').classList.toggle('is-checked')
             }
         };

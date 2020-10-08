@@ -12,8 +12,8 @@
 
 namespace Novactive\EzRssFeedBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * RssFeedsItems.
@@ -47,15 +47,13 @@ class RssFeedItems
     private $contentTypeId;
 
     /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="update")
+     * @var DateTime
      * @ORM\Column(name="modified_at", type="datetime", nullable=true)
      */
     private $modifiedAt;
 
     /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="create")
+     * @var DateTime
      * @ORM\Column(name="created_at", type="datetime", nullable=true)
      */
     private $createdAt;
@@ -104,65 +102,49 @@ class RssFeedItems
     private $rssFeeds;
 
     /**
-     * RssFeedItems constructor.
+     * Constructor.
      */
     public function __construct()
     {
+        $this->createdAt = new DateTime();
+        $this->modifiedAt = new DateTime();
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * Get modifiedAt.
-     *
-     * @return \DateTime
-     */
-    public function getModifiedAt()
+    public function getModifiedAt(): ?DateTime
     {
         return $this->modifiedAt;
     }
 
-    /**
-     * Get createdAt.
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    /**
-     * Get rssFeeds.
-     *
-     * @return \Novactive\EzRssFeedBundle\Entity\RssFeeds|null
-     */
-    public function getRssFeeds()
+    public function setModifiedAt(DateTime $modifiedAt): self
+    {
+        $this->modifiedAt = $modifiedAt;
+
+        return $this;
+    }
+
+    public function getRssFeeds(): ?RssFeeds
     {
         return $this->rssFeeds;
     }
 
-    /**
-     * Set rssFeeds.
-     *
-     * @return RssFeedItems
-     */
-    public function setRssFeeds(\Novactive\EzRssFeedBundle\Entity\RssFeeds $rssFeeds = null)
+    public function setRssFeeds(RssFeeds $rssFeeds = null): self
     {
         $this->rssFeeds = $rssFeeds;
 
         return $this;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'locationId' => $this->getSubtreePath(),
@@ -177,168 +159,84 @@ class RssFeedItems
         ];
     }
 
-    /**
-     * Get subtreePath.
-     *
-     * @return int
-     */
-    public function getSubtreePath()
+    public function getSubtreePath(): int
     {
         return $this->subtreePath;
     }
 
-    /**
-     * Set subtreePath.
-     *
-     * @param int $subtreePath
-     *
-     * @return RssFeedItems
-     */
-    public function setSubtreePath($subtreePath)
+    public function setSubtreePath($subtreePath): self
     {
         $this->subtreePath = $subtreePath;
 
         return $this;
     }
 
-    /**
-     * Get includeSubtree.
-     *
-     * @return bool
-     */
-    public function getIncludeSubtree()
+    public function getIncludeSubtree(): bool
     {
         return $this->includeSubtree;
     }
 
-    /**
-     * Set includeSubtree.
-     *
-     * @param bool $includeSubtree
-     *
-     * @return RssFeedItems
-     */
-    public function setIncludeSubtree($includeSubtree)
+    public function setIncludeSubtree($includeSubtree): self
     {
         $this->includeSubtree = $includeSubtree;
 
         return $this;
     }
 
-    /**
-     * Get contentTypeId.
-     *
-     * @return int
-     */
-    public function getContentTypeId()
+    public function getContentTypeId(): ?int
     {
         return $this->contentTypeId;
     }
 
-    /**
-     * Set contentTypeId.
-     *
-     * @param int $contentTypeId
-     *
-     * @return RssFeedItems
-     */
-    public function setContentTypeId($contentTypeId)
+    public function setContentTypeId($contentTypeId): self
     {
         $this->contentTypeId = $contentTypeId;
 
         return $this;
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
-        return $this->title;
+        return $this->title ?? '';
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     *
-     * @return RssFeedItems
-     */
-    public function setTitle($title)
+    public function setTitle(?string $title): self
     {
-        $this->title = $title;
+        $this->title = (string) $title;
 
         return $this;
     }
 
-    /**
-     * Get description.
-     *
-     * @return string|null
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * Set description.
-     *
-     * @param string|null $description
-     *
-     * @return RssFeedItems
-     */
-    public function setDescription($description = null)
+    public function setDescription($description = null): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * Get category.
-     *
-     * @return string|null
-     */
-    public function getCategory()
+    public function getCategory(): ?string
     {
         return $this->category;
     }
 
-    /**
-     * Set category.
-     *
-     * @param string|null $category
-     *
-     * @return RssFeedItems
-     */
-    public function setCategory($category = null)
+    public function setCategory($category = null): self
     {
         $this->category = $category;
 
         return $this;
     }
 
-    /**
-     * Get media.
-     *
-     * @return string|null
-     */
-    public function getMedia()
+    public function getMedia(): ?string
     {
         return $this->media;
     }
 
-    /**
-     * Set media.
-     *
-     * @param string|null $media
-     *
-     * @return RssFeedItems
-     */
-    public function setMedia($media = null)
+    public function setMedia($media = null): self
     {
         $this->media = $media;
 

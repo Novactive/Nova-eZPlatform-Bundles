@@ -14,8 +14,8 @@ namespace Novactive\EzRssFeedBundle\Entity;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * RssFeeds.
@@ -79,7 +79,6 @@ class RssFeeds
 
     /**
      * @var DateTime
-     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
@@ -104,7 +103,6 @@ class RssFeeds
 
     /**
      * @var DateTime
-     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="modified_at", type="datetime", nullable=true)
      */
     private $modifiedAt;
@@ -126,132 +124,77 @@ class RssFeeds
         $this->sortDirection = self::SORT_DIRECTION_DESC;
         $this->numberOfObject = 10;
         $this->createdAt = new DateTime();
+        $this->modifiedAt = new DateTime();
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     *
-     * @return RssFeeds
-     */
-    public function setTitle($title)
+    public function setTitle($title): self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * Get description.
-     *
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * Set description.
-     *
-     * @param string $description
-     *
-     * @return RssFeeds
-     */
-    public function setDescription($description)
+    public function setDescription($description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * Get urlSlug.
-     *
-     * @return string
-     */
-    public function getUrlSlug()
+    public function getUrlSlug(): string
     {
         return $this->urlSlug;
     }
 
-    /**
-     * Set urlSlug.
-     *
-     * @param string $urlSlug
-     *
-     * @return RssFeeds
-     */
-    public function setUrlSlug($urlSlug)
+    public function setUrlSlug($urlSlug): self
     {
         $this->urlSlug = $urlSlug;
 
         return $this;
     }
 
-    /**
-     * Get status.
-     *
-     * @return int
-     */
-    public function getStatus()
+    public function getStatus(): int
     {
         return $this->status;
     }
 
-    /**
-     * Set status.
-     *
-     * @param int $status
-     *
-     * @return RssFeeds
-     */
-    public function setStatus($status)
+    public function setStatus($status): self
     {
         $this->status = $status;
 
         return $this;
     }
 
-    /**
-     * Get createdAt.
-     *
-     * @return DateTime
-     */
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    /**
-     * Get modifiedAt.
-     *
-     * @return DateTime|null
-     */
-    public function getModifiedAt()
+    public function getModifiedAt(): ?DateTime
     {
         return $this->modifiedAt;
+    }
+
+    public function setModifiedAt(DateTime $modifiedAt): self
+    {
+        $this->modifiedAt = $modifiedAt;
+
+        return $this;
     }
 
     public function getNumberOfObject(): int
@@ -259,17 +202,14 @@ class RssFeeds
         return $this->numberOfObject;
     }
 
-    public function setNumberOfObject(int $numberOfObject): void
+    public function setNumberOfObject(int $numberOfObject): self
     {
         $this->numberOfObject = $numberOfObject;
+
+        return $this;
     }
 
-    /**
-     * Add feedItem.
-     *
-     * @return RssFeeds
-     */
-    public function addFeedItem(\Novactive\EzRssFeedBundle\Entity\RssFeedItems $feedItem)
+    public function addFeedItem(\Novactive\EzRssFeedBundle\Entity\RssFeedItems $feedItem): self
     {
         $this->feedItems[] = $feedItem;
         $feedItem->setRssFeeds($this);
@@ -278,21 +218,14 @@ class RssFeeds
     }
 
     /**
-     * Remove feedItem.
-     *
      * @return bool TRUE if this collection contained the specified element, FALSE otherwise
      */
-    public function removeFeedItem(\Novactive\EzRssFeedBundle\Entity\RssFeedItems $feedItem)
+    public function removeFeedItem(\Novactive\EzRssFeedBundle\Entity\RssFeedItems $feedItem): bool
     {
         return $this->feedItems->removeElement($feedItem);
     }
 
-    /**
-     * Get feedItems.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFeedItems()
+    public function getFeedItems(): Collection
     {
         return $this->feedItems;
     }
@@ -302,21 +235,22 @@ class RssFeeds
         return $this->sortType;
     }
 
-    public function setSortType(int $sortType): void
+    public function setSortType(int $sortType): self
     {
         $this->sortType = $sortType;
+
+        return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getSortDirection(): string
     {
         return $this->sortDirection;
     }
 
-    public function setSortDirection(string $sortDirection): void
+    public function setSortDirection(string $sortDirection): self
     {
         $this->sortDirection = $sortDirection;
+
+        return $this;
     }
 }

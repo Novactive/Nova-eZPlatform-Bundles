@@ -1,4 +1,4 @@
-{% extends '@ezdesign/layout.html.twig' %}
+{% extends '@ezdesign/ui/layout.html.twig' %}
 
 {% block content %}
     <section class="container mt-4 px-5">
@@ -85,16 +85,6 @@
         {% endif %}
     </section>
 
-{% endblock %}
+    <div id="template-values" data-change-visibility-feed-url="{{ path('platform_admin_ui_rss_ajax_change_visibility_feed') }}"></div>
 
-
-{% block javascripts %}
-
-    <script>
-        var TWIG = {};
-        TWIG.urlChangeVisibilityFeed = "{{ path('platform_admin_ui_rss_ajax_change_visibility_feed') }}";
-    </script>
-
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="{{ asset("js/admin.rss.feed.state.js", "ezdesign") }}"></script>
 {% endblock %}

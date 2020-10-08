@@ -47,7 +47,7 @@ class RssFeedItemsType extends AbstractType
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $contentTypeList = $this->getContentTypeList();
         $fieldTypeMap = $this->fieldTypeMap;
@@ -61,16 +61,13 @@ class RssFeedItemsType extends AbstractType
                     'compound' => true,
                     'attr' => [
                         'class' => 'ez-button-tree 
-                                                        pure-button 
-                                                        ez-font-icon 
-                                                        ez-button btn 
-                                                        btn-primary 
-                                                        ez-pick-subtree-button',
-                        'data-starting-location-id' => $this->configResolver->getParameter(
-                            'universal_discovery_widget_module.default_location_id'
-                        ),
-                        'data-location-input-selector' => 'input-location-'.uniqid(),
-                        'data-selected-location-list-selector' => 'location-values-'.uniqid(),
+                            pure-button 
+                            ez-font-icon 
+                            ez-button btn 
+                            btn-primary
+                            js-novaezrssfeed-select-location-id',
+                        'data-location-input-selector' => 'input-location-'.uniqid('', false),
+                        'data-selected-location-list-selector' => 'location-values-'.uniqid('', false),
                     ],
                 ]
             )
@@ -128,7 +125,7 @@ class RssFeedItemsType extends AbstractType
                 ]
             );
 
-        $formModifier = function (FormInterface $form, ContentType $contentType = null) {
+        $formModifier = function (FormInterface $form, ContentType $contentType) {
             $fieldTypeMap = $this->getFieldTypeByContentType($contentType);
             $form->add(
                 'title',
@@ -178,7 +175,7 @@ class RssFeedItemsType extends AbstractType
             function (FormEvent $event) use ($formModifier) {
                 $data = $event->getData();
 
-                if (null != $data) {
+                if (null !== $data) {
                     $contentTypeId = $data->getContentTypeId();
                     $contentType = $this->contentTypeService->loadContentType($contentTypeId);
 
@@ -198,7 +195,7 @@ class RssFeedItemsType extends AbstractType
         );
     }
 
-    public function getContentTypeList()
+    public function getContentTypeList(): array
     {
         if ($this->configResolver->hasParameter('ez_rss_feed.content_group')) {
             $contentGroup = $this->configResolver->getParameter('ez_rss_feed.content_group');
@@ -241,7 +238,7 @@ class RssFeedItemsType extends AbstractType
         return $contentTypesMap;
     }
 
-    public function getFieldTypeByContentType(ContentType $contentType)
+    public function getFieldTypeByContentType(ContentType $contentType): array
     {
         $fieldsMap = [];
 
@@ -253,7 +250,7 @@ class RssFeedItemsType extends AbstractType
         return $fieldsMap;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [

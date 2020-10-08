@@ -22,24 +22,21 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 class MainMenuBuilderListener implements EventSubscriberInterface
 {
     /**
-     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
+     * @var Repository
      */
-    private $authorizationChecker;
-
     private $repository;
 
     public function __construct(AuthorizationCheckerInterface $authorizationChecker, Repository $repository)
     {
-        $this->authorizationChecker = $authorizationChecker;
         $this->repository = $repository;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [ConfigureMenuEvent::MAIN_MENU => 'onMainMenuBuild'];
     }
 
-    public function onMainMenuBuild(ConfigureMenuEvent $event)
+    public function onMainMenuBuild(ConfigureMenuEvent $event): void
     {
         /**
          * @var PermissionResolver
@@ -59,7 +56,7 @@ class MainMenuBuilderListener implements EventSubscriberInterface
     /**
      * Adds the RSS submenu to eZ Platform admin interface.
      */
-    private function addSubMenu(ItemInterface $menu)
+    private function addSubMenu(ItemInterface $menu): void
     {
         $menu
             ->addChild('rss', ['route' => 'platform_admin_ui_rss_feeds_list'])

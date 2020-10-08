@@ -1,0 +1,17 @@
+services:
+
+    nova_ezrssfeed.ezadminui.component.stylesheets:
+         parent: EzSystems\EzPlatformAdminUi\Component\TwigComponent
+         public: false
+         arguments:
+            $template: '@@EzRssFeed/ezadminui/stylesheets.html.twig'
+         tags:
+             - { name: ezplatform.admin_ui.component, group: 'stylesheet-head' }
+
+    nova_ezrssfeed.ezadminui.component.javascripts:
+         parent: EzSystems\EzPlatformAdminUi\Component\TwigComponent
+         public: false
+         arguments:
+             $template: '@@EzRssFeed/ezadminui/javascripts.html.twig'
+         tags:
+             - { name: ezplatform.admin_ui.component, group: 'script-body' }

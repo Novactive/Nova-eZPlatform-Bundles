@@ -1,12 +1,12 @@
 system:
-  default:
-    content_view:
-      rss_line:
-        default:
-          template: "EzRssFeedBundle:default:content/rss_line.html.twig"
-          match: []
+    default:
+        content_view:
+            rss_line:
+                default:
+                    template: "@EzRssFeed/default/content/rss_line.html.twig"
+                    match: ~
 
-      asset_image:
-        default:
-          template: "EzRssFeedBundle:default:content/fields/asset_image.html.twig"
-          match: []
+            rss_image:
+                default:
+                    template: "@EzRssFeed/default/content/rss_image.html.twig"
+                    match: ~
