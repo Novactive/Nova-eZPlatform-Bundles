@@ -13,6 +13,7 @@
 namespace Novactive\EzRssFeedBundle\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -101,12 +102,21 @@ class RssFeedItems
      */
     private $rssFeeds;
 
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->createdAt = new DateTime();
+        $this->modifiedAt = new DateTime();
+    }
+
     public function getId(): int
     {
         return $this->id;
     }
 
-    public function getModifiedAt(): DateTime
+    public function getModifiedAt(): ?DateTime
     {
         return $this->modifiedAt;
     }
@@ -114,6 +124,13 @@ class RssFeedItems
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
+    }
+
+    public function setModifiedAt(DateTime $modifiedAt): self
+    {
+        $this->modifiedAt = $modifiedAt;
+
+        return $this;
     }
 
     public function getRssFeeds(): ?RssFeeds

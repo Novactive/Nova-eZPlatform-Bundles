@@ -29,6 +29,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use DateTime;
 
 /**
  * @Route("/rssfeeds")
@@ -161,6 +162,10 @@ class RssFeedController extends Controller
         $feedForm->handleRequest($request);
 
         if ($feedForm->isSubmitted() && $feedForm->isValid()) {
+            $rssFeed->setModifiedAt(new DateTime());
+            foreach ($rssFeed->getFeedItems() as $feedItem) {
+                $feedItem->setModifiedAt(new DateTime());
+            }
             $this->entityManager->persist($rssFeed);
 
             foreach ($originalFeedsItems as $originalChild) {

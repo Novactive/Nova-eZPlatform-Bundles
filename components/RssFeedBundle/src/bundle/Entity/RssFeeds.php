@@ -124,6 +124,7 @@ class RssFeeds
         $this->sortDirection = self::SORT_DIRECTION_DESC;
         $this->numberOfObject = 10;
         $this->createdAt = new DateTime();
+        $this->modifiedAt = new DateTime();
     }
 
     public function getId(): int
@@ -187,6 +188,13 @@ class RssFeeds
     public function getModifiedAt(): ?DateTime
     {
         return $this->modifiedAt;
+    }
+
+    public function setModifiedAt(DateTime $modifiedAt): self
+    {
+        $this->modifiedAt = $modifiedAt;
+
+        return $this;
     }
 
     public function getNumberOfObject(): int
