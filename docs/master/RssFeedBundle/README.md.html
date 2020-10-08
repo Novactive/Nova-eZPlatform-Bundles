@@ -96,26 +96,15 @@ img.img-fluid {
 <a href="LICENSE.html"><img src="https://img.shields.io/packagist/l/novactive/ezrssfeedbundle.svg?style=flat-square" alt="License" class="img-fluid" /></a></p>
 <h2 name="fa9f2b3fde8a1ecd921517ebbf88a4fb">Installation steps</h2>
 <h3 name="6065c97227a6214bc68bad0f15ff16d1">Use Composer</h3>
-<p>Run the following from your website root folder to install Rss Bundle:</p>
-<pre><code>$ composer require novactive/ezrssfeedbundle</code></pre>
-<h3 name="165be230e7ca75541ca8236ee05dd860">Activate the bundle</h3>
-<p>Activate the bundle in <code>app/AppKernel.php</code> file by adding it to the <code>$bundles</code> array in <code>registerBundles</code> method, together with other required bundles:</p>
-<pre><code class=" php">public function registerBundles()
-{
-    ...
+<p>Add the lib to your composer.json, run <code>composer require novactive/ezrssfeedbundle</code> to refresh dependencies.</p>
+<p>Then inject the bundle in the <code>bundles.php</code> of your application.</p>
+<pre><code class=" php">   Novactive\EzRssFeedBundle\EzRssFeedBundle::class =&gt; [ 'all'=&gt; true ],</code></pre>
+<h3 name="814b1401d1a609253b98ac549a68a493">Add routes</h3>
+<p>Make sure you add this route to your routing:</p>
+<pre><code class=" yml"># config/routes.yaml
 
-     $bundles[] = new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle();
-     $bundles[] = new Novactive\EzRssFeedBundle\EzRssFeedBundle();
-
-    return $bundles;
-}</code></pre>
-<h3 name="ca58756c64bd8ec52ccacdb138801b40">Edit configuration</h3>
-<p>Put the following in your <code>app/config/routing.yml</code> file to be able to display rss view pages:</p>
-<pre><code class=" yml">EzRssFeedBundle:
+EzRssFeedBundle:
     resource: '@EzRssFeedBundle/Resources/config/routing.yml'</code></pre>
-<p>If you're installing Rss Bundle on eZ Platform 2.x and plan to use it integrated into eZ Platform Admin UI, you need to add it to Assetic configuration in <code>app/config/config.yml</code>, together with <code>EzPlatformAdminUiBundle</code> and all other bundles already configured there:</p>
-<pre><code>assetic:
-    bundles: [EzPlatformAdminUiBundle, EzRssFeedBundle]</code></pre>
 <h3 name="0205945e7d6df58c73e84776c8a24700">Import database tables</h3>
 <p>Rss Bundle uses custom database tables to store data. Use the following command to add the tables to your eZ Publish database:</p>
 <pre><code>$ php bin/console doctrine:schema:update </code></pre>
@@ -124,13 +113,12 @@ img.img-fluid {
 <pre><code class=" bash">$ php app/console cache:clear</code></pre>
 <h3 name="c38a260ed214b3c2c9e4a0119fd0bb29">Install and dump assets</h3>
 <p>Run the following to correctly install and dump assets for admin UI. Make sure to use the correct Symfony environment with <code>--env</code> parameter:</p>
-<pre><code class=" bash">$ php app/console assets:install --symlink --relative
-$ php app/console assetic:dump</code></pre>
+<pre><code class=" bash">$ php app/console assets:install --symlink --relative</code></pre>
 <h3 name="0cd472dc2e1d35d777f3b39b62b90344">Templating</h3>
 <p>A default view &quot;rss_line&quot; was created with an associated default template.
-The override rule supports all types of content</p>
+The override rule supports all types of content items.</p>
 <p>If you want to implement a particular view for a content type just do it like this:</p>
-<pre><code class=" yml">system:
+<pre><code class=" yaml">system:
     default:
         content_view:
             rss_line:
@@ -138,19 +126,17 @@ The override rule supports all types of content</p>
                     template: "AcmeBlogBundle:eZViews:line/article.html.twig"
                     match:
                         Identifier\ContentType: [article]</code></pre>
-<p>Note : </p>
-<p>I have not found any other solution for the moment, so that your rule of override is active it is necessary that your bundle is loaded last in appKernel after this bundle.                        </p>
 
             <p class="text-right">
                 <img width="204" height="20"
-                     src='https://img.shields.io/badge/Updated on-10--01--2020 00:04:42-green?style=flat-square&labelColor=black'
-                     alt='Updated on 10--01--2020 00:04:42'
+                     src='https://img.shields.io/badge/Updated on-10--08--2020 19:22:23-green?style=flat-square&labelColor=black'
+                     alt='Updated on 10--08--2020 19:22:23'
                 />
             </p>
         </div>
         <div class="col-md-4 col-sm-12 d-print-none sidebar">
                             <p><strong>In this page</strong>:</p>
-                <ul class="nav flex-column"><li class="nav-item first last"><a href="#6fbf59719ca40763cd4904420afdfc5b" class="nav-link">RSS Bundle installation instructions</a><ul class="menu_level_1"><li class="nav-item first last"><a href="#fa9f2b3fde8a1ecd921517ebbf88a4fb" class="nav-link">Installation steps</a><ul class="menu_level_2"><li class="nav-item first"><a href="#6065c97227a6214bc68bad0f15ff16d1" class="nav-link">Use Composer</a></li><li class="nav-item"><a href="#165be230e7ca75541ca8236ee05dd860" class="nav-link">Activate the bundle</a></li><li class="nav-item"><a href="#ca58756c64bd8ec52ccacdb138801b40" class="nav-link">Edit configuration</a></li><li class="nav-item"><a href="#0205945e7d6df58c73e84776c8a24700" class="nav-link">Import database tables</a></li><li class="nav-item"><a href="#82b2ef72828846d45666a475154fc6d2" class="nav-link">Clear the caches</a></li><li class="nav-item"><a href="#c38a260ed214b3c2c9e4a0119fd0bb29" class="nav-link">Install and dump assets</a></li><li class="nav-item last"><a href="#0cd472dc2e1d35d777f3b39b62b90344" class="nav-link">Templating</a></li></ul></li></ul></li></ul>
+                <ul class="nav flex-column"><li class="nav-item first last"><a href="#6fbf59719ca40763cd4904420afdfc5b" class="nav-link">RSS Bundle installation instructions</a><ul class="menu_level_1"><li class="nav-item first last"><a href="#fa9f2b3fde8a1ecd921517ebbf88a4fb" class="nav-link">Installation steps</a><ul class="menu_level_2"><li class="nav-item first"><a href="#6065c97227a6214bc68bad0f15ff16d1" class="nav-link">Use Composer</a></li><li class="nav-item"><a href="#814b1401d1a609253b98ac549a68a493" class="nav-link">Add routes</a></li><li class="nav-item"><a href="#0205945e7d6df58c73e84776c8a24700" class="nav-link">Import database tables</a></li><li class="nav-item"><a href="#82b2ef72828846d45666a475154fc6d2" class="nav-link">Clear the caches</a></li><li class="nav-item"><a href="#c38a260ed214b3c2c9e4a0119fd0bb29" class="nav-link">Install and dump assets</a></li><li class="nav-item last"><a href="#0cd472dc2e1d35d777f3b39b62b90344" class="nav-link">Templating</a></li></ul></li></ul></li></ul>
                     </div>
     </div>
     <footer class="pt-4 my-md-5 pt-md-5 border-top">
