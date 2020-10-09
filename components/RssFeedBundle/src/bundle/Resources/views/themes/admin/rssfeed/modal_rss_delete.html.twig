@@ -14,7 +14,7 @@
                 </p>
             </div>
             <div class="modal-footer">
-                <form action="{{ path('platform_admin_ui_rss_feeds_delete', {'id': rss.id}) }}" method="POST">
+                <form action="{{ path('platform_admin_ui_rss_feeds_delete', {'id': rss.id}) }}" method="POST" id="form-delete-rss-feed-{{ rss.urlSlug }}">
                     <button type="button" class="btn btn-secondary btn--no" data-dismiss="modal">
                         {{ 'form.cancel'|trans|desc('Cancel') }}
                     </button>

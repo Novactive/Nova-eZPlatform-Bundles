@@ -30,7 +30,7 @@
             </thead>
             <tbody>
             {% for rss in pager.currentPageResults %}
-                <tr>
+                <tr id="{{ 'rssfeed-' ~ rss.urlSlug }}">
                     <td>{{ rss.title }}</td>
                     <td>{{ rss.createdAt|date("d/m/Y H:i") }}</td>
                     <td>{{ rss.modifiedAt|date("d/m/Y H:i") }}</td>
@@ -58,7 +58,7 @@
                                href="{{ path('platform_admin_ui_rss_feeds_delete', {'id': rss.id}) }}"
                                data-toggle='modal'
                                data-target='#delete-rss-modal-{{ rss.id }}'
-                               class="btn btn-icon mx-3">
+                               class="btn btn-icon mx-3 rssfeed-delete">
                                 <svg class="ez-icon ez-icon-trash">
                                     <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#trash"></use>
                                 </svg>
