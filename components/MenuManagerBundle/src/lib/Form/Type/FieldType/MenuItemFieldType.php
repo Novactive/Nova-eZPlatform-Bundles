@@ -15,8 +15,8 @@ namespace Novactive\EzMenuManager\Form\Type\FieldType;
 use eZ\Publish\API\Repository\FieldTypeService;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\Helper\TranslationHelper;
-use EzSystems\RepositoryForms\Data\Content\ContentCreateData;
-use EzSystems\RepositoryForms\Data\Content\ContentUpdateData;
+use EzSystems\EzPlatformContentForms\Data\Content\ContentCreateData;
+use EzSystems\EzPlatformContentForms\Data\Content\ContentUpdateData;
 use Novactive\EzMenuManager\Service\DataTransformer\MenuItemValueTransformer;
 use Novactive\EzMenuManager\Service\MenuService;
 use Symfony\Component\Form\AbstractType;
@@ -25,7 +25,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MenuItemFieldType extends AbstractType
 {

@@ -3,6 +3,8 @@ services:
         autowire: true
         autoconfigure: true
         public: false
+        bind:
+            $translationHelper: "@ezpublish.translation_helper"
 
     Novactive\EzMenuManager\Form\Type\FieldType\MenuItemFieldType: ~
     Novactive\EzMenuManager\Form\Type\FieldType\FieldValueTransformer: ~

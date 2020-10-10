@@ -1,0 +1,4 @@
+parameters:
+    nova_menu_manager.default.menu_types:
+        main: menu.type.main
+        footer: menu.type.footer

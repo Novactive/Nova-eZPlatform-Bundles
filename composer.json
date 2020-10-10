@@ -53,6 +53,11 @@
         "symfony/css-selector": "^5.1",
         "erusev/parsedown": "^1.7",
         "twig/twig": "^3.0",
-        "knplabs/knp-menu": "^3.1"
+        "knplabs/knp-menu": "^3.1",
+        "ezsystems/ezplatform-admin-ui": "^2.0.0",
+        "doctrine/orm": "^2.7"
+    },
+    "require-dev": {
+        "rector/rector": "^0.8.6"
     }
 }

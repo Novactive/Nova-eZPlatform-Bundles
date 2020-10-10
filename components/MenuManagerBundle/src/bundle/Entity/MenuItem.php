@@ -77,7 +77,7 @@ class MenuItem
      *
      * @ORM\ManyToOne(
      *     targetEntity="Novactive\EzMenuManagerBundle\Entity\MenuItem",
-     *     inversedBy="childrens",
+     *     inversedBy="childrens"
      *     )
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */

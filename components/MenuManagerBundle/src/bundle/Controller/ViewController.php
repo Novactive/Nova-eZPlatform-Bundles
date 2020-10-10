@@ -12,9 +12,9 @@
 
 namespace Novactive\EzMenuManagerBundle\Controller;
 
+use EzSystems\EzPlatformAdminUiBundle\Controller\Controller;
 use Novactive\EzMenuManager\Service\MenuBuilder;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**

@@ -15,6 +15,7 @@ namespace Novactive\EzMenuManager\MenuItem\Type;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\Helper\TranslationHelper;
+use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use eZ\Publish\Core\MVC\Symfony\siteAccess;
 use eZ\Publish\Core\Repository\siteAccessAware\ContentService;
 use eZ\Publish\Core\Repository\siteAccessAware\LocationService;
@@ -143,7 +144,7 @@ class ContentMenuItemType extends DefaultMenuItemType
     {
         try {
             $menuItemLinkInfos = $this->getMenuItemLinkInfos($menuItem);
-            $link = new MenuItemValue($menuItemLinkInfos['id']);
+            $link = $this->createMenuItemValue($menuItemLinkInfos['id']);
             if (true === $menuItem->getOption('active', true)) {
                 $link->setUri($menuItemLinkInfos['uri']);
             }
@@ -177,12 +178,18 @@ class ContentMenuItemType extends DefaultMenuItemType
 
         $menuItemLinkInfos = [
             'id' => "location-{$location->id}",
-            'uri' => $this->router->generate($location, [], UrlGeneratorInterface::ABSOLUTE_URL),
+            'uri' => $this->router->generate(
+                UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+                [
+                    'location' => $location,
+                ],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            ),
             'label' => $this->translationHelper->getTranslatedContentNameByContentInfo($content->contentInfo),
             'extras' => [
-                    'contentId' => $location->contentId,
-                    'locationId' => $location->id,
-                ],
+                'contentId' => $location->contentId,
+                'locationId' => $location->id,
+            ],
         ];
 
         $cacheItem->set($menuItemLinkInfos);

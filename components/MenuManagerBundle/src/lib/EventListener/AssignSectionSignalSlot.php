@@ -14,21 +14,22 @@ declare(strict_types=1);
 
 namespace Novactive\EzMenuManager\EventListener;
 
-use eZ\Publish\Core\SignalSlot\Signal;
-use eZ\Publish\Core\SignalSlot\Slot;
+use eZ\Publish\API\Repository\Events\Section\AssignSectionEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class AssignSectionSignalSlot extends Slot
+class AssignSectionSignalSlot implements EventSubscriberInterface
 {
     use CachePurgerTrait;
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function receive(Signal $signal): void
+    public static function getSubscribedEvents(): array
     {
-        if (!$signal instanceof Signal\SectionService\AssignSectionSignal) {
-            return;
-        }
-        $this->purgeContentMenuItemCache($signal->contentId);
+        return [
+            AssignSectionEvent::class => 'onAssignSection',
+        ];
+    }
+
+    public function onAssignSection(AssignSectionEvent $event): void
+    {
+        $this->purgeContentMenuItemCache($event->getContentInfo()->id);
     }
 }

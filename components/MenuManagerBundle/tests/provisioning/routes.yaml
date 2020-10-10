@@ -1,0 +1,4 @@
+novactive.menu_manager:
+    resource: "@EzMenuManagerBundle/Controller/"
+    type:     annotation
+    prefix:   /

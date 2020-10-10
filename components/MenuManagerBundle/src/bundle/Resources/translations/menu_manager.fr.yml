@@ -1,6 +1,7 @@
 menu.list: Liste des menus
 menu:
   root: Racine du menu
+  new: Nouveau menu
   property:
     id: ID
     name: Nom
@@ -42,4 +43,5 @@ menu_item:
     desactivate: Désactiver
   edit_form:
     save: Enregistrer le lien
+    save_container: Enregistrer le dossier
     cancel: Annuler

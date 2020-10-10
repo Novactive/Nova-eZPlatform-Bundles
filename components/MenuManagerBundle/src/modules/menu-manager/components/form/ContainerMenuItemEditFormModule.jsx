@@ -71,7 +71,7 @@ export default class ContainerMenuItemEditFormModule extends MenuItemEditFormMod
             />
           </FormGroup>
           <Button type="submit" className="pull-right" color="primary">
-            {Translator.trans('menu_item.edit_form.save')}
+            {Translator.trans('menu_item.edit_form.save_container')}
           </Button>
           <Button type="button" onClick={this.handleCancel}>
             {Translator.trans('menu_item.edit_form.cancel')}

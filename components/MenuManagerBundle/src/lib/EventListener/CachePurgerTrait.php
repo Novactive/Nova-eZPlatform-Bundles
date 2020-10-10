@@ -13,17 +13,17 @@
 namespace Novactive\EzMenuManager\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
-use FOS\HttpCache\Handler\TagHandler;
+use eZ\Publish\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface;
+use EzSystems\PlatformHttpCacheBundle\PurgeClient\PurgeClientInterface;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
-use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
 trait CachePurgerTrait
 {
-    /** @var TagHandler */
-    protected $httpCacheTagHandler;
+    /** @var PurgeClientInterface */
+    protected $httpCachePurgeClient;
 
-    /** @var TagAwareAdapterInterface */
+    /** @var TransactionAwareAdapterInterface */
     protected $persistenceCacheAdapter;
 
     /** @var EntityManagerInterface */
@@ -32,15 +32,15 @@ trait CachePurgerTrait
     /**
      * @required
      */
-    public function setHttpCache(TagHandler $httpCacheTagHandler): void
+    public function setHttpCachePurgeClient(PurgeClientInterface $httpCachePurgeClient): void
     {
-        $this->httpCacheTagHandler = $httpCacheTagHandler;
+        $this->httpCachePurgeClient = $httpCachePurgeClient;
     }
 
     /**
      * @required
      */
-    public function setPersistenceCache(TagAwareAdapterInterface $persistenceCacheAdapter): void
+    public function setPersistenceCache(TransactionAwareAdapterInterface $persistenceCacheAdapter): void
     {
         $this->persistenceCacheAdapter = $persistenceCacheAdapter;
     }
@@ -95,7 +95,7 @@ trait CachePurgerTrait
     protected function invalidateTags(array $tags): void
     {
         if (!empty($tags)) {
-            $this->httpCacheTagHandler->invalidateTags($tags);
+            $this->httpCachePurgeClient->purge($tags);
             $this->persistenceCacheAdapter->invalidateTags($tags);
         }
     }
