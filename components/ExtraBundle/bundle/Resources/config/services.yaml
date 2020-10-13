@@ -13,6 +13,12 @@ services:
     Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\ContentType: ~
     Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Content: ~
 
+    novactive.ezextra.twig.extension.content:
+        class: Novactive\Bundle\eZExtraBundle\Twig\ContentExtension
+        parent: ezpublish.twig.extension.content
+        tags:
+            - {name: twig.extension}
+
     Novactive\Bundle\eZExtraBundle\EventListener\PreContentViewListener:
         arguments: ['@ezpublish.api.repository', '@ezpublish.templating.global_helper']
         tags:
