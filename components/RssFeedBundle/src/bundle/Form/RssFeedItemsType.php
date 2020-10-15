@@ -234,7 +234,7 @@ class RssFeedItemsType extends AbstractType
                 $contentTypesMap[ucfirst($contentType->getName())] = $contentType->id;
             }
             ksort($contentTypesMap);
-            if (count($contentTypesMap)) {
+            if (\count($contentTypesMap)) {
                 $defaultContentType = $this->contentTypeService
                     ->loadContentType(array_values($contentTypesMap)[0]);
                 $this->fieldTypeMap = $this->getFieldTypeByContentType($defaultContentType);
