@@ -251,17 +251,11 @@ class RssFeedItems
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function getOnlyVisible(): bool
     {
         return $this->onlyVisible;
     }
 
-    /**
-     * @param bool $onlyVisible
-     */
     public function setOnlyVisible(bool $onlyVisible): void
     {
         $this->onlyVisible = $onlyVisible;
