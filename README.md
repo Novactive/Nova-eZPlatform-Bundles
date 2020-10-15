@@ -87,20 +87,3 @@ bin/releaser tag
 
 [auto-install]: https://img.shields.io/badge/CI-install-green?style=flat-square&labelColor=black&logo=github-actions
 [auto-test]: https://img.shields.io/badge/CI-tests-green?style=flat-square&labelColor=black&logo=github-actions
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

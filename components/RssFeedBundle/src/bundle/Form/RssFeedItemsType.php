@@ -80,6 +80,14 @@ class RssFeedItemsType extends AbstractType
                 ]
             )
             ->add(
+                'only_visible',
+                CheckboxType::class,
+                [
+                    'label' => 'ez_rss_feed.form.only_visible',
+                    'required' => false,
+                ]
+            )
+            ->add(
                 'contenttype_id',
                 ChoiceType::class,
                 [

@@ -43,6 +43,17 @@
         </div>
     </div>
 {% endblock _rss_feeds_feed_items_entry_include_subtree_row %}
+{% block _rss_feeds_feed_items_entry_only_visible_row %}
+    <div class="form-group col-md-12 col-sm-12 col-xs-12 pull-left">
+        <label class="form-label">
+            {{- form_label(form) -}}
+        </label>
+        <div class="controls">
+            {{- form_errors(form) -}}
+            {{- form_widget(form) -}}
+        </div>
+    </div>
+{% endblock _rss_feeds_feed_items_entry_only_visible_row %}
 {% block _rss_feeds_feed_items_entry_contenttype_id_row %}
     <div class="form-group col-md-12 col-sm-12 col-xs-12 pull-left">
         <label class="form-label">
