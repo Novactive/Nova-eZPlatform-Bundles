@@ -94,13 +94,19 @@ bin/releaser tag
 
 
 
+# Installation de splitsh-lite
 
+https://github.com/splitsh/lite
 
+Go on https://github.com/splitsh/lite/releases to chose a version
 
+Then download and install it
 
-
-
-
-
+```
+cd ~/Downloads 
+wget https://github.com/splitsh/lite/releases/download/v1.0.1/lite_linux_amd64.tar.gz
+sudo tar -zxpf lite_linux_amd64.tar.gz --directory /usr/local/bin/
+sudo cp /usr/local/bin/splitsh-lite "$(git --exec-path)"/git-splitsh
+```
 
 

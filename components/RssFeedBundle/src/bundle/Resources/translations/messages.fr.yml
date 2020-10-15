@@ -19,6 +19,7 @@ ez_rss_feed.form.url_slug: URL
 ez_rss_feed.form.sources: Sources
 ez_rss_feed.form.subtree_path: Sélectionner un emplacement
 ez_rss_feed.form.include_subtree: Inclure les sous noeuds
+ez_rss_feed.form.only_visible: Afficher uniquement les noeuds visibles
 ez_rss_feed.form.number_of_object: Nombre d'objet
 ez_rss_feed.form.contenttype: Sélectionner le type de contenu
 ez_rss_feed.form.field.title: Champ Titre

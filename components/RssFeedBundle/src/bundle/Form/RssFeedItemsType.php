@@ -80,6 +80,14 @@ class RssFeedItemsType extends AbstractType
                 ]
             )
             ->add(
+                'only_visible',
+                CheckboxType::class,
+                [
+                    'label' => 'ez_rss_feed.form.only_visible',
+                    'required' => false,
+                ]
+            )
+            ->add(
                 'contenttype_id',
                 ChoiceType::class,
                 [
@@ -226,7 +234,7 @@ class RssFeedItemsType extends AbstractType
                 $contentTypesMap[ucfirst($contentType->getName())] = $contentType->id;
             }
             ksort($contentTypesMap);
-            if (\count($contentTypesMap)) {
+            if (count($contentTypesMap)) {
                 $defaultContentType = $this->contentTypeService
                     ->loadContentType(array_values($contentTypesMap)[0]);
                 $this->fieldTypeMap = $this->getFieldTypeByContentType($defaultContentType);
