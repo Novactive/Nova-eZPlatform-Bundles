@@ -31,7 +31,8 @@
             "Novactive\\EzSolrSearchExtraBundle\\": "components/SolrSearchExtraBundle/src/bundle",
             "Novactive\\EzSolrSearchExtra\\": "components/SolrSearchExtraBundle/src/lib",
             "Novactive\\Bundle\\EzStaticTemplatesBundle\\": "components/StaticTemplatesBundle/bundle",
-            "Novactive\\Bundle\\EzStaticTemplatesBundle\\Tests\\": "components/StaticTemplatesBundle/tests/Tests"
+            "Novactive\\Bundle\\EzStaticTemplatesBundle\\Tests\\": "components/StaticTemplatesBundle/tests/Tests",
+            "Novactive\\NovaeZMaintenanceBundle\\": "components/MaintenanceBundle/bundle"
         }
     },
     "require": {

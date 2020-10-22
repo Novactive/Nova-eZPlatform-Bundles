@@ -1,0 +1,23 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Novactive\NovaeZMaintenanceBundle\Command\:
+        resource: '../../Command'
+
+    Novactive\NovaeZMaintenanceBundle\Helper\FileHelper:
+        arguments:
+            - "@ezpublish.fieldType.ezbinaryfile.io_service"
+
+    Novactive\NovaeZMaintenanceBundle\Controller\:
+        resource: '../../Controller'
+        tags:
+            - { name: controller.service_arguments }
+
+    Novactive\NovaeZMaintenanceBundle\Listener\MaintenanceSubscriber: ~
+
+    Novactive\NovaeZMaintenanceBundle\Listener\AdminTopMenu:
+        tags:
+            - { name: kernel.event_listener, event: "ezplatform_admin_ui.menu_configure.main_menu", method: "onMenuConfigure",  priority: -100 }

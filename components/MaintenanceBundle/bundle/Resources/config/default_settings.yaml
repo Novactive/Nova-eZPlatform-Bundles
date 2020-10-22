@@ -1,0 +1,4 @@
+parameters:
+    nova_ezmaintenance.default.enable: false
+    nova_ezmaintenance.default.template: '@NovaeZMaintenance/maintenance.html.twig'
+    nova_ezmaintenance.default.lock_file_id: 'default.lock'

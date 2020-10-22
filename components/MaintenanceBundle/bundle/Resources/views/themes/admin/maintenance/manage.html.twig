@@ -1,0 +1,37 @@
+{% extends "@ezdesign/ui/layout.html.twig" %}
+
+{% block title %}Maintenance{% endblock %}
+{%- block breadcrumbs -%}
+    {% include '@ezdesign/ui/breadcrumbs.html.twig' with { items: [
+        { value: 'Maintenance' }
+    ]} %}
+{%- endblock -%}
+
+{%- block page_title -%}
+    {% include '@ezdesign/ui/page_title.html.twig' with {
+        title: 'Maintenance',
+        iconName: 'content-type'
+    } %}
+{%- endblock -%}
+{%- block content -%}
+    <section class="container mt-4">
+        <div class="ez-table-header">
+            <div class="ez-table-header__headline">Maintenance</div>
+        </div>
+        {{ form_start(form) }}
+        <table class="table ez-table--list">
+            <tfoot>
+            <tr>
+                <td colspan="2">
+                    <div class="form-actions">
+                        {{ form_widget(form.submit, { label: btnLabel}) }}
+                    </div>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+        {{ form_row(form._token) }}
+        {{ form_end(form, {'render_rest': false}) }}
+    </section>
+{%- endblock -%}
+
