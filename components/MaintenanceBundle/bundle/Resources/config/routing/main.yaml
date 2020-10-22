@@ -1,0 +1,4 @@
+_novaezmaintenanceRoutes:
+    resource: "@NovaeZMaintenanceBundle/Controller/"
+    type:     annotation
+    prefix:   /

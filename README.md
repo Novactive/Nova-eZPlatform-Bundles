@@ -42,6 +42,7 @@ Please comply with `make codeclean` and `make tests` before to push, your PR won
 | [SlackBundle](https://github.com/Novactive/NovaeZSlackBundle): Control your DXP with this complete Slack integration. It allows a 2-way communication between your Slack workspace and your eZ Content Repository. Build custom publication workflow and use them from your mobile! | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-NOK] | ![MIT] |
 | [StaticTemplatesBundle](https://github.com/Novactive/NovaeZStaticTemplatesBundle): Render twig templates via their paths through the design engine mechanism. Simple and perfect tiny bundle to build your Front-end first using Twig. | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK] | ![MIT] |
 | [SolrSearchExtraBundle](https://github.com/Novactive/NovaeZSolrSearchExtraBundle): Solr search handler additions. It adds many things, binary file plain text content indexation, fullText criterion, custom field configuration, exact matches boosting configuration, etc. | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] | ![MIT] |
+| [MaintenanceBundle](https://github.com/Novactive/NovaeZMaintenanceBundle): Easily enable an maintenance page! | ![eZ-Platform-3.x-OK] | ![MIT] |
 
 ## For Maintainers
 

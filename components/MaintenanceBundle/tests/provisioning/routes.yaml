@@ -1,0 +1,2 @@
+_novaezmaintenance_routes:
+    resource: '@NovaeZMaintenanceBundle/Resources/config/routing/main.yaml'
