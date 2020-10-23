@@ -44,8 +44,11 @@ class ProtectedAccessRepository extends EntityRepository
         return ProtectedAccess::class;
     }
 
-    public function findByContent(Content $content): array
+    public function findByContent(?Content $content): array
     {
+        if (null === $content) {
+            return [];
+        }
         $contentIds = $this->repository->sudo(
             function (Repository $repository) use ($content) {
                 $ids = [$content->id];
