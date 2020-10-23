@@ -17,9 +17,9 @@ CHROMEDRIVER := $(CURRENT_DIR)/chromedriver
 DOCKER := docker
 DOCKER_DB_CONTAINER := dbezplbundl
 MYSQL := mysql -f -u root -pezplatform -h 127.0.0.1 -P 3300 ezplatform
-CHROME_DRIVER_URL := https://chromedriver.storage.googleapis.com/84.0.4147.30/chromedriver_linux64.zip
+CHROME_DRIVER_URL := https://chromedriver.storage.googleapis.com/86.0.4240.22/chromedriver_linux64.zip
 ifeq ($(UNAME_S),Darwin)
-CHROME_DRIVER_URL := https://chromedriver.storage.googleapis.com/84.0.4147.30/chromedriver_mac64.zip
+CHROME_DRIVER_URL := https://chromedriver.storage.googleapis.com/86.0.4240.22/chromedriver_mac64.zip
 endif
 
 .DEFAULT_GOAL := list
@@ -71,7 +71,7 @@ installez: install ## Install eZ as the local project
 	@cd $(EZ_DIR) && bin/console doctrine:schema:update --dump-sql --force
 	@cd $(EZ_DIR) && bin/console novaezmailing:install
 	@cp -rp components/ProtectedContentBundle/tests/provisioning/article.html.twig $(EZ_DIR)/templates/themes/standard/full/
-	@cp -rp components/StaticTemplatesBundle/tests/provisioning/static_ultimatenova $(EZ_DIR)/templates/
+	@cp -rp components/StaticTemplatesBundle/tests/provisioning/static_ultimatenova $(EZ_DIR)/templates/themes/
 
 	@echo "..:: Final Cleaning Cache ::.."
 	@cd $(EZ_DIR) && bin/console cache:clear

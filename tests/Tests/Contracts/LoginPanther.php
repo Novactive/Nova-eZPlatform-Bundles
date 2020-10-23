@@ -20,9 +20,9 @@ trait LoginPanther
     {
         $crawler = $helper->get('/admin/login');
 
-        $this->assertStringContainsString('ez-login__form-wrapper', $helper->client()->getPageSource());
+        $this->assertStringContainsString('ez-login__actions-wrapper', $helper->client()->getPageSource());
 
-        $form = $crawler->filter('.ez-login__form-wrapper form');
+        $form = $crawler->filter('.ez-login__actions-wrapper form');
         $form->form(
             [
                 '_username' => 'admin',

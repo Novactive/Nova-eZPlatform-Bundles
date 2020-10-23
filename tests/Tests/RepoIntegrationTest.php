@@ -24,7 +24,7 @@ class RepoIntegrationTest extends WebTestCase
         $location = $repo->getLocationService()->loadLocation(2);
 
         $this->assertEquals(2, $location->id);
-        $this->assertEquals("eZ Platform", $location->contentInfo->name);
+        $this->assertEquals("Ibexa Platform", $location->contentInfo->name);
     }
 
     private function wrapRichText(string $text): string
@@ -52,7 +52,7 @@ class RepoIntegrationTest extends WebTestCase
         $location = $repository->getLocationService()->loadLocation(2);
 
         $this->assertEquals(2, $location->id);
-        $this->assertEquals("eZ Platform", $location->contentInfo->name);
+        $this->assertEquals("Ibexa Platform", $location->contentInfo->name);
 
         $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
