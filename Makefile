@@ -46,7 +46,7 @@ install: ## Install vendors
 .PHONY: installez
 installez: install ## Install eZ as the local project
 	@$(DOCKER) run -d -p 3300:3306 --name $(DOCKER_DB_CONTAINER) -e MYSQL_ROOT_PASSWORD=ezplatform mariadb:10.3
-	@$(COMPOSER) create-project ezsystems/ezplatform --prefer-dist --no-progress --no-interaction --no-scripts $(EZ_DIR)
+	@$(COMPOSER) create-project ezsystems/ezplatform:dev-master --prefer-dist --no-progress --no-interaction --no-scripts $(EZ_DIR)
 	@echo "..:: Do bundle YARN deps ::.."
 	@mkdir $(EZ_DIR)/node_modules && ln -sf $(EZ_DIR)/node_modules
 
@@ -60,7 +60,7 @@ installez: install ## Install eZ as the local project
 			COMPONENT_CONFIG_DIR="components/$${COMPONENT}/tests/provisioning" COMPONENT=$${COMPONENT} bin/wrapbundle; \
 		fi \
 	done
-	@cd $(EZ_DIR) && $(COMPOSER) update --lock
+	@cd $(EZ_DIR) && $(COMPOSER) update
 	@cd $(EZ_DIR) && bin/console cache:clear
 
 	@echo "..:: Do bundle specifics ::.."

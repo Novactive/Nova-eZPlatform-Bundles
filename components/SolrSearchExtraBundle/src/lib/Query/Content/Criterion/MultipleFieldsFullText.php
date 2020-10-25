@@ -157,6 +157,7 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
 
     /**
      * @deprecated since 7.2, will be removed in 8.0. Use the constructor directly instead.
+     * @SuppressWarnings(PHPMD)
      */
     public static function createFromQueryBuilder($target, $operator, $value)
     {

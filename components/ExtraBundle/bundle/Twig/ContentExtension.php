@@ -88,7 +88,7 @@ class ContentExtension extends KernelContentExtension
                     continue;
                 }
                 $list[] = $content;
-            } catch (Exception $ex) {
+            } catch (Exception $exception) {
                 return [];
             }
         }
