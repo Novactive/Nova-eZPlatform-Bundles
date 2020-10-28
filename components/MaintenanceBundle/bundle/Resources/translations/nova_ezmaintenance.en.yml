@@ -1,0 +1,12 @@
+maintenance:
+    home: 'Maintenance home'
+    response.unexpected_error: "Unexpected Error ocurred, verify your maintenance twig template"
+    disabled: 'Maintenance system not enabled for this siteaccess'
+    start: 'Start maintenance mode'
+    stop: 'Stop maintenance mode'
+    started: 'Maintenance mode started'
+    stopped: 'Maintenance mode stopped'
+    admin.title: 'Maintenance'
+    available_siteaccesses: 'Available siteaccess for maintenance'
+    manage.for: 'Manage maintenance for the siteaccess: "%siteaccess%"'
+    no_siteaccess: 'No siteaccess Configured for maintenance'

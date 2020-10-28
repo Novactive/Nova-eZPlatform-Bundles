@@ -14,22 +14,12 @@ declare(strict_types=1);
 
 namespace Novactive\NovaeZMaintenanceBundle\Listener;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use EzSystems\EzPlatformAdminUi\Menu\Event\ConfigureMenuEvent;
 use EzSystems\EzPlatformAdminUi\Menu\MainMenuBuilder;
+use Novactive\NovaeZMaintenanceBundle\Helper\FileHelper;
 
 class AdminTopMenu
 {
-    /**
-     * @var ConfigResolverInterface
-     */
-    private $configResolver;
-
-    public function __construct(ConfigResolverInterface $configResolver)
-    {
-        $this->configResolver = $configResolver;
-    }
-
     public function onMenuConfigure(ConfigureMenuEvent $event): void
     {
         $menu = $event->getMenu();
@@ -37,8 +27,11 @@ class AdminTopMenu
             $menu[MainMenuBuilder::ITEM_ADMIN]->addChild(
                 'manage_maintenane',
                 [
-                    'label' => 'Maintenance',
-                    'route' => 'novamaintenance_manage',
+                    'label' => 'maintenance.admin.title',
+                    'route' => 'novamaintenance_index',
+                    'extras' => [
+                        'translation_domain' => FileHelper::CONFIG_NAMESPACE,
+                    ],
                 ]
             );
         }

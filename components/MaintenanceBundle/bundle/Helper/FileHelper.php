@@ -15,14 +15,22 @@ declare(strict_types=1);
 namespace Novactive\NovaeZMaintenanceBundle\Helper;
 
 use Exception;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
-class FileHelper
+class FileHelper implements SiteAccess\SiteAccessAware
 {
+    public const CONFIG_NAMESPACE = 'nova_ezmaintenance';
+
     /**
      * @var IOServiceInterface
      */
@@ -42,25 +50,47 @@ class FileHelper
      * @var ConfigResolverInterface
      */
     private $configResolver;
+    private array $siteaccessList;
+
+    private TranslatorInterface $translator;
+
+    private ?SiteAccess $currentSiteaccess;
 
     public function __construct(
         IOServiceInterface $binaryFileIOService,
         Filesystem $fileSystem,
         Environment $twig,
-        ConfigResolverInterface $configResolver
+        ConfigResolverInterface $configResolver,
+        TranslatorInterface $translator,
+        array $siteaccessList = []
     ) {
         $this->binaryfileIOService = $binaryFileIOService;
         $this->fileSystem = $fileSystem;
         $this->twig = $twig;
         $this->configResolver = $configResolver;
+        $this->translator = $translator;
+        $this->siteaccessList = $siteaccessList;
     }
 
-    public function createFileCluster(string $filePath): string
+    /**
+     * @required
+     */
+    public function setSiteAccess(SiteAccess $siteAccess = null)
     {
+        $this->currentSiteaccess = $siteAccess;
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     * @throws InvalidArgumentValue
+     */
+    public function createFileCluster(?string $siteaccess = null): string
+    {
+        $filePath = $this->getLockFile($siteaccess);
         $localeFile = rtrim(sys_get_temp_dir(), '/').'/'.ltrim(basename($filePath), '/');
         $this->fileSystem->touch([$localeFile]);
         $binaryFile = $this->binaryfileIOService->newBinaryCreateStructFromLocalFile($localeFile);
-        $binaryFile->id = $this->getFileId($filePath);
+        $binaryFile->id = $this->getFileId($siteaccess);
 
         $uri = $this->binaryfileIOService->createBinaryFile($binaryFile)->uri;
 
@@ -69,25 +99,38 @@ class FileHelper
         return $uri;
     }
 
-    public function existFileCluster(string $filePath): bool
+    public function existFileCluster(?string $siteaccess = null): bool
     {
-        return $this->binaryfileIOService->exists($this->getFileId($filePath));
+        return $this->binaryfileIOService->exists($this->getFileId($siteaccess));
     }
 
-    public function deleteFileCluster(string $filePath): bool
+    public function isMaintenanceModeRunning(?string $siteaccess = null): bool
     {
-        $binaryFileId = $this->getFileId($filePath);
-        if ($this->binaryfileIOService->exists($binaryFileId)) {
-            $this->binaryfileIOService->deleteBinaryFile($this->binaryfileIOService->loadBinaryFile($binaryFileId));
-        }
+        $this->assertMaintenanceEnabled($siteaccess);
 
-        return true;
+        return $this->existFileCluster($siteaccess);
     }
 
-    public function maintenanceUnLock(string $filePath): bool
+    /**
+     * @throws InvalidArgumentException
+     * @throws InvalidArgumentValue
+     * @throws NotFoundException
+     */
+    public function manageMaintenance(?string $siteaccess = null): void
     {
-        if ($this->existFileCluster($filePath)) {
-            $this->deleteFileCluster($filePath);
+        $this->assertMaintenanceEnabled($siteaccess);
+        $isExistFile = $this->isMaintenanceModeRunning($siteaccess);
+        $isExistFile ? $this->maintenanceUnLock($siteaccess) : $this->maintenanceLock($siteaccess);
+    }
+
+    /**
+     * @throws InvalidArgumentValue
+     * @throws NotFoundException
+     */
+    public function maintenanceUnLock(?string $siteaccess = null): bool
+    {
+        if ($this->isMaintenanceModeRunning($siteaccess)) {
+            $this->deleteFileCluster($siteaccess);
 
             return true;
         }
@@ -95,26 +138,29 @@ class FileHelper
         return false;
     }
 
-    public function maintenanceLock(string $filePath): bool
+    /**
+     * @throws InvalidArgumentException
+     * @throws InvalidArgumentValue
+     */
+    public function maintenanceLock(?string $siteaccess = null): bool
     {
-        if ($this->existFileCluster($filePath)) {
+        if ($this->existFileCluster($siteaccess)) {
             return false;
         }
-        $this->createFileCluster($filePath);
+        $this->createFileCluster($siteaccess);
 
         return true;
     }
 
-    public function getResponse(?int $status = null): Response
+    public function getResponse(?int $status = null, ?string $siteaccess = null): Response
     {
         try {
-            $content = $this->twig->render(
-                $this->configResolver->getParameter('template', 'nova_ezmaintenance')
-            );
+            $content = $this->twig->render($this->getParameter('template', $siteaccess));
         } catch (Exception $exception) {
-            $content = 'Une erreur inconnue s\'est produite';
+            $content = $this->translator->trans('maintenance.response.unexpected_error', [], self::CONFIG_NAMESPACE);
         }
         $response = new Response();
+        $status = $status ?? Response::HTTP_SERVICE_UNAVAILABLE;
         if (null !== $status) {
             $response->setStatusCode($status);
         }
@@ -122,8 +168,83 @@ class FileHelper
         return $response->setContent($content);
     }
 
-    private function getFileId(string $filePath): string
+    public function translate(string $id, $parameters = []): string
     {
-        return 'nova_ezmaintenance/'.basename($filePath);
+        return $this->translator->trans($id, $parameters, self::CONFIG_NAMESPACE);
+    }
+
+    public function getAvailableSiteaccessList(): array
+    {
+        $siteaccessList = [];
+        foreach ($this->siteaccessList as $item) {
+            if (true === $this->isMaintenanceEnabled($item)) {
+                $siteaccessList[$item] = $item;
+            }
+        }
+
+        return $siteaccessList;
+    }
+
+    public function isMaintenanceEnabled(?string $siteaccess = null): bool
+    {
+        if (true !== $this->hasParameter('enable', $siteaccess)) {
+            return false;
+        }
+
+        return true === $this->getParameter('enable', $siteaccess);
+    }
+
+    public function assertMaintenanceEnabled(?string $siteaccess = null): void
+    {
+        if (true !== $this->isMaintenanceEnabled($siteaccess)) {
+            throw new RuntimeException(
+                $this->translator->trans('maintenance.disabled', [], self::CONFIG_NAMESPACE)
+            );
+        }
+    }
+
+    /**
+     * @return mixed|null
+     */
+    private function getParameter(string $paramName, ?string $siteaccess = null)
+    {
+        if ($this->hasParameter($paramName, $siteaccess)) {
+            return $this->configResolver->getParameter($paramName, self::CONFIG_NAMESPACE, $siteaccess);
+        }
+
+        return null;
+    }
+
+    private function hasParameter(string $paramName, ?string $siteaccess = null): bool
+    {
+        return true === $this->configResolver->hasParameter($paramName, self::CONFIG_NAMESPACE, $siteaccess);
+    }
+
+    private function getLockFile(?string $siteaccess = null): string
+    {
+        $this->assertMaintenanceEnabled($siteaccess);
+
+        return (string) $this->getParameter('lock_file_id', $siteaccess);
+    }
+
+    private function getFileId(string $siteaccess = null): string
+    {
+        $lockFile = $this->getLockFile($siteaccess);
+
+        return self::CONFIG_NAMESPACE.'/'.($siteaccess ?? $this->currentSiteaccess->name).'/'.basename($lockFile);
+    }
+
+    /**
+     * @throws InvalidArgumentValue
+     * @throws NotFoundException
+     */
+    private function deleteFileCluster(?string $siteaccess = null): bool
+    {
+        $binaryFileId = $this->getFileId($siteaccess);
+        if ($this->binaryfileIOService->exists($binaryFileId)) {
+            $this->binaryfileIOService->deleteBinaryFile($this->binaryfileIOService->loadBinaryFile($binaryFileId));
+        }
+
+        return true;
     }
 }

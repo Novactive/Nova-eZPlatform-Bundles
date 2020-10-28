@@ -9,7 +9,8 @@ services:
 
     Novactive\NovaeZMaintenanceBundle\Helper\FileHelper:
         arguments:
-            - "@ezpublish.fieldType.ezbinaryfile.io_service"
+            $binaryFileIOService: "@ezpublish.fieldType.ezbinaryfile.io_service"
+            $siteaccessList: '%ezpublish.siteaccess.list%'
 
     Novactive\NovaeZMaintenanceBundle\Controller\:
         resource: '../../Controller'
