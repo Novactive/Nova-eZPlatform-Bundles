@@ -1,0 +1,46 @@
+{% extends "@ezdesign/ui/layout.html.twig" %}
+
+{% block title %}{{ 'maintenance.home'|trans({}, 'nova_ezmaintenance')}}{% endblock %}
+{%- block breadcrumbs -%}
+    {% include '@ezdesign/ui/breadcrumbs.html.twig' with { items: [
+        { value: 'maintenance.home'|trans({}, 'nova_ezmaintenance') }
+    ]} %}
+{%- endblock -%}
+
+{%- block page_title -%}
+    {% include '@ezdesign/ui/page_title.html.twig' with {
+        title: 'maintenance.home'|trans({}, 'nova_ezmaintenance'),
+        iconName: 'content-type'
+    } %}
+{%- endblock -%}
+{%- block content -%}
+    <section class="container mt-4">
+        <div class="ez-table-header">
+            <div class="ez-table-header__headline">{{ 'maintenance.available_siteaccesses'|trans({}, 'nova_ezmaintenance') }}</div>
+        </div>
+        <table class="table ez-table--list">
+            <tbody>
+            {% for  maintenance_siteaccess in maintenance_siteaccesses %}
+                <tr>
+                    <td colspan="2">
+                        <div class="form-actions">
+                            <a href="{{ path('novamaintenance_manage', {'maintenanceSiteaccess': maintenance_siteaccess}) }}" title="{{ 'maintenance.manage.for'|trans({'%siteaccess%': maintenance_siteaccess}, 'nova_ezmaintenance') }}">
+                                {{ maintenance_siteaccess }}
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2">
+                        <div class="form-actions">
+                            <em>{{ 'maintenance.no_siteaccess'|trans({}, 'nova_ezmaintenance') }}</em>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </section>
+{%- endblock -%}
+

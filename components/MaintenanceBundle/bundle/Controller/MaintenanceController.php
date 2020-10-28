@@ -15,7 +15,9 @@ declare(strict_types=1);
 namespace Novactive\NovaeZMaintenanceBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use Novactive\NovaeZMaintenanceBundle\Form\Type\FilterType;
 use Novactive\NovaeZMaintenanceBundle\Helper\FileHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -45,28 +47,43 @@ class MaintenanceController extends Controller
     }
 
     /**
-     * @Route("/manage", name="novamaintenance_manage")
-     * @Template("@ezdesign/maintenance/manage.html.twig")
+     * @Route("/", name="novamaintenance_index")
+     * @Template("@ezdesign/maintenance/index.html.twig")
      */
-    public function manageMaintenanceAction(Request $request, ConfigResolverInterface $configResolver): array
+    public function indexAction(): array
     {
-        $filePath = $configResolver->getParameter('lock_file_id', 'nova_ezmaintenance');
-        $isExistFile = $this->fileHelper->existFileCluster($filePath);
+        return [
+            'maintenance_siteaccesses' => $this->fileHelper->getAvailableSiteaccessList(),
+        ];
+    }
 
-        $btnLabel = !$isExistFile ? 'Enable maintenance' : 'Disable maintenance';
+    /**
+     * @Route("/manage/{maintenanceSiteaccess}", name="novamaintenance_manage")
+     * @Template("@ezdesign/maintenance/manage.html.twig")
+     *
+     * @throws InvalidArgumentException
+     * @throws InvalidArgumentValue
+     * @throws NotFoundException
+     */
+    public function manageAction(string $maintenanceSiteaccess, Request $request): array
+    {
+        $isExistFile = $this->fileHelper->isMaintenanceModeRunning($maintenanceSiteaccess);
+
+        $btnLabel = $this->fileHelper->translate(!$isExistFile ? 'maintenance.start' : 'maintenance.stop');
         $form = $this->createForm(FilterType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $isExistFile ? $this->fileHelper->maintenanceUnLock($filePath) : $this->fileHelper->maintenanceLock(
-                $filePath
+            $this->fileHelper->manageMaintenance($maintenanceSiteaccess);
+            $this->flashBag->add(
+                'success',
+                $this->fileHelper->translate($isExistFile ? 'maintenance.stopped' : 'maintenance.started')
             );
-            $message = $isExistFile ? 'Disabled' : 'Enabled';
-            $this->flashBag->add('success', 'Maintenance '.$message);
-            $btnLabel = $isExistFile ? 'Enable maintenance' : 'Disable maintenance';
+            $btnLabel = $this->fileHelper->translate($isExistFile ? 'maintenance.start' : 'maintenance.stop');
         }
 
         return [
             'form' => $form->createView(),
+            'maintenance_siteaccess' => $maintenanceSiteaccess,
             'btnLabel' => $btnLabel,
         ];
     }

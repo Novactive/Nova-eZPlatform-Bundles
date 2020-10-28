@@ -14,9 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\NovaeZMaintenanceBundle\Command;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Novactive\NovaeZMaintenanceBundle\Helper\FileHelper;
-use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -29,15 +27,9 @@ final class MaintenanceCommand extends Command
      */
     protected $fileHelper;
 
-    /**
-     * @var ConfigResolverInterface
-     */
-    protected $configResolver;
-
-    public function __construct(ConfigResolverInterface $configResolver, FileHelper $fileHelper)
+    public function __construct(FileHelper $fileHelper)
     {
         parent::__construct();
-        $this->configResolver = $configResolver;
         $this->fileHelper = $fileHelper;
     }
 
@@ -49,27 +41,14 @@ final class MaintenanceCommand extends Command
         $this->addOption('unlock', null, InputOption::VALUE_NONE, 'Disable Maintenance');
     }
 
-    public function unlock(): string
+    private function unlock(): string
     {
-        $this->assertMaintenanceEnabled();
-        $filePath = $this->configResolver->getParameter('lock_file_id', 'nova_ezmaintenance');
-
-        return $this->fileHelper->maintenanceUnLock($filePath) ? 'Maintenance unlock' : 'Maintenance already enabled';
+        return $this->fileHelper->maintenanceUnLock() ? 'Maintenance unlocked' : 'Maintenance already unlocked';
     }
 
-    public function lock(): string
+    private function lock(): string
     {
-        $this->assertMaintenanceEnabled();
-        $filePath = $this->configResolver->getParameter('lock_file_id', 'nova_ezmaintenance');
-
-        return $this->fileHelper->maintenanceLock($filePath) ? 'Maintenance lock' : 'Maintenance already disabled';
-    }
-
-    protected function assertMaintenanceEnabled(): void
-    {
-        if (true !== $this->configResolver->getParameter('enable', 'nova_ezmaintenance')) {
-            throw new RuntimeException('Maintenance not activeted for this siteaccess');
-        }
+        return $this->fileHelper->maintenanceLock() ? 'Maintenance locked' : 'Maintenance already locked';
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

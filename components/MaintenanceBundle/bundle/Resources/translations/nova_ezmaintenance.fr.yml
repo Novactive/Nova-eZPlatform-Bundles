@@ -1,0 +1,12 @@
+maintenance:
+    home: 'Accueil maintenance'
+    response.unexpected_error: "Une erreur inattendue s'est produite, veuillez verrifier votre template de maintenance"
+    disabled: 'Le système de maintenance n''est pas valable pour ce siteaccess'
+    start: 'Mettre en maintenance'
+    stop: 'Arrêter la maintenance'
+    started: 'Maintenance en cours'
+    stopped: 'Maintenance arrêtée'
+    admin.title: 'Maintenance'
+    available_siteaccesses: 'Siteaccesses éligibles à la maintenance'
+    manage.for: 'Gérer  la manage maintenance pour le siteaccess: "%siteaccess%"'
+    no_siteaccess: 'Aucun siteaccess configuré pour la maintenance'

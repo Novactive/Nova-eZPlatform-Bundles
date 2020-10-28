@@ -1,22 +1,23 @@
 {% extends "@ezdesign/ui/layout.html.twig" %}
 
-{% block title %}Maintenance{% endblock %}
+{% block title %}{{'maintenance.manage.for'|trans({'%siteaccess%': maintenance_siteaccess}, 'nova_ezmaintenance')}}{% endblock %}
 {%- block breadcrumbs -%}
     {% include '@ezdesign/ui/breadcrumbs.html.twig' with { items: [
-        { value: 'Maintenance' }
+        { value: 'maintenance.home'|trans({}, 'nova_ezmaintenance'), url: path('novamaintenance_index') },
+        { value: 'maintenance.admin.title'|trans({}, 'nova_ezmaintenance') }
     ]} %}
 {%- endblock -%}
 
 {%- block page_title -%}
     {% include '@ezdesign/ui/page_title.html.twig' with {
-        title: 'Maintenance',
+        title: 'maintenance.admin.title'|trans({}, 'nova_ezmaintenance'),
         iconName: 'content-type'
     } %}
 {%- endblock -%}
 {%- block content -%}
     <section class="container mt-4">
         <div class="ez-table-header">
-            <div class="ez-table-header__headline">Maintenance</div>
+            <div class="ez-table-header__headline">{{ 'maintenance.manage.for'|trans({'%siteaccess%': maintenance_siteaccess}, 'nova_ezmaintenance') }}</div>
         </div>
         {{ form_start(form) }}
         <table class="table ez-table--list">
