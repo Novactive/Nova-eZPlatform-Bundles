@@ -55,8 +55,7 @@ final class MaintenanceCommand extends Command
     {
         if (true === $input->getOption('lock')) {
             $output->writeln('<info>'.$this->lock().'</info>');
-        }
-        if (true === $input->getOption('unlock')) {
+        } elseif (true === $input->getOption('unlock')) {
             $output->writeln('<info>'.$this->unlock().'</info>');
         }
 
