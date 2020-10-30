@@ -14,23 +14,38 @@ declare(strict_types=1);
 
 namespace Novactive\NovaeZMaintenanceBundle\Command;
 
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use Novactive\NovaeZMaintenanceBundle\Helper\FileHelper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class MaintenanceCommand extends Command
+final class MaintenanceCommand extends Command implements SiteAccessAware
 {
     /**
      * @var FileHelper
      */
     protected $fileHelper;
 
+    private ?SiteAccess $siteAccess;
+
     public function __construct(FileHelper $fileHelper)
     {
         parent::__construct();
         $this->fileHelper = $fileHelper;
+    }
+
+    /**
+     * @required
+     */
+    public function setSiteAccess(SiteAccess $siteAccess = null)
+    {
+        $this->siteAccess = $siteAccess;
     }
 
     protected function configure(): void
@@ -41,22 +56,35 @@ final class MaintenanceCommand extends Command
         $this->addOption('unlock', null, InputOption::VALUE_NONE, 'Disable Maintenance');
     }
 
-    private function unlock(): string
+    /**
+     * @throws InvalidArgumentValue
+     * @throws NotFoundException
+     */
+    private function unlock(string $siteaccess): string
     {
-        return $this->fileHelper->maintenanceUnLock() ? 'Maintenance unlocked' : 'Maintenance already unlocked';
+        return $this->fileHelper->maintenanceUnLock($siteaccess) ?
+            'Maintenance unlocked' : 'Maintenance already unlocked';
     }
 
-    private function lock(): string
+    /**
+     * @throws InvalidArgumentException
+     * @throws InvalidArgumentValue
+     */
+    private function lock(string $siteaccess): string
     {
-        return $this->fileHelper->maintenanceLock() ? 'Maintenance locked' : 'Maintenance already locked';
+        return $this->fileHelper->maintenanceLock($siteaccess) ? 'Maintenance locked' : 'Maintenance already locked';
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        if (null === $this->siteAccess) {
+            return Command::FAILURE;
+        }
+        $siteaccessName = $this->siteAccess->name;
         if (true === $input->getOption('lock')) {
-            $output->writeln('<info>'.$this->lock().'</info>');
+            $output->writeln('<info>'.$this->lock($siteaccessName).'</info>');
         } elseif (true === $input->getOption('unlock')) {
-            $output->writeln('<info>'.$this->unlock().'</info>');
+            $output->writeln('<info>'.$this->unlock($siteaccessName).'</info>');
         }
 
         return Command::SUCCESS;

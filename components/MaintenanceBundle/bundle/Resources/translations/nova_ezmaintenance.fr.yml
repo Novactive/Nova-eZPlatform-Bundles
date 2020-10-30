@@ -1,7 +1,7 @@
 maintenance:
     home: 'Accueil maintenance'
     response.unexpected_error: "Une erreur inattendue s'est produite, veuillez verrifier votre template de maintenance"
-    disabled: 'Le système de maintenance n''est pas valable pour ce siteaccess'
+    disabled: 'Le système de maintenance n''est pas configuré pour le siteaccess: "%siteaccess%"'
     start: 'Mettre en maintenance'
     stop: 'Arrêter la maintenance'
     started: 'Maintenance en cours'
