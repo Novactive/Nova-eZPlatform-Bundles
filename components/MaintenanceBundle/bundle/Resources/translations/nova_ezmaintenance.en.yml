@@ -1,7 +1,7 @@
 maintenance:
     home: 'Maintenance home'
     response.unexpected_error: "Unexpected Error ocurred, verify your maintenance twig template"
-    disabled: 'Maintenance system not enabled for this siteaccess'
+    disabled: 'Maintenance system not enabled for this siteaccess: "%siteaccess%"'
     start: 'Start maintenance mode'
     stop: 'Stop maintenance mode'
     started: 'Maintenance mode started'
