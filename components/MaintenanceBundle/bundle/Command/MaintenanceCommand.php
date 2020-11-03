@@ -32,7 +32,10 @@ final class MaintenanceCommand extends Command implements SiteAccessAware
      */
     protected $fileHelper;
 
-    private ?SiteAccess $siteAccess;
+    /**
+     * @var SiteAccess|null
+     */
+    private $siteAccess;
 
     public function __construct(FileHelper $fileHelper)
     {
