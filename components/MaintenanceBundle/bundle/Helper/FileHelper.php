@@ -55,7 +55,10 @@ class FileHelper
      */
     private $siteaccessList;
 
-    private TranslatorInterface $translator;
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
 
     public function __construct(
         IOServiceInterface $binaryFileIOService,
