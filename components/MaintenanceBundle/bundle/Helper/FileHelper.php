@@ -49,7 +49,11 @@ class FileHelper
      * @var ConfigResolverInterface
      */
     private $configResolver;
-    private array $siteaccessList;
+
+    /**
+     * @var array
+     */
+    private $siteaccessList;
 
     private TranslatorInterface $translator;
 
