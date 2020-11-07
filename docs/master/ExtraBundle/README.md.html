@@ -148,9 +148,7 @@ public function previousByPriority( $locationId, $additionnalCriterion = [] )</c
 <h3 name="90374846a70d03c0c963e1a6cf74e132">Children Provider</h3>
 <p>Simply inject the children ( and potentially other things on a view Full )</p>
 <p>Add your provider in a folder of your bundle</p>
-<pre><code class=" yaml">project.home_page.children.provider:
-    class: Project\Bundle\GeneralBundle\ChildrenProvider\YOUCONTENTIDENTIFIERPROVIDERCLASS
-    parent: novactive.ezextra.abstract.children.provider
+<pre><code class=" yaml">Project\Bundle\GeneralBundle\ChildrenProvider\YOUCONTENTIDENTIFIERPROVIDERCLASS:
     tags:
         -  { name: novactive.ezextra.children.provider, contentTypeIdentifier: YOUCONTENTIDENTIFIER }</code></pre>
 <p>You class YOUCONTENTIDENTIFIERPROVIDERCLASS must extend Novactive\Bundle\eZExtraBundle\EventListener\Type</p>
@@ -176,8 +174,8 @@ class PersonalizationEngine extends Type
 
             <p class="text-right">
                 <img width="204" height="20"
-                     src='https://img.shields.io/badge/Updated on-11--02--2020 21:04:25-green?style=flat-square&labelColor=black'
-                     alt='Updated on 11--02--2020 21:04:25'
+                     src='https://img.shields.io/badge/Updated on-11--07--2020 00:56:34-green?style=flat-square&labelColor=black'
+                     alt='Updated on 11--07--2020 00:56:34'
                 />
             </p>
         </div>
