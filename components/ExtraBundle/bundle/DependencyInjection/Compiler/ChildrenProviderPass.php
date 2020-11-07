@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\DependencyInjection\Compiler;
 
+use Novactive\Bundle\eZExtraBundle\EventListener\PreContentViewListener;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -22,17 +23,18 @@ class ChildrenProviderPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        if (!$container->has('novactive.ezextra.pre_content_view_listener')) {
+        if (!$container->has(PreContentViewListener::class)) {
             return;
         }
 
         $definition = $container->findDefinition(
-            'novactive.ezextra.pre_content_view_listener'
+            PreContentViewListener::class
         );
 
         $taggedServices = $container->findTaggedServiceIds(
             'novactive.ezextra.children.provider'
         );
+
         foreach ($taggedServices as $id => $tags) {
             foreach ($tags as $attributes) {
                 $definition->addMethodCall(

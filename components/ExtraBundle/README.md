@@ -117,9 +117,7 @@ Simply inject the children ( and potentially other things on a view Full )
 Add your provider in a folder of your bundle
 
 ```yaml
-project.home_page.children.provider:
-    class: Project\Bundle\GeneralBundle\ChildrenProvider\YOUCONTENTIDENTIFIERPROVIDERCLASS
-    parent: novactive.ezextra.abstract.children.provider
+Project\Bundle\GeneralBundle\ChildrenProvider\YOUCONTENTIDENTIFIERPROVIDERCLASS:
     tags:
         -  { name: novactive.ezextra.children.provider, contentTypeIdentifier: YOUCONTENTIDENTIFIER }
 ```
