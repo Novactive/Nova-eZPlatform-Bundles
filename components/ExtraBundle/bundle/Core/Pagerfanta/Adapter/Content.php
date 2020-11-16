@@ -42,7 +42,7 @@ final class Content extends LocationSearchAdapter
         return $contentResults;
     }
 
-    public function getSlice(int $offset, int $length)
+    public function getSlice($offset, $length)
     {
         $list = parent::getSlice($offset, $length);
 
