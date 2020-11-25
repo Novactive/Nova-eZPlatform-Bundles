@@ -90,22 +90,32 @@ img.img-fluid {
 <div class="container-fluid">
         <div class="row flex-column-reverse flex-md-row">
         <div class="col-md-8 col-sm-12">
-            <p>Copyright (c) 2020 Novactive, <a href="https://github.com/Novactive/NovaeZSlackBundle">https://github.com/Novactive/NovaeZSlackBundle</a> <a href="mailto:dir.tech@novactive.com">dir.tech@novactive.com</a></p>
-<p>Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the &quot;Software&quot;), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:</p>
-<p>The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.</p>
-<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.</p>
+            <h1 name="078a378d8af1d759e69571c0435d4c28">Novactive eZ Maintenance Bundle</h1>
+<hr />
+<p><a href="https://packagist.org/packages/novactive/ezmaintenance"><img src="https://img.shields.io/packagist/dt/novactive/ezmaintenancebundle.svg?style=flat-square" alt="Downloads" class="img-fluid" /></a>
+<a href="https://github.com/Novactive/NovaeZMaintenanceBundle/releases"><img src="https://img.shields.io/github/release/Novactive/NovaeZMaintenanceBundle.svg?style=flat-square" alt="Latest version" class="img-fluid" /></a>
+<a href="LICENSE.html"><img src="https://img.shields.io/packagist/l/novactive/ezmaintenancebundle.svg?style=flat-square" alt="License" class="img-fluid" /></a></p>
+<p>Easily enable a Maintenance page.</p>
+<h2 name="7cd8fb6e31cc946c078d2740c76a9899">Installation</h2>
+<h3 name="c610b848dabf92d5b498d6e8ea64e85f">Step 1: Download using composer</h3>
+<p>Add the lib to your composer.json, run <code>composer require novactive/ezmaintenancebundle</code> to refresh dependencies.</p>
+<h3 name="bb6c5087283397e44b9b10981a83dad6">Step 2: Enable the bundle</h3>
+<p>Then inject the bundle in the <code>bundles.php</code> of your application.</p>
+<pre><code class=" php">     Novactive\NovaeZMaintenanceBundle\NovaeZMaintenanceBundle::class =&gt; [ 'all'=&gt; true ],</code></pre>
+<h3 name="448bc62803172f41bfddb22d9d8c14ff">Step 3: Add the default routes</h3>
+<p>Activate the sroutes:</p>
+<pre><code class=" yml">_novaezmaintenance_routes:
+    resource: '@NovaeZMaintenanceBundle/Resources/config/routing/main.yaml'</code></pre>
+<h3 name="08cc9578c88dbf3eee20917aa63aed47">Step 4: Clear the cache and check</h3>
+<pre><code class=" bash">php app|ezpublish/console cache:clear --env=dev</code></pre>
+<h2 name="254f642527b45bc260048e30704edb39">Configuration</h2>
+<pre><code class=" yaml">nova_ezmaintenance:
+    system:
+        default:
+            enable: false # to enable to capability
+            template: '@ezdesign/maintenance.html.twig' # the template you want as a maintenace page
+            lock_file_id: 'plop.lock' # the name of the lock file in the cluster
+</code></pre>
 
             <p class="text-right">
                 <img width="204" height="20"
@@ -115,6 +125,8 @@ THE SOFTWARE.</p>
             </p>
         </div>
         <div class="col-md-4 col-sm-12 d-print-none sidebar">
+                            <p><strong>In this page</strong>:</p>
+                <ul class="nav flex-column"><li class="nav-item first last"><a href="#078a378d8af1d759e69571c0435d4c28" class="nav-link">Novactive eZ Maintenance Bundle</a><ul class="menu_level_1"><li class="nav-item first"><a href="#7cd8fb6e31cc946c078d2740c76a9899" class="nav-link">Installation</a><ul class="menu_level_2"><li class="nav-item first"><a href="#c610b848dabf92d5b498d6e8ea64e85f" class="nav-link">Step 1: Download using composer</a></li><li class="nav-item"><a href="#bb6c5087283397e44b9b10981a83dad6" class="nav-link">Step 2: Enable the bundle</a></li><li class="nav-item"><a href="#448bc62803172f41bfddb22d9d8c14ff" class="nav-link">Step 3: Add the default routes</a></li><li class="nav-item last"><a href="#08cc9578c88dbf3eee20917aa63aed47" class="nav-link">Step 4: Clear the cache and check</a></li></ul></li><li class="nav-item last"><a href="#254f642527b45bc260048e30704edb39" class="nav-link">Configuration</a></li></ul></li></ul>
                     </div>
     </div>
     <footer class="pt-4 my-md-5 pt-md-5 border-top">
