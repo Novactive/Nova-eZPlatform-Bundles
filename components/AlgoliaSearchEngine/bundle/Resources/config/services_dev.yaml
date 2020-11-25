@@ -1,0 +1,20 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\WrapperFactory: ~
+    Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\Content: ~
+    Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\ContentType: ~
+    Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Content: ~
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\DataCollector\MainCollector:
+        tags:
+            -
+                name:     data_collector
+                template: '@ezdesign/data_collector/main.html.twig'
+                id:       'nova.ez.algolia.collector'
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\DataCollector\Logger:
+        $enabled: true

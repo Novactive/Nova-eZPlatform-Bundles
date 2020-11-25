@@ -1,0 +1,49 @@
+{
+    "name": "novactive/ezalgoliasearchengine",
+    "description": "Novactive eZ Algolia Search Engine is an eZ Platform bundle to provide Algolia search integration.",
+    "keywords": [
+        "performance",
+        "ezplatform",
+        "novactive",
+        "search",
+        "index",
+        "algolia"
+    ],
+    "homepage": "https://github.com/Novactive/NovaeZAlgoliaSearchEngine",
+    "type": "ezplatform-bundle",
+    "authors": [
+        {
+            "name": "Novactive",
+            "homepage": "https://www.novactive.us",
+            "email": "dir.tech@novactive.com"
+        }
+    ],
+    "license": [
+        "SEE FULL LICENSE OPTIONS IN LICENSE.md"
+    ],
+    "require": {
+        "php": "^7.3",
+        "ext-dom": "*",
+        "ext-pdo": "*",
+        "ext-json": "*",
+        "algolia/algoliasearch-client-php": "^2.7",
+        "ext-openssl": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Novactive\\Bundle\\eZAlgoliaSearchEngine\\": "bundle",
+            "Novactive\\Bundle\\eZAlgoliaSearchEngine\\Tests\\": "tests/Tests"
+        }
+    },
+    "extra": {
+        "thanks": {
+            "name": "ezsystems/ezplatform",
+            "url": "https://github.com/ezsystems/ezplatform"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0",
+        "novactive/ezextrabundle": "^3.0",
+        "fzaninotto/faker": "^1.9"
+    }
+}

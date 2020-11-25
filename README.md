@@ -43,6 +43,7 @@ Please comply with `make codeclean` and `make tests` before to push, your PR won
 | [StaticTemplatesBundle](https://github.com/Novactive/NovaeZStaticTemplatesBundle): Render twig templates via their paths through the design engine mechanism. Simple and perfect tiny bundle to build your Front-end first using Twig. | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK] | ![MIT] |
 | [SolrSearchExtraBundle](https://github.com/Novactive/NovaeZSolrSearchExtraBundle): Solr search handler additions. It adds many things, binary file plain text content indexation, fullText criterion, custom field configuration, exact matches boosting configuration, etc. | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] | ![MIT] |
 | [MaintenanceBundle](https://github.com/Novactive/NovaeZMaintenanceBundle): Easily enable an maintenance page! | ![eZ-Platform-3.x-OK] | ![MIT] |
+| [AlgoliaSearchEngine](https://github.com/Novactive/NovaeZAlgoliaSearchEngine): Complete Integration with Algolia! Criterions, Facets, and more! | ![eZ-Platform-3.x-OK] | ![Commercial] ![GPL] ![CreativeCommons] |
 
 ## For Maintainers
 
@@ -89,6 +90,7 @@ bin/releaser tag
 [MIT]: https://img.shields.io/badge/license-MIT-green?style=flat-square&labelColor=black
 [Commercial]: https://img.shields.io/badge/license-Commercial-red?style=flat-square&labelColor=black
 [GPL]: https://img.shields.io/badge/license-GPL-blue?style=flat-square&labelColor=black
+[CreativeCommons]: https://img.shields.io/badge/license-CreativeCommons-yellow?style=flat-square&labelColor=black
 
 
 
