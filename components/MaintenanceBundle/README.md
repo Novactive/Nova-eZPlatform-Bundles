@@ -14,7 +14,7 @@ Documentation is available in this repository via `.md` files but also packaged 
 
 [![Downloads](https://img.shields.io/packagist/dt/novactive/ezmaintenancebundle.svg?style=flat-square)](https://packagist.org/packages/novactive/ezmaintenance)
 [![Latest version](https://img.shields.io/github/release/Novactive/NovaeZMaintenanceBundle.svg?style=flat-square)](https://github.com/Novactive/NovaeZMaintenanceBundle/releases)
-[![License](https://img.shields.io/packagist/l/novactive/ezmaintenancebundle.svg?style=flat-square)](LICENSE)
+[![License](https://img.shields.io/packagist/l/novactive/ezmaintenancebundle?style=flat-square)](LICENSE)
 
 Easily enable a Maintenance page.
 

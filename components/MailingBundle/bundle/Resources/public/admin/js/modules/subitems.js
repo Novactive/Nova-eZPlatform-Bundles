@@ -30,7 +30,7 @@ export const eZMailingSubItemsModule = function () {
             contentTypesMap: contentTypesMap,
             totalCount: subitemsList.ChildrenCount,
             handleEditItem: function (content) {
-                alert("@todo: please PR to https://github.com/Novactive/Nova-eZPlatform-Bunddles");
+                alert("@todo: please PR to https://github.com/Novactive/Nova-eZPlatform-Bundles");
             },
             generateLink: function (locationId,contentId) {
                 return window.Routing.generate('_ez_content_view', { locationId, contentId });
