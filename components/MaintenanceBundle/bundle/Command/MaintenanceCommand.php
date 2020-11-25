@@ -14,9 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\NovaeZMaintenanceBundle\Command;
 
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use Novactive\NovaeZMaintenanceBundle\Helper\FileHelper;
@@ -46,7 +43,7 @@ final class MaintenanceCommand extends Command implements SiteAccessAware
     /**
      * @required
      */
-    public function setSiteAccess(SiteAccess $siteAccess = null)
+    public function setSiteAccess(SiteAccess $siteAccess = null): void
     {
         $this->siteAccess = $siteAccess;
     }
@@ -59,20 +56,12 @@ final class MaintenanceCommand extends Command implements SiteAccessAware
         $this->addOption('unlock', null, InputOption::VALUE_NONE, 'Disable Maintenance');
     }
 
-    /**
-     * @throws InvalidArgumentValue
-     * @throws NotFoundException
-     */
     private function unlock(string $siteaccess): string
     {
         return $this->fileHelper->maintenanceUnLock($siteaccess) ?
             'Maintenance unlocked' : 'Maintenance already unlocked';
     }
 
-    /**
-     * @throws InvalidArgumentException
-     * @throws InvalidArgumentValue
-     */
     private function lock(string $siteaccess): string
     {
         return $this->fileHelper->maintenanceLock($siteaccess) ? 'Maintenance locked' : 'Maintenance already locked';

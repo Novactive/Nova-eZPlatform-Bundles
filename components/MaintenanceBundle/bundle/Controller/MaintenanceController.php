@@ -15,9 +15,6 @@ declare(strict_types=1);
 namespace Novactive\NovaeZMaintenanceBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use Novactive\NovaeZMaintenanceBundle\Form\Type\FilterType;
 use Novactive\NovaeZMaintenanceBundle\Helper\FileHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -60,10 +57,6 @@ class MaintenanceController extends Controller
     /**
      * @Route("/manage/{maintenanceSiteaccess}", name="novamaintenance_manage")
      * @Template("@ezdesign/maintenance/manage.html.twig")
-     *
-     * @throws InvalidArgumentException
-     * @throws InvalidArgumentValue
-     * @throws NotFoundException
      */
     public function manageAction(string $maintenanceSiteaccess, Request $request): array
     {

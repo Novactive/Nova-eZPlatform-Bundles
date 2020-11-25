@@ -15,9 +15,6 @@ declare(strict_types=1);
 namespace Novactive\NovaeZMaintenanceBundle\Helper;
 
 use Exception;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use RuntimeException;
@@ -88,11 +85,6 @@ class FileHelper
         return $this->existFileCluster($siteaccess);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     * @throws InvalidArgumentValue
-     * @throws NotFoundException
-     */
     public function manageMaintenance(string $siteaccess): void
     {
         $this->assertMaintenanceEnabled($siteaccess);
@@ -100,10 +92,6 @@ class FileHelper
         $isExistFile ? $this->maintenanceUnLock($siteaccess) : $this->maintenanceLock($siteaccess);
     }
 
-    /**
-     * @throws InvalidArgumentValue
-     * @throws NotFoundException
-     */
     public function maintenanceUnLock(string $siteaccess): bool
     {
         if ($this->isMaintenanceModeRunning($siteaccess)) {
@@ -115,10 +103,6 @@ class FileHelper
         return false;
     }
 
-    /**
-     * @throws InvalidArgumentException
-     * @throws InvalidArgumentValue
-     */
     public function maintenanceLock(string $siteaccess): bool
     {
         if ($this->existFileCluster($siteaccess)) {
@@ -180,10 +164,6 @@ class FileHelper
         }
     }
 
-    /**
-     * @throws InvalidArgumentException
-     * @throws InvalidArgumentValue
-     */
     private function createFileCluster(string $siteaccess): string
     {
         $filePath = $this->getLockFile($siteaccess);
@@ -230,10 +210,6 @@ class FileHelper
         return self::CONFIG_NAMESPACE.'/'.$siteaccess.'/'.basename($lockFile);
     }
 
-    /**
-     * @throws InvalidArgumentValue
-     * @throws NotFoundException
-     */
     private function deleteFileCluster(string $siteaccess): bool
     {
         $binaryFileId = $this->getFileId($siteaccess);

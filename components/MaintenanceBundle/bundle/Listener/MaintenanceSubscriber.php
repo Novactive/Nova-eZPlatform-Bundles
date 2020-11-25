@@ -29,7 +29,7 @@ class MaintenanceSubscriber implements EventSubscriberInterface, SiteAccessAware
     /**
      * @required
      */
-    public function setSiteAccess(SiteAccess $siteAccess = null)
+    public function setSiteAccess(SiteAccess $siteAccess = null): void
     {
         $this->siteAccess = $siteAccess;
     }
