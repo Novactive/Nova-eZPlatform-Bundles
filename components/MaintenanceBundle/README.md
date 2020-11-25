@@ -12,9 +12,9 @@ Documentation is available in this repository via `.md` files but also packaged 
 ----
 
 
-[![Downloads](https://img.shields.io/packagist/dt/novactive/ezmaintenance.svg?style=flat-square)](https://packagist.org/packages/novactive/ezmaintenance)
+[![Downloads](https://img.shields.io/packagist/dt/novactive/ezmaintenancebundle.svg?style=flat-square)](https://packagist.org/packages/novactive/ezmaintenance)
 [![Latest version](https://img.shields.io/github/release/Novactive/NovaeZMaintenanceBundle.svg?style=flat-square)](https://github.com/Novactive/NovaeZMaintenanceBundle/releases)
-[![License](https://img.shields.io/packagist/l/novactive/ezmaintenance.svg?style=flat-square)](LICENSE)
+[![License](https://img.shields.io/packagist/l/novactive/ezmaintenancebundle.svg?style=flat-square)](LICENSE)
 
 Easily enable a Maintenance page.
 
@@ -23,7 +23,7 @@ Easily enable a Maintenance page.
 
 ### Step 1: Download using composer
 
-Add the lib to your composer.json, run `composer require novactive/ezmaintenance` to refresh dependencies.
+Add the lib to your composer.json, run `composer require novactive/ezmaintenancebundle` to refresh dependencies.
 
 ### Step 2: Enable the bundle
 
@@ -56,7 +56,7 @@ nova_ezmaintenance:
     system:
         default:
             enable: false # to enable to capability
-            template: '@NovaeZMaintenance/maintenance.html.twig' # the template you want as a maintenace page
+            template: '@ezdesign/maintenance.html.twig' # the template you want as a maintenace page
             lock_file_id: 'plop.lock' # the name of the lock file in the cluster
 
 ```
