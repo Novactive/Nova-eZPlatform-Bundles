@@ -90,7 +90,7 @@ class AliasGenerator implements VariationService
         }
 
         try {
-            $variation = $this->variationService->getVariation($field, $versionInfo, $eZVariationName);
+            $variation = $this->variationService->getVariation($field, $versionInfo, $eZVariationName, $parameters);
         } catch (NonExistingFilterException $exception) {
             $cloudinaryFallbackVariation = $this->configResolver->getParameter(
                 'cloudinary_fallback_variation',
@@ -106,7 +106,12 @@ class AliasGenerator implements VariationService
                         $cloudinaryFallbackVariation
                     )
                 );
-                $variation = $this->variationService->getVariation($field, $versionInfo, $cloudinaryFallbackVariation);
+                $variation = $this->variationService->getVariation(
+                    $field,
+                    $versionInfo,
+                    $cloudinaryFallbackVariation,
+                    $parameters
+                );
             } else {
                 throw $exception;
             }

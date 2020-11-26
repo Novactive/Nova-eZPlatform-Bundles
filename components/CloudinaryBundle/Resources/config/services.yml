@@ -5,9 +5,7 @@ services:
         autoconfigure: true
         public: false
 
-    Novactive\Bundle\eZCloudinaryBundle\Twig\Extension:
-        tags:
-            - { name: twig.extension }
+    Novactive\Bundle\eZCloudinaryBundle\Twig\Extension: ~
 
     Novactive\Bundle\eZCloudinaryBundle\Core\AliasGenerator:
         arguments:

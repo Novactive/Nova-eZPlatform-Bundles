@@ -34,25 +34,27 @@ class Configuration extends SAConfiguration
                 ->end();
 
         $this->generateScopeBaseNode($rootNode)
-                     ->arrayNode('cloudinary_fecth_proxy')
-                        ->children()
-                            ->scalarNode('host')->defaultNull()->end()
-                            ->scalarNode('port')->defaultNull()->end()
-                        ->end()
-                    ->end()
-                     ->arrayNode('cloudinary_variations')
-                        ->prototype('array')
-                            ->children()
-                                ->scalarNode('ezreference_variation')->defaultNull()->end()
-                                ->arrayNode('filters')
-                                    ->prototype('variable')
+            ->scalarNode('cloudinary_disabled')->defaultFalse()->end()
+            ->scalarNode('cloudinary_fallback_variation')->defaultNull()->end()
+             ->arrayNode('cloudinary_fecth_proxy')
+                ->children()
+                    ->scalarNode('host')->defaultNull()->end()
+                    ->scalarNode('port')->defaultNull()->end()
+                ->end()
+            ->end()
+             ->arrayNode('cloudinary_variations')
+                ->prototype('array')
+                    ->children()
+                        ->scalarNode('ezreference_variation')->defaultNull()->end()
+                        ->arrayNode('filters')
+                            ->prototype('variable')
 
-                                    ->end()
-                                ->end()
                             ->end()
                         ->end()
                     ->end()
-                ;
+                ->end()
+            ->end()
+        ;
         $rootNode->end();
 
         return $treeBuilder;

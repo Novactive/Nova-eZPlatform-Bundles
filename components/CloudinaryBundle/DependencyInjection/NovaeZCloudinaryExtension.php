@@ -37,6 +37,9 @@ class NovaeZCloudinaryExtension extends Extension implements PrependExtensionInt
         $loader->load('default_settings.yml');
 
         $processor = new ConfigurationProcessor($container, 'nova_ezcloudinary');
+
+        $processor->mapSetting('cloudinary_disabled', $config);
+        $processor->mapSetting('cloudinary_fallback_variation', $config);
         $processor->mapConfigArray('cloudinary_variations', $config);
         $processor->mapConfigArray('cloudinary_fecth_proxy', $config);
     }
@@ -45,7 +48,7 @@ class NovaeZCloudinaryExtension extends Extension implements PrependExtensionInt
     {
         $fieldOverrideFile = __DIR__.'/../Resources/config/field_override.yml';
         $config = Yaml::parse(file_get_contents($fieldOverrideFile));
-        $container->prependExtensionConfig('ezpublish', $config);
+        $container->prependExtensionConfig('ezplatform', $config);
         $container->addResource(new FileResource($fieldOverrideFile));
     }
 

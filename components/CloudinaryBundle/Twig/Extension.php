@@ -38,9 +38,4 @@ class Extension extends AbstractExtension
             ),
         ];
     }
-
-    public function getName(): string
-    {
-        return 'nova_ezloudinary_extension';
-    }
 }
