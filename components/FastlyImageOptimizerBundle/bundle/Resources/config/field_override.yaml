@@ -1,0 +1,4 @@
+system:
+    default:
+        field_templates:
+            - { template: "@NovaeZFastlyImageOptimizer/content_fields.html.twig", priority: 10 }

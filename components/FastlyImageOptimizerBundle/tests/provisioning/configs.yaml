@@ -1,0 +1,8 @@
+nova_ezfastlyio:
+    system:
+        default:
+            fastlyio_variations:
+                bright:
+                    filters:
+                        width: 20
+                        brightness: -50

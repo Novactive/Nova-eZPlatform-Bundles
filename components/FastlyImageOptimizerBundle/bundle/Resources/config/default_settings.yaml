@@ -1,0 +1,3 @@
+parameters:
+    nova_ezfastlyio.default.fastlyio_disabled: false
+    nova_ezfastlyio.default.fastlyio_variations: []

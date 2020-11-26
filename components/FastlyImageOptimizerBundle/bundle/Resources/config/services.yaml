@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Novactive\Bundle\eZFastlyImageOptimizerBundle\Twig\Extension: ~
+    Novactive\Bundle\eZFastlyImageOptimizerBundle\Core\AliasGenerator:
+        arguments:
+            - "@ezpublish.fieldType.ezimage.variation_service"
+            - "@ezpublish.config.resolver"

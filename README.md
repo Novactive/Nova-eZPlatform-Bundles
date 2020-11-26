@@ -43,6 +43,7 @@ Please comply with `make codeclean` and `make tests` before to push, your PR won
 | [StaticTemplatesBundle](https://github.com/Novactive/NovaeZStaticTemplatesBundle): Render twig templates via their paths through the design engine mechanism. Simple and perfect tiny bundle to build your Front-end first using Twig. | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-OK] | ![MIT] |
 | [SolrSearchExtraBundle](https://github.com/Novactive/NovaeZSolrSearchExtraBundle): Solr search handler additions. It adds many things, binary file plain text content indexation, fullText criterion, custom field configuration, exact matches boosting configuration, etc. | ![eZ-Platform-2.x-OK] ![eZ-Platform-3.x-UNSURE] | ![MIT] |
 | [MaintenanceBundle](https://github.com/Novactive/NovaeZMaintenanceBundle): Easily enable an maintenance page! | ![eZ-Platform-3.x-OK] | ![MIT] |
+| [FastlyImageOptimizerBundle](https://github.com/Novactive/NovaeZFastlyImageOptimizerBundle): Images optimizations and manipulations by Fastly Image Optimizer on top of eZ variatons. | ![eZ-Platform-3.x-OK] | ![MIT] |
 
 ## For Maintainers
 
