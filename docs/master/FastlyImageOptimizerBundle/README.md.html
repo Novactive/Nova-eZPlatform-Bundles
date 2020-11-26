@@ -91,137 +91,74 @@ img.img-fluid {
 <div class="container-fluid">
         <div class="row flex-column-reverse flex-md-row">
         <div class="col-md-8 col-sm-12">
-            <h1 name="f0aa4737d0ee5d5870a8556ee8b1fbbf">Novactive eZ Slack Bundle</h1>
-<h1 name="c64518704ce0c0d5501a45763f464276">Usage</h1>
+            <h1 name="1c71c03eb0491d1f0f2d88ed5b0ffd00">Novactive eZ Fastly Image Optimizer Bundle</h1>
+<hr />
+<p><a href="https://packagist.org/packages/novactive/ezfastlyiobundle"><img src="https://img.shields.io/packagist/dt/novactive/ezfastlyiobundle.svg?style=flat-square" alt="Downloads" class="img-fluid" /></a>
+<a href="https://github.com/Novactive/NovaeZFastlyImageOptimizerBundle/releases"><img src="https://img.shields.io/github/release/Novactive/NovaeZFastlyImageOptimizerBundle.svg?style=flat-square" alt="Latest version" class="img-fluid" /></a>
+<a href="LICENSE.html"><img src="https://img.shields.io/packagist/l/novactive/ezfastlyiobundle.svg?style=flat-square" alt="License" class="img-fluid" /></a></p>
+<p>Novactive eZ Fastly Image Optimizer Bundle is an eZPlatform bundle for images optimizations and manipulations.</p>
+<p>This bundle brings the power of <a href="https://docs.fastly.com/en/guides/image-optimization-api">Fastly Image Optimization API</a> into your eZ Platform project.</p>
+<p>The plugin allows you to define Fastly Image Optimization Variations on top of eZ Variations.
+The image source is adapted to inject  Fastly Image Optimization parameters based on your configuration.</p>
 <blockquote>
 <p>All the configuration is SiteAccessAware then you can have different one depending on the SiteAccess</p>
 </blockquote>
-<h2 name="263485bdc392a068c22db476bfb5d0f2">Basic Configuration</h2>
-<pre><code class=" yaml">
-# config.yml
-nova_ezslack:
+<h2 name="6a755e7d228a2b491321dbae0a7a248b">INSTALL</h2>
+<h3 name="6065c97227a6214bc68bad0f15ff16d1">Use Composer</h3>
+<p>Add the lib to your composer.json, run <code>composer require novactive/ezfastlyiobundle</code> to refresh dependencies.</p>
+<p>Then inject the bundle in the <code>bundles.php</code> of your application.</p>
+<pre><code class=" php">    Novactive\Bundle\eZFastlyImageOptimizerBundle\NovaeZFastlyImageOptimizerBundle::class =&gt; [ 'all'=&gt; true ],</code></pre>
+<h2 name="c64518704ce0c0d5501a45763f464276">Usage</h2>
+<p>This bundle mimics the native image variation system.</p>
+<pre><code class=" yaml">nova_ezfastlyio:
     system:
         default:
-            slack_client_id: "" # The Client Id of your Slack App
-            slack_client_secret: "" #The Client Secret of your Slack App
-            slack_verification_token: "" #The Verification Token of your Slack app
-            slackconnect_usergroup_content_id: 12 # When to create Slack connect Users if they do not exist
-            slackconnect_contenttype_identifier: 'user' # The Content Type of the Users
-            site_name: "" # Used to display in the Message
-            asset_prefix: "" # Prefix where to load the assets
-            notifications:
-                channels:
-                    - "" # Incoming Webhook URL #1
-                    - "" # Incoming Webhook URL #2
-                    - "" # Incoming Webhook URL #N
+            fastlyio_variations:
+                bright:
+                    filters:
+                        width: 200
+                        brightness: -50
+                        blur: 50</code></pre>
+<p>You can also provide the reference variation.
+It is not recommended, using the original gives you better results on Fastly and avoid a variation to be generated on eZ side.</p>
+<pre><code class=" yaml">nova_ezfastlyio:
+    system:
+        default:
+            fastlyio_variations:
+                ezreference_variation: medium
+                bright:
+                    filters:
+                        width: 200
+                        brightness: -50
+                        blur: 50</code></pre>
+<blockquote>
+<p>In this configuration Fastly Image Optimizer will manipulate the medium variation.</p>
+</blockquote>
+<p>In your template</p>
+<pre><code class=" twig">    {{ ez_render_field( content, "image",{
+        "parameters": {"alias": 'simpletest2'},
+        "attr" : { "class" : "img-responsive" }
+    }
+    ) }}</code></pre>
+<p>Automatically, <code>nova_ezfastlyio_alias</code> will be used instead of <code>ez_image_alias</code>.
+The bundle fallback on the native Variation system if the alias name does not exist in <code>fastlyio_variations</code></p>
+<p>Then basically there is no change in your code, just yaml configuration for your Variations.</p>
+<blockquote>
+<p>if you have overrided the content_fields, be sure to update the call <code>nova_ezfastlyio_alias</code></p>
+</blockquote>
+<h2 name="aa4fcb17c0557dd8a312d18194829ddd">How to manage local dev</h2>
+<p>In local you won't have Fastly Image Optimizer, the system will just add the parameters in the URI of your images.</p>
+<p>Depending on your need to may want to disable the FastlyIO Variations.</p>
+<pre><code class=" yaml">
+# config/packages/dev/variations.yaml
 
-# DO NOT TOUCH THAT UNLESS YOU KNOW WHAT YOUR ARE DOING
-knpu_oauth2_client:
-    clients:
-        slack:
-            type: slack
-            redirect_route: _novaezslack_slack_oauth_check
-            client_id: "#" # will be overridden by ConfigResolver - this value does not matter
-            client_secret: "#" # will be overridden by ConfigResolver - this value does not matter
-</code></pre>
-<h2 name="45825ab9d334ffbe24b90b77813b9731">Create your own interactions</h2>
-<p>You have to understands some Slack concepts first: <a href="https://api.slack.com/interactive-messages">https://api.slack.com/interactive-messages</a></p>
-<p>To sum up:</p>
-<ul>
-<li>A Message is a collection of Attachments</li>
-<li>A Attachment can own Action(s) (Button or Select)</li>
-<li>When, from whithin Slack, a user click on an Action, the callback is called and this callback can update the Message.</li>
-</ul>
-<p>This bundle provides 2 concepts to manage that:</p>
-<ul>
-<li><code>AttachmentProvider</code>: to provide an Attachment to a Message</li>
-<li><code>ActionProvider</code>: to provide an Action to a Attachment</li>
-</ul>
-<p>Now look at this Message:</p>
-<p><img src="images/Message2-tech.png" alt="Message2-tech" class="img-fluid" /></p>
-<p>Now look at the configuration of services and tag to generate it.</p>
-<pre><code class=" yaml"> novaezslack.attachment.provider.content.main:
-        class: "%novaezslack.attachment.provider.content.class%"
-        tags:
-            - { name: "novaezslack.attachment.provider", alias: "main"}
-
-    novaezslack.attachment.provider.content.details:
-        class: "%novaezslack.attachment.provider.content.class%"
-        tags:
-            - { name: "novaezslack.attachment.provider", alias: "details"}
-
-    Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Attachment\BasicActions:
-        tags:
-            - { name: "novaezslack.attachment.provider", alias: "basic-actions"}
-
-    Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Attachment\States:
-        tags:
-            - { name: "novaezslack.attachment.provider", alias: "states"}
-
-    Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action\Hide:
-        tags:
-            - { name: "novaezslack.action.provider", alias: "hide", attachment: "basic-actions" }
-
-    Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action\Unhide:
-        tags:
-            - { name: "novaezslack.action.provider", alias: "unhide", attachment: "basic-actions" }
-
-    Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action\Trash:
-        tags:
-            - { name: "novaezslack.action.provider", alias: "trash", attachment: "basic-actions" }
-
-    Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action\Recover:
-        tags:
-            - { name: "novaezslack.action.provider", alias: "recover", attachment: "basic-actions" }
-
-    Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action\PublicationChainChangeState:
-        tags:
-            - { name: "novaezslack.action.provider", alias: "publication_chain.change_state", attachment: "states" }
-</code></pre>
-<p>So basically:</p>
-<ul>
-<li>
-<p>you can inject an Attachment if you define a Service tagged <code>novaezslack.attachment.provider</code> that implements
-AttachmentProviderInterface</p>
-</li>
-<li>
-<p>inject an Action to an Attachment if you define a Service tagged <code>novaezslack.action.provider</code> that implements
-ActionProviderInterface. Here you also need to provide the Attachment name with <code>attachment</code> key.</p>
-</li>
-</ul>
-<p>Wanna add an attachment &quot;MyAttachmentPart&quot; and &quot;Button1&quot; and &quot;Select2&quot;?</p>
-<pre><code class=" yaml">    YOUR_FQDN_CLASS_FOR_MyAttachmentPart_AttachmentProviderInterface:
-        tags:
-            - { name: "novaezslack.attachment.provider", alias: "MyAttachmentPart"}
-
-    YOUR_FQDN_CLASS_FOR_Button1_ActionProviderInterface:
-        tags:
-            - { name: "novaezslack.action.provider", alias: "Button1", attachment: "MyAttachmentPart" }
-
-    YOUR_FQDN_CLASS_FOR_Select2_ActionProviderInterface:
-        tags:
-            - { name: "novaezslack.action.provider", alias: "Select2", attachment: "MyAttachmentPart" }
-</code></pre>
-<p>That is it! Now your turn to code!</p>
-<h2 name="d930a6572086a21ff86a355e0e70b869">Create your own command</h2>
-<p>You have to understands some Slack concepts first: <a href="https://api.slack.com/slash-commands">https://api.slack.com/slash-commands</a></p>
-<p>To sump up:</p>
-<ul>
-<li>A command is trigger from Slack and consist of Text placed after the <code>/command</code></li>
-<li>A callback URLs is called by Slack to get the Message to display!</li>
-</ul>
-<p>This bundle provides a concept of <code>Responder</code> to manage that, it is pretty simple you just have to implement the
-ResponderInterface and tag your service:</p>
-<pre><code class=" yaml">    YOUR_FQDN_CLASS_FOR_MyAttachmentPart_AttachmentProviderInterface:
-        tags:
-            - { name: "novaezslack.command.responder"}</code></pre>
-<p>The trigger of this Responder will be the ClassName, for instance
-<code>Novactive\Bundle\eZSlackBundle\Core\Slack\Responder\Search</code> will provide the <code>/command search</code> responder.</p>
-<p>In your Slack you can then do:</p>
-<pre><code>/command classname whatever you want etc --12 --hello=world </code></pre>
-<p>And you will get an array of arguments (without <code>/command</code> and <code>classname</code>) in the
-<code>public function respond(array $arguments = []): Message;</code> function </p>
-<p>That's it!</p>
+nova_ezfastlyio:
+    system:
+        site:
+            fastlyio_disabled: true</code></pre>
+<blockquote>
+<p>that's not required,=</p>
+</blockquote>
 
             <p class="text-right">
                 <img width="204" height="20"
@@ -232,7 +169,7 @@ ResponderInterface and tag your service:</p>
         </div>
         <div class="col-md-4 col-sm-12 d-print-none sidebar">
                             <p><strong>In this page</strong>:</p>
-                <ul class="nav flex-column"><li class="nav-item first"><a href="#f0aa4737d0ee5d5870a8556ee8b1fbbf" class="nav-link">Novactive eZ Slack Bundle</a></li><li class="nav-item last"><a href="#c64518704ce0c0d5501a45763f464276" class="nav-link">Usage</a><ul class="menu_level_1"><li class="nav-item first"><a href="#263485bdc392a068c22db476bfb5d0f2" class="nav-link">Basic Configuration</a></li><li class="nav-item"><a href="#45825ab9d334ffbe24b90b77813b9731" class="nav-link">Create your own interactions</a></li><li class="nav-item last"><a href="#d930a6572086a21ff86a355e0e70b869" class="nav-link">Create your own command</a></li></ul></li></ul>
+                <ul class="nav flex-column"><li class="nav-item first last"><a href="#1c71c03eb0491d1f0f2d88ed5b0ffd00" class="nav-link">Novactive eZ Fastly Image Optimizer Bundle</a><ul class="menu_level_1"><li class="nav-item first"><a href="#6a755e7d228a2b491321dbae0a7a248b" class="nav-link">INSTALL</a><ul class="menu_level_2"><li class="nav-item first last"><a href="#6065c97227a6214bc68bad0f15ff16d1" class="nav-link">Use Composer</a></li></ul></li><li class="nav-item"><a href="#c64518704ce0c0d5501a45763f464276" class="nav-link">Usage</a></li><li class="nav-item last"><a href="#aa4fcb17c0557dd8a312d18194829ddd" class="nav-link">How to manage local dev</a></li></ul></li></ul>
                     </div>
     </div>
     <footer class="pt-4 my-md-5 pt-md-5 border-top">
