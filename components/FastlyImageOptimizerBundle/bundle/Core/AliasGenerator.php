@@ -25,10 +25,20 @@ use Psr\Log\LoggerInterface;
 
 class AliasGenerator implements VariationService
 {
-    protected ConfigResolverInterface $configResolver;
-    protected VariationService $variationService;
+    /**
+     * @var ConfigResolverInterface
+     */
+    protected $configResolver;
 
-    protected LoggerInterface $logger;
+    /**
+     * @var VariationService
+     */
+    protected $variationService;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
 
     public function __construct(
         VariationService $variationService,
