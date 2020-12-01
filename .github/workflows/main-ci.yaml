@@ -1,6 +1,6 @@
 name: CI
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
     lint:
@@ -42,7 +42,7 @@ jobs:
                 options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
         strategy:
             matrix:
-                php: [7.3, 7.4]
+                php: [ 7.3, 7.4 ]
         env:
             CACHE_POOL: cache.redis
             DATABASE_URL: mysql://root@127.0.0.1:3306/ezplatform
@@ -82,6 +82,9 @@ jobs:
                     key: ${{ runner.os }}-composer-cache-dir
                     restore-keys: |
                         ${{ runner.os }}-composer-cache-dir
+
+            -   name: Composer Auth
+                run: composer config github-oauth.github.com ${{ secrets.GITHUB_TOKEN }}
 
             -   name: Install dependencies of the Mono Repo
                 run: composer install --prefer-dist --no-progress --no-suggest --no-interaction
