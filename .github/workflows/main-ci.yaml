@@ -88,7 +88,7 @@ jobs:
 
             -   name: Install eZ Platform and Yarn deps
                 run: |
-                    composer create-project ezsystems/ezplatform:dev-master --prefer-dist --no-progress --no-interaction --no-scripts ezplatform
+                    composer create-project ezsystems/ezplatform --prefer-dist --no-progress --no-interaction --no-scripts ezplatform
                     mkdir -p ezplatform/node_modules && ln -s ezplatform/node_modules
                     cd ezplatform
 
