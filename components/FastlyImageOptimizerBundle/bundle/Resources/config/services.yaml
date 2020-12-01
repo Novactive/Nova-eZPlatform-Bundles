@@ -9,3 +9,4 @@ services:
         arguments:
             - "@ezpublish.fieldType.ezimage.variation_service"
             - "@ezpublish.config.resolver"
+            - "@logger"
