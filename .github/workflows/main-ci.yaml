@@ -61,6 +61,8 @@ jobs:
                     php-version: ${{ matrix.php }}
                     extensions: mbstring, intl
                 id: php
+                env:
+                    COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             -   name: Install Latest Chrome Driver
                 run: |
@@ -82,9 +84,6 @@ jobs:
                     key: ${{ runner.os }}-composer-cache-dir
                     restore-keys: |
                         ${{ runner.os }}-composer-cache-dir
-
-            -   name: Composer Auth
-                run: composer config github-oauth.github.com ${{ secrets.GITHUB_TOKEN }}
 
             -   name: Install dependencies of the Mono Repo
                 run: composer install --prefer-dist --no-progress --no-suggest --no-interaction
