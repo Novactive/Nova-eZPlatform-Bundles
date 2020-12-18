@@ -1,0 +1,2 @@
+_novaezalgoliasearchengine_routes:
+    resource: '@NovaEzAlgoliaSearchEngine/Resources/config/routing.yaml'

@@ -93,7 +93,7 @@ jobs:
                     composer create-project ezsystems/ezplatform --prefer-dist --no-progress --no-interaction --no-scripts ezplatform
                     mkdir -p ezplatform/node_modules && ln -s ezplatform/node_modules
                     cd ezplatform
-
+                    yarn add --dev algoliasearch react react-collapsible react-dom react-instantsearch-dom
                     rm -rf var/cache
                     composer ezplatform-install
 

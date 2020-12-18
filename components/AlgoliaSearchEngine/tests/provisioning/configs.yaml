@@ -1,0 +1,28 @@
+nova_ezalgoliasearchengine:
+    system:
+        default:
+            index_name_prefix: xxx
+            app_id: yyy
+            api_secret_key: zzz
+            api_search_only_key: ttt
+
+
+webpack_encore:
+    builds:
+        nova_ezalgolia: "%kernel.project_dir%/public/assets/nova_ezalgolia/build"
+
+framework:
+    assets:
+        packages:
+            nova_ezalgolia:
+                json_manifest_path: '%kernel.project_dir%/public/assets/nova_ezalgolia/build/manifest.json'
+
+ezplatform:
+    system:
+        site_group:
+            search_view:
+                full:
+                    ezplatform_admin_ui:
+                        controller: 'Novactive\Bundle\eZAlgoliaSearchEngine\Controller\SearchController:searchAction'
+                        template: '@ezdesign/ui/search/algolia.html.twig'
+                        match: true

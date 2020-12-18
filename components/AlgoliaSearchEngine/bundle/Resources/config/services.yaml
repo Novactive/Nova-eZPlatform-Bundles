@@ -1,0 +1,234 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    _instanceof:
+        Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\CriterionVisitor\Contracts\FieldInterface:
+            tags:
+                - { name: ezplatform.search.algolia.query.content.criterion_visitor }
+                - { name: ezplatform.search.algolia.query.location.criterion_visitor }
+            calls:
+                - [ setServices, [ "@ezpublish.search.common.field_name_resolver", "@ezpublish.search.common.field_value_mapper.aggregate", "@ezpublish.search.common.field_name_generator" ] ]
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Command\:
+        resource: '../../Command'
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Command\Reindex:
+        bind:
+            $persistenceHandler: '@ezpublish.api.storage_engine'
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Controller\:
+        resource: '../../Controller'
+        tags: ['controller.service_arguments']
+
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Mapping\ParametersResolver: ~
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\:
+        resource: '../../Core'
+        exclude: '../../Core/Search'
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\AlgoliaClient:
+        bind:
+            $dispatcherCriterionVisitor: '@ezplatform.search.algolia.query.content.criterion_visitor.dispatcher'
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\Search\Search: ~
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\Search\SearchQueryFactory: ~
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\Indexer:
+        arguments:
+            $logger: '@logger'
+            $persistenceHandler: '@ezpublish.api.storage_engine'
+            $connection: '@ezpublish.persistence.connection'
+            $searchHandler: '@Novactive\Bundle\eZAlgoliaSearchEngine\Core\Handler'
+        lazy: true
+        tags:
+            - { name: ezplatform.search_engine.indexer, alias: algolia }
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\Handler:
+        bind:
+            $contentSearch: '@ezplatform.search.algolia.query.content.search'
+            $locationSearch: '@ezplatform.search.algolia.query.location.search'
+            $logger: '@logger'
+        arguments:
+            $gateway: '@ezpublish.search.legacy.gateway.content'
+            $locationGateway: '@ezpublish.search.legacy.gateway.location'
+            $indexerGateway: '@eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Gateway\DoctrineDatabase'
+            $contentMapper: '@ezpublish.persistence.legacy.content.mapper'
+            $locationMapper: '@ezpublish.persistence.legacy.location.mapper'
+            $languageHandler: '@ezpublish.spi.persistence.language_handler'
+            $mapper: '@ezpublish.search.legacy.fulltext_mapper'
+        lazy: true
+        tags:
+            - { name: ezplatform.search_engine, alias: algolia }
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\ClientService:
+        bind:
+            $contentSearch: '@ezplatform.search.algolia.query.content.search'
+            $locationSearch: '@ezplatform.search.algolia.query.location.search'
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\AttributeGenerator:
+        bind:
+            $fieldNameGenerator: '@ezpublish.search.common.field_name_generator'
+            $fieldRegistry: '@ezpublish.search.common.field_registry'
+            $fieldTypeRegistry: '@ezpublish.persistence.field_type_registry'
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\Converter:
+        arguments:
+            $persistenceHandler: '@ezpublish.api.storage_engine'
+            $fieldRegistry: '@ezpublish.search.common.field_registry'
+            $fieldNameGenerator: '@ezpublish.search.common.field_name_generator'
+            $fieldTypeRegistry: '@ezpublish.persistence.field_type_registry'
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\DocumentSerializer:
+        arguments:
+            $fieldValueMapper: '@ezpublish.search.common.field_value_mapper.aggregate'
+            $fieldNameGenerator: '@ezpublish.search.common.field_name_generator'
+
+    # Search
+
+    ezplatform.search.algolia.query.content.search:
+        class: Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\Search
+        arguments:
+            $resultExtractor: '@Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\ResultExtractor\ContentResultsExtractor'
+            $dispatcherFacetVisitor: '@ezplatform.search.algolia.query.content.facet_builder_visitor.dispatcher'
+            $dispatcherCriterionVisitor: '@ezplatform.search.algolia.query.content.criterion_visitor.dispatcher'
+            $dispatcherSortClauseVisitor: '@ezplatform.search.algolia.query.sort_clause_visitor.dispatcher'
+
+    ezplatform.search.algolia.query.location.search:
+        class: Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\Search
+        arguments:
+            $resultExtractor: '@Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\ResultExtractor\LocationResultsExtractor'
+            $dispatcherFacetVisitor: '@ezplatform.search.algolia.query.location.facet_builder_visitor.dispatcher'
+            $dispatcherCriterionVisitor: '@ezplatform.search.algolia.query.location.criterion_visitor.dispatcher'
+            $dispatcherSortClauseVisitor: '@ezplatform.search.algolia.query.sort_clause_visitor.dispatcher'
+
+    # Visitors
+
+    ## - Facets
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\FacetBuilderVisitor\ContentTypeVisitor:
+        tags:
+            - { name: ezplatform.search.algolia.query.content.facet_builder_visitor }
+            - { name: ezplatform.search.algolia.query.location.facet_builder_visitor }
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\FacetBuilderVisitor\SectionVisitor:
+        tags:
+            - { name: ezplatform.search.algolia.query.content.facet_builder_visitor }
+            - { name: ezplatform.search.algolia.query.location.facet_builder_visitor }
+
+    ezplatform.search.algolia.query.content.facet_builder_visitor.dispatcher:
+        class: Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\FacetBuilderVisitor\DispatcherVisitor
+        arguments:
+            $visitors: !tagged_iterator ezplatform.search.algolia.query.content.facet_builder_visitor
+
+    ezplatform.search.algolia.query.location.facet_builder_visitor.dispatcher:
+        class: Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\FacetBuilderVisitor\DispatcherVisitor
+        arguments:
+            $visitors: !tagged_iterator ezplatform.search.algolia.query.location.facet_builder_visitor
+
+    ## - Criterions
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\CriterionVisitor\:
+        resource: '../../Core/Query/CriterionVisitor'
+        tags:
+            - { name: ezplatform.search.algolia.query.content.criterion_visitor }
+            - { name: ezplatform.search.algolia.query.location.criterion_visitor }
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\CriterionVisitor\ContentTypeIdentifierVisitor:
+        tags:
+            - { name: ezplatform.search.algolia.query.content.criterion_visitor }
+            - { name: ezplatform.search.algolia.query.location.criterion_visitor }
+        arguments:
+            $contentTypeHandler: '@ezpublish.spi.persistence.content_type_handler'
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\CriterionVisitor\Tags\TagIdVisitor:
+        tags:
+            - { name: ezplatform.search.algolia.query.content.criterion_visitor }
+            - { name: ezplatform.search.algolia.query.location.criterion_visitor }
+        arguments:
+            - "@ezpublish.spi.persistence.content_type_handler"
+            - "eztags"
+            - "tag_ids"
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\CriterionVisitor\Tags\TagKeywordVisitor:
+        tags:
+            - { name: ezplatform.search.algolia.query.content.criterion_visitor }
+            - { name: ezplatform.search.algolia.query.location.criterion_visitor }
+        arguments:
+            - "@ezpublish.spi.persistence.content_type_handler"
+            - "eztags"
+            - "tag_keywords"
+
+    ### - Content specific
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\CriterionVisitor\Content\:
+        resource: '../../Core/Query/CriterionVisitor/Content'
+        tags:
+            - { name: ezplatform.search.algolia.query.content.criterion_visitor }
+
+    ### - Location specific
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\CriterionVisitor\Location\:
+        resource: '../../Core/Query/CriterionVisitor/Location'
+        tags:
+            - { name: ezplatform.search.algolia.query.location.criterion_visitor }
+
+    ### - Dispatchers
+
+    ezplatform.search.algolia.query.content.criterion_visitor.dispatcher:
+        class: Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\CriterionVisitor\DispatcherVisitor
+        arguments:
+            $visitors: !tagged_iterator ezplatform.search.algolia.query.content.criterion_visitor
+
+    ezplatform.search.algolia.query.location.criterion_visitor.dispatcher:
+        class: Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\CriterionVisitor\DispatcherVisitor
+        arguments:
+            $visitors: !tagged_iterator ezplatform.search.algolia.query.location.criterion_visitor
+
+    ## - Sort Clause Visitors
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\SortClauseVisitor\:
+        resource: '../../Core/Query/SortClauseVisitor'
+        tags:
+            - { name: ezplatform.search.algolia.query.sort_clause_visitor }
+
+    ### - Dispatchers
+
+    ezplatform.search.algolia.query.sort_clause_visitor.dispatcher:
+        class: Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\SortClauseVisitor\DispatcherVisitor
+        arguments:
+            $visitors: !tagged_iterator ezplatform.search.algolia.query.sort_clause_visitor
+
+    # Extractors
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\ResultExtractor\ContentResultsExtractor:
+        arguments:
+            $contentHandler: '@ezpublish.spi.persistence.content_handler'
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\ResultExtractor\LocationResultsExtractor:
+        arguments:
+            $locationHandler: '@ezpublish.spi.persistence.location_handler'
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\ResultExtractor\FacetResultExtractor\FacetResultExtractor:
+        alias: Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\ResultExtractor\FacetResultExtractor\DispatcherResultExtractor
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\ResultExtractor\FacetResultExtractor\DispatcherResultExtractor:
+        arguments:
+            $extractors: !tagged_iterator ezplatform.search.algolia.query.facet_result_extractor
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\ResultExtractor\FacetResultExtractor\ContentTypeResultExtractor:
+        tags:
+            - { name: ezplatform.search.algolia.query.facet_result_extractor }
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\ResultExtractor\FacetResultExtractor\SectionResultExtractor:
+        tags:
+            - { name: ezplatform.search.algolia.query.facet_result_extractor }
+
+    Novactive\Bundle\eZAlgoliaSearchEngine\Listener\ContentNotSearchableFieldSkipped:
+        arguments:
+            $imageVariationHandler: '@ezpublish.fieldType.ezimage.variation_service'
+        tags:
+            - { name: kernel.event_listener, event: Novactive\Bundle\eZAlgoliaSearchEngine\Event\ContentTranslationDataFieldConvertEvent }
