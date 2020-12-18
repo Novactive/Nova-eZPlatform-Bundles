@@ -1,0 +1,26 @@
+sort_by_content_id_i_asc: Content Id Asc
+sort_by_content_id_i_desc: Content Id Desc
+sort_by_content_name_s_asc: Content Name Asc
+sort_by_content_name_s_desc: Content Name Desc
+sort_by_content_publication_date_dt_asc: Content Publication Date Asc
+sort_by_content_publication_date_dt_desc: Content Publication Date Desc
+sort_by_content_modification_date_dt_asc: Content Modification Date Asc
+sort_by_content_modification_date_dt_desc: Content Modification Date Desc
+sort_by_section_identifier_id_asc: Section Identifier Asc
+sort_by_section_identifier_id_desc: Section Identifier Desc
+sort_by_section_name_s_asc: Section Name Asc
+sort_by_section_name_s_desc: Section Name Desc
+sort_by_priority_i_asc: Priority Asc
+sort_by_priority_i_desc: Priority Desc
+sort_by_depth_i_asc: Depth Asc
+sort_by_depth_i_desc: Depth Desc
+sort_by_location_id_i_asc: Location Id Asc
+sort_by_location_id_i_desc: Location Id Desc
+sort_by_is_main_location_b_asc: Is Main Location Asc
+sort_by_is_main_location_b_desc: Is Main Location Desc
+sort_by_path_string_id_asc: Path String Asc
+sort_by_path_string_id_desc: Path String Desc
+sort_by_invisible_b_asc: Invisible Asc
+sort_by_invisible_b_desc: Invisible Desc
+facet.content_type_name_s: Content Type Name
+facet.section_name_s: Section

@@ -1,0 +1,85 @@
+parameters:
+    nova_ezalgoliasearchengine.default.index_name_prefix: ~
+    nova_ezalgoliasearchengine.default.app_id: ~
+    nova_ezalgoliasearchengine.default.api_secret_key: ~
+    nova_ezalgoliasearchengine.default.api_search_only_key: ~
+    nova_ezalgoliasearchengine.default.license_key: ~
+    nova_ezalgoliasearchengine.default.searchable_attributes:
+        - content_id_i
+        - content_remote_id_id
+        - content_name_s
+        - content_type_id_i
+        - content_type_name_s
+        - content_type_identifier_s
+        - content_type_group_id_mi
+        - content_owner_user_id_i
+        - content_owner_user_group_id_mi
+        - content_main_language_code_id
+        - content_always_available_b
+        - section_id_i
+        - section_identifier_id
+        - section_name_s
+        - content_modification_date_dt
+        - content_publication_date_dt
+        - object_state_id_mi
+        - content_language_codes_ms
+        - content_version_creator_user_id_i
+        - location_id_mi
+        - location_parent_id_mi
+        - location_remote_id_mid
+        - location_path_string_mid
+        - location_ancestors_path_string_ms
+        - path_string_id
+        - main_location_i
+        - main_location_parent_i
+        - main_location_remote_id_id
+        - main_location_visible_b
+        - main_location_path_id
+        - main_location_depth_i
+        - main_location_priority_i
+        - location_visible_b
+        - meta_indexed_language_code_s
+        - meta_indexed_is_main_translation_b
+        - meta_indexed_is_main_translation_and_always_available_b
+
+    nova_ezalgoliasearchengine.default.attributes_for_faceting:
+        - content_type_name_s
+        - doc_type_s
+        - section_name_s
+        - filterOnly(content_type_identifier_s)
+        - filterOnly(location_remote_id_mid)
+        - filterOnly(section_identifier_id)
+        - filterOnly(content_remote_id_id)
+        - filterOnly(content_language_codes_ms)
+        - filterOnly(location_visible_b)
+        - filterOnly(is_main_location_b)
+        - filterOnly(location_remote_id_id)
+        - filterOnly(invisible_b)
+        - filterOnly(ancestors_path_string_mid)
+        - filterOnly(location_ancestors_path_string_mid)
+
+    nova_ezalgoliasearchengine.default.attributes_to_retrieve:
+        - content_id_i
+        - location_id_i
+        - meta_indexed_language_code_s
+        - content_name_s
+
+    nova_ezalgoliasearchengine.default.attributes_for_replicas:
+        - content_id_i
+        - content_name_s
+        - content_publication_date_dt
+        - content_modification_date_dt
+        - section_identifier_id
+        - section_name_s
+        - priority_i
+        - depth_i
+        - location_id_i
+        - is_main_location_b
+        - path_string_id
+        - invisible_b
+
+    nova_ezalgoliasearchengine.default.exclude_content_types:
+        - user
+        - user_group
+
+    nova_ezalgoliasearchengine.default.include_content_types: []

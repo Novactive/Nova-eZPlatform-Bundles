@@ -49,6 +49,7 @@ installez: install ## Install eZ as the local project
 	@$(COMPOSER) create-project ezsystems/ezplatform --prefer-dist --no-progress --no-interaction --no-scripts $(EZ_DIR)
 	@echo "..:: Do bundle YARN deps ::.."
 	@mkdir $(EZ_DIR)/node_modules && ln -sf $(EZ_DIR)/node_modules
+	@cd $(EZ_DIR) && yarn add --dev algoliasearch react react-collapsible react-dom react-instantsearch-dom
 
 	@echo "..:: Do eZ Install ::.."
 	@echo "DATABASE_URL=mysql://root:ezplatform@127.0.0.1:3300/ezplatform" >>  $(EZ_DIR)/.env.local

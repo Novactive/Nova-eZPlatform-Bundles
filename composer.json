@@ -33,7 +33,9 @@
             "Novactive\\Bundle\\EzStaticTemplatesBundle\\": "components/StaticTemplatesBundle/bundle",
             "Novactive\\Bundle\\EzStaticTemplatesBundle\\Tests\\": "components/StaticTemplatesBundle/tests/Tests",
             "Novactive\\NovaeZMaintenanceBundle\\": "components/MaintenanceBundle/bundle",
-            "Novactive\\Bundle\\eZFastlyImageOptimizerBundle\\": "components/FastlyImageOptimizerBundle/bundle"
+            "Novactive\\Bundle\\eZFastlyImageOptimizerBundle\\": "components/FastlyImageOptimizerBundle/bundle",
+            "Novactive\\Bundle\\eZAlgoliaSearchEngine\\": "components/AlgoliaSearchEngine/bundle",
+            "Novactive\\Bundle\\eZAlgoliaSearchEngine\\Tests\\": "components/AlgoliaSearchEngine/tests/Tests"
         }
     },
     "require": {
