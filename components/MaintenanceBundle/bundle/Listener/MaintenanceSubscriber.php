@@ -50,6 +50,10 @@ class MaintenanceSubscriber implements EventSubscriberInterface, SiteAccessAware
             if (
                 true === $this->fileHelper->isMaintenanceEnabled($siteaccessName)
                 && true === $this->fileHelper->isMaintenanceModeRunning($siteaccessName)
+                && false === $this->fileHelper->isClientIpAuthorized(
+                    $event->getRequest()->getClientIp(),
+                    $this->siteAccess
+                )
             ) {
                 $event->setResponse($this->fileHelper->getResponse($siteaccessName));
             }

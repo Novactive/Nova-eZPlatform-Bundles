@@ -15,10 +15,13 @@ declare(strict_types=1);
 namespace Novactive\NovaeZMaintenanceBundle\Helper;
 
 use Exception;
+use eZ\Publish\API\Repository\PermissionResolver;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
@@ -57,12 +60,18 @@ class FileHelper
      */
     private $translator;
 
+    /**
+     * @var PermissionResolver
+     */
+    private $permissionResolver;
+
     public function __construct(
         IOServiceInterface $binaryFileIOService,
         Filesystem $fileSystem,
         Environment $twig,
         ConfigResolverInterface $configResolver,
         TranslatorInterface $translator,
+        PermissionResolver $permissionResolver,
         array $siteaccessList = []
     ) {
         $this->binaryfileIOService = $binaryFileIOService;
@@ -70,6 +79,7 @@ class FileHelper
         $this->twig = $twig;
         $this->configResolver = $configResolver;
         $this->translator = $translator;
+        $this->permissionResolver = $permissionResolver;
         $this->siteaccessList = $siteaccessList;
     }
 
@@ -218,5 +228,22 @@ class FileHelper
         }
 
         return true;
+    }
+
+    public function isClientIpAuthorized(string $client_ip, string $siteaccess): bool
+    {
+        $authorized_ips = $this->getParameter('authorized_ips', $siteaccess);
+        if (IPUtils::checkIp($client_ip, $authorized_ips)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function checkManageAccess(): void
+    {
+        if (!$this->permissionResolver->hasAccess('novamaintenance', 'manage')) {
+            throw new UnauthorizedException('novamaintenance', 'manage', []);
+        }
     }
 }
