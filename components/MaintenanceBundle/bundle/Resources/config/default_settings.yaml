@@ -2,4 +2,4 @@ parameters:
     nova_ezmaintenance.default.enable: false
     nova_ezmaintenance.default.template: '@NovaeZMaintenance/maintenance.html.twig'
     nova_ezmaintenance.default.lock_file_id: 'default.lock'
-    nova_ezmaintenance.default.authorized_ips: ~
+    nova_ezmaintenance.default.authorized_ips: []

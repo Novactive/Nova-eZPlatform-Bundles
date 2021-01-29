@@ -232,7 +232,7 @@ class FileHelper
 
     public function isClientIpAuthorized(string $client_ip, string $siteaccess): bool
     {
-        $authorized_ips = $this->getParameter('authorized_ips', $siteaccess);
+        $authorized_ips = (array) $this->getParameter('authorized_ips', $siteaccess);
         if (IPUtils::checkIp($client_ip, $authorized_ips)) {
             return true;
         }
