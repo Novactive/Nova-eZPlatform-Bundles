@@ -11,13 +11,15 @@ services:
         arguments:
             $binaryFileIOService: "@ezpublish.fieldType.ezbinaryfile.io_service"
             $siteaccessList: '%ezpublish.siteaccess.list%'
+        lazy: true
 
     Novactive\NovaeZMaintenanceBundle\Controller\:
         resource: '../../Controller'
         tags:
             - { name: controller.service_arguments }
 
-    Novactive\NovaeZMaintenanceBundle\Listener\MaintenanceSubscriber: ~
+    Novactive\NovaeZMaintenanceBundle\Listener\MaintenanceSubscriber:
+        lazy: true
 
     Novactive\NovaeZMaintenanceBundle\Listener\AdminTopMenu:
         tags:
