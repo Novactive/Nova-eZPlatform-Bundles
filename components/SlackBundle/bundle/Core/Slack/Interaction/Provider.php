@@ -14,11 +14,11 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction;
 
-use eZ\Publish\Core\SignalSlot\Signal;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Attachment\AttachmentProviderInterface;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
 use RuntimeException;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Class Provider.
@@ -50,11 +50,11 @@ class Provider
     /**
      * @return Attachment[]
      */
-    public function getAttachments(Signal $signal): array
+    public function getAttachments(Event $event): array
     {
         $attachments = [];
         foreach ($this->attachmentProviders as $provider) {
-            $attachment = $provider->getAttachment($signal);
+            $attachment = $provider->getAttachment($event);
             if (null !== $attachment) {
                 $attachments[] = $attachment;
             }

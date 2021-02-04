@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Attachment;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use Symfony\Contracts\EventDispatcher\Event;
 use Novactive\Bundle\eZSlackBundle\Core\Decorator\Attachment as AttachmentDecorator;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Action;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
@@ -24,9 +24,6 @@ use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\AliasTrait;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
 use RuntimeException;
 
-/**
- * Class AttachmentProvider.
- */
 abstract class AttachmentProvider implements AttachmentProviderInterface
 {
     use AliasTrait;
@@ -34,7 +31,7 @@ abstract class AttachmentProvider implements AttachmentProviderInterface
     /**
      * @var ActionProviderInterface[]
      */
-    protected $actions;
+    protected array $actions;
 
     /**
      * @var AttachmentDecorator
@@ -67,12 +64,12 @@ abstract class AttachmentProvider implements AttachmentProviderInterface
     /**
      * @return Action[]
      */
-    public function buildActions(Signal $signal): array
+    public function buildActions(Event $event): array
     {
         $actions = [];
         foreach ($this->actions as $index => $actionProvider) {
             /* @var ActionProvider $actionProvider */
-            $action = $actionProvider->getAction($signal, (int) $index);
+            $action = $actionProvider->getAction($event, (int) $index);
             if (null !== $action) {
                 $actions[] = $action;
             }
@@ -81,19 +78,15 @@ abstract class AttachmentProvider implements AttachmentProviderInterface
         return $actions;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($alias): bool
     {
-        return substr($alias, 0, \strlen($this->getAlias())) === $this->getAlias();
+        return strpos($alias, $this->getAlias()) === 0;
     }
 
     public function execute(InteractiveMessage $message): Attachment
     {
         $action = $message->getAction();
         foreach ($this->actions as $provider) {
-            /** @var ActionProviderInterface $provider */
             if ($provider->supports($action->getName())) {
                 return $provider->execute($message);
             }

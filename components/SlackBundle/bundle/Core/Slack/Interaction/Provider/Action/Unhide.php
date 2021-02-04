@@ -14,28 +14,23 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use Symfony\Contracts\EventDispatcher\Event;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Action;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Button;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
+use eZ\Publish\API\Repository\Events\Trash\TrashEvent;
 
-/**
- * Class Unhide.
- */
 class Unhide extends ActionProvider
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getAction(Signal $signal, int $index): ?Action
+    public function getAction(Event $signal, int $index): ?Action
     {
         $content = $this->getContentForSignal($signal);
         if (
             null === $content ||
             !$content->contentInfo->published ||
             null === $content->contentInfo->mainLocationId ||
-            $signal instanceof Signal\TrashService\TrashSignal
+            $signal instanceof TrashEvent
         ) {
             return null;
         }
@@ -49,10 +44,7 @@ class Unhide extends ActionProvider
 
         return $button;
     }
-
-    /**
-     * {@inheritdoc}
-     */
+    
     public function execute(InteractiveMessage $message): Attachment
     {
         $action = $message->getAction();

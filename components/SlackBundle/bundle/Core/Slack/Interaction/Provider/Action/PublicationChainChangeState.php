@@ -14,29 +14,24 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action;
 
-use eZ\Publish\Core\SignalSlot\Signal;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Action;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Option;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Select;
+use Symfony\Contracts\EventDispatcher\Event;
 
-/**
- * Class PublicationChainChangeState.
- */
 class PublicationChainChangeState extends ActionProvider
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getAction(Signal $signal, int $index): ?Action
+    public function getAction(Event $event, int $index): ?Action
     {
-        $content = $this->getContentForSignal($signal);
+        $content = $this->getContentForSignal($event);
         if (null === $content) {
             return null;
         }
 
         try {
+            $chainGroup = null;
             $objectStateService = $this->repository->getObjectStateService();
             $allGroups = $objectStateService->loadObjectStateGroups();
             foreach ($allGroups as $group) {
@@ -65,13 +60,10 @@ class PublicationChainChangeState extends ActionProvider
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InteractiveMessage $message): Attachment
     {
         $action = $message->getAction();
-        list($contentId, $value) = explode(':', $action->getSelectedOption()->getValue());
+        [$contentId, $value] = explode(':', $action->getSelectedOption()->getValue());
         $attachment = new Attachment();
         $attachment->setTitle('_t:action.publication_chain.change_state');
         try {

@@ -18,27 +18,22 @@ use Exception;
 use eZ\Publish\API\Repository\Values\Content\Query as eZQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
-use eZ\Publish\Core\SignalSlot\Signal;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Action;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Button;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Confirmation;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
+use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\API\Repository\Events\Trash\TrashEvent;
 
-/**
- * Class Recover.
- */
 class Recover extends ActionProvider
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getAction(Signal $signal, int $index): ?Action
+    public function getAction(Event $event, int $index): ?Action
     {
-        if (!$signal instanceof Signal\TrashService\TrashSignal) {
+        if (!$event instanceof TrashEvent) {
             return null;
         }
-        $button = new Button($this->getAlias(), '_t:action.recover', (string) $signal->contentId);
+        $button = new Button($this->getAlias(), '_t:action.recover', (string) $event->getLocation()->contentId);
         $button->setStyle(Button::PRIMARY_STYLE);
         $confirmation = new Confirmation('_t:action.generic.confirmation');
         $button->setConfirmation($confirmation);
@@ -46,9 +41,6 @@ class Recover extends ActionProvider
         return $button;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InteractiveMessage $message): Attachment
     {
         $action = $message->getAction();

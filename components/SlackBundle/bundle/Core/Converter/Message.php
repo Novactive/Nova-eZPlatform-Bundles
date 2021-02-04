@@ -14,74 +14,67 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Converter;
 
-use eZ\Publish\Core\SignalSlot\Signal;
-use Novactive\Bundle\eZSlackBundle\Core\Signal\Shared;
+use Novactive\Bundle\eZSlackBundle\Core\Event\Shared;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider as InteractionProvider;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Message as MessageModel;
+use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\API\Repository\Events;
 
 /**
  * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class Message
 {
-    /**
-     * @var InteractionProvider
-     */
-    private $provider;
+    private InteractionProvider $provider;
 
-    /**
-     * Message constructor.
-     */
     public function __construct(InteractionProvider $provider)
     {
         $this->provider = $provider;
     }
 
-    public function convert(Signal $signal, ?MessageModel $message = null): MessageModel
+    public function convert(Event $event, ?MessageModel $message = null): MessageModel
     {
         if (null === $message) {
             $message = new MessageModel();
         }
 
         if (null === $message->getText()) {
-            if ($signal instanceof Signal\ContentService\PublishVersionSignal) {
+            if ($event instanceof Events\Content\PublishVersionEvent) {
+                $created = '_t:message.text.content.created';
+                $updated = '_t:message.text.content.updated';
                 $message->setText(
-                    $signal->versionNo > 1 ? '_t:message.text.content.updated' : '_t:message.text.content.created'
+                    $event->getVersionInfo()->versionNo > 1 ? $updated : $created
                 );
             }
-            if ($signal instanceof Signal\LocationService\HideLocationSignal) {
+            if ($event instanceof Events\Location\HideLocationEvent) {
                 $message->setText('_t:message.text.content.hid');
             }
-            if ($signal instanceof Signal\LocationService\UnhideLocationSignal) {
+            if ($event instanceof Events\Location\UnhideLocationEvent) {
                 $message->setText('_t:message.text.content.unhid');
             }
-            if ($signal instanceof Signal\TrashService\TrashSignal) {
+            if ($event instanceof Events\Trash\TrashEvent) {
                 $message->setText('_t:message.text.content.trashed');
             }
-            if ($signal instanceof Signal\TrashService\RecoverSignal) {
+            if ($event instanceof Events\Trash\RecoverEvent) {
                 $message->setText('_t:message.text.content.recovered');
             }
-            if ($signal instanceof Signal\ObjectStateService\SetContentStateSignal) {
+            if ($event instanceof Events\ObjectState\SetContentStateEvent) {
                 $message->setText('_t:message.text.content.state.updated');
             }
-            if ($signal instanceof Shared) {
+            if ($event instanceof Shared) {
                 $message->setText('_t:message.text.content.shared');
             }
+
             // eZ Platform Enterprise
-            if (
-                class_exists(\EzSystems\FormBuilder\Core\SignalSlot\Signal\FormSubmit::class) &&
-                $signal instanceof \EzSystems\FormBuilder\Core\SignalSlot\Signal\FormSubmit
-            ) {
+            if (is_a($event, 'EzSystems\EzPlatformFormBuilder\Event\FormSubmitEvent')) {
                 $message->setText('_t:message.text.formsubmit');
             }
-            if (
-                class_exists(\EzSystems\Notification\Core\SignalSlot\Signal\NotificationSignal::class) &&
-                $signal instanceof \EzSystems\Notification\Core\SignalSlot\Signal\NotificationSignal
-            ) {
+
+            if ($event instanceof Events\Notification\CreateNotificationEvent) {
                 $message->setText('_t:message.text.notification');
             }
         }
-        $attachments = $this->provider->getAttachments($signal);
+        $attachments = $this->provider->getAttachments($event);
         $message->setAttachments($attachments);
 
         return $message;

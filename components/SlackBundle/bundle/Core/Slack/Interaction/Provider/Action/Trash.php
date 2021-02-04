@@ -14,29 +14,20 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use Symfony\Contracts\EventDispatcher\Event;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Action;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Button;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Confirmation;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
+use eZ\Publish\API\Repository\Events\Trash\TrashEvent;
 
-/**
- * Class Trash.
- */
 class Trash extends ActionProvider
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getAction(Signal $signal, int $index): ?Action
+    public function getAction(Event $event, int $index): ?Action
     {
-        $content = $this->getContentForSignal($signal);
-        if (
-            null === $content ||
-            !$content->contentInfo->published ||
-            $signal instanceof Signal\TrashService\TrashSignal
-        ) {
+        $content = $this->getContentForSignal($event);
+        if (null === $content || !$content->contentInfo->published || $event instanceof TrashEvent) {
             return null;
         }
         $button = new Button($this->getAlias(), '_t:action.trash', (string) $content->id);
@@ -47,9 +38,6 @@ class Trash extends ActionProvider
         return $button;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InteractiveMessage $message): Attachment
     {
         $action = $message->getAction();

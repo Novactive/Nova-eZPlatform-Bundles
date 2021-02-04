@@ -16,7 +16,7 @@
     ],
     "require": {
         "php": "^7.3",
-        "jms/serializer-bundle": "^2.3",
+        "jms/serializer-bundle": "*",
         "nesbot/carbon": "*",
         "netgen/query-translator": "*",
         "knpuniversity/oauth2-client-bundle": "^1.17",

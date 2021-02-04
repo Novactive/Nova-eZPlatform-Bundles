@@ -14,38 +14,43 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core;
 
-use eZ\Publish\Core\SignalSlot\Signal;
-use eZ\Publish\Core\SignalSlot\Slot as BaseSlot;
 use Novactive\Bundle\eZSlackBundle\Core\Client\Slack;
 use Novactive\Bundle\eZSlackBundle\Core\Converter\Message as MessageConverter;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use eZ\Publish\API\Repository\Events;
+use Symfony\Contracts\EventDispatcher\Event;
+use Novactive\Bundle\eZSlackBundle\Core\Event\Shared;
 
-/**
- * Class Dispatcher.
- */
-class Dispatcher extends BaseSlot
+class Dispatcher implements EventSubscriberInterface
 {
-    /**
-     * @var Slack
-     */
-    private $slackClient;
+    private Slack $slackClient;
 
-    /**
-     * @var MessageConverter
-     */
-    private $messageConverter;
+    private MessageConverter $messageConverter;
 
-    /**
-     * Dispatcher constructor.
-     */
     public function __construct(Slack $slackClient, MessageConverter $messageConverter)
     {
         $this->slackClient = $slackClient;
         $this->messageConverter = $messageConverter;
     }
 
-    public function receive(Signal $signal): void
+    public function receive(Event $event): void
     {
-        $message = $this->messageConverter->convert($signal);
+        $message = $this->messageConverter->convert($event);
         $this->slackClient->sendNotification($message);
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            Events\Content\PublishVersionEvent::class => 'receive',
+            Events\Location\HideLocationEvent::class => 'receive',
+            Events\Location\UnhideLocationEvent::class => 'receive',
+            Events\Trash\TrashEvent::class => 'receive',
+            Events\Trash\RecoverEvent::class => 'receive',
+            Events\ObjectState\SetContentStateEvent::class => 'receive',
+            Shared::class => 'receive',
+            'EzSystems\EzPlatformFormBuilder\Event\FormSubmitEvent' => 'receive',
+            Events\Notification\CreateNotificationEvent::class => 'receive',
+        ];
     }
 }

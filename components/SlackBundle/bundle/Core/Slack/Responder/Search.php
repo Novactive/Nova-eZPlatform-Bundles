@@ -17,8 +17,8 @@ namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Responder;
 use eZ\Publish\API\Repository\Repository;
 use Novactive\Bundle\eZSlackBundle\Core\Converter\Message as MessageConverter;
 use Novactive\Bundle\eZSlackBundle\Core\Converter\Query as QueryConverter;
-use Novactive\Bundle\eZSlackBundle\Core\Signal\Searched;
-use Novactive\Bundle\eZSlackBundle\Core\Signal\Selected;
+use Novactive\Bundle\eZSlackBundle\Core\Event\Searched;
+use Novactive\Bundle\eZSlackBundle\Core\Event\Selected;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Message;
 
 /**

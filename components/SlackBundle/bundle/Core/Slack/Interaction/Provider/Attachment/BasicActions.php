@@ -14,28 +14,22 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Attachment;
 
-use eZ\Publish\Core\SignalSlot\Signal;
-use Novactive\Bundle\eZSlackBundle\Core\Signal\Searched;
+use Symfony\Contracts\EventDispatcher\Event;
+use Novactive\Bundle\eZSlackBundle\Core\Event\Searched;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
 
-/**
- * Class BasicActions.
- */
 class BasicActions extends AttachmentProvider
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getAttachment(Signal $signal): ?Attachment
+    public function getAttachment(Event $event): ?Attachment
     {
-        if (\count($this->actions) <= 0 || $signal instanceof Searched) {
+        if ($event instanceof Searched || count($this->actions) <= 0) {
             return null;
         }
         $attachment = new Attachment();
         $attachment->setColor('#0000ff');
         $attachment->setText('_t:provider.basic-buttons');
-        $actions = $this->buildActions($signal);
-        if (\count($actions) <= 0) {
+        $actions = $this->buildActions($event);
+        if (count($actions) <= 0) {
             return null;
         }
         $attachment->setActions($actions);

@@ -19,7 +19,7 @@ use eZ\Publish\Core\MVC\Symfony\Routing\ChainRouter;
 use JMS\Serializer\Serializer;
 use Novactive\Bundle\eZSlackBundle\Core\Client\Slack;
 use Novactive\Bundle\eZSlackBundle\Core\Dispatcher;
-use Novactive\Bundle\eZSlackBundle\Core\Signal\Shared;
+use Novactive\Bundle\eZSlackBundle\Core\Event\Shared;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Message;
@@ -92,8 +92,8 @@ class CallbackController
     ) {
         $location = $repository->getLocationService()->loadLocation($locationId);
         $contentId = (int) $location->contentInfo->id;
-        $slot = new Shared(['contentId' => $contentId]);
-        $dispatcher->receive($slot);
+        $event = new Shared($contentId);
+        $dispatcher->receive($event);
         if ($request->isXmlHttpRequest()) {
             return new JsonResponse('ok');
         }

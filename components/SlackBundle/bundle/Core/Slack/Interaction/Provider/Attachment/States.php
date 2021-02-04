@@ -14,27 +14,21 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Attachment;
 
-use eZ\Publish\Core\SignalSlot\Signal;
-use Novactive\Bundle\eZSlackBundle\Core\Signal\Searched;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
+use eZ\Publish\API\Repository\Events\ObjectState\SetContentStateEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-/**
- * Class States.
- */
 class States extends AttachmentProvider
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getAttachment(Signal $signal): ?Attachment
+    public function getAttachment(Event $event): ?Attachment
     {
-        if (\count($this->actions) <= 0 || $signal instanceof Searched) {
+        if (!$event instanceof SetContentStateEvent) {
             return null;
         }
         $attachment = new Attachment();
         $attachment->setText('_t:provider.states');
-        $actions = $this->buildActions($signal);
-        if (\count($actions) <= 0) {
+        $actions = $this->buildActions($event);
+        if (count($actions) <= 0) {
             return null;
         }
         $attachment->setActions($actions);

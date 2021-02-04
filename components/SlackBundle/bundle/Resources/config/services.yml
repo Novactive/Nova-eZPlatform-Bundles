@@ -68,16 +68,4 @@ services:
         tags:
             - { name: ezplatform.admin_ui.config_provider, key: 'user' }
 
-    # Signals
-    Novactive\Bundle\eZSlackBundle\Core\Dispatcher:
-        tags:
-            - { name: ezpublish.api.slot, signal: ContentService\PublishVersionSignal }
-            - { name: ezpublish.api.slot, signal: LocationService\HideLocationSignal }
-            - { name: ezpublish.api.slot, signal: LocationService\UnhideLocationSignal }
-            - { name: ezpublish.api.slot, signal: TrashService\TrashSignal }
-            - { name: ezpublish.api.slot, signal: TrashService\RecoverSignal }
-            - { name: ezpublish.api.slot, signal: ObjectStateService\SetContentStateSignal }
-            - { name: ezpublish.api.slot, signal: \EzSystems\FormBuilder\Core\SignalSlot\Signal\FormSubmit }
-            - { name: ezpublish.api.slot, signal: \EzSystems\Notification\Core\SignalSlot\Signal\NotificationSignal }
-
 

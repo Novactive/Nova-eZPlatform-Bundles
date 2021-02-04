@@ -14,27 +14,22 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action;
 
-use eZ\Publish\Core\SignalSlot\Signal;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Action;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Button;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
+use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\API\Repository\Events;
 
-/**
- * Class Publish.
- */
 class Publish extends ActionProvider
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getAction(Signal $signal, int $index): ?Action
+    public function getAction(Event $event, int $index): ?Action
     {
-        $content = $this->getContentForSignal($signal);
+        $content = $this->getContentForSignal($event);
         if (
             null === $content || $content->contentInfo->published ||
-            $signal instanceof Signal\TrashService\TrashSignal ||
-            $signal instanceof Signal\TrashService\RecoverSignal
+            $event instanceof Events\Trash\TrashEvent ||
+            $event instanceof Events\Trash\RecoverEvent
         ) {
             return null;
         }
@@ -44,9 +39,6 @@ class Publish extends ActionProvider
         return $button;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InteractiveMessage $message): Attachment
     {
         $action = $message->getAction();

@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use Symfony\Contracts\EventDispatcher\Event;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Action;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
@@ -28,7 +28,7 @@ interface ActionProviderInterface
 
     public function getAlias(): string;
 
-    public function getAction(Signal $signal, int $index): ?Action;
+    public function getAction(Event $event, int $index): ?Action;
 
     /**
      * @param $alias
