@@ -7,6 +7,7 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use Novactive\NovaeZMaintenanceBundle\Helper\FileHelper;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class MaintenanceSubscriber implements EventSubscriberInterface, SiteAccessAware
@@ -37,13 +38,13 @@ class MaintenanceSubscriber implements EventSubscriberInterface, SiteAccessAware
     public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::RESPONSE => [
+            KernelEvents::REQUEST => [
                 ['onKernelRequest', 10],
             ],
         ];
     }
 
-    public function onKernelRequest(ResponseEvent $event): void
+    public function onKernelRequest(RequestEvent $event): void
     {
         if (null !== $this->siteAccess) {
             $siteaccessName = $this->siteAccess->name;

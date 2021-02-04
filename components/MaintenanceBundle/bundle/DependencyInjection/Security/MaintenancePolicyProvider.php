@@ -1,13 +1,13 @@
 <?php
 
 /**
- * NovaeZRssFeedBundle.
+ * NovaeZMaintenanceBundle.
  *
- * @package   NovaeZRssFeedBundle
+ * @package   NovaeZMaintenanceBundle
  *
- * @author    Novactive
- * @copyright 2018 Novactive
- * @license   https://github.com/Novactive/NovaeZRssFeedBundle/blob/master/LICENSE
+ * @author    Julien RONDIN
+ * @copyright 2021 AlmaviaCX
+ * @license   https://github.com/Novactive/NovaeZMaintenanceBundle/blob/master/LICENSE
  */
 
 namespace Novactive\NovaeZMaintenanceBundle\DependencyInjection\Security;
