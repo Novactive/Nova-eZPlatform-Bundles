@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Attachment;
 
-use Symfony\Contracts\EventDispatcher\Event;
 use Novactive\Bundle\eZSlackBundle\Core\Decorator\Attachment as AttachmentDecorator;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Action;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
@@ -23,6 +22,7 @@ use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action\Action
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\AliasTrait;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
 use RuntimeException;
+use Symfony\Contracts\EventDispatcher\Event;
 
 abstract class AttachmentProvider implements AttachmentProviderInterface
 {
@@ -80,7 +80,7 @@ abstract class AttachmentProvider implements AttachmentProviderInterface
 
     public function supports($alias): bool
     {
-        return strpos($alias, $this->getAlias()) === 0;
+        return 0 === strpos($alias, $this->getAlias());
     }
 
     public function execute(InteractiveMessage $message): Attachment

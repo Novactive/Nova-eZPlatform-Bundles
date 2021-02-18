@@ -25,7 +25,7 @@ class Form extends AttachmentProvider
 {
     public function getAttachment(Event $event): ?Attachment
     {
-        if (is_a($event, 'EzSystems\EzPlatformFormBuilder\Event\FormSubmitEvent') === false) {
+        if (false === is_a($event, 'EzSystems\EzPlatformFormBuilder\Event\FormSubmitEvent')) {
             return null;
         }
         $form = $event->getForm();

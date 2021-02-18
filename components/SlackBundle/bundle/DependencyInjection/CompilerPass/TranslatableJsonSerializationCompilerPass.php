@@ -30,8 +30,8 @@ class TranslatableJsonSerializationCompilerPass implements CompilerPassInterface
             return;
         }
 
-        $jmsJsonSerializationVisitor = $container->getDefinition('jms_serializer.json_serialization_visitor');
-        $jmsJsonSerializationVisitor->setClass(TranslatableJsonSerializationVisitor::class);
-        $jmsJsonSerializationVisitor->addMethodCall('setTranslator', [new Reference('translator')]);
+//        $jmsJsonSerializationVisitor = $container->getDefinition('jms_serializer.json_serialization_visitor');
+//        $jmsJsonSerializationVisitor->setClass(TranslatableJsonSerializationVisitor::class);
+//        $jmsJsonSerializationVisitor->addMethodCall('setTranslator', [new Reference('translator')]);
     }
 }

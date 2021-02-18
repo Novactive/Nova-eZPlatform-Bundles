@@ -16,51 +16,30 @@ namespace Novactive\Bundle\eZSlackBundle\Core\Client;
 
 use Exception;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
-use JMS\Serializer\Serializer;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Message;
+use Symfony\Component\Notifier\ChatterInterface;
+use Symfony\Component\Notifier\Bridge\Slack\SlackOptions;
+use Symfony\Component\Notifier\Message\ChatMessage;
 
-/**
- * Class Slack.
- */
 class Slack
 {
-    /**
-     * @var Client
-     */
-    private $http;
+    private ChatterInterface $chatter;
 
-    /**
-     * @var Serializer
-     */
-    private $serializer;
+    private array $transports;
 
-    /**
-     * @var
-     */
-    private $channelsURI;
-
-    /**
-     * Slack constructor.
-     */
-    public function __construct(Client $http, Serializer $serializer, ConfigResolverInterface $configResolver)
+    public function __construct(ConfigResolverInterface $configResolver, ChatterInterface $chatter)
     {
-        $this->http = $http;
-        $this->serializer = $serializer;
-        $this->channelsURI = $configResolver->getParameter('notifications', 'nova_ezslack')['channels'];
+        $this->transports = $configResolver->getParameter('notifications', 'nova_ezslack')['transports'];
+        $this->chatter = $chatter;
     }
 
-    public function sendNotification(Message $message): void
+    public function sendMessage(SlackOptions $options, string $subject = 'Interactive'): void
     {
-        $headers = [
-            'Content-type' => 'application/json',
-        ];
-        $payload = $this->serializer->serialize($message, 'json');
-        foreach ($this->channelsURI as $uri) {
-            $request = new Request('POST', trim($uri, '/'), $headers, $payload);
+        foreach ($this->transports as $transport) {
+            $chatMessage = new ChatMessage($subject);
+            $chatMessage->transport($transport);
+            $chatMessage->options($options);
             try {
-                $this->http->send($request, ['timeout' => 0.25]);
+                $this->chatter->send($chatMessage);
             } catch (Exception $e) {
                 // it is common slack would timeout, then we don't care
                 continue;

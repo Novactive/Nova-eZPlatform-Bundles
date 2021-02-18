@@ -18,13 +18,15 @@ use DateTime;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Content as ValueContent;
-use eZ\Publish\Core\FieldType\RichText\Converter as RichTextConverter;
-use eZ\Publish\Core\FieldType\RichText\Value as RichTextValue;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Novactive\Bundle\eZSlackBundle\Core\Decorator\Attachment as AttachmentDecorator;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment as AttachmentModel;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Field;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use EzSystems\EzPlatformRichText\eZ\RichText\Converter as RichTextConverter;
+use EzSystems\EzPlatformRichText\eZ\FieldType\RichText\Value as RichTextValue;
+use eZ\Publish\Core\MVC\Symfony\Routing\Generator\RouteReferenceGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @SuppressWarnings(PHPMD.IfStatementAssignment)
@@ -47,7 +49,7 @@ class Attachment
     private $siteAccessList;
 
     /**
-     * @var UrlGeneratorInterface
+     * @var RouterInterface
      */
     private $router;
 
@@ -67,7 +69,7 @@ class Attachment
     public function __construct(
         Repository $repository,
         RichTextConverter $converter,
-        UrlGeneratorInterface $router,
+        RouterInterface $router,
         ConfigResolverInterface $configResolver,
         AttachmentDecorator $decorator,
         array $siteAccessList
@@ -183,10 +185,19 @@ class Attachment
             $locations = $this->repository->getLocationService()->loadLocations($content->contentInfo);
             foreach ($locations as $location) {
                 foreach ($this->siteAccessList as $siteAccessName) {
+                    //                    $url = $this->router->generate(
+                    //                        $location,
+                    //                        [
+                    //                            'siteaccess' => $siteAccessName,
+                    //                        ],
+                    //                        UrlGeneratorInterface::ABSOLUTE_URL
+                    //                    );
                     $url = $this->router->generate(
-                        $location,
+                        '_ez_content_view',
                         [
-                            'siteaccess' => $siteAccessName,
+                            'contentId' => $location->contentId,
+                            'locationId' => $location->id,
+                            'siteaccess' => $siteAccessName
                         ],
                         UrlGeneratorInterface::ABSOLUTE_URL
                     );

@@ -14,13 +14,13 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action;
 
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\API\Repository\Events\Trash\TrashEvent;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Action;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Button;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Confirmation;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
-use eZ\Publish\API\Repository\Events\Trash\TrashEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class Trash extends ActionProvider
 {

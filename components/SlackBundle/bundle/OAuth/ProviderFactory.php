@@ -45,7 +45,7 @@ class ProviderFactory extends BaseProviderFactory
     /**
      * {@inheritdoc}
      */
-    public function createProvider($class, array $options, $redirectUri, array $redirectParams = [])
+    public function createProvider($class, array $options, $redirectUri, array $redirectParams = [], array $collaborators = [])
     {
         if (Slack::class === $class) {
             if ($options['clientId']) {
@@ -60,7 +60,8 @@ class ProviderFactory extends BaseProviderFactory
             $class,
             $options,
             $redirectUri,
-            $redirectParams
+            $redirectParams,
+            $collaborators
         );
 
         return $provider;

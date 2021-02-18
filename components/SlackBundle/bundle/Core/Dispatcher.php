@@ -14,12 +14,13 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core;
 
+use eZ\Publish\API\Repository\Events;
 use Novactive\Bundle\eZSlackBundle\Core\Client\Slack;
 use Novactive\Bundle\eZSlackBundle\Core\Converter\Message as MessageConverter;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use eZ\Publish\API\Repository\Events;
-use Symfony\Contracts\EventDispatcher\Event;
 use Novactive\Bundle\eZSlackBundle\Core\Event\Shared;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Contracts\EventDispatcher\Event;
+use Symfony\Component\Notifier\Bridge\Slack\SlackOptions;
 
 class Dispatcher implements EventSubscriberInterface
 {
@@ -36,7 +37,9 @@ class Dispatcher implements EventSubscriberInterface
     public function receive(Event $event): void
     {
         $message = $this->messageConverter->convert($event);
-        $this->slackClient->sendNotification($message);
+        dd($message);
+        //$this->slackClient->sendNotification($message);
+        $this->slackClient->sendMessage(new SlackOptions());
     }
 
     public static function getSubscribedEvents(): array

@@ -43,7 +43,7 @@ class Configuration extends SiteAccessAware\Configuration
             ->scalarNode('site_name')->end()
             ->arrayNode('notifications')
                 ->children()
-                    ->arrayNode('channels')
+                    ->arrayNode('transports')
                         ->scalarPrototype()->end()
                     ->end()
                 ->end()

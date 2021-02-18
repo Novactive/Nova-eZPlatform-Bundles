@@ -21,7 +21,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 /**
  * Class TranslatableJsonSerializationVisitor.
  */
-class TranslatableJsonSerializationVisitor extends JsonSerializationVisitor
+class TranslatableJsonSerializationVisitor
 {
     /**
      * @var TranslatorInterface;

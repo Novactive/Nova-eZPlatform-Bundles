@@ -3,6 +3,7 @@ parameters:
 services:
     _defaults:
         autowire: true
+        autoconfigure: true
         public: false
         bind:
             $jmsSerializer: '@jms_serializer'
@@ -36,6 +37,11 @@ services:
     Novactive\Bundle\eZSlackBundle\Core\Converter\Attachment:
         $siteAccessList: "%ezpublish.siteaccess.list%"
 
+    Novactive\Bundle\eZSlackBundle\Core\Dispatcher: ~
+
+    # Decorator
+    Novactive\Bundle\eZSlackBundle\Core\Decorator\Attachment: ~
+
     # Listeners
     Novactive\Bundle\eZSlackBundle\Listener\Request:
         tags:
@@ -53,11 +59,10 @@ services:
     Symfony\Component\Translation\TranslatorInterface:
         alias: translator
 
-    eZ\Publish\Core\FieldType\RichText\Converter:
-        alias: ezpublish.fieldType.ezrichtext.converter.output.xhtml5
+    EzSystems\EzPlatformRichText\eZ\RichText\Converter:
+        alias: ezrichtext.converter.output.xhtml5.core
 
-    nova_ezslack.guzzle.client:
-        class: GuzzleHttp\Client
+    GuzzleHttp\Client: ~
 
     knpu.oauth2.provider_factory:
         class: Novactive\Bundle\eZSlackBundle\OAuth\ProviderFactory

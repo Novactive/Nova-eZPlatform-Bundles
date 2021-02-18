@@ -20,7 +20,8 @@
         "nesbot/carbon": "*",
         "netgen/query-translator": "*",
         "knpuniversity/oauth2-client-bundle": "^1.17",
-        "adam-paterson/oauth2-slack": "^1.1"
+        "adam-paterson/oauth2-slack": "^1.1",
+        "symfony/slack-notifier": "^5.2"
     },
     "autoload": {
         "psr-4": {

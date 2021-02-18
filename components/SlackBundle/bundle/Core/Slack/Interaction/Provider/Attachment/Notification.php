@@ -15,8 +15,8 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Attachment;
 
 use eZ\Publish\API\Repository\Events\Notification\CreateNotificationEvent;
-use Symfony\Contracts\EventDispatcher\Event;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class Notification extends AttachmentProvider
 {

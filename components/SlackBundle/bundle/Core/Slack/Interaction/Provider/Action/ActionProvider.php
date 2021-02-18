@@ -14,14 +14,14 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action;
 
+use eZ\Publish\API\Repository\Events;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Content;
-use Symfony\Contracts\EventDispatcher\Event;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\AliasTrait;
 use Novactive\Bundle\eZSlackBundle\Core\Event\Searched;
 use Novactive\Bundle\eZSlackBundle\Core\Event\Selected;
 use Novactive\Bundle\eZSlackBundle\Core\Event\Shared;
-use eZ\Publish\API\Repository\Events;
+use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\AliasTrait;
+use Symfony\Contracts\EventDispatcher\Event;
 
 abstract class ActionProvider implements ActionProviderInterface
 {
@@ -46,7 +46,7 @@ abstract class ActionProvider implements ActionProviderInterface
 
     public function supports($alias): bool
     {
-        return strpos($alias, $this->getAlias()) === 0;
+        return 0 === strpos($alias, $this->getAlias());
     }
 
     protected function getContentForSignal(Event $event): ?Content
@@ -57,10 +57,12 @@ abstract class ActionProvider implements ActionProviderInterface
         if ($event instanceof Events\Content\PublishVersionEvent) {
             return $this->repository->getContentService()->loadContent($event->getContent()->id);
         }
-        if ($event instanceof Events\Location\HideLocationEvent ||
+        if (
+            $event instanceof Events\Location\HideLocationEvent ||
             $event instanceof Events\Location\UnhideLocationEvent ||
             $event instanceof Events\Trash\TrashEvent ||
-            $event instanceof Events\Trash\RecoverEvent) {
+            $event instanceof Events\Trash\RecoverEvent
+        ) {
             return $this->repository->getContentService()->loadContent($event->getLocation()->contentId);
         }
         if ($event instanceof Events\ObjectState\SetContentStateEvent) {

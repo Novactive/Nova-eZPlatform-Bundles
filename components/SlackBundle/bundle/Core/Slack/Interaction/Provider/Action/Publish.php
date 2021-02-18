@@ -14,12 +14,12 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action;
 
+use eZ\Publish\API\Repository\Events;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Action;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Button;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
 use Symfony\Contracts\EventDispatcher\Event;
-use eZ\Publish\API\Repository\Events;
 
 class Publish extends ActionProvider
 {

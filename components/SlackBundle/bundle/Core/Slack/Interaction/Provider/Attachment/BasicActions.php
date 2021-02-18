@@ -14,9 +14,9 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Attachment;
 
-use Symfony\Contracts\EventDispatcher\Event;
 use Novactive\Bundle\eZSlackBundle\Core\Event\Searched;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class BasicActions extends AttachmentProvider
 {

@@ -14,13 +14,13 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Attachment;
 
+use eZ\Publish\API\Repository\Events;
+use Novactive\Bundle\eZSlackBundle\Core\Converter\Attachment as AttachmentConverter;
 use Novactive\Bundle\eZSlackBundle\Core\Event\Searched;
 use Novactive\Bundle\eZSlackBundle\Core\Event\Selected;
 use Novactive\Bundle\eZSlackBundle\Core\Event\Shared;
-use Symfony\Contracts\EventDispatcher\Event;
-use Novactive\Bundle\eZSlackBundle\Core\Converter\Attachment as AttachmentConverter;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
-use eZ\Publish\API\Repository\Events;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class Content extends AttachmentProvider
 {
@@ -38,10 +38,12 @@ class Content extends AttachmentProvider
             $contentId = $event->getContentId();
         } elseif ($event instanceof Events\Content\PublishVersionEvent) {
             $contentId = $event->getContent()->id;
-        } elseif ($event instanceof Events\Location\HideLocationEvent ||
-                  $event instanceof Events\Location\UnhideLocationEvent ||
-                  $event instanceof Events\Trash\TrashEvent ||
-                  $event instanceof Events\Trash\RecoverEvent) {
+        } elseif (
+            $event instanceof Events\Location\HideLocationEvent ||
+            $event instanceof Events\Location\UnhideLocationEvent ||
+            $event instanceof Events\Trash\TrashEvent ||
+            $event instanceof Events\Trash\RecoverEvent
+        ) {
             $contentId = $event->getLocation()->contentId;
         } elseif ($event instanceof Events\ObjectState\SetContentStateEvent) {
             $contentId = $event->getContentInfo()->id;

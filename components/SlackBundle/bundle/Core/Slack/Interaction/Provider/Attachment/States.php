@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Attachment;
 
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
 use eZ\Publish\API\Repository\Events\ObjectState\SetContentStateEvent;
+use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class States extends AttachmentProvider

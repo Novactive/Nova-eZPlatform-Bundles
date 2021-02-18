@@ -16,12 +16,12 @@ namespace Novactive\Bundle\eZSlackBundle\Listener;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use JMS\Serializer\Serializer;
+use JMS\Serializer\SerializerInterface;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
 use Novactive\Bundle\eZSlackBundle\Repository\User as UserRepository;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 /**
  * Class Request.
@@ -34,7 +34,7 @@ class Request
     private $configResolver;
 
     /**
-     * @var Serializer
+     * @var SerializerInterface
      */
     private $serializer;
 
@@ -53,7 +53,7 @@ class Request
      */
     public function __construct(
         ConfigResolverInterface $configResolver,
-        Serializer $serializer,
+        SerializerInterface $serializer,
         UserRepository $userRepository,
         Repository $repository
     ) {
@@ -73,7 +73,7 @@ class Request
         $this->repository->getPermissionResolver()->setCurrentUserReference($apiUser);
     }
 
-    public function onKernelRequest(GetResponseEvent $event): void
+    public function onKernelRequest(RequestEvent $event): void
     {
         if (!$event->isMasterRequest()) {
             // don't do anything if it's not the master request

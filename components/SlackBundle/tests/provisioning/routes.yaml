@@ -1,0 +1,7 @@
+_novaezslack_routes:
+    resource: "@NovaeZSlackBundle/Controller"
+    type:     annotation
+    prefix:   /_novaezslack
+
+_novaezslack_slack_oauth_check:
+    path: /_novaezslack/auth/check

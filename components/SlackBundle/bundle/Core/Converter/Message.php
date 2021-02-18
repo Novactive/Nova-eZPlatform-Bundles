@@ -14,11 +14,11 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Converter;
 
+use eZ\Publish\API\Repository\Events;
 use Novactive\Bundle\eZSlackBundle\Core\Event\Shared;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider as InteractionProvider;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Message as MessageModel;
 use Symfony\Contracts\EventDispatcher\Event;
-use eZ\Publish\API\Repository\Events;
 
 /**
  * @SuppressWarnings(PHPMD.NPathComplexity)

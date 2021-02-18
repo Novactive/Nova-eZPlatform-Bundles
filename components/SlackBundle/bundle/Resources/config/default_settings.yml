@@ -4,7 +4,7 @@ parameters:
     nova_ezslack.default.favicon: ~
     nova_ezslack.default.site_name: ~
     nova_ezslack.default.notifications:
-        channels: []
+        transports: []
     nova_ezslack.default.field_identifiers:
         description:
             - "short_description"

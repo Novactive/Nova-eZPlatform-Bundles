@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action;
 
 use Exception;
+use eZ\Publish\API\Repository\Events\Trash\TrashEvent;
 use eZ\Publish\API\Repository\Values\Content\Query as eZQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
@@ -24,7 +25,6 @@ use Novactive\Bundle\eZSlackBundle\Core\Slack\Button;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Confirmation;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
 use Symfony\Contracts\EventDispatcher\Event;
-use eZ\Publish\API\Repository\Events\Trash\TrashEvent;
 
 class Recover extends ActionProvider
 {

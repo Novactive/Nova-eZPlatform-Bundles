@@ -16,7 +16,8 @@ namespace Novactive\Bundle\eZSlackBundle\Controller;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\Symfony\Routing\ChainRouter;
-use JMS\Serializer\Serializer;
+use Symfony\Component\Routing\RouterInterface;
+use JMS\Serializer\SerializerInterface;
 use Novactive\Bundle\eZSlackBundle\Core\Client\Slack;
 use Novactive\Bundle\eZSlackBundle\Core\Dispatcher;
 use Novactive\Bundle\eZSlackBundle\Core\Event\Shared;
@@ -24,8 +25,7 @@ use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Message;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Responder\FirstResponder;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,13 +38,12 @@ use Symfony\Component\HttpFoundation\Request;
 class CallbackController
 {
     /**
-     * @Route("/command", name="novactive_ezslack_callback_command")
-     * @Method({"POST"})
+     * @Route("/command", methods={"POST"}, name="novactive_ezslack_callback_command")
      */
     public function commandAction(
         Request $request,
         FirstResponder $firstResponder,
-        Serializer $jmsSerializer
+        SerializerInterface $jmsSerializer
     ): JsonResponse {
         $message = $firstResponder($request->request->get('text'));
 
@@ -52,12 +51,11 @@ class CallbackController
     }
 
     /**
-     * @Route("/message", name="novactive_ezslack_callback_message")
-     * @Method({"POST"})
+     * @Route("/message", methods={"POST"}, name="novactive_ezslack_callback_message")
      */
     public function messageAction(
         Request $request,
-        Serializer $jmsSerializer,
+        SerializerInterface $jmsSerializer,
         Provider $provider
     ): JsonResponse {
         // has been decoded and checked in the RequestListener already
@@ -78,15 +76,12 @@ class CallbackController
     }
 
     /**
-     * @Route("/share/{locationId}", name="novactive_ezslack_callback_shareonslack")
-     * @Method({"GET"})
-     *
-     * @return JsonResponse|RedirectResponse
+     * @Route("/share/{locationId}", methods={"GET"}, name="novactive_ezslack_callback_shareonslack")
      */
     public function shareOnSlackAction(
         Request $request,
         int $locationId,
-        ChainRouter $router,
+        RouterInterface $router,
         Dispatcher $dispatcher,
         Repository $repository
     ) {
@@ -98,16 +93,17 @@ class CallbackController
             return new JsonResponse('ok');
         }
 
-        return new RedirectResponse($router->generate('_ezpublishLocation', ['locationId' => $locationId]));
+        return new RedirectResponse(
+            $router->generate('_ez_content_view', ['locationId' => $locationId, 'contentId' => $location->contentId])
+        );
     }
 
     /**
-     * @Route("/kcode")
-     * @Method({"GET"})
+     * @Route("/kcode", methods={"GET"})
      */
     public function kcodeAction(Slack $client, Request $request): JsonResponse
     {
-        $client->sendNotification(new Message(base64_decode(base64_decode($request->query->get('m')))));
+        //$client->sendNotification(new Message(base64_decode(base64_decode($request->query->get('m')))));
 
         return new JsonResponse();
     }
