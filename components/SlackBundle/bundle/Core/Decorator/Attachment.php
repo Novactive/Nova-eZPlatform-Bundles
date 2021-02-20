@@ -17,7 +17,6 @@ namespace Novactive\Bundle\eZSlackBundle\Core\Decorator;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Content as ValueContent;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
-use eZ\Publish\Core\FieldType\Relation\Value as RelationValue;
 use eZ\Publish\Core\FieldType\RelationList\Value as RelationListValue;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment as AttachmentModel;
@@ -113,16 +112,11 @@ class Attachment
         $fieldIdentifiers = $this->getParameter('field_identifiers')['image'];
         foreach ($fieldIdentifiers as $try) {
             $value = $content->getFieldValue($try);
-            if (null !== $value && $value instanceof ImageValue) {
+            if ($value instanceof ImageValue) {
                 return ($this->getParameter('asset_prefix') ?? '').$value->uri;
             }
-            if (null !== $value && $value instanceof RelationListValue && \count($value->destinationContentIds) > 0) {
+            if ($value instanceof RelationListValue && \count($value->destinationContentIds) > 0) {
                 $image = $this->repository->getContentService()->loadContent($value->destinationContentIds[0]);
-
-                return $this->getPictureUrl($image);
-            }
-            if (null !== $value && $value instanceof RelationValue && $value->destinationContentId > 0) {
-                $image = $this->repository->getContentService()->loadContent($value->destinationContentId);
 
                 return $this->getPictureUrl($image);
             }

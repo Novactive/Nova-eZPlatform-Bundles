@@ -18,15 +18,22 @@ use DateTime;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Content as ValueContent;
+use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
+use eZ\Publish\Core\FieldType\RelationList\Value as RelationListValue;
+use eZ\Publish\Core\FieldType\Relation\Value as RelationValue;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Novactive\Bundle\eZSlackBundle\Core\Decorator\Attachment as AttachmentDecorator;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment as AttachmentModel;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Field;
+use Novactive\Bundle\eZSlackBundle\Core\Slack\NewBuilder\Context;
+use Symfony\Component\Notifier\Bridge\Slack\Block\SlackDividerBlock;
+use Symfony\Component\Notifier\Bridge\Slack\Block\SlackImageBlockElement;
+use Symfony\Component\Notifier\Bridge\Slack\Block\SlackSectionBlock;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use EzSystems\EzPlatformRichText\eZ\RichText\Converter as RichTextConverter;
 use EzSystems\EzPlatformRichText\eZ\FieldType\RichText\Value as RichTextValue;
-use eZ\Publish\Core\MVC\Symfony\Routing\Generator\RouteReferenceGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.IfStatementAssignment)
@@ -63,6 +70,8 @@ class Attachment
      */
     private $attachmentDecorator;
 
+    private TranslatorInterface $translator;
+
     /**
      * Attachment constructor.
      */
@@ -72,6 +81,7 @@ class Attachment
         RouterInterface $router,
         ConfigResolverInterface $configResolver,
         AttachmentDecorator $decorator,
+        TranslatorInterface $translator,
         array $siteAccessList
     ) {
         $this->repository = $repository;
@@ -80,6 +90,7 @@ class Attachment
         $this->router = $router;
         $this->attachmentDecorator = $decorator;
         $this->configResolver = $configResolver;
+        $this->translator = $translator;
     }
 
     /**
@@ -135,6 +146,117 @@ class Attachment
         return $attachment;
     }
 
+    public function getMainBlocks(int $contentId): array
+    {
+        $content = $this->findContent($contentId);
+
+        $blocks = [];
+
+        $owner = $this->findContent($content->contentInfo->ownerId);
+        $ownerPicture = $this->getPicture($owner);
+        $ownerBlock = new Context();
+        if (null !== $ownerPicture) {
+            $ownerBlock->image($ownerPicture['uri'], $ownerPicture['alternativeText']);
+        }
+        $ownerBlock->text($this->sanitize($owner->contentInfo->name), 'plain_text');
+        $blocks[] = $ownerBlock;
+
+        $textFields = $this->sanitize('*'.$content->contentInfo->name.'*');
+        $description = $this->getDescription($content);
+        if (null !== $description && !empty($description)) {
+            $textFields .= "\n\n".$this->sanitize($description);
+        }
+        $contentBlock = (new SlackSectionBlock())->text($textFields);
+        $contentImage = $this->getPicture($content);
+        if (null !== $contentImage) {
+            $contentBlock->accessory(
+                new SlackImageBlockElement($contentImage['uri'], $contentImage['alternativeText'])
+            );
+        }
+        $blocks[] = $contentBlock;
+
+        $siteName = $this->getParameter('site_name');
+        if (null !== $siteName) {
+            $siteInfoBlock = new Context();
+            $siteFavicon = $this->getParameter('favicon');
+            if (null !== $siteFavicon) {
+                $siteInfoBlock->image($siteFavicon, $siteName);
+            }
+            $siteInfoBlock->text($siteName);
+            $blocks[] = $siteInfoBlock;
+        }
+
+        $blocks[] = new SlackDividerBlock();
+
+        return $blocks;
+    }
+
+    public function getDetailsBlock(int $contentId): array
+    {
+        $content = $this->findContent($contentId);
+        $leftColumn = $rightColumn = '';
+        if (null !== $content->contentInfo->publishedDate) {
+            $leftColumn .= '*'.$this->translator->trans('field.content.published', [], 'slack')."*\n".
+                           $this->formatDate($content->contentInfo->publishedDate);
+        }
+        if (!empty($leftColumn)) {
+            $leftColumn .= "\n\n";
+        }
+        $leftColumn .= '*'.$this->translator->trans('field.content.id', [], 'slack')."*\n".$content->id;
+        if ($content->contentInfo->mainLocationId > 0) {
+            $leftColumn .= "\n\n*".$this->translator->trans('field.content.mainlocationid', [], 'slack')."*\n".
+                           $content->contentInfo->mainLocationId;
+        }
+        $objectStateService = $this->repository->getObjectStateService();
+        $allGroups = $objectStateService->loadObjectStateGroups();
+        foreach ($allGroups as $group) {
+            if ('ez_lock' === $group->identifier) {
+                continue;
+            }
+            $state = $this->repository->getObjectStateService()->getContentState($content->contentInfo, $group);
+            $leftColumn .= "\n\n*".$group->getName($group->mainLanguageCode)."*\n".
+                           $state->getName($state->mainLanguageCode);
+        }
+        if ($content->contentInfo->published) {
+            $locations = $this->repository->getLocationService()->loadLocations($content->contentInfo);
+            foreach ($locations as $location) {
+                foreach ($this->siteAccessList as $siteAccessName) {
+                    $url = $this->router->generate(
+                        '_ez_content_view',
+                        [
+                            'contentId' => $location->contentId,
+                            'locationId' => $location->id,
+                            'siteaccess' => $siteAccessName
+                        ],
+                        UrlGeneratorInterface::ABSOLUTE_URL
+                    );
+                    $fieldName = "SiteAccess {$siteAccessName}";
+                    if ($location->id !== $content->contentInfo->mainLocationId) {
+                        $fieldName = "Location: {$location->id} {$fieldName}";
+                    }
+                    $leftColumn .= "\n\n*".$fieldName."*\n".explode('?', $url)[0];
+                }
+            }
+        }
+
+        if (null !== $content->contentInfo->modificationDate) {
+            $rightColumn .= '*'.$this->translator->trans('field.content.modified', [], 'slack')."*\n".
+                            $this->formatDate($content->contentInfo->modificationDate);
+        }
+        if (!empty($rightColumn)) {
+            $rightColumn .= "\n\n";
+        }
+        $rightColumn .= '*'.$this->translator->trans('field.content.version', [], 'slack')."*\n".
+                        $content->contentInfo->currentVersionNo;
+        $rightColumn .= "\n\n*".$this->translator->trans('field.content.languages', [], 'slack')."*\n".
+                        implode(',', $content->versionInfo->languageCodes);
+
+        return [
+            (new SlackSectionBlock())->field($leftColumn)->field($rightColumn),
+            new SlackDividerBlock()
+        ];
+    }
+
     public function getDetails(int $contentId): AttachmentModel
     {
         $content = $this->findContent($contentId);
@@ -185,13 +307,6 @@ class Attachment
             $locations = $this->repository->getLocationService()->loadLocations($content->contentInfo);
             foreach ($locations as $location) {
                 foreach ($this->siteAccessList as $siteAccessName) {
-                    //                    $url = $this->router->generate(
-                    //                        $location,
-                    //                        [
-                    //                            'siteaccess' => $siteAccessName,
-                    //                        ],
-                    //                        UrlGeneratorInterface::ABSOLUTE_URL
-                    //                    );
                     $url = $this->router->generate(
                         '_ez_content_view',
                         [
@@ -256,5 +371,40 @@ class Attachment
     private function formatDate(DateTime $dateTime): string
     {
         return $dateTime->format(DateTime::RFC850);
+    }
+
+    private function sanitize(?string $text): ?string
+    {
+        if (null === $text) {
+            return null;
+        }
+
+        return trim(strip_tags(html_entity_decode($text)));
+    }
+
+    private function getPicture(ValueContent $content): ?array
+    {
+        $fieldIdentifiers = $this->getParameter('field_identifiers')['image'];
+        foreach ($fieldIdentifiers as $try) {
+            $value = $content->getFieldValue($try);
+            if ($value instanceof ImageValue) {
+                return [
+                    'uri' => ($this->getParameter('asset_prefix') ?? '').$value->uri,
+                    'alternativeText' => $value->alternativeText
+                ];
+            }
+            if ($value instanceof RelationValue && $value->destinationContentId > 0) {
+                $image = $this->findContent($value->destinationContentId);
+
+                return $this->getPicture($image);
+            }
+            if ($value instanceof RelationListValue && \count($value->destinationContentIds) > 0) {
+                $image = $this->findContent($value->destinationContentIds[0]);
+
+                return $this->getPicture($image);
+            }
+        }
+
+        return null;
     }
 }

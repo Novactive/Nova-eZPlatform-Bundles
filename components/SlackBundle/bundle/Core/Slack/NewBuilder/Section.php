@@ -6,13 +6,20 @@ use Symfony\Component\Notifier\Bridge\Slack\Block\AbstractSlackBlock;
 
 final class Section extends AbstractSlackBlock
 {
-    public function __construct(string $text, string $textType)
+    public function __construct(string $text, string $type = 'plain_text')
     {
         $this->options['type'] = 'section';
         $this->options['text'] = [
-            'type' => $textType,
+            'type' => $type,
             'text' => $text
         ];
+    }
+
+    public function blockId(string $blockId): self
+    {
+        $this->options['block_id'] = $blockId;
+
+        return $this;
     }
 
     public function button(string $text, string $actionId, string $value, string $style = null): self

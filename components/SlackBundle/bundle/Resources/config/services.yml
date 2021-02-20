@@ -56,8 +56,8 @@ services:
             - { name: kernel.event_listener, event: "ezplatform_admin_ui.menu_configure.content_sidebar_right", method: "onMenuConfigure" }
 
     # Native or 3rd party
-    Symfony\Component\Translation\TranslatorInterface:
-        alias: translator
+#    Symfony\Component\Translation\TranslatorInterface:
+#        alias: translator
 
     EzSystems\EzPlatformRichText\eZ\RichText\Converter:
         alias: ezrichtext.converter.output.xhtml5.core

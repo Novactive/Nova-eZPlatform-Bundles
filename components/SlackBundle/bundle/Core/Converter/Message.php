@@ -18,7 +18,12 @@ use eZ\Publish\API\Repository\Events;
 use Novactive\Bundle\eZSlackBundle\Core\Event\Shared;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider as InteractionProvider;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Message as MessageModel;
+use Novactive\Bundle\eZSlackBundle\Core\Slack\NewBuilder\Section;
+use Symfony\Component\Notifier\Bridge\Slack\Block\SlackDividerBlock;
+use Symfony\Component\Notifier\Bridge\Slack\Block\SlackSectionBlock;
+use Symfony\Component\Notifier\Bridge\Slack\SlackOptions;
 use Symfony\Contracts\EventDispatcher\Event;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -27,9 +32,12 @@ class Message
 {
     private InteractionProvider $provider;
 
-    public function __construct(InteractionProvider $provider)
+    private TranslatorInterface $translator;
+
+    public function __construct(InteractionProvider $provider, TranslatorInterface $translator)
     {
         $this->provider = $provider;
+        $this->translator = $translator;
     }
 
     public function convert(Event $event, ?MessageModel $message = null): MessageModel
@@ -78,5 +86,60 @@ class Message
         $message->setAttachments($attachments);
 
         return $message;
+    }
+
+    public function convertToOptions(Event $event, ?SlackOptions $slackOptions = null): SlackOptions
+    {
+        if (null === $slackOptions) {
+            $slackOptions = new SlackOptions();
+        }
+
+        if (!isset($slackOptions->toArray()['blocks']) ||
+            !in_array('title', array_column($slackOptions->toArray()['blocks'], 'block_id'), true)) {
+            if ($event instanceof Events\Content\PublishVersionEvent) {
+                $created = 'message.text.content.created';
+                $updated = 'message.text.content.updated';
+                $headerText = $event->getVersionInfo()->versionNo > 1 ? $updated : $created;
+            }
+            if ($event instanceof Events\Location\HideLocationEvent) {
+                $headerText = 'message.text.content.hid';
+            }
+            if ($event instanceof Events\Location\UnhideLocationEvent) {
+                $headerText = 'message.text.content.unhid';
+            }
+            if ($event instanceof Events\Trash\TrashEvent) {
+                $headerText = 'message.text.content.trashed';
+            }
+            if ($event instanceof Events\Trash\RecoverEvent) {
+                $headerText = 'message.text.content.recovered';
+            }
+            if ($event instanceof Events\ObjectState\SetContentStateEvent) {
+                $headerText = 'message.text.content.state.updated';
+            }
+            if ($event instanceof Shared) {
+                $headerText = 'message.text.content.shared';
+            }
+
+            // eZ Platform Enterprise
+            if (is_a($event, 'EzSystems\EzPlatformFormBuilder\Event\FormSubmitEvent')) {
+                $headerText = 'message.text.formsubmit';
+            }
+
+            if ($event instanceof Events\Notification\CreateNotificationEvent) {
+                $headerText = 'message.text.notification';
+            }
+
+            if (isset($headerText)) {
+                $slackOptions
+                    ->block((new Section($this->translator->trans($headerText, [], 'slack')))->blockId('title'))
+                    ->block(new SlackDividerBlock());
+            }
+        }
+
+        foreach ($this->provider->getBlocks($event) as $block) {
+            $slackOptions->block($block);
+        }
+
+        return $slackOptions;
     }
 }

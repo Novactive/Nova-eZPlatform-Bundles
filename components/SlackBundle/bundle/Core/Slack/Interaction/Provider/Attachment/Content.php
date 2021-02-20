@@ -20,6 +20,7 @@ use Novactive\Bundle\eZSlackBundle\Core\Event\Searched;
 use Novactive\Bundle\eZSlackBundle\Core\Event\Selected;
 use Novactive\Bundle\eZSlackBundle\Core\Event\Shared;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
+use Symfony\Component\Notifier\Bridge\Slack\Block\SlackBlockInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class Content extends AttachmentProvider
@@ -49,6 +50,9 @@ class Content extends AttachmentProvider
             $contentId = $event->getContentInfo()->id;
         }
 
+        dump($contentId);
+        dump($this->getAlias());
+
         if ($contentId > 0) {
             if ('novaezslack.provider.main' === $this->getAlias()) {
                 return $this->converter->getMain($contentId);
@@ -63,5 +67,39 @@ class Content extends AttachmentProvider
         }
 
         return null;
+    }
+
+    public function getAttachmentBlocks(Event $event): array
+    {
+        $contentId = 0;
+        if ($event instanceof Shared || $event instanceof Selected || $event instanceof Searched) {
+            $contentId = $event->getContentId();
+        } elseif ($event instanceof Events\Content\PublishVersionEvent) {
+            $contentId = $event->getContent()->id;
+        } elseif (
+            $event instanceof Events\Location\HideLocationEvent ||
+            $event instanceof Events\Location\UnhideLocationEvent ||
+            $event instanceof Events\Trash\TrashEvent ||
+            $event instanceof Events\Trash\RecoverEvent
+        ) {
+            $contentId = $event->getLocation()->contentId;
+        } elseif ($event instanceof Events\ObjectState\SetContentStateEvent) {
+            $contentId = $event->getContentInfo()->id;
+        }
+
+        if ($contentId > 0) {
+            if ('novaezslack.provider.main' === $this->getAlias()) {
+                return $this->converter->getMainBlocks($contentId);
+            }
+
+            if (!$event instanceof Searched && 'novaezslack.provider.details' === $this->getAlias()) {
+                return $this->converter->getDetailsBlock($contentId);
+            }
+//            if (!$event instanceof Searched && 'novaezslack.provider.preview' === $this->getAlias()) {
+//                return $this->converter->getPreview($contentId);
+//            }
+        }
+
+        return [];
     }
 }

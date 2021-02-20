@@ -84,13 +84,13 @@ class Search extends Responder
         } elseif (1 === $results->totalCount) {
             $message->setText('Only one selected for that search!');
             $message = $this->messageConverter->convert(
-                new Selected(['contentId' => $results->searchHits[0]->valueObject->id]),
+                new Selected($results->searchHits[0]->valueObject->id),
                 $message
             );
         } else {
             $message->setText(sprintf('I found %d contents.', $results->totalCount));
             foreach ($results->searchHits as $searchHit) {
-                $signal = new Searched(['contentId' => $searchHit->valueObject->id]);
+                $signal = new Searched($searchHit->valueObject->id);
                 $contentMessage = $this->messageConverter->convert($signal);
                 // we just want the main
                 $message->addAttachment($contentMessage->getAttachments()[0]);

@@ -36,10 +36,14 @@ class Dispatcher implements EventSubscriberInterface
 
     public function receive(Event $event): void
     {
-        $message = $this->messageConverter->convert($event);
-        dd($message);
+        //$message = $this->messageConverter->convert($event);
+        //dd($message);
         //$this->slackClient->sendNotification($message);
-        $this->slackClient->sendMessage(new SlackOptions());
+
+        $options = $this->messageConverter->convertToOptions($event);
+        //dd($options->toArray());
+
+        $this->slackClient->sendMessage($options);
     }
 
     public static function getSubscribedEvents(): array

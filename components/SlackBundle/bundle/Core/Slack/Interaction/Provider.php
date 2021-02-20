@@ -52,6 +52,7 @@ class Provider
      */
     public function getAttachments(Event $event): array
     {
+        dump($this->attachmentProviders);
         $attachments = [];
         foreach ($this->attachmentProviders as $provider) {
             $attachment = $provider->getAttachment($event);
@@ -61,5 +62,15 @@ class Provider
         }
 
         return $attachments;
+    }
+
+    public function getBlocks(Event $event): array
+    {
+        $blocks = [];
+        foreach ($this->attachmentProviders as $provider) {
+            $blocks[] = $provider->getAttachmentBlocks($event);
+        }
+
+        return array_merge(...$blocks);
     }
 }

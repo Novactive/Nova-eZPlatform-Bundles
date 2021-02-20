@@ -47,4 +47,9 @@ class Form extends AttachmentProvider
 
         return null;
     }
+
+    public function getAttachmentBlocks(Event $event): array
+    {
+        return [];
+    }
 }

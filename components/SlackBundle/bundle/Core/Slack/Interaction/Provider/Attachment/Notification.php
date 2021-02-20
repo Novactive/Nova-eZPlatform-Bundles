@@ -42,4 +42,9 @@ class Notification extends AttachmentProvider
 
         return $attachment;
     }
+
+    public function getAttachmentBlocks(Event $event): array
+    {
+        return [];
+    }
 }

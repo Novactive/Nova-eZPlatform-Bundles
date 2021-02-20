@@ -3,6 +3,7 @@
 namespace Novactive\Bundle\eZSlackBundle\Command;
 
 use Novactive\Bundle\eZSlackBundle\Core\Slack\NewBuilder\BlockElement\StaticSelect;
+use Novactive\Bundle\eZSlackBundle\Core\Slack\NewBuilder\Header;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -53,10 +54,11 @@ class NewNotificationCommand extends Command
                 'primary'
             );
 
-        $sectionBlock = (new Section(uniqid(date('Y-m-d H:i:s').' - ', false), 'plain_text'));
+        $titleBlock = (new Section(uniqid(date('Y-m-d H:i:s').' - ', false)))->blockId('title');
 
         $slackOptions = (new SlackOptions())
-            ->block($sectionBlock);
+            ->block((new SlackSectionBlock())->text(uniqid(date('Y-m-d H:i:s').' - ', false)))
+            ->block($titleBlock);
 //            ->block($actionBlock)
 //            ->block(new SlackDividerBlock())
 //            ->block(
@@ -73,6 +75,10 @@ class NewNotificationCommand extends Command
 //                        )
 //                    )
 //            );
+
+        //dd($slackOptions->toArray());
+
+        dd(array_column($slackOptions->toArray()['blocks'], 'block_id'));
 
         $this->slackClient->sendMessage($slackOptions);
 
