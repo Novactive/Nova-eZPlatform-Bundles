@@ -60,6 +60,11 @@ class PublicationChainChangeState extends ActionProvider
         }
     }
 
+    public function getNewAction(Event $event, int $index): ?array
+    {
+        return [];
+    }
+
     public function execute(InteractiveMessage $message): Attachment
     {
         $action = $message->getAction();

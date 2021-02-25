@@ -27,6 +27,7 @@ use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment as AttachmentModel;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Field;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\NewBuilder\Context;
 use Symfony\Component\Notifier\Bridge\Slack\Block\SlackDividerBlock;
+use Symfony\Component\Notifier\Bridge\Slack\Block\SlackImageBlock;
 use Symfony\Component\Notifier\Bridge\Slack\Block\SlackImageBlockElement;
 use Symfony\Component\Notifier\Bridge\Slack\Block\SlackSectionBlock;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -347,6 +348,26 @@ class Attachment
         }
 
         return null;
+    }
+
+    public function getPreviewBlock(int $contentId): array
+    {
+        $content = $this->findContent($contentId);
+        $mediaSection = $this->repository->sudo(
+            function (Repository $repository) {
+                return $repository->getSectionService()->loadSectionByIdentifier('media');
+            }
+        );
+        $blocks = [];
+        if ($content->contentInfo->sectionId === $mediaSection->id) {
+            $contentImage = $this->getPicture($content);
+            if (null !== $contentImage) {
+                $blocks[] = new SlackImageBlock($contentImage['uri'], $contentImage['alternativeText']);
+                $blocks[] = new SlackDividerBlock();
+            }
+        }
+
+        return $blocks;
     }
 
     private function getDescription(ValueContent $content): ?string

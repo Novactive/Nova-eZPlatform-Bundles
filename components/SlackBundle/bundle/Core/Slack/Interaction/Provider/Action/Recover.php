@@ -41,6 +41,20 @@ class Recover extends ActionProvider
         return $button;
     }
 
+    public function getNewAction(Event $event, int $index): ?array
+    {
+        if (!$event instanceof TrashEvent) {
+            return null;
+        }
+
+        return [
+            'text' => $this->translator->trans('action.recover', [], 'slack'),
+            'action_id' => $this->getAlias(),
+            'value' => (string) $event->getLocation()->contentId,
+            'style' => ActionProvider::PRIMARY_STYLE
+        ];
+    }
+
     public function execute(InteractiveMessage $message): Attachment
     {
         $action = $message->getAction();

@@ -22,6 +22,7 @@ use Novactive\Bundle\eZSlackBundle\Core\Event\Selected;
 use Novactive\Bundle\eZSlackBundle\Core\Event\Shared;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\AliasTrait;
 use Symfony\Contracts\EventDispatcher\Event;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class ActionProvider implements ActionProviderInterface
 {
@@ -32,6 +33,12 @@ abstract class ActionProvider implements ActionProviderInterface
      */
     protected $repository;
 
+    protected TranslatorInterface $translator;
+
+    public const DEFAULT_STYLE = 'default';
+    public const PRIMARY_STYLE = 'primary';
+    public const DANGER_STYLE = 'danger';
+
     /**
      * @required
      *
@@ -40,6 +47,18 @@ abstract class ActionProvider implements ActionProviderInterface
     public function setRepository(Repository $repository): self
     {
         $this->repository = $repository;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     *
+     * @return ActionProvider
+     */
+    public function setTranslator(TranslatorInterface $translator): self
+    {
+        $this->translator = $translator;
 
         return $this;
     }

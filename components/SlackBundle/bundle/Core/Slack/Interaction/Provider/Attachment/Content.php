@@ -95,9 +95,9 @@ class Content extends AttachmentProvider
             if (!$event instanceof Searched && 'novaezslack.provider.details' === $this->getAlias()) {
                 return $this->converter->getDetailsBlock($contentId);
             }
-//            if (!$event instanceof Searched && 'novaezslack.provider.preview' === $this->getAlias()) {
-//                return $this->converter->getPreview($contentId);
-//            }
+            if (!$event instanceof Searched && 'novaezslack.provider.preview' === $this->getAlias()) {
+                return $this->converter->getPreviewBlock($contentId);
+            }
         }
 
         return [];

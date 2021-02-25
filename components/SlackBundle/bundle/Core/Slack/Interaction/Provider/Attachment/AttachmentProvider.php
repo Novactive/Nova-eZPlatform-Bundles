@@ -23,6 +23,7 @@ use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\AliasTrait;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
 use RuntimeException;
 use Symfony\Contracts\EventDispatcher\Event;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class AttachmentProvider implements AttachmentProviderInterface
 {
@@ -38,6 +39,8 @@ abstract class AttachmentProvider implements AttachmentProviderInterface
      */
     protected $attachmentDecorator;
 
+    protected TranslatorInterface $translator;
+
     /**
      * @required
      *
@@ -46,6 +49,18 @@ abstract class AttachmentProvider implements AttachmentProviderInterface
     public function setAttachmentDecorator(AttachmentDecorator $attachmentDecorator): self
     {
         $this->attachmentDecorator = $attachmentDecorator;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     *
+     * @return AttachmentProvider
+     */
+    public function setTranslator(TranslatorInterface $translator): self
+    {
+        $this->translator = $translator;
 
         return $this;
     }
@@ -61,15 +76,12 @@ abstract class AttachmentProvider implements AttachmentProviderInterface
         return $this;
     }
 
-    /**
-     * @return Action[]
-     */
     public function buildActions(Event $event): array
     {
         $actions = [];
         foreach ($this->actions as $index => $actionProvider) {
             /* @var ActionProvider $actionProvider */
-            $action = $actionProvider->getAction($event, (int) $index);
+            $action = $actionProvider->getNewAction($event, (int) $index);
             if (null !== $action) {
                 $actions[] = $action;
             }

@@ -16,6 +16,8 @@ namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Attachm
 
 use Novactive\Bundle\eZSlackBundle\Core\Event\Searched;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
+use Novactive\Bundle\eZSlackBundle\Core\Slack\NewBuilder\Action;
+use Symfony\Component\Notifier\Bridge\Slack\Block\SlackSectionBlock;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class BasicActions extends AttachmentProvider
@@ -42,6 +44,22 @@ class BasicActions extends AttachmentProvider
 
     public function getAttachmentBlocks(Event $event): array
     {
-        return [];
+        if ($event instanceof Searched || count($this->actions) <= 0) {
+            return [];
+        }
+        $actions = $this->buildActions($event);
+        if (count($actions) <= 0) {
+            return [];
+        }
+
+        $actionsBlock = new Action();
+        foreach ($actions as $action) {
+            call_user_func_array([$actionsBlock, 'button'], $action);
+        }
+
+        return [
+            (new SlackSectionBlock())->text($this->translator->trans('provider.basic-buttons', [], 'slack'), false),
+            $actionsBlock
+        ];
     }
 }

@@ -38,6 +38,21 @@ class Trash extends ActionProvider
         return $button;
     }
 
+    public function getNewAction(Event $event, int $index): ?array
+    {
+        $content = $this->getContentForSignal($event);
+        if (null === $content || !$content->contentInfo->published || $event instanceof TrashEvent) {
+            return null;
+        }
+
+        return [
+            'text' => $this->translator->trans('action.trash', [], 'slack'),
+            'action_id' => $this->getAlias(),
+            'value' => (string) $content->id,
+            'style' => ActionProvider::DANGER_STYLE
+        ];
+    }
+
     public function execute(InteractiveMessage $message): Attachment
     {
         $action = $message->getAction();

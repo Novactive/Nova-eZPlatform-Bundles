@@ -45,6 +45,30 @@ class Unhide extends ActionProvider
         return $button;
     }
 
+    public function getNewAction(Event $event, int $index): ?array
+    {
+        $content = $this->getContentForSignal($event);
+        if (
+            null === $content ||
+            !$content->contentInfo->published ||
+            null === $content->contentInfo->mainLocationId ||
+            $event instanceof TrashEvent
+        ) {
+            return null;
+        }
+
+        $location = $this->repository->getLocationService()->loadLocation($content->contentInfo->mainLocationId);
+        if (!$location->hidden) {
+            return null;
+        }
+        return [
+            'text' => $this->translator->trans('action.unhide', [], 'slack'),
+            'action_id' => $this->getAlias(),
+            'value' => (string) $content->id,
+            'style' => ActionProvider::PRIMARY_STYLE
+        ];
+    }
+
     public function execute(InteractiveMessage $message): Attachment
     {
         $action = $message->getAction();
