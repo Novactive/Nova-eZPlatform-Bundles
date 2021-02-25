@@ -31,15 +31,35 @@ class Meta
     protected $content;
 
     /**
-     * Constructor.
-     *
-     * @param string $name
-     * @param string $content
+     * @var bool|null
      */
-    public function __construct(?string $name = null, ?string $content = null)
-    {
+    protected $required;
+
+    /**
+     * @var string|null
+     */
+    protected $minLength;
+
+    /**
+     * @var string|null
+     */
+    protected $maxLength;
+
+    /**
+     * Constructor.
+     */
+    public function __construct(
+        ?string $name = null,
+        ?string $content = null,
+        ?bool $required = null,
+        ?string $minLength = null,
+        ?string $maxLength = null
+    ) {
         $this->name = $name;
         $this->content = $content;
+        $this->required = $required;
+        $this->minLength = $minLength;
+        $this->maxLength = $maxLength;
     }
 
     public function getName(): string
@@ -66,6 +86,36 @@ class Meta
         return $this;
     }
 
+    public function getRequired(): ?bool
+    {
+        return $this->required;
+    }
+
+    public function setRequired(?bool $required): void
+    {
+        $this->required = $required;
+    }
+
+    public function getMinLength(): ?string
+    {
+        return $this->minLength;
+    }
+
+    public function setMinLength(?string $minLength): void
+    {
+        $this->minLength = $minLength;
+    }
+
+    public function getMaxLength(): ?string
+    {
+        return $this->maxLength;
+    }
+
+    public function setMaxLength(?string $maxLength): void
+    {
+        $this->maxLength = $maxLength;
+    }
+
     /**
      * Returns true if the provided attribute exists.
      */
@@ -82,6 +132,9 @@ class Meta
         return [
             'name',
             'content',
+            'required',
+            'minLength',
+            'maxLength',
         ];
     }
 
@@ -93,10 +146,14 @@ class Meta
         switch ($name) {
             case 'name':
                 return $this->getName();
-                break;
             case 'content':
                 return $this->getContent();
-                break;
+            case 'required':
+                return $this->getRequired();
+            case 'minLength':
+                return $this->getMinLength();
+            case 'maxLength':
+                return $this->getMaxLength();
             default:
                 throw new PropertyNotFoundException($name, \get_class($this));
                 break;
