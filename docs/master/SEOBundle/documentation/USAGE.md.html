@@ -167,14 +167,18 @@ But you will have to manage yourself. ( we can't do that for you, but we'd simpl
                 title:
                     label: 'Title'
                     default_pattern: "&lt;title|name&gt;"
+                    required: true
                 description:
                     label: 'Description'
                     default_pattern: "&lt;description|short_description|title|name&gt;"
+                    minLength: 100
+                    maxLength: 150
                 keywords:
                     label: 'Keywords'
                     default_pattern: ~
 </code></pre>
 <p>This configuration defines 3 metas, <em>title</em>, <em>description</em> and <em>keywords</em></p>
+<p>The options required, minLength and maxLength are optional.</p>
 <blockquote>
 <p>You can add what you want to here.</p>
 </blockquote>
@@ -285,8 +289,8 @@ Help:
 
             <p class="text-right">
                 <img width="204" height="20"
-                     src='https://img.shields.io/badge/Updated on-12--18--2020 23:57:24-green?style=flat-square&labelColor=black'
-                     alt='Updated on 12--18--2020 23:57:24'
+                     src='https://img.shields.io/badge/Updated on-02--25--2021 19:31:17-green?style=flat-square&labelColor=black'
+                     alt='Updated on 02--25--2021 19:31:17'
                 />
             </p>
         </div>
@@ -299,7 +303,7 @@ Help:
     <div class="row">
         <div class="col-2">
             <img class="mb-2" src="https://avatars0.githubusercontent.com/u/710363?s=60&v=4" width="24" height="24" alt="Novactive"/>
-            <small class="d-block mb-3 text-muted">&copy; 2020</small>
+            <small class="d-block mb-3 text-muted">&copy; 2021</small>
         </div>
         <div class="col-8">
             <p class="text-center">
