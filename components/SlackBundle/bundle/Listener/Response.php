@@ -55,7 +55,7 @@ class Response
 <script type="text/javascript">
 $(function () {
 "use strict";
-var slackButton = $("<a/>").attr({href:"{$connectURL}", class: "", style:"margin-top:0.95rem; display:inline-block"});
+var slackButton = $("<a/>").attr({href:"{$connectURL}", class: "", style:"margin-right:20px; display:inline-block"});
 var slackImage = $("<img/>").attr({
 src: "{$slackAssetPrefix}/img/sign_in_with_slack.png",
 srcset: "{$slackAssetPrefix}/img/sign_in_with_slack.png 1x, {$slackAssetPrefix}/img/sign_in_with_slack@2x.png 2x",
@@ -63,7 +63,7 @@ height: 40,
 width: 172
 });
 slackButton.append(slackImage);
-slackButton.insertBefore(".ez-login__form-wrapper form button[type=submit]:first");
+slackButton.insertBefore(".ez-login__actions-wrapper form button[type=submit]:first");
 });
 </script>
 END;

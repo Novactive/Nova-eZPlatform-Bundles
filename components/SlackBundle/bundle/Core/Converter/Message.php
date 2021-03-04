@@ -96,15 +96,24 @@ class Message
 
         if (!isset($slackOptions->toArray()['blocks']) ||
             !in_array('title', array_column($slackOptions->toArray()['blocks'], 'block_id'), true)) {
+            $params = [];
             if ($event instanceof Events\Content\PublishVersionEvent) {
                 $created = 'message.text.content.created';
                 $updated = 'message.text.content.updated';
                 $headerText = $event->getVersionInfo()->versionNo > 1 ? $updated : $created;
             }
             if ($event instanceof Events\Location\HideLocationEvent) {
-                $headerText = 'message.text.content.hid';
+                $headerText = 'message.text.location.hid';
+                $params = ['%id%' => $event->getLocation()->id];
             }
             if ($event instanceof Events\Location\UnhideLocationEvent) {
+                $headerText = 'message.text.location.unhid';
+                $params = ['%id%' => $event->getLocation()->id];
+            }
+            if ($event instanceof Events\Content\HideContentEvent) {
+                $headerText = 'message.text.content.hid';
+            }
+            if ($event instanceof Events\Content\RevealContentEvent) {
                 $headerText = 'message.text.content.unhid';
             }
             if ($event instanceof Events\Trash\TrashEvent) {
@@ -131,7 +140,7 @@ class Message
 
             if (isset($headerText)) {
                 $slackOptions
-                    ->block((new Section($this->translator->trans($headerText, [], 'slack')))->blockId('title'))
+                    ->block((new Section($this->translator->trans($headerText, $params, 'slack')))->blockId('title'))
                     ->block(new SlackDividerBlock());
             }
         }

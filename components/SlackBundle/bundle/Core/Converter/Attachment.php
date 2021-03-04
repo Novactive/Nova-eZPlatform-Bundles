@@ -157,7 +157,7 @@ class Attachment
         $ownerPicture = $this->getPicture($owner);
         $ownerBlock = new Context();
         if (null !== $ownerPicture) {
-            $ownerBlock->image($ownerPicture['uri'], $ownerPicture['alternativeText']);
+            $ownerBlock->image($ownerPicture['uri'], (string) $ownerPicture['alternativeText']);
         }
         $ownerBlock->text($this->sanitize($owner->contentInfo->name), 'plain_text');
         $blocks[] = $ownerBlock;
@@ -171,7 +171,7 @@ class Attachment
         $contentImage = $this->getPicture($content);
         if (null !== $contentImage) {
             $contentBlock->accessory(
-                new SlackImageBlockElement($contentImage['uri'], $contentImage['alternativeText'])
+                new SlackImageBlockElement($contentImage['uri'], (string) $contentImage['alternativeText'])
             );
         }
         $blocks[] = $contentBlock;
@@ -218,7 +218,25 @@ class Attachment
             $leftColumn .= "\n\n*".$group->getName($group->mainLanguageCode)."*\n".
                            $state->getName($state->mainLanguageCode);
         }
+
+        if (null !== $content->contentInfo->modificationDate) {
+            $rightColumn .= '*'.$this->translator->trans('field.content.modified', [], 'slack')."*\n".
+                            $this->formatDate($content->contentInfo->modificationDate);
+        }
+        if (!empty($rightColumn)) {
+            $rightColumn .= "\n\n";
+        }
+        $rightColumn .= '*'.$this->translator->trans('field.content.version', [], 'slack')."*\n".
+                        $content->contentInfo->currentVersionNo;
+        $rightColumn .= "\n\n*".$this->translator->trans('field.content.languages', [], 'slack')."*\n".
+                        implode(',', $content->versionInfo->languageCodes);
+
+        $blocks = [
+            (new SlackSectionBlock())->field($leftColumn)->field($rightColumn)
+        ];
+
         if ($content->contentInfo->published) {
+            $siteAccessLinks = '';
             $locations = $this->repository->getLocationService()->loadLocations($content->contentInfo);
             foreach ($locations as $location) {
                 foreach ($this->siteAccessList as $siteAccessName) {
@@ -235,27 +253,14 @@ class Attachment
                     if ($location->id !== $content->contentInfo->mainLocationId) {
                         $fieldName = "Location: {$location->id} {$fieldName}";
                     }
-                    $leftColumn .= "\n\n*".$fieldName."*\n".explode('?', $url)[0];
+                    $siteAccessLinks .= "\n\n*".$fieldName."*\n".explode('?', $url)[0];
                 }
             }
+            $blocks[] = (new SlackSectionBlock())->text($siteAccessLinks);
         }
+        $blocks[] = new SlackDividerBlock();
 
-        if (null !== $content->contentInfo->modificationDate) {
-            $rightColumn .= '*'.$this->translator->trans('field.content.modified', [], 'slack')."*\n".
-                            $this->formatDate($content->contentInfo->modificationDate);
-        }
-        if (!empty($rightColumn)) {
-            $rightColumn .= "\n\n";
-        }
-        $rightColumn .= '*'.$this->translator->trans('field.content.version', [], 'slack')."*\n".
-                        $content->contentInfo->currentVersionNo;
-        $rightColumn .= "\n\n*".$this->translator->trans('field.content.languages', [], 'slack')."*\n".
-                        implode(',', $content->versionInfo->languageCodes);
-
-        return [
-            (new SlackSectionBlock())->field($leftColumn)->field($rightColumn),
-            new SlackDividerBlock()
-        ];
+        return $blocks;
     }
 
     public function getDetails(int $contentId): AttachmentModel

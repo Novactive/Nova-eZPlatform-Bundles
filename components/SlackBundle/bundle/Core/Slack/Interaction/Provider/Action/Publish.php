@@ -39,7 +39,7 @@ class Publish extends ActionProvider
         return $button;
     }
 
-    public function getNewAction(Event $event, int $index): ?array
+    public function getNewAction(Event $event): ?array
     {
         $content = $this->getContentForSignal($event);
         if (
@@ -58,23 +58,31 @@ class Publish extends ActionProvider
         ];
     }
 
-    public function execute(InteractiveMessage $message): Attachment
+//    public function execute(InteractiveMessage $message): Attachment
+//    {
+//        $action = $message->getAction();
+//        $value = (int) $action->getValue();
+//
+//        $attachment = new Attachment();
+//        $attachment->setTitle('_t:action.publish');
+//        try {
+//            $content = $this->repository->getContentService()->loadContent($value);
+//            $this->repository->getContentService()->publishVersion($content->versionInfo);
+//            $attachment->setColor('good');
+//            $attachment->setText('_t:action.content.published');
+//        } catch (\Exception $e) {
+//            $attachment->setColor('danger');
+//            $attachment->setText($e->getMessage());
+//        }
+//
+//        return $attachment;
+//    }
+
+    public function execute(InteractiveMessage $message): array
     {
         $action = $message->getAction();
-        $value = (int) $action->getValue();
+        $value = (int) $action['value'];
 
-        $attachment = new Attachment();
-        $attachment->setTitle('_t:action.publish');
-        try {
-            $content = $this->repository->getContentService()->loadContent($value);
-            $this->repository->getContentService()->publishVersion($content->versionInfo);
-            $attachment->setColor('good');
-            $attachment->setText('_t:action.content.published');
-        } catch (\Exception $e) {
-            $attachment->setColor('danger');
-            $attachment->setText($e->getMessage());
-        }
-
-        return $attachment;
+        return [];
     }
 }

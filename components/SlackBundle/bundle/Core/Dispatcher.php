@@ -52,6 +52,8 @@ class Dispatcher implements EventSubscriberInterface
             Events\Content\PublishVersionEvent::class => 'receive',
             Events\Location\HideLocationEvent::class => 'receive',
             Events\Location\UnhideLocationEvent::class => 'receive',
+            Events\Content\HideContentEvent::class => 'receive',
+            Events\Content\RevealContentEvent::class => 'receive',
             Events\Trash\TrashEvent::class => 'receive',
             Events\Trash\RecoverEvent::class => 'receive',
             Events\ObjectState\SetContentStateEvent::class => 'receive',

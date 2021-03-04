@@ -16,6 +16,9 @@ namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Attachm
 
 use eZ\Publish\API\Repository\Events\ObjectState\SetContentStateEvent;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
+use Novactive\Bundle\eZSlackBundle\Core\Slack\NewBuilder\Action;
+use Symfony\Component\Notifier\Bridge\Slack\Block\SlackDividerBlock;
+use Symfony\Component\Notifier\Bridge\Slack\Block\SlackSectionBlock;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class States extends AttachmentProvider
@@ -38,8 +41,25 @@ class States extends AttachmentProvider
         return $attachment;
     }
 
-    public function getAttachmentBlocks(Event $event): array
+    public function getAttachmentBlocks(Event $event): ?array
     {
-        return [];
+        if (!$event instanceof SetContentStateEvent) {
+            return null;
+        }
+        $actions = $this->buildActions($event);
+        if (count($actions) <= 0) {
+            return null;
+        }
+
+        $actionsBlock = new Action();
+        foreach ($actions as $action) {
+            call_user_func_array([$actionsBlock, 'staticSelect'], $action);
+        }
+
+        return [
+            new SlackDividerBlock(),
+            (new SlackSectionBlock())->text($this->translator->trans('provider.states', [], 'slack'), false),
+            $actionsBlock
+        ];
     }
 }

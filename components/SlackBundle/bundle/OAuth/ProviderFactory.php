@@ -56,14 +56,12 @@ class ProviderFactory extends BaseProviderFactory
             }
         }
 
-        $provider = parent::createProvider(
+        return parent::createProvider(
             $class,
             $options,
             $redirectUri,
             $redirectParams,
             $collaborators
         );
-
-        return $provider;
     }
 }

@@ -38,7 +38,7 @@ class Trash extends ActionProvider
         return $button;
     }
 
-    public function getNewAction(Event $event, int $index): ?array
+    public function getNewAction(Event $event): ?array
     {
         $content = $this->getContentForSignal($event);
         if (null === $content || !$content->contentInfo->published || $event instanceof TrashEvent) {
@@ -53,30 +53,38 @@ class Trash extends ActionProvider
         ];
     }
 
-    public function execute(InteractiveMessage $message): Attachment
+//    public function execute(InteractiveMessage $message): Attachment
+//    {
+//        $action = $message->getAction();
+//        $value = (int) $action->getValue();
+//        $attachment = new Attachment();
+//        $attachment->setTitle('_t:action.trash');
+//        try {
+//            $content = $this->repository->getContentService()->loadContent($value);
+//            if (!$content->contentInfo->published) {
+//                $attachment->setColor('danger');
+//                $attachment->setText(var_export($content->contentInfo, true));
+//            } else {
+//                $locations = $this->repository->getLocationService()->loadLocations($content->contentInfo);
+//                foreach ($locations as $location) {
+//                    $this->repository->getTrashService()->trash($location);
+//                }
+//                $attachment->setColor('good');
+//                $attachment->setText('_t:action.locations.trashed');
+//            }
+//        } catch (\Exception $e) {
+//            $attachment->setColor('danger');
+//            $attachment->setText($e->getMessage());
+//        }
+//
+//        return $attachment;
+//    }
+
+    public function execute(InteractiveMessage $message): array
     {
         $action = $message->getAction();
-        $value = (int) $action->getValue();
-        $attachment = new Attachment();
-        $attachment->setTitle('_t:action.trash');
-        try {
-            $content = $this->repository->getContentService()->loadContent($value);
-            if (!$content->contentInfo->published) {
-                $attachment->setColor('danger');
-                $attachment->setText(var_export($content->contentInfo, true));
-            } else {
-                $locations = $this->repository->getLocationService()->loadLocations($content->contentInfo);
-                foreach ($locations as $location) {
-                    $this->repository->getTrashService()->trash($location);
-                }
-                $attachment->setColor('good');
-                $attachment->setText('_t:action.locations.trashed');
-            }
-        } catch (\Exception $e) {
-            $attachment->setColor('danger');
-            $attachment->setText($e->getMessage());
-        }
+        $value = (int) $action['value'];
 
-        return $attachment;
+        return [];
     }
 }

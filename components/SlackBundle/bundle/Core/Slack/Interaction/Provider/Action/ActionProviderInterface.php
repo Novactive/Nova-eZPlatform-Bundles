@@ -35,5 +35,5 @@ interface ActionProviderInterface
      */
     public function supports($alias): bool;
 
-    public function execute(InteractiveMessage $message): Attachment;
+    public function execute(InteractiveMessage $message): array;
 }

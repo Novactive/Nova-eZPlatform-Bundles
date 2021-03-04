@@ -20,7 +20,6 @@ use Novactive\Bundle\eZSlackBundle\Core\Event\Searched;
 use Novactive\Bundle\eZSlackBundle\Core\Event\Selected;
 use Novactive\Bundle\eZSlackBundle\Core\Event\Shared;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
-use Symfony\Component\Notifier\Bridge\Slack\Block\SlackBlockInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class Content extends AttachmentProvider
@@ -49,9 +48,6 @@ class Content extends AttachmentProvider
         } elseif ($event instanceof Events\ObjectState\SetContentStateEvent) {
             $contentId = $event->getContentInfo()->id;
         }
-
-        dump($contentId);
-        dump($this->getAlias());
 
         if ($contentId > 0) {
             if ('novaezslack.provider.main' === $this->getAlias()) {
@@ -83,7 +79,11 @@ class Content extends AttachmentProvider
             $event instanceof Events\Trash\RecoverEvent
         ) {
             $contentId = $event->getLocation()->contentId;
-        } elseif ($event instanceof Events\ObjectState\SetContentStateEvent) {
+        } elseif (
+            $event instanceof Events\Content\HideContentEvent ||
+            $event instanceof Events\Content\RevealContentEvent ||
+            $event instanceof Events\ObjectState\SetContentStateEvent
+        ) {
             $contentId = $event->getContentInfo()->id;
         }
 

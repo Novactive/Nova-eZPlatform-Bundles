@@ -64,8 +64,8 @@ services:
 
     GuzzleHttp\Client: ~
 
-    knpu.oauth2.provider_factory:
-        class: Novactive\Bundle\eZSlackBundle\OAuth\ProviderFactory
+    Novactive\Bundle\eZSlackBundle\OAuth\ProviderFactory:
+        decorates: "knpu.oauth2.provider_factory"
         arguments: ["@router"]
 
     # HERE ONLY TO FIX A BUG: https://github.com/ezsystems/ezplatform-admin-ui/pull/353

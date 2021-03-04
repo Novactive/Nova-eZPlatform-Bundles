@@ -95,15 +95,27 @@ abstract class AttachmentProvider implements AttachmentProviderInterface
         return 0 === strpos($alias, $this->getAlias());
     }
 
-    public function execute(InteractiveMessage $message): Attachment
+    public function execute(InteractiveMessage $message): array
     {
         $action = $message->getAction();
         foreach ($this->actions as $provider) {
-            if ($provider->supports($action->getName())) {
+            if ($provider->supports($action['action_id'])) {
                 return $provider->execute($message);
             }
         }
 
-        throw new RuntimeException("No Action Provider supports '{$action->getName()}'.");
+        throw new RuntimeException("No Action Provider supports '{$action['action_id']}'.");
+    }
+
+    public function executeBlocks(InteractiveMessage $message): array
+    {
+        $action = $message->getAction();
+        foreach ($this->actions as $provider) {
+            if ($provider->supports($action['action_id'])) {
+                return $provider->execute($message);
+            }
+        }
+
+        throw new RuntimeException("No Action Provider supports '{$action['action_id']}'.");
     }
 }

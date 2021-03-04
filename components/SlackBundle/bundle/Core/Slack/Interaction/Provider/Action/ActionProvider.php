@@ -84,7 +84,11 @@ abstract class ActionProvider implements ActionProviderInterface
         ) {
             return $this->repository->getContentService()->loadContent($event->getLocation()->contentId);
         }
-        if ($event instanceof Events\ObjectState\SetContentStateEvent) {
+        if (
+            $event instanceof Events\Content\HideContentEvent ||
+            $event instanceof Events\Content\RevealContentEvent ||
+            $event instanceof Events\ObjectState\SetContentStateEvent
+        ) {
             return $this->repository->getContentService()->loadContent($event->getContentInfo()->id);
         }
 

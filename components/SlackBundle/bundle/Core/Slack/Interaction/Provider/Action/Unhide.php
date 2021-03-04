@@ -16,10 +16,10 @@ namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action;
 
 use eZ\Publish\API\Repository\Events\Trash\TrashEvent;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Action;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Button;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
 use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\API\Repository\Events;
 
 class Unhide extends ActionProvider
 {
@@ -45,7 +45,7 @@ class Unhide extends ActionProvider
         return $button;
     }
 
-    public function getNewAction(Event $event, int $index): ?array
+    public function getNewAction(Event $event): ?array
     {
         $content = $this->getContentForSignal($event);
         if (
@@ -57,38 +57,59 @@ class Unhide extends ActionProvider
             return null;
         }
 
-        $location = $this->repository->getLocationService()->loadLocation($content->contentInfo->mainLocationId);
-        if (!$location->hidden) {
+        if ($event instanceof Events\Content\HideContentEvent) {
+            $actionId = $this->getAlias().'.content';
+            $value = (string) $event->getContentInfo()->id;
+        } elseif ($event instanceof Events\Location\HideLocationEvent) {
+            $actionId = $this->getAlias().'.location';
+            $value = (string) $event->getLocation()->id;
+        } elseif (
+            $event instanceof Events\Content\RevealContentEvent ||
+            $event instanceof Events\Location\UnhideLocationEvent ||
+            false === $content->contentInfo->isHidden
+        ) {
             return null;
+        } else {
+            $actionId = $this->getAlias().'.content';
+            $value = (string) $content->id;
         }
+
         return [
             'text' => $this->translator->trans('action.unhide', [], 'slack'),
-            'action_id' => $this->getAlias(),
-            'value' => (string) $content->id,
+            'action_id' => $actionId,
+            'value' => $value,
             'style' => ActionProvider::PRIMARY_STYLE
         ];
     }
 
-    public function execute(InteractiveMessage $message): Attachment
+    //    public function execute(InteractiveMessage $message): Attachment
+    //    {
+    //        $action = $message->getAction();
+    //        $value = (int) $action->getValue();
+    //
+    //        $attachment = new Attachment();
+    //        $attachment->setTitle('_t:action.unhide');
+    //        try {
+    //            $content = $this->repository->getContentService()->loadContent($value);
+    //            $locations = $this->repository->getLocationService()->loadLocations($content->contentInfo);
+    //            foreach ($locations as $location) {
+    //                $this->repository->getLocationService()->unhideLocation($location);
+    //            }
+    //            $attachment->setColor('good');
+    //            $attachment->setText('_t:action.locations.unhid');
+    //        } catch (\Exception $e) {
+    //            $attachment->setColor('danger');
+    //            $attachment->setText($e->getMessage());
+    //        }
+    //
+    //        return $attachment;
+    //    }
+
+    public function execute(InteractiveMessage $message): array
     {
         $action = $message->getAction();
-        $value = (int) $action->getValue();
+        $value = (int) $action['value'];
 
-        $attachment = new Attachment();
-        $attachment->setTitle('_t:action.unhide');
-        try {
-            $content = $this->repository->getContentService()->loadContent($value);
-            $locations = $this->repository->getLocationService()->loadLocations($content->contentInfo);
-            foreach ($locations as $location) {
-                $this->repository->getLocationService()->unhideLocation($location);
-            }
-            $attachment->setColor('good');
-            $attachment->setText('_t:action.locations.unhid');
-        } catch (\Exception $e) {
-            $attachment->setColor('danger');
-            $attachment->setText($e->getMessage());
-        }
-
-        return $attachment;
+        return [];
     }
 }

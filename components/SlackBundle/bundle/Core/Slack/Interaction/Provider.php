@@ -36,15 +36,15 @@ class Provider
         $this->attachmentProviders[$alias] = $provider;
     }
 
-    public function execute(InteractiveMessage $message): Attachment
+    public function execute(InteractiveMessage $message): array
     {
         $action = $message->getAction();
         foreach ($this->attachmentProviders as $provider) {
-            if ($provider->supports($action->getName())) {
-                return $provider->execute($message);
+            if ($provider->supports($action['action_id'])) {
+                return $provider->executeBlocks($message);
             }
         }
-        throw new RuntimeException("No Attachment Provider supports '{$action->getName()}'.");
+        throw new RuntimeException("No Attachment Provider supports '{$action['action_id']}'.");
     }
 
     /**
@@ -52,7 +52,6 @@ class Provider
      */
     public function getAttachments(Event $event): array
     {
-        dump($this->attachmentProviders);
         $attachments = [];
         foreach ($this->attachmentProviders as $provider) {
             $attachment = $provider->getAttachment($event);
@@ -68,7 +67,10 @@ class Provider
     {
         $blocks = [];
         foreach ($this->attachmentProviders as $provider) {
-            $blocks[] = $provider->getAttachmentBlocks($event);
+            $block = $provider->getAttachmentBlocks($event);
+            if (null !== $block) {
+                $blocks[] = $block;
+            }
         }
 
         return array_merge(...$blocks);

@@ -48,6 +48,7 @@ class BasicActions extends AttachmentProvider
             return [];
         }
         $actions = $this->buildActions($event);
+        //dd($actions);
         if (count($actions) <= 0) {
             return [];
         }
@@ -59,7 +60,7 @@ class BasicActions extends AttachmentProvider
 
         return [
             (new SlackSectionBlock())->text($this->translator->trans('provider.basic-buttons', [], 'slack'), false),
-            $actionsBlock
+            $actionsBlock,
         ];
     }
 }

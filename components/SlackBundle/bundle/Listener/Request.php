@@ -81,12 +81,27 @@ class Request
         }
 
         $route = $event->getRequest()->get('_route');
-        if (!\in_array($route, ['novactive_ezslack_callback_message', 'novactive_ezslack_callback_command'])) {
+        if (!\in_array(
+            $route,
+            [
+                'novactive_ezslack_callback_message',
+                'novactive_ezslack_callback_command',
+                'novactive_ezslack_callback_notification'
+            ]
+        )) {
             // don't do anything if it's not a compliant route
             return;
         }
         try {
             $validToken = $this->configResolver->getParameter('slack_verification_token', 'nova_ezslack');
+            if ('novactive_ezslack_callback_notification' === $route) {
+                $payload = json_decode($event->getRequest()->get('payload'), true, 512, JSON_THROW_ON_ERROR);
+                if ($validToken === $payload['token']) {
+                    // we are good, return
+                    // @todo: will need to figure out what to do with exact user authentication
+                    return;
+                }
+            }
             if ('novactive_ezslack_callback_command' === $route) {
                 // token is in POST
                 $token = $event->getRequest()->request->get('token');
@@ -101,23 +116,23 @@ class Request
                 }
             }
 
-            if ('novactive_ezslack_callback_message' === $route) {
-                $payload = $event->getRequest()->get('payload');
-                /** @var InteractiveMessage $interactiveMessage */
-                $interactiveMessage = $this->serializer->deserialize($payload, InteractiveMessage::class, 'json');
-                if ($interactiveMessage instanceof InteractiveMessage) {
-                    $event->getRequest()->attributes->set('interactiveMessage', $interactiveMessage);
-                    if ($validToken === $interactiveMessage->getToken()) {
-                        $this->sudoUser(
-                            $interactiveMessage->getUser()->getId(),
-                            $interactiveMessage->getTeam()->getId()
-                        );
-
-                        // we are good, return
-                        return;
-                    }
-                }
-            }
+//            if ('novactive_ezslack_callback_message' === $route) {
+//                $payload = $event->getRequest()->get('payload');
+//                /** @var InteractiveMessage $interactiveMessage */
+//                $interactiveMessage = $this->serializer->deserialize($payload, InteractiveMessage::class, 'json');
+//                if ($interactiveMessage instanceof InteractiveMessage) {
+//                    $event->getRequest()->attributes->set('interactiveMessage', $interactiveMessage);
+//                    if ($validToken === $interactiveMessage->getToken()) {
+//                        $this->sudoUser(
+//                            $interactiveMessage->getUser()->getId(),
+//                            $interactiveMessage->getTeam()->getId()
+//                        );
+//
+//                        // we are good, return
+//                        return;
+//                    }
+//                }
+//            }
         } catch (\Exception $e) {
             $event->setResponse(
                 new JsonResponse(
