@@ -78,7 +78,7 @@ class Publish extends ActionProvider
 //        return $attachment;
 //    }
 
-    public function execute(InteractiveMessage $message): array
+    public function execute(InteractiveMessage $message, array $actions = []): array
     {
         $action = $message->getAction();
         $value = (int) $action['value'];

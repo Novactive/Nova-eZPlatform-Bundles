@@ -48,6 +48,7 @@ class Unhide extends ActionProvider
     public function getNewAction(Event $event): ?array
     {
         $content = $this->getContentForSignal($event);
+
         if (
             null === $content ||
             !$content->contentInfo->published ||
@@ -105,11 +106,45 @@ class Unhide extends ActionProvider
     //        return $attachment;
     //    }
 
-    public function execute(InteractiveMessage $message): array
+    public function execute(InteractiveMessage $message, array $allActions = []): array
     {
-        $action = $message->getAction();
-        $value = (int) $action['value'];
+        $messageAction = $message->getAction();
+        $value = (int) $messageAction['value'];
+        //dd($actions);
 
-        return [];
+        $response = [];
+        try {
+            if (str_ends_with($messageAction['action_id'], 'content')) {
+                $content = $this->repository->getContentService()->loadContent($value);
+                $this->repository->getContentService()->revealContent($content->contentInfo);
+                $response['text'] = $this->translator->trans('action.content.unhid', [], 'slack');
+                $event = new Events\Content\RevealContentEvent($content->contentInfo);
+            } else {
+                $location = $this->repository->getLocationService()->loadLocation($value);
+                $this->repository->getLocationService()->unhideLocation($location);
+                $response['text'] = $this->translator->trans('action.location.unhid', [], 'slack');
+                $event = new Events\Location\UnhideLocationEvent($location, $location);
+            }
+        } catch (\Exception $e) {
+            $response['text'] = $e->getMessage();
+
+            return $response;
+        }
+        foreach ($allActions as $action) {
+            if ($action instanceof Hide) {
+                $block = $action->getNewAction($event);
+                if (null !== $block) {
+                    $block['text'] = [
+                        'type' => 'plain_text',
+                        'text' => $block['text']
+                    ];
+                    $block['type'] = 'button';
+                    $response['action'] = $block;
+                }
+                break;
+            }
+        }
+
+        return $response;
     }
 }

@@ -48,7 +48,6 @@ class BasicActions extends AttachmentProvider
             return [];
         }
         $actions = $this->buildActions($event);
-        //dd($actions);
         if (count($actions) <= 0) {
             return [];
         }

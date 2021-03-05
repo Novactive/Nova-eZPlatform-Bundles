@@ -112,7 +112,7 @@ abstract class AttachmentProvider implements AttachmentProviderInterface
         $action = $message->getAction();
         foreach ($this->actions as $provider) {
             if ($provider->supports($action['action_id'])) {
-                return $provider->execute($message);
+                return $provider->execute($message, $this->actions);
             }
         }
 

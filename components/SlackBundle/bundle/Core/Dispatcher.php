@@ -19,6 +19,7 @@ use Novactive\Bundle\eZSlackBundle\Core\Client\Slack;
 use Novactive\Bundle\eZSlackBundle\Core\Converter\Message as MessageConverter;
 use Novactive\Bundle\eZSlackBundle\Core\Event\Shared;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\EventDispatcher\Event;
 use Symfony\Component\Notifier\Bridge\Slack\SlackOptions;
 
@@ -28,16 +29,21 @@ class Dispatcher implements EventSubscriberInterface
 
     private MessageConverter $messageConverter;
 
-    public function __construct(Slack $slackClient, MessageConverter $messageConverter)
+    private RequestStack $requestStack;
+
+    public function __construct(Slack $slackClient, MessageConverter $messageConverter, RequestStack $requestStack)
     {
         $this->slackClient = $slackClient;
         $this->messageConverter = $messageConverter;
+        $this->requestStack = $requestStack;
     }
 
     public function receive(Event $event): void
     {
         //$message = $this->messageConverter->convert($event);
-        //dd($message);
+        if ('novactive_ezslack_callback_notification' === $this->requestStack->getCurrentRequest()->get('_route')) {
+            return;
+        }
         //$this->slackClient->sendNotification($message);
 
         $options = $this->messageConverter->convertToOptions($event);

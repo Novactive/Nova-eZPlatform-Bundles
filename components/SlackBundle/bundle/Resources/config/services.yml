@@ -27,6 +27,7 @@ services:
 
     Novactive\Bundle\eZSlackBundle\Core\Client\Slack: ~
     Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider: ~
+    Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Generator: ~
     Novactive\Bundle\eZSlackBundle\Security\SlackAuthenticator: ~
     Novactive\Bundle\eZSlackBundle\Repository\User: ~
 

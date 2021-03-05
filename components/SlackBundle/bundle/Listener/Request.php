@@ -16,51 +16,33 @@ namespace Novactive\Bundle\eZSlackBundle\Listener;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use JMS\Serializer\SerializerInterface;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
+use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Generator;
 use Novactive\Bundle\eZSlackBundle\Repository\User as UserRepository;
 use RuntimeException;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
-/**
- * Class Request.
- */
 class Request
 {
-    /**
-     * @var ConfigResolverInterface
-     */
-    private $configResolver;
+    private ConfigResolverInterface $configResolver;
 
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
+    private UserRepository $userRepository;
 
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
+    private Repository $repository;
 
-    /**
-     * @var Repository
-     */
-    private $repository;
+    private Generator $generator;
 
-    /**
-     * Request constructor.
-     */
     public function __construct(
         ConfigResolverInterface $configResolver,
-        SerializerInterface $serializer,
         UserRepository $userRepository,
-        Repository $repository
+        Repository $repository,
+        Generator $generator
     ) {
         $this->configResolver = $configResolver;
-        $this->serializer = $serializer;
         $this->userRepository = $userRepository;
         $this->repository = $repository;
+        $this->generator = $generator;
     }
 
     private function sudoUser(string $slackId, string $slackTeamId): void
@@ -84,7 +66,6 @@ class Request
         if (!\in_array(
             $route,
             [
-                'novactive_ezslack_callback_message',
                 'novactive_ezslack_callback_command',
                 'novactive_ezslack_callback_notification'
             ]
@@ -92,18 +73,27 @@ class Request
             // don't do anything if it's not a compliant route
             return;
         }
+
+        $response = [
+            'response_type' => 'ephemeral',
+            'replace_original' => 'false',
+            'text' => "Sorry, that didn't work. Please try again."
+        ];
+
         try {
             $validToken = $this->configResolver->getParameter('slack_verification_token', 'nova_ezslack');
             if ('novactive_ezslack_callback_notification' === $route) {
                 $payload = json_decode($event->getRequest()->get('payload'), true, 512, JSON_THROW_ON_ERROR);
                 if ($validToken === $payload['token']) {
-                    // we are good, return
-                    // @todo: will need to figure out what to do with exact user authentication
+                    $this->sudoUser($payload['user']['id'], $payload['team']['id']);
+
+                    // we are good, return and proceed to controller
                     return;
                 }
             }
             if ('novactive_ezslack_callback_command' === $route) {
                 // token is in POST
+                // @todo: this should be checked and modified according to the new api specification if needed
                 $token = $event->getRequest()->request->get('token');
                 if ($validToken === $token) {
                     $this->sudoUser(
@@ -111,49 +101,22 @@ class Request
                         $event->getRequest()->request->get('team_id')
                     );
 
-                    // we are good, return
+                    // we are good, return and proceed to controller
                     return;
                 }
             }
-
-//            if ('novactive_ezslack_callback_message' === $route) {
-//                $payload = $event->getRequest()->get('payload');
-//                /** @var InteractiveMessage $interactiveMessage */
-//                $interactiveMessage = $this->serializer->deserialize($payload, InteractiveMessage::class, 'json');
-//                if ($interactiveMessage instanceof InteractiveMessage) {
-//                    $event->getRequest()->attributes->set('interactiveMessage', $interactiveMessage);
-//                    if ($validToken === $interactiveMessage->getToken()) {
-//                        $this->sudoUser(
-//                            $interactiveMessage->getUser()->getId(),
-//                            $interactiveMessage->getTeam()->getId()
-//                        );
-//
-//                        // we are good, return
-//                        return;
-//                    }
-//                }
-//            }
         } catch (\Exception $e) {
-            $event->setResponse(
-                new JsonResponse(
-                    [
-                        'response_type' => 'ephemeral',
-                        'replace_original' => true,
-                        'text' => $e->getMessage(),
-                    ]
-                )
-            );
-
-            return;
+            $response['text'] = $e->getMessage();
         }
-        $event->setResponse(
-            new JsonResponse(
-                [
-                    'response_type' => 'ephemeral',
-                    'replace_original' => false,
-                    'text' => "Sorry, that didn't work. Please try again.",
-                ]
-            )
-        );
+
+        // @todo: this should be checked and modified according to the new api specification if needed
+        if (isset($payload)) {
+            $blocks = $payload['message']['blocks'];
+            $this->generator->insertTextSection($blocks, $response['text'], $payload['actions'][0]['block_id']);
+            $response['blocks'] = $blocks;
+            $response['replace_original'] = 'true';
+            HttpClient::create()->request('POST', $payload['response_url'], ['json' => $response]);
+        }
+        $event->setResponse(new JsonResponse($response));
     }
 }
