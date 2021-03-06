@@ -98,6 +98,7 @@ class Hide extends ActionProvider
     {
         $messageAction = $message->getAction();
         $value = (int) $messageAction['value'];
+
         $response = [];
         try {
             if (str_ends_with($messageAction['action_id'], 'content')) {

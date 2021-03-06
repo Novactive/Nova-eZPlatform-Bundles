@@ -42,7 +42,8 @@ action.items.recovered: "Trashed items for this content recovered."
 action.publication_chain.change_state: "Publication Chain"
 action.state.changed: "State has been changed."
 action.content.published: "Content has been published."
-
+action.confirmation.confirm: "Okay"
+action.confirmation.deny: "Cancel"
 
 provider.basic-buttons: "Basic Actions"
 provider.states: "Object state changes"

@@ -110,7 +110,6 @@ class Unhide extends ActionProvider
     {
         $messageAction = $message->getAction();
         $value = (int) $messageAction['value'];
-        //dd($actions);
 
         $response = [];
         try {

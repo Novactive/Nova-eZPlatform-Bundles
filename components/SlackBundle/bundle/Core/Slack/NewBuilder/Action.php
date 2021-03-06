@@ -11,8 +11,13 @@ final class Action extends AbstractSlackBlock
         $this->options['type'] = 'actions';
     }
 
-    public function button(string $text, string $actionId, string $value, string $style = null): self
-    {
+    public function button(
+        string $text,
+        string $actionId,
+        string $value,
+        ?string $style = null,
+        ?array $confirm = null
+    ): self {
         $element = [
             'type' => 'button',
             'text' => [
@@ -23,8 +28,29 @@ final class Action extends AbstractSlackBlock
             'value' => $value
         ];
 
-        if ($style) {
+        if (null !== $style) {
             $element['style'] = $style;
+        }
+
+        if (null !== $confirm) {
+            $element['confirm'] = [
+                'title' => [
+                    'type' => 'plain_text',
+                    'text' => $confirm['title']
+                ],
+                'text' => [
+                    'type' => 'plain_text',
+                    'text' => $confirm['text']
+                ],
+                'confirm' => [
+                    'type' => 'plain_text',
+                    'text' => $confirm['confirm']
+                ],
+                'deny' => [
+                    'type' => 'plain_text',
+                    'text' => $confirm['deny']
+                ]
+            ];
         }
 
         $this->options['elements'][] = $element;
@@ -51,7 +77,8 @@ final class Action extends AbstractSlackBlock
                         'value' => $value
                     ];
                 },
-                array_keys($options), array_values($options)
+                array_keys($options),
+                array_values($options)
             )
         ];
 

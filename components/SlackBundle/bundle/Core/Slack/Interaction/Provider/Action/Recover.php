@@ -51,7 +51,13 @@ class Recover extends ActionProvider
             'text' => $this->translator->trans('action.recover', [], 'slack'),
             'action_id' => $this->getAlias(),
             'value' => (string) $event->getLocation()->contentId,
-            'style' => ActionProvider::PRIMARY_STYLE
+            'style' => ActionProvider::PRIMARY_STYLE,
+            'confirm' => [
+                'title' => $this->translator->trans('action.recover', [], 'slack'),
+                'text' => $this->translator->trans('action.generic.confirmation', [], 'slack'),
+                'confirm' => $this->translator->trans('action.confirmation.confirm', [], 'slack'),
+                'deny' => $this->translator->trans('action.confirmation.deny', [], 'slack')
+            ]
         ];
     }
 

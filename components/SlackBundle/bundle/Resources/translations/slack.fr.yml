@@ -42,7 +42,8 @@ action.items.recovered: "Les éléments de ce contenu ont été restaurés."
 action.publication_chain.change_state: "Workflow éditorial"
 action.state.changed: "L'état de ce contenu a bien été modifié."
 action.content.published: "Ce contenu a bien été publié."
-
+action.confirmation.confirm: "D'accord"
+action.confirmation.deny: "Annuler"
 
 provider.basic-buttons: "Actions rapides"
 provider.states: "L'état de l'objet a été changé"

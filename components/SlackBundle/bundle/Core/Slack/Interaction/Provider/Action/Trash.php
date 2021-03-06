@@ -16,7 +16,6 @@ namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action;
 
 use eZ\Publish\API\Repository\Events\Trash\TrashEvent;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Action;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Button;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Confirmation;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
@@ -49,7 +48,13 @@ class Trash extends ActionProvider
             'text' => $this->translator->trans('action.trash', [], 'slack'),
             'action_id' => $this->getAlias(),
             'value' => (string) $content->id,
-            'style' => ActionProvider::DANGER_STYLE
+            'style' => ActionProvider::DANGER_STYLE,
+            'confirm' => [
+                'title' => $this->translator->trans('action.trash', [], 'slack'),
+                'text' => $this->translator->trans('action.generic.confirmation', [], 'slack'),
+                'confirm' => $this->translator->trans('action.confirmation.confirm', [], 'slack'),
+                'deny' => $this->translator->trans('action.confirmation.deny', [], 'slack'),
+            ]
         ];
     }
 
@@ -82,9 +87,35 @@ class Trash extends ActionProvider
 
     public function execute(InteractiveMessage $message, array $actions = []): array
     {
-        $action = $message->getAction();
-        $value = (int) $action['value'];
+        $messageAction = $message->getAction();
+        $value = (int) $messageAction['value'];
 
-        return [];
+        $response = [];
+//        try {
+//                $content = $this->repository->getContentService()->loadContent($value);
+//                $this->repository->getTrashService()->
+//                $response['text'] = $this->translator->trans('action.content.hid', [], 'slack');
+//                $event = new Events\Content\HideContentEvent($content->contentInfo);
+//        } catch (\Exception $e) {
+//            $response['text'] = $e->getMessage();
+//
+//            return $response;
+//        }
+//        foreach ($allActions as $action) {
+//            if ($action instanceof Unhide) {
+//                $block = $action->getNewAction($event);
+//                if (null !== $block) {
+//                    $block['text'] = [
+//                        'type' => 'plain_text',
+//                        'text' => $block['text']
+//                    ];
+//                    $block['type'] = 'button';
+//                    $response['action'] = $block;
+//                }
+//                break;
+//            }
+//        }
+
+        return $response;
     }
 }
