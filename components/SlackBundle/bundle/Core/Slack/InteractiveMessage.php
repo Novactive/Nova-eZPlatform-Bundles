@@ -30,7 +30,7 @@ class InteractiveMessage
     private string $token;
 
     /**
-     * The array of blocks sent with initial slack message
+     * The array of blocks sent with initial slack message.
      */
     private array $blocks;
 

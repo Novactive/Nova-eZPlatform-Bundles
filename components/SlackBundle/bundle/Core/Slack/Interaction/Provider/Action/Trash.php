@@ -14,31 +14,14 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action;
 
+use eZ\Publish\API\Repository\Events;
 use eZ\Publish\API\Repository\Events\Trash\TrashEvent;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Action;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Button;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Confirmation;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
 use Symfony\Contracts\EventDispatcher\Event;
-use eZ\Publish\API\Repository\Events;
 
 class Trash extends ActionProvider
 {
-    public function getAction(Event $event, int $index): ?Action
-    {
-        $content = $this->getContentForSignal($event);
-        if (null === $content || !$content->contentInfo->published || $event instanceof TrashEvent) {
-            return null;
-        }
-        $button = new Button($this->getAlias(), '_t:action.trash', (string) $content->id);
-        $button->setStyle(Button::DANGER_STYLE);
-        $confirmation = new Confirmation('_t:action.generic.confirmation');
-        $button->setConfirmation($confirmation);
-
-        return $button;
-    }
-
-    public function getNewAction(Event $event): ?array
+    public function getAction(Event $event): ?array
     {
         $content = $this->getContentForSignal($event);
         if (null === $content || !$content->contentInfo->published || $event instanceof TrashEvent) {
@@ -55,36 +38,9 @@ class Trash extends ActionProvider
                 'text' => $this->translator->trans('action.generic.confirmation', [], 'slack'),
                 'confirm' => $this->translator->trans('action.confirmation.confirm', [], 'slack'),
                 'deny' => $this->translator->trans('action.confirmation.deny', [], 'slack'),
-            ]
+            ],
         ];
     }
-
-    //    public function execute(InteractiveMessage $message): Attachment
-    //    {
-    //        $action = $message->getAction();
-    //        $value = (int) $action->getValue();
-    //        $attachment = new Attachment();
-    //        $attachment->setTitle('_t:action.trash');
-    //        try {
-    //            $content = $this->repository->getContentService()->loadContent($value);
-    //            if (!$content->contentInfo->published) {
-    //                $attachment->setColor('danger');
-    //                $attachment->setText(var_export($content->contentInfo, true));
-    //            } else {
-    //                $locations = $this->repository->getLocationService()->loadLocations($content->contentInfo);
-    //                foreach ($locations as $location) {
-    //                    $this->repository->getTrashService()->trash($location);
-    //                }
-    //                $attachment->setColor('good');
-    //                $attachment->setText('_t:action.locations.trashed');
-    //            }
-    //        } catch (\Exception $e) {
-    //            $attachment->setColor('danger');
-    //            $attachment->setText($e->getMessage());
-    //        }
-    //
-    //        return $attachment;
-    //    }
 
     public function execute(InteractiveMessage $message, array $allActions = []): array
     {
@@ -114,30 +70,30 @@ class Trash extends ActionProvider
         if (isset($event)) {
             foreach ($allActions as $action) {
                 if ($action instanceof Recover) {
-                    $block = $action->getNewAction($event);
+                    $block = $action->getAction($event);
                     if (null !== $block) {
                         $block['text'] = [
                             'type' => 'plain_text',
-                            'text' => $block['text']
+                            'text' => $block['text'],
                         ];
                         $block['type'] = 'button';
                         $block['confirm'] = [
                             'title' => [
                                 'type' => 'plain_text',
-                                'text' => $block['confirm']['title']
+                                'text' => $block['confirm']['title'],
                             ],
                             'text' => [
                                 'type' => 'plain_text',
-                                'text' => $block['confirm']['text']
+                                'text' => $block['confirm']['text'],
                             ],
                             'confirm' => [
                                 'type' => 'plain_text',
-                                'text' => $block['confirm']['confirm']
+                                'text' => $block['confirm']['confirm'],
                             ],
                             'deny' => [
                                 'type' => 'plain_text',
-                                'text' => $block['confirm']['deny']
-                            ]
+                                'text' => $block['confirm']['deny'],
+                            ],
                         ];
                         $response['action'] = $block;
                     }

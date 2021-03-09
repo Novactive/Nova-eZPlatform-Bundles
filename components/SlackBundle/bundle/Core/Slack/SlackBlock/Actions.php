@@ -1,10 +1,10 @@
 <?php
 
-namespace Novactive\Bundle\eZSlackBundle\Core\Slack\NewBuilder;
+namespace Novactive\Bundle\eZSlackBundle\Core\Slack\SlackBlock;
 
 use Symfony\Component\Notifier\Bridge\Slack\Block\AbstractSlackBlock;
 
-final class Action extends AbstractSlackBlock
+final class Actions extends AbstractSlackBlock
 {
     public function __construct()
     {
@@ -25,7 +25,7 @@ final class Action extends AbstractSlackBlock
                 'text' => $text,
             ],
             'action_id' => $actionId,
-            'value' => $value
+            'value' => $value,
         ];
 
         if (null !== $style) {
@@ -36,20 +36,20 @@ final class Action extends AbstractSlackBlock
             $element['confirm'] = [
                 'title' => [
                     'type' => 'plain_text',
-                    'text' => $confirm['title']
+                    'text' => $confirm['title'],
                 ],
                 'text' => [
                     'type' => 'plain_text',
-                    'text' => $confirm['text']
+                    'text' => $confirm['text'],
                 ],
                 'confirm' => [
                     'type' => 'plain_text',
-                    'text' => $confirm['confirm']
+                    'text' => $confirm['confirm'],
                 ],
                 'deny' => [
                     'type' => 'plain_text',
-                    'text' => $confirm['deny']
-                ]
+                    'text' => $confirm['deny'],
+                ],
             ];
         }
 
@@ -72,14 +72,14 @@ final class Action extends AbstractSlackBlock
                     return [
                         'text' => [
                             'type' => 'plain_text',
-                            'text' => $key
+                            'text' => $key,
                         ],
-                        'value' => $value
+                        'value' => $value,
                     ];
                 },
                 array_keys($options),
                 array_values($options)
-            )
+            ),
         ];
 
         $this->options['elements'][] = $element;

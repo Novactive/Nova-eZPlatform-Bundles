@@ -21,11 +21,9 @@ use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
  */
 class UIConfigProviderUser implements ProviderInterface
 {
-    /** @var TokenStorageInterface */
-    private $tokenStorage;
+    private TokenStorageInterface $tokenStorage;
 
-    /** @var ContentTypeService */
-    private $contentTypeService;
+    private ContentTypeService $contentTypeService;
 
     public function __construct(
         TokenStorageInterface $tokenStorage,
@@ -68,7 +66,7 @@ class UIConfigProviderUser implements ProviderInterface
         foreach ($user->getFields() as $field) {
             $fieldDef = $contentType->getFieldDefinition($field->fieldDefIdentifier);
 
-            if ('ezimage' === $fieldDef->fieldTypeIdentifier) {
+            if (null !== $fieldDef && 'ezimage' === $fieldDef->fieldTypeIdentifier) {
                 return $field;
             }
         }

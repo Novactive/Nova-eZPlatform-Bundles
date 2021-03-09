@@ -14,21 +14,16 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action;
 
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Action;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
 use Symfony\Contracts\EventDispatcher\Event;
 
-/**
- * Interface ActionProviderInterface.
- */
 interface ActionProviderInterface
 {
     public function setAlias(string $alias): void;
 
     public function getAlias(): string;
 
-    public function getAction(Event $event, int $index): ?Action;
+    public function getAction(Event $event): ?array;
 
     /**
      * @param $alias

@@ -16,7 +16,6 @@ namespace Novactive\Bundle\eZSlackBundle\Listener;
 
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
-use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Class Response.
@@ -25,22 +24,10 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class Response
 {
-    /**
-     * @var RouterInterface
-     */
-    private $router;
+    private ClientRegistry $clientRegistry;
 
-    /**
-     * @var ClientRegistry
-     */
-    private $clientRegistry;
-
-    /**
-     * Response constructor.
-     */
-    public function __construct(RouterInterface $router, ClientRegistry $clientRegistry)
+    public function __construct(ClientRegistry $clientRegistry)
     {
-        $this->router = $router;
         $this->clientRegistry = $clientRegistry;
     }
 
@@ -48,7 +35,8 @@ class Response
     {
         $response = $event->getResponse();
         $connectURL = $this->clientRegistry->getClient('slack')->redirect(
-            ['team:read', 'users.profile:read', 'users:read', 'users:read.email'], []
+            ['team:read', 'users.profile:read', 'users:read', 'users:read.email'],
+            []
         )->getTargetUrl();
         $slackAssetPrefix = 'https://platform.slack-edge.com';
         $code = <<<END

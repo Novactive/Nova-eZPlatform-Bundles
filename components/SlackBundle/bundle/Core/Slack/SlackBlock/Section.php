@@ -1,6 +1,6 @@
 <?php
 
-namespace Novactive\Bundle\eZSlackBundle\Core\Slack\NewBuilder;
+namespace Novactive\Bundle\eZSlackBundle\Core\Slack\SlackBlock;
 
 use Symfony\Component\Notifier\Bridge\Slack\Block\AbstractSlackBlock;
 
@@ -11,7 +11,7 @@ final class Section extends AbstractSlackBlock
         $this->options['type'] = 'section';
         $this->options['text'] = [
             'type' => $type,
-            'text' => $text
+            'text' => $text,
         ];
     }
 
@@ -31,7 +31,7 @@ final class Section extends AbstractSlackBlock
                 'text' => $text,
             ],
             'action_id' => $actionId,
-            'value' => $value
+            'value' => $value,
         ];
 
         if ($style) {

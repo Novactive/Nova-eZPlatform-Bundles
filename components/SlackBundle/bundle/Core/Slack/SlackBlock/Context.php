@@ -1,6 +1,6 @@
 <?php
 
-namespace Novactive\Bundle\eZSlackBundle\Core\Slack\NewBuilder;
+namespace Novactive\Bundle\eZSlackBundle\Core\Slack\SlackBlock;
 
 use Symfony\Component\Notifier\Bridge\Slack\Block\AbstractSlackBlock;
 
@@ -16,7 +16,7 @@ final class Context extends AbstractSlackBlock
         $this->options['elements'][] = [
             'type' => 'image',
             'image_url' => $imageUrl,
-            'alt_text' => $altText
+            'alt_text' => $altText,
         ];
 
         return $this;
@@ -26,7 +26,7 @@ final class Context extends AbstractSlackBlock
     {
         $this->options['elements'][] = [
             'type' => $type,
-            'text' => $text
+            'text' => $text,
         ];
 
         return $this;

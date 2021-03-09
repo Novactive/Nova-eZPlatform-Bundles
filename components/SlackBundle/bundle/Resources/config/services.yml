@@ -41,9 +41,6 @@ services:
 
     Novactive\Bundle\eZSlackBundle\Core\Dispatcher: ~
 
-    # Decorator
-    Novactive\Bundle\eZSlackBundle\Core\Decorator\Attachment: ~
-
     # Listeners
     Novactive\Bundle\eZSlackBundle\Listener\Request:
         tags:
@@ -56,10 +53,6 @@ services:
     Novactive\Bundle\eZSlackBundle\Listener\MenuContentSidebarRight:
         tags:
             - { name: kernel.event_listener, event: "ezplatform_admin_ui.menu_configure.content_sidebar_right", method: "onMenuConfigure" }
-
-    # Native or 3rd party
-#    Symfony\Component\Translation\TranslatorInterface:
-#        alias: translator
 
     EzSystems\EzPlatformRichText\eZ\RichText\Converter:
         alias: ezrichtext.converter.output.xhtml5.core

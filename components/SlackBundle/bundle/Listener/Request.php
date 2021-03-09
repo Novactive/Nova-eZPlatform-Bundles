@@ -63,13 +63,7 @@ class Request
         }
 
         $route = $event->getRequest()->get('_route');
-        if (!\in_array(
-            $route,
-            [
-                'novactive_ezslack_callback_command',
-                'novactive_ezslack_callback_notification'
-            ]
-        )) {
+        if (!\in_array($route, ['novactive_ezslack_callback_command', 'novactive_ezslack_callback_notification'])) {
             // don't do anything if it's not a compliant route
             return;
         }
@@ -77,7 +71,7 @@ class Request
         $response = [
             'response_type' => 'ephemeral',
             'replace_original' => 'false',
-            'text' => "Sorry, that didn't work. Please try again."
+            'text' => "Sorry, that didn't work. Please try again.",
         ];
 
         try {

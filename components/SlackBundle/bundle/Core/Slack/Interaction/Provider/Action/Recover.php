@@ -15,34 +15,16 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action;
 
 use Exception;
+use eZ\Publish\API\Repository\Events;
 use eZ\Publish\API\Repository\Events\Trash\TrashEvent;
 use eZ\Publish\API\Repository\Values\Content\Query as eZQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\TrashItem;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Action;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Button;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Confirmation;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
 use Symfony\Contracts\EventDispatcher\Event;
-use eZ\Publish\API\Repository\Events;
 
 class Recover extends ActionProvider
 {
-    public function getAction(Event $event, int $index): ?Action
-    {
-        if (!$event instanceof TrashEvent) {
-            return null;
-        }
-        $button = new Button($this->getAlias(), '_t:action.recover', (string) $event->getLocation()->contentId);
-        $button->setStyle(Button::PRIMARY_STYLE);
-        $confirmation = new Confirmation('_t:action.generic.confirmation');
-        $button->setConfirmation($confirmation);
-
-        return $button;
-    }
-
-    public function getNewAction(Event $event): ?array
+    public function getAction(Event $event): ?array
     {
         if (!$event instanceof TrashEvent) {
             return null;
@@ -57,41 +39,10 @@ class Recover extends ActionProvider
                 'title' => $this->translator->trans('action.recover', [], 'slack'),
                 'text' => $this->translator->trans('action.generic.confirmation', [], 'slack'),
                 'confirm' => $this->translator->trans('action.confirmation.confirm', [], 'slack'),
-                'deny' => $this->translator->trans('action.confirmation.deny', [], 'slack')
-            ]
+                'deny' => $this->translator->trans('action.confirmation.deny', [], 'slack'),
+            ],
         ];
     }
-
-    //    public function execute(InteractiveMessage $message): Attachment
-    //    {
-    //        $action = $message->getAction();
-    //        $value = (int) $action->getValue();
-    //        $attachment = new Attachment();
-    //        $attachment->setTitle('_t:action.recover');
-    //        try {
-    //            $query = new eZQuery();
-    //            $query->filter = new Criterion\ContentId($value);
-    //            // too bad what have to limit and to check the ID, the TrashService is not finish...
-    //            // See: https://github.com/ezsystems/ezpublish-kernel/blob/master/eZ/Publish/Core/Persistence/Legacy/Content/Location/Trash/Handler.php#L183
-    //
-    //            $query->limit = 1000;
-    //            $results = $this->repository->getTrashService()->findTrashItems($query);
-    //
-    //            foreach ($results as $item) {
-    //                /* @var TrashItem $item */
-    //                if ($item->contentInfo->id === $value) {
-    //                    $this->repository->getTrashService()->recover($item);
-    //                }
-    //            }
-    //            $attachment->setColor('good');
-    //            $attachment->setText('_t:action.items.recovered');
-    //        } catch (Exception $e) {
-    //            $attachment->setColor('danger');
-    //            $attachment->setText($e->getMessage());
-    //        }
-    //
-    //        return $attachment;
-    //    }
 
     public function execute(InteractiveMessage $message, array $allActions = []): array
     {
@@ -122,30 +73,30 @@ class Recover extends ActionProvider
         if (isset($event)) {
             foreach ($allActions as $action) {
                 if ($action instanceof Trash) {
-                    $block = $action->getNewAction($event);
+                    $block = $action->getAction($event);
                     if (null !== $block) {
                         $block['text'] = [
                             'type' => 'plain_text',
-                            'text' => $block['text']
+                            'text' => $block['text'],
                         ];
                         $block['type'] = 'button';
                         $block['confirm'] = [
                             'title' => [
                                 'type' => 'plain_text',
-                                'text' => $block['confirm']['title']
+                                'text' => $block['confirm']['title'],
                             ],
                             'text' => [
                                 'type' => 'plain_text',
-                                'text' => $block['confirm']['text']
+                                'text' => $block['confirm']['text'],
                             ],
                             'confirm' => [
                                 'type' => 'plain_text',
-                                'text' => $block['confirm']['confirm']
+                                'text' => $block['confirm']['confirm'],
                             ],
                             'deny' => [
                                 'type' => 'plain_text',
-                                'text' => $block['confirm']['deny']
-                            ]
+                                'text' => $block['confirm']['deny'],
+                            ],
                         ];
                         $response['action'] = $block;
                     }

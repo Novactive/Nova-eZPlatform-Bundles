@@ -44,8 +44,8 @@ class Generator
                     'type' => 'section',
                     'text' => [
                         'type' => 'plain_text',
-                        'text' => $text
-                    ]
+                        'text' => $text,
+                    ],
                 ];
                 array_splice($blocks, $blockIndex, 0, [$responseTextBlock]);
 

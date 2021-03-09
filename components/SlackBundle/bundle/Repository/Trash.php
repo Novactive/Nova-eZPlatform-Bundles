@@ -15,21 +15,14 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZSlackBundle\Repository;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Query as eZQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\TrashItem;
-use eZ\Publish\API\Repository\Values\Content\Content;
 
 class Trash
 {
-    /**
-     * @var Repository
-     */
-    private $repository;
+    private Repository $repository;
 
-    /**
-     * User constructor.
-     */
     public function __construct(Repository $repository)
     {
         $this->repository = $repository;

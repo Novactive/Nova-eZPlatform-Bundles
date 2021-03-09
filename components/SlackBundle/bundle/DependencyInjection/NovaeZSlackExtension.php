@@ -52,9 +52,6 @@ class NovaeZSlackExtension extends Extension
             $loader->load('interactions_services_notification.yml');
         }
         $loader->load('interactions_services.yml');
-//        $asseticBundles = $container->getParameter('assetic.bundles');
-//        $asseticBundles[] = 'NovaeZSlackBundle';
-//        $container->setParameter('assetic.bundles', $asseticBundles);
 
         $processor = new ConfigurationProcessor($container, $this->getAlias());
         $processor->mapSetting('slack_client_id', $config);

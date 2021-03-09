@@ -22,7 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class TestSlackCommand extends Command
 {
-    private $firstResponder;
+    private FirstResponder $firstResponder;
 
     public function __construct(FirstResponder $firstResponder)
     {

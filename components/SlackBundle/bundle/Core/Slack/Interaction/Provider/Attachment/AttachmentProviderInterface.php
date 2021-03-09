@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Attachment;
 
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
 use Symfony\Contracts\EventDispatcher\Event;
 
@@ -27,7 +26,7 @@ interface AttachmentProviderInterface
 
     public function getAlias(): string;
 
-    public function getAttachment(Event $event): ?Attachment;
+    public function getAttachment(Event $event): ?array;
 
     /**
      * @param $alias

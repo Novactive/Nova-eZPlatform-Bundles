@@ -16,9 +16,6 @@ namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Responder;
 
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Message;
 
-/**
- * Interface ResponderInterface.
- */
 interface ResponderInterface
 {
     /**
@@ -38,8 +35,6 @@ interface ResponderInterface
 
     /**
      * Invoke the Responder.
-     *
-     * @param array $arguments The Arguments
      */
     public function respond(array $arguments = []): Message;
 }

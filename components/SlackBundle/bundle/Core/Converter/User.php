@@ -25,34 +25,16 @@ use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use Novactive\Bundle\eZSlackBundle\Repository\User as UserRepository;
 use RuntimeException;
 
-/**
- * Class User.
- */
 class User
 {
-    /**
-     * @var Repository
-     */
-    private $repository;
+    private Repository $repository;
 
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
+    private UserRepository $userRepository;
 
-    /**
-     * @var ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
-    /**
-     * @var array
-     */
-    private $languages;
+    private array $languages;
 
-    /**
-     * User constructor.
-     */
     public function __construct(
         Repository $repository,
         UserRepository $userRepository,
@@ -64,10 +46,7 @@ class User
         $this->languages = $configResolver->getParameter('languages');
     }
 
-    /**
-     * @param $paramName
-     */
-    private function getParameter($paramName)
+    private function getParameter(string $paramName)
     {
         return $this->configResolver->getParameter($paramName, 'nova_ezslack');
     }

@@ -17,10 +17,8 @@ namespace Novactive\Bundle\eZSlackBundle\Core\Converter;
 use eZ\Publish\API\Repository\Events;
 use Novactive\Bundle\eZSlackBundle\Core\Event\Shared;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider as InteractionProvider;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Message as MessageModel;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\NewBuilder\Section;
+use Novactive\Bundle\eZSlackBundle\Core\Slack\SlackBlock\Section;
 use Symfony\Component\Notifier\Bridge\Slack\Block\SlackDividerBlock;
-use Symfony\Component\Notifier\Bridge\Slack\Block\SlackSectionBlock;
 use Symfony\Component\Notifier\Bridge\Slack\SlackOptions;
 use Symfony\Contracts\EventDispatcher\Event;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -40,62 +38,16 @@ class Message
         $this->translator = $translator;
     }
 
-    public function convert(Event $event, ?MessageModel $message = null): MessageModel
-    {
-        if (null === $message) {
-            $message = new MessageModel();
-        }
-
-        if (null === $message->getText()) {
-            if ($event instanceof Events\Content\PublishVersionEvent) {
-                $created = '_t:message.text.content.created';
-                $updated = '_t:message.text.content.updated';
-                $message->setText(
-                    $event->getVersionInfo()->versionNo > 1 ? $updated : $created
-                );
-            }
-            if ($event instanceof Events\Location\HideLocationEvent) {
-                $message->setText('_t:message.text.content.hid');
-            }
-            if ($event instanceof Events\Location\UnhideLocationEvent) {
-                $message->setText('_t:message.text.content.unhid');
-            }
-            if ($event instanceof Events\Trash\TrashEvent) {
-                $message->setText('_t:message.text.content.trashed');
-            }
-            if ($event instanceof Events\Trash\RecoverEvent) {
-                $message->setText('_t:message.text.content.recovered');
-            }
-            if ($event instanceof Events\ObjectState\SetContentStateEvent) {
-                $message->setText('_t:message.text.content.state.updated');
-            }
-            if ($event instanceof Shared) {
-                $message->setText('_t:message.text.content.shared');
-            }
-
-            // eZ Platform Enterprise
-            if (is_a($event, 'EzSystems\EzPlatformFormBuilder\Event\FormSubmitEvent')) {
-                $message->setText('_t:message.text.formsubmit');
-            }
-
-            if ($event instanceof Events\Notification\CreateNotificationEvent) {
-                $message->setText('_t:message.text.notification');
-            }
-        }
-        $attachments = $this->provider->getAttachments($event);
-        $message->setAttachments($attachments);
-
-        return $message;
-    }
-
-    public function convertToOptions(Event $event, ?SlackOptions $slackOptions = null): SlackOptions
+    public function convert(Event $event, ?SlackOptions $slackOptions = null): SlackOptions
     {
         if (null === $slackOptions) {
             $slackOptions = new SlackOptions();
         }
 
-        if (!isset($slackOptions->toArray()['blocks']) ||
-            !in_array('title', array_column($slackOptions->toArray()['blocks'], 'block_id'), true)) {
+        if (
+            !isset($slackOptions->toArray()['blocks']) ||
+            !in_array('title', array_column($slackOptions->toArray()['blocks'], 'block_id'), true)
+        ) {
             $params = [];
             if ($event instanceof Events\Content\PublishVersionEvent) {
                 $created = 'message.text.content.created';
@@ -145,7 +97,7 @@ class Message
             }
         }
 
-        foreach ($this->provider->getBlocks($event) as $block) {
+        foreach ($this->provider->getAttachments($event) as $block) {
             $slackOptions->block($block);
         }
 

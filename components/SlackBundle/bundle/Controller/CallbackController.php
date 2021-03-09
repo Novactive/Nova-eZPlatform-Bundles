@@ -15,20 +15,20 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZSlackBundle\Controller;
 
 use eZ\Publish\API\Repository\Repository;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Generator;
-use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RouterInterface;
 use JMS\Serializer\SerializerInterface;
 use Novactive\Bundle\eZSlackBundle\Core\Client\Slack;
 use Novactive\Bundle\eZSlackBundle\Core\Dispatcher;
 use Novactive\Bundle\eZSlackBundle\Core\Event\Shared;
+use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Generator;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Responder\FirstResponder;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @Route("/notify")
@@ -61,8 +61,8 @@ class CallbackController
             [
                 'json' => [
                     'blocks' => $blocks,
-                    "replace_original" => "true",
-                ]
+                    'replace_original' => 'true',
+                ],
             ]
         );
 

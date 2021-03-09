@@ -48,25 +48,21 @@ class Query
     private function build(Node $node): ?Criterion
     {
         if ($node instanceof Vnode\LogicalAnd) {
-            $criterion = new Criterion\LogicalAnd(
+            return new Criterion\LogicalAnd(
                 [
                     $this->build($node->leftOperand),
                     $this->build($node->rightOperand),
                 ]
             );
-
-            return $criterion;
         }
 
         if ($node instanceof Vnode\LogicalOr) {
-            $criterion = new Criterion\LogicalOr(
+            return new Criterion\LogicalOr(
                 [
                     $this->build($node->leftOperand),
                     $this->build($node->rightOperand),
                 ]
             );
-
-            return $criterion;
         }
 
         if ($node instanceof Vnode\LogicalNot) {
@@ -79,30 +75,26 @@ class Query
             return new Criterion\LogicalNot($this->build($node->operand));
         }
 
-        if ($node instanceof Vnode\Group) {
-            if (\count($node->getNodes())) {
-                $criterions = [];
-                foreach ($node->getNodes() as $subNode) {
-                    $criterions[] = $this->build($subNode);
-                }
-
-                return new Criterion\LogicalOr($criterions);
+        if (($node instanceof Vnode\Group) && \count($node->getNodes())) {
+            $criterions = [];
+            foreach ($node->getNodes() as $subNode) {
+                $criterions[] = $this->build($subNode);
             }
+
+            return new Criterion\LogicalOr($criterions);
         }
 
         if ($node instanceof Vnode\Term) {
             return $this->getTermCriterion($node);
         }
 
-        if ($node instanceof Vnode\Query) {
-            if (\count($node->getNodes())) {
-                $criterions = [];
-                foreach ($node->getNodes() as $subNode) {
-                    $criterions[] = $this->build($subNode);
-                }
-
-                return new Criterion\LogicalOr($criterions);
+        if (($node instanceof Vnode\Query) && \count($node->getNodes())) {
+            $criterions = [];
+            foreach ($node->getNodes() as $subNode) {
+                $criterions[] = $this->build($subNode);
             }
+
+            return new Criterion\LogicalOr($criterions);
         }
 
         return null;
@@ -111,7 +103,7 @@ class Query
     private function getDatedCriterion(string $target, string $date): Criterion
     {
         $operator = Criterion\Operator::EQ;
-        if (\in_array($date[0], [Criterion\Operator::GT, Criterion\Operator::LT])) {
+        if (\in_array($date[0], [Criterion\Operator::GT, Criterion\Operator::LT], true)) {
             $operator = $date[0];
             $date = (string) substr($date, 1);
         }

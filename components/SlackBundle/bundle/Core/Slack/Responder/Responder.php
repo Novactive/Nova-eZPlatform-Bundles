@@ -18,8 +18,6 @@ abstract class Responder implements ResponderInterface
 {
     /**
      * Get The Name based on the Class Name.
-     *
-     * @return mixed
      */
     final public function getName(): string
     {
@@ -28,10 +26,8 @@ abstract class Responder implements ResponderInterface
 
     /**
      * Get the Name for a class.
-     *
-     * @param string $className THe ClassName
      */
-    final public static function getNameForClassName($className): string
+    final public static function getNameForClassName(string $className): string
     {
         $path = explode('\\', $className);
 

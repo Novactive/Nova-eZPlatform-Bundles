@@ -14,9 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Attachment;
 
-use Novactive\Bundle\eZSlackBundle\Core\Decorator\Attachment as AttachmentDecorator;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Action;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action\ActionProvider;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action\ActionProviderInterface;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\AliasTrait;
@@ -29,34 +26,12 @@ abstract class AttachmentProvider implements AttachmentProviderInterface
 {
     use AliasTrait;
 
-    /**
-     * @var ActionProviderInterface[]
-     */
     protected array $actions;
-
-    /**
-     * @var AttachmentDecorator
-     */
-    protected $attachmentDecorator;
 
     protected TranslatorInterface $translator;
 
     /**
      * @required
-     *
-     * @return AttachmentProvider
-     */
-    public function setAttachmentDecorator(AttachmentDecorator $attachmentDecorator): self
-    {
-        $this->attachmentDecorator = $attachmentDecorator;
-
-        return $this;
-    }
-
-    /**
-     * @required
-     *
-     * @return AttachmentProvider
      */
     public function setTranslator(TranslatorInterface $translator): self
     {
@@ -65,9 +40,6 @@ abstract class AttachmentProvider implements AttachmentProviderInterface
         return $this;
     }
 
-    /**
-     * @return BasicActions
-     */
     public function addAction(ActionProviderInterface $action, string $alias): self
     {
         $action->setAlias($alias);
@@ -79,9 +51,9 @@ abstract class AttachmentProvider implements AttachmentProviderInterface
     public function buildActions(Event $event): array
     {
         $actions = [];
-        foreach ($this->actions as $index => $actionProvider) {
+        foreach ($this->actions as $actionProvider) {
             /* @var ActionProvider $actionProvider */
-            $action = $actionProvider->getNewAction($event, (int) $index);
+            $action = $actionProvider->getAction($event);
             if (null !== $action) {
                 $actions[] = $action;
             }
@@ -96,18 +68,6 @@ abstract class AttachmentProvider implements AttachmentProviderInterface
     }
 
     public function execute(InteractiveMessage $message): array
-    {
-        $action = $message->getAction();
-        foreach ($this->actions as $provider) {
-            if ($provider->supports($action['action_id'])) {
-                return $provider->execute($message);
-            }
-        }
-
-        throw new RuntimeException("No Action Provider supports '{$action['action_id']}'.");
-    }
-
-    public function executeBlocks(InteractiveMessage $message): array
     {
         $action = $message->getAction();
         foreach ($this->actions as $provider) {

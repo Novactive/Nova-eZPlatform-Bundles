@@ -17,9 +17,6 @@ namespace Novactive\Bundle\eZSlackBundle\DependencyInjection;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
-/**
- * Class Configuration.
- */
 class Configuration extends SiteAccessAware\Configuration
 {
     public const NAMESPACE = 'nova_ezslackbundle';

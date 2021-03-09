@@ -14,53 +14,12 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action;
 
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Action;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Option;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Select;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class PublicationChainChangeState extends ActionProvider
 {
-    public function getAction(Event $event, int $index): ?Action
-    {
-        $content = $this->getContentForSignal($event);
-        if (null === $content) {
-            return null;
-        }
-
-        try {
-            $chainGroup = null;
-            $objectStateService = $this->repository->getObjectStateService();
-            $allGroups = $objectStateService->loadObjectStateGroups();
-            foreach ($allGroups as $group) {
-                if ('publication_chain' === $group->identifier) {
-                    $chainGroup = $group;
-                    break;
-                }
-            }
-            if (null === $chainGroup) {
-                return null;
-            }
-            $states = $objectStateService->loadObjectStates($chainGroup);
-            $select = new Select($this->getAlias(), '_t:action.publication_chain.change_state', '');
-            foreach ($states as $state) {
-                $select->addOption(
-                    new Option(
-                        $state->getNames()[$state->mainLanguageCode],
-                        "{$content->id}:{$state->id}"
-                    )
-                );
-            }
-
-            return $select;
-        } catch (\Exception $e) {
-            return null;
-        }
-    }
-
-    public function getNewAction(Event $event): ?array
+    public function getAction(Event $event): ?array
     {
         $content = $this->getContentForSignal($event);
         if (null === $content) {
@@ -84,7 +43,7 @@ class PublicationChainChangeState extends ActionProvider
 
             $select = [
                 'placeholder' => $this->translator->trans('action.publication_chain.change_state', [], 'slack'),
-                'action_id' => $this->getAlias()
+                'action_id' => $this->getAlias(),
             ];
 
             foreach ($states as $state) {
@@ -97,30 +56,6 @@ class PublicationChainChangeState extends ActionProvider
         }
     }
 
-//    public function execute(InteractiveMessage $message): Attachment
-//    {
-//        $action = $message->getAction();
-//        [$contentId, $value] = explode(':', $action->getSelectedOption()->getValue());
-//        $attachment = new Attachment();
-//        $attachment->setTitle('_t:action.publication_chain.change_state');
-//        try {
-//            $content = $this->repository->getContentService()->loadContent((int) $contentId);
-//            $state = $this->repository->getObjectStateService()->loadObjectState((int) $value);
-//            $this->repository->getObjectStateService()->setContentState(
-//                $content->contentInfo,
-//                $state->getObjectStateGroup(),
-//                $state
-//            );
-//            $attachment->setColor('good');
-//            $attachment->setText('_t:action.state.changed');
-//        } catch (\Exception $e) {
-//            $attachment->setColor('danger');
-//            $attachment->setText($e->getMessage());
-//        }
-//
-//        return $attachment;
-//    }
-
     public function execute(InteractiveMessage $messageAction, array $allActions = []): array
     {
         $action = $messageAction->getAction();
@@ -131,7 +66,10 @@ class PublicationChainChangeState extends ActionProvider
         try {
             $content = $this->repository->getContentService()->loadContent((int) $contentId);
             $state = $this->repository->getObjectStateService()->loadObjectState((int) $value);
-            $contentState = $this->repository->getObjectStateService()->getContentState($content->contentInfo, $state->getObjectStateGroup());
+            $contentState = $this->repository->getObjectStateService()->getContentState(
+                $content->contentInfo,
+                $state->getObjectStateGroup()
+            );
 
             if ($state->id !== $contentState->id) {
                 $this->repository->getObjectStateService()->setContentState(

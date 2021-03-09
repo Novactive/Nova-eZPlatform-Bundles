@@ -14,34 +14,14 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Attachment;
 
-use eZ\Publish\API\Repository\Events\ObjectState\SetContentStateEvent;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\NewBuilder\Action;
+use Novactive\Bundle\eZSlackBundle\Core\Slack\SlackBlock\Actions;
 use Symfony\Component\Notifier\Bridge\Slack\Block\SlackDividerBlock;
 use Symfony\Component\Notifier\Bridge\Slack\Block\SlackSectionBlock;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class States extends AttachmentProvider
 {
-    public function getAttachment(Event $event): ?Attachment
-    {
-        if (\count($this->actions) <= 0) {
-            return null;
-        }
-        $attachment = new Attachment();
-        $attachment->setText('_t:provider.states');
-        $actions = $this->buildActions($event);
-        if (\count($actions) <= 0) {
-            return null;
-        }
-        $attachment->setActions($actions);
-        $attachment->setCallbackId($this->getAlias().'.'.time());
-        $this->attachmentDecorator->decorate($attachment, 'states');
-
-        return $attachment;
-    }
-
-    public function getAttachmentBlocks(Event $event): ?array
+    public function getAttachment(Event $event): ?array
     {
         if (count($this->actions) <= 0) {
             return null;
@@ -51,7 +31,7 @@ class States extends AttachmentProvider
             return null;
         }
 
-        $actionsBlock = new Action();
+        $actionsBlock = new Actions();
         foreach ($actions as $action) {
             call_user_func_array([$actionsBlock, 'staticSelect'], $action);
         }
@@ -59,7 +39,7 @@ class States extends AttachmentProvider
         return [
             new SlackDividerBlock(),
             (new SlackSectionBlock())->text($this->translator->trans('provider.states', [], 'slack'), false),
-            $actionsBlock
+            $actionsBlock,
         ];
     }
 }

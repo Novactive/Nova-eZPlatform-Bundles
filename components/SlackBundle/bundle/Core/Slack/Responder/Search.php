@@ -21,29 +21,14 @@ use Novactive\Bundle\eZSlackBundle\Core\Event\Searched;
 use Novactive\Bundle\eZSlackBundle\Core\Event\Selected;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Message;
 
-/**
- * Class Search.
- */
 class Search extends Responder
 {
-    /**
-     * @var Repository
-     */
-    private $repository;
+    private Repository $repository;
 
-    /**
-     * @var QueryConverter
-     */
-    private $queryConverter;
+    private QueryConverter $queryConverter;
 
-    /**
-     * @var MessageConverter
-     */
-    private $messageConverter;
+    private MessageConverter $messageConverter;
 
-    /**
-     * Search constructor.
-     */
     public function __construct(
         Repository $repository,
         QueryConverter $queryConverter,

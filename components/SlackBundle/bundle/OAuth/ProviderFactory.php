@@ -19,21 +19,14 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use KnpU\OAuth2ClientBundle\DependencyInjection\ProviderFactory as BaseProviderFactory;
 
 /**
- * Class ProviderFactory.
- *
- * Extension that makes the configuration SiteAccess Aware
+ * Extension that makes the configuration SiteAccess Aware.
  */
 class ProviderFactory extends BaseProviderFactory
 {
-    /**
-     * @var ConfigResolverInterface
-     */
-    private $configResolver;
+    private ConfigResolverInterface $configResolver;
 
     /**
      * @required
-     *
-     * @return ProviderFactory
      */
     public function setConfigResolver(ConfigResolverInterface $configResolver): self
     {
@@ -45,8 +38,13 @@ class ProviderFactory extends BaseProviderFactory
     /**
      * {@inheritdoc}
      */
-    public function createProvider($class, array $options, $redirectUri, array $redirectParams = [], array $collaborators = [])
-    {
+    public function createProvider(
+        $class,
+        array $options,
+        $redirectUri,
+        array $redirectParams = [],
+        array $collaborators = []
+    ) {
         if (Slack::class === $class) {
             if ($options['clientId']) {
                 $options['clientId'] = $this->configResolver->getParameter('slack_client_id', 'nova_ezslack');

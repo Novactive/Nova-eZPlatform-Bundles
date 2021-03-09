@@ -14,24 +14,13 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core;
 
-use JMS\Serializer\Context;
-use JMS\Serializer\JsonSerializationVisitor;
 use Symfony\Component\Translation\TranslatorInterface;
 
-/**
- * Class TranslatableJsonSerializationVisitor.
- */
 class TranslatableJsonSerializationVisitor
 {
-    /**
-     * @var TranslatorInterface;
-     */
-    private $translator;
+    private TranslatorInterface $translator;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function visitString($data, array $type, Context $context)
+    public function visitString($data, array $type): string
     {
         if ('string' !== $type['name']) {
             return $data;
@@ -42,10 +31,8 @@ class TranslatableJsonSerializationVisitor
         }
 
         foreach ($type['params'] as $param) {
-            if ('translatable' === $param['name']) {
-                if ('_t:' === substr($data, 0, 3)) {
-                    $data = $this->translator->trans(substr($data, 3), [], 'slack');
-                }
+            if (('translatable' === $param['name']) && 0 === strpos($data, '_t:')) {
+                $data = $this->translator->trans(substr($data, 3), [], 'slack');
             }
         }
 

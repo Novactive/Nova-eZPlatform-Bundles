@@ -28,10 +28,7 @@ abstract class ActionProvider implements ActionProviderInterface
 {
     use AliasTrait;
 
-    /**
-     * @var Repository
-     */
-    protected $repository;
+    protected Repository $repository;
 
     protected TranslatorInterface $translator;
 
@@ -41,8 +38,6 @@ abstract class ActionProvider implements ActionProviderInterface
 
     /**
      * @required
-     *
-     * @return ActionProvider
      */
     public function setRepository(Repository $repository): self
     {
@@ -53,8 +48,6 @@ abstract class ActionProvider implements ActionProviderInterface
 
     /**
      * @required
-     *
-     * @return ActionProvider
      */
     public function setTranslator(TranslatorInterface $translator): self
     {

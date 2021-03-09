@@ -19,69 +19,43 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Content as ValueContent;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
-use eZ\Publish\Core\FieldType\RelationList\Value as RelationListValue;
 use eZ\Publish\Core\FieldType\Relation\Value as RelationValue;
+use eZ\Publish\Core\FieldType\RelationList\Value as RelationListValue;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use Novactive\Bundle\eZSlackBundle\Core\Decorator\Attachment as AttachmentDecorator;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment as AttachmentModel;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Field;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\NewBuilder\Context;
+use EzSystems\EzPlatformRichText\eZ\FieldType\RichText\Value as RichTextValue;
+use EzSystems\EzPlatformRichText\eZ\RichText\Converter as RichTextConverter;
+use Novactive\Bundle\eZSlackBundle\Core\Slack\SlackBlock\Context;
 use Symfony\Component\Notifier\Bridge\Slack\Block\SlackDividerBlock;
 use Symfony\Component\Notifier\Bridge\Slack\Block\SlackImageBlock;
 use Symfony\Component\Notifier\Bridge\Slack\Block\SlackImageBlockElement;
 use Symfony\Component\Notifier\Bridge\Slack\Block\SlackSectionBlock;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use EzSystems\EzPlatformRichText\eZ\RichText\Converter as RichTextConverter;
-use EzSystems\EzPlatformRichText\eZ\FieldType\RichText\Value as RichTextValue;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.IfStatementAssignment)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class Attachment
 {
-    /**
-     * @var Repository
-     */
-    private $repository;
+    private Repository $repository;
 
-    /**
-     * @var RichTextConverter
-     */
-    private $richTextConverter;
+    private RichTextConverter $richTextConverter;
 
-    /**
-     * @var array
-     */
-    private $siteAccessList;
+    private array $siteAccessList;
 
-    /**
-     * @var RouterInterface
-     */
-    private $router;
+    private RouterInterface $router;
 
-    /**
-     * @var ConfigResolverInterface
-     */
-    private $configResolver;
-
-    /**
-     * @var AttachmentDecorator
-     */
-    private $attachmentDecorator;
+    private ConfigResolverInterface $configResolver;
 
     private TranslatorInterface $translator;
 
-    /**
-     * Attachment constructor.
-     */
     public function __construct(
         Repository $repository,
         RichTextConverter $converter,
         RouterInterface $router,
         ConfigResolverInterface $configResolver,
-        AttachmentDecorator $decorator,
         TranslatorInterface $translator,
         array $siteAccessList
     ) {
@@ -89,14 +63,10 @@ class Attachment
         $this->richTextConverter = $converter;
         $this->siteAccessList = $siteAccessList;
         $this->router = $router;
-        $this->attachmentDecorator = $decorator;
         $this->configResolver = $configResolver;
         $this->translator = $translator;
     }
 
-    /**
-     * @param $name
-     */
     private function getParameter($name)
     {
         return $this->configResolver->getParameter($name, 'nova_ezslack');
@@ -109,42 +79,18 @@ class Attachment
         return $contentService->loadContent($id);
     }
 
-    /**
-     * @return Attachment[]
-     */
     public function convert(int $contentId): array
     {
         $attachments = [
-            $this->getMain($contentId),
-            $this->getDetails($contentId),
+            $this->getMainBlocks($contentId),
+            $this->getDetailsBlock($contentId),
         ];
 
-        if ($attachment = $this->getPreview($contentId)) {
+        if ($attachment = $this->getPreviewBlock($contentId)) {
             $attachments[] = $attachment;
         }
 
         return $attachments;
-    }
-
-    public function getMain(int $contentId): AttachmentModel
-    {
-        $content = $this->findContent($contentId);
-        $attachment = new AttachmentModel();
-        $this->attachmentDecorator->addAuthor($attachment, $content->contentInfo->ownerId);
-        $attachment->setTitle($content->contentInfo->name);
-        $attachment->setText($this->getDescription($content));
-        $mediaSection = $this->repository->sudo(
-            function (Repository $repository) {
-                return $repository->getSectionService()->loadSectionByIdentifier('media');
-            }
-        );
-        if ($content->contentInfo->sectionId !== $mediaSection->id) {
-            $attachment->setThumbURL($this->attachmentDecorator->getPictureUrl($content));
-        }
-        $this->attachmentDecorator->decorate($attachment);
-        $this->attachmentDecorator->addSiteInformation($attachment);
-
-        return $attachment;
     }
 
     public function getMainBlocks(int $contentId): array
@@ -153,13 +99,19 @@ class Attachment
 
         $blocks = [];
 
-        $owner = $this->findContent($content->contentInfo->ownerId);
-        $ownerPicture = $this->getPicture($owner);
         $ownerBlock = new Context();
+        try {
+            $owner = $this->findContent($content->contentInfo->ownerId);
+            $ownerPicture = $this->getPicture($owner);
+            $ownerName = $this->sanitize($owner->contentInfo->name);
+        } catch (\Exception $e) {
+            $ownerPicture = null;
+            $ownerName = $e->getMessage();
+        }
         if (null !== $ownerPicture) {
             $ownerBlock->image($ownerPicture['uri'], (string) $ownerPicture['alternativeText']);
         }
-        $ownerBlock->text($this->sanitize($owner->contentInfo->name), 'plain_text');
+        $ownerBlock->text($ownerName, 'plain_text');
         $blocks[] = $ownerBlock;
 
         $textFields = $this->sanitize('*'.$content->contentInfo->name.'*');
@@ -167,8 +119,13 @@ class Attachment
         if (null !== $description && !empty($description)) {
             $textFields .= "\n\n".$this->sanitize($description);
         }
+
         $contentBlock = (new SlackSectionBlock())->text($textFields);
-        $contentImage = $this->getPicture($content);
+        try {
+            $contentImage = $this->getPicture($content);
+        } catch (\Exception $e) {
+            $contentImage = null;
+        }
         if (null !== $contentImage) {
             $contentBlock->accessory(
                 new SlackImageBlockElement($contentImage['uri'], (string) $contentImage['alternativeText'])
@@ -232,7 +189,7 @@ class Attachment
                         implode(',', $content->versionInfo->languageCodes);
 
         $blocks = [
-            (new SlackSectionBlock())->field($leftColumn)->field($rightColumn)
+            (new SlackSectionBlock())->field($leftColumn)->field($rightColumn),
         ];
 
         if ($content->contentInfo->published) {
@@ -245,7 +202,7 @@ class Attachment
                         [
                             'contentId' => $location->contentId,
                             'locationId' => $location->id,
-                            'siteaccess' => $siteAccessName
+                            'siteaccess' => $siteAccessName,
                         ],
                         UrlGeneratorInterface::ABSOLUTE_URL
                     );
@@ -261,98 +218,6 @@ class Attachment
         $blocks[] = new SlackDividerBlock();
 
         return $blocks;
-    }
-
-    public function getDetails(int $contentId): AttachmentModel
-    {
-        $content = $this->findContent($contentId);
-        $attachment = new AttachmentModel();
-        $fields = [];
-        if (null !== $content->contentInfo->publishedDate) {
-            $fields[] = new Field(
-                '_t:field.content.published',
-                $this->formatDate($content->contentInfo->publishedDate)
-            );
-        }
-        if (null !== $content->contentInfo->modificationDate) {
-            $fields[] = new Field(
-                '_t:field.content.modified',
-                $this->formatDate($content->contentInfo->modificationDate)
-            );
-        }
-
-        $fields[] = new Field('_t:field.content.id', (string) $content->id);
-        $fields[] = new Field(
-            '_t:field.content.version',
-            (string) $content->contentInfo->currentVersionNo
-        );
-
-        if ($content->contentInfo->mainLocationId > 0) {
-            $fields[] = new Field(
-                '_t:field.content.mainlocationid',
-                (string) $content->contentInfo->mainLocationId
-            );
-        }
-        $fields[] = new Field(
-            '_t:field.content.languages',
-            implode(',', $content->versionInfo->languageCodes)
-        );
-
-        // states
-        $objectStateService = $this->repository->getObjectStateService();
-        $allGroups = $objectStateService->loadObjectStateGroups();
-        foreach ($allGroups as $group) {
-            if ('ez_lock' === $group->identifier) {
-                continue;
-            }
-            $state = $this->repository->getObjectStateService()->getContentState($content->contentInfo, $group);
-            $fields[] = new Field($group->getName($group->mainLanguageCode), $state->getName($state->mainLanguageCode));
-        }
-
-        if ($content->contentInfo->published) {
-            $locations = $this->repository->getLocationService()->loadLocations($content->contentInfo);
-            foreach ($locations as $location) {
-                foreach ($this->siteAccessList as $siteAccessName) {
-                    $url = $this->router->generate(
-                        '_ez_content_view',
-                        [
-                            'contentId' => $location->contentId,
-                            'locationId' => $location->id,
-                            'siteaccess' => $siteAccessName
-                        ],
-                        UrlGeneratorInterface::ABSOLUTE_URL
-                    );
-                    $fieldName = "SiteAccess {$siteAccessName}";
-                    if ($location->id !== $content->contentInfo->mainLocationId) {
-                        $fieldName = "Location: {$location->id} {$fieldName}";
-                    }
-                    $fields[] = new Field($fieldName, explode('?', $url)[0], false);
-                }
-            }
-        }
-        $attachment->setFields($fields);
-        $this->attachmentDecorator->decorate($attachment, 'details');
-
-        return $attachment;
-    }
-
-    public function getPreview(int $contentId): ?AttachmentModel
-    {
-        $content = $this->findContent($contentId);
-        $mediaSection = $this->repository->sudo(
-            function (Repository $repository) {
-                return $repository->getSectionService()->loadSectionByIdentifier('media');
-            }
-        );
-        if ($content->contentInfo->sectionId === $mediaSection->id) {
-            $attachment = new AttachmentModel();
-            $attachment->setImageURL($this->attachmentDecorator->getPictureUrl($content));
-            $this->attachmentDecorator->decorate($attachment, 'preview');
-
-            return $attachment;
-        }
-
-        return null;
     }
 
     public function getPreviewBlock(int $contentId): array
@@ -416,7 +281,7 @@ class Attachment
             if ($value instanceof ImageValue) {
                 return [
                     'uri' => ($this->getParameter('asset_prefix') ?? '').$value->uri,
-                    'alternativeText' => $value->alternativeText
+                    'alternativeText' => $value->alternativeText,
                 ];
             }
             if ($value instanceof RelationValue && $value->destinationContentId > 0) {
