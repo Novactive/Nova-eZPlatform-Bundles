@@ -51,7 +51,7 @@ class CallbackController
 
         if (isset($response['action'])) {
             $generator->replaceBlockAction($blocks, $response['action'], $action['block_id'], $action['action_id']);
-        } else {
+        } elseif (isset($response['text'])) {
             $generator->insertTextSection($blocks, $response['text'], $action['block_id']);
         }
 

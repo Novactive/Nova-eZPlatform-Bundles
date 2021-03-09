@@ -25,13 +25,13 @@ class States extends AttachmentProvider
 {
     public function getAttachment(Event $event): ?Attachment
     {
-        if (!$event instanceof SetContentStateEvent) {
+        if (\count($this->actions) <= 0) {
             return null;
         }
         $attachment = new Attachment();
         $attachment->setText('_t:provider.states');
         $actions = $this->buildActions($event);
-        if (count($actions) <= 0) {
+        if (\count($actions) <= 0) {
             return null;
         }
         $attachment->setActions($actions);
@@ -43,7 +43,7 @@ class States extends AttachmentProvider
 
     public function getAttachmentBlocks(Event $event): ?array
     {
-        if (!$event instanceof SetContentStateEvent) {
+        if (count($this->actions) <= 0) {
             return null;
         }
         $actions = $this->buildActions($event);

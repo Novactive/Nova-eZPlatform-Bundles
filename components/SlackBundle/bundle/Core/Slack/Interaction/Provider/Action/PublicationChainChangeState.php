@@ -121,10 +121,30 @@ class PublicationChainChangeState extends ActionProvider
 //        return $attachment;
 //    }
 
-    public function execute(InteractiveMessage $message, array $actions = []): array
+    public function execute(InteractiveMessage $messageAction, array $allActions = []): array
     {
-        $action = $message->getAction();
+        $action = $messageAction->getAction();
+        [$contentId, $value] = explode(':', $action['selected_option']['value']);
 
-        return [];
+        $response = [];
+
+        try {
+            $content = $this->repository->getContentService()->loadContent((int) $contentId);
+            $state = $this->repository->getObjectStateService()->loadObjectState((int) $value);
+            $contentState = $this->repository->getObjectStateService()->getContentState($content->contentInfo, $state->getObjectStateGroup());
+
+            if ($state->id !== $contentState->id) {
+                $this->repository->getObjectStateService()->setContentState(
+                    $content->contentInfo,
+                    $state->getObjectStateGroup(),
+                    $state
+                );
+                $response['text'] = $this->translator->trans('action.state.changed', [], 'slack');
+            }
+        } catch (\Exception $e) {
+            $response['text'] = $e->getMessage();
+        }
+
+        return $response;
     }
 }

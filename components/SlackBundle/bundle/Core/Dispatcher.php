@@ -22,6 +22,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\EventDispatcher\Event;
 use Symfony\Component\Notifier\Bridge\Slack\SlackOptions;
+use Novactive\Bundle\eZSlackBundle\Repository\Trash as TrashRepository;
+use eZ\Publish\API\Repository\Values\Content\Query as eZQuery;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\TrashItem;
 
 class Dispatcher implements EventSubscriberInterface
 {
@@ -31,11 +35,18 @@ class Dispatcher implements EventSubscriberInterface
 
     private RequestStack $requestStack;
 
-    public function __construct(Slack $slackClient, MessageConverter $messageConverter, RequestStack $requestStack)
-    {
+    private TrashRepository $trashRepository;
+
+    public function __construct(
+        Slack $slackClient,
+        MessageConverter $messageConverter,
+        RequestStack $requestStack,
+        TrashRepository $trashRepository
+    ) {
         $this->slackClient = $slackClient;
         $this->messageConverter = $messageConverter;
         $this->requestStack = $requestStack;
+        $this->trashRepository = $trashRepository;
     }
 
     public function receive(Event $event): void
@@ -45,6 +56,12 @@ class Dispatcher implements EventSubscriberInterface
             return;
         }
         //$this->slackClient->sendNotification($message);
+
+        // checking if the event is Trash and the Content is really in trash
+        if ($event instanceof Events\Trash\TrashEvent &&
+            !$this->trashRepository->checkIfContentIsInTrash($event->getLocation()->getContent())) {
+            return;
+        }
 
         $options = $this->messageConverter->convertToOptions($event);
         //dd($options->toArray());

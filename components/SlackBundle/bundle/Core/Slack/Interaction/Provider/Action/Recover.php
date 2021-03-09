@@ -25,6 +25,7 @@ use Novactive\Bundle\eZSlackBundle\Core\Slack\Button;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Confirmation;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
 use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\API\Repository\Events;
 
 class Recover extends ActionProvider
 {
@@ -61,42 +62,98 @@ class Recover extends ActionProvider
         ];
     }
 
-//    public function execute(InteractiveMessage $message): Attachment
-//    {
-//        $action = $message->getAction();
-//        $value = (int) $action->getValue();
-//        $attachment = new Attachment();
-//        $attachment->setTitle('_t:action.recover');
-//        try {
-//            $query = new eZQuery();
-//            $query->filter = new Criterion\ContentId($value);
-//            // too bad what have to limit and to check the ID, the TrashService is not finish...
-//            // See: https://github.com/ezsystems/ezpublish-kernel/blob/master/eZ/Publish/Core/Persistence/Legacy/Content/Location/Trash/Handler.php#L183
-//
-//            $query->limit = 1000;
-//            $results = $this->repository->getTrashService()->findTrashItems($query);
-//
-//            foreach ($results as $item) {
-//                /* @var TrashItem $item */
-//                if ($item->contentInfo->id === $value) {
-//                    $this->repository->getTrashService()->recover($item);
-//                }
-//            }
-//            $attachment->setColor('good');
-//            $attachment->setText('_t:action.items.recovered');
-//        } catch (Exception $e) {
-//            $attachment->setColor('danger');
-//            $attachment->setText($e->getMessage());
-//        }
-//
-//        return $attachment;
-//    }
+    //    public function execute(InteractiveMessage $message): Attachment
+    //    {
+    //        $action = $message->getAction();
+    //        $value = (int) $action->getValue();
+    //        $attachment = new Attachment();
+    //        $attachment->setTitle('_t:action.recover');
+    //        try {
+    //            $query = new eZQuery();
+    //            $query->filter = new Criterion\ContentId($value);
+    //            // too bad what have to limit and to check the ID, the TrashService is not finish...
+    //            // See: https://github.com/ezsystems/ezpublish-kernel/blob/master/eZ/Publish/Core/Persistence/Legacy/Content/Location/Trash/Handler.php#L183
+    //
+    //            $query->limit = 1000;
+    //            $results = $this->repository->getTrashService()->findTrashItems($query);
+    //
+    //            foreach ($results as $item) {
+    //                /* @var TrashItem $item */
+    //                if ($item->contentInfo->id === $value) {
+    //                    $this->repository->getTrashService()->recover($item);
+    //                }
+    //            }
+    //            $attachment->setColor('good');
+    //            $attachment->setText('_t:action.items.recovered');
+    //        } catch (Exception $e) {
+    //            $attachment->setColor('danger');
+    //            $attachment->setText($e->getMessage());
+    //        }
+    //
+    //        return $attachment;
+    //    }
 
-    public function execute(InteractiveMessage $message, array $actions = []): array
+    public function execute(InteractiveMessage $message, array $allActions = []): array
     {
         $action = $message->getAction();
         $value = (int) $action['value'];
 
-        return [];
+        $response = [];
+
+        try {
+            $query = new eZQuery();
+            $query->filter = new Criterion\ContentTypeId(
+                $this->repository->getContentService()->loadContent($value)->contentInfo->contentTypeId
+            );
+            $results = $this->repository->getTrashService()->findTrashItems($query);
+            foreach ($results->items as $item) {
+                if ($item->contentInfo->id === $value) {
+                    $location = $this->repository->getTrashService()->recover($item);
+                    $event = new Events\Trash\RecoverEvent($location, $item);
+                }
+            }
+            $response['text'] = $this->translator->trans('action.items.recovered', [], 'slack');
+        } catch (Exception $e) {
+            $response['text'] = $e->getMessage();
+
+            return $response;
+        }
+
+        if (isset($event)) {
+            foreach ($allActions as $action) {
+                if ($action instanceof Trash) {
+                    $block = $action->getNewAction($event);
+                    if (null !== $block) {
+                        $block['text'] = [
+                            'type' => 'plain_text',
+                            'text' => $block['text']
+                        ];
+                        $block['type'] = 'button';
+                        $block['confirm'] = [
+                            'title' => [
+                                'type' => 'plain_text',
+                                'text' => $block['confirm']['title']
+                            ],
+                            'text' => [
+                                'type' => 'plain_text',
+                                'text' => $block['confirm']['text']
+                            ],
+                            'confirm' => [
+                                'type' => 'plain_text',
+                                'text' => $block['confirm']['confirm']
+                            ],
+                            'deny' => [
+                                'type' => 'plain_text',
+                                'text' => $block['confirm']['deny']
+                            ]
+                        ];
+                        $response['action'] = $block;
+                    }
+                    break;
+                }
+            }
+        }
+
+        return $response;
     }
 }

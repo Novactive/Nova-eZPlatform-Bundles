@@ -30,6 +30,7 @@ services:
     Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Generator: ~
     Novactive\Bundle\eZSlackBundle\Security\SlackAuthenticator: ~
     Novactive\Bundle\eZSlackBundle\Repository\User: ~
+    Novactive\Bundle\eZSlackBundle\Repository\Trash: ~
 
     # Converters
     Novactive\Bundle\eZSlackBundle\Core\Converter\User: ~
