@@ -16,6 +16,15 @@ make installez
 
 This will install eZ Platform and bundles on top of it.
 
+### ERROR `"/dbezplbundl"`
+
+> docker: Error response from daemon: Conflict. The container name "/dbezplbundl" is already in use by container "ee898e532768eab69767220f81d1f122871b6d4db9b649e02b98078e69cec341". You have to remove (or rename) that container to be able to reuse that name.
+
+```
+docker container rm -f dbezplbundl
+rm -fr ezplatform
+```
+
 ## Contribution
 
 This project comes with Coding Standards and Tests.
