@@ -63,10 +63,14 @@ class ContentExtension extends KernelContentExtension
     {
         try {
             $content = $this->repository->getContentService()->loadContent($fieldValue->destinationContentId);
-            $location = $this->repository->getLocationService()->loadLocation($content->contentInfo->mainLocationId);
 
-            if ((1 === $location->invisible) || (1 === $location->hidden)) {
-                return false;
+            if (!$content->contentInfo->isTrashed()) {
+                $locationService = $this->repository->getLocationService();
+                $location = $locationService->loadLocation($content->contentInfo->mainLocationId);
+
+                if ((1 === $location->invisible) || (1 === $location->hidden)) {
+                    return false;
+                }
             }
         } catch (NotFoundException $e) {
             return false;
@@ -82,12 +86,13 @@ class ContentExtension extends KernelContentExtension
         foreach ($fieldValue->destinationContentIds as $id) {
             try {
                 $content = $repository->getContentService()->loadContent($id);
-                $location = $repository->getLocationService()->loadLocation($content->contentInfo->mainLocationId);
-
-                if (1 == $location->invisible or 1 == $location->hidden) {
-                    continue;
+                if (!$content->contentInfo->isTrashed()) {
+                    $location = $repository->getLocationService()->loadLocation($content->contentInfo->mainLocationId);
+                    if (1 == $location->invisible or 1 == $location->hidden) {
+                        continue;
+                    }
+                    $list[] = $content;
                 }
-                $list[] = $content;
             } catch (Exception $exception) {
                 return [];
             }
