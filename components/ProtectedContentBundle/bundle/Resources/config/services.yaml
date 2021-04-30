@@ -7,6 +7,7 @@ services:
         public: false
         bind:
             $httpCachePurgeClient: '@ezplatform.http_cache.purge_client'
+            $entityManager: "@novaezprotectedcontent.doctrine.entity_manager"
 
     Novactive\Bundle\eZProtectedContentBundle\Command\:
         resource: '../../Command'
@@ -33,3 +34,13 @@ services:
     Novactive\Bundle\eZProtectedContentBundle\Listener\PasswordProvided:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: 'onKernelRequest', priority: -100}
+
+    novaezprotectedcontent.doctrine.entity_manager:
+        class: Doctrine\ORM\EntityManagerInterface
+        factory: ['@Novactive\Bundle\eZSEOBundle\Core\SiteAccessAwareEntityManagerFactory', 'get']
+
+    Novactive\Bundle\eZProtectedContentBundle\Core\SiteAccessAwareEntityManagerFactory:
+        arguments:
+            $repositoryConfigurationProvider: "@ezpublish.api.repository_configuration_provider"
+            $resolver: "@doctrine.orm.default_entity_listener_resolver"
+            $settings: { debug: "%kernel.debug%", cache_dir: "%kernel.cache_dir%" }
