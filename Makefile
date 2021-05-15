@@ -17,9 +17,9 @@ CHROMEDRIVER := $(CURRENT_DIR)/chromedriver
 DOCKER := docker
 DOCKER_DB_CONTAINER := dbezplbundl
 MYSQL := mysql -f -u root -pezplatform -h 127.0.0.1 -P 3300 ezplatform
-CHROME_DRIVER_URL := https://chromedriver.storage.googleapis.com/86.0.4240.22/chromedriver_linux64.zip
+CHROME_DRIVER_URL := https://chromedriver.storage.googleapis.com/90.0.4430.24/chromedriver_linux64.zip
 ifeq ($(UNAME_S),Darwin)
-CHROME_DRIVER_URL := https://chromedriver.storage.googleapis.com/86.0.4240.22/chromedriver_mac64.zip
+CHROME_DRIVER_URL := https://chromedriver.storage.googleapis.com/90.0.4430.24/chromedriver_mac64.zip
 endif
 CONSOLE := $(PHP_BIN) bin/console
 
