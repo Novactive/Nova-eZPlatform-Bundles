@@ -15,11 +15,25 @@ declare(strict_types=1);
 namespace Novactive\NovaeZMaintenanceBundle;
 
 use LogicException;
+use Novactive\NovaeZMaintenanceBundle\DependencyInjection\Security\MaintenancePolicyProvider;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class NovaeZMaintenanceBundle extends Bundle
 {
+    public function build(ContainerBuilder $container): void
+    {
+        parent::build($container);
+
+        // ...
+
+        // Retrieve "ezpublish" container extension
+        $eZExtension = $container->getExtension('ezpublish');
+        // Add the policy provider
+        $eZExtension->addPolicyProvider(new MaintenancePolicyProvider());
+    }
+
     public function getContainerExtension()
     {
         if (null === $this->extension) {

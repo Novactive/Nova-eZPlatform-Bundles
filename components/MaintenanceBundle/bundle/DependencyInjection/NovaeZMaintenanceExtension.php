@@ -40,5 +40,6 @@ class NovaeZMaintenanceExtension extends Extension
         $processor->mapSetting('enable', $config);
         $processor->mapSetting('template', $config);
         $processor->mapSetting('lock_file_id', $config);
+        $processor->mapSetting('authorized_ips', $config);
     }
 }

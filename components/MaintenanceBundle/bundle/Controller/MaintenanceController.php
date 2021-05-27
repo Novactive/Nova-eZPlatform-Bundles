@@ -15,10 +15,12 @@ declare(strict_types=1);
 namespace Novactive\NovaeZMaintenanceBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;
+use eZ\Publish\API\Repository\PermissionResolver;
 use Novactive\NovaeZMaintenanceBundle\Form\Type\FilterType;
 use Novactive\NovaeZMaintenanceBundle\Helper\FileHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -47,21 +49,25 @@ class MaintenanceController extends Controller
      * @Route("/", name="novamaintenance_index")
      * @Template("@ezdesign/maintenance/index.html.twig")
      */
-    public function indexAction(): array
+    public function indexAction(PermissionResolver $permissionResolver): Response
     {
-        return [
+        $this->fileHelper->checkManageAccess();
+
+        return $this->render('@ezdesign/maintenance/index.html.twig', [
             'maintenance_siteaccesses' => $this->fileHelper->getAvailableSiteaccessList(),
-        ];
+        ]);
     }
 
     /**
      * @Route("/manage/{maintenanceSiteaccess}", name="novamaintenance_manage")
-     * @Template("@ezdesign/maintenance/manage.html.twig")
      */
-    public function manageAction(string $maintenanceSiteaccess, Request $request): array
-    {
+    public function manageAction(
+        string $maintenanceSiteaccess,
+        Request $request,
+        PermissionResolver $permissionResolver
+    ): Response {
+        $this->fileHelper->checkManageAccess();
         $isExistFile = $this->fileHelper->isMaintenanceModeRunning($maintenanceSiteaccess);
-
         $btnLabel = $this->fileHelper->translate(!$isExistFile ? 'maintenance.start' : 'maintenance.stop');
         $form = $this->createForm(FilterType::class);
         $form->handleRequest($request);
@@ -74,10 +80,10 @@ class MaintenanceController extends Controller
             $btnLabel = $this->fileHelper->translate($isExistFile ? 'maintenance.start' : 'maintenance.stop');
         }
 
-        return [
+        return $this->render('@ezdesign/maintenance/manage.html.twig', [
             'form' => $form->createView(),
             'maintenance_siteaccess' => $maintenanceSiteaccess,
             'btnLabel' => $btnLabel,
-        ];
+        ]);
     }
 }
