@@ -1,0 +1,8 @@
+{% if not ez_field_is_empty(content, identifier) %}
+    {{ ez_render_field(content,identifier,  {
+        parameters: {
+            'alias': alias,
+            'class': classes|join(' ')
+        }
+    } ) }}
+{% endif %}

@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZExtraBundle\Core\Helper\eZ;
 
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\Values\Content\Content as RepositoryContent;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery as Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
@@ -238,7 +239,7 @@ class Content
 
         $query = new Query();
 
-        if (null != $attributeIdentifier) {
+        if (null !== $attributeIdentifier) {
             // by Attribute
             $valueSortFieldValue = $content->getFieldValue($attributeIdentifier);
             if ($valueSortFieldValue instanceof DateValue) {
@@ -272,5 +273,19 @@ class Content
         $result = $searchService->findLocations($query);
 
         return $this->wrapResults($result, 1);
+    }
+
+    public function getSelectionTextValue(RepositoryContent $content, string $identifier): string
+    {
+        $options = $content->getContentType()->getFieldDefinition($identifier);
+        if (null !== $options) {
+            $list = $options->getFieldSettings();
+            $index = $content->getFieldValue($identifier)->selection;
+            if (isset($index[0], $list['options'][$index[0]])) {
+                return $list['options'][$index[0]];
+            }
+        }
+
+        return '';
     }
 }
