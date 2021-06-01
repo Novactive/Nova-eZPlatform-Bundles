@@ -1,6 +1,6 @@
 parameters:
     env(ENABLE_IMAGE_PLACEHOLDER): true
-#    env(IMAGE_TAG_TEMPLATE_PATH): '@NovaeZExtra/fields/display_image_tag.html.twig'
+    env(VIEW_MATCHER_FIELD_IDENTIFIER): 'matcher'
 
 services:
     _defaults:
@@ -28,3 +28,7 @@ services:
         tags:
             - {name: kernel.event_listener, event: ezpublish.pre_content_view, method: onPreContentView}
 
+    Novactive\Bundle\eZExtraBundle\Core\ViewMatcher\ContentTypeField:
+        tags: [ 'ezplatform.view.matcher' ]
+        bind:
+            $fieldIdentifier: '%env(VIEW_MATCHER_FIELD_IDENTIFIER)%'
