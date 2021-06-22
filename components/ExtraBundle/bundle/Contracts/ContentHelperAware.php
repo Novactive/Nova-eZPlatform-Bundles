@@ -18,7 +18,10 @@ use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Content as BaseContentHelper;
 
 trait ContentHelperAware
 {
-    protected BaseContentHelper $contentHelper;
+    /**
+     * @var BaseContentHelper
+     */
+    protected $contentHelper;
 
     /**
      * @required

@@ -22,7 +22,10 @@ use Symfony\Component\Routing\RouterInterface;
 
 trait RouterAware
 {
-    private RouterInterface $router;
+    /**
+     * @var RouterInterface
+     */
+    private $router;
 
     /**
      * @required

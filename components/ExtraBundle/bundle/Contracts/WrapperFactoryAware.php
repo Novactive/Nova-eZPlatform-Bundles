@@ -18,7 +18,10 @@ use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\WrapperFactory;
 
 trait WrapperFactoryAware
 {
-    protected WrapperFactory $wrapperFactory;
+    /**
+     * @var WrapperFactory
+     */
+    protected $wrapperFactory;
 
     /**
      * @required

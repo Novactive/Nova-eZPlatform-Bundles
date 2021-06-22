@@ -27,7 +27,10 @@ use Twig\TwigFunction;
 
 class ContentExtension extends AbstractExtension
 {
-    private Repository $repository;
+    /**
+     * @var Repository
+     */
+    private $repository;
 
     public function __construct(Repository $repository)
     {

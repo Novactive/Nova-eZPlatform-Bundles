@@ -21,7 +21,10 @@ use eZ\Publish\API\Repository\Values\Content\RelationList\Item\RelationListItem;
 
 trait RepositoryAware
 {
-    protected ApiRepository $repository;
+    /**
+     * @var ApiRepository
+     */
+    protected $repository;
 
     /**
      * @required

@@ -21,9 +21,15 @@ use eZ\Publish\Core\MVC\Symfony\View\View;
 
 final class ContentTypeField extends RepositoryAware implements ViewMatcherInterface
 {
-    private string $fieldIdentifier;
+    /**
+     * @var string
+     */
+    private $fieldIdentifier;
 
-    private string $attribute;
+    /**
+     * @var string
+     */
+    private $attribute;
 
     public function setMatchingConfig($matchingConfig): void
     {

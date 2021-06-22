@@ -27,12 +27,35 @@ use Twig\TwigFunction;
 
 final class ImageExtension extends AbstractExtension
 {
-    private Environment $twig;
-    private ConfigResolverInterface $configResolver;
-    private bool $enablePlaceholder;
-    private bool $forcePlaceholder;
-    private VariationHandler $variationHandler;
-    private WrapperFactory $wrapperFactory;
+    /**
+     * @var Environment
+     */
+    private $twig;
+
+    /**
+     * @var ConfigResolverInterface
+     */
+    private $configResolver;
+
+    /**
+     * @var bool
+     */
+    private $enablePlaceholder;
+
+    /**
+     * @var bool
+     */
+    private $forcePlaceholder;
+
+    /**
+     * @var VariationHandler
+     */
+    private $variationHandler;
+
+    /**
+     * @var WrapperFactory
+     */
+    private $wrapperFactory;
 
     public function __construct(
         bool $enableImagePlaceholder,
