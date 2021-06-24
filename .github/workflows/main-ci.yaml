@@ -66,7 +66,7 @@ jobs:
 
             -   name: Install Latest Chrome Driver
                 run: |
-                    wget https://chromedriver.storage.googleapis.com/89.0.4389.23/chromedriver_linux64.zip -P /home/runner/
+                    wget https://chromedriver.storage.googleapis.com/91.0.4472.101/chromedriver_linux64.zip -P /home/runner/
                     unzip /home/runner/chromedriver_linux64.zip -d /home/runner/.chrome
 
             -   name: Install Symfony Server
@@ -193,7 +193,7 @@ jobs:
 
             -   name: Install Latest Chrome Driver
                 run: |
-                    wget https://chromedriver.storage.googleapis.com/89.0.4389.23/chromedriver_linux64.zip -P /home/runner/
+                    wget https://chromedriver.storage.googleapis.com/91.0.4472.101/chromedriver_linux64.zip -P /home/runner/
                     unzip /home/runner/chromedriver_linux64.zip -d /home/runner/.chrome
 
             -   name: Install Symfony Server
@@ -271,6 +271,9 @@ jobs:
 
             -   name: Test Web Server
                 run: curl -I http://127.0.0.1:8000 | grep "HTTP/1.1 200 OK"
+
+            -   name: Update PHP Unit
+                run: composer update && composer require -W phpunit/phpunit:^9.5 symfony/phpunit-bridge:^5.3
 
             -   name: Finally Run the tests
                 run: |
