@@ -1,18 +1,11 @@
-<phpunit colors="true" stopOnFailure="false" backupGlobals="false" bootstrap="./bootstrap.php">
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" colors="true" stopOnFailure="false" backupGlobals="false"
+         bootstrap="./bootstrap.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
     <testsuites>
         <testsuite name="Global">
             <directory>./Tests/</directory>
         </testsuite>
     </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory>./</directory>
-            <exclude>
-                <directory>./Tests</directory>
-            </exclude>
-        </whitelist>
-    </filter>
     <php>
         <env name="APP_ENV" value="test" force="true"/>
         <env name="KERNEL_CLASS" value="App\Kernel"/>
@@ -20,6 +13,6 @@
         <env name="SYMFONY_DEPRECATIONS_HELPER" value="verbose=0"/>
     </php>
     <extensions>
-        <extension class="Symfony\Component\Panther\ServerExtension" />
+        <extension class="Symfony\Component\Panther\ServerExtension"/>
     </extensions>
 </phpunit>
