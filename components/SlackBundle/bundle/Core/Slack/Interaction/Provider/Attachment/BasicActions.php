@@ -14,35 +14,31 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Attachment;
 
-use eZ\Publish\Core\SignalSlot\Signal;
-use Novactive\Bundle\eZSlackBundle\Core\Signal\Searched;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
+use Novactive\Bundle\eZSlackBundle\Core\Event\Searched;
+use Novactive\Bundle\eZSlackBundle\Core\Slack\SlackBlock\Actions;
+use Symfony\Component\Notifier\Bridge\Slack\Block\SlackSectionBlock;
+use Symfony\Contracts\EventDispatcher\Event;
 
-/**
- * Class BasicActions.
- */
 class BasicActions extends AttachmentProvider
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getAttachment(Signal $signal): ?Attachment
+    public function getAttachment(Event $event): array
     {
-        if (\count($this->actions) <= 0 || $signal instanceof Searched) {
-            return null;
+        if ($event instanceof Searched || count($this->actions) <= 0) {
+            return [];
         }
-        $attachment = new Attachment();
-        $attachment->setColor('#0000ff');
-        $attachment->setText('_t:provider.basic-buttons');
-        $actions = $this->buildActions($signal);
-        if (\count($actions) <= 0) {
-            return null;
+        $actions = $this->buildActions($event);
+        if (count($actions) <= 0) {
+            return [];
         }
-        $attachment->setActions($actions);
-        $attachment->setCallbackId($this->getAlias().'.'.time());
 
-        $this->attachmentDecorator->decorate($attachment);
+        $actionsBlock = new Actions();
+        foreach ($actions as $action) {
+            call_user_func_array([$actionsBlock, 'button'], $action);
+        }
 
-        return $attachment;
+        return [
+            (new SlackSectionBlock())->text($this->translator->trans('provider.basic-buttons', [], 'slack'), false),
+            $actionsBlock,
+        ];
     }
 }

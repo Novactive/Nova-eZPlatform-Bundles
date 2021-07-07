@@ -1,0 +1,27 @@
+nova_ezslack:
+    system:
+        default:
+            slack_client_id: "SLACK_APP_CLIENT ID"
+            slack_client_secret: "SLACK_APP_CLIENT_SECRET"
+            slack_verification_token: "SLACK_APP_VERIFICATION_TOKEN"
+            slackconnect_usergroup_content_id: 12 # When to create Slack connect Users if they do not exist
+            slackconnect_contenttype_identifier: 'user' # The Content Type of the Users
+            site_name: "novactive.us"
+            favicon: "https://assets.novactive.us/images/icos/favicon.ico"
+            asset_prefix: "https://assets.novactive.us"
+            notifications:
+                transports:
+                    - 'slack'
+
+knpu_oauth2_client:
+    clients:
+        slack:
+            type: slack
+            redirect_route: _novaezslack_slack_oauth_check
+            client_id: "#" # will be overridden by ConfigResolver - this value does not matter
+            client_secret: "#" # will be overridden by ConfigResolver - this value does not matter
+
+framework:
+    notifier:
+        chatter_transports:
+            slack: '%env(SLACK_DSN)%'

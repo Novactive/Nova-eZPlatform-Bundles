@@ -3,6 +3,7 @@ parameters:
 services:
     _defaults:
         autowire: true
+        autoconfigure: true
         public: false
         bind:
             $jmsSerializer: '@jms_serializer'
@@ -26,8 +27,10 @@ services:
 
     Novactive\Bundle\eZSlackBundle\Core\Client\Slack: ~
     Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider: ~
+    Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Generator: ~
     Novactive\Bundle\eZSlackBundle\Security\SlackAuthenticator: ~
     Novactive\Bundle\eZSlackBundle\Repository\User: ~
+    Novactive\Bundle\eZSlackBundle\Repository\Trash: ~
 
     # Converters
     Novactive\Bundle\eZSlackBundle\Core\Converter\User: ~
@@ -35,6 +38,8 @@ services:
     Novactive\Bundle\eZSlackBundle\Core\Converter\Query: ~
     Novactive\Bundle\eZSlackBundle\Core\Converter\Attachment:
         $siteAccessList: "%ezpublish.siteaccess.list%"
+
+    Novactive\Bundle\eZSlackBundle\Core\Dispatcher: ~
 
     # Listeners
     Novactive\Bundle\eZSlackBundle\Listener\Request:
@@ -49,35 +54,18 @@ services:
         tags:
             - { name: kernel.event_listener, event: "ezplatform_admin_ui.menu_configure.content_sidebar_right", method: "onMenuConfigure" }
 
-    # Native or 3rd party
-    Symfony\Component\Translation\TranslatorInterface:
-        alias: translator
+    EzSystems\EzPlatformRichText\eZ\RichText\Converter:
+        alias: ezrichtext.converter.output.xhtml5.core
 
-    eZ\Publish\Core\FieldType\RichText\Converter:
-        alias: ezpublish.fieldType.ezrichtext.converter.output.xhtml5
+    GuzzleHttp\Client: ~
 
-    nova_ezslack.guzzle.client:
-        class: GuzzleHttp\Client
-
-    knpu.oauth2.provider_factory:
-        class: Novactive\Bundle\eZSlackBundle\OAuth\ProviderFactory
+    Novactive\Bundle\eZSlackBundle\OAuth\ProviderFactory:
+        decorates: "knpu.oauth2.provider_factory"
         arguments: ["@router"]
 
     # HERE ONLY TO FIX A BUG: https://github.com/ezsystems/ezplatform-admin-ui/pull/353
     Novactive\Bundle\eZSlackBundle\Core\UIConfigProviderUser:
         tags:
             - { name: ezplatform.admin_ui.config_provider, key: 'user' }
-
-    # Signals
-    Novactive\Bundle\eZSlackBundle\Core\Dispatcher:
-        tags:
-            - { name: ezpublish.api.slot, signal: ContentService\PublishVersionSignal }
-            - { name: ezpublish.api.slot, signal: LocationService\HideLocationSignal }
-            - { name: ezpublish.api.slot, signal: LocationService\UnhideLocationSignal }
-            - { name: ezpublish.api.slot, signal: TrashService\TrashSignal }
-            - { name: ezpublish.api.slot, signal: TrashService\RecoverSignal }
-            - { name: ezpublish.api.slot, signal: ObjectStateService\SetContentStateSignal }
-            - { name: ezpublish.api.slot, signal: \EzSystems\FormBuilder\Core\SignalSlot\Signal\FormSubmit }
-            - { name: ezpublish.api.slot, signal: \EzSystems\Notification\Core\SignalSlot\Signal\NotificationSignal }
 
 

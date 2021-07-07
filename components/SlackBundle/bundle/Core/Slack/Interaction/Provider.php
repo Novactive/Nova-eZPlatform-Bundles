@@ -14,21 +14,14 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction;
 
-use eZ\Publish\Core\SignalSlot\Signal;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Attachment\AttachmentProviderInterface;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
 use RuntimeException;
+use Symfony\Contracts\EventDispatcher\Event;
 
-/**
- * Class Provider.
- */
 class Provider
 {
-    /**
-     * @var AttachmentProviderInterface[]
-     */
-    private $attachmentProviders;
+    private array $attachmentProviders;
 
     public function addAttachmentProvider(AttachmentProviderInterface $provider, string $alias): void
     {
@@ -36,30 +29,27 @@ class Provider
         $this->attachmentProviders[$alias] = $provider;
     }
 
-    public function execute(InteractiveMessage $message): Attachment
+    public function execute(InteractiveMessage $message): array
     {
         $action = $message->getAction();
         foreach ($this->attachmentProviders as $provider) {
-            if ($provider->supports($action->getName())) {
+            if ($provider->supports($action['action_id'])) {
                 return $provider->execute($message);
             }
         }
-        throw new RuntimeException("No Attachment Provider supports '{$action->getName()}'.");
+        throw new RuntimeException("No Attachment Provider supports '{$action['action_id']}'.");
     }
 
-    /**
-     * @return Attachment[]
-     */
-    public function getAttachments(Signal $signal): array
+    public function getAttachments(Event $event): array
     {
-        $attachments = [];
+        $blocks = [];
         foreach ($this->attachmentProviders as $provider) {
-            $attachment = $provider->getAttachment($signal);
-            if (null !== $attachment) {
-                $attachments[] = $attachment;
+            $block = $provider->getAttachment($event);
+            if (null !== $block) {
+                $blocks[] = $block;
             }
         }
 
-        return $attachments;
+        return array_merge(...$blocks);
     }
 }

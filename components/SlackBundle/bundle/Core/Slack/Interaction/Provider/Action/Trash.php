@@ -14,66 +14,94 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action;
 
-use eZ\Publish\Core\SignalSlot\Signal;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Action;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Button;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Confirmation;
+use eZ\Publish\API\Repository\Events;
+use eZ\Publish\API\Repository\Events\Trash\TrashEvent;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
+use Symfony\Contracts\EventDispatcher\Event;
 
-/**
- * Class Trash.
- */
 class Trash extends ActionProvider
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getAction(Signal $signal, int $index): ?Action
+    public function getAction(Event $event): ?array
     {
-        $content = $this->getContentForSignal($signal);
-        if (
-            null === $content ||
-            !$content->contentInfo->published ||
-            $signal instanceof Signal\TrashService\TrashSignal
-        ) {
+        $content = $this->getContentForSignal($event);
+        if (null === $content || !$content->contentInfo->published || $event instanceof TrashEvent) {
             return null;
         }
-        $button = new Button($this->getAlias(), '_t:action.trash', (string) $content->id);
-        $button->setStyle(Button::DANGER_STYLE);
-        $confirmation = new Confirmation('_t:action.generic.confirmation');
-        $button->setConfirmation($confirmation);
 
-        return $button;
+        return [
+            'text' => $this->translator->trans('action.trash', [], 'slack'),
+            'action_id' => $this->getAlias(),
+            'value' => (string) $content->id,
+            'style' => ActionProvider::DANGER_STYLE,
+            'confirm' => [
+                'title' => $this->translator->trans('action.trash', [], 'slack'),
+                'text' => $this->translator->trans('action.generic.confirmation', [], 'slack'),
+                'confirm' => $this->translator->trans('action.confirmation.confirm', [], 'slack'),
+                'deny' => $this->translator->trans('action.confirmation.deny', [], 'slack'),
+            ],
+        ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function execute(InteractiveMessage $message): Attachment
+    public function execute(InteractiveMessage $message, array $allActions = []): array
     {
-        $action = $message->getAction();
-        $value = (int) $action->getValue();
-        $attachment = new Attachment();
-        $attachment->setTitle('_t:action.trash');
+        $messageAction = $message->getAction();
+        $value = (int) $messageAction['value'];
+
+        $response = [];
         try {
             $content = $this->repository->getContentService()->loadContent($value);
-            if (!$content->contentInfo->published) {
-                $attachment->setColor('danger');
-                $attachment->setText(var_export($content->contentInfo, true));
-            } else {
+            if ($content->contentInfo->published) {
                 $locations = $this->repository->getLocationService()->loadLocations($content->contentInfo);
                 foreach ($locations as $location) {
-                    $this->repository->getTrashService()->trash($location);
+                    $trashItem = $this->repository->getTrashService()->trash($location);
+                    if ($location->id === $content->contentInfo->mainLocationId) {
+                        $event = new Events\Trash\TrashEvent($trashItem, $location);
+                    }
                 }
-                $attachment->setColor('good');
-                $attachment->setText('_t:action.locations.trashed');
+                $response['text'] = $this->translator->trans('action.locations.trashed', [], 'slack');
+            } else {
+                $response['text'] = var_export($content->contentInfo, true);
             }
         } catch (\Exception $e) {
-            $attachment->setColor('danger');
-            $attachment->setText($e->getMessage());
+            $response['text'] = $e->getMessage();
+
+            return $response;
+        }
+        if (isset($event)) {
+            foreach ($allActions as $action) {
+                if ($action instanceof Recover) {
+                    $block = $action->getAction($event);
+                    if (null !== $block) {
+                        $block['text'] = [
+                            'type' => 'plain_text',
+                            'text' => $block['text'],
+                        ];
+                        $block['type'] = 'button';
+                        $block['confirm'] = [
+                            'title' => [
+                                'type' => 'plain_text',
+                                'text' => $block['confirm']['title'],
+                            ],
+                            'text' => [
+                                'type' => 'plain_text',
+                                'text' => $block['confirm']['text'],
+                            ],
+                            'confirm' => [
+                                'type' => 'plain_text',
+                                'text' => $block['confirm']['confirm'],
+                            ],
+                            'deny' => [
+                                'type' => 'plain_text',
+                                'text' => $block['confirm']['deny'],
+                            ],
+                        ];
+                        $response['action'] = $block;
+                    }
+                    break;
+                }
+            }
         }
 
-        return $attachment;
+        return $response;
     }
 }

@@ -14,29 +14,20 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action;
 
-use eZ\Publish\Core\SignalSlot\Signal;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Action;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Option;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Select;
+use Symfony\Contracts\EventDispatcher\Event;
 
-/**
- * Class PublicationChainChangeState.
- */
 class PublicationChainChangeState extends ActionProvider
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getAction(Signal $signal, int $index): ?Action
+    public function getAction(Event $event): ?array
     {
-        $content = $this->getContentForSignal($signal);
+        $content = $this->getContentForSignal($event);
         if (null === $content) {
             return null;
         }
 
         try {
+            $chainGroup = null;
             $objectStateService = $this->repository->getObjectStateService();
             $allGroups = $objectStateService->loadObjectStateGroups();
             foreach ($allGroups as $group) {
@@ -49,14 +40,14 @@ class PublicationChainChangeState extends ActionProvider
                 return null;
             }
             $states = $objectStateService->loadObjectStates($chainGroup);
-            $select = new Select($this->getAlias(), '_t:action.publication_chain.change_state', '');
+
+            $select = [
+                'placeholder' => $this->translator->trans('action.publication_chain.change_state', [], 'slack'),
+                'action_id' => $this->getAlias(),
+            ];
+
             foreach ($states as $state) {
-                $select->addOption(
-                    new Option(
-                        $state->getNames()[$state->mainLanguageCode],
-                        "{$content->id}:{$state->id}"
-                    )
-                );
+                $select['options'][$state->getNames()[$state->mainLanguageCode]] = "{$content->id}:{$state->id}";
             }
 
             return $select;
@@ -65,30 +56,33 @@ class PublicationChainChangeState extends ActionProvider
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function execute(InteractiveMessage $message): Attachment
+    public function execute(InteractiveMessage $messageAction, array $allActions = []): array
     {
-        $action = $message->getAction();
-        list($contentId, $value) = explode(':', $action->getSelectedOption()->getValue());
-        $attachment = new Attachment();
-        $attachment->setTitle('_t:action.publication_chain.change_state');
+        $action = $messageAction->getAction();
+        [$contentId, $value] = explode(':', $action['selected_option']['value']);
+
+        $response = [];
+
         try {
             $content = $this->repository->getContentService()->loadContent((int) $contentId);
             $state = $this->repository->getObjectStateService()->loadObjectState((int) $value);
-            $this->repository->getObjectStateService()->setContentState(
+            $contentState = $this->repository->getObjectStateService()->getContentState(
                 $content->contentInfo,
-                $state->getObjectStateGroup(),
-                $state
+                $state->getObjectStateGroup()
             );
-            $attachment->setColor('good');
-            $attachment->setText('_t:action.state.changed');
+
+            if ($state->id !== $contentState->id) {
+                $this->repository->getObjectStateService()->setContentState(
+                    $content->contentInfo,
+                    $state->getObjectStateGroup(),
+                    $state
+                );
+                $response['text'] = $this->translator->trans('action.state.changed', [], 'slack');
+            }
         } catch (\Exception $e) {
-            $attachment->setColor('danger');
-            $attachment->setText($e->getMessage());
+            $response['text'] = $e->getMessage();
         }
 
-        return $attachment;
+        return $response;
     }
 }

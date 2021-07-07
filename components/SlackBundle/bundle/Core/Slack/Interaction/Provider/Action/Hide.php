@@ -14,60 +14,82 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action;
 
-use eZ\Publish\Core\SignalSlot\Signal;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Action;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Button;
+use eZ\Publish\API\Repository\Events;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
+use Symfony\Contracts\EventDispatcher\Event;
 
-/**
- * Class Hide.
- */
 class Hide extends ActionProvider
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getAction(Signal $signal, int $index): ?Action
+    public function getAction(Event $event): ?array
     {
-        $content = $this->getContentForSignal($signal);
+        $content = $this->getContentForSignal($event);
         if (null === $content || !$content->contentInfo->published || null === $content->contentInfo->mainLocationId) {
             return null;
         }
 
-        $location = $this->repository->getLocationService()->loadLocation($content->contentInfo->mainLocationId);
-        if ($location->hidden) {
+        if ($event instanceof Events\Content\RevealContentEvent) {
+            $actionId = $this->getAlias().'.content';
+            $value = (string) $event->getContentInfo()->id;
+        } elseif ($event instanceof Events\Location\UnhideLocationEvent) {
+            $actionId = $this->getAlias().'.location';
+            $value = (string) $event->getLocation()->id;
+        } elseif (
+            $event instanceof Events\Content\HideContentEvent ||
+            $event instanceof Events\Location\HideLocationEvent ||
+            $content->contentInfo->isHidden
+        ) {
             return null;
+        } else {
+            $actionId = $this->getAlias().'.content';
+            $value = (string) $content->id;
         }
-        $button = new Button($this->getAlias(), '_t:action.hide', (string) $content->id);
-        $button->setStyle(Button::DANGER_STYLE);
 
-        return $button;
+        return [
+            'text' => $this->translator->trans('action.hide', [], 'slack'),
+            'action_id' => $actionId,
+            'value' => $value,
+            'style' => ActionProvider::DANGER_STYLE,
+        ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function execute(InteractiveMessage $message): Attachment
+    public function execute(InteractiveMessage $message, array $allActions = []): array
     {
-        $action = $message->getAction();
-        $value = (int) $action->getValue();
+        $messageAction = $message->getAction();
+        $value = (int) $messageAction['value'];
 
-        $attachment = new Attachment();
-        $attachment->setTitle('_t:action.hide');
+        $response = [];
         try {
-            $content = $this->repository->getContentService()->loadContent($value);
-            $locations = $this->repository->getLocationService()->loadLocations($content->contentInfo);
-            foreach ($locations as $location) {
+            if (str_ends_with($messageAction['action_id'], 'content')) {
+                $content = $this->repository->getContentService()->loadContent($value);
+                $this->repository->getContentService()->hideContent($content->contentInfo);
+                $response['text'] = $this->translator->trans('action.content.hid', [], 'slack');
+                $event = new Events\Content\HideContentEvent($content->contentInfo);
+            } else {
+                $location = $this->repository->getLocationService()->loadLocation($value);
                 $this->repository->getLocationService()->hideLocation($location);
+                $response['text'] = $this->translator->trans('action.location.hid', [], 'slack');
+                $event = new Events\Location\HideLocationEvent($location, $location);
             }
-            $attachment->setColor('good');
-            $attachment->setText('_t:action.locations.hid');
         } catch (\Exception $e) {
-            $attachment->setColor('danger');
-            $attachment->setText($e->getMessage());
+            $response['text'] = $e->getMessage();
+
+            return $response;
+        }
+        foreach ($allActions as $action) {
+            if ($action instanceof Unhide) {
+                $block = $action->getAction($event);
+                if (null !== $block) {
+                    $block['text'] = [
+                        'type' => 'plain_text',
+                        'text' => $block['text'],
+                    ];
+                    $block['type'] = 'button';
+                    $response['action'] = $block;
+                }
+                break;
+            }
         }
 
-        return $attachment;
+        return $response;
     }
 }

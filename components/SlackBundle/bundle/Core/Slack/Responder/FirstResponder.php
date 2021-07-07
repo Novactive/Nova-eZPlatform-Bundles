@@ -19,16 +19,8 @@ use RuntimeException;
 
 class FirstResponder
 {
-    /**
-     * Array with all responders.
-     *
-     * @var Responder[]
-     */
-    protected $responders;
+    protected array $responders;
 
-    /**
-     * FirstResponder constructor.
-     */
     public function __construct(iterable $responders)
     {
         foreach ($responders as $responder) {
@@ -36,20 +28,12 @@ class FirstResponder
         }
     }
 
-    /**
-     * Add a responder.
-     */
     public function addResponder(ResponderInterface $responder): void
     {
         $this->responders[$responder->getName()] = $responder;
     }
 
-    /**
-     * Get the Responder.
-     *
-     * @param string $name
-     */
-    public function getResponder($name): Responder
+    public function getResponder(string $name): Responder
     {
         $name = strtolower($name);
         if (isset($this->responders[$name])) {
@@ -84,7 +68,7 @@ class FirstResponder
     {
         $o = [];
         foreach ($argv as $a) {
-            if ('--' === substr($a, 0, 2)) {
+            if (strpos($a, '--') === 0) {
                 $equal = strpos($a, '=');
                 if (false !== $equal) {
                     $o[substr($a, 2, $equal - 2)] = substr($a, $equal + 1);
@@ -94,20 +78,18 @@ class FirstResponder
                         $o[$k] = true;
                     }
                 }
-            } else {
-                if ('-' === $a[0]) {
-                    if ('=' === $a[2]) {
-                        $o[$a[1]] = substr($a, 3);
-                    } else {
-                        foreach (str_split(substr($a, 1)) as $k) {
-                            if (!isset($o[$k])) {
-                                $o[$k] = true;
-                            }
+            } else if ('-' === $a[0]) {
+                if ('=' === $a[2]) {
+                    $o[$a[1]] = substr($a, 3);
+                } else {
+                    foreach (str_split(substr($a, 1)) as $k) {
+                        if (!isset($o[$k])) {
+                            $o[$k] = true;
                         }
                     }
-                } else {
-                    $o[] = $a;
                 }
+            } else {
+                $o[] = $a;
             }
         }
 

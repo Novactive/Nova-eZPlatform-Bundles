@@ -25,34 +25,16 @@ use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use Novactive\Bundle\eZSlackBundle\Repository\User as UserRepository;
 use RuntimeException;
 
-/**
- * Class User.
- */
 class User
 {
-    /**
-     * @var Repository
-     */
-    private $repository;
+    private Repository $repository;
 
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
+    private UserRepository $userRepository;
 
-    /**
-     * @var ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
-    /**
-     * @var array
-     */
-    private $languages;
+    private array $languages;
 
-    /**
-     * User constructor.
-     */
     public function __construct(
         Repository $repository,
         UserRepository $userRepository,
@@ -64,10 +46,7 @@ class User
         $this->languages = $configResolver->getParameter('languages');
     }
 
-    /**
-     * @param $paramName
-     */
-    private function getParameter($paramName)
+    private function getParameter(string $paramName)
     {
         return $this->configResolver->getParameter($paramName, 'nova_ezslack');
     }
@@ -86,8 +65,8 @@ class User
             $existingFields[] = $fieldDefinition->identifier;
         }
         if (
-            \in_array(UserRepository::SLACK_ID, $existingFields) &&
-            \in_array(UserRepository::SLACK_TEAM_ID, $existingFields)
+            \in_array(UserRepository::SLACK_ID, $existingFields, true) &&
+            \in_array(UserRepository::SLACK_TEAM_ID, $existingFields, true)
         ) {
             return;
         }
@@ -97,7 +76,7 @@ class User
         } catch (BadStateException $e) {
             $contentTypeDraft = $contentTypeService->loadContentTypeDraft($contentType->id);
         }
-        if (!\in_array(UserRepository::SLACK_ID, $existingFields)) {
+        if (!\in_array(UserRepository::SLACK_ID, $existingFields, true)) {
             $fieldCreateStruct = $contentTypeService->newFieldDefinitionCreateStruct(
                 UserRepository::SLACK_ID,
                 'ezstring'
@@ -110,7 +89,7 @@ class User
             }
             $contentTypeService->addFieldDefinition($contentTypeDraft, $fieldCreateStruct);
         }
-        if (!\in_array(UserRepository::SLACK_TEAM_ID, $existingFields)) {
+        if (!\in_array(UserRepository::SLACK_TEAM_ID, $existingFields, true)) {
             $fieldCreateStruct = $contentTypeService->newFieldDefinitionCreateStruct(
                 UserRepository::SLACK_TEAM_ID,
                 'ezstring'
@@ -172,8 +151,8 @@ class User
     {
         [$first, $last] = explode(' ', $resource->getRealName(), 2);
         $attributes = [
-            'last_name' => $first,
-            'first_name' => $last,
+            'first_name' => $first,
+            'last_name' => $last,
             'signature' => $resource->getProfile()['title'] ?? '',
             UserRepository::SLACK_ID => $resource->getId(),
             UserRepository::SLACK_TEAM_ID => $resource->getProfile()['team'],
@@ -185,9 +164,9 @@ class User
 
         $userService = $this->repository->getUserService();
         $userCreateStruct = $userService->newUserCreateStruct(
+            explode('@', $resource->getEmail())[0],
             $resource->getEmail(),
-            $resource->getEmail(),
-            md5(uniqid($resource->getId(), true)),
+            'P'.md5(uniqid($resource->getId(), true)),
             $this->languages[0],
             $contentType
         );
@@ -230,10 +209,8 @@ class User
                     try {
                         $existingUser = $userService->loadUserByLogin($userEmail);
                     } catch (NotFoundException $e) {
-                        if (null === $existingUser) {
-                            $existingUser = $userService->loadUsersByEmail($userEmail);
-                            $existingUser = $existingUser[0] ?? null;
-                        }
+                        $existingUser = $userService->loadUsersByEmail($userEmail);
+                        $existingUser = $existingUser[0] ?? null;
                     }
                 }
 

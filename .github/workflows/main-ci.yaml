@@ -59,7 +59,7 @@ jobs:
                 uses: shivammathur/setup-php@master
                 with:
                     php-version: ${{ matrix.php }}
-                    extensions: mbstring, intl
+                    extensions: mbstring, intl, redis
                 id: php
                 env:
                     COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}

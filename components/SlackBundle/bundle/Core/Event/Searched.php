@@ -12,18 +12,21 @@
 
 declare(strict_types=1);
 
-namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Attachment;
+namespace Novactive\Bundle\eZSlackBundle\Core\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;
 
-class Form extends AttachmentProvider
+class Searched extends Event
 {
-    public function getAttachment(Event $event): ?array
-    {
-        if (false === is_a($event, 'EzSystems\EzPlatformFormBuilder\Event\FormSubmitEvent')) {
-            return null;
-        }
+    private int $contentId;
 
-        return null;
+    public function __construct(int $contentId)
+    {
+        $this->contentId = $contentId;
+    }
+
+    public function getContentId(): int
+    {
+        return $this->contentId;
     }
 }

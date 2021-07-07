@@ -17,33 +17,18 @@ namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Responder;
 use eZ\Publish\API\Repository\Repository;
 use Novactive\Bundle\eZSlackBundle\Core\Converter\Message as MessageConverter;
 use Novactive\Bundle\eZSlackBundle\Core\Converter\Query as QueryConverter;
-use Novactive\Bundle\eZSlackBundle\Core\Signal\Searched;
-use Novactive\Bundle\eZSlackBundle\Core\Signal\Selected;
+use Novactive\Bundle\eZSlackBundle\Core\Event\Searched;
+use Novactive\Bundle\eZSlackBundle\Core\Event\Selected;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Message;
 
-/**
- * Class Search.
- */
 class Search extends Responder
 {
-    /**
-     * @var Repository
-     */
-    private $repository;
+    private Repository $repository;
 
-    /**
-     * @var QueryConverter
-     */
-    private $queryConverter;
+    private QueryConverter $queryConverter;
 
-    /**
-     * @var MessageConverter
-     */
-    private $messageConverter;
+    private MessageConverter $messageConverter;
 
-    /**
-     * Search constructor.
-     */
     public function __construct(
         Repository $repository,
         QueryConverter $queryConverter,
@@ -84,13 +69,13 @@ class Search extends Responder
         } elseif (1 === $results->totalCount) {
             $message->setText('Only one selected for that search!');
             $message = $this->messageConverter->convert(
-                new Selected(['contentId' => $results->searchHits[0]->valueObject->id]),
+                new Selected($results->searchHits[0]->valueObject->id),
                 $message
             );
         } else {
             $message->setText(sprintf('I found %d contents.', $results->totalCount));
             foreach ($results->searchHits as $searchHit) {
-                $signal = new Searched(['contentId' => $searchHit->valueObject->id]);
+                $signal = new Searched($searchHit->valueObject->id);
                 $contentMessage = $this->messageConverter->convert($signal);
                 // we just want the main
                 $message->addAttachment($contentMessage->getAttachments()[0]);

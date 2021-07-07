@@ -14,54 +14,60 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Attachment;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use eZ\Publish\API\Repository\Events;
 use Novactive\Bundle\eZSlackBundle\Core\Converter\Attachment as AttachmentConverter;
-use Novactive\Bundle\eZSlackBundle\Core\Signal\Searched as SearchedSignal;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
+use Novactive\Bundle\eZSlackBundle\Core\Event\Searched;
+use Novactive\Bundle\eZSlackBundle\Core\Event\Selected;
+use Novactive\Bundle\eZSlackBundle\Core\Event\Shared;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
- * Class Content.
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class Content extends AttachmentProvider
 {
-    /**
-     * @var AttachmentConverter
-     */
-    private $converter;
+    private AttachmentConverter $converter;
 
-    /**
-     * Content constructor.
-     */
     public function __construct(AttachmentConverter $converter)
     {
         $this->converter = $converter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getAttachment(Signal $signal): ?Attachment
+    public function getAttachment(Event $event): array
     {
         $contentId = 0;
-        if (isset($signal->contentId)) {
-            $contentId = (int) $signal->contentId;
-        } elseif (isset($signal->data)) {
-            $contentId = (int) ($signal->data['content_id'] ?? $signal->data['contentId'] ?? 0);
+        if ($event instanceof Shared || $event instanceof Selected || $event instanceof Searched) {
+            $contentId = $event->getContentId();
+        } elseif ($event instanceof Events\Content\PublishVersionEvent) {
+            $contentId = $event->getContent()->id;
+        } elseif (
+            $event instanceof Events\Location\HideLocationEvent ||
+            $event instanceof Events\Location\UnhideLocationEvent ||
+            $event instanceof Events\Trash\TrashEvent ||
+            $event instanceof Events\Trash\RecoverEvent
+        ) {
+            $contentId = $event->getLocation()->contentId;
+        } elseif (
+            $event instanceof Events\Content\HideContentEvent ||
+            $event instanceof Events\Content\RevealContentEvent ||
+            $event instanceof Events\ObjectState\SetContentStateEvent
+        ) {
+            $contentId = $event->getContentInfo()->id;
         }
 
         if ($contentId > 0) {
             if ('novaezslack.provider.main' === $this->getAlias()) {
-                return $this->converter->getMain($contentId);
+                return $this->converter->getMainBlocks($contentId);
             }
 
-            if ('novaezslack.provider.details' === $this->getAlias() && !$signal instanceof SearchedSignal) {
-                return $this->converter->getDetails($contentId);
+            if (!$event instanceof Searched && 'novaezslack.provider.details' === $this->getAlias()) {
+                return $this->converter->getDetailsBlock($contentId);
             }
-            if ('novaezslack.provider.preview' === $this->getAlias() && !$signal instanceof SearchedSignal) {
-                return $this->converter->getPreview($contentId);
+            if (!$event instanceof Searched && 'novaezslack.provider.preview' === $this->getAlias()) {
+                return $this->converter->getPreviewBlock($contentId);
             }
         }
 
-        return null;
+        return [];
     }
 }

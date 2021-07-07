@@ -14,76 +14,93 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Converter;
 
-use eZ\Publish\Core\SignalSlot\Signal;
-use Novactive\Bundle\eZSlackBundle\Core\Signal\Shared;
+use eZ\Publish\API\Repository\Events;
+use Novactive\Bundle\eZSlackBundle\Core\Event\Shared;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider as InteractionProvider;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Message as MessageModel;
+use Novactive\Bundle\eZSlackBundle\Core\Slack\SlackBlock\Section;
+use Symfony\Component\Notifier\Bridge\Slack\Block\SlackDividerBlock;
+use Symfony\Component\Notifier\Bridge\Slack\SlackOptions;
+use Symfony\Contracts\EventDispatcher\Event;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class Message
 {
-    /**
-     * @var InteractionProvider
-     */
-    private $provider;
+    private InteractionProvider $provider;
 
-    /**
-     * Message constructor.
-     */
-    public function __construct(InteractionProvider $provider)
+    private TranslatorInterface $translator;
+
+    public function __construct(InteractionProvider $provider, TranslatorInterface $translator)
     {
         $this->provider = $provider;
+        $this->translator = $translator;
     }
 
-    public function convert(Signal $signal, ?MessageModel $message = null): MessageModel
+    public function convert(Event $event, ?SlackOptions $slackOptions = null): SlackOptions
     {
-        if (null === $message) {
-            $message = new MessageModel();
+        if (null === $slackOptions) {
+            $slackOptions = new SlackOptions();
         }
 
-        if (null === $message->getText()) {
-            if ($signal instanceof Signal\ContentService\PublishVersionSignal) {
-                $message->setText(
-                    $signal->versionNo > 1 ? '_t:message.text.content.updated' : '_t:message.text.content.created'
-                );
+        if (
+            !isset($slackOptions->toArray()['blocks']) ||
+            !in_array('title', array_column($slackOptions->toArray()['blocks'], 'block_id'), true)
+        ) {
+            $params = [];
+            if ($event instanceof Events\Content\PublishVersionEvent) {
+                $created = 'message.text.content.created';
+                $updated = 'message.text.content.updated';
+                $headerText = $event->getVersionInfo()->versionNo > 1 ? $updated : $created;
             }
-            if ($signal instanceof Signal\LocationService\HideLocationSignal) {
-                $message->setText('_t:message.text.content.hid');
+            if ($event instanceof Events\Location\HideLocationEvent) {
+                $headerText = 'message.text.location.hid';
+                $params = ['%id%' => $event->getLocation()->id];
             }
-            if ($signal instanceof Signal\LocationService\UnhideLocationSignal) {
-                $message->setText('_t:message.text.content.unhid');
+            if ($event instanceof Events\Location\UnhideLocationEvent) {
+                $headerText = 'message.text.location.unhid';
+                $params = ['%id%' => $event->getLocation()->id];
             }
-            if ($signal instanceof Signal\TrashService\TrashSignal) {
-                $message->setText('_t:message.text.content.trashed');
+            if ($event instanceof Events\Content\HideContentEvent) {
+                $headerText = 'message.text.content.hid';
             }
-            if ($signal instanceof Signal\TrashService\RecoverSignal) {
-                $message->setText('_t:message.text.content.recovered');
+            if ($event instanceof Events\Content\RevealContentEvent) {
+                $headerText = 'message.text.content.unhid';
             }
-            if ($signal instanceof Signal\ObjectStateService\SetContentStateSignal) {
-                $message->setText('_t:message.text.content.state.updated');
+            if ($event instanceof Events\Trash\TrashEvent) {
+                $headerText = 'message.text.content.trashed';
             }
-            if ($signal instanceof Shared) {
-                $message->setText('_t:message.text.content.shared');
+            if ($event instanceof Events\Trash\RecoverEvent) {
+                $headerText = 'message.text.content.recovered';
             }
+            if ($event instanceof Events\ObjectState\SetContentStateEvent) {
+                $headerText = 'message.text.content.state.updated';
+            }
+            if ($event instanceof Shared) {
+                $headerText = 'message.text.content.shared';
+            }
+
             // eZ Platform Enterprise
-            if (
-                class_exists(\EzSystems\FormBuilder\Core\SignalSlot\Signal\FormSubmit::class) &&
-                $signal instanceof \EzSystems\FormBuilder\Core\SignalSlot\Signal\FormSubmit
-            ) {
-                $message->setText('_t:message.text.formsubmit');
+            if (is_a($event, 'EzSystems\EzPlatformFormBuilder\Event\FormSubmitEvent')) {
+                $headerText = 'message.text.formsubmit';
             }
-            if (
-                class_exists(\EzSystems\Notification\Core\SignalSlot\Signal\NotificationSignal::class) &&
-                $signal instanceof \EzSystems\Notification\Core\SignalSlot\Signal\NotificationSignal
-            ) {
-                $message->setText('_t:message.text.notification');
+
+            if ($event instanceof Events\Notification\CreateNotificationEvent) {
+                $headerText = 'message.text.notification';
+            }
+
+            if (isset($headerText)) {
+                $slackOptions
+                    ->block((new Section($this->translator->trans($headerText, $params, 'slack')))->blockId('title'))
+                    ->block(new SlackDividerBlock());
             }
         }
-        $attachments = $this->provider->getAttachments($signal);
-        $message->setAttachments($attachments);
 
-        return $message;
+        foreach ($this->provider->getAttachments($event) as $block) {
+            $slackOptions->block($block);
+        }
+
+        return $slackOptions;
     }
 }

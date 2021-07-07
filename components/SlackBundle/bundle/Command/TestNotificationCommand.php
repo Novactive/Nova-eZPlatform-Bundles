@@ -14,35 +14,28 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Command;
 
-use eZ\Publish\Core\SignalSlot\Signal\ContentService\PublishVersionSignal;
+use eZ\Publish\API\Repository\Events\Content\PublishVersionEvent;
+use eZ\Publish\API\Repository\Repository;
 use Novactive\Bundle\eZSlackBundle\Core\Dispatcher;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * Class TestNotificationCommand.
- */
 class TestNotificationCommand extends Command
 {
-    /**
-     * @var Dispatcher
-     */
-    private $dispatcher;
+    private Dispatcher $dispatcher;
 
-    /**
-     * TestNotificationCommand constructor.
-     */
-    public function __construct(Dispatcher $dispatcher)
+    private Repository $repository;
+
+    public function __construct(Dispatcher $dispatcher, Repository $repository)
     {
         $this->dispatcher = $dispatcher;
+        $this->repository = $repository;
         parent::__construct();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configure(): void
     {
         $this
@@ -52,14 +45,18 @@ class TestNotificationCommand extends Command
             ->addArgument('contentId', InputArgument::OPTIONAL, 'ContentId', 1);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $io = new SymfonyStyle($input, $output);
+        $io->title('Dispatching...');
+
         $contentId = (int) $input->getArgument('contentId');
-        $slot = new PublishVersionSignal(['contentId' => $contentId, 'versionNo' => 1]);
-        $this->dispatcher->receive($slot);
-        $output->writeln("Dispatch {$contentId} Done.");
+        $content = $this->repository->getContentService()->loadContent($contentId);
+        $event = new PublishVersionEvent($content, $content->getVersionInfo(), []);
+        $this->dispatcher->receive($event);
+
+        $io->success("Dispatch of Content {$contentId} Done.");
+
+        return 0;
     }
 }

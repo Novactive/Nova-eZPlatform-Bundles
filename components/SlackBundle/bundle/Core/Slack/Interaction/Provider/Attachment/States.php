@@ -14,33 +14,32 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Attachment;
 
-use eZ\Publish\Core\SignalSlot\Signal;
-use Novactive\Bundle\eZSlackBundle\Core\Signal\Searched;
-use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
+use Novactive\Bundle\eZSlackBundle\Core\Slack\SlackBlock\Actions;
+use Symfony\Component\Notifier\Bridge\Slack\Block\SlackDividerBlock;
+use Symfony\Component\Notifier\Bridge\Slack\Block\SlackSectionBlock;
+use Symfony\Contracts\EventDispatcher\Event;
 
-/**
- * Class States.
- */
 class States extends AttachmentProvider
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getAttachment(Signal $signal): ?Attachment
+    public function getAttachment(Event $event): ?array
     {
-        if (\count($this->actions) <= 0 || $signal instanceof Searched) {
+        if (count($this->actions) <= 0) {
             return null;
         }
-        $attachment = new Attachment();
-        $attachment->setText('_t:provider.states');
-        $actions = $this->buildActions($signal);
-        if (\count($actions) <= 0) {
+        $actions = $this->buildActions($event);
+        if (count($actions) <= 0) {
             return null;
         }
-        $attachment->setActions($actions);
-        $attachment->setCallbackId($this->getAlias().'.'.time());
-        $this->attachmentDecorator->decorate($attachment, 'states');
 
-        return $attachment;
+        $actionsBlock = new Actions();
+        foreach ($actions as $action) {
+            call_user_func_array([$actionsBlock, 'staticSelect'], $action);
+        }
+
+        return [
+            new SlackDividerBlock(),
+            (new SlackSectionBlock())->text($this->translator->trans('provider.states', [], 'slack'), false),
+            $actionsBlock,
+        ];
     }
 }

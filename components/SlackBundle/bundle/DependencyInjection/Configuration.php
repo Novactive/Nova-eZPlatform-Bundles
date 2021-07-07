@@ -17,18 +17,17 @@ namespace Novactive\Bundle\eZSlackBundle\DependencyInjection;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
-/**
- * Class Configuration.
- */
 class Configuration extends SiteAccessAware\Configuration
 {
+    public const NAMESPACE = 'nova_ezslackbundle';
+
     /**
      * {@inheritdoc}
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('nova_ezslack');
+        $treeBuilder = new TreeBuilder(self::NAMESPACE);
+        $rootNode = $treeBuilder->getRootNode();
         $systemNode = $this->generateScopeBaseNode($rootNode);
         $systemNode
             ->scalarNode('slack_client_id')->isRequired()->cannotBeEmpty()->end()
@@ -41,7 +40,7 @@ class Configuration extends SiteAccessAware\Configuration
             ->scalarNode('site_name')->end()
             ->arrayNode('notifications')
                 ->children()
-                    ->arrayNode('channels')
+                    ->arrayNode('transports')
                         ->scalarPrototype()->end()
                     ->end()
                 ->end()

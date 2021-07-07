@@ -14,27 +14,30 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action;
 
+use eZ\Publish\API\Repository\Events;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\Core\SignalSlot\Signal;
+use Novactive\Bundle\eZSlackBundle\Core\Event\Searched;
+use Novactive\Bundle\eZSlackBundle\Core\Event\Selected;
+use Novactive\Bundle\eZSlackBundle\Core\Event\Shared;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\AliasTrait;
+use Symfony\Contracts\EventDispatcher\Event;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * Class ActionProvider.
- */
 abstract class ActionProvider implements ActionProviderInterface
 {
     use AliasTrait;
 
-    /**
-     * @var Repository
-     */
-    protected $repository;
+    protected Repository $repository;
+
+    protected TranslatorInterface $translator;
+
+    public const DEFAULT_STYLE = 'default';
+    public const PRIMARY_STYLE = 'primary';
+    public const DANGER_STYLE = 'danger';
 
     /**
      * @required
-     *
-     * @return ActionProvider
      */
     public function setRepository(Repository $repository): self
     {
@@ -44,23 +47,42 @@ abstract class ActionProvider implements ActionProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @required
      */
-    public function supports($alias): bool
+    public function setTranslator(TranslatorInterface $translator): self
     {
-        return substr($alias, 0, \strlen($this->getAlias())) === $this->getAlias();
+        $this->translator = $translator;
+
+        return $this;
     }
 
-    protected function getContentForSignal(Signal $signal): ?Content
+    public function supports($alias): bool
     {
-        if (isset($signal->contentId)) {
-            return $this->repository->getContentService()->loadContent($signal->contentId);
+        return 0 === strpos($alias, $this->getAlias());
+    }
+
+    protected function getContentForSignal(Event $event): ?Content
+    {
+        if ($event instanceof Shared || $event instanceof Selected || $event instanceof Searched) {
+            return $this->repository->getContentService()->loadContent($event->getContentId());
         }
-        if (isset($signal->data['content_id'])) {
-            return $this->repository->getContentService()->loadContent($signal->data['content_id']);
+        if ($event instanceof Events\Content\PublishVersionEvent) {
+            return $this->repository->getContentService()->loadContent($event->getContent()->id);
         }
-        if (isset($signal->data['contentId'])) {
-            return $this->repository->getContentService()->loadContent($signal->data['contentId']);
+        if (
+            $event instanceof Events\Location\HideLocationEvent ||
+            $event instanceof Events\Location\UnhideLocationEvent ||
+            $event instanceof Events\Trash\TrashEvent ||
+            $event instanceof Events\Trash\RecoverEvent
+        ) {
+            return $this->repository->getContentService()->loadContent($event->getLocation()->contentId);
+        }
+        if (
+            $event instanceof Events\Content\HideContentEvent ||
+            $event instanceof Events\Content\RevealContentEvent ||
+            $event instanceof Events\ObjectState\SetContentStateEvent
+        ) {
+            return $this->repository->getContentService()->loadContent($event->getContentInfo()->id);
         }
 
         return null;

@@ -20,27 +20,15 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\User\User as ValueUser;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
-/**
- * Class User.
- */
 class User
 {
     public const SLACK_ID = 'novaezslack_id';
     public const SLACK_TEAM_ID = 'novaezslack_teamid';
 
-    /**
-     * @var Repository
-     */
-    private $repository;
+    private Repository $repository;
 
-    /**
-     * @var ConfigResolverInterface
-     */
-    private $configResolver;
+    private ConfigResolverInterface $configResolver;
 
-    /**
-     * User constructor.
-     */
     public function __construct(Repository $repository, ConfigResolverInterface $configResolver)
     {
         $this->repository = $repository;

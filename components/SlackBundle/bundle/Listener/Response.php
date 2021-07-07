@@ -15,8 +15,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZSlackBundle\Listener;
 
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 /**
  * Class Response.
@@ -25,37 +24,26 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class Response
 {
-    /**
-     * @var RouterInterface
-     */
-    private $router;
+    private ClientRegistry $clientRegistry;
 
-    /**
-     * @var ClientRegistry
-     */
-    private $clientRegistry;
-
-    /**
-     * Response constructor.
-     */
-    public function __construct(RouterInterface $router, ClientRegistry $clientRegistry)
+    public function __construct(ClientRegistry $clientRegistry)
     {
-        $this->router = $router;
         $this->clientRegistry = $clientRegistry;
     }
 
-    public function onKernelResponse(FilterResponseEvent $event): void
+    public function onKernelResponse(ResponseEvent $event): void
     {
         $response = $event->getResponse();
         $connectURL = $this->clientRegistry->getClient('slack')->redirect(
-            ['team:read', 'users.profile:read', 'users:read', 'users:read.email']
+            ['team:read', 'users.profile:read', 'users:read', 'users:read.email'],
+            []
         )->getTargetUrl();
         $slackAssetPrefix = 'https://platform.slack-edge.com';
         $code = <<<END
 <script type="text/javascript">
 $(function () {
 "use strict";
-var slackButton = $("<a/>").attr({href:"{$connectURL}", class: "", style:"margin-top:0.95rem; display:inline-block"});
+var slackButton = $("<a/>").attr({href:"{$connectURL}", class: "", style:"margin-right:20px; display:inline-block"});
 var slackImage = $("<img/>").attr({
 src: "{$slackAssetPrefix}/img/sign_in_with_slack.png",
 srcset: "{$slackAssetPrefix}/img/sign_in_with_slack.png 1x, {$slackAssetPrefix}/img/sign_in_with_slack@2x.png 2x",
@@ -63,7 +51,7 @@ height: 40,
 width: 172
 });
 slackButton.append(slackImage);
-slackButton.insertBefore(".ez-login__form-wrapper form button[type=submit]:first");
+slackButton.insertBefore(".ez-login__actions-wrapper form button[type=submit]:first");
 });
 </script>
 END;

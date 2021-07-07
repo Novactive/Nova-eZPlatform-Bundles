@@ -19,28 +19,16 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Class RemoveObjectStatesCommand.
- */
 class RemoveObjectStatesCommand extends Command
 {
-    /**
-     * @var Repository
-     */
-    private $repository;
+    private Repository $repository;
 
-    /**
-     * TestSearchCommand constructor.
-     */
     public function __construct(Repository $firstResponder)
     {
         $this->repository = $firstResponder;
         parent::__construct();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configure(): void
     {
         $this
@@ -49,9 +37,6 @@ class RemoveObjectStatesCommand extends Command
             ->setHidden(true);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $admin = $this->repository->getUserService()->loadUser(14);
