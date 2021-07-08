@@ -2,7 +2,8 @@
     {{ ez_render_field(content,identifier,  {
         parameters: {
             'alias': alias,
-            'class': classes|join(' ')
+            'class': classes|join(' '),
+            'alt' : imageAssetAlternativeText
         }
     } ) }}
 {% endif %}

@@ -213,9 +213,12 @@ final class ImageExtension extends AbstractExtension
             return sprintf($placeholderTag, "{$content->contentInfo->name}(#{$content->id}) on {$identifier}");
         }
 
+        $imageAssetAlternativeText = null;
+
         if ($field->value instanceof ImageAssetValue && $field->value->destinationContentId > 0) {
             $content = $this->wrapperFactory->createByContentId((int) $field->value->destinationContentId)->content;
             $identifier = 'image';
+            $imageAssetAlternativeText = $field->value->alternativeText;
         }
 
         $field = $content->getField($identifier);
@@ -234,6 +237,7 @@ final class ImageExtension extends AbstractExtension
                 'identifier' => $identifier,
                 'alias' => $alias,
                 'classes' => $params['classes'] ?? [],
+                'imageAssetAlternativeText' => $imageAssetAlternativeText
             ]
         );
     }
