@@ -1,0 +1,47 @@
+{
+    "name": "novactive/ez2fabundle",
+    "description": "Novactive eZ 2FA Bundle is an eZ Platform bundle that provides two-factor authentication for your ezplatform project",
+    "keywords": [
+        "two-factor",
+        "authentication",
+        "ezpublish",
+        "novactive",
+        "ezplatform"
+    ],
+    "homepage": "https://github.com/Novactive/NovaeZ2FA",
+    "type": "ezplatform-bundle",
+    "authors": [
+        {
+            "name": "Novactive",
+            "homepage": "https://www.novactive.us",
+            "email": "dir.tech@novactive.com"
+        },
+        {
+            "name": "Sebastien Morel",
+            "homepage": "https://github.com/Plopix",
+            "email": "morel.seb@gmail.com"
+        }
+    ],
+    "license": [
+        "MIT"
+    ],
+    "require": {
+        "php": "^7.3",
+        "scheb/2fa-google-authenticator": "*",
+        "scheb/2fa": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Novactive\\Bundle\\eZ2FABundle\\": "bundle"
+        }
+    },
+    "extra": {
+        "thanks": {
+            "name": "ezsystems/ezplatform",
+            "url": "https://github.com/ezsystems/ezplatform"
+        }
+    }
+}

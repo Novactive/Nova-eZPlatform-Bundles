@@ -1,0 +1,2 @@
+_novaez2fa_routes:
+    resource: '@NovaeZ2FABundle/Resources/config/routing.yaml'

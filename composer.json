@@ -35,7 +35,8 @@
             "Novactive\\NovaeZMaintenanceBundle\\": "components/MaintenanceBundle/bundle",
             "Novactive\\Bundle\\eZFastlyImageOptimizerBundle\\": "components/FastlyImageOptimizerBundle/bundle",
             "Novactive\\Bundle\\eZAlgoliaSearchEngine\\": "components/AlgoliaSearchEngine/bundle",
-            "Novactive\\Bundle\\eZAlgoliaSearchEngine\\Tests\\": "components/AlgoliaSearchEngine/tests/Tests"
+            "Novactive\\Bundle\\eZAlgoliaSearchEngine\\Tests\\": "components/AlgoliaSearchEngine/tests/Tests",
+            "Novactive\\Bundle\\eZ2FABundle\\": "components/2FABundle/bundle"
         }
     },
     "require": {
@@ -59,6 +60,7 @@
         "twig/twig": "^3.0",
         "knplabs/knp-menu": "^3.1",
         "behat/behat": "^3.8",
-        "friends-of-behat/mink-extension": "^2.5"
+        "friends-of-behat/mink-extension": "^2.5",
+        "ext-pdo": "*"
     }
 }
