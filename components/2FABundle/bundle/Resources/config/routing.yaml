@@ -7,3 +7,13 @@
 
 2fa_login_check:
     path: /2fa_check
+
+2fa_setup:
+    path: /2fa_setup
+    defaults:
+        _controller: Novactive\Bundle\eZ2FABundle\Controller\TwoFactorAuthController::setupAction
+
+2fa_reset:
+    path: /2fa_reset
+    defaults:
+        _controller: Novactive\Bundle\eZ2FABundle\Controller\TwoFactorAuthController::resetAction

@@ -2,9 +2,14 @@
 
 ----
 
-Novactive eZ 2FA Bundle provides two-factor authentication for your ezplatform project
+Novactive eZ 2FA Bundle provides two-factor authentication for your ezplatform/ibexa project.
 
 ## Installation
+
+### Requirements
+
+* eZ Platform 3.1+
+* PHP 7.3
 
 ### Use Composer
 
@@ -59,6 +64,24 @@ security:
     access_control:
         - { path: ^/logout, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/2fa, role: IS_AUTHENTICATED_2FA_IN_PROGRESS }
+
+```
+
+### Add new configuration
+
+The values can be updated according to the project specification
+
+```yaml
+# config/packages/scheb_two_factor.yaml
+
+scheb_two_factor:
+    google:
+        enabled: true
+        server_name: Local Ez Server                # Server name used in QR code
+        issuer: EzIssuer                            # Issuer name used in QR code
+        digits: 6                                   # Number of digits in authentication code
+        window: 1                                   # How many codes before/after the current one would be accepted as valid
+        template: "@ezdesign/2fa/auth.html.twig"    # Template for the 2FA login page
 
 ```
 

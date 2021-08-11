@@ -9,6 +9,7 @@ services:
 
 
     Novactive\Bundle\eZ2FABundle\Listener\UserEventSubscriber: ~
+    Novactive\Bundle\eZ2FABundle\Listener\MenuEventSubscriber: ~
 
     Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareQueryExecutor:
         arguments:
@@ -16,3 +17,9 @@ services:
 
     Novactive\Bundle\eZ2FABundle\Security\TwoFactorUserProviderDecorator:
         decorates: 'ezpublish.security.user_provider'
+
+    Novactive\Bundle\eZ2FABundle\Controller\:
+        resource: '../../Controller'
+        tags: ['controller.service_arguments']
+
+    Novactive\Bundle\eZ2FABundle\Core\QRCodeGenerator: ~

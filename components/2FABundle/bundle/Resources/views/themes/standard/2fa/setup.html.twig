@@ -1,0 +1,76 @@
+{% extends '@ezdesign/ui/layout.html.twig' %}
+
+{% set pageTitle = 'Two-factor Authentication Setup' %}
+
+{% block title %}{{ pageTitle }}{% endblock %}
+
+{%- block breadcrumbs -%}
+    {% include '@ezdesign/ui/breadcrumbs.html.twig' with { items: [
+        { value: pageTitle }
+    ]} %}
+{%- endblock -%}
+
+{%- block page_title -%}
+    {% include '@ezdesign/ui/page_title.html.twig' with {
+        title: pageTitle,
+        icon_name: 'article'
+    } %}
+{%- endblock -%}
+
+{%- block content -%}
+    <section class="container ez-container mt-4">
+        <div class="card ez-card ez-card--light">
+            <div class="card-body">
+
+                {% if success is defined %}
+
+                    <h5>Two-factor authentication has been successfuly completed.</h5>
+
+                {% elseif reset is defined %}
+
+                    <div class="ez-data-source__message--main">Two-factor authentication is already set up.</div>
+                    <div class="ez-data-source__message--main">Click
+                        <a href="{{ ez_path(ez_route('2fa_reset')) }}"><strong>Here</strong></a> to reset it.
+                    </div>
+
+                {% else %}
+
+                    <div class="ez-data-source__message--main">Scan this QR code in your Google Authenticator application.</div>
+                    <div class="ez-data-source__message--main">Enter 6-digit code generated for this account.</div>
+
+                    {{ qrCode|raw }}
+
+                    {{ form_start(form, {'attr': {'class': 'ez-form-validate'}, 'method':'post'}) }}
+
+                    <div class="ez-field ez-field-edit--ezstring ez-field-edit--required">
+                        <div class="ez-field__label-wrapper">
+                            {{ form_label(form.sixdigitCode, null, {'label_attr': {'class': 'ez-field__label ez-label required'}}) }}
+                        </div>
+                        <div class="ez-field-edit__data">
+                            <div class="ez-data-source">
+                                {{ form_widget(form.sixdigitCode, {'attr': {'class': 'ez-data-source__input form-control'}}) }}
+                            </div>
+                        </div>
+                        {% for error in form.sixdigitCode.vars.errors %}
+                            <em class="ez-field-edit__error">{{ error.message }}</em>
+                        {% endfor %}
+                    </div>
+
+                    <br/>
+                    <div class="ez-field">
+                        <div class="ez-field__data">
+                            <div class="ez-data-source">
+                                {{ form_row(form.submit, {'attr': {'class': 'ez-data-source__btn-add btn btn-secondary'}}) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    {{ form_rest(form) }}
+                    {{ form_end(form) }}
+
+                {% endif %}
+
+            </div>
+        </div>
+    </section>
+{%- endblock -%}

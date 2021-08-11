@@ -48,6 +48,7 @@ final class GenerateUsersGoogleAuthSecretCommand extends Command
         $io->writeln($this->googleAuthenticator->generateSecret());
 
         $io->success('Done.');
+
         return 0;
     }
 

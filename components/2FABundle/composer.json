@@ -28,7 +28,8 @@
     "require": {
         "php": "^7.3",
         "scheb/2fa-google-authenticator": "*",
-        "scheb/2fa": "*"
+        "scheb/2fa": "*",
+        "bacon/bacon-qr-code": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"

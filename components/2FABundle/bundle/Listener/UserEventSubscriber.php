@@ -17,7 +17,6 @@ namespace Novactive\Bundle\eZ2FABundle\Listener;
 use Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareQueryExecutor;
 use eZ\Publish\API\Repository\Events\User\CreateUserEvent;
 use eZ\Publish\API\Repository\Events\User\DeleteUserEvent;
-use PDO;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -43,23 +42,14 @@ final class UserEventSubscriber implements EventSubscriberInterface
 
     public function onCreateUser(CreateUserEvent $event): void
     {
-        $userId = $event->getUser()->id;
-        $secret = $this->googleAuthenticator->generateSecret();
-
-        $query = <<<QUERY
-                INSERT INTO user_google_auth_secret (user_contentobject_id, google_authentication_secret) 
-                VALUES (?, ?)
-            QUERY;
-        ($this->queryExecutor)($query, [$userId, $secret], [PDO::PARAM_INT, PDO::PARAM_STR]);
+        $this->queryExecutor->insertUserGoogleAuthSecret(
+            $event->getUser()->id,
+            $this->googleAuthenticator->generateSecret()
+        );
     }
 
     public function onDeleteUser(DeleteUserEvent $event): void
     {
-        $userId = $event->getUser()->id;
-        $query = <<<QUERY
-                DELETE FROM user_google_auth_secret
-                WHERE user_contentobject_id = ? 
-            QUERY;
-        ($this->queryExecutor)($query, [$userId], [PDO::PARAM_INT]);
+        $this->queryExecutor->deleteUserGoogleAuthSecret($event->getUser()->id);
     }
 }

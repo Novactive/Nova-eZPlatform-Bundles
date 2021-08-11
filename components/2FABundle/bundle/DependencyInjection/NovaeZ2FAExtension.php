@@ -5,7 +5,7 @@
  *
  * @package   NovaeZ2FABundle
  *
- * @author    Yassine HANINI
+ * @author    Maxim Strukov <maxim.strukov@almaviacx.com>
  * @copyright 2021 AlmaviaCX
  * @license   https://github.com/Novactive/NovaeZ2FA/blob/main/LICENSE
  */

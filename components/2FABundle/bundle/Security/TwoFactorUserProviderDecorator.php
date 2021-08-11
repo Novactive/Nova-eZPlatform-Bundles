@@ -44,14 +44,26 @@ final class TwoFactorUserProviderDecorator implements UserProviderInterface
                 WHERE user_contentobject_id = ?
                 LIMIT 1
             QUERY;
-            $results = ($this->queryExecutor)($query,
-                                              [$user->getAPIUserReference()->getUserId()],
-                                              [PDO::PARAM_INT])->fetchAssociative();
+            $results = ($this->queryExecutor)(
+                $query,
+                [$user->getAPIUserReference()->getUserId()],
+                [PDO::PARAM_INT]
+            )->fetchAssociative();
 
-            return new UserGoogleAuthSecret($user->getAPIUser(), $user->getRoles(), $results['secret'] ?? null);
+            return new UserGoogleAuthSecret(
+                $user->getAPIUser(),
+                $user->getRoles(),
+                $results['secret'] ?? null,
+                is_array($results)
+            );
         }
 
         return $user;
+    }
+
+    public function loadUserByIdentifier(string $identifier)
+    {
+        return $this->loadUserByUsername($identifier);
     }
 
     public function refreshUser(UserInterface $user): UserInterface
