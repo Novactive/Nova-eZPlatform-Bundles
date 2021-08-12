@@ -51,7 +51,7 @@ class Tracking implements ModifierInterface
 
         return preg_replace_callback(
             '/<a(.[^>]*)href="http(s)?(.[^"]*)"/uimx',
-            function ($aInput) use ($mailing, $uniqId, $broadcast) {
+            function ($aInput) use ($uniqId, $broadcast) {
                 $continueUrl = $this->router->generate(
                     'novaezmailing_t_continue',
                     [

@@ -39,7 +39,7 @@ class ChainPlaceholderProvider implements PlaceholderProvider
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getPlaceholder(ImageValue $value, array $options = []): string
     {

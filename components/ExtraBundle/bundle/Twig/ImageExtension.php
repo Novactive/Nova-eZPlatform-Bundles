@@ -237,7 +237,7 @@ final class ImageExtension extends AbstractExtension
                 'identifier' => $identifier,
                 'alias' => $alias,
                 'classes' => $params['classes'] ?? [],
-                'imageAssetAlternativeText' => $imageAssetAlternativeText
+                'imageAssetAlternativeText' => $imageAssetAlternativeText,
             ]
         );
     }

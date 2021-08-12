@@ -51,7 +51,6 @@ jobs:
             APP_DEBUG: 1
             COMPOSER_MEMORY_LIMIT: 4G
             PANTHER_EXTERNAL_BASE_URI: http://127.0.0.1:8000
-            PANTHER_CHROME_DRIVER_BINARY: /home/runner/.chrome/chromedriver
         steps:
             -   uses: actions/checkout@v2
 
@@ -63,11 +62,6 @@ jobs:
                 id: php
                 env:
                     COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            -   name: Install Latest Chrome Driver
-                run: |
-                    wget https://chromedriver.storage.googleapis.com/91.0.4472.101/chromedriver_linux64.zip -P /home/runner/
-                    unzip /home/runner/chromedriver_linux64.zip -d /home/runner/.chrome
 
             -   name: Install Symfony Server
                 run: |
@@ -140,6 +134,7 @@ jobs:
 
             -   name: Finally Run the tests
                 run: |
+                    php vendor/bin/bdi detect drivers
                     echo  echo ::group::..:: Global Mono Repo Testing ::..
                     APP_ENV=test php ./vendor/bin/phpunit -c "tests" "tests" --exclude-group behat
                     echo ::endgroup::
@@ -178,7 +173,6 @@ jobs:
             APP_DEBUG: 1
             COMPOSER_MEMORY_LIMIT: 4G
             PANTHER_EXTERNAL_BASE_URI: http://127.0.0.1:8000
-            PANTHER_CHROME_DRIVER_BINARY: /home/runner/.chrome/chromedriver
         steps:
             -   uses: actions/checkout@v2
 
@@ -190,11 +184,6 @@ jobs:
                 id: php
                 env:
                     COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            -   name: Install Latest Chrome Driver
-                run: |
-                    wget https://chromedriver.storage.googleapis.com/91.0.4472.101/chromedriver_linux64.zip -P /home/runner/
-                    unzip /home/runner/chromedriver_linux64.zip -d /home/runner/.chrome
 
             -   name: Install Symfony Server
                 run: |
@@ -277,6 +266,7 @@ jobs:
 
             -   name: Finally Run the tests
                 run: |
+                    php vendor/bin/bdi detect drivers
                     echo  echo ::group::..:: Global Mono Repo Testing ::..
                     APP_ENV=test php ./vendor/bin/phpunit -c "tests" "tests" --exclude-group behat
                     echo ::endgroup::

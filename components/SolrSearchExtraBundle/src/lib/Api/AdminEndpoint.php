@@ -19,7 +19,7 @@ use EzSystems\EzPlatformSolrSearchEngine\Gateway\Endpoint;
 class AdminEndpoint extends Endpoint
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getIdentifier()
     {

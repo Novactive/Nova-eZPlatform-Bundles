@@ -88,7 +88,7 @@ class ImageFieldValueConverter implements FieldValueConverterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function support(string $fieldTypeIdentifier): bool
     {
