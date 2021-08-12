@@ -61,6 +61,7 @@ post-install:
 
 	@echo "..:: Do bundle specifics ::.."
 	@$(MYSQL) < components/SEOBundle/bundle/Resources/sql/schema.sql
+	@$(MYSQL) < components/2FABundle/bundle/Resources/sql/schema.sql
 	@cd $(EZ_DIR) && $(CONSOLE) novaezextra:contenttypes:create ../tests/vmcd.xlsx
 	@cd $(EZ_DIR) && $(CONSOLE) novaezprotectedcontent:install
 	@cd $(EZ_DIR) && $(CONSOLE) novaezhelptooltip:create
