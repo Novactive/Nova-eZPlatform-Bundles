@@ -77,7 +77,7 @@ installez: install ## Install eZ as the local project
 	@cd $(EZ_DIR) && $(COMPOSER) ezplatform-install
 	@cd $(EZ_DIR) && $(CONSOLE) cache:clear
 
-	@(MAKE) post-install
+	@$(MAKE) post-install
 
 
 .PHONY: installibexa
