@@ -116,6 +116,7 @@ jobs:
 
                     echo ::group::..:: Do bundle specifics ::..
                     mysql -u root -h 127.0.0.1 -P 3306 ezplatform < ../components/SEOBundle/bundle/Resources/sql/schema.sql
+                    mysql -u root -h 127.0.0.1 -P 3306 ezplatform < ../components/2FABundle/bundle/Resources/sql/schema.sql
                     bin/console novaezextra:contenttypes:create ../tests/vmcd.xlsx
                     bin/console novaezprotectedcontent:install
                     bin/console novaezmailing:install
@@ -245,6 +246,7 @@ jobs:
 
                     echo ::group::..:: Do bundle specifics ::..
                     mysql -u root -h 127.0.0.1 -P 3306 ezplatform < ../components/SEOBundle/bundle/Resources/sql/schema.sql
+                    mysql -u root -h 127.0.0.1 -P 3306 ezplatform < ../components/2FABundle/bundle/Resources/sql/schema.sql
                     php bin/console novaezextra:contenttypes:create ../tests/vmcd.xlsx
                     php bin/console novaezprotectedcontent:install
                     php bin/console novaezmailing:install
@@ -262,7 +264,9 @@ jobs:
                 run: curl -I http://127.0.0.1:8000 | grep "HTTP/1.1 200 OK"
 
             -   name: Update PHP Unit
-                run: composer update && composer require -W phpunit/phpunit:^9.5 symfony/phpunit-bridge:^5.3
+                run: |
+                    composer update && composer require -W phpunit/phpunit:^9.5 symfony/phpunit-bridge:^5.3
+                    rm -f ezplatform/config/packages/test/doctrine.yaml
 
             -   name: Finally Run the tests
                 run: |

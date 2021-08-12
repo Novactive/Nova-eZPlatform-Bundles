@@ -56,6 +56,7 @@ post-install:
 
 	@echo "..:: Do bundle specifics ::.."
 	@$(MYSQL) < components/SEOBundle/bundle/Resources/sql/schema.sql
+	@$(MYSQL) < components/2FABundle/bundle/Resources/sql/schema.sql
 	@cd $(EZ_DIR) && $(CONSOLE) novaezextra:contenttypes:create ../tests/vmcd.xlsx
 	@cd $(EZ_DIR) && $(CONSOLE) novaezprotectedcontent:install
 	@cd $(EZ_DIR) && $(CONSOLE) novaezhelptooltip:create
@@ -97,6 +98,7 @@ installibexa: install ## Install Ibexa as the local project
 	@$(MAKE) post-install
 	@cd $(EZ_DIR) && $(COMPOSER) update
 	@cd $(EZ_DIR) && $(COMPOSER) require -W phpunit/phpunit:^9.5 symfony/phpunit-bridge:^5.3
+	@rm -f $(EZ_DIR)/config/packages/test/doctrine.yaml
 
 
 .PHONY: serve
