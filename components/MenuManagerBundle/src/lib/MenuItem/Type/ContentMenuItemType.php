@@ -117,7 +117,7 @@ class ContentMenuItemType extends DefaultMenuItemType
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function fromHash($hash): ?MenuItem
     {

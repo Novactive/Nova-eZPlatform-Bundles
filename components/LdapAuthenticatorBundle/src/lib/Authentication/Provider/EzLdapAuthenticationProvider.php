@@ -51,7 +51,7 @@ class EzLdapAuthenticationProvider extends LdapBindAuthenticationProvider
     protected $queryString;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function __construct(
         UserProviderInterface $userProvider,
@@ -123,7 +123,7 @@ class EzLdapAuthenticationProvider extends LdapBindAuthenticationProvider
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function checkAuthentication(UserInterface $user, UsernamePasswordToken $token): void
     {

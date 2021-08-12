@@ -30,7 +30,7 @@ class EzLdapAuthenticatorBundle extends Bundle
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function build(ContainerBuilder $container): void
     {

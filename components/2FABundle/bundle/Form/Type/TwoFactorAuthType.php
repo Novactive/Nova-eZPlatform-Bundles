@@ -15,10 +15,10 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZ2FABundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 final class TwoFactorAuthType extends AbstractType
@@ -37,8 +37,8 @@ final class TwoFactorAuthType extends AbstractType
                             [
                                 'message' => '6-digit code is required to complete the setup',
                             ]
-                        )
-                    ]
+                        ),
+                    ],
                 ]
             )
             ->add('secretKey', HiddenType::class, ['required' => true])

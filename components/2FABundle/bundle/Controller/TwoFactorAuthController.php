@@ -14,14 +14,14 @@ namespace Novactive\Bundle\eZ2FABundle\Controller;
 
 use EzSystems\EzPlatformAdminUiBundle\Controller\Controller;
 use Novactive\Bundle\eZ2FABundle\Core\QRCodeGenerator;
+use Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareQueryExecutor;
 use Novactive\Bundle\eZ2FABundle\Entity\UserGoogleAuthSecret;
 use Novactive\Bundle\eZ2FABundle\Form\Type\TwoFactorAuthType;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator;
-use Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareQueryExecutor;
+use Symfony\Component\HttpFoundation\Response;
 
 class TwoFactorAuthController extends Controller
 {
@@ -38,7 +38,7 @@ class TwoFactorAuthController extends Controller
             return $this->render(
                 '@ezdesign/2fa/setup.html.twig',
                 [
-                    'reset' => true
+                    'reset' => true,
                 ]
             );
         }
@@ -61,7 +61,7 @@ class TwoFactorAuthController extends Controller
                 return $this->render(
                     '@ezdesign/2fa/setup.html.twig',
                     [
-                        'success' => true
+                        'success' => true,
                     ]
                 );
             }
@@ -73,7 +73,7 @@ class TwoFactorAuthController extends Controller
             '@ezdesign/2fa/setup.html.twig',
             [
                 'qrCode' => $QRCodeGenerator->createFromUser($user),
-                'form' => $form->createView()
+                'form' => $form->createView(),
             ]
         );
     }

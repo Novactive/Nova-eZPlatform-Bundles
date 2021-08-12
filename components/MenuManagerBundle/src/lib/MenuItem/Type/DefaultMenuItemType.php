@@ -121,7 +121,7 @@ class DefaultMenuItemType extends AbstractMenuItemType
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function toMenuItemLink(MenuItem $menuItem): ?MenuItemValue
     {

@@ -14,9 +14,9 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZ2FABundle\Listener;
 
-use Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareQueryExecutor;
 use eZ\Publish\API\Repository\Events\User\CreateUserEvent;
 use eZ\Publish\API\Repository\Events\User\DeleteUserEvent;
+use Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareQueryExecutor;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

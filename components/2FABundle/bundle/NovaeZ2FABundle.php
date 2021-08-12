@@ -14,11 +14,11 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZ2FABundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use LogicException;
+use Novactive\Bundle\eZ2FABundle\DependencyInjection\NovaeZ2FAExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use Novactive\Bundle\eZ2FABundle\DependencyInjection\NovaeZ2FAExtension;
-use LogicException;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 final class NovaeZ2FABundle extends Bundle
 {

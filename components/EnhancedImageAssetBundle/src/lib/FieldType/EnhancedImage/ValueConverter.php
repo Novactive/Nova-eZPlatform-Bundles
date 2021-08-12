@@ -20,7 +20,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\ImageConvert
 class ValueConverter extends ImageConverter
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function fillXml($imageData, $pathInfo, $timestamp): string
     {
@@ -40,7 +40,7 @@ class ValueConverter extends ImageConverter
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function parseLegacyXml($xml): array
     {

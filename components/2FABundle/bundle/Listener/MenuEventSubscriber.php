@@ -14,9 +14,9 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZ2FABundle\Listener;
 
+use EzSystems\EzPlatformAdminUi\Menu\Event\ConfigureMenuEvent;
 use Knp\Menu\Util\MenuManipulator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use EzSystems\EzPlatformAdminUi\Menu\Event\ConfigureMenuEvent;
 
 final class MenuEventSubscriber implements EventSubscriberInterface
 {
@@ -33,7 +33,7 @@ final class MenuEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            ConfigureMenuEvent::USER_MENU => ['onConfigureUserMenu', -200]
+            ConfigureMenuEvent::USER_MENU => ['onConfigureUserMenu', -200],
         ];
     }
 

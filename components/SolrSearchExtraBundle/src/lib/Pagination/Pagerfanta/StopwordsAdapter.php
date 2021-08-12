@@ -38,7 +38,7 @@ class StopwordsAdapter implements AdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getNbResults()
     {
@@ -52,7 +52,7 @@ class StopwordsAdapter implements AdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getSlice($offset, $length)
     {

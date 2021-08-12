@@ -273,7 +273,9 @@ jobs:
                 run: curl -I http://127.0.0.1:8000 | grep "HTTP/1.1 200 OK"
 
             -   name: Update PHP Unit
-                run: composer update && composer require -W phpunit/phpunit:^9.5 symfony/phpunit-bridge:^5.3
+                run: |
+                    composer update && composer require -W phpunit/phpunit:^9.5 symfony/phpunit-bridge:^5.3
+                    rm -f ezplatform/config/packages/test/doctrine.yaml
 
             -   name: Finally Run the tests
                 run: |

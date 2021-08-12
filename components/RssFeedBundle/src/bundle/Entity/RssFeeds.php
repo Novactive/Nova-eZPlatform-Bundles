@@ -209,7 +209,7 @@ class RssFeeds
         return $this;
     }
 
-    public function addFeedItem(\Novactive\EzRssFeedBundle\Entity\RssFeedItems $feedItem): self
+    public function addFeedItem(RssFeedItems $feedItem): self
     {
         $this->feedItems[] = $feedItem;
         $feedItem->setRssFeeds($this);
@@ -220,7 +220,7 @@ class RssFeeds
     /**
      * @return bool TRUE if this collection contained the specified element, FALSE otherwise
      */
-    public function removeFeedItem(\Novactive\EzRssFeedBundle\Entity\RssFeedItems $feedItem): bool
+    public function removeFeedItem(RssFeedItems $feedItem): bool
     {
         return $this->feedItems->removeElement($feedItem);
     }

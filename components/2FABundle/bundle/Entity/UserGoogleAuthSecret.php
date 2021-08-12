@@ -14,9 +14,9 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZ2FABundle\Entity;
 
+use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
-use eZ\Publish\API\Repository\Values\User\User as APIUser;
 
 final class UserGoogleAuthSecret extends User implements TwoFactorInterface
 {
@@ -40,7 +40,7 @@ final class UserGoogleAuthSecret extends User implements TwoFactorInterface
 
     public function isGoogleAuthenticatorEnabled(): bool
     {
-        return $this->secret !== null;
+        return null !== $this->secret;
     }
 
     public function getGoogleAuthenticatorUsername(): string
@@ -74,7 +74,7 @@ final class UserGoogleAuthSecret extends User implements TwoFactorInterface
             'reference' => $this->getAPIUserReference(),
             'roles' => $this->getRoles(),
             'secret' => $this->secret,
-            'setupComplete' => $this->isSetupComplete()
+            'setupComplete' => $this->isSetupComplete(),
         ];
     }
 }

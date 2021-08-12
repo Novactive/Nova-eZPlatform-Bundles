@@ -14,9 +14,9 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZ2FABundle\Core;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry as Registry;
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
-use Doctrine\DBAL\Connection;
 use PDO;
 
 final class SiteAccessAwareQueryExecutor
@@ -50,7 +50,7 @@ final class SiteAccessAwareQueryExecutor
         /** @var Connection $connection */
         $connection = $this->registry->getConnection($this->getConnectionName());
 
-        if (stripos($cleanQuery, 'select') === 0) {
+        if (0 === stripos($cleanQuery, 'select')) {
             return $connection->executeQuery($cleanQuery, $params, $types);
         }
 

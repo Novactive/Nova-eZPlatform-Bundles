@@ -102,6 +102,7 @@ installibexa: install ## Install Ibexa as the local project
 	@$(MAKE) post-install
 	@cd $(EZ_DIR) && $(COMPOSER) update
 	@cd $(EZ_DIR) && $(COMPOSER) require -W phpunit/phpunit:^9.5 symfony/phpunit-bridge:^5.3
+	@rm -f $(EZ_DIR)/config/packages/test/doctrine.yaml
 
 
 .PHONY: serve

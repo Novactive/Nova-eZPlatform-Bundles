@@ -14,9 +14,9 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZ2FABundle\Security;
 
+use eZ\Publish\Core\MVC\Symfony\Security\User;
 use Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareQueryExecutor;
 use Novactive\Bundle\eZ2FABundle\Entity\UserGoogleAuthSecret;
-use eZ\Publish\Core\MVC\Symfony\Security\User;
 use PDO;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -39,6 +39,7 @@ final class TwoFactorUserProviderDecorator implements UserProviderInterface
         $this->queryExecutor = $queryExecutor;
     }
 
+    /** @SuppressWarnings(PHPMD) */
     public function loadUserByUsername(string $username)
     {
         $user = $this->provider->loadUserByUsername($username);
