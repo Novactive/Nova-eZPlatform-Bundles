@@ -30,7 +30,7 @@ Then inject the bundle in the `config\bundles.php` of your application.
 
 Make sure you add this route to your routing:
 
-```yml
+```yaml
 # config/routes.yaml
 
 _novaez2fa_routes:

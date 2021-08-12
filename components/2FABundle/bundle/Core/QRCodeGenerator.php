@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * NovaeZ2FABundle.
  *
  * @package   NovaeZ2FABundle
@@ -23,7 +23,10 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator
 
 final class QRCodeGenerator
 {
-    private GoogleAuthenticator $googleAuthenticator;
+    /**
+     * @var GoogleAuthenticator
+     */
+    private $googleAuthenticator;
 
     public function __construct(GoogleAuthenticator $googleAuthenticator)
     {

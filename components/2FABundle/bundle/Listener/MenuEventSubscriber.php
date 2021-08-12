@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * NovaeZ2FABundle.
  *
  * @package   NovaeZ2FABundle
@@ -20,7 +20,10 @@ use EzSystems\EzPlatformAdminUi\Menu\Event\ConfigureMenuEvent;
 
 final class MenuEventSubscriber implements EventSubscriberInterface
 {
-    private MenuManipulator $menuManipulator;
+    /**
+     * @var MenuManipulator
+     */
+    private $menuManipulator;
 
     public function __construct(MenuManipulator $menuManipulator)
     {

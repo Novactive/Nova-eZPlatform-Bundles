@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * NovaeZ2FABundle.
  *
  * @package   NovaeZ2FABundle
@@ -22,9 +22,15 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class UserEventSubscriber implements EventSubscriberInterface
 {
-    private GoogleAuthenticator $googleAuthenticator;
+    /**
+     * @var GoogleAuthenticator
+     */
+    private $googleAuthenticator;
 
-    private SiteAccessAwareQueryExecutor $queryExecutor;
+    /**
+     * @var SiteAccessAwareQueryExecutor
+     */
+    private $queryExecutor;
 
     public function __construct(SiteAccessAwareQueryExecutor $queryExecutor, GoogleAuthenticator $googleAuthenticator)
     {

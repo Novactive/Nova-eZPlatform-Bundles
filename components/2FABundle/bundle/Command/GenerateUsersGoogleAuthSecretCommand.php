@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * NovaeZ2FABundle.
  *
  * @package   NovaeZ2FABundle
@@ -20,7 +20,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class GenerateUsersGoogleAuthSecretCommand extends Command
 {
-    private GoogleAuthenticator $googleAuthenticator;
+    /**
+     * @var GoogleAuthenticator
+     */
+    private $googleAuthenticator;
 
     /**
      * @required
@@ -51,5 +54,4 @@ final class GenerateUsersGoogleAuthSecretCommand extends Command
 
         return 0;
     }
-
 }

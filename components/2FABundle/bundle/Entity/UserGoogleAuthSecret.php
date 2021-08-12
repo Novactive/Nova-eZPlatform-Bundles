@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * NovaeZ2FABundle.
  *
  * @package   NovaeZ2FABundle
@@ -20,9 +20,15 @@ use eZ\Publish\API\Repository\Values\User\User as APIUser;
 
 final class UserGoogleAuthSecret extends User implements TwoFactorInterface
 {
-    private ?string $secret;
+    /**
+     * @var string|null
+     */
+    private $secret;
 
-    private bool $setupComplete;
+    /**
+     * @var bool
+     */
+    private $setupComplete;
 
     public function __construct(APIUser $user, array $roles = [], ?string $secret = null, bool $setupComplete = false)
     {

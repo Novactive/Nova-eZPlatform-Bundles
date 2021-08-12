@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * NovaeZ2FABundle.
  *
  * @package   NovaeZ2FABundle
@@ -23,9 +23,15 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 final class TwoFactorUserProviderDecorator implements UserProviderInterface
 {
-    private UserProviderInterface $provider;
+    /**
+     * @var UserProviderInterface
+     */
+    private $provider;
 
-    private SiteAccessAwareQueryExecutor $queryExecutor;
+    /**
+     * @var SiteAccessAwareQueryExecutor
+     */
+    private $queryExecutor;
 
     public function __construct(UserProviderInterface $provider, SiteAccessAwareQueryExecutor $queryExecutor)
     {
