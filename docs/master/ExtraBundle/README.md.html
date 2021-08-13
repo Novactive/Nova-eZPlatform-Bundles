@@ -60,6 +60,7 @@ img.img-fluid {
             </a>
             <div class="dropdown-menu" aria-labelledby="components-menu">
 
+                                    <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/2FABundle/README.md.html">2FABundle</a>
                                     <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/Accelerator/README.md.html">Accelerator</a>
                                     <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/AlgoliaSearchEngine/README.md.html">AlgoliaSearchEngine</a>
                                     <a class="dropdown-item" href="/Nova-eZPlatform-Bundles/master/CloudinaryBundle/README.md.html">CloudinaryBundle</a>
@@ -111,7 +112,7 @@ img.img-fluid {
 <pre><code class=" bash">php app|ezpublish/console cache:clear --env=dev</code></pre>
 <p>Go to : <em>/_novaezextra/dev/test</em></p>
 <h2 name="5b6cf869265c13af8566f192b4ab3d2a">Documentation</h2>
-<h3 name="4b62d75765b784b48dfca9ff7221a9f0">Twig Helper</h3>
+<h3 name="79da1e7fc2ad8d907f4871a4982b3d8f">Twig Content Helper</h3>
 <h4 name="288878195dbfe4e44c395bbcf8b6be78">eznova_parentcontent_by_contentinfo( content )</h4>
 <pre><code class=" twig">{% set content = eznova_parentcontent_by_contentinfo( content ) %}</code></pre>
 <blockquote>
@@ -119,15 +120,68 @@ img.img-fluid {
 </blockquote>
 <h4 name="b7dab7393523892a719577c80895fbd4">eznova_location_by_content( content )</h4>
 <pre><code class=" twig">{% set contentType = eznova_location_by_content( content ) %}</code></pre>
-<h4 name="9194c9329403628270bc30253a72faaa">eznova_relation_field_to_content( fieldValue )</h4>
-<pre><code class=" twig">{% set content = eznova_relation_field_to_content( ez_field_value( content, 'internal_link' ) ) %}</code></pre>
-<blockquote>
-<p>Note : return the direct linked content by the relation object FieldType</p>
-</blockquote>
 <h4 name="69db770f88907a07aeeedc128f446c09">eznova_relationlist_field_to_content_list( fieldValue )</h4>
 <pre><code class=" twig">{% set content = eznova_relationlist_field_to_content_list( ez_field_value( content, 'internal_links' ) ) %}</code></pre>
 <blockquote>
 <p>Note : return an array of direct linked contents by the relation objects FieldType</p>
+</blockquote>
+<h4 name="661571bec53b03da8e99a671be0a8990">eznova_is_rich_text_really_empty(richTextFieldValue)</h4>
+<pre><code class=" twig">{% set content = eznova_is_rich_text_really_empty( ez_field_value( content, 'description' ) ) %}</code></pre>
+<blockquote>
+<p>Note : returns true if the value of RichText field is empty excluding the tags, whitespaces and line breaks, false otherwise</p>
+</blockquote>
+<h3 name="00718a68e88e0f1a47bbad129c36561d">Twig Text Parsing Helper</h3>
+<h4 name="553ba8b9b2f5d864da38136af12edcdd">ctaize</h4>
+<pre><code class=" twig">{% set ctaField | ctaize %}</code></pre>
+<blockquote>
+<p>Note : Filter which converts the string like ezcontent://123 or ezlocation://234 to the URL of specified content or location</p>
+</blockquote>
+<h4 name="139b6a5827d4f7d3806c70b7e1930791">ezlinks</h4>
+<pre><code class=" twig">{% set richTextFieldValue | ezlinks %}</code></pre>
+<blockquote>
+<p>Note : Filter which fixes the mistakes in opening/closing div tags and converts string like ezlocation://234 to the URL of specified location</p>
+</blockquote>
+<h4 name="5e35dc65764c2280b4e84d0a49788c2c">htmldecode</h4>
+<pre><code class=" twig">{% set stringValue | htmldecode %}</code></pre>
+<blockquote>
+<p>Note : Filter which applies html_entity_decode php function to the specified var</p>
+</blockquote>
+<h3 name="f204c8e3900a7f3828f941a37c3cc437">Twig Image Helper</h3>
+<h4 name="8fc0ca3b31f64f5fed6521ea3736f3db">get_image_tag(content, fieldIdentifier, variationAlias, params)</h4>
+<pre><code class=" twig">{{ get_image_tag(content, 'thumbnail', 'card_slider') }}</code></pre>
+<blockquote>
+<p>Generates the picture html code including images for original, retina and mobile screens specified in the image variations config like the following:</p>
+</blockquote>
+<pre><code class=" yaml">optimized_original:
+    reference: ~
+    filters:
+        - { name: auto_rotate }
+        - { name: strip }
+        - { name: geometry/scaledownonly, params: [ 200,200 ] }
+optimized_original_retina:
+    reference: ~
+    filters:
+        - { name: auto_rotate }
+        - { name: strip }
+        - { name: geometry/scaledownonly, params: [ 400,400 ] }
+optimized_original_mobile:
+    reference: ~
+    filters:
+        - { name: auto_rotate }
+        - { name: strip }
+        - { name: geometry/scaledownonly, params: [ 50,50 ] }</code></pre>
+<blockquote>
+<p>If the placeholder dimensions are specified with empty content and variation then the placeholder image will be displayed:</p>
+</blockquote>
+<pre><code class=" twig">{{ get_image_tag(null, 'image', '', {placeholder: {width: 300, height: 100}}) }}</code></pre>
+<h4 name="2ecd04463056ef76b171e135ff82992f">get_image_url(content, fieldIdentifier, variationAlias, params)</h4>
+<blockquote>
+<p>The same as previous but returning just an image URL instead of tag.</p>
+</blockquote>
+<h4 name="7bb9d9f56b5feea04f40675c4ee81d11">get_image_asset_content(field)</h4>
+<blockquote>
+<p>Returns the Content by the Image Asset field. Requires the eZ\Publish\API\Repository\Values\Content\Field to be specified.</p>
+<p><strong>IMPORTANT</strong>: The image placeholder is enabled by default but can be disabled by setting the bool value to _ENABLE_IMAGE<em>PLACEHOLDER</em> env variable.</p>
 </blockquote>
 <h3 name="006c2ac8f59e621f3c110896f6beb8bd">Picture Controller</h3>
 <pre><code class=" twig">{{ render( controller( "eZNovaExtraBundle:Picture:alias", { "contentId": content.getField('picture').value.destinationContentId, "fieldIdentifier": "image", "alias": "large" })) }}</code></pre>
@@ -138,7 +192,8 @@ public function contentList( $parentLocationId, $typeIdentifiers = [], $sortClau
 public function nextByAttribute( $locationId, $attributeIdentifier, $locale, $additionnalCriterions = [] );
 public function nextByPriority( $locationId, $aditionnalCriterions = [] )
 public function previousByAttribute( $locationId, $attributeIdentifier, $locale, $additionnalCriterion = [] )
-public function previousByPriority( $locationId, $additionnalCriterion = [] )</code></pre>
+public function previousByPriority( $locationId, $additionnalCriterion = [] )
+public function getSelectionTextValue($content, $identifier)</code></pre>
 <blockquote>
 <p>Return an array of Result</p>
 </blockquote>
@@ -174,17 +229,36 @@ class PersonalizationEngine extends Type
         ...
     }
 }</code></pre>
+<h3 name="fdc9d3259426059fa2935ddc3ec9333f">RepositoryAware helper (trait)</h3>
+<pre><code class=" php">    public function loadReverseRelations(ContentInfo $contentInfo, int $offset = 0, int $limit = -1): RelationList</code></pre>
+<p>Returns the list of reverse relations (RelationList) of the specified ContentInfo</p>
+<h3 name="518caed1c3f60955b730607f5a45dabd">RouterAware helper (trait)</h3>
+<pre><code>public function generateRouteLocation(Location $location): string
+public function generateRouteContent(Content $content): string
+public function generateRouteWrapper(Wrapper $wrapper): string</code></pre>
+<p>The trait that allows to get the Route by location, content or Wrapper object.</p>
+<h3 name="c39718b441c363c25f6369a802bfd2f2">ViewMatcher</h3>
+<p>This allows you to specify different ez views for the same content type but with different value of particular field.</p>
+<blockquote>
+<p><strong>IMPORTANT</strong>: By default the field name is set to <strong><em>matcher</em></strong> but can be rewritten by specifying it in the _<strong>VIEW_MATCHER_FIELD_IDENTIFIER</strong>_ env variable.</p>
+</blockquote>
+<p>Then for example if you set the <strong>business</strong> value to the field that is set to identify the view (<strong>matcher</strong> by default) inside the <strong>Article</strong> Content Type then another template can be defined for that using the following config:</p>
+<pre><code class=" yaml">article_business:
+    template: '@ezdesign/full/article_business.html.twig'
+    match:
+        Identifier\ContentType: [ 'article' ]
+        '@Novactive\Bundle\eZExtraBundle\Core\ViewMatcher\ContentTypeField': 'business'</code></pre>
 
             <p class="text-right">
                 <img width="204" height="20"
-                     src='https://img.shields.io/badge/Updated on-06--30--2021 23:44:48-green?style=flat-square&labelColor=black'
-                     alt='Updated on 06--30--2021 23:44:48'
+                     src='https://img.shields.io/badge/Updated on-08--13--2021 17:25:23-green?style=flat-square&labelColor=black'
+                     alt='Updated on 08--13--2021 17:25:23'
                 />
             </p>
         </div>
         <div class="col-md-4 col-sm-12 d-print-none sidebar">
                             <p><strong>In this page</strong>:</p>
-                <ul class="nav flex-column"><li class="nav-item first last"><a href="#381599d6d227cc5be1ed3045e9cda12a" class="nav-link">Novactive Extra Bundle for eZ Publish Platform</a><ul class="menu_level_1"><li class="nav-item first"><a href="#7cd8fb6e31cc946c078d2740c76a9899" class="nav-link">Installation</a><ul class="menu_level_2"><li class="nav-item first"><a href="#337488b89bd401c0d64191d51436e2e2" class="nav-link">Step 1: Download Nova eZExtra Bundle using composer</a></li><li class="nav-item"><a href="#bb6c5087283397e44b9b10981a83dad6" class="nav-link">Step 2: Enable the bundle</a></li><li class="nav-item"><a href="#448bc62803172f41bfddb22d9d8c14ff" class="nav-link">Step 3: Add the default routes</a></li><li class="nav-item last"><a href="#08cc9578c88dbf3eee20917aa63aed47" class="nav-link">Step 4: Clear the cache and check</a></li></ul></li><li class="nav-item last"><a href="#5b6cf869265c13af8566f192b4ab3d2a" class="nav-link">Documentation</a><ul class="menu_level_2"><li class="nav-item first"><a href="#4b62d75765b784b48dfca9ff7221a9f0" class="nav-link">Twig Helper</a><ul class="menu_level_3"><li class="nav-item first"><a href="#288878195dbfe4e44c395bbcf8b6be78" class="nav-link">eznova_parentcontent_by_contentinfo( content )</a></li><li class="nav-item"><a href="#b7dab7393523892a719577c80895fbd4" class="nav-link">eznova_location_by_content( content )</a></li><li class="nav-item"><a href="#9194c9329403628270bc30253a72faaa" class="nav-link">eznova_relation_field_to_content( fieldValue )</a></li><li class="nav-item last"><a href="#69db770f88907a07aeeedc128f446c09" class="nav-link">eznova_relationlist_field_to_content_list( fieldValue )</a></li></ul></li><li class="nav-item"><a href="#006c2ac8f59e621f3c110896f6beb8bd" class="nav-link">Picture Controller</a></li><li class="nav-item"><a href="#d9363efcaaeb49d15c26523708d3c57d" class="nav-link">Content/Location Helper</a></li><li class="nav-item last"><a href="#90374846a70d03c0c963e1a6cf74e132" class="nav-link">Children Provider</a></li></ul></li></ul></li></ul>
+                <ul class="nav flex-column"><li class="nav-item first last"><a href="#381599d6d227cc5be1ed3045e9cda12a" class="nav-link">Novactive Extra Bundle for eZ Publish Platform</a><ul class="menu_level_1"><li class="nav-item first"><a href="#7cd8fb6e31cc946c078d2740c76a9899" class="nav-link">Installation</a><ul class="menu_level_2"><li class="nav-item first"><a href="#337488b89bd401c0d64191d51436e2e2" class="nav-link">Step 1: Download Nova eZExtra Bundle using composer</a></li><li class="nav-item"><a href="#bb6c5087283397e44b9b10981a83dad6" class="nav-link">Step 2: Enable the bundle</a></li><li class="nav-item"><a href="#448bc62803172f41bfddb22d9d8c14ff" class="nav-link">Step 3: Add the default routes</a></li><li class="nav-item last"><a href="#08cc9578c88dbf3eee20917aa63aed47" class="nav-link">Step 4: Clear the cache and check</a></li></ul></li><li class="nav-item last"><a href="#5b6cf869265c13af8566f192b4ab3d2a" class="nav-link">Documentation</a><ul class="menu_level_2"><li class="nav-item first"><a href="#79da1e7fc2ad8d907f4871a4982b3d8f" class="nav-link">Twig Content Helper</a><ul class="menu_level_3"><li class="nav-item first"><a href="#288878195dbfe4e44c395bbcf8b6be78" class="nav-link">eznova_parentcontent_by_contentinfo( content )</a></li><li class="nav-item"><a href="#b7dab7393523892a719577c80895fbd4" class="nav-link">eznova_location_by_content( content )</a></li><li class="nav-item"><a href="#69db770f88907a07aeeedc128f446c09" class="nav-link">eznova_relationlist_field_to_content_list( fieldValue )</a></li><li class="nav-item last"><a href="#661571bec53b03da8e99a671be0a8990" class="nav-link">eznova_is_rich_text_really_empty(richTextFieldValue)</a></li></ul></li><li class="nav-item"><a href="#00718a68e88e0f1a47bbad129c36561d" class="nav-link">Twig Text Parsing Helper</a><ul class="menu_level_3"><li class="nav-item first"><a href="#553ba8b9b2f5d864da38136af12edcdd" class="nav-link">ctaize</a></li><li class="nav-item"><a href="#139b6a5827d4f7d3806c70b7e1930791" class="nav-link">ezlinks</a></li><li class="nav-item last"><a href="#5e35dc65764c2280b4e84d0a49788c2c" class="nav-link">htmldecode</a></li></ul></li><li class="nav-item"><a href="#f204c8e3900a7f3828f941a37c3cc437" class="nav-link">Twig Image Helper</a><ul class="menu_level_3"><li class="nav-item first"><a href="#8fc0ca3b31f64f5fed6521ea3736f3db" class="nav-link">get_image_tag(content, fieldIdentifier, variationAlias, params)</a></li><li class="nav-item"><a href="#2ecd04463056ef76b171e135ff82992f" class="nav-link">get_image_url(content, fieldIdentifier, variationAlias, params)</a></li><li class="nav-item last"><a href="#7bb9d9f56b5feea04f40675c4ee81d11" class="nav-link">get_image_asset_content(field)</a></li></ul></li><li class="nav-item"><a href="#006c2ac8f59e621f3c110896f6beb8bd" class="nav-link">Picture Controller</a></li><li class="nav-item"><a href="#d9363efcaaeb49d15c26523708d3c57d" class="nav-link">Content/Location Helper</a></li><li class="nav-item"><a href="#90374846a70d03c0c963e1a6cf74e132" class="nav-link">Children Provider</a></li><li class="nav-item"><a href="#fdc9d3259426059fa2935ddc3ec9333f" class="nav-link">RepositoryAware helper (trait)</a></li><li class="nav-item"><a href="#518caed1c3f60955b730607f5a45dabd" class="nav-link">RouterAware helper (trait)</a></li><li class="nav-item last"><a href="#c39718b441c363c25f6369a802bfd2f2" class="nav-link">ViewMatcher</a></li></ul></li></ul></li></ul>
                     </div>
     </div>
     <footer class="pt-4 my-md-5 pt-md-5 border-top">
