@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\Reference;
 class SecurityPass implements CompilerPassInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function process(ContainerBuilder $container): void
     {

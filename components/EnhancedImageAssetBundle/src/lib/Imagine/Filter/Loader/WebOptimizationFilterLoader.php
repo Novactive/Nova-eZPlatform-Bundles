@@ -21,7 +21,7 @@ use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 class WebOptimizationFilterLoader implements LoaderInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function load(ImageInterface $image, array $options = []): ImageInterface
     {

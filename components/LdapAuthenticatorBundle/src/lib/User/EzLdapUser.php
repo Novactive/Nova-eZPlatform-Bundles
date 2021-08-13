@@ -42,7 +42,7 @@ class EzLdapUser implements UserInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getRoles(): array
     {
@@ -50,7 +50,7 @@ class EzLdapUser implements UserInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getPassword(): string
     {
@@ -58,7 +58,7 @@ class EzLdapUser implements UserInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getSalt(): ?string
     {
@@ -66,7 +66,7 @@ class EzLdapUser implements UserInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getUsername(): string
     {
@@ -74,7 +74,7 @@ class EzLdapUser implements UserInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function eraseCredentials(): void
     {

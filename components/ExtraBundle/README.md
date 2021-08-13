@@ -49,7 +49,7 @@ Go to : */_novaezextra/dev/test*
 ## Documentation
 
 
-### Twig Helper
+### Twig Content Helper
 
 #### eznova_parentcontent_by_contentinfo( content )
 
@@ -65,14 +65,6 @@ Go to : */_novaezextra/dev/test*
 {% set contentType = eznova_location_by_content( content ) %}
 ```
 
-#### eznova_relation_field_to_content( fieldValue )
-
-```twig
-{% set content = eznova_relation_field_to_content( ez_field_value( content, 'internal_link' ) ) %}
-```
-
-> Note : return the direct linked content by the relation object FieldType
-
 #### eznova_relationlist_field_to_content_list( fieldValue )
 
 ```twig
@@ -80,6 +72,87 @@ Go to : */_novaezextra/dev/test*
 ```
 
 > Note : return an array of direct linked contents by the relation objects FieldType
+
+#### eznova_is_rich_text_really_empty(richTextFieldValue)
+
+```twig
+{% set content = eznova_is_rich_text_really_empty( ez_field_value( content, 'description' ) ) %}
+```
+
+> Note : returns true if the value of RichText field is empty excluding the tags, whitespaces and line breaks, false otherwise
+
+### Twig Text Parsing Helper
+
+#### ctaize
+
+```twig
+{% set ctaField | ctaize %}
+```
+
+> Note : Filter which converts the string like ezcontent://123 or ezlocation://234 to the URL of specified content or location
+
+#### ezlinks
+
+```twig
+{% set richTextFieldValue | ezlinks %}
+```
+
+> Note : Filter which fixes the mistakes in opening/closing div tags and converts string like ezlocation://234 to the URL of specified location
+
+#### htmldecode
+
+```twig
+{% set stringValue | htmldecode %}
+```
+
+> Note : Filter which applies html_entity_decode php function to the specified var
+
+### Twig Image Helper
+
+#### get_image_tag(content, fieldIdentifier, variationAlias, params)
+
+```twig
+{{ get_image_tag(content, 'thumbnail', 'card_slider') }}
+```
+
+> Generates the picture html code including images for original, retina and mobile screens specified in the image variations config like the following:
+
+```yaml
+optimized_original:
+    reference: ~
+    filters:
+        - { name: auto_rotate }
+        - { name: strip }
+        - { name: geometry/scaledownonly, params: [ 200,200 ] }
+optimized_original_retina:
+    reference: ~
+    filters:
+        - { name: auto_rotate }
+        - { name: strip }
+        - { name: geometry/scaledownonly, params: [ 400,400 ] }
+optimized_original_mobile:
+    reference: ~
+    filters:
+        - { name: auto_rotate }
+        - { name: strip }
+        - { name: geometry/scaledownonly, params: [ 50,50 ] }
+```
+
+> If the placeholder dimensions are specified with empty content and variation then the placeholder image will be displayed:
+
+```twig
+{{ get_image_tag(null, 'image', '', {placeholder: {width: 300, height: 100}}) }}
+```
+
+#### get_image_url(content, fieldIdentifier, variationAlias, params)
+
+> The same as previous but returning just an image URL instead of tag.
+
+#### get_image_asset_content(field)
+
+> Returns the Content by the Image Asset field. Requires the eZ\Publish\API\Repository\Values\Content\Field to be specified.
+
+> **IMPORTANT**: The image placeholder is enabled by default but can be disabled by setting the bool value to _ENABLE_IMAGE_PLACEHOLDER_ env variable.
 
 ### Picture Controller
 
@@ -97,6 +170,7 @@ The goal was to mimic the old Fetch Content List
     public function nextByPriority( $locationId, $aditionnalCriterions = [] )
     public function previousByAttribute( $locationId, $attributeIdentifier, $locale, $additionnalCriterion = [] )
     public function previousByPriority( $locationId, $additionnalCriterion = [] )
+    public function getSelectionTextValue($content, $identifier)
     
 > Return an array of Result
 
@@ -148,5 +222,33 @@ class PersonalizationEngine extends Type
 }
 ```
 
+### RepositoryAware helper (trait)
 
+```php
+    public function loadReverseRelations(ContentInfo $contentInfo, int $offset = 0, int $limit = -1): RelationList
+```
+Returns the list of reverse relations (RelationList) of the specified ContentInfo
 
+### RouterAware helper (trait)
+
+    public function generateRouteLocation(Location $location): string
+    public function generateRouteContent(Content $content): string
+    public function generateRouteWrapper(Wrapper $wrapper): string
+    
+The trait that allows to get the Route by location, content or Wrapper object.
+
+### ViewMatcher
+
+This allows you to specify different ez views for the same content type but with different value of particular field.
+
+> **IMPORTANT**: By default the field name is set to **_matcher_** but can be rewritten by specifying it in the _**VIEW_MATCHER_FIELD_IDENTIFIER**_ env variable.
+
+Then for example if you set the **business** value to the field that is set to identify the view (**matcher** by default) inside the **Article** Content Type then another template can be defined for that using the following config:
+
+```yaml
+article_business:
+    template: '@ezdesign/full/article_business.html.twig'
+    match:
+        Identifier\ContentType: [ 'article' ]
+        '@Novactive\Bundle\eZExtraBundle\Core\ViewMatcher\ContentTypeField': 'business'
+```

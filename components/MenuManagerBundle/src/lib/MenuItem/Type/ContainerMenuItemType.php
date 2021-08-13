@@ -26,7 +26,7 @@ class ContainerMenuItemType extends DefaultMenuItemType
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function toMenuItemLink(MenuItem $menuItem): ?MenuItemValue
     {

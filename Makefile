@@ -13,14 +13,9 @@ COMPOSER := composer
 CURRENT_DIR := $(shell pwd)
 SYMFONY := symfony
 EZ_DIR := $(CURRENT_DIR)/ezplatform
-CHROMEDRIVER := $(CURRENT_DIR)/chromedriver
 DOCKER := docker
 DOCKER_DB_CONTAINER := dbezplbundl
 MYSQL := mysql -f -u root -pezplatform -h 127.0.0.1 -P 3300 ezplatform
-CHROME_DRIVER_URL := https://chromedriver.storage.googleapis.com/91.0.4472.101/chromedriver_linux64.zip
-ifeq ($(UNAME_S),Darwin)
-CHROME_DRIVER_URL := https://chromedriver.storage.googleapis.com/91.0.4472.101/chromedriver_mac64.zip
-endif
 CONSOLE := $(PHP_BIN) bin/console
 
 .DEFAULT_GOAL := list
@@ -41,7 +36,7 @@ codeclean: ## Coding Standard checks
 .PHONY: install
 install: ## Install vendors
 	@$(COMPOSER) install
-	@wget -O chromedriver.zip "$(CHROME_DRIVER_URL)" && unzip -o chromedriver.zip && rm chromedriver.zip
+	@$(PHP) vendor/bin/bdi detect drivers
 
 .PHONY: post-install
 post-install:
@@ -61,6 +56,7 @@ post-install:
 
 	@echo "..:: Do bundle specifics ::.."
 	@$(MYSQL) < components/SEOBundle/bundle/Resources/sql/schema.sql
+	@$(MYSQL) < components/2FABundle/bundle/Resources/sql/schema.sql
 	@cd $(EZ_DIR) && $(CONSOLE) novaezextra:contenttypes:create ../tests/vmcd.xlsx
 	@cd $(EZ_DIR) && $(CONSOLE) novaezprotectedcontent:install
 	@cd $(EZ_DIR) && $(CONSOLE) novaezhelptooltip:create
@@ -82,7 +78,7 @@ installez: install ## Install eZ as the local project
 	@cd $(EZ_DIR) && $(COMPOSER) ezplatform-install
 	@cd $(EZ_DIR) && $(CONSOLE) cache:clear
 
-	@(MAKE) post-install
+	@$(MAKE) post-install
 
 
 .PHONY: installibexa
@@ -102,6 +98,7 @@ installibexa: install ## Install Ibexa as the local project
 	@$(MAKE) post-install
 	@cd $(EZ_DIR) && $(COMPOSER) update
 	@cd $(EZ_DIR) && $(COMPOSER) require -W phpunit/phpunit:^9.5 symfony/phpunit-bridge:^5.3
+	@rm -f $(EZ_DIR)/config/packages/test/doctrine.yaml
 
 
 .PHONY: serve
@@ -119,15 +116,14 @@ stop: ## Stop the web server if it is running
 	@-$(DOCKER) stop $(DOCKER_DB_CONTAINER)
 
 
-# PANTHER_NO_HEADLESS=1 DATABASE_URL="mysql://root:ezplatform@127.0.0.1:3300/ezplatform" PANTHER_EXTERNAL_BASE_URI="https://127.0.0.1:11083" PANTHER_CHROME_DRIVER_BINARY=/Users/plopix/DOCKFILES/NOVACTIVE/OSS/eZ-Platform-Bundles/chromedriver php ./vendor/bin/phpunit -c "components/StaticTemplatesBundle/tests" "components/StaticTemplatesBundle/tests"
 .PHONY: tests
 tests: ## Run the tests
 	@echo " ..:: Global Mono Repo Testing ::.."
-	@DATABASE_URL="mysql://root:ezplatform@127.0.0.1:3300/ezplatform" PANTHER_EXTERNAL_BASE_URI="https://127.0.0.1:11083" PANTHER_CHROME_DRIVER_BINARY=$(CHROMEDRIVER) $(PHP_BIN) ./vendor/bin/phpunit -c "tests" "tests" --exclude-group behat
+	@PANTHER_NO_HEADLESS=${SHOW_CHROME} DATABASE_URL="mysql://root:ezplatform@127.0.0.1:3300/ezplatform" PANTHER_EXTERNAL_BASE_URI="https://127.0.0.1:11083" $(PHP_BIN) ./vendor/bin/phpunit -c "tests" "tests" --exclude-group behat
 	@for COMPONENT in $(shell ls components); do \
     	if COMPONENT=$${COMPONENT} bin/ci-should test; then \
     		echo " ..:: Testing $${COMPONENT} ::.."; \
-    		DATABASE_URL="mysql://root:ezplatform@127.0.0.1:3300/ezplatform" PANTHER_EXTERNAL_BASE_URI="https://127.0.0.1:11083" PANTHER_CHROME_DRIVER_BINARY=$(CHROMEDRIVER) $(PHP_BIN) ./vendor/bin/phpunit -c "components/$${COMPONENT}/tests" "components/$${COMPONENT}/tests" --exclude-group behat; \
+    		PANTHER_NO_HEADLESS=${SHOW_CHROME} DATABASE_URL="mysql://root:ezplatform@127.0.0.1:3300/ezplatform" PANTHER_EXTERNAL_BASE_URI="https://127.0.0.1:11083" $(PHP_BIN) ./vendor/bin/phpunit -c "components/$${COMPONENT}/tests" "components/$${COMPONENT}/tests" --exclude-group behat; \
 		fi \
 	done
 
@@ -146,7 +142,7 @@ documentation: ## Generate the documention
 clean: stop ## Removes the vendors, and caches
 	@-rm -f .php_cs.cache
 	@-rm -rf vendor
-	@-rm -f chromedriver
+	@-rm -f drivers
 	@-rm -rf ezplatform
 	@-rm  node_modules
 	@-$(DOCKER) rm $(DOCKER_DB_CONTAINER)

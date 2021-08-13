@@ -51,7 +51,6 @@ jobs:
             APP_DEBUG: 1
             COMPOSER_MEMORY_LIMIT: 4G
             PANTHER_EXTERNAL_BASE_URI: http://127.0.0.1:8000
-            PANTHER_CHROME_DRIVER_BINARY: /home/runner/.chrome/chromedriver
         steps:
             -   uses: actions/checkout@v2
 
@@ -63,11 +62,6 @@ jobs:
                 id: php
                 env:
                     COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            -   name: Install Latest Chrome Driver
-                run: |
-                    wget https://chromedriver.storage.googleapis.com/91.0.4472.101/chromedriver_linux64.zip -P /home/runner/
-                    unzip /home/runner/chromedriver_linux64.zip -d /home/runner/.chrome
 
             -   name: Install Symfony Server
                 run: |
@@ -122,6 +116,7 @@ jobs:
 
                     echo ::group::..:: Do bundle specifics ::..
                     mysql -u root -h 127.0.0.1 -P 3306 ezplatform < ../components/SEOBundle/bundle/Resources/sql/schema.sql
+                    mysql -u root -h 127.0.0.1 -P 3306 ezplatform < ../components/2FABundle/bundle/Resources/sql/schema.sql
                     bin/console novaezextra:contenttypes:create ../tests/vmcd.xlsx
                     bin/console novaezprotectedcontent:install
                     bin/console novaezmailing:install
@@ -140,6 +135,7 @@ jobs:
 
             -   name: Finally Run the tests
                 run: |
+                    php vendor/bin/bdi detect drivers
                     echo  echo ::group::..:: Global Mono Repo Testing ::..
                     APP_ENV=test php ./vendor/bin/phpunit -c "tests" "tests" --exclude-group behat
                     echo ::endgroup::
@@ -178,7 +174,6 @@ jobs:
             APP_DEBUG: 1
             COMPOSER_MEMORY_LIMIT: 4G
             PANTHER_EXTERNAL_BASE_URI: http://127.0.0.1:8000
-            PANTHER_CHROME_DRIVER_BINARY: /home/runner/.chrome/chromedriver
         steps:
             -   uses: actions/checkout@v2
 
@@ -190,11 +185,6 @@ jobs:
                 id: php
                 env:
                     COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            -   name: Install Latest Chrome Driver
-                run: |
-                    wget https://chromedriver.storage.googleapis.com/91.0.4472.101/chromedriver_linux64.zip -P /home/runner/
-                    unzip /home/runner/chromedriver_linux64.zip -d /home/runner/.chrome
 
             -   name: Install Symfony Server
                 run: |
@@ -256,6 +246,7 @@ jobs:
 
                     echo ::group::..:: Do bundle specifics ::..
                     mysql -u root -h 127.0.0.1 -P 3306 ezplatform < ../components/SEOBundle/bundle/Resources/sql/schema.sql
+                    mysql -u root -h 127.0.0.1 -P 3306 ezplatform < ../components/2FABundle/bundle/Resources/sql/schema.sql
                     php bin/console novaezextra:contenttypes:create ../tests/vmcd.xlsx
                     php bin/console novaezprotectedcontent:install
                     php bin/console novaezmailing:install
@@ -273,10 +264,13 @@ jobs:
                 run: curl -I http://127.0.0.1:8000 | grep "HTTP/1.1 200 OK"
 
             -   name: Update PHP Unit
-                run: composer update && composer require -W phpunit/phpunit:^9.5 symfony/phpunit-bridge:^5.3
+                run: |
+                    composer update && composer require -W phpunit/phpunit:^9.5 symfony/phpunit-bridge:^5.3
+                    rm -f ezplatform/config/packages/test/doctrine.yaml
 
             -   name: Finally Run the tests
                 run: |
+                    php vendor/bin/bdi detect drivers
                     echo  echo ::group::..:: Global Mono Repo Testing ::..
                     APP_ENV=test php ./vendor/bin/phpunit -c "tests" "tests" --exclude-group behat
                     echo ::endgroup::

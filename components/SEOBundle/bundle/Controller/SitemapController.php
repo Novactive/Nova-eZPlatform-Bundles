@@ -102,7 +102,6 @@ class SitemapController extends Controller
         $query = $queryFactory();
         $query->limit = static::PACKET_MAX;
         $query->offset = static::PACKET_MAX * ($page - 1);
-
         $searchService = $this->getRepository()->getSearchService();
 
         $results = $searchService->findLocations($query);
@@ -135,6 +134,10 @@ class SitemapController extends Controller
                 if ($this->has('logger')) {
                     $this->get('logger')->error('NovaeZSEO: '.$exception->getMessage());
                 }
+                continue;
+            }
+
+            if (0 != strpos($url, 'view/content/')) {
                 continue;
             }
 

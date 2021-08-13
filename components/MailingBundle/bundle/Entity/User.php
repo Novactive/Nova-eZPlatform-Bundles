@@ -449,7 +449,7 @@ class User
         if (
             $this->registrations->exists(
                 function ($key, Registration $element) use ($registration) {
-                    $key; //tricks phpmd
+                    //tricks phpmd
 
                     return $element->getMailingList()->getId() === $registration->getMailingList()->getId();
                 }
