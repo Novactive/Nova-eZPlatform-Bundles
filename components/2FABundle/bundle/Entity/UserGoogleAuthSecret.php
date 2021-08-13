@@ -25,17 +25,11 @@ final class UserGoogleAuthSecret extends User implements TwoFactorInterface
      */
     private $secret;
 
-    /**
-     * @var bool
-     */
-    private $setupComplete;
-
-    public function __construct(APIUser $user, array $roles = [], ?string $secret = null, bool $setupComplete = false)
+    public function __construct(APIUser $user, array $roles = [], ?string $secret = null)
     {
         parent::__construct($user, $roles);
 
         $this->secret = $secret;
-        $this->setupComplete = $setupComplete;
     }
 
     public function isGoogleAuthenticatorEnabled(): bool
@@ -58,23 +52,12 @@ final class UserGoogleAuthSecret extends User implements TwoFactorInterface
         $this->secret = $googleAuthenticatorSecret;
     }
 
-    public function setupComplete(bool $isSetupComplete = true): void
-    {
-        $this->setupComplete = $isSetupComplete;
-    }
-
-    public function isSetupComplete(): bool
-    {
-        return $this->setupComplete ?? false;
-    }
-
     public function __serialize(): array
     {
         return [
             'reference' => $this->getAPIUserReference(),
             'roles' => $this->getRoles(),
             'secret' => $this->secret,
-            'setupComplete' => $this->isSetupComplete(),
         ];
     }
 }

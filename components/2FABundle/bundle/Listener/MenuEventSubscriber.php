@@ -32,6 +32,10 @@ final class MenuEventSubscriber implements EventSubscriberInterface
 
     public static function getSubscribedEvents(): array
     {
+        if (PHP_VERSION_ID < 70400) {
+            return [];
+        }
+
         return [
             ConfigureMenuEvent::USER_MENU => ['onConfigureUserMenu', -200],
         ];

@@ -17,7 +17,6 @@ namespace Novactive\Bundle\eZ2FABundle\Security;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
 use Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareQueryExecutor;
 use Novactive\Bundle\eZ2FABundle\Entity\UserGoogleAuthSecret;
-use PDO;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
@@ -39,29 +38,21 @@ final class TwoFactorUserProviderDecorator implements UserProviderInterface
         $this->queryExecutor = $queryExecutor;
     }
 
-    /** @SuppressWarnings(PHPMD) */
     public function loadUserByUsername(string $username)
     {
         $user = $this->provider->loadUserByUsername($username);
 
         if ($user instanceof User) {
-            $query = <<<QUERY
-                SELECT google_authentication_secret as secret 
-                FROM user_google_auth_secret
-                WHERE user_contentobject_id = ?
-                LIMIT 1
-            QUERY;
-            $results = ($this->queryExecutor)(
-                $query,
-                [$user->getAPIUserReference()->getUserId()],
-                [PDO::PARAM_INT]
-            )->fetchAssociative();
+            $results = $this->queryExecutor->getUserGoogleAuthSecretByUserId($user->getAPIUserReference()->getUserId());
+
+            if (false === $results) {
+                return $user;
+            }
 
             return new UserGoogleAuthSecret(
                 $user->getAPIUser(),
                 $user->getRoles(),
-                $results['secret'] ?? null,
-                is_array($results)
+                $results['secret'] ?? null
             );
         }
 

@@ -74,4 +74,16 @@ final class SiteAccessAwareQueryExecutor
             QUERY;
         ($this)($query, [$userId], [PDO::PARAM_INT]);
     }
+
+    public function getUserGoogleAuthSecretByUserId(int $userId)
+    {
+        $query = <<<QUERY
+                SELECT google_authentication_secret as secret 
+                FROM user_google_auth_secret
+                WHERE user_contentobject_id = ?
+                LIMIT 1
+            QUERY;
+
+        return ($this)($query, [$userId], [PDO::PARAM_INT])->fetchAssociative();
+    }
 }

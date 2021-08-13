@@ -12,6 +12,7 @@
 
 namespace Novactive\Bundle\eZ2FABundle\Controller;
 
+use eZ\Publish\Core\MVC\Symfony\Security\User;
 use EzSystems\EzPlatformAdminUiBundle\Controller\Controller;
 use Novactive\Bundle\eZ2FABundle\Core\QRCodeGenerator;
 use Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareQueryExecutor;
@@ -31,10 +32,10 @@ class TwoFactorAuthController extends Controller
         SiteAccessAwareQueryExecutor $queryExecutor,
         QRCodeGenerator $QRCodeGenerator
     ): Response {
-        /* @var UserGoogleAuthSecret $user */
+        /* @var User $user */
         $user = $this->getUser();
 
-        if ($user->isSetupComplete()) {
+        if ($queryExecutor->getUserGoogleAuthSecretByUserId($user->getAPIUser()->id)) {
             return $this->render(
                 '@ezdesign/2fa/setup.html.twig',
                 [
@@ -43,20 +44,16 @@ class TwoFactorAuthController extends Controller
             );
         }
 
-        $secretKey = $user->getGoogleAuthenticatorSecret();
-        if (null === $secretKey) {
-            $secretKey = $googleAuthenticator->generateSecret();
-            $user->setGoogleAuthenticatorSecret($secretKey);
-        }
+        $user = new UserGoogleAuthSecret($user->getAPIUser(), $user->getRoles(), null);
 
-        $form = $this->createForm(TwoFactorAuthType::class, ['secretKey' => $secretKey]);
+        $form = $this->createForm(TwoFactorAuthType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
+            $user->setGoogleAuthenticatorSecret($data['secretKey']);
             if ($googleAuthenticator->checkCode($user, $data['sixdigitCode'])) {
                 $queryExecutor->insertUserGoogleAuthSecret($user->getAPIUser()->id, $data['secretKey']);
-                $user->setupComplete();
 
                 return $this->render(
                     '@ezdesign/2fa/setup.html.twig',
@@ -67,6 +64,12 @@ class TwoFactorAuthController extends Controller
             }
 
             $form->get('sixdigitCode')->addError(new FormError('Wrong 6-digit code provided!'));
+        }
+
+        if (!$form->isSubmitted()) {
+            $secretKey = $googleAuthenticator->generateSecret();
+            $user->setGoogleAuthenticatorSecret($secretKey);
+            $form->get('secretKey')->setData($secretKey);
         }
 
         return $this->render(
@@ -84,7 +87,6 @@ class TwoFactorAuthController extends Controller
         $user = $this->getUser();
 
         $queryExecutor->deleteUserGoogleAuthSecret($user->getAPIUser()->id);
-        $user->setupComplete(false);
 
         return $this->redirectToRoute('2fa_setup');
     }
