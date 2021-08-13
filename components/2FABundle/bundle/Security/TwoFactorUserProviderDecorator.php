@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZ2FABundle\Security;
 
 use eZ\Publish\Core\MVC\Symfony\Security\User;
-use Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareQueryExecutor;
+use Novactive\Bundle\eZ2FABundle\Core\UserRepository;
 use Novactive\Bundle\eZ2FABundle\Entity\UserGoogleAuthSecret;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -28,14 +28,14 @@ final class TwoFactorUserProviderDecorator implements UserProviderInterface
     private $provider;
 
     /**
-     * @var SiteAccessAwareQueryExecutor
+     * @var UserRepository
      */
-    private $queryExecutor;
+    private $userRepository;
 
-    public function __construct(UserProviderInterface $provider, SiteAccessAwareQueryExecutor $queryExecutor)
+    public function __construct(UserProviderInterface $provider, UserRepository $userRepository)
     {
         $this->provider = $provider;
-        $this->queryExecutor = $queryExecutor;
+        $this->userRepository = $userRepository;
     }
 
     public function loadUserByUsername(string $username)
@@ -43,7 +43,9 @@ final class TwoFactorUserProviderDecorator implements UserProviderInterface
         $user = $this->provider->loadUserByUsername($username);
 
         if ($user instanceof User) {
-            $results = $this->queryExecutor->getUserGoogleAuthSecretByUserId($user->getAPIUserReference()->getUserId());
+            $results = $this->userRepository->getUserGoogleAuthSecretByUserId(
+                $user->getAPIUserReference()->getUserId()
+            );
 
             if (false === $results) {
                 return $user;

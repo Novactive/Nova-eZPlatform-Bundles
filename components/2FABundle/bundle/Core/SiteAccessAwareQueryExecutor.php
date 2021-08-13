@@ -17,7 +17,6 @@ namespace Novactive\Bundle\eZ2FABundle\Core;
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry as Registry;
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
-use PDO;
 
 final class SiteAccessAwareQueryExecutor
 {
@@ -55,35 +54,5 @@ final class SiteAccessAwareQueryExecutor
         }
 
         return $connection->executeStatement($cleanQuery, $params, $types);
-    }
-
-    public function insertUserGoogleAuthSecret(int $userId, string $secret): void
-    {
-        $query = <<<QUERY
-                INSERT INTO user_google_auth_secret (user_contentobject_id, google_authentication_secret) 
-                VALUES (?, ?)
-            QUERY;
-        ($this)($query, [$userId, $secret], [PDO::PARAM_INT, PDO::PARAM_STR]);
-    }
-
-    public function deleteUserGoogleAuthSecret(int $userId): void
-    {
-        $query = <<<QUERY
-                DELETE FROM user_google_auth_secret
-                WHERE user_contentobject_id = ? 
-            QUERY;
-        ($this)($query, [$userId], [PDO::PARAM_INT]);
-    }
-
-    public function getUserGoogleAuthSecretByUserId(int $userId)
-    {
-        $query = <<<QUERY
-                SELECT google_authentication_secret as secret 
-                FROM user_google_auth_secret
-                WHERE user_contentobject_id = ?
-                LIMIT 1
-            QUERY;
-
-        return ($this)($query, [$userId], [PDO::PARAM_INT])->fetchAssociative();
     }
 }

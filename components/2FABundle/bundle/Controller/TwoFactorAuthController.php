@@ -15,7 +15,7 @@ namespace Novactive\Bundle\eZ2FABundle\Controller;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
 use EzSystems\EzPlatformAdminUiBundle\Controller\Controller;
 use Novactive\Bundle\eZ2FABundle\Core\QRCodeGenerator;
-use Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareQueryExecutor;
+use Novactive\Bundle\eZ2FABundle\Core\UserRepository;
 use Novactive\Bundle\eZ2FABundle\Entity\UserGoogleAuthSecret;
 use Novactive\Bundle\eZ2FABundle\Form\Type\TwoFactorAuthType;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator;
@@ -29,13 +29,13 @@ class TwoFactorAuthController extends Controller
     public function setupAction(
         Request $request,
         GoogleAuthenticator $googleAuthenticator,
-        SiteAccessAwareQueryExecutor $queryExecutor,
+        UserRepository $userRepository,
         QRCodeGenerator $QRCodeGenerator
     ): Response {
         /* @var User $user */
         $user = $this->getUser();
 
-        if ($queryExecutor->getUserGoogleAuthSecretByUserId($user->getAPIUser()->id)) {
+        if ($userRepository->getUserGoogleAuthSecretByUserId($user->getAPIUser()->id)) {
             return $this->render(
                 '@ezdesign/2fa/setup.html.twig',
                 [
@@ -53,7 +53,7 @@ class TwoFactorAuthController extends Controller
             $data = $form->getData();
             $user->setGoogleAuthenticatorSecret($data['secretKey']);
             if ($googleAuthenticator->checkCode($user, $data['sixdigitCode'])) {
-                $queryExecutor->insertUserGoogleAuthSecret($user->getAPIUser()->id, $data['secretKey']);
+                $userRepository->insertUserGoogleAuthSecret($user->getAPIUser()->id, $data['secretKey']);
 
                 return $this->render(
                     '@ezdesign/2fa/setup.html.twig',
@@ -81,12 +81,12 @@ class TwoFactorAuthController extends Controller
         );
     }
 
-    public function resetAction(SiteAccessAwareQueryExecutor $queryExecutor): RedirectResponse
+    public function resetAction(UserRepository $userRepository): RedirectResponse
     {
         /* @var UserGoogleAuthSecret $user */
         $user = $this->getUser();
 
-        $queryExecutor->deleteUserGoogleAuthSecret($user->getAPIUser()->id);
+        $userRepository->deleteUserGoogleAuthSecret($user->getAPIUser()->id);
 
         return $this->redirectToRoute('2fa_setup');
     }
