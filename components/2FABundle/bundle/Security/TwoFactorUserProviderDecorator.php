@@ -17,6 +17,7 @@ namespace Novactive\Bundle\eZ2FABundle\Security;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
 use Novactive\Bundle\eZ2FABundle\Core\UserRepository;
 use Novactive\Bundle\eZ2FABundle\Entity\UserGoogleAuthSecret;
+use Novactive\Bundle\eZ2FABundle\Entity\UserTotpAuthSecret;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
@@ -43,7 +44,7 @@ final class TwoFactorUserProviderDecorator implements UserProviderInterface
         $user = $this->provider->loadUserByUsername($username);
 
         if ($user instanceof User) {
-            $results = $this->userRepository->getUserGoogleAuthSecretByUserId(
+            $results = $this->userRepository->getUserAuthSecretByUserId(
                 $user->getAPIUserReference()->getUserId()
             );
 
@@ -51,11 +52,20 @@ final class TwoFactorUserProviderDecorator implements UserProviderInterface
                 return $user;
             }
 
-            return new UserGoogleAuthSecret(
-                $user->getAPIUser(),
-                $user->getRoles(),
-                $results['secret'] ?? null
-            );
+            if (!empty($results['google_authentication_secret'])) {
+                return new UserGoogleAuthSecret(
+                    $user->getAPIUser(),
+                    $user->getRoles(),
+                    $results['google_authentication_secret']
+                );
+            }
+            if (!empty($results['totp_authentication_secret'])) {
+                return new UserTotpAuthSecret(
+                    $user->getAPIUser(),
+                    $user->getRoles(),
+                    $results['totp_authentication_secret']
+                );
+            }
         }
 
         return $user;

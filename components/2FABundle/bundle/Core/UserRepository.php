@@ -40,7 +40,36 @@ final class UserRepository
         ($this->queryExecutor)($query, [$userId, $secret], [PDO::PARAM_INT, PDO::PARAM_STR]);
     }
 
-    public function deleteUserGoogleAuthSecret(int $userId): void
+    public function updateUserGoogleAuthSecret(int $userId, string $secret): void
+    {
+        $query = <<<QUERY
+                UPDATE user_google_auth_secret
+                SET google_authentication_secret = ?
+                WHERE user_contentobject_id = ? 
+            QUERY;
+        ($this->queryExecutor)($query, [$secret, $userId], [PDO::PARAM_STR, PDO::PARAM_INT]);
+    }
+
+    public function insertUserTotpAuthSecret(int $userId, string $secret): void
+    {
+        $query = <<<QUERY
+                INSERT INTO user_google_auth_secret (user_contentobject_id, totp_authentication_secret) 
+                VALUES (?, ?)
+            QUERY;
+        ($this->queryExecutor)($query, [$userId, $secret], [PDO::PARAM_INT, PDO::PARAM_STR]);
+    }
+
+    public function updateUserTotpAuthSecret(int $userId, string $secret): void
+    {
+        $query = <<<QUERY
+                UPDATE user_google_auth_secret
+                SET totp_authentication_secret = ?
+                WHERE user_contentobject_id = ? 
+            QUERY;
+        ($this->queryExecutor)($query, [$secret, $userId], [PDO::PARAM_STR, PDO::PARAM_INT]);
+    }
+
+    public function deleteUserAuthSecret(int $userId): void
     {
         $query = <<<QUERY
                 DELETE FROM user_google_auth_secret
@@ -49,10 +78,30 @@ final class UserRepository
         ($this->queryExecutor)($query, [$userId], [PDO::PARAM_INT]);
     }
 
-    public function getUserGoogleAuthSecretByUserId(int $userId)
+    public function deleteUserGoogleAuthSecret(int $userId): void
     {
         $query = <<<QUERY
-                SELECT google_authentication_secret as secret 
+                UPDATE user_google_auth_secret
+                SET google_authentication_secret = ''
+                WHERE user_contentobject_id = ? 
+            QUERY;
+        ($this->queryExecutor)($query, [$userId], [PDO::PARAM_INT]);
+    }
+
+    public function deleteUserTotpAuthSecret(int $userId): void
+    {
+        $query = <<<QUERY
+                UPDATE user_google_auth_secret
+                SET totp_authentication_secret = ''
+                WHERE user_contentobject_id = ? 
+            QUERY;
+        ($this->queryExecutor)($query, [$userId], [PDO::PARAM_INT]);
+    }
+
+    public function getUserAuthSecretByUserId(int $userId)
+    {
+        $query = <<<QUERY
+                SELECT google_authentication_secret, totp_authentication_secret
                 FROM user_google_auth_secret
                 WHERE user_contentobject_id = ?
                 LIMIT 1
