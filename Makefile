@@ -142,7 +142,7 @@ documentation: ## Generate the documention
 clean: stop ## Removes the vendors, and caches
 	@-rm -f .php_cs.cache
 	@-rm -rf vendor
-	@-rm -f drivers
+	@-rm -rf drivers
 	@-rm -rf ezplatform
 	@-rm  node_modules
 	@-$(DOCKER) rm $(DOCKER_DB_CONTAINER)
