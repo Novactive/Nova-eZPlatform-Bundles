@@ -37,6 +37,7 @@ class TwoFactorAuthController extends Controller
                 '@ezdesign/2fa/setup.html.twig',
                 [
                     'reset' => true,
+                    'method' => $saAuthenticatorResolver->getMethod(),
                 ]
             );
         }
@@ -52,6 +53,7 @@ class TwoFactorAuthController extends Controller
                     '@ezdesign/2fa/setup.html.twig',
                     [
                         'success' => true,
+                        'method' => $saAuthenticatorResolver->getMethod(),
                     ]
                 );
             }

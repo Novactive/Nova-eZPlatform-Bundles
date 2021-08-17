@@ -47,7 +47,7 @@ final class Remove2FAForUserCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setName('acx:users:remove-2fa')
+            ->setName('nova:2fa:remove-secret-key')
             ->setDescription('Removes the 2FA secret key for the specified user')
             ->addArgument('user_login', InputArgument::REQUIRED, 'User Login');
     }

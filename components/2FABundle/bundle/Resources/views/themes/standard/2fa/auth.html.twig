@@ -18,7 +18,9 @@
                 {% block login_form_fields %}
                     <div class="form-group{% if authenticationError %} has-error{% endif %}">
                         <div class="ez-login__input-label-wrapper">
-                            <label class="ez-login__input-label" for="_auth_code">{{ "auth_code"|trans({}, 'SchebTwoFactorBundle') }} {{ twoFactorProvider }}:</label>
+                            <label class="ez-login__input-label" for="_auth_code">
+                                {{ app.token.attribute('method')|capitalize }} {{ "auth_code"|trans({}, 'SchebTwoFactorBundle') }}:
+                            </label>
                         </div>
                         <input
                                 type="text"
@@ -32,12 +34,13 @@
 
                     {% if displayTrustedOption %}
                         <div class="form-group">
+                            <input id="_trusted" type="checkbox" name="{{ trustedParameterName }}"/>
                             <div class="ez-login__input-label-wrapper">
                                 <label for="_trusted">{{ "trusted"|trans({}, 'SchebTwoFactorBundle') }}</label>
                             </div>
-                            <input id="_trusted" type="checkbox" name="{{ trustedParameterName }}"/>
                         </div>
                     {% endif %}
+
                     {% if isCsrfProtectionEnabled %}
                         <input type="hidden" name="{{ csrfParameterName }}" value="{{ csrf_token(csrfTokenId) }}">
                     {% endif %}
@@ -45,9 +48,11 @@
                 {% endblock %}
 
                 {% block login_form_buttons %}
-                    <button type="submit" class="btn btn-primary ez-login__btn ez-login__btn--sign-in" tabindex="3">
-                        {{ "login"|trans({}, 'SchebTwoFactorBundle') }}
-                    </button>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary ez-login__btn ez-login__btn--sign-in" tabindex="3">
+                            {{ "login"|trans({}, 'SchebTwoFactorBundle') }}
+                        </button>
+                    </div>
                 {% endblock %}
 
                 {# The logout link gives the user a way out if they can't complete two-factor authentication #}
