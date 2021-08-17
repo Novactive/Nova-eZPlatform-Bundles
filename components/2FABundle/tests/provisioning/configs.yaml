@@ -1,8 +1,31 @@
 scheb_two_factor:
+    # Google Authenticator config
     google:
         enabled: true
         server_name: Server Name                    # Server name used in QR code
-        issuer: Issuer Name                         # Issuer name used in QR code
+        issuer: Google Issuer                       # Issuer name used in QR code
         digits: 6                                   # Number of digits in authentication code
         window: 1                                   # How many codes before/after the current one would be accepted as valid
         template: "@ezdesign/2fa/auth.html.twig"    # Template for the 2FA login page
+
+    # TOTP Authenticator config
+    totp:
+        enabled: true                               # If TOTP authentication should be enabled, default false
+        server_name: Server Name                    # Server name used in QR code
+        issuer: TOTP Issuer                         # Issuer name used in QR code
+        window: 1                                   # How many codes before/after the current one would be accepted as valid
+        template: "@ezdesign/2fa/auth.html.twig"    # Template used to render the authentication form
+
+nova_ez2fa:
+    system:
+        # Available methods - google, totp, microsoft.
+        # If microsoft is selected the totp mechanism is still used but the config is forced and static so Microsoft Authenticator app can be used.
+        default:
+            2fa_method: google
+        site:
+            2fa_method: totp
+            # if microsoft method set - the config is forced to: algorithm: sha1, period: 30, digits: 6
+            config:
+                algorithm: sha1 #(md5, sha1, sha256, sha512)
+                period: 30
+                digits: 6

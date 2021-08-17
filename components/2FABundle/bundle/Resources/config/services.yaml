@@ -6,11 +6,14 @@ services:
     Novactive\Bundle\eZ2FABundle\Command\GenerateUsersGoogleAuthSecretCommand:
         bind:
             $googleAuthenticator: '@scheb_two_factor.security.google_authenticator'
-
+            $totpAuthenticator: '@scheb_two_factor.security.totp_authenticator'
 
     Novactive\Bundle\eZ2FABundle\Listener\UserEventSubscriber: ~
     Novactive\Bundle\eZ2FABundle\Listener\MenuEventSubscriber: ~
 
+    Novactive\Bundle\eZ2FABundle\Core\QRCodeGenerator: ~
+    Novactive\Bundle\eZ2FABundle\Core\UserRepository: ~
+    Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareAuthenticatorResolver: ~
     Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareQueryExecutor:
         arguments:
             $repositoryConfigurationProvider: "@ezpublish.api.repository_configuration_provider"
@@ -21,6 +24,3 @@ services:
     Novactive\Bundle\eZ2FABundle\Controller\:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
-
-    Novactive\Bundle\eZ2FABundle\Core\QRCodeGenerator: ~
-    Novactive\Bundle\eZ2FABundle\Core\UserRepository: ~

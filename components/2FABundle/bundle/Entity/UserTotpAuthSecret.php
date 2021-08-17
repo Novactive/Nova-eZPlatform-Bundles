@@ -27,11 +27,21 @@ final class UserTotpAuthSecret extends User implements TwoFactorInterface
      */
     private $secret;
 
-    public function __construct(APIUser $user, array $roles = [], ?string $secret = null)
+    /**
+     * @var array
+     */
+    private $config;
+
+    private const DEFAULT_ALGORITHM = TotpConfiguration::ALGORITHM_SHA1;
+    private const DEFAULT_PERIOD = 30;
+    private const DEFAULT_DIGITS = 6;
+
+    public function __construct(APIUser $user, array $roles = [], ?string $secret = null, array $config = [])
     {
         parent::__construct($user, $roles);
 
         $this->secret = $secret;
+        $this->config = $config;
     }
 
     public function isTotpAuthenticationEnabled(): bool
@@ -47,7 +57,12 @@ final class UserTotpAuthSecret extends User implements TwoFactorInterface
     public function getTotpAuthenticationConfiguration(): TotpConfigurationInterface
     {
         // You could persist the other configuration options in the user entity to make it individual per user.
-        return new TotpConfiguration($this->secret, TotpConfiguration::ALGORITHM_SHA1, 30, 6);
+        return new TotpConfiguration(
+            $this->secret,
+            $this->config['algorithm'] ?? self::DEFAULT_ALGORITHM,
+            $this->config['period'] ?? self::DEFAULT_PERIOD,
+            $this->config['digits'] ?? self::DEFAULT_DIGITS
+        );
     }
 
     public function setAuthenticatorSecret(?string $totpAuthenticatorSecret): void

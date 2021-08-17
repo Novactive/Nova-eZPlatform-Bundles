@@ -39,6 +39,6 @@ final class UserEventSubscriber implements EventSubscriberInterface
 
     public function onDeleteUser(DeleteUserEvent $event): void
     {
-        $this->userRepository->deleteUserAuthSecret($event->getUser()->id);
+        $this->userRepository->deleteUserAuthSecrets($event->getUser()->id);
     }
 }

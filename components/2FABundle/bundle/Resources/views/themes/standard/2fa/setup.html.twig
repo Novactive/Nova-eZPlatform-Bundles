@@ -35,8 +35,8 @@
 
                 {% else %}
 
-                    <div class="ez-data-source__message--main">Scan this QR code in your Google Authenticator application.</div>
-                    <div class="ez-data-source__message--main">Enter 6-digit code generated for this account.</div>
+                    <div class="ez-data-source__message--main">Scan this QR code with an application compatible with {{ method|capitalize }} Authenticator.</div>
+                    <div class="ez-data-source__message--main">Enter the code generated for this account.</div>
 
                     {{ qrCode|raw }}
 
@@ -44,14 +44,14 @@
 
                     <div class="ez-field ez-field-edit--ezstring ez-field-edit--required">
                         <div class="ez-field__label-wrapper">
-                            {{ form_label(form.sixdigitCode, null, {'label_attr': {'class': 'ez-field__label ez-label required'}}) }}
+                            {{ form_label(form.code, null, {'label_attr': {'class': 'ez-field__label ez-label required'}}) }}
                         </div>
                         <div class="ez-field-edit__data">
                             <div class="ez-data-source">
-                                {{ form_widget(form.sixdigitCode, {'attr': {'class': 'ez-data-source__input form-control'}}) }}
+                                {{ form_widget(form.code, {'attr': {'class': 'ez-data-source__input form-control'}}) }}
                             </div>
                         </div>
-                        {% for error in form.sixdigitCode.vars.errors %}
+                        {% for error in form.code.vars.errors %}
                             <em class="ez-field-edit__error">{{ error.message }}</em>
                         {% endfor %}
                     </div>
