@@ -2,6 +2,15 @@
 
 ----
 
+This repository is what we call a "subtree split": a read-only copy of one directory of the main repository. 
+It is used by Composer to allow developers to depend on specific bundles.
+
+If you want to report or contribute, you should instead open your issue on the main repository: https://github.com/Novactive/Nova-eZPlatform-Bundles
+
+Documentation is available in this repository via `.md` files but also packaged here: https://novactive.github.io/Nova-eZPlatform-Bundles/master/2FABundle/README.md.html
+
+----
+
 Novactive eZ 2FA Bundle provides two-factor authentication for your ezplatform/ibexa project.
 
 ## Installation
@@ -83,8 +92,46 @@ scheb_two_factor:
         window: 1                                   # How many codes before/after the current one would be accepted as valid
         template: "@ezdesign/2fa/auth.html.twig"    # Template for the 2FA login page
 
+    # TOTP Authenticator config
+    totp:
+        enabled: true                               # If TOTP authentication should be enabled, default false
+        server_name: Server Name                    # Server name used in QR code
+        issuer: TOTP Issuer                         # Issuer name used in QR code
+        window: 1                                   # How many codes before/after the current one would be accepted as valid
+        template: "@ezdesign/2fa/auth.html.twig"    # Template used to render the authentication form
+
+```
+
+```yaml
+# config/packages/nova_ez2fa.yaml
+
+nova_ez2fa:
+    system:
+        # Available methods - google, totp, microsoft.
+        # If microsoft is selected the totp mechanism is still used but the config is forced and static so Microsoft Authenticator app can be used.
+        default:
+            2fa_method: google
+        site:
+            2fa_method: totp
+            # if microsoft method set - the config is forced to: algorithm: sha1, period: 30, digits: 6
+            config:
+                algorithm: sha1 #(md5, sha1, sha256, sha512)
+                period: 30
+                digits: 6
+
 ```
 
 ### Create the table in DB:
 
 See the file `bundle/Resources/sql/schema.sql`
+
+
+### Manually removing 2FA record for specific User:
+
+If some User needs its 2FA record in the database removed to be able to login without entering 2FA code run the following command `acx:users:remove-2fa` with specifying user's login:
+
+```shell script
+
+php ezplatform/bin/console acx:users:remove-2fa user_login
+
+```

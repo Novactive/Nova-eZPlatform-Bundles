@@ -3,10 +3,7 @@ services:
         autowire: true
         autoconfigure: true
 
-    Novactive\Bundle\eZ2FABundle\Command\GenerateUsersGoogleAuthSecretCommand:
-        bind:
-            $googleAuthenticator: '@scheb_two_factor.security.google_authenticator'
-            $totpAuthenticator: '@scheb_two_factor.security.totp_authenticator'
+    Novactive\Bundle\eZ2FABundle\Command\Remove2FAForUserCommand:
 
     Novactive\Bundle\eZ2FABundle\Listener\UserEventSubscriber: ~
     Novactive\Bundle\eZ2FABundle\Listener\MenuEventSubscriber: ~
