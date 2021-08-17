@@ -47,7 +47,7 @@ final class UserGoogleAuthSecret extends User implements TwoFactorInterface
         return $this->secret;
     }
 
-    public function setGoogleAuthenticatorSecret(?string $googleAuthenticatorSecret): void
+    public function setAuthenticatorSecret(?string $googleAuthenticatorSecret): void
     {
         $this->secret = $googleAuthenticatorSecret;
     }

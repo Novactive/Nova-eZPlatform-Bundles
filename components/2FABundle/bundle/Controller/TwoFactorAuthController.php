@@ -15,10 +15,8 @@ namespace Novactive\Bundle\eZ2FABundle\Controller;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
 use EzSystems\EzPlatformAdminUiBundle\Controller\Controller;
 use Novactive\Bundle\eZ2FABundle\Core\QRCodeGenerator;
-use Novactive\Bundle\eZ2FABundle\Core\UserRepository;
-use Novactive\Bundle\eZ2FABundle\Entity\UserGoogleAuthSecret;
+use Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareAuthenticatorResolver;
 use Novactive\Bundle\eZ2FABundle\Form\Type\TwoFactorAuthType;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,14 +26,13 @@ class TwoFactorAuthController extends Controller
 {
     public function setupAction(
         Request $request,
-        GoogleAuthenticator $googleAuthenticator,
-        UserRepository $userRepository,
-        QRCodeGenerator $QRCodeGenerator
+        QRCodeGenerator $QRCodeGenerator,
+        SiteAccessAwareAuthenticatorResolver $saAuthenticatorResolver
     ): Response {
         /* @var User $user */
         $user = $this->getUser();
 
-        if ($userRepository->getUserGoogleAuthSecretByUserId($user->getAPIUser()->id)) {
+        if ($saAuthenticatorResolver->checkIfUserSecretExists($user)) {
             return $this->render(
                 '@ezdesign/2fa/setup.html.twig',
                 [
@@ -44,17 +41,13 @@ class TwoFactorAuthController extends Controller
             );
         }
 
-        $user = new UserGoogleAuthSecret($user->getAPIUser(), $user->getRoles(), null);
+        $user = $saAuthenticatorResolver->getUserAuthenticatorEntity($user);
 
         $form = $this->createForm(TwoFactorAuthType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            $user->setGoogleAuthenticatorSecret($data['secretKey']);
-            if ($googleAuthenticator->checkCode($user, $data['sixdigitCode'])) {
-                $userRepository->insertUserGoogleAuthSecret($user->getAPIUser()->id, $data['secretKey']);
-
+            if ($saAuthenticatorResolver->validateCodeAndUpdateUser($user, $form->getData())) {
                 return $this->render(
                     '@ezdesign/2fa/setup.html.twig',
                     [
@@ -63,12 +56,12 @@ class TwoFactorAuthController extends Controller
                 );
             }
 
-            $form->get('sixdigitCode')->addError(new FormError('Wrong 6-digit code provided!'));
+            $form->get('code')->addError(new FormError('Wrong code provided!'));
         }
 
         if (!$form->isSubmitted()) {
-            $secretKey = $googleAuthenticator->generateSecret();
-            $user->setGoogleAuthenticatorSecret($secretKey);
+            $secretKey = $saAuthenticatorResolver->getAuthenticator()->generateSecret();
+            $user->setAuthenticatorSecret($secretKey);
             $form->get('secretKey')->setData($secretKey);
         }
 
@@ -77,16 +70,17 @@ class TwoFactorAuthController extends Controller
             [
                 'qrCode' => $QRCodeGenerator->createFromUser($user),
                 'form' => $form->createView(),
+                'method' => $saAuthenticatorResolver->getMethod(),
             ]
         );
     }
 
-    public function resetAction(UserRepository $userRepository): RedirectResponse
+    public function resetAction(SiteAccessAwareAuthenticatorResolver $saAuthenticatorResolver): RedirectResponse
     {
-        /* @var UserGoogleAuthSecret $user */
+        /* @var User $user */
         $user = $this->getUser();
 
-        $userRepository->deleteUserGoogleAuthSecret($user->getAPIUser()->id);
+        $saAuthenticatorResolver->deleteUserAuthSecret($user);
 
         return $this->redirectToRoute('2fa_setup');
     }

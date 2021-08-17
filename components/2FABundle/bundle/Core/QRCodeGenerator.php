@@ -18,8 +18,9 @@ use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
-use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
+use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface as GoogleTwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticator;
 
 final class QRCodeGenerator
 {
@@ -28,12 +29,18 @@ final class QRCodeGenerator
      */
     private $googleAuthenticator;
 
-    public function __construct(GoogleAuthenticator $googleAuthenticator)
+    /**
+     * @var TotpAuthenticator
+     */
+    private $totpAuthenticator;
+
+    public function __construct(GoogleAuthenticator $googleAuthenticator, TotpAuthenticator $totpAuthenticator)
     {
         $this->googleAuthenticator = $googleAuthenticator;
+        $this->totpAuthenticator = $totpAuthenticator;
     }
 
-    public function createFromUser(TwoFactorInterface $user): string
+    public function createFromUser($user): string
     {
         $renderer = new ImageRenderer(
             new RendererStyle(300),
@@ -41,6 +48,12 @@ final class QRCodeGenerator
         );
         $writer = new Writer($renderer);
 
-        return $writer->writeString($this->googleAuthenticator->getQRContent($user));
+        if ($user instanceof GoogleTwoFactorInterface) {
+            $qrContent = $this->googleAuthenticator->getQRContent($user);
+        } else {
+            $qrContent = $this->totpAuthenticator->getQRContent($user);
+        }
+
+        return $writer->writeString($qrContent);
     }
 }

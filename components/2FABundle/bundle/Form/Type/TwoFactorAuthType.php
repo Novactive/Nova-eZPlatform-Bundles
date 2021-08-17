@@ -27,15 +27,15 @@ final class TwoFactorAuthType extends AbstractType
     {
         $builder
             ->add(
-                'sixdigitCode',
+                'code',
                 TextType::class,
                 [
                     'required' => true,
-                    'label' => '6-digit code',
+                    'label' => 'Code',
                     'constraints' => [
                         new NotBlank(
                             [
-                                'message' => '6-digit code is required to complete the setup',
+                                'message' => 'The code is required to complete the setup',
                             ]
                         ),
                     ],

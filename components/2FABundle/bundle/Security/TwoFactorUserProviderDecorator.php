@@ -15,8 +15,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZ2FABundle\Security;
 
 use eZ\Publish\Core\MVC\Symfony\Security\User;
-use Novactive\Bundle\eZ2FABundle\Core\UserRepository;
-use Novactive\Bundle\eZ2FABundle\Entity\UserGoogleAuthSecret;
+use Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareAuthenticatorResolver;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
@@ -28,14 +27,16 @@ final class TwoFactorUserProviderDecorator implements UserProviderInterface
     private $provider;
 
     /**
-     * @var UserRepository
+     * @var SiteAccessAwareAuthenticatorResolver
      */
-    private $userRepository;
+    private $saAuthenticatorResolver;
 
-    public function __construct(UserProviderInterface $provider, UserRepository $userRepository)
-    {
+    public function __construct(
+        UserProviderInterface $provider,
+        SiteAccessAwareAuthenticatorResolver $saAuthenticatorResolver
+    ) {
         $this->provider = $provider;
-        $this->userRepository = $userRepository;
+        $this->saAuthenticatorResolver = $saAuthenticatorResolver;
     }
 
     public function loadUserByUsername(string $username)
@@ -43,19 +44,7 @@ final class TwoFactorUserProviderDecorator implements UserProviderInterface
         $user = $this->provider->loadUserByUsername($username);
 
         if ($user instanceof User) {
-            $results = $this->userRepository->getUserGoogleAuthSecretByUserId(
-                $user->getAPIUserReference()->getUserId()
-            );
-
-            if (false === $results) {
-                return $user;
-            }
-
-            return new UserGoogleAuthSecret(
-                $user->getAPIUser(),
-                $user->getRoles(),
-                $results['secret'] ?? null
-            );
+            return $this->saAuthenticatorResolver->getUserForDecorator($user);
         }
 
         return $user;
