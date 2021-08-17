@@ -100,7 +100,22 @@ scheb_two_factor:
         window: 1                                   # How many codes before/after the current one would be accepted as valid
         template: "@ezdesign/2fa/auth.html.twig"    # Template used to render the authentication form
 
+    # Trusted device feature
+    trusted_device:
+        enabled: true                                   # If the trusted device feature should be enabled
+        # manager: acme.custom_trusted_device_manager   # Use a custom trusted device manager
+        lifetime: 259200                                # Lifetime of the trusted device token, in seconds
+        extend_lifetime: false                          # Automatically extend lifetime of the trusted cookie on re-login
+        cookie_name: trusted_device                     # Name of the trusted device cookie
+        cookie_secure: true                             # Set the 'Secure' (HTTPS Only) flag on the trusted device cookie
+        cookie_same_site: "lax"                         # The same-site option of the cookie, can be "lax", "strict" or null
+        # cookie_domain: ""                             # Domain to use when setting the cookie, fallback to the request domain if not set
+        cookie_path: "/"                                # Path to use when setting the cookie
+
 ```
+
+For full **scheb_two_factor** reference visit the following resource: https://github.com/scheb/two-factor-bundle/blob/4.x/Resources/doc/configuration.md
+
 
 ```yaml
 # config/packages/nova_ez2fa.yaml
@@ -135,3 +150,5 @@ If some User needs its 2FA record in the database removed to be able to login wi
 php ezplatform/bin/console acx:users:remove-2fa user_login
 
 ```
+
+> **Note to keep in mind**: If you have the 2FA already set up for the user and you're going to reset it by following the corresponding link on the 2FA Setup page don't change the method for the current site access before that! Because in this case the secret key will supposed to be removed for the new method not for the old one and hence the reset won't work!
