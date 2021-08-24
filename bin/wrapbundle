@@ -41,7 +41,10 @@ file_put_contents($bundleFile, $bundleList);
  * Inject the configurations
  */
 if (file_exists($configDir."/configs.yaml") && trim(file_get_contents($configDir."/configs.yaml")) !== '') {
-    $bundleName = substr(trim(file($configDir."/configs.yaml")[0]), 0, -1);
+    $firstLine = substr(trim(file($configDir."/configs.yaml")[0]), 0, -1);
+    if(strpos($firstLine, 'nova_') === 0) {
+        $bundleName = $firstLine;
+    }
     file_put_contents(
         "{$appRootDir}/config/packages/{$bundleName}.yaml",
         file_get_contents($configDir."/configs.yaml")
