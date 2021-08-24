@@ -77,7 +77,7 @@ $psr4 = array_map(
     $bundleComposerJson["autoload"]['psr-4'] ?? []
 );
 
-$data["autoload"]['psr-4'] += $psr4;
+$data["autoload"]['psr-4'] = array_merge($data["autoload"]['psr-4'], $psr4);
 $data['require'] += $bundleComposerJson['require'] ?? [];
 $data['require-dev'] += $bundleComposerJson['require-dev'] ?? [];
 
