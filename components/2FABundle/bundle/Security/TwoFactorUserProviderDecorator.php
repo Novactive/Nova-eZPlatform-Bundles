@@ -14,15 +14,17 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZ2FABundle\Security;
 
+use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
+use eZ\Publish\Core\MVC\Symfony\Security\User\APIUserProviderInterface;
 use Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareAuthenticatorResolver;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
-final class TwoFactorUserProviderDecorator implements UserProviderInterface
+final class TwoFactorUserProviderDecorator implements UserProviderInterface, APIUserProviderInterface
 {
     /**
-     * @var UserProviderInterface
+     * @var UserProviderInterface|APIUserProviderInterface
      */
     private $provider;
 
@@ -37,6 +39,11 @@ final class TwoFactorUserProviderDecorator implements UserProviderInterface
     ) {
         $this->provider = $provider;
         $this->saAuthenticatorResolver = $saAuthenticatorResolver;
+    }
+
+    public function loadUserByAPIUser(APIUser $apiUser): User
+    {
+        return $this->provider->loadUserByAPIUser($apiUser);
     }
 
     public function loadUserByUsername(string $username)
