@@ -147,7 +147,7 @@ If some User needs its 2FA record in the database removed to be able to login wi
 
 ```shell script
 
-php ezplatform/bin/console acx:users:remove-2fa user_login
+php ezplatform/bin/console nova:2fa:remove-secret-key user_login
 
 ```
 
