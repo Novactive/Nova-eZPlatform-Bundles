@@ -21,3 +21,9 @@ services:
 
     Novactive\Bundle\eZ2FABundle\Security\TwoFactorUserProviderDecorator:
         decorates: 'ezpublish.security.user_provider'
+
+    Novactive\Bundle\eZ2FABundle\Security\BackupCodeManager: ~
+
+    Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareAuthenticatorResolver:
+        bind:
+            $backupCodesEnabled: '%nova_ez2fa.backup_codes.enabled%'

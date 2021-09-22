@@ -48,12 +48,14 @@ class TwoFactorAuthController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($saAuthenticatorResolver->validateCodeAndUpdateUser($user, $form->getData())) {
+            $result = $saAuthenticatorResolver->validateCodeAndUpdateUser($user, $form->getData());
+            if ($result['valid']) {
                 return $this->render(
                     '@ezdesign/2fa/setup.html.twig',
                     [
                         'success' => true,
                         'method' => $saAuthenticatorResolver->getMethod(),
+                        'backupCodes' => $result['backupCodes'],
                     ]
                 );
             }
