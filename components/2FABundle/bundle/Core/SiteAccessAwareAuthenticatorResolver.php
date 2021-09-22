@@ -19,6 +19,9 @@ use eZ\Publish\Core\MVC\Symfony\Security\User;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use Novactive\Bundle\eZ2FABundle\DependencyInjection\Configuration;
+use Novactive\Bundle\eZ2FABundle\Entity\BackupCodeInterface;
+use Novactive\Bundle\eZ2FABundle\Entity\AuthenticatorInterface;
+use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Novactive\Bundle\eZ2FABundle\Entity\UserGoogleAuthSecret;
 use Novactive\Bundle\eZ2FABundle\Entity\UserTotpAuthSecret;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator;
@@ -145,7 +148,7 @@ final class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
 
     public function validateCodeAndUpdateUser(User $user, array $formData): array
     {
-        /* @var UserGoogleAuthSecret|UserTotpAuthSecret $user */
+        /* @var User|TwoFactorInterface|AuthenticatorInterface|BackupCodeInterface $user */
         $user->setAuthenticatorSecret($formData['secretKey']);
         if ($this->getAuthenticator()->checkCode($user, $formData['code'])) {
             if ($this->backupCodesEnabled) {

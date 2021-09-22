@@ -14,10 +14,9 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZ2FABundle\Security;
 
+use eZ\Publish\Core\MVC\Symfony\Security\User;
 use Novactive\Bundle\eZ2FABundle\Core\UserRepository;
-use Novactive\Bundle\eZ2FABundle\Entity\UserGoogleAuthSecret;
-use Novactive\Bundle\eZ2FABundle\Entity\UserTotpAuthSecret;
-use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
+use Novactive\Bundle\eZ2FABundle\Entity\BackupCodeInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
 
 final class BackupCodeManager implements BackupCodeManagerInterface
@@ -44,7 +43,7 @@ final class BackupCodeManager implements BackupCodeManagerInterface
     public function invalidateBackupCode($user, string $code): void
     {
         if ($user instanceof BackupCodeInterface) {
-            /* @var UserGoogleAuthSecret|UserTotpAuthSecret $user */
+            /* @var User|BackupCodeInterface $user */
             $user->invalidateBackupCode($code);
             $this->userRepository->updateBackupCodes(
                 $user->getAPIUser()->getUserId(),

@@ -16,13 +16,14 @@ namespace Novactive\Bundle\eZ2FABundle\Entity;
 
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
-use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
 use Scheb\TwoFactorBundle\Model\Totp\TotpConfiguration;
 use Scheb\TwoFactorBundle\Model\Totp\TotpConfigurationInterface;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
 
-final class UserTotpAuthSecret extends User implements TwoFactorInterface, BackupCodeInterface
+final class UserTotpAuthSecret extends User implements TwoFactorInterface, BackupCodeInterface, AuthenticatorInterface
 {
+    use BackupCodeAware;
+
     /**
      * @var string|null
      */
@@ -32,11 +33,6 @@ final class UserTotpAuthSecret extends User implements TwoFactorInterface, Backu
      * @var array
      */
     private $config;
-
-    /**
-     * @var array
-     */
-    private $backupCodes = [];
 
     private const DEFAULT_ALGORITHM = TotpConfiguration::ALGORITHM_SHA1;
     private const DEFAULT_PERIOD = 30;
@@ -74,29 +70,6 @@ final class UserTotpAuthSecret extends User implements TwoFactorInterface, Backu
     public function setAuthenticatorSecret(?string $totpAuthenticatorSecret): void
     {
         $this->secret = $totpAuthenticatorSecret;
-    }
-
-    public function isBackupCode(string $code): bool
-    {
-        return in_array((int) $code, $this->backupCodes, true);
-    }
-
-    public function invalidateBackupCode(string $code): void
-    {
-        $key = array_search($code, $this->backupCodes, true);
-        if (false !== $key) {
-            unset($this->backupCodes[$key]);
-        }
-    }
-
-    public function setBackupCodes(array $backupCodes): void
-    {
-        $this->backupCodes = $backupCodes;
-    }
-
-    public function getBackupCodes(): array
-    {
-        return $this->backupCodes;
     }
 
     public function __serialize(): array
