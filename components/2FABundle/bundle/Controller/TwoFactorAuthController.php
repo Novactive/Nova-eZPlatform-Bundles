@@ -12,6 +12,8 @@
 
 namespace Novactive\Bundle\eZ2FABundle\Controller;
 
+use eZ\Publish\API\Repository\PermissionResolver;
+use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
 use EzSystems\EzPlatformAdminUiBundle\Controller\Controller;
 use Novactive\Bundle\eZ2FABundle\Core\QRCodeGenerator;
@@ -21,6 +23,8 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class TwoFactorAuthController extends Controller
 {
@@ -79,12 +83,35 @@ class TwoFactorAuthController extends Controller
         );
     }
 
-    public function resetAction(SiteAccessAwareAuthenticatorResolver $saAuthenticatorResolver): RedirectResponse
-    {
-        /* @var User $user */
-        $user = $this->getUser();
+    public function resetAction(
+        SiteAccessAwareAuthenticatorResolver $saAuthenticatorResolver,
+        UserService $userService,
+        RouterInterface $router,
+        PermissionResolver $permissionResolver,
+        ?int $userId = null
+    ): RedirectResponse {
+        if (null === $userId) {
+            /* @var User $user */
+            $user = $this->getUser();
+        } else {
+            if (!$permissionResolver->hasAccess('2fa_management', 'all_functions')) {
+                throw new AccessDeniedException('Limited access !!!');
+            }
+
+            $apiUser = $userService->loadUser($userId);
+            $user = new User($apiUser);
+            $contentId = $apiUser->contentInfo->id;
+            $locationId = $apiUser->contentInfo->mainLocationId;
+        }
 
         $saAuthenticatorResolver->deleteUserAuthSecret($user);
+
+        if (isset($contentId, $locationId)) {
+            return new RedirectResponse(
+                $router->generate('_ez_content_view', ['contentId' => $contentId, 'locationId' => $locationId]).
+                '#ez-tab-location-view-reset-for-user#tab'
+            );
+        }
 
         return $this->redirectToRoute('2fa_setup');
     }

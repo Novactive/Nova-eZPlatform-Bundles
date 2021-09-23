@@ -19,11 +19,11 @@ use eZ\Publish\Core\MVC\Symfony\Security\User;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use Novactive\Bundle\eZ2FABundle\DependencyInjection\Configuration;
-use Novactive\Bundle\eZ2FABundle\Entity\BackupCodeInterface;
 use Novactive\Bundle\eZ2FABundle\Entity\AuthenticatorInterface;
-use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
+use Novactive\Bundle\eZ2FABundle\Entity\BackupCodeInterface;
 use Novactive\Bundle\eZ2FABundle\Entity\UserGoogleAuthSecret;
 use Novactive\Bundle\eZ2FABundle\Entity\UserTotpAuthSecret;
+use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticator;
 

@@ -27,3 +27,7 @@ services:
     Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareAuthenticatorResolver:
         bind:
             $backupCodesEnabled: '%nova_ez2fa.backup_codes.enabled%'
+
+    Novactive\Bundle\eZ2FABundle\Core\Tab\TwoFAManagement:
+        tags:
+            - { name: ezplatform.tab, group: location-view }
