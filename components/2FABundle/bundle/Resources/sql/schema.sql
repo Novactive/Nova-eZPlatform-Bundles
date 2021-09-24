@@ -3,5 +3,6 @@ CREATE TABLE `user_auth_secret` (
    `google_authentication_secret` varchar(255) NOT NULL DEFAULT '',
    `totp_authentication_secret` varchar(255) NOT NULL DEFAULT '',
    `microsoft_authentication_secret` varchar(255) NOT NULL DEFAULT '',
+   `backup_codes` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
    PRIMARY KEY (`user_contentobject_id`)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

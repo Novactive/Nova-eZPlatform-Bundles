@@ -31,21 +31,29 @@ final class UserRepository
         $this->queryExecutor = $queryExecutor;
     }
 
-    public function insertUpdateUserAuthSecret(int $userId, string $secret, string $prefix): void
+    public function insertUpdateUserAuthSecret(int $userId, string $secret, string $prefix, string $backupCodes): void
     {
         if (is_array($this->getUserAuthSecretByUserId($userId))) {
             $query = <<<QUERY
                 UPDATE user_auth_secret
-                SET {$prefix}_authentication_secret = ?
+                SET {$prefix}_authentication_secret = ?, backup_codes = ?
                 WHERE user_contentobject_id = ? 
             QUERY;
-            ($this->queryExecutor)($query, [$secret, $userId], [PDO::PARAM_STR, PDO::PARAM_INT]);
+            ($this->queryExecutor)(
+                $query,
+                [$secret, $backupCodes, $userId],
+                [PDO::PARAM_STR, PDO::PARAM_STR, PDO::PARAM_INT]
+            );
         } else {
             $query = <<<QUERY
-                INSERT INTO user_auth_secret (user_contentobject_id, {$prefix}_authentication_secret) 
-                VALUES (?, ?)
+                INSERT INTO user_auth_secret (user_contentobject_id, {$prefix}_authentication_secret, backup_codes) 
+                VALUES (?, ?, ?)
             QUERY;
-            ($this->queryExecutor)($query, [$userId, $secret], [PDO::PARAM_INT, PDO::PARAM_STR]);
+            ($this->queryExecutor)(
+                $query,
+                [$userId, $secret, $backupCodes],
+                [PDO::PARAM_INT, PDO::PARAM_STR, PDO::PARAM_STR]
+            );
         }
     }
 
@@ -62,7 +70,7 @@ final class UserRepository
     {
         $query = <<<QUERY
                 UPDATE user_auth_secret
-                SET {$prefix}_authentication_secret = ''
+                SET {$prefix}_authentication_secret = '', backup_codes = ''
                 WHERE user_contentobject_id = ? 
             QUERY;
         ($this->queryExecutor)($query, [$userId], [PDO::PARAM_INT]);
@@ -71,12 +79,22 @@ final class UserRepository
     public function getUserAuthSecretByUserId(int $userId)
     {
         $query = <<<QUERY
-                SELECT google_authentication_secret, totp_authentication_secret, microsoft_authentication_secret
+                SELECT *
                 FROM user_auth_secret
                 WHERE user_contentobject_id = ?
                 LIMIT 1
             QUERY;
 
         return ($this->queryExecutor)($query, [$userId], [PDO::PARAM_INT])->fetchAssociative();
+    }
+
+    public function updateBackupCodes(int $userId, string $backupCodes): void
+    {
+        $query = <<<QUERY
+                UPDATE user_auth_secret
+                SET backup_codes = ?
+                WHERE user_contentobject_id = ? 
+            QUERY;
+        ($this->queryExecutor)($query, [$backupCodes, $userId], [PDO::PARAM_STR, PDO::PARAM_INT]);
     }
 }

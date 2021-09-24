@@ -18,8 +18,10 @@ use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 
-final class UserGoogleAuthSecret extends User implements TwoFactorInterface
+final class UserGoogleAuthSecret extends User implements TwoFactorInterface, BackupCodeInterface, AuthenticatorInterface
 {
+    use BackupCodeAware;
+
     /**
      * @var string|null
      */
@@ -58,6 +60,7 @@ final class UserGoogleAuthSecret extends User implements TwoFactorInterface
             'reference' => $this->getAPIUserReference(),
             'roles' => $this->getRoles(),
             'secret' => $this->secret,
+            'backupCodes' => $this->backupCodes,
         ];
     }
 }

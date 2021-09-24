@@ -16,6 +16,7 @@ namespace Novactive\Bundle\eZ2FABundle;
 
 use LogicException;
 use Novactive\Bundle\eZ2FABundle\DependencyInjection\NovaeZ2FAExtension;
+use Novactive\Bundle\eZ2FABundle\DependencyInjection\Security\PolicyProvider;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -25,6 +26,8 @@ final class NovaeZ2FABundle extends Bundle
     public function build(ContainerBuilder $container): void
     {
         parent::build($container);
+        $eZExtension = $container->getExtension('ezpublish');
+        $eZExtension->addPolicyProvider(new PolicyProvider());
     }
 
     public function getContainerExtension()

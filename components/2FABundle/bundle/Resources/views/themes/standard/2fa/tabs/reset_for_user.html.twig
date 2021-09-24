@@ -1,0 +1,7 @@
+<div class="ez-data-source__message--main">{{ method|capitalize }} two-factor authentication is {% if not isSetup %}NOT{% endif%} set up for this User.</div>
+{% if isSetup %}
+    <hr/>
+    <div class="ez-data-source__message--main">
+        <a href="{{ ez_path(ez_route('2fa_reset'), {userId: user.apiUser.id}) }}" onclick="return confirm('Are you sure?')" class="btn btn-secondary"><strong>RESET</strong></a>
+    </div>
+{% endif %}

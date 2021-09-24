@@ -19,8 +19,11 @@ use eZ\Publish\Core\MVC\Symfony\Security\User;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use Novactive\Bundle\eZ2FABundle\DependencyInjection\Configuration;
+use Novactive\Bundle\eZ2FABundle\Entity\AuthenticatorInterface;
+use Novactive\Bundle\eZ2FABundle\Entity\BackupCodeInterface;
 use Novactive\Bundle\eZ2FABundle\Entity\UserGoogleAuthSecret;
 use Novactive\Bundle\eZ2FABundle\Entity\UserTotpAuthSecret;
+use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticator;
 
@@ -61,16 +64,23 @@ final class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
      */
     private $userRepository;
 
+    /**
+     * @var bool
+     */
+    private $backupCodesEnabled;
+
     public function __construct(
         ConfigResolverInterface $configResolver,
         GoogleAuthenticator $googleAuthenticator,
         TotpAuthenticator $totpAuthenticator,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        bool $backupCodesEnabled
     ) {
         $this->configResolver = $configResolver;
         $this->googleAuthenticator = $googleAuthenticator;
         $this->totpAuthenticator = $totpAuthenticator;
         $this->userRepository = $userRepository;
+        $this->backupCodesEnabled = $backupCodesEnabled;
     }
 
     /**
@@ -122,6 +132,7 @@ final class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
 
         $authenticatorEntity = $this->getUserAuthenticatorEntity($user);
         $authenticatorEntity->setAuthenticatorSecret($userSecrets["{$this->method}_authentication_secret"]);
+        $authenticatorEntity->setBackupCodes(json_decode($userSecrets['backup_codes']) ?? []);
 
         return $authenticatorEntity;
     }
@@ -135,21 +146,41 @@ final class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
         return $this->totpAuthenticator;
     }
 
-    public function validateCodeAndUpdateUser(User $user, array $formData): bool
+    public function validateCodeAndUpdateUser(User $user, array $formData): array
     {
-        /* @var UserGoogleAuthSecret|UserTotpAuthSecret $user */
+        /* @var User|TwoFactorInterface|AuthenticatorInterface|BackupCodeInterface $user */
         $user->setAuthenticatorSecret($formData['secretKey']);
         if ($this->getAuthenticator()->checkCode($user, $formData['code'])) {
+            if ($this->backupCodesEnabled) {
+                // Generating backup codes
+                $backupCodes = [
+                    random_int(100000, 999999),
+                    random_int(100000, 999999),
+                    random_int(100000, 999999),
+                    random_int(100000, 999999),
+                    random_int(100000, 999999),
+                    random_int(100000, 999999),
+                ];
+
+                $user->setBackupCodes($backupCodes);
+            }
+
             $this->userRepository->insertUpdateUserAuthSecret(
                 $user->getAPIUser()->id,
                 $formData['secretKey'],
-                $this->method
+                $this->method,
+                isset($backupCodes) ? json_encode($backupCodes) : ''
             );
 
-            return true;
+            return [
+                'valid' => true,
+                'backupCodes' => $backupCodes ?? [],
+            ];
         }
 
-        return false;
+        return [
+            'valid' => false,
+        ];
     }
 
     public function checkIfUserSecretExists(User $user): bool

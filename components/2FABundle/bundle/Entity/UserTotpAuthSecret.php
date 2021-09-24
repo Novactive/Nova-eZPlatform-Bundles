@@ -20,8 +20,10 @@ use Scheb\TwoFactorBundle\Model\Totp\TotpConfiguration;
 use Scheb\TwoFactorBundle\Model\Totp\TotpConfigurationInterface;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
 
-final class UserTotpAuthSecret extends User implements TwoFactorInterface
+final class UserTotpAuthSecret extends User implements TwoFactorInterface, BackupCodeInterface, AuthenticatorInterface
 {
+    use BackupCodeAware;
+
     /**
      * @var string|null
      */
@@ -76,6 +78,7 @@ final class UserTotpAuthSecret extends User implements TwoFactorInterface
             'reference' => $this->getAPIUserReference(),
             'roles' => $this->getRoles(),
             'secret' => $this->secret,
+            'backupCodes' => $this->backupCodes,
         ];
     }
 }

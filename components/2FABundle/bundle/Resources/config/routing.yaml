@@ -14,6 +14,7 @@
         _controller: Novactive\Bundle\eZ2FABundle\Controller\TwoFactorAuthController::setupAction
 
 2fa_reset:
-    path: /2fa_reset
+    path: /2fa_reset/{userId}
     defaults:
+        userId: null
         _controller: Novactive\Bundle\eZ2FABundle\Controller\TwoFactorAuthController::resetAction

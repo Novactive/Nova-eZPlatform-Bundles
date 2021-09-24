@@ -84,6 +84,11 @@ The values can be updated according to the project specification
 # config/packages/scheb_two_factor.yaml
 
 scheb_two_factor:
+
+    backup_codes:
+        enabled: '%nova_ez2fa.backup_codes.enabled%' # Reading the value from the nova_ez2fa.backup_codes.enabled value in parameters section
+        manager: Novactive\Bundle\eZ2FABundle\Security\BackupCodeManager # This should either remain or be replaced with another one developed for that purpose
+
     google:
         enabled: true
         server_name: Local Ez Server                # Server name used in QR code
@@ -111,6 +116,11 @@ scheb_two_factor:
         cookie_same_site: "lax"                         # The same-site option of the cookie, can be "lax", "strict" or null
         # cookie_domain: ""                             # Domain to use when setting the cookie, fallback to the request domain if not set
         cookie_path: "/"                                # Path to use when setting the cookie
+
+# Whether to use the backup codes or not should be specified here, then used in scheb_two_factor.backup_codes
+# It's done this way in order to be able to determine if the backup codes should be generated or not
+parameters:
+    nova_ez2fa.backup_codes.enabled: true
 
 ```
 
