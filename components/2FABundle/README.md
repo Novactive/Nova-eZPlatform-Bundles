@@ -126,13 +126,14 @@ parameters:
 
 For full **scheb_two_factor** reference visit the following resource: https://github.com/scheb/two-factor-bundle/blob/4.x/Resources/doc/configuration.md
 
+> **Note to keep in mind**: This bundle is Siteaccess aware so each Siteaccess can have different authentication method.
 
 ```yaml
 # config/packages/nova_ez2fa.yaml
 
 nova_ez2fa:
     system:
-        # Available methods - google, totp, microsoft.
+        # Available methods - google, totp, microsoft. Set per Siteaccess.
         # If microsoft is selected the totp mechanism is still used but the config is forced and static so Microsoft Authenticator app can be used.
         default:
             2fa_method: google
@@ -161,4 +162,4 @@ php ezplatform/bin/console nova:2fa:remove-secret-key user_login
 
 ```
 
-> **Note to keep in mind**: If you have the 2FA already set up for the user and you're going to reset it by following the corresponding link on the 2FA Setup page don't change the method for the current site access before that! Because in this case the secret key will supposed to be removed for the new method not for the old one and hence the reset won't work!
+> **Note to keep in mind**: If you have the 2FA already set up for the user and you're going to reset it by following the corresponding link on the 2FA Setup page don't change the method for the current Siteaccess before that! Because in this case the secret key will supposed to be removed for the new method not for the old one and hence the reset won't work!

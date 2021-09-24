@@ -1,4 +1,9 @@
 scheb_two_factor:
+
+    backup_codes:
+        enabled: '%nova_ez2fa.backup_codes.enabled%' # Reading the value from the nova_ez2fa.backup_codes.enabled value in parameters section
+        manager: Novactive\Bundle\eZ2FABundle\Security\BackupCodeManager # This should either remain or be replaced with another one developed for that purpose
+
     # Google Authenticator config
     google:
         enabled: true
@@ -41,3 +46,8 @@ nova_ez2fa:
                 algorithm: sha1 #(md5, sha1, sha256, sha512)
                 period: 30
                 digits: 6
+
+# Whether to use the backup codes or not should be specified here, then used in scheb_two_factor.backup_codes
+# It's done this way in order to be able to determine if the backup codes should be generated or not
+parameters:
+    nova_ez2fa.backup_codes.enabled: true
