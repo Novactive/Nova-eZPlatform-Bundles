@@ -68,19 +68,6 @@ post-install:
 	@echo "..:: Final Cleaning Cache ::.."
 	@cd $(EZ_DIR) && $(CONSOLE) cache:clear
 
-.PHONY: installez
-installez: install ## Install eZ as the local project
-	@$(DOCKER) run -d -p 3300:3306 --name $(DOCKER_DB_CONTAINER) -e MYSQL_ROOT_PASSWORD=ezplatform mariadb:10.3
-	@$(COMPOSER) create-project ezsystems/ezplatform --prefer-dist --no-progress --no-interaction --no-scripts $(EZ_DIR)
-
-	@echo "..:: Do eZ Install ::.."
-	@echo "DATABASE_URL=mysql://root:ezplatform@127.0.0.1:3300/ezplatform" >>  $(EZ_DIR)/.env.local
-	@cd $(EZ_DIR) && $(COMPOSER) ezplatform-install
-	@cd $(EZ_DIR) && $(CONSOLE) cache:clear
-
-	@$(MAKE) post-install
-
-
 .PHONY: installibexa
 installibexa: install ## Install Ibexa as the local project
 	@$(DOCKER) run -d -p 3300:3306 --name $(DOCKER_DB_CONTAINER) -e MYSQL_ROOT_PASSWORD=ezplatform mariadb:10.4
