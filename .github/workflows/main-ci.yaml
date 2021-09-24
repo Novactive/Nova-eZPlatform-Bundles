@@ -207,17 +207,9 @@ jobs:
 
             -   name: Install Ibexa DXP and Yarn deps
                 run: |
-                    composer create-project ibexa/website-skeleton --prefer-dist --no-progress --no-interaction ezplatform
+                    composer create-project ibexa/oss-skeleton --prefer-dist --no-progress --no-interaction ezplatform
                     mkdir -p ezplatform/node_modules && ln -s ezplatform/node_modules
                     cd ezplatform
-                    composer require ibexa/oss --no-interaction
-                    git config --global user.email "automation@novaezplatformbundles.com"
-                    git config --global user.name "novaezplatformbundles"
-                    git init
-                    git add .
-                    git commit -m "Fake commit that will be removed"
-                    composer recipes:install ibexa/oss --force
-                    rm -rf .git
                     php bin/console ibexa:install
                     php bin/console ibexa:graphql:generate-schema
                     composer run post-update-cmd

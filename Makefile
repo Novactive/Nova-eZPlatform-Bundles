@@ -84,13 +84,9 @@ installez: install ## Install eZ as the local project
 .PHONY: installibexa
 installibexa: install ## Install Ibexa as the local project
 	@$(DOCKER) run -d -p 3300:3306 --name $(DOCKER_DB_CONTAINER) -e MYSQL_ROOT_PASSWORD=ezplatform mariadb:10.4
-	@$(COMPOSER) create-project ibexa/website-skeleton --prefer-dist --no-progress --no-interaction $(EZ_DIR)
-	@cd $(EZ_DIR) && $(COMPOSER) require ibexa/oss --no-interaction
+	@$(COMPOSER) create-project ibexa/oss-skeleton --prefer-dist --no-progress --no-interaction $(EZ_DIR)
 	@echo "..:: Do Ibexa Install ::.."
 	@echo "DATABASE_URL=mysql://root:ezplatform@127.0.0.1:3300/ezplatform" >>  $(EZ_DIR)/.env.local
-	@cd $(EZ_DIR) && git init && git add . &&  git commit -m "Fake commit that will be removed"
-	@cd $(EZ_DIR) && $(COMPOSER) recipes:install ibexa/oss --force
-	@rm -rf $(EZ_DIR)/.git
 
 	@cd $(EZ_DIR) && $(CONSOLE) ibexa:install
 	@cd $(EZ_DIR) && $(CONSOLE) ibexa:graphql:generate-schema
