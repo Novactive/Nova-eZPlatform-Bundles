@@ -33,7 +33,7 @@ final class UserRepository
 
     public function insertUpdateUserAuthSecret(int $userId, string $secret, string $prefix, string $backupCodes): void
     {
-        if (is_array($this->getUserAuthSecretByUserId($userId))) {
+        if (is_array($this->getUserAuthData($userId))) {
             $query = <<<QUERY
                 UPDATE user_auth_secret
                 SET {$prefix}_authentication_secret = ?, backup_codes = ?
@@ -57,7 +57,7 @@ final class UserRepository
         }
     }
 
-    public function deleteUserAuthSecrets(int $userId): void
+    public function deleteUserAuthData(int $userId): void
     {
         $query = <<<QUERY
                 DELETE FROM user_auth_secret
@@ -66,17 +66,19 @@ final class UserRepository
         ($this->queryExecutor)($query, [$userId], [PDO::PARAM_INT]);
     }
 
-    public function deleteUserAuthSecret(int $userId, string $prefix): void
+    public function deleteUserAuthSecretAndEmail(int $userId, ?string $prefix): void
     {
+        $emptySecret = (null === $prefix || 'email' === $prefix) ? '' : "{$prefix}_authentication_secret = '', ";
+
         $query = <<<QUERY
                 UPDATE user_auth_secret
-                SET {$prefix}_authentication_secret = '', backup_codes = ''
+                SET {$emptySecret} backup_codes = '', email_authentication = 0, email_authentication_code = ''
                 WHERE user_contentobject_id = ? 
             QUERY;
         ($this->queryExecutor)($query, [$userId], [PDO::PARAM_INT]);
     }
 
-    public function getUserAuthSecretByUserId(int $userId)
+    public function getUserAuthData(int $userId)
     {
         $query = <<<QUERY
                 SELECT *
@@ -96,5 +98,37 @@ final class UserRepository
                 WHERE user_contentobject_id = ? 
             QUERY;
         ($this->queryExecutor)($query, [$backupCodes, $userId], [PDO::PARAM_STR, PDO::PARAM_INT]);
+    }
+
+    public function insertUpdateEmailAuthentication(int $userId): void
+    {
+        if (is_array($this->getUserAuthData($userId))) {
+            $query = <<<QUERY
+                UPDATE user_auth_secret
+                SET email_authentication = 1
+                WHERE user_contentobject_id = ? 
+            QUERY;
+            ($this->queryExecutor)($query, [$userId], [PDO::PARAM_INT]);
+        } else {
+            $query = <<<QUERY
+                INSERT INTO user_auth_secret (user_contentobject_id, email_authentication) 
+                VALUES (?, 1)
+            QUERY;
+            ($this->queryExecutor)(
+                $query,
+                [$userId],
+                [PDO::PARAM_INT]
+            );
+        }
+    }
+
+    public function updateEmailAuthenticationCode(int $userId, string $authCode): void
+    {
+        $query = <<<QUERY
+                UPDATE user_auth_secret
+                SET email_authentication_code = ?
+                WHERE user_contentobject_id = ? 
+            QUERY;
+        ($this->queryExecutor)($query, [$authCode, $userId], [PDO::PARAM_STR, PDO::PARAM_INT]);
     }
 }

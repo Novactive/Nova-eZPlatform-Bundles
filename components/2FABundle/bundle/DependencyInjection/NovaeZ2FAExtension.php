@@ -37,7 +37,8 @@ final class NovaeZ2FAExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $processor = new ConfigurationProcessor($container, Configuration::NAMESPACE);
-        $processor->mapSetting('2fa_method', $config);
+        $processor->mapSetting('2fa_mobile_method', $config);
+        $processor->mapSetting('2fa_email_method_enabled', $config);
         $processor->mapConfigArray('config', $config);
     }
 }

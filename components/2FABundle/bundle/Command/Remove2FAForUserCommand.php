@@ -59,7 +59,7 @@ final class Remove2FAForUserCommand extends Command
         /* @var User $user */
         $user = $this->userProvider->loadUserByUsername($input->getArgument('user_login'));
 
-        $this->userRepository->deleteUserAuthSecrets($user->getAPIUser()->id);
+        $this->userRepository->deleteUserAuthData($user->getAPIUser()->id);
 
         $io->success('Done.');
 

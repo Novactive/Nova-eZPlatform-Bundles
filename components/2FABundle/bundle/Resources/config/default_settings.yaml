@@ -1,6 +1,7 @@
 parameters:
-    nova_ez2fa.default.2fa_method: totp
+    nova_ez2fa.default.2fa_mobile_method: ~
     nova_ez2fa.default.config:
         algorithm: sha1
         period: 30
         digits: 6
+    nova_ez2fa.default.2fa_email_method_enabled: true

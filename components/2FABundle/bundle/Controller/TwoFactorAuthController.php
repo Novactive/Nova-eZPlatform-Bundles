@@ -19,6 +19,8 @@ use EzSystems\EzPlatformAdminUiBundle\Controller\Controller;
 use Novactive\Bundle\eZ2FABundle\Core\QRCodeGenerator;
 use Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareAuthenticatorResolver;
 use Novactive\Bundle\eZ2FABundle\Form\Type\TwoFactorAuthType;
+use Novactive\Bundle\eZ2FABundle\Form\Type\TwoFactorMethodType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,6 +30,9 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class TwoFactorAuthController extends Controller
 {
+    /**
+     * @SuppressWarnings("PMD.NPathComplexity")
+     */
     public function setupAction(
         Request $request,
         QRCodeGenerator $QRCodeGenerator,
@@ -46,13 +51,64 @@ class TwoFactorAuthController extends Controller
             );
         }
 
+        // The Method Selection (email or mobile app) form IF email method is enabled
+        if ($saAuthenticatorResolver->isEmailMethodEnabled()) {
+            $methodForm = $this->createForm(TwoFactorMethodType::class);
+
+            if (null === $saAuthenticatorResolver->getMethod()) {
+                $options = $methodForm->get('method')->getConfig()->getOptions();
+                $options['choices'] = ['Email' => 'email'];
+                $options['data'] = 'email';
+                $methodForm->add('method', ChoiceType::class, $options);
+            }
+
+            $methodForm->handleRequest($request);
+        }
+
+        if (null === $saAuthenticatorResolver->getMethod()) {
+            return $this->render(
+                '@ezdesign/2fa/setup.html.twig',
+                [
+                    'form' => null,
+                ]
+            );
+        }
+
+        // The Mobile App QR Code form
+        $qrCodeForm = $this->createForm(TwoFactorAuthType::class);
+        $qrCodeForm->handleRequest($request);
+
+        // If none of the forms is submitted show the first one with method selection
+        if (
+            isset($methodForm) && !$qrCodeForm->isSubmitted() &&
+            !($methodForm->isSubmitted() && $methodForm->isValid())
+        ) {
+            return $this->render(
+                '@ezdesign/2fa/setup.html.twig',
+                [
+                    'form' => $methodForm->createView(),
+                ]
+            );
+        }
+
+        // When the method is submitted and it's email - then save it in DB and show SetUp Success
+        if (isset($methodForm, $methodForm->getData()['method']) && 'email' === $methodForm->getData()['method']) {
+            $saAuthenticatorResolver->setEmailAuthentication($user);
+
+            return $this->render(
+                '@ezdesign/2fa/setup.html.twig',
+                [
+                    'success' => true,
+                    'method' => 'email',
+                ]
+            );
+        }
+
+        // Otherwise, if method is submitted and it's NOT email - show the second form with mobile app QR code
         $user = $saAuthenticatorResolver->getUserAuthenticatorEntity($user);
 
-        $form = $this->createForm(TwoFactorAuthType::class);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $result = $saAuthenticatorResolver->validateCodeAndUpdateUser($user, $form->getData());
+        if ($qrCodeForm->isSubmitted() && $qrCodeForm->isValid()) {
+            $result = $saAuthenticatorResolver->validateCodeAndUpdateUser($user, $qrCodeForm->getData());
             if ($result['valid']) {
                 return $this->render(
                     '@ezdesign/2fa/setup.html.twig',
@@ -64,20 +120,20 @@ class TwoFactorAuthController extends Controller
                 );
             }
 
-            $form->get('code')->addError(new FormError('Wrong code provided!'));
+            $qrCodeForm->get('code')->addError(new FormError('Wrong code provided!'));
         }
 
-        if (!$form->isSubmitted()) {
+        if (!$qrCodeForm->isSubmitted()) {
             $secretKey = $saAuthenticatorResolver->getAuthenticator()->generateSecret();
             $user->setAuthenticatorSecret($secretKey);
-            $form->get('secretKey')->setData($secretKey);
+            $qrCodeForm->get('secretKey')->setData($secretKey);
         }
 
         return $this->render(
             '@ezdesign/2fa/setup.html.twig',
             [
                 'qrCode' => $QRCodeGenerator->createFromUser($user),
-                'form' => $form->createView(),
+                'form' => $qrCodeForm->createView(),
                 'method' => $saAuthenticatorResolver->getMethod(),
             ]
         );
@@ -104,7 +160,7 @@ class TwoFactorAuthController extends Controller
             $locationId = $apiUser->contentInfo->mainLocationId;
         }
 
-        $saAuthenticatorResolver->deleteUserAuthSecret($user);
+        $saAuthenticatorResolver->deleteUserAuthSecretAndEmail($user);
 
         if (isset($contentId, $locationId)) {
             return new RedirectResponse(

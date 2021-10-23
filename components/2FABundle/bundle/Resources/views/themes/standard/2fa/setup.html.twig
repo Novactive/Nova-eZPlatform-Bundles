@@ -24,7 +24,7 @@
 
                 {% if success is defined %}
 
-                    <h5>{{ method|capitalize }} two-factor authentication has been successfuly completed.</h5>
+                    <h5>{{ method|capitalize }} two-factor authentication has been successfuly set up.</h5>
 
                     {% if backupCodes is defined and backupCodes|length > 0 %}
                         <p>
@@ -48,6 +48,46 @@
                     <div class="ez-data-source__message--main">Click
                         <a href="{{ ez_path(ez_route('2fa_reset')) }}"><strong>Here</strong></a> to reset it.
                     </div>
+
+                {% elseif form is null %}
+
+                    <div class="ez-data-source__message--main">
+                        <span>You have no methods of two-factor authentication enabled.</span>
+                    </div>
+
+                {% elseif form.vars.name == 'two_factor_method' %}
+
+                    <div class="ez-data-source__message--main">
+                        {% if form.method.vars.choices|length == 1 %}
+                            <span>Submit the current available method of two-factor authentication.</span>
+                        {% else %}
+                            <span>Select whether to use <strong>Mobile Application</strong> or <strong>Email</strong> for two-factor authentication.</span>
+                        {% endif %}
+                    </div>
+                    <br/>
+
+                    {{ form_start(form, {'attr': {'class': 'ez-form-validate'}, 'method':'post'}) }}
+
+                    {% for formMethod in form.method %}
+
+                        <div class="form-check">
+                            {{ form_widget(formMethod, {'attr': {'class': 'ez-input ez-input--radio form-check-input'}}) }}
+                            {{ form_label(formMethod, null, {'label_attr': {'class': 'radio-inline form-check-label required'}}) }}
+                        </div>
+
+                    {% endfor %}
+
+                    <br/>
+                    <div class="ez-field">
+                        <div class="ez-field__data">
+                            <div class="ez-data-source">
+                                {{ form_row(form.submit, {'attr': {'class': 'ez-data-source__btn-add btn btn-secondary'}}) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    {{ form_rest(form) }}
+                    {{ form_end(form) }}
 
                 {% else %}
 

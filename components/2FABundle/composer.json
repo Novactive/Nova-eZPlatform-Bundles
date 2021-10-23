@@ -32,6 +32,7 @@
         "scheb/2fa-totp": "^5.0",
         "scheb/2fa-trusted-device": "^5.0",
         "scheb/2fa-backup-code":  "^5.0",
+        "scheb/2fa-email": "^5.0",
         "bacon/bacon-qr-code": "^2.0"
     },
     "require-dev": {

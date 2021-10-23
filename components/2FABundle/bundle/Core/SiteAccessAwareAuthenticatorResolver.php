@@ -21,6 +21,7 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use Novactive\Bundle\eZ2FABundle\DependencyInjection\Configuration;
 use Novactive\Bundle\eZ2FABundle\Entity\AuthenticatorInterface;
 use Novactive\Bundle\eZ2FABundle\Entity\BackupCodeInterface;
+use Novactive\Bundle\eZ2FABundle\Entity\UserEmailAuth;
 use Novactive\Bundle\eZ2FABundle\Entity\UserGoogleAuthSecret;
 use Novactive\Bundle\eZ2FABundle\Entity\UserTotpAuthSecret;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
@@ -69,6 +70,11 @@ final class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
      */
     private $backupCodesEnabled;
 
+    /**
+     * @var bool
+     */
+    private $emailMethodEnabled;
+
     public function __construct(
         ConfigResolverInterface $configResolver,
         GoogleAuthenticator $googleAuthenticator,
@@ -95,7 +101,7 @@ final class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
     private function setConfig(): void
     {
         $this->method = $this->configResolver->getParameter(
-            '2fa_method',
+            '2fa_mobile_method',
             Configuration::NAMESPACE,
             $this->siteAccess->name
         );
@@ -104,15 +110,28 @@ final class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
             Configuration::NAMESPACE,
             $this->siteAccess->name
         );
+        $this->emailMethodEnabled = $this->configResolver->getParameter(
+            '2fa_email_method_enabled',
+            Configuration::NAMESPACE,
+            $this->siteAccess->name
+        );
     }
 
-    public function getMethod(): string
+    public function getMethod(): ?string
     {
         return $this->method;
     }
 
+    public function isEmailMethodEnabled(): bool
+    {
+        return $this->emailMethodEnabled;
+    }
+
     public function getUserAuthenticatorEntity(User $user)
     {
+        if ('email' === $this->method) {
+            return new UserEmailAuth($user->getAPIUser(), $user->getRoles());
+        }
         if ('google' === $this->method) {
             return new UserGoogleAuthSecret($user->getAPIUser(), $user->getRoles());
         }
@@ -120,19 +139,36 @@ final class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
             return new UserTotpAuthSecret($user->getAPIUser(), $user->getRoles());
         }
 
-        return new UserTotpAuthSecret($user->getAPIUser(), $user->getRoles(), null, $this->config);
+        return new UserTotpAuthSecret($user->getAPIUser(), $user->getRoles(), $this->config);
     }
 
     public function getUserForDecorator(User $user): User
     {
-        $userSecrets = $this->getUserSecrets($user);
-        if (false === $userSecrets || empty($userSecrets["{$this->method}_authentication_secret"])) {
+        $userAuthData = $this->getUserAuthData($user);
+
+        if (false === $userAuthData) {
+            return $user;
+        }
+
+        if ($userAuthData['email_authentication']) {
+            $this->method = 'email';
+        }
+
+        if (
+            false === $userAuthData ||
+            ('email' !== $this->method && empty($userAuthData["{$this->method}_authentication_secret"]))
+        ) {
             return $user;
         }
 
         $authenticatorEntity = $this->getUserAuthenticatorEntity($user);
-        $authenticatorEntity->setAuthenticatorSecret($userSecrets["{$this->method}_authentication_secret"]);
-        $authenticatorEntity->setBackupCodes(json_decode($userSecrets['backup_codes']) ?? []);
+
+        if ('email' === $this->method) {
+            $authenticatorEntity->setEmailAuthCode($userAuthData['email_authentication_code']);
+        } else {
+            $authenticatorEntity->setAuthenticatorSecret($userAuthData["{$this->method}_authentication_secret"]);
+            $authenticatorEntity->setBackupCodes(json_decode($userAuthData['backup_codes']) ?? []);
+        }
 
         return $authenticatorEntity;
     }
@@ -166,7 +202,7 @@ final class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
             }
 
             $this->userRepository->insertUpdateUserAuthSecret(
-                $user->getAPIUser()->id,
+                $user->getAPIUser()->getUserId(),
                 $formData['secretKey'],
                 $this->method,
                 isset($backupCodes) ? json_encode($backupCodes) : ''
@@ -183,25 +219,40 @@ final class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
         ];
     }
 
+    public function setEmailAuthentication(User $user): void
+    {
+        $this->method = 'email';
+        $this->userRepository->insertUpdateEmailAuthentication($user->getAPIUser()->getUserId());
+    }
+
     public function checkIfUserSecretExists(User $user): bool
     {
-        $userAuthSecrets = $this->getUserSecrets($user);
+        $userAuthData = $this->getUserAuthData($user);
 
-        return is_array($userAuthSecrets) &&
+        if (false === $userAuthData) {
+            return false;
+        }
+
+        if ($userAuthData['email_authentication']) {
+            $this->method = 'email';
+        }
+
+        return is_array($userAuthData) &&
                (
-                   !empty($userAuthSecrets['google_authentication_secret']) ||
-                   !empty($userAuthSecrets['totp_authentication_secret']) ||
-                   !empty($userAuthSecrets['microsoft_authentication_secret'])
+                   !empty($userAuthData['google_authentication_secret']) ||
+                   !empty($userAuthData['totp_authentication_secret']) ||
+                   !empty($userAuthData['microsoft_authentication_secret']) ||
+                   $userAuthData['email_authentication']
                );
     }
 
-    public function getUserSecrets(User $user)
+    public function getUserAuthData(User $user)
     {
-        return $this->userRepository->getUserAuthSecretByUserId($user->getAPIUser()->id);
+        return $this->userRepository->getUserAuthData($user->getAPIUser()->getUserId());
     }
 
-    public function deleteUserAuthSecret(User $user): void
+    public function deleteUserAuthSecretAndEmail(User $user): void
     {
-        $this->userRepository->deleteUserAuthSecret($user->getAPIUser()->id, $this->method);
+        $this->userRepository->deleteUserAuthSecretAndEmail($user->getAPIUser()->getUserId(), $this->method);
     }
 }
