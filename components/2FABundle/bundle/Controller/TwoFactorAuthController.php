@@ -154,10 +154,7 @@ class TwoFactorAuthController extends Controller
             /* @var User $user */
             $user = $this->getUser();
         } else {
-            if (
-                !$permissionResolver->hasAccess('2fa_management', 'all_functions') ||
-                $saAuthenticatorResolver->isForceSetup()
-            ) {
+            if (!$permissionResolver->hasAccess('2fa_management', 'all_functions')) {
                 throw new AccessDeniedException('Limited access !!!');
             }
 

@@ -56,11 +56,9 @@
                 {% elseif reset is defined %}
 
                     <div class="ez-data-source__message--main">{{ method|capitalize }} two-factor authentication is already set up.</div>
-                    {% if forced is not defined or forced == false %}
-                        <div class="ez-data-source__message--main">Click
-                            <a href="{{ ez_path(ez_route('2fa_reset')) }}"><strong>Here</strong></a> to reset it.
-                        </div>
-                    {% endif %}
+                    <div class="ez-data-source__message--main">Click
+                        <a href="{{ ez_path(ez_route('2fa_reset')) }}"><strong>Here</strong></a> to reset it.
+                    </div>
 
                 {% elseif form is null %}
 
