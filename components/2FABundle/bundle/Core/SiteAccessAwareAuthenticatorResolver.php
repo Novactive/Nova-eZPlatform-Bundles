@@ -75,6 +75,11 @@ final class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
      */
     private $emailMethodEnabled;
 
+    /**
+     * @var bool
+     */
+    private $forceSetup;
+
     public function __construct(
         ConfigResolverInterface $configResolver,
         GoogleAuthenticator $googleAuthenticator,
@@ -115,6 +120,11 @@ final class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
             Configuration::NAMESPACE,
             $this->siteAccess->name
         );
+        $this->forceSetup = $this->configResolver->getParameter(
+            '2fa_force_setup',
+            Configuration::NAMESPACE,
+            $this->siteAccess->name
+        );
     }
 
     public function getMethod(): ?string
@@ -125,6 +135,11 @@ final class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
     public function isEmailMethodEnabled(): bool
     {
         return $this->emailMethodEnabled;
+    }
+
+    public function isForceSetup(): bool
+    {
+        return $this->forceSetup;
     }
 
     public function getUserAuthenticatorEntity(User $user)
@@ -225,7 +240,7 @@ final class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
         $this->userRepository->insertUpdateEmailAuthentication($user->getAPIUser()->getUserId());
     }
 
-    public function checkIfUserSecretExists(User $user): bool
+    public function checkIfUserSecretOrEmailExists(User $user): bool
     {
         $userAuthData = $this->getUserAuthData($user);
 
@@ -235,14 +250,15 @@ final class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
 
         if ($userAuthData['email_authentication']) {
             $this->method = 'email';
+
+            return true;
         }
 
         return is_array($userAuthData) &&
                (
                    !empty($userAuthData['google_authentication_secret']) ||
                    !empty($userAuthData['totp_authentication_secret']) ||
-                   !empty($userAuthData['microsoft_authentication_secret']) ||
-                   $userAuthData['email_authentication']
+                   !empty($userAuthData['microsoft_authentication_secret'])
                );
     }
 

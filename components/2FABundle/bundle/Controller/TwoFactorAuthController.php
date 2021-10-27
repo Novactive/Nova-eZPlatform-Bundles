@@ -41,12 +41,13 @@ class TwoFactorAuthController extends Controller
         /* @var User $user */
         $user = $this->getUser();
 
-        if ($saAuthenticatorResolver->checkIfUserSecretExists($user)) {
+        if ($saAuthenticatorResolver->checkIfUserSecretOrEmailExists($user)) {
             return $this->render(
                 '@ezdesign/2fa/setup.html.twig',
                 [
                     'reset' => true,
                     'method' => $saAuthenticatorResolver->getMethod(),
+                    'forced' => $saAuthenticatorResolver->isForceSetup(),
                 ]
             );
         }
@@ -70,6 +71,7 @@ class TwoFactorAuthController extends Controller
                 '@ezdesign/2fa/setup.html.twig',
                 [
                     'form' => null,
+                    'forced' => $saAuthenticatorResolver->isForceSetup(),
                 ]
             );
         }
@@ -87,6 +89,7 @@ class TwoFactorAuthController extends Controller
                 '@ezdesign/2fa/setup.html.twig',
                 [
                     'form' => $methodForm->createView(),
+                    'forced' => $saAuthenticatorResolver->isForceSetup(),
                 ]
             );
         }
@@ -135,6 +138,7 @@ class TwoFactorAuthController extends Controller
                 'qrCode' => $QRCodeGenerator->createFromUser($user),
                 'form' => $qrCodeForm->createView(),
                 'method' => $saAuthenticatorResolver->getMethod(),
+                'forced' => $saAuthenticatorResolver->isForceSetup(),
             ]
         );
     }
@@ -150,7 +154,10 @@ class TwoFactorAuthController extends Controller
             /* @var User $user */
             $user = $this->getUser();
         } else {
-            if (!$permissionResolver->hasAccess('2fa_management', 'all_functions')) {
+            if (
+                !$permissionResolver->hasAccess('2fa_management', 'all_functions') ||
+                $saAuthenticatorResolver->isForceSetup()
+            ) {
                 throw new AccessDeniedException('Limited access !!!');
             }
 

@@ -1,4 +1,10 @@
-{% extends '@ezdesign/ui/layout.html.twig' %}
+{% set baseLayout = '@ezdesign/ui/layout.html.twig' %}
+{% if forced is defined and forced == true and reset is not defined %}
+    {% set baseLayout = '@ezdesign/account/base.html.twig' %}
+{% endif %}
+
+{% extends baseLayout %}
+
 
 {% set pageTitle = 'Two-factor Authentication Setup' %}
 
@@ -18,6 +24,11 @@
 {%- endblock -%}
 
 {%- block content -%}
+
+    {% if forced is defined and forced == true and reset is not defined %}
+        <h2 class="ez-login__actions-headline">Two-Factor Authentication</h2>
+    {% endif %}
+
     <section class="container ez-container mt-4">
         <div class="card ez-card ez-card--light">
             <div class="card-body">
@@ -45,9 +56,11 @@
                 {% elseif reset is defined %}
 
                     <div class="ez-data-source__message--main">{{ method|capitalize }} two-factor authentication is already set up.</div>
-                    <div class="ez-data-source__message--main">Click
-                        <a href="{{ ez_path(ez_route('2fa_reset')) }}"><strong>Here</strong></a> to reset it.
-                    </div>
+                    {% if forced is not defined or forced == false %}
+                        <div class="ez-data-source__message--main">Click
+                            <a href="{{ ez_path(ez_route('2fa_reset')) }}"><strong>Here</strong></a> to reset it.
+                        </div>
+                    {% endif %}
 
                 {% elseif form is null %}
 

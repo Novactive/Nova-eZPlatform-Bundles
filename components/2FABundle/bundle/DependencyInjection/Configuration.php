@@ -44,6 +44,7 @@ class Configuration extends SAConfiguration
                 ->end()
             ->end()
             ->booleanNode('2fa_email_method_enabled')->defaultTrue()->end()
+            ->booleanNode('2fa_force_setup')->defaultTrue()->end()
         ->end();
 
         return $treeBuilder;

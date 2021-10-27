@@ -34,3 +34,7 @@ services:
         bind:
             $mailer: '@scheb_two_factor.security.email.auth_code_mailer'
             $digits: '%scheb_two_factor.email.digits%'
+
+    Novactive\Bundle\eZ2FABundle\Listener\OnHttpRequestListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request }

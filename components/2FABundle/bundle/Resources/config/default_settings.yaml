@@ -5,3 +5,4 @@ parameters:
         period: 30
         digits: 6
     nova_ez2fa.default.2fa_email_method_enabled: true
+    nova_ez2fa.default.2fa_force_setup: false

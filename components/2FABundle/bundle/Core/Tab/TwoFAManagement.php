@@ -92,7 +92,7 @@ final class TwoFAManagement extends AbstractTab implements OrderedTabInterface, 
             '@ezdesign/2fa/tabs/reset_for_user.html.twig',
             [
                 'user' => $user,
-                'isSetup' => $this->saAuthenticatorResolver->checkIfUserSecretExists($user),
+                'isSetup' => $this->saAuthenticatorResolver->checkIfUserSecretOrEmailExists($user),
                 'method' => $this->saAuthenticatorResolver->getMethod(),
             ]
         );

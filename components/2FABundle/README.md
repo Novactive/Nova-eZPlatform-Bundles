@@ -144,17 +144,23 @@ For full **scheb_two_factor** reference visit the following resource: https://gi
 
 nova_ez2fa:
     system:
-        # Available methods - google, totp, microsoft. Set per Siteaccess.
+        # Available mobile methods - google, totp, microsoft or null.
         # If microsoft is selected the totp mechanism is still used but the config is forced and static so Microsoft Authenticator app can be used.
+        # Email method can also be enabled or disabled for each siteaccess
+        # If 2fa_force_setup is true then the User must always set up 2FA upon authentication and reset function is off
         default:
-            2fa_method: google
+            2fa_mobile_method: google
+            2fa_email_method_enabled: true
+            2fa_force_setup: false
         site:
-            2fa_method: totp
+            2fa_mobile_method: totp
             # if microsoft method set - the config is forced to: algorithm: sha1, period: 30, digits: 6
             config:
                 algorithm: sha1 #(md5, sha1, sha256, sha512)
                 period: 30
                 digits: 6
+            2fa_email_method_enabled: true
+            2fa_force_setup: false
 
 ```
 
