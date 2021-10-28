@@ -31,6 +31,7 @@ Then inject the bundle in the `config\bundles.php` of your application.
 ```php
     return [
         // ...
+        Scheb\TwoFactorBundle\SchebTwoFactorBundle::class => ['all' => true],
         Novactive\Bundle\eZ2FABundle\NovaeZ2FABundle::class => [ 'all'=> true ],
     ];
 ```
@@ -125,6 +126,17 @@ scheb_two_factor:
         sender_name: John Doe                    # Sender name
         digits: 6                                # Number of digits in authentication code
         template: "@ezdesign/2fa/auth.html.twig" # Template used to render the authentication form
+
+    # The security token classes, which trigger two-factor authentication.
+    # By default the bundle only reacts to Symfony's username+password authentication. If you want to enable
+    # two-factor authentication for other authentication methods, add their security token classes.
+    # See the configuration reference at https://github.com/scheb/two-factor-bundle/blob/4.x/Resources/doc/configuration.md
+    security_tokens:
+        - Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
+        # If you're using guard-based authentication, you have to use this one:
+        # - Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken
+        # If you're using authenticator-based security (introduced in Symfony 5.1), you have to use this one:
+        # - Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken
 
 # Whether to use the backup codes or not should be specified here in parameters section, then used in scheb_two_factor.backup_codes
 # It's done this way in order to let the user customize if the backup codes should be generated or not
