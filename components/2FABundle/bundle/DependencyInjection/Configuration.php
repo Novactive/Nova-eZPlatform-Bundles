@@ -28,7 +28,7 @@ class Configuration extends SAConfiguration
         $rootNode = $treeBuilder->getRootNode();
         $systemNode = $this->generateScopeBaseNode($rootNode);
         $systemNode
-            ->enumNode('2fa_method')->values(['google', 'totp', 'microsoft'])->isRequired()->end()
+            ->enumNode('2fa_mobile_method')->values(['google', 'totp', 'microsoft', null])->defaultNull()->end()
             ->arrayNode('config')
                 ->children()
                     ->enumNode('algorithm')->values(
@@ -43,6 +43,8 @@ class Configuration extends SAConfiguration
                     ->integerNode('digits')->end()
                 ->end()
             ->end()
+            ->booleanNode('2fa_email_method_enabled')->defaultTrue()->end()
+            ->booleanNode('2fa_force_setup')->defaultTrue()->end()
         ->end();
 
         return $treeBuilder;

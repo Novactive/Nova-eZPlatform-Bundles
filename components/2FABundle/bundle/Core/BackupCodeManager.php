@@ -12,10 +12,9 @@
 
 declare(strict_types=1);
 
-namespace Novactive\Bundle\eZ2FABundle\Security;
+namespace Novactive\Bundle\eZ2FABundle\Core;
 
 use eZ\Publish\Core\MVC\Symfony\Security\User;
-use Novactive\Bundle\eZ2FABundle\Core\UserRepository;
 use Novactive\Bundle\eZ2FABundle\Entity\BackupCodeInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
 

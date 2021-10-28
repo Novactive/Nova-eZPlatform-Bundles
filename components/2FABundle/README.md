@@ -117,12 +117,23 @@ scheb_two_factor:
         # cookie_domain: ""                             # Domain to use when setting the cookie, fallback to the request domain if not set
         cookie_path: "/"                                # Path to use when setting the cookie
 
-# Whether to use the backup codes or not should be specified here, then used in scheb_two_factor.backup_codes
-# It's done this way in order to be able to determine if the backup codes should be generated or not
+    email:
+        enabled: true                            # If email authentication should be enabled, default false
+        # mailer: acme.custom_mailer_service     # Use alternative service to send the authentication code
+        code_generator: Novactive\Bundle\eZ2FABundle\Security\EmailCodeGenerator # Use alternative service to generate authentication code
+        sender_email: me@example.com             # Sender email address
+        sender_name: John Doe                    # Sender name
+        digits: 6                                # Number of digits in authentication code
+        template: "@ezdesign/2fa/auth.html.twig" # Template used to render the authentication form
+
+# Whether to use the backup codes or not should be specified here in parameters section, then used in scheb_two_factor.backup_codes
+# It's done this way in order to let the user customize if the backup codes should be generated or not
 parameters:
     nova_ez2fa.backup_codes.enabled: true
 
 ```
+
+If email method is enabled then **MAILER_DSN** env variable should be specified in the .env file
 
 For full **scheb_two_factor** reference visit the following resource: https://github.com/scheb/two-factor-bundle/blob/4.x/Resources/doc/configuration.md
 
@@ -133,17 +144,23 @@ For full **scheb_two_factor** reference visit the following resource: https://gi
 
 nova_ez2fa:
     system:
-        # Available methods - google, totp, microsoft. Set per Siteaccess.
+        # Available mobile methods - google, totp, microsoft or null.
         # If microsoft is selected the totp mechanism is still used but the config is forced and static so Microsoft Authenticator app can be used.
+        # Email method can also be enabled or disabled for each siteaccess
+        # If 2fa_force_setup is true then the User must always set up 2FA upon authentication and reset function is off
         default:
-            2fa_method: google
+            2fa_mobile_method: google
+            2fa_email_method_enabled: true
+            2fa_force_setup: false
         site:
-            2fa_method: totp
+            2fa_mobile_method: totp
             # if microsoft method set - the config is forced to: algorithm: sha1, period: 30, digits: 6
             config:
                 algorithm: sha1 #(md5, sha1, sha256, sha512)
                 period: 30
                 digits: 6
+            2fa_email_method_enabled: true
+            2fa_force_setup: false
 
 ```
 
@@ -162,4 +179,4 @@ php ezplatform/bin/console nova:2fa:remove-secret-key user_login
 
 ```
 
-> **Note to keep in mind**: If you have the 2FA already set up for the user and you're going to reset it by following the corresponding link on the 2FA Setup page don't change the method for the current Siteaccess before that! Because in this case the secret key will supposed to be removed for the new method not for the old one and hence the reset won't work!
+> **Note to keep in mind**: If you have the 2FA already set up for the user and you're going to reset it by following the corresponding link on the 2FA Setup page don't change the method for the current Siteaccess before that! Because in this case the secret key will be supposed to be removed for the new method not for the old one and hence the reset won't work!

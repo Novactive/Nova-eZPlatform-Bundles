@@ -38,11 +38,9 @@ final class UserTotpAuthSecret extends User implements TwoFactorInterface, Backu
     private const DEFAULT_PERIOD = 30;
     private const DEFAULT_DIGITS = 6;
 
-    public function __construct(APIUser $user, array $roles = [], ?string $secret = null, array $config = [])
+    public function __construct(APIUser $user, array $roles = [], array $config = [])
     {
         parent::__construct($user, $roles);
-
-        $this->secret = $secret;
         $this->config = $config;
     }
 

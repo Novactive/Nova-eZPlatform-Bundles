@@ -18,8 +18,13 @@
                 {% block login_form_fields %}
                     <div class="form-group{% if authenticationError %} has-error{% endif %}">
                         <div class="ez-login__input-label-wrapper">
+                            {% if app.token.twoFactorProviders[0] == 'email' %}
+                                {% set method = 'Email' %}
+                            {% else %}
+                                {% set method = app.token.attribute('method')|capitalize %}
+                            {% endif %}
                             <label class="ez-login__input-label" for="_auth_code">
-                                {{ app.token.attribute('method')|capitalize }} {{ "auth_code"|trans({}, 'SchebTwoFactorBundle') }}:
+                                {{ method }} {{ "auth_code"|trans({}, 'SchebTwoFactorBundle') }}:
                             </label>
                         </div>
                         <input

@@ -16,40 +16,45 @@ namespace Novactive\Bundle\eZ2FABundle\Entity;
 
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
-use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
+use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 
-final class UserGoogleAuthSecret extends User implements TwoFactorInterface, BackupCodeInterface, AuthenticatorInterface
+final class UserEmailAuth extends User implements TwoFactorInterface
 {
-    use BackupCodeAware;
+    /**
+     * @var string
+     */
+    private $email;
 
     /**
-     * @var string|null
+     * @var string
      */
-    private $secret;
+    private $authCode;
 
     public function __construct(APIUser $user, array $roles = [])
     {
         parent::__construct($user, $roles);
+
+        $this->email = $user->email;
     }
 
-    public function isGoogleAuthenticatorEnabled(): bool
+    public function isEmailAuthEnabled(): bool
     {
-        return null !== $this->secret;
+        return true;
     }
 
-    public function getGoogleAuthenticatorUsername(): string
+    public function getEmailAuthRecipient(): string
     {
-        return $this->getUsername();
+        return $this->email;
     }
 
-    public function getGoogleAuthenticatorSecret(): ?string
+    public function getEmailAuthCode(): string
     {
-        return $this->secret;
+        return $this->authCode;
     }
 
-    public function setAuthenticatorSecret(?string $googleAuthenticatorSecret): void
+    public function setEmailAuthCode(string $authCode): void
     {
-        $this->secret = $googleAuthenticatorSecret;
+        $this->authCode = $authCode;
     }
 
     public function __serialize(): array
@@ -57,8 +62,8 @@ final class UserGoogleAuthSecret extends User implements TwoFactorInterface, Bac
         return [
             'reference' => $this->getAPIUserReference(),
             'roles' => $this->getRoles(),
-            'secret' => $this->secret,
-            'backupCodes' => $this->backupCodes,
+            'email' => $this->getEmailAuthRecipient(),
+            'authCode' => $this->getEmailAuthCode(),
         ];
     }
 }
