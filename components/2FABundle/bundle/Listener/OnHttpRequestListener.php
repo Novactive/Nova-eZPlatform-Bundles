@@ -55,13 +55,12 @@ final class OnHttpRequestListener
 
         $setupUri = $this->router->generate('2fa_setup');
 
-        if (!$event->isMainRequest() || !$this->saAuthenticatorResolver->isForceSetup()) {
-            return;
-        }
+        $isMainRequestMethod = method_exists($event, 'isMainRequest') ? 'isMainRequest' : 'isMasterRequest';
 
-        if ($request->getRequestUri() === $setupUri) {
-            $request->query->set('forced', true);
-
+        if (
+            !$event->$isMainRequestMethod() || !$this->saAuthenticatorResolver->isForceSetup() ||
+            $request->getRequestUri() === $setupUri
+        ) {
             return;
         }
 

@@ -87,7 +87,7 @@ scheb_two_factor:
 
     backup_codes:
         enabled: '%nova_ez2fa.backup_codes.enabled%' # Reading the value from the nova_ez2fa.backup_codes.enabled value in parameters section
-        manager: Novactive\Bundle\eZ2FABundle\Security\BackupCodeManager # This should either remain or be replaced with another one developed for that purpose
+        manager: Novactive\Bundle\eZ2FABundle\Core\BackupCodeManager # This should either remain or be replaced with another one developed for that purpose
 
     google:
         enabled: true
@@ -120,7 +120,7 @@ scheb_two_factor:
     email:
         enabled: true                            # If email authentication should be enabled, default false
         # mailer: acme.custom_mailer_service     # Use alternative service to send the authentication code
-        code_generator: Novactive\Bundle\eZ2FABundle\Security\EmailCodeGenerator # Use alternative service to generate authentication code
+        code_generator: Novactive\Bundle\eZ2FABundle\Core\EmailCodeGenerator # Use alternative service to generate authentication code
         sender_email: me@example.com             # Sender email address
         sender_name: John Doe                    # Sender name
         digits: 6                                # Number of digits in authentication code
@@ -168,6 +168,8 @@ nova_ez2fa:
 
 See the file `bundle/Resources/sql/schema.sql`
 
+
+#### [Upgrade Instructions](UPGRADE.md)
 
 ### Manually removing 2FA record for specific User:
 

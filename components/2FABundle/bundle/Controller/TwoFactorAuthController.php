@@ -41,6 +41,10 @@ class TwoFactorAuthController extends Controller
         /* @var User $user */
         $user = $this->getUser();
 
+        if (null === $user) {
+            return $this->redirectToRoute('login');
+        }
+
         if ($saAuthenticatorResolver->checkIfUserSecretOrEmailExists($user)) {
             return $this->render(
                 '@ezdesign/2fa/setup.html.twig',
@@ -66,7 +70,7 @@ class TwoFactorAuthController extends Controller
             $methodForm->handleRequest($request);
         }
 
-        if (null === $saAuthenticatorResolver->getMethod()) {
+        if (!isset($methodForm) && null === $saAuthenticatorResolver->getMethod()) {
             return $this->render(
                 '@ezdesign/2fa/setup.html.twig',
                 [
