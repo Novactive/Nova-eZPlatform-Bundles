@@ -93,22 +93,18 @@ img.img-fluid {
 <div class="container-fluid">
         <div class="row flex-column-reverse flex-md-row">
         <div class="col-md-8 col-sm-12">
-            <p>Copyright (c) 2020 Novactive, <a href="https://github.com/Novactive/NovaeZEditHelpBundle">https://github.com/Novactive/NovaeZEditHelpBundle</a> <a href="mailto:dir.tech@novactive.com">dir.tech@novactive.com</a></p>
-<p>Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the &quot;Software&quot;), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:</p>
-<p>The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.</p>
-<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.</p>
+            <h1 name="9eac6633d000352376123c680b96b3f7">Novactive eZ 2FA Bundle</h1>
+<h2 name="616e39d73d00b01644e28dfd0167136c">Upgrade Instructions</h2>
+<p>Refer to the sql files inside the <code>Resources/sql</code> folder and run the particular queries inside the file depending on the version you're upgrading the Bundle to.</p>
+<h4 name="c264d91245911a806ab74718fd8f4cbf">Upgrade from 1.2.0 to 1.3.0</h4>
+<ul>
+<li>Run the query from the <code>Resources/sql/upgrade-1.2.0-to.1.3.0.sql</code> file.</li>
+</ul>
+<h4 name="774dc10225ee5f51958f3d2855fbf738">Upgrade from 1.3.0 to 1.4.0</h4>
+<ul>
+<li>Run the query from the <code>Resources/sql/upgrade-1.3.0-to.1.4.0.sql</code> file.</li>
+<li>Rename the <strong>2fa_method</strong> to <strong>2fa_mobile_method</strong> inside the bundle config file (<code>nova_ez2fa.yaml</code>).</li>
+</ul>
 
             <p class="text-right">
                 <img width="204" height="20"
@@ -118,6 +114,8 @@ THE SOFTWARE.</p>
             </p>
         </div>
         <div class="col-md-4 col-sm-12 d-print-none sidebar">
+                            <p><strong>In this page</strong>:</p>
+                <ul class="nav flex-column"><li class="nav-item first"><a href="#9eac6633d000352376123c680b96b3f7" class="nav-link">Novactive eZ 2FA Bundle</a><ul class="menu_level_1"><li class="nav-item first last"><a href="#616e39d73d00b01644e28dfd0167136c" class="nav-link">Upgrade Instructions</a></li></ul></li><li class="nav-item"><a href="#c264d91245911a806ab74718fd8f4cbf" class="nav-link">Upgrade from 1.2.0 to 1.3.0</a></li><li class="nav-item last"><a href="#774dc10225ee5f51958f3d2855fbf738" class="nav-link">Upgrade from 1.3.0 to 1.4.0</a></li></ul>
                     </div>
     </div>
     <footer class="pt-4 my-md-5 pt-md-5 border-top">
