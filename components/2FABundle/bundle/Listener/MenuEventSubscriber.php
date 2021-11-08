@@ -17,6 +17,7 @@ namespace Novactive\Bundle\eZ2FABundle\Listener;
 use EzSystems\EzPlatformAdminUi\Menu\Event\ConfigureMenuEvent;
 use Knp\Menu\Util\MenuManipulator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class MenuEventSubscriber implements EventSubscriberInterface
 {
@@ -25,9 +26,15 @@ final class MenuEventSubscriber implements EventSubscriberInterface
      */
     private $menuManipulator;
 
-    public function __construct(MenuManipulator $menuManipulator)
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    public function __construct(MenuManipulator $menuManipulator, TranslatorInterface $translator)
     {
         $this->menuManipulator = $menuManipulator;
+        $this->translator = $translator;
     }
 
     public static function getSubscribedEvents(): array
@@ -44,7 +51,10 @@ final class MenuEventSubscriber implements EventSubscriberInterface
     public function onConfigureUserMenu(ConfigureMenuEvent $event): void
     {
         $menu = $event->getMenu();
-        $newItem = $menu->addChild('user__setup_2fa', ['label' => 'Setup 2FA', 'route' => '2fa_setup']);
+        $newItem = $menu->addChild(
+            'user__setup_2fa',
+            ['label' => $this->translator->trans('menu_label', [], 'novaez2fa'), 'route' => '2fa_setup']
+        );
 
         $this->menuManipulator->moveToPosition($newItem, count($menu->getChildren()) - 2);
     }

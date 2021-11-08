@@ -27,6 +27,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TwoFactorAuthController extends Controller
 {
@@ -36,7 +37,8 @@ class TwoFactorAuthController extends Controller
     public function setupAction(
         Request $request,
         QRCodeGenerator $QRCodeGenerator,
-        SiteAccessAwareAuthenticatorResolver $saAuthenticatorResolver
+        SiteAccessAwareAuthenticatorResolver $saAuthenticatorResolver,
+        TranslatorInterface $translator
     ): Response {
         /* @var User $user */
         $user = $this->getUser();
@@ -62,7 +64,11 @@ class TwoFactorAuthController extends Controller
 
             if (null === $saAuthenticatorResolver->getMethod()) {
                 $options = $methodForm->get('method')->getConfig()->getOptions();
-                $options['choices'] = ['Email' => 'email'];
+                $options['choices'] = [
+                    ucfirst(
+                        $translator->trans('setup_form.method.email', [], 'novaez2fa')
+                    ) => 'email',
+                ];
                 $options['data'] = 'email';
                 $methodForm->add('method', ChoiceType::class, $options);
             }
@@ -127,7 +133,9 @@ class TwoFactorAuthController extends Controller
                 );
             }
 
-            $qrCodeForm->get('code')->addError(new FormError('Wrong code provided!'));
+            $qrCodeForm->get('code')->addError(
+                new FormError($translator->trans('setup_form.wrong_code', [], 'novaez2fa'))
+            );
         }
 
         if (!$qrCodeForm->isSubmitted()) {

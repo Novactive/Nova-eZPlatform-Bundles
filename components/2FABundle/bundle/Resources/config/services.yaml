@@ -38,3 +38,8 @@ services:
     Novactive\Bundle\eZ2FABundle\Listener\OnHttpRequestListener:
         tags:
             - { name: kernel.event_listener, event: kernel.request }
+
+    Novactive\Bundle\eZ2FABundle\Core\AuthCodeMailer:
+        bind:
+            $senderEmail: '%scheb_two_factor.email.sender_email%'
+            $senderName: '%scheb_two_factor.email.sender_name%'
