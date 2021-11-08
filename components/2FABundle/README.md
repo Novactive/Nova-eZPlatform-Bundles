@@ -120,7 +120,7 @@ scheb_two_factor:
 
     email:
         enabled: true                            # If email authentication should be enabled, default false
-        # mailer: acme.custom_mailer_service     # Use alternative service to send the authentication code
+        mailer: Novactive\Bundle\eZ2FABundle\Core\AuthCodeMailer # Use alternative service to send the authentication code
         code_generator: Novactive\Bundle\eZ2FABundle\Core\EmailCodeGenerator # Use alternative service to generate authentication code
         sender_email: me@example.com             # Sender email address
         sender_name: John Doe                    # Sender name

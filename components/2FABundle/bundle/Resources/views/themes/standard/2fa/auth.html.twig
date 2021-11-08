@@ -3,7 +3,7 @@
 {%- block content -%}
 
     <h2 class="ez-login__actions-headline">{{ 'base.sign_in'|trans|desc('Sign in to IBEXA DXP') }}</h2>
-    <p class="ez-login__actions-subheadline">Enter your Two-Factor Authentication code.</p>
+    <p class="ez-login__actions-subheadline">{{ 'auth_form.subtitle'|trans({}, 'novaez2fa') }}</p>
 
     {% block login_form %}
 
@@ -19,7 +19,7 @@
                     <div class="form-group{% if authenticationError %} has-error{% endif %}">
                         <div class="ez-login__input-label-wrapper">
                             {% if app.token.twoFactorProviders[0] == 'email' %}
-                                {% set method = 'Email' %}
+                                {% set method = 'setup_form.method.email'|trans({}, 'novaez2fa')|capitalize %}
                             {% else %}
                                 {% set method = app.token.attribute('method')|capitalize %}
                             {% endif %}

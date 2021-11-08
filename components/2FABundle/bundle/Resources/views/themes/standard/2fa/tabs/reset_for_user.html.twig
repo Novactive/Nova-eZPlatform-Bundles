@@ -1,7 +1,19 @@
-<div class="ez-data-source__message--main">{{ method|capitalize }} two-factor authentication is {% if not isSetup %}NOT{% endif%} set up for this User.</div>
+{% trans_default_domain 'novaez2fa' %}
+
+<div class="ez-data-source__message--main">
+    {% if not isSetup %}
+        {{ 'user_tab.not_setup_line'|trans }}
+    {% elseif 'email' == method %}
+        {{ 'user_tab.setup_line_email'|trans }}
+    {% else %}
+        {{ 'user_tab.setup_line_mobile'|trans({'%method%': method|capitalize}) }}
+    {% endif %}
+</div>
 {% if isSetup %}
     <hr/>
     <div class="ez-data-source__message--main">
-        <a href="{{ ez_path(ez_route('2fa_reset'), {userId: user.apiUser.id}) }}" onclick="return confirm('Are you sure?')" class="btn btn-secondary"><strong>RESET</strong></a>
+        <a href="{{ ez_path(ez_route('2fa_reset'), {userId: user.apiUser.id}) }}" onclick="return confirm('{{ 'user_tab.are_you_sure'|trans }}')" class="btn btn-secondary">
+            <strong>{{ 'user_tab.reset'|trans }}</strong>
+        </a>
     </div>
 {% endif %}

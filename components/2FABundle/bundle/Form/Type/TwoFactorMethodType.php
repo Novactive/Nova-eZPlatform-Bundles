@@ -32,8 +32,8 @@ final class TwoFactorMethodType extends AbstractType
                     'expanded' => true,
                     'multiple' => false,
                     'choices' => [
-                        'Mobile Auth Application' => 'app',
-                        'Email' => 'email',
+                        'setup_form.method.mobile' => 'app',
+                        'setup_form.method.email' => 'email',
                     ],
                     'data' => 'app',
                 ]

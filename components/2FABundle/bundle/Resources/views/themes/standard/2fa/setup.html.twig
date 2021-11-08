@@ -5,8 +5,9 @@
 
 {% extends baseLayout %}
 
+{% trans_default_domain 'novaez2fa' %}
 
-{% set pageTitle = 'Two-factor Authentication Setup' %}
+{% set pageTitle = 'setup_form.title'|trans %}
 
 {% block title %}{{ pageTitle }}{% endblock %}
 
@@ -26,7 +27,7 @@
 {%- block content -%}
 
     {% if forced is defined and forced == true and reset is not defined %}
-        <h2 class="ez-login__actions-headline">Two-Factor Authentication</h2>
+        <h2 class="ez-login__actions-headline">{{ 'force_setup.title'|trans }}</h2>
     {% endif %}
 
     <section class="container ez-container mt-4">
@@ -35,16 +36,15 @@
 
                 {% if success is defined %}
 
-                    <h5>{{ method|capitalize }} two-factor authentication has been successfuly set up.</h5>
+                    <h5>{{ 'setup_form.success_message'|trans({'%method%': method|capitalize}) }}</h5>
 
                     {% if backupCodes is defined and backupCodes|length > 0 %}
                         <p>
-                            Here are the
-                            <strong>Backup Codes</strong> which are one-time authentication codes and can be used instead of the actual codes.
+                            {{ 'setup_form.backup_codes.line1'|trans|raw }}
                             <br/>
-                            They're meant as emergency codes, when the authentication device is not available and you have to pass the two-factor authentication process.
+                            {{ 'setup_form.backup_codes.line2'|trans }}
                             <br/>
-                            They should be saved securely so you can use them when needed.
+                            {{ 'setup_form.backup_codes.line3'|trans }}
                         </p>
                         <ul>
                             {% for code in backupCodes %}
@@ -54,25 +54,28 @@
                     {% endif %}
 
                 {% elseif reset is defined %}
-
-                    <div class="ez-data-source__message--main">{{ method|capitalize }} two-factor authentication is already set up.</div>
-                    <div class="ez-data-source__message--main">Click
-                        <a href="{{ ez_path(ez_route('2fa_reset')) }}"><strong>Here</strong></a> to reset it.
+                    {% set set_up_method = 'email' == method ? 'setup_form.method.email'|trans : method|capitalize %}
+                    <div class="ez-data-source__message--main">{{ 'setup_form.already_set_up'|trans({'%method%': set_up_method}) }}</div>
+                    <div class="ez-data-source__message--main">
+                        {% set resetLink %}<a href="{{ ez_path(ez_route('2fa_reset')) }}"><strong>{{ 'setup_form.here'|trans }}</strong></a>{% endset %}
+                        {{ 'setup_form.reset'|trans({'%link%': resetLink})|raw }}
                     </div>
 
                 {% elseif form is null %}
 
                     <div class="ez-data-source__message--main">
-                        <span>You have no methods of two-factor authentication enabled.</span>
+                        <span>{{ 'setup_form.no_methods_enabled'|trans }}</span>
                     </div>
 
                 {% elseif form.vars.name == 'two_factor_method' %}
 
                     <div class="ez-data-source__message--main">
                         {% if form.method.vars.choices|length == 1 %}
-                            <span>Submit the current available method of two-factor authentication.</span>
+                            <span>{{ 'setup_form.submit_current_method'|trans }}</span>
                         {% else %}
-                            <span>Select whether to use <strong>Mobile Application</strong> or <strong>Email</strong> for two-factor authentication.</span>
+                            {% set mobileApplication %}<strong>{{ 'mobile_application'|trans }}</strong>{% endset %}
+                            {% set email %}<strong>{{ 'email'|trans }}</strong>{% endset %}
+                            <span>{{ 'force_setup.subtitle'|trans({'%method1%': mobileApplication, '%method2%': email})|raw }}</span>
                         {% endif %}
                     </div>
                     <br/>
@@ -83,7 +86,7 @@
 
                         <div class="form-check">
                             {{ form_widget(formMethod, {'attr': {'class': 'ez-input ez-input--radio form-check-input'}}) }}
-                            {{ form_label(formMethod, null, {'label_attr': {'class': 'radio-inline form-check-label required'}}) }}
+                            {{ form_label(formMethod, formMethod.vars.label|trans|capitalize, {'label_attr': {'class': 'radio-inline form-check-label required'}}) }}
                         </div>
 
                     {% endfor %}
@@ -92,7 +95,7 @@
                     <div class="ez-field">
                         <div class="ez-field__data">
                             <div class="ez-data-source">
-                                {{ form_row(form.submit, {'attr': {'class': 'ez-data-source__btn-add btn btn-secondary'}}) }}
+                                {{ form_row(form.submit, {'label': 'setup_form.submit'|trans, 'attr': {'class': 'ez-data-source__btn-add btn btn-secondary'}}) }}
                             </div>
                         </div>
                     </div>
@@ -102,8 +105,8 @@
 
                 {% else %}
 
-                    <div class="ez-data-source__message--main">Scan this QR code with an application compatible with {{ method|capitalize }} Authenticator.</div>
-                    <div class="ez-data-source__message--main">Enter the code generated for this account.</div>
+                    <div class="ez-data-source__message--main">{{ 'setup_form.scan_qr_code'|trans({'%method%': method|capitalize}) }}</div>
+                    <div class="ez-data-source__message--main">{{ 'setup_form.enter_generated_code'|trans }}</div>
 
                     {{ qrCode|raw }}
 
@@ -127,7 +130,7 @@
                     <div class="ez-field">
                         <div class="ez-field__data">
                             <div class="ez-data-source">
-                                {{ form_row(form.submit, {'attr': {'class': 'ez-data-source__btn-add btn btn-secondary'}}) }}
+                                {{ form_row(form.submit, {'label': 'setup_form.submit'|trans, 'attr': {'class': 'ez-data-source__btn-add btn btn-secondary'}}) }}
                             </div>
                         </div>
                     </div>

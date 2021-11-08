@@ -1,0 +1,34 @@
+mobile_application: Mobile Application
+email: Email
+force_setup:
+    title: Two-Factor Authentication
+    subtitle: 'Select whether to use %method1% or %method2% for two-factor authentication.'
+setup_form:
+    method:
+        mobile: Mobile Auth Application
+        email: Email
+    title: Two-factor Authentication Setup
+    success_message: '%method% two-factor authentication has been successfuly set up.'
+    already_set_up: '%method% two-factor authentication is already set up.'
+    reset: 'Click %link% to reset it.'
+    here: Here
+    submit: Submit
+    backup_codes:
+        line1: Here are the <strong>Backup Codes</strong> which are one-time authentication codes and can be used instead of the actual codes.
+        line2: They're meant as emergency codes, when the authentication device is not available and you have to pass the two-factor authentication process.
+        line3: They should be saved securely so you can use them when needed.
+    no_methods_enabled: You have no methods of two-factor authentication enabled.
+    submit_current_method: Submit the only available method of two-factor authentication.
+    scan_qr_code: 'Scan this QR code with an application compatible with %method% Authenticator.'
+    enter_generated_code: Enter the code generated for this account.
+    wrong_code: The verification code is not valid.
+auth_form:
+    subtitle: Enter your Two-Factor Authentication code.
+menu_label: 2FA Setup
+user_tab:
+    setup_line_email: 'Email two-factor authentication is set up for this User.'
+    setup_line_mobile: '%method% two-factor authentication is set up for this User.'
+    not_setup_line: 'Two-factor authentication is NOT set up for this User.'
+    reset: Reset
+    are_you_sure: Are you sure?
+email_subject: Authentication Code
