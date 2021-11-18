@@ -141,6 +141,8 @@ security:
     ...
     access_control:
         - { path: ^/logout, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/2fa_setup, role: ROLE_USER }
+        - { path: ^/2fa_reset, role: ROLE_USER }
         - { path: ^/2fa, role: IS_AUTHENTICATED_2FA_IN_PROGRESS }
 </code></pre>
 <h3 name="2a84d9915b12fcb0c1436709a77a8dd0">Add new configuration</h3>
@@ -235,6 +237,13 @@ nova_ez2fa:
 </code></pre>
 <h3 name="8689a46961f5ee90841967e0a68a677d">Create the table in DB:</h3>
 <p>See the file <code>bundle/Resources/sql/schema.sql</code></p>
+<h3 name="bb2420d0c739938919dd041e0a217244">Especial instructions for HTTP Cache</h3>
+<p><strong>Important!</strong>: For the HTTP Cache system (e.g. Varnish or Fastly) the following logic should be implemented:</p>
+<pre><code class=" vcl">if (req.url ~ "^/2fa") {
+    return (pass);
+}</code></pre>
+<p>and it should be added before the <code>call ez_user_context_hash</code> line.</p>
+<p>We need it in order to avoid triggering the X User Hash mechanism when /2fa request is sent, so the <code>/_fos_user_context_hash</code> request would not return 302 redirect response because of this bundle.</p>
 <h4 name="9d6dd462cebdc91d2e4f3889edabea1d"><a href="UPGRADE.md.html">Upgrade Instructions</a></h4>
 <h3 name="a619491466c157829c3dd8cb13872622">Manually removing 2FA record for specific User:</h3>
 <p>If some User needs its 2FA record in the database removed to be able to login without entering 2FA code run the following command <code>acx:users:remove-2fa</code> with specifying user's login:</p>
@@ -247,14 +256,14 @@ php ezplatform/bin/console nova:2fa:remove-secret-key user_login
 
             <p class="text-right">
                 <img width="204" height="20"
-                     src='https://img.shields.io/badge/Updated on-11--08--2021 23:10:26-green?style=flat-square&labelColor=black'
-                     alt='Updated on 11--08--2021 23:10:26'
+                     src='https://img.shields.io/badge/Updated on-11--18--2021 23:29:35-green?style=flat-square&labelColor=black'
+                     alt='Updated on 11--18--2021 23:29:35'
                 />
             </p>
         </div>
         <div class="col-md-4 col-sm-12 d-print-none sidebar">
                             <p><strong>In this page</strong>:</p>
-                <ul class="nav flex-column"><li class="nav-item first last"><a href="#9eac6633d000352376123c680b96b3f7" class="nav-link">Novactive eZ 2FA Bundle</a><ul class="menu_level_1"><li class="nav-item first last"><a href="#7cd8fb6e31cc946c078d2740c76a9899" class="nav-link">Installation</a><ul class="menu_level_2"><li class="nav-item first"><a href="#5a2ebfb8baa378cfcfcba58bbb1380c2" class="nav-link">Requirements</a></li><li class="nav-item"><a href="#6065c97227a6214bc68bad0f15ff16d1" class="nav-link">Use Composer</a></li><li class="nav-item"><a href="#040da9acc61145e551bcf66b54f44420" class="nav-link">Register the bundle</a></li><li class="nav-item"><a href="#814b1401d1a609253b98ac549a68a493" class="nav-link">Add routes</a></li><li class="nav-item"><a href="#8f55e285551800b41684b2c637d6eb63" class="nav-link">Update Configuration</a></li><li class="nav-item"><a href="#2a84d9915b12fcb0c1436709a77a8dd0" class="nav-link">Add new configuration</a></li><li class="nav-item"><a href="#8689a46961f5ee90841967e0a68a677d" class="nav-link">Create the table in DB:</a><ul class="menu_level_3"><li class="nav-item first last"><a href="#9d6dd462cebdc91d2e4f3889edabea1d" class="nav-link">[Upgrade Instructions](UPGRADE.md)</a></li></ul></li><li class="nav-item last"><a href="#a619491466c157829c3dd8cb13872622" class="nav-link">Manually removing 2FA record for specific User:</a></li></ul></li></ul></li></ul>
+                <ul class="nav flex-column"><li class="nav-item first last"><a href="#9eac6633d000352376123c680b96b3f7" class="nav-link">Novactive eZ 2FA Bundle</a><ul class="menu_level_1"><li class="nav-item first last"><a href="#7cd8fb6e31cc946c078d2740c76a9899" class="nav-link">Installation</a><ul class="menu_level_2"><li class="nav-item first"><a href="#5a2ebfb8baa378cfcfcba58bbb1380c2" class="nav-link">Requirements</a></li><li class="nav-item"><a href="#6065c97227a6214bc68bad0f15ff16d1" class="nav-link">Use Composer</a></li><li class="nav-item"><a href="#040da9acc61145e551bcf66b54f44420" class="nav-link">Register the bundle</a></li><li class="nav-item"><a href="#814b1401d1a609253b98ac549a68a493" class="nav-link">Add routes</a></li><li class="nav-item"><a href="#8f55e285551800b41684b2c637d6eb63" class="nav-link">Update Configuration</a></li><li class="nav-item"><a href="#2a84d9915b12fcb0c1436709a77a8dd0" class="nav-link">Add new configuration</a></li><li class="nav-item"><a href="#8689a46961f5ee90841967e0a68a677d" class="nav-link">Create the table in DB:</a></li><li class="nav-item"><a href="#bb2420d0c739938919dd041e0a217244" class="nav-link">Especial instructions for HTTP Cache</a><ul class="menu_level_3"><li class="nav-item first last"><a href="#9d6dd462cebdc91d2e4f3889edabea1d" class="nav-link">[Upgrade Instructions](UPGRADE.md)</a></li></ul></li><li class="nav-item last"><a href="#a619491466c157829c3dd8cb13872622" class="nav-link">Manually removing 2FA record for specific User:</a></li></ul></li></ul></li></ul>
                     </div>
     </div>
     <footer class="pt-4 my-md-5 pt-md-5 border-top">
