@@ -73,6 +73,8 @@ security:
     ...
     access_control:
         - { path: ^/logout, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/2fa_setup, role: ROLE_USER }
+        - { path: ^/2fa_reset, role: ROLE_USER }
         - { path: ^/2fa, role: IS_AUTHENTICATED_2FA_IN_PROGRESS }
 
 ```
@@ -180,6 +182,16 @@ nova_ez2fa:
 
 See the file `bundle/Resources/sql/schema.sql`
 
+### Especial instructions for HTTP Cache
+**Important!**: For the HTTP Cache system (e.g. Varnish or Fastly) the following logic should be implemented:
+```vcl
+if (req.url ~ "^/2fa") {
+    return (pass);
+}
+```
+and it should be added before the `call ez_user_context_hash` line.
+
+We need it in order to avoid triggering the X User Hash mechanism when /2fa request is sent, so the `/_fos_user_context_hash` request would not return 302 redirect response because of this bundle.
 
 #### [Upgrade Instructions](UPGRADE.md)
 
