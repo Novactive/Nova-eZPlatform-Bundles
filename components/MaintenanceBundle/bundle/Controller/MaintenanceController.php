@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Novactive\NovaeZMaintenanceBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;
-use eZ\Publish\API\Repository\PermissionResolver;
 use Novactive\NovaeZMaintenanceBundle\Form\Type\FilterType;
 use Novactive\NovaeZMaintenanceBundle\Helper\FileHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -32,12 +31,12 @@ class MaintenanceController extends Controller
     /**
      * @var FlashBagInterface
      */
-    private $flashBag;
+    private FlashBagInterface $flashBag;
 
     /**
      * @var FileHelper
      */
-    private $fileHelper;
+    private FileHelper $fileHelper;
 
     public function __construct(FlashBagInterface $flashBag, FileHelper $fileHelper)
     {
@@ -49,7 +48,7 @@ class MaintenanceController extends Controller
      * @Route("/", name="novamaintenance_index")
      * @Template("@ezdesign/maintenance/index.html.twig")
      */
-    public function indexAction(PermissionResolver $permissionResolver): Response
+    public function indexAction(): Response
     {
         $this->fileHelper->checkManageAccess();
 
@@ -61,11 +60,8 @@ class MaintenanceController extends Controller
     /**
      * @Route("/manage/{maintenanceSiteaccess}", name="novamaintenance_manage")
      */
-    public function manageAction(
-        string $maintenanceSiteaccess,
-        Request $request,
-        PermissionResolver $permissionResolver
-    ): Response {
+    public function manageAction(string $maintenanceSiteaccess, Request $request): Response
+    {
         $this->fileHelper->checkManageAccess();
         $isExistFile = $this->fileHelper->isMaintenanceModeRunning($maintenanceSiteaccess);
         $btnLabel = $this->fileHelper->translate(!$isExistFile ? 'maintenance.start' : 'maintenance.stop');
