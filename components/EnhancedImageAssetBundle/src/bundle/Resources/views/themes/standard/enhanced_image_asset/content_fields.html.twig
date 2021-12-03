@@ -31,11 +31,23 @@
                     <source {% for attrname, attrvalue in alternativeImageAttrs if attrvalue is not empty %}{{ attrname }}="{{ attrvalue }}" {% endfor %}/>
                 {% endfor %}
 
+                {% if parameters.ezlink|default({}) is not empty %}
+                    <a
+                            href="{{ parameters.ezlink.href }}"
+                            {% if parameters.ezlink.title is defined %} title="{{ parameters.ezlink.title|e('html_attr') }}"{% endif %}
+                            {% if parameters.ezlink.target is defined %} target="{{ parameters.ezlink.target|e('html_attr') }}"{% endif %}
+                    >
+                {% endif %}
+
                 <img {% for attrname, attrvalue in imageAttrs if attrvalue is not empty %}{{ attrname }}="{{ attrvalue }}" {% endfor %}/>
 
                 {% if lazyLoad %}
                     {% set placeholderAlias = ez_image_alias(field, versionInfo, 'placeholder') %}
                     <img src="{{ placeholderAlias.uri }}" class="placeholder" width="{{ imageAttrs['data-width'] }}" height="{{ imageAttrs['data-height'] }}" alt=""/>
+                {% endif %}
+
+                {% if parameters.ezlink|default({}) is not empty %}
+                    </a>
                 {% endif %}
             </picture>
         {% endif %}
@@ -73,11 +85,23 @@
                     <source {% for attrname, attrvalue in alternativeImageAttrs if attrvalue is not empty %}{{ attrname }}="{{ attrvalue }}" {% endfor %}/>
                 {% endfor %}
 
+                {% if parameters.ezlink|default({}) is not empty %}
+                    <a
+                        href="{{ parameters.ezlink.href }}"
+                        {% if parameters.ezlink.title is defined %} title="{{ parameters.ezlink.title|e('html_attr') }}"{% endif %}
+                        {% if parameters.ezlink.target is defined %} target="{{ parameters.ezlink.target|e('html_attr') }}"{% endif %}
+                    >
+                {% endif %}
+
                 <img {% for attrname, attrvalue in imageAttrs if attrvalue is not empty %}{{ attrname }}="{{ attrvalue }}" {% endfor %}/>
 
                 {% if lazyLoad %}
                     {% set placeholderAlias = ez_image_alias(field, versionInfo, 'placeholder') %}
                     <img src="{{ placeholderAlias.uri }}" class="placeholder" width="{{ imageAttrs['data-width'] }}" height="{{ imageAttrs['data-height'] }}" alt=""/>
+                {% endif %}
+
+                {% if parameters.ezlink|default({}) is not empty %}
+                    </a>
                 {% endif %}
             </picture>
         {% endif %}
