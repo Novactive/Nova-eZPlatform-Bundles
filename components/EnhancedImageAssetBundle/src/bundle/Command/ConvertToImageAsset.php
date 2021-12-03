@@ -19,6 +19,7 @@ use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use Exception;
 use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\Exceptions\BadStateException;
 use eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
@@ -36,8 +37,6 @@ use eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\FieldType\ImageAsset\Value as ImageAssetValue;
-use eZ\Publish\Core\Repository\ContentTypeService;
-use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use Novactive\EzEnhancedImageAsset\FieldValueConverter\ChainFieldValueConverter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\Console\Command\Command;
@@ -66,9 +65,6 @@ class ConvertToImageAsset extends Command
 
     /** @var ChainFieldValueConverter */
     protected $valueConverter;
-
-    /** @var SignalDispatcher */
-    protected $signalDispatcher;
 
     /** @var TagAwareAdapterInterface */
     protected $cache;
@@ -114,14 +110,6 @@ class ConvertToImageAsset extends Command
     public function setValueConverter(ChainFieldValueConverter $valueConverter): void
     {
         $this->valueConverter = $valueConverter;
-    }
-
-    /**
-     * @required
-     */
-    public function setSignalDispatcher(SignalDispatcher $signalDispatcher): void
-    {
-        $this->signalDispatcher = $signalDispatcher;
     }
 
     /**

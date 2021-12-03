@@ -12,7 +12,7 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        enhancedimage: './src/js/enhancedimage.ts',
+        enhancedimage: './src/js/enhancedimage.ts'
     },
     output: {
         filename: '[name].js',
@@ -23,16 +23,16 @@ module.exports = {
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                use: 'babel-loader',
+                use: 'babel-loader'
             },
             {
                 test: /\.tsx?$/,
                 use: 'ts-loader',
                 exclude: /node_modules/
             }
-        ],
+        ]
     },
     resolve: {
-        extensions: [ '.tsx', '.ts', '.js' ]
-    },
+        extensions: ['.tsx', '.ts', '.js']
+    }
 };

@@ -1,6 +1,6 @@
-{% trans_default_domain 'ezrepoforms_content' %}
+{% trans_default_domain 'ezplatform_content_forms_content' %}
 
-{% use '@ezdesign/fieldtypes/edit/ezimage.html.twig' %}
+{% use '@ezdesign/ui/field_type/edit/ezimage.html.twig' %}
 
 {%- block ezplatform_fieldtype_enhancedimage_row -%}
     {% set preview_block_name = 'enhancedimage_preview' %}
@@ -10,19 +10,47 @@
 {%- endblock -%}
 
 {% block enhancedimage_preview %}
-    {% form_theme form '@ezdesign/fieldtypes/edit/binary_base_fields.html.twig' %}
+    {% form_theme form '@ezdesign/ui/field_type/edit/binary_base_fields.html.twig' %}
 
     {% set image = form.parent.vars.value.value %}
     {% set focusPoint = image.focusPoint %}
     <div class="ez-field-edit-preview">
         <div class="ez-field-edit-preview__visual focuspoint-helper">
             <div class="ez-field-edit-preview__media-wrapper">
+                <div class="ez-field-edit-preview__actions">
+                    <button
+                        type="button"
+                        class="ez-field-edit-preview__action ez-field-edit-preview__action--remove"
+                        title="{{ 'content.field_type.ezimage.delete'|trans|desc('Delete image') }}"
+                    >
+                        <svg class="ez-icon ez-icon--small-medium">
+                            <use xlink:href="{{ ez_icon_path('trash') }}"></use>
+                        </svg>
+                    </button>
+                    <a
+                        class="ez-field-edit-preview__action ez-field-edit-preview__action--preview"
+                        href="{{ form.parent.vars.value.value.uri }}"
+                        title="{{ 'content.field_type.ezimage.preview'|trans|desc('Preview') }}"
+                        target="_blank"
+                    >
+                        <svg class="ez-icon ez-icon--small-medium">
+                            <use xlink:href="{{ ez_icon_path('open-newtab') }}"></use>
+                        </svg>
+                    </a>
+                    {{ ez_render_component_group(
+                        'image-edit-actions-after',
+                        {
+                            'fieldDefinitionIdentifier' : form.parent.vars.value.fieldDefinition.identifier,
+                            'contentId' : app.request.get('contentId')
+                        }
+                    ) }}
+                </div>
                 <div class="focuspoint-helper--frames">
                     {% for i in 1..9 %}
                         <div class="focuspoint-helper--frame focuspoint-helper--frame-{{ loop.index }}">
                             <picture class="enhancedimage--wrapper enhancedimage--focused-img--wrapper">
                                 <img data-srcset="{{ image.uri }}"
-                                     alt="{{ 'content.field_type.ezimage.img_alt'|trans({'%label%': form.vars.label})|desc("Image stored in field '%label%'") }}"
+                                     alt="{{ 'content.field_type.ezimage.img_alt'|trans({'%label%': form.vars.label})|desc("Image stored in Field '%label%'") }}"
                                      class="enhancedimage--img enhancedimage--focused-img enhancedimage--img--lazyload blur-up"
                                      data-focus-x="{{ focusPoint.posX }}"
                                      data-focus-y="{{ focusPoint.posY }}">
@@ -43,7 +71,7 @@
                         <img    draggable="false"
                                 class="ez-field-edit-preview__media focuspoint-helper--img focuspoint-helper--target-overlay"
                                 src="{{ image.uri }}"
-                                alt="{{ 'content.field_type.ezimage.img_alt'|trans({'%label%': form.vars.label})|desc("Image stored in field '%label%'") }}" />
+                                alt="{{ 'content.field_type.ezimage.img_alt'|trans({'%label%': form.vars.label})|desc("Image stored in Field '%label%'") }}" />
                     </div>
                 </div>
             </div>
@@ -52,24 +80,17 @@
                 <span class="ez-field-edit-preview__file-size">{{ image.fileSize|ez_file_size(2) }}</span>
             </div>
             <div class="ez-field-edit-preview__image-alt">
-                {{ form_row(form.alternativeText) }}
+                {% set alternative_text_label_class = form.vars.is_alternative_text_required ? 'required' : '' %}
+                {{ form_row(form.alternativeText, {
+                    attr: { 'data-is-required': form.vars.is_alternative_text_required },
+                    label_attr: { 'class': alternative_text_label_class }
+                }) }}
             </div>
+            {{ form_widget(form.additionalData, {attr: {class: 'ez-field-edit-preview__additional-data'}}) }}
             <div hidden="true">
                 {{ form_widget(form.focusPoint) }}
                 {{ form_widget(form.isNewFocusPoint) }}
             </div>
-        </div>
-        <div class="ez-field-edit-preview__actions">
-            <button type="button" class="ez-field-edit-preview__action--remove">
-                <svg class="ez-icon">
-                    <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#trash"></use>
-                </svg>
-            </button>
-            <a class="ez-field-edit-preview__action--preview" href="{{ image.uri }}" target="_blank">
-                <svg class="ez-icon">
-                    <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#open-newtab"></use>
-                </svg>
-            </a>
         </div>
     </div>
 {% endblock %}
