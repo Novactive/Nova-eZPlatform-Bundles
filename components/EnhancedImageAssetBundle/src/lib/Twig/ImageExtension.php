@@ -17,6 +17,7 @@ namespace Novactive\EzEnhancedImageAsset\Twig;
 use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException;
 use eZ\Publish\SPI\Variation\Values\ImageVariation;
 use InvalidArgumentException;
@@ -27,9 +28,10 @@ use Psr\Log\LoggerInterface;
 use ReflectionException;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Twig\Extension\AbstractExtension;
+use Twig\Extension\GlobalsInterface;
 use Twig\TwigFunction;
 
-class ImageExtension extends AbstractExtension
+class ImageExtension extends AbstractExtension implements GlobalsInterface
 {
     /** @var FocusedImageAliasGenerator */
     protected $focusedImageAliasGenerator;
@@ -39,6 +41,17 @@ class ImageExtension extends AbstractExtension
 
     /** @var AssetExtension */
     protected $assetExtension;
+
+    /** @var ConfigResolverInterface */
+    protected $configResolver;
+
+    public function getGlobals(): array
+    {
+        return [
+            'lazy_load_images' => $this->configResolver->getParameter('enable_lazy_load', 'ez_enhanced_image_asset'),
+            'enable_retina_variations' => $this->configResolver->getParameter('enable_retina', 'ez_enhanced_image_asset')
+        ];
+    }
 
     /**
      * @required
@@ -62,6 +75,21 @@ class ImageExtension extends AbstractExtension
     public function setAssetExtension(AssetExtension $assetExtension): void
     {
         $this->assetExtension = $assetExtension;
+    }
+
+    /**
+     * @required
+     */
+    public function setConfigResolver(ConfigResolverInterface $configResolver): void
+    {
+        $this->configResolver = $configResolver;
+    }
+
+    protected function isVariationsAvailable($variationName): bool
+    {
+        $configuredVariations = $this->configResolver->getParameter('image_variations');
+
+        return isset($configuredVariations[$variationName]);
     }
 
     /**
@@ -179,6 +207,9 @@ class ImageExtension extends AbstractExtension
      */
     public function getImageVariation(Field $field, VersionInfo $versionInfo, string $variationName)
     {
+        if (!$this->isVariationsAvailable($variationName)) {
+            return null;
+        }
         try {
             return $this->focusedImageAliasGenerator->getVariation($field, $versionInfo, $variationName);
         } catch (InvalidVariationException $e) {

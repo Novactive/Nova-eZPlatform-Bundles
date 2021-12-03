@@ -16,12 +16,13 @@ namespace Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\FieldTypeService;
+use EzSystems\EzPlatformAdminUi\FieldType\Mapper\ImageFormMapper;
+use EzSystems\EzPlatformContentForms\FieldType\FieldValueFormMapperInterface;
 use EzSystems\RepositoryForms\Data\Content\FieldData;
-use EzSystems\RepositoryForms\FieldType\Mapper\ImageFormMapper;
 use Novactive\EzEnhancedImageAsset\Form\Type\FieldType\EnhancedImageFieldType;
 use Symfony\Component\Form\FormInterface;
 
-class FormMapper extends ImageFormMapper
+class FormMapper extends ImageFormMapper implements FieldValueFormMapperInterface
 {
     /** @var FieldTypeService */
     private $fieldTypeService;

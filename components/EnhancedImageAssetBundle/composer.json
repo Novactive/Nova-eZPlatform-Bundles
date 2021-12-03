@@ -18,8 +18,7 @@
         }
     ],
     "require": {
-        "php": "^7.3",
-        "ezsystems/repository-forms": "*"
+        "php": "^7.3"
     },
     "autoload": {
         "psr-4": {
