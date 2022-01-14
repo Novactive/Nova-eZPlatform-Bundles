@@ -63,7 +63,7 @@
                 {# The logout link gives the user a way out if they can't complete two-factor authentication #}
                 <div class="form-group">
                     <div class="ez-login__input-label-wrapper">
-                        <a href="{{ logoutPath }}">{{ "cancel"|trans({}, 'SchebTwoFactorBundle') }}</a>
+                        <a href="{{ ez_path(ez_route('logout')) }}">{{ "cancel"|trans({}, 'SchebTwoFactorBundle') }}</a>
                     </div>
                 </div>
             </fieldset>

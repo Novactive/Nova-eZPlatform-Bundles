@@ -69,13 +69,19 @@ security:
             two_factor:
                 auth_form_path: 2fa_login    # The route name you have used in the routes.yaml
                 check_path: 2fa_login_check  # The route name you have used in the routes.yaml
+                default_target_path: /                # Where to redirect by default after successful authentication
+                always_use_default_target_path: true  # If it should always redirect to default_target_path
     
     ...
     access_control:
+        - { path: ^/_fos_user_context_hash, role: PUBLIC_ACCESS }
         - { path: ^/logout, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/2fa_setup, role: ROLE_USER }
-        - { path: ^/2fa_reset, role: ROLE_USER }
+        - { path: ^/logout, role: IS_AUTHENTICATED_2FA_IN_PROGRESS }
+        - { path: 2fa_setup$, role: ROLE_USER }
+        - { path: 2fa_reset$, role: ROLE_USER }
         - { path: ^/2fa, role: IS_AUTHENTICATED_2FA_IN_PROGRESS }
+        - { path: ^/admin/2fa, role: IS_AUTHENTICATED_2FA_IN_PROGRESS }
+        - { path: ^/_fos_user_context_hash, role: IS_AUTHENTICATED_2FA_IN_PROGRESS }
 
 ```
 
