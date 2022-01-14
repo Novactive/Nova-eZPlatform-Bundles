@@ -2,7 +2,7 @@ nova_ezmaintenance:
     system:
         default:
             enable: false
-            template: '@NovaeZMaintenance/maintenance.html.twig'
+            template: '@@NovaeZMaintenance/maintenance.html.twig'
 
         site:
             enable: true #Enable maintenance for site access 'site'

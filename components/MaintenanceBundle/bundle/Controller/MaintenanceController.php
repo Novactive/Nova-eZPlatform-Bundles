@@ -17,7 +17,6 @@ namespace Novactive\NovaeZMaintenanceBundle\Controller;
 use eZ\Bundle\EzPublishCoreBundle\Controller;
 use Novactive\NovaeZMaintenanceBundle\Form\Type\FilterType;
 use Novactive\NovaeZMaintenanceBundle\Helper\FileHelper;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
@@ -46,7 +45,6 @@ class MaintenanceController extends Controller
 
     /**
      * @Route("/", name="novamaintenance_index")
-     * @Template("@ezdesign/maintenance/index.html.twig")
      */
     public function indexAction(): Response
     {
