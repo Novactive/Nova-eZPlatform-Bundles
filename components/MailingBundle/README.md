@@ -49,7 +49,7 @@ Wording
 - A StatHit:
     - A record that tracks
         - email openings
-        - clicks on URLs
+        - click on URLs
                        
 Features
 --------

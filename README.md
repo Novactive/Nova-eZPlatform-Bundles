@@ -14,7 +14,7 @@ git clone
 make installibexa
 ```
 
-This will install Ibexa and bundles on top of it.
+This will install the last version of Ibexa and bundles on top of it.
 
 ## Contribution
 

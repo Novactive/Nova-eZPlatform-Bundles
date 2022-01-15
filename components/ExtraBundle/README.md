@@ -239,7 +239,7 @@ The trait that allows to get the Route by location, content or Wrapper object.
 
 ### ViewMatcher
 
-This allows you to specify different ez views for the same content type but with different value of particular field.
+This allows you to specify different ez views for the same content type but with different values of particular field.
 
 > **IMPORTANT**: By default the field name is set to **_matcher_** but can be rewritten by specifying it in the _**VIEW_MATCHER_FIELD_IDENTIFIER**_ env variable.
 
