@@ -39,8 +39,8 @@ class EnhancedImageStorage extends ImageStorage
                 && !isset($field->value->externalData['inputUri'])
                 && isset($field->value->externalData['id'])
             ) {
-                $binaryFile = $this->IOService->loadBinaryFile($field->value->externalData['id']);
-                $stream = $this->IOService->getFileInputStream($binaryFile);
+                $binaryFile = $this->ioService->loadBinaryFile($field->value->externalData['id']);
+                $stream = $this->ioService->getFileInputStream($binaryFile);
                 $streamMetadatas = stream_get_meta_data($stream);
 
                 $field->value->externalData['inputUri'] = $streamMetadatas['uri'];
