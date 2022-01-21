@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZCloudinaryBundle\Core;
 
-use Cloudinary;
+use Cloudinary\Tag\ImageTag;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
@@ -49,13 +49,18 @@ class AliasGenerator implements VariationService
         $this->configResolver = $configResolver;
         $this->variationService = $variationService;
         $this->logger = $logger;
-        Cloudinary::config(
-            [
-                'cloud_name' => $auth['cloud_name'],
-                'api_key' => $auth['api_key'],
-                'api_secret' => $auth['api_secret'],
-            ]
-        );
+
+        $config = [
+            'cloud_name' => $auth['cloud_name'],
+            'api_key' => $auth['api_key'],
+            'api_secret' => $auth['api_secret'],
+        ];
+
+        if (class_exists(\Cloudinary\Configuration\Configuration::class)) {
+            \Cloudinary\Configuration\Configuration::instance($config);
+        } else {
+            \Cloudinary::config($config);
+        }
     }
 
     /**
@@ -135,10 +140,19 @@ class AliasGenerator implements VariationService
         if (!empty($fetchPort)) {
             $components['port'] = $fetchPort;
         }
-        $html = fetch_image_tag(
-            $this->unparseUrl($components),
-            $cloudinaryVariationsList[$variationName]['filters']
-        );
+
+        if (class_exists(\Cloudinary\Configuration\Configuration::class)) {
+            $html = ImageTag::fetch(
+                $this->unparseUrl($components),
+                $cloudinaryVariationsList[$variationName]['filters']
+            )->toTag();
+        } else {
+            $html = fetch_image_tag(
+                $this->unparseUrl($components),
+                $cloudinaryVariationsList[$variationName]['filters']
+            );
+        }
+
         $attributes = [];
         foreach ($this->parseAttributes($html) as $key => $value) {
             if ('img' === $key) {

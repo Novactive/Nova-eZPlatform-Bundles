@@ -1,0 +1,146 @@
+{% set baseLayout = '@ezdesign/ui/layout.html.twig' %}
+{% if forced is defined and forced == true and reset is not defined %}
+    {% set baseLayout = '@ezdesign/account/base.html.twig' %}
+{% endif %}
+
+{% extends baseLayout %}
+
+{% trans_default_domain 'novaez2fa' %}
+
+{% set pageTitle = 'setup_form.title'|trans %}
+
+{% block title %}{{ pageTitle }}{% endblock %}
+
+{%- block breadcrumbs -%}
+    {% include '@ezdesign/ui/breadcrumbs.html.twig' with { items: [
+        { value: pageTitle }
+    ]} %}
+{%- endblock -%}
+
+{%- block page_title -%}
+    {% include '@ezdesign/ui/page_title.html.twig' with {
+        title: pageTitle,
+        icon_name: 'article'
+    } %}
+{%- endblock -%}
+
+{%- block content -%}
+
+    {% if forced is defined and forced == true and reset is not defined %}
+        <h2 class="ez-login__actions-headline">{{ 'force_setup.title'|trans }}</h2>
+    {% endif %}
+
+    <section class="container ez-container mt-4">
+        <div class="card ez-card ez-card--light">
+            <div class="card-body">
+
+                {% if success is defined %}
+
+                    <h5>{{ 'setup_form.success_message'|trans({'%method%': method|capitalize}) }}</h5>
+
+                    {% if backupCodes is defined and backupCodes|length > 0 %}
+                        <p>
+                            {{ 'setup_form.backup_codes.line1'|trans|raw }}
+                            <br/>
+                            {{ 'setup_form.backup_codes.line2'|trans }}
+                            <br/>
+                            {{ 'setup_form.backup_codes.line3'|trans }}
+                        </p>
+                        <ul>
+                            {% for code in backupCodes %}
+                                <li>{{ code }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                {% elseif reset is defined %}
+                    {% set set_up_method = 'email' == method ? 'setup_form.method.email'|trans : method|capitalize %}
+                    <div class="ez-data-source__message--main">{{ 'setup_form.already_set_up'|trans({'%method%': set_up_method}) }}</div>
+                    <div class="ez-data-source__message--main">
+                        {% set resetLink %}<a href="{{ ez_path(ez_route('2fa_reset')) }}"><strong>{{ 'setup_form.here'|trans }}</strong></a>{% endset %}
+                        {{ 'setup_form.reset'|trans({'%link%': resetLink})|raw }}
+                    </div>
+
+                {% elseif form is null %}
+
+                    <div class="ez-data-source__message--main">
+                        <span>{{ 'setup_form.no_methods_enabled'|trans }}</span>
+                    </div>
+
+                {% elseif form.vars.name == 'two_factor_method' %}
+
+                    <div class="ez-data-source__message--main">
+                        {% if form.method.vars.choices|length == 1 %}
+                            <span>{{ 'setup_form.submit_current_method'|trans }}</span>
+                        {% else %}
+                            {% set mobileApplication %}<strong>{{ 'mobile_application'|trans }}</strong>{% endset %}
+                            {% set email %}<strong>{{ 'email'|trans }}</strong>{% endset %}
+                            <span>{{ 'force_setup.subtitle'|trans({'%method1%': mobileApplication, '%method2%': email})|raw }}</span>
+                        {% endif %}
+                    </div>
+                    <br/>
+
+                    {{ form_start(form, {'attr': {'class': 'ez-form-validate'}, 'method':'post'}) }}
+
+                    {% for formMethod in form.method %}
+
+                        <div class="form-check">
+                            {{ form_widget(formMethod, {'attr': {'class': 'ez-input ez-input--radio form-check-input'}}) }}
+                            {{ form_label(formMethod, formMethod.vars.label|trans|capitalize, {'label_attr': {'class': 'radio-inline form-check-label required'}}) }}
+                        </div>
+
+                    {% endfor %}
+
+                    <br/>
+                    <div class="ez-field">
+                        <div class="ez-field__data">
+                            <div class="ez-data-source">
+                                {{ form_row(form.submit, {'label': 'setup_form.submit'|trans, 'attr': {'class': 'ez-data-source__btn-add btn btn-secondary'}}) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    {{ form_rest(form) }}
+                    {{ form_end(form) }}
+
+                {% else %}
+
+                    <div class="ez-data-source__message--main">{{ 'setup_form.scan_qr_code'|trans({'%method%': method|capitalize}) }}</div>
+                    <div class="ez-data-source__message--main">{{ 'setup_form.enter_generated_code'|trans }}</div>
+
+                    {{ qrCode|raw }}
+
+                    {{ form_start(form, {'attr': {'class': 'ez-form-validate'}, 'method':'post'}) }}
+
+                    <div class="ez-field ez-field-edit--ezstring ez-field-edit--required">
+                        <div class="ez-field__label-wrapper">
+                            {{ form_label(form.code, null, {'label_attr': {'class': 'ez-field__label ez-label required'}}) }}
+                        </div>
+                        <div class="ez-field-edit__data">
+                            <div class="ez-data-source">
+                                {{ form_widget(form.code, {'attr': {'class': 'ez-data-source__input form-control'}}) }}
+                            </div>
+                        </div>
+                        {% for error in form.code.vars.errors %}
+                            <em class="ez-field-edit__error">{{ error.message }}</em>
+                        {% endfor %}
+                    </div>
+
+                    <br/>
+                    <div class="ez-field">
+                        <div class="ez-field__data">
+                            <div class="ez-data-source">
+                                {{ form_row(form.submit, {'label': 'setup_form.submit'|trans, 'attr': {'class': 'ez-data-source__btn-add btn btn-secondary'}}) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    {{ form_rest(form) }}
+                    {{ form_end(form) }}
+
+                {% endif %}
+
+            </div>
+        </div>
+    </section>
+{%- endblock -%}

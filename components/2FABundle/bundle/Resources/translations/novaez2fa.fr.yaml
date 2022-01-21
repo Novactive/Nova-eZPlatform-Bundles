@@ -1,0 +1,34 @@
+mobile_application: l'application mobile
+email: l'e-mail
+force_setup:
+    title: Authentification à deux facteurs
+    subtitle: "Choisissez %method1% ou %method2% pour l'authentification à deux facteurs."
+setup_form:
+    method:
+        mobile: Application Mobile
+        email: e-mail
+    title: Configuration de l'authentification à deux facteurs
+    success_message: "L'authentification à deux facteurs a été configurée avec succès."
+    already_set_up: "L'authentification à deux facteurs par %method% est déjà paramétrée."
+    reset: 'Cliquez %link% pour la réinitialiser.'
+    here: ici
+    submit: Soumettre
+    backup_codes:
+        line1: Voici les <strong>codes de secours</strong> qui sont des codes d'authentification à usage unique et peuvent être utilisés à la place des codes réels.
+        line2: Ils sont conçus comme des codes d'urgence, lorsque l'application d'authentification n'est pas disponible et vous devez passer le processus d'authentification à deux facteurs.
+        line3: Ils doivent être sauvegardés en toute sécurité afin que vous puissiez les utiliser en cas de besoin.
+    no_methods_enabled: Aucune méthode d'authentification à deux facteurs n'est activée.
+    submit_current_method: Continuer avec la seule méthode d'authentification à deux facteurs disponible.
+    scan_qr_code: 'Scannez ce QR code avec une application compatible avec %method% Authenticator.'
+    enter_generated_code: Saisissez le code généré pour ce compte.
+    wrong_code: Le code de vérification n'est pas valide.
+auth_form:
+    subtitle: Entrez votre code d'authentification à deux facteurs.
+menu_label: Configuration de 2FA
+user_tab:
+    setup_line_email: "L'authentification à deux facteurs par e-mail est déjà paramétrée pour cet utilisateur."
+    setup_line_mobile: "L'authentification à deux facteurs %method% est déjà paramétrée pour cet utilisateur."
+    not_setup_line: "L'authentification à deux facteurs n'est pas configurée pour cet utilisateur."
+    reset: Réinitialiser
+    are_you_sure: Etes-vous sûr?
+email_subject: Code d'authentification

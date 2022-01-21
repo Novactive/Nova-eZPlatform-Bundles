@@ -25,7 +25,7 @@ class MenuItemValue extends KnpMenuItem
     public const TARGET_TOP = '_top';
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function __construct(string $name, FactoryInterface $factory)
     {

@@ -71,8 +71,8 @@ final class QueryFactory
             $criterions,
             $this->getCriterionsForConfig(
                 $config['contentTypeIdentifiers'],
-                $config['subtrees'],
                 $config['locations'],
+                $config['subtrees'],
                 false
             )
         );
@@ -83,11 +83,13 @@ final class QueryFactory
             $criterions,
             $this->getCriterionsForConfig(
                 $config['contentTypeIdentifiers'],
-                $config['subtrees'],
                 $config['locations'],
+                $config['subtrees'],
                 true
             )
         );
+
+        $criterions[] = new Criterion\LanguageCode($this->configResolver->getParameter('languages'), true);
 
         $query->query = new Criterion\LogicalAnd($criterions);
         $query->sortClauses = [new SortClause\DatePublished(Query::SORT_DESC)];

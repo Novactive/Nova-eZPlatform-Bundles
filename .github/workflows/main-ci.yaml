@@ -23,12 +23,12 @@ jobs:
 
             -   name: Check Mess Sources
                 run: php vendor/bin/phpmd src,components,bin text .cs/md_ruleset.xml
-    tests:
-        name: Tests
+    ibexa:
+        name: Ibexa OSS
         runs-on: ubuntu-latest
         services:
             mysql:
-                image: mariadb:10.3
+                image: mariadb:10.4
                 env:
                     MYSQL_ALLOW_EMPTY_PASSWORD: yes
                     MYSQL_DATABASE: ezplatform
@@ -42,7 +42,7 @@ jobs:
                 options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
         strategy:
             matrix:
-                php: [ 7.3, 7.4 ]
+                php: [ 7.4 ]
         env:
             CACHE_POOL: cache.redis
             DATABASE_URL: mysql://root@127.0.0.1:3306/ezplatform
@@ -51,9 +51,23 @@ jobs:
             APP_DEBUG: 1
             COMPOSER_MEMORY_LIMIT: 4G
             PANTHER_EXTERNAL_BASE_URI: http://127.0.0.1:8000
-            PANTHER_CHROME_DRIVER_BINARY: /home/runner/.chrome/chromedriver
         steps:
             -   uses: actions/checkout@v2
+
+            -   uses: volta-cli/action@v1
+                with:
+                    node-version: 14.18
+                    yarn-version: 1.22
+
+            -   name: Check JS Version
+                run: |
+                    node --version
+                    yarn --version
+                    /usr/local/bin/node --version
+                    which node
+                    yarn node --version
+                    rm /usr/local/bin/node
+                    ln -s `which node` /usr/local/bin/node 
 
             -   name: Setup PHP
                 uses: shivammathur/setup-php@master
@@ -63,11 +77,6 @@ jobs:
                 id: php
                 env:
                     COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            -   name: Install Latest Chrome Driver
-                run: |
-                    wget https://chromedriver.storage.googleapis.com/87.0.4280.88/chromedriver_linux64.zip -P /home/runner/
-                    unzip /home/runner/chromedriver_linux64.zip -d /home/runner/.chrome
 
             -   name: Install Symfony Server
                 run: |
@@ -88,14 +97,15 @@ jobs:
             -   name: Install dependencies of the Mono Repo
                 run: composer install --prefer-dist --no-progress --no-suggest --no-interaction
 
-            -   name: Install eZ Platform and Yarn deps
+            -   name: Install Ibexa DXP and Yarn deps
                 run: |
-                    composer create-project ezsystems/ezplatform --prefer-dist --no-progress --no-interaction --no-scripts ezplatform
+                    composer create-project ibexa/oss-skeleton --prefer-dist --no-progress --no-interaction ezplatform
                     mkdir -p ezplatform/node_modules && ln -s ezplatform/node_modules
                     cd ezplatform
+                    php bin/console ibexa:install
+                    php bin/console ibexa:graphql:generate-schema
+                    composer run post-update-cmd
                     yarn add --dev algoliasearch react react-collapsible react-dom react-instantsearch-dom
-                    rm -rf var/cache
-                    composer ezplatform-install
 
             -   name: Run Webserver
                 run: |
@@ -112,34 +122,39 @@ jobs:
                             echo ::endgroup::
                         fi
                     done
-
                     cd ezplatform
-
                     echo ::group::..:: Update Composer ::..
                     composer update
-                    bin/console cache:clear
+                    php bin/console cache:clear
                     echo ::endgroup::
 
                     echo ::group::..:: Do bundle specifics ::..
                     mysql -u root -h 127.0.0.1 -P 3306 ezplatform < ../components/SEOBundle/bundle/Resources/sql/schema.sql
-                    bin/console novaezextra:contenttypes:create ../tests/vmcd.xlsx
-                    bin/console novaezprotectedcontent:install
-                    bin/console novaezmailing:install
-                    bin/console novaezhelptooltip:create
-                    bin/console doctrine:schema:update
+                    mysql -u root -h 127.0.0.1 -P 3306 ezplatform < ../components/2FABundle/bundle/Resources/sql/schema.sql
+                    php bin/console novaezextra:contenttypes:create ../tests/vmcd.xlsx
+                    php bin/console novaezprotectedcontent:install
+                    php bin/console novaezmailing:install
+                    php bin/console novaezhelptooltip:create
+                    php bin/console doctrine:schema:update
                     cp -rp ../components/ProtectedContentBundle/tests/provisioning/article.html.twig templates/themes/standard/full/
                     cp -rp ../components/StaticTemplatesBundle/tests/provisioning/static_ultimatenova templates/themes/
                     echo ::endgroup::
 
                     echo ::group::..:: Final Steps ::..
-                    bin/console cache:clear
+                    php bin/console cache:clear
                     echo ::endgroup::
 
             -   name: Test Web Server
                 run: curl -I http://127.0.0.1:8000 | grep "HTTP/1.1 200 OK"
 
+            -   name: Update PHP Unit
+                run: |
+                    composer update && composer require -W phpunit/phpunit:^9.5 symfony/phpunit-bridge:^5.3
+                    rm -f ezplatform/config/packages/test/doctrine.yaml
+
             -   name: Finally Run the tests
                 run: |
+                    php vendor/bin/bdi detect drivers
                     echo  echo ::group::..:: Global Mono Repo Testing ::..
                     APP_ENV=test php ./vendor/bin/phpunit -c "tests" "tests" --exclude-group behat
                     echo ::endgroup::

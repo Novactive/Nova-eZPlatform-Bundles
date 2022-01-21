@@ -22,6 +22,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 final class SyncCommand extends Command
 {
     use AskValidLocaleBranch;
+    use AskValidComponent;
 
     protected static $defaultName = 'sync';
 
@@ -40,8 +41,15 @@ final class SyncCommand extends Command
             $output
         );
 
+        $component = $this->askValidComponent(
+            'Please enter the name of the component to sync',
+            'all',
+            $input,
+            $output
+        );
+
         $answer = $io->ask(
-            "Synchronize <fg=yellow>{$branch}</> accross all the components. Continue?"
+            "Synchronize <fg=yellow>{$branch}</> accross the specified component. Continue?"
         );
 
         if ('yes' !== $answer) {
@@ -52,7 +60,11 @@ final class SyncCommand extends Command
 
         $splitter = new Splitter();
 
-        $components = (new Components())();
+        if ('all' === $component) {
+            $components = (new Components())();
+        } else {
+            $components = [$component];
+        }
 
         foreach ($components as $component) {
             $io->section("Component {$component}");

@@ -1,0 +1,74 @@
+{% extends '@ezdesign/account/base.html.twig' %}
+
+{%- block content -%}
+
+    <h2 class="ez-login__actions-headline">{{ 'base.sign_in'|trans|desc('Sign in to IBEXA DXP') }}</h2>
+    <p class="ez-login__actions-subheadline">{{ 'auth_form.subtitle'|trans({}, 'novaez2fa') }}</p>
+
+    {% block login_form %}
+
+        <form action="{{ checkPathUrl ? checkPathUrl: path(checkPathRoute) }}" method="post" role="form">
+            <fieldset>
+
+                {# Authentication errors #}
+                {% if authenticationError %}
+                    <span class="ez-login__errors-container">{{ authenticationError|trans(authenticationErrorData, 'SchebTwoFactorBundle') }}</span>
+                {% endif %}
+
+                {% block login_form_fields %}
+                    <div class="form-group{% if authenticationError %} has-error{% endif %}">
+                        <div class="ez-login__input-label-wrapper">
+                            {% if app.token.twoFactorProviders[0] == 'email' %}
+                                {% set method = 'setup_form.method.email'|trans({}, 'novaez2fa')|capitalize %}
+                            {% else %}
+                                {% set method = app.token.attribute('method')|capitalize %}
+                            {% endif %}
+                            <label class="ez-login__input-label" for="_auth_code">
+                                {{ method }} {{ "auth_code"|trans({}, 'SchebTwoFactorBundle') }}:
+                            </label>
+                        </div>
+                        <input
+                                type="text"
+                                id="_auth_code"
+                                class="form-control ez-login__input ez-login__input--username"
+                                name="{{ authCodeParameterName }}"
+                                autocomplete="one-time-code"
+                                autofocus
+                        />
+                    </div>
+
+                    {% if displayTrustedOption %}
+                        <div class="form-group">
+                            <input id="_trusted" type="checkbox" name="{{ trustedParameterName }}"/>
+                            <div class="ez-login__input-label-wrapper">
+                                <label for="_trusted">{{ "trusted"|trans({}, 'SchebTwoFactorBundle') }}</label>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if isCsrfProtectionEnabled %}
+                        <input type="hidden" name="{{ csrfParameterName }}" value="{{ csrf_token(csrfTokenId) }}">
+                    {% endif %}
+
+                {% endblock %}
+
+                {% block login_form_buttons %}
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary ez-login__btn ez-login__btn--sign-in" tabindex="3">
+                            {{ "login"|trans({}, 'SchebTwoFactorBundle') }}
+                        </button>
+                    </div>
+                {% endblock %}
+
+                {# The logout link gives the user a way out if they can't complete two-factor authentication #}
+                <div class="form-group">
+                    <div class="ez-login__input-label-wrapper">
+                        <a href="{{ ez_path(ez_route('logout')) }}">{{ "cancel"|trans({}, 'SchebTwoFactorBundle') }}</a>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+    {% endblock %}
+
+{%- endblock content -%}

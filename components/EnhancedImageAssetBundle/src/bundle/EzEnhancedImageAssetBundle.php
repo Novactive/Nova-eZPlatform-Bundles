@@ -24,7 +24,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 class EzEnhancedImageAssetBundle extends Bundle
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function build(ContainerBuilder $container): void
     {
