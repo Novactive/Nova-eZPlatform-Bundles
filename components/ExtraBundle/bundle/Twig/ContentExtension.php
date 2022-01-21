@@ -75,6 +75,9 @@ class ContentExtension extends AbstractExtension
         try {
             $content = $this->repository->getContentService()->loadContent($fieldValue->destinationContentId);
 
+            if (true === $content->contentInfo->isHidden) {
+                return false;
+            }
             if (!$content->contentInfo->isTrashed()) {
                 $locationService = $this->repository->getLocationService();
                 $location = $locationService->loadLocation($content->contentInfo->mainLocationId);
@@ -97,6 +100,10 @@ class ContentExtension extends AbstractExtension
         foreach ($fieldValue->destinationContentIds as $id) {
             try {
                 $content = $repository->getContentService()->loadContent($id);
+
+                if (true === $content->contentInfo->isHidden) {
+                    continue;
+                }
                 if (!$content->contentInfo->isTrashed()) {
                     $location = $repository->getLocationService()->loadLocation($content->contentInfo->mainLocationId);
                     if ($location->invisible || $location->hidden) {
