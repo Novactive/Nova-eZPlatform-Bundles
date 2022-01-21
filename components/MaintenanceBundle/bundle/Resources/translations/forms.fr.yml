@@ -1,0 +1,3 @@
+role.policy.novamaintenance: 'Maintenance'
+role.policy.novamaintenance.all_functions: 'Toutes les fonctions'
+role.policy.novamaintenance.manage: 'Manage'
