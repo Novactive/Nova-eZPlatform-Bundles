@@ -54,9 +54,10 @@ jobs:
         steps:
             -   uses: actions/checkout@v2
 
-            -   uses: actions/setup-node@v2
+            -   uses: volta-cli/action@v1
                 with:
-                    node-version: '14'
+                    node-version: 14.18
+                    yarn-version: 1.22
 
             -   name: Setup PHP
                 uses: shivammathur/setup-php@master
