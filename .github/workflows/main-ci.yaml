@@ -59,6 +59,13 @@ jobs:
                     node-version: 14.18
                     yarn-version: 1.22
 
+            -   name: Check JS Version
+                run: |
+                    node --version
+                    yarn --version
+                    /usr/local/bin/node --version
+                    which node
+                    
             -   name: Setup PHP
                 uses: shivammathur/setup-php@master
                 with:
