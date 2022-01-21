@@ -58,9 +58,6 @@ jobs:
                 with:
                     node-version: '14'
 
-            -   name: Node JS Version
-                run: node --version
-
             -   name: Setup PHP
                 uses: shivammathur/setup-php@master
                 with:
