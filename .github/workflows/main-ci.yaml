@@ -65,7 +65,10 @@ jobs:
                     yarn --version
                     /usr/local/bin/node --version
                     which node
-                    
+                    yarn node --version
+                    rm /usr/local/bin/node
+                    ln -s `which node` /usr/local/bin/node 
+
             -   name: Setup PHP
                 uses: shivammathur/setup-php@master
                 with:
