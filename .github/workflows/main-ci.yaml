@@ -24,14 +24,14 @@ jobs:
             -   name: Check Mess Sources
                 run: php vendor/bin/phpmd src,components,bin text .cs/md_ruleset.xml
     ibexa:
-        name: Ibexa OSS
+        name: Ibexa OSS ${{ matrix.ibexa_version }} on PHP${{ matrix.php }}
         runs-on: ubuntu-latest
         services:
             mysql:
                 image: mariadb:10.4
                 env:
                     MYSQL_ALLOW_EMPTY_PASSWORD: yes
-                    MYSQL_DATABASE: ezplatform
+                    MYSQL_DATABASE: ezplatform_test
                 ports:
                     - 3306:3306
                 options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -42,10 +42,11 @@ jobs:
                 options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
         strategy:
             matrix:
+                ibexa_version: [ 3.3.15 ]
                 php: [ 7.4 ]
         env:
             CACHE_POOL: cache.redis
-            DATABASE_URL: mysql://root@127.0.0.1:3306/ezplatform
+            DATABASE_URL: mysql://root@127.0.0.1:3306/ezplatform_test
             CACHE_DSN: 127.0.0.1:6379
             APP_ENV: dev
             APP_DEBUG: 1
@@ -99,7 +100,7 @@ jobs:
 
             -   name: Install Ibexa DXP and Yarn deps
                 run: |
-                    composer create-project ibexa/oss-skeleton --prefer-dist --no-progress --no-interaction ezplatform
+                    composer create-project "ibexa/oss-skeleton:${{ matrix.ibexa_version }}" --prefer-dist --no-progress --no-interaction ezplatform
                     mkdir -p ezplatform/node_modules && ln -s ezplatform/node_modules
                     cd ezplatform
                     php bin/console ibexa:install
@@ -129,8 +130,8 @@ jobs:
                     echo ::endgroup::
 
                     echo ::group::..:: Do bundle specifics ::..
-                    mysql -u root -h 127.0.0.1 -P 3306 ezplatform < ../components/SEOBundle/bundle/Resources/sql/schema.sql
-                    mysql -u root -h 127.0.0.1 -P 3306 ezplatform < ../components/2FABundle/bundle/Resources/sql/schema.sql
+                    mysql -u root -h 127.0.0.1 -P 3306 ezplatform_test < ../components/SEOBundle/bundle/Resources/sql/schema.sql
+                    mysql -u root -h 127.0.0.1 -P 3306 ezplatform_test < ../components/2FABundle/bundle/Resources/sql/schema.sql
                     php bin/console novaezextra:contenttypes:create ../tests/vmcd.xlsx
                     php bin/console novaezprotectedcontent:install
                     php bin/console novaezmailing:install
@@ -156,12 +157,12 @@ jobs:
                 run: |
                     php vendor/bin/bdi detect drivers
                     echo  echo ::group::..:: Global Mono Repo Testing ::..
-                    APP_ENV=test php ./vendor/bin/phpunit -c "tests" "tests" --exclude-group behat
+                    DATABASE_URL=mysql://root@127.0.0.1:3306/ezplatform APP_ENV=test php ./vendor/bin/phpunit -c "tests" "tests" --exclude-group behat
                     echo ::endgroup::
                     for COMPONENT in `ls components`; do
                         if COMPONENT=${COMPONENT} bin/ci-should test; then
                             echo ::group::..:: ${COMPONENT} ::..
-                            APP_ENV=test php ./vendor/bin/phpunit -c "components/${COMPONENT}/tests" "components/${COMPONENT}/tests" --exclude-group behat;
+                            DATABASE_URL=mysql://root@127.0.0.1:3306/ezplatform APP_ENV=test php ./vendor/bin/phpunit -c "components/${COMPONENT}/tests" "components/${COMPONENT}/tests" --exclude-group behat;
                             echo ::endgroup::
                         fi
                     done
