@@ -67,7 +67,7 @@ Then inject the bundle in the `bundles.php` of your application.
     Novactive\Bundle\eZResponsiveImagesBundle\NovaeZResponsiveImagesBundle::class => [ 'all'=> true ],
 ```
 
-### Create the _mobile and _retina Alias Name
+### Create the _mobile and _retina Alias Names
 
 The bundle requires that you create 2 more alias for each alias you are using. Ex:
 

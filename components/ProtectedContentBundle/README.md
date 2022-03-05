@@ -17,7 +17,7 @@ Documentation is available in this repository via `.md` files but also packaged 
 
 A bundle that provides quick password protection on Contents.
 
-## How it works
+## How does it work?
 
 Allows you to add 1 on N password on a Content in the Admin UI.
 
