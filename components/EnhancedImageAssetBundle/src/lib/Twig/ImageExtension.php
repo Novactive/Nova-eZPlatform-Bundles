@@ -48,8 +48,14 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
     public function getGlobals(): array
     {
         return [
-            'lazy_load_images' => $this->configResolver->getParameter('enable_lazy_load', 'ez_enhanced_image_asset'),
-            'enable_retina_variations' => $this->configResolver->getParameter('enable_retina', 'ez_enhanced_image_asset')
+            'lazy_load_images' => $this->configResolver->getParameter(
+                'enable_lazy_load',
+                'ez_enhanced_image_asset'
+            ),
+            'enable_retina_variations' => $this->configResolver->getParameter(
+                'enable_retina',
+                'ez_enhanced_image_asset'
+            )
         ];
     }
 
@@ -85,13 +91,6 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
         $this->configResolver = $configResolver;
     }
 
-    protected function isVariationsAvailable($variationName): bool
-    {
-        $configuredVariations = $this->configResolver->getParameter('image_variations');
-
-        return isset($configuredVariations[$variationName]);
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -108,13 +107,13 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
         return [
             new TwigFunction(
                 'ez_focused_image_alias',
-                [$this, 'getImageVariation'],
-                ['is_safe' => ['html']]
+                [ $this, 'getImageVariation' ],
+                [ 'is_safe' => [ 'html' ] ]
             ),
             new TwigFunction(
                 'ez_image_attrs',
-                [$this, 'getImageAttributes'],
-                ['is_safe' => ['html']]
+                [ $this, 'getImageAttributes' ],
+                [ 'is_safe' => [ 'html' ] ]
             ),
         ];
     }
@@ -123,14 +122,15 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
      * @param       $variationName
      * @param array $parameters
      *
+     * @return array|mixed
      * @throws ReflectionException
      *
-     * @return array|mixed
      */
     public function getImageAttributes(Field $field, VersionInfo $versionInfo, $variationName, $parameters = [])
     {
         $lazyLoadEnabled = $parameters['lazyLoad'] ?? false;
         $retinaSupportEnabled = $parameters['retina'] ?? false;
+        $addMimeType = $parameters['addMimeType'] ?? false;
         $attrs = $parameters['attrs'] ?? [];
 
         $this->initiateArrayAttribute($attrs, 'srcset');
@@ -142,6 +142,9 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
             $this->appendRetinaVariationAttrs($field, $versionInfo, $variationName, $defaultVariation, $attrs);
         }
 
+        if ($addMimeType) {
+            $attrs['type'] = $defaultVariation->mimeType;
+        }
         if (is_array($attrs['srcset'])) {
             $attrs['srcset'] = implode(', ', $attrs['srcset']);
         }
@@ -162,7 +165,7 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
             $attributes[$attributeName] = [];
         } else {
             $attributes[$attributeName] = !is_array($attributes[$attributeName]) ?
-                [$attributes[$attributeName]] :
+                [ $attributes[$attributeName] ] :
                 $attributes[$attributeName];
         }
     }
@@ -171,9 +174,9 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
      * @param       $variationName
      * @param array $attrs
      *
+     * @return ImageVariation|FocusedVariation|null
      * @throws ReflectionException
      *
-     * @return ImageVariation|FocusedVariation|null
      */
     protected function appendDefaultVariationAttrs(
         Field $field,
@@ -201,9 +204,9 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
     /**
      * Returns the image variation object for $field/$versionInfo.
      *
+     * @return ImageVariation|FocusedVariation|null
      * @throws ReflectionException
      *
-     * @return ImageVariation|FocusedVariation|null
      */
     public function getImageVariation(Field $field, VersionInfo $versionInfo, string $variationName)
     {
@@ -214,7 +217,9 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
             return $this->focusedImageAliasGenerator->getVariation($field, $versionInfo, $variationName);
         } catch (InvalidVariationException $e) {
             if (isset($this->logger)) {
-                $this->logger->error("Couldn't get variation '{$variationName}' for image with id {$field->value->id}");
+                $this->logger->error(
+                    "Couldn't get variation '{$variationName}' for image with id {$field->value->id}"
+                );
             }
         } catch (SourceImageNotFoundException $e) {
             if (isset($this->logger)) {
@@ -235,13 +240,20 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
         return null;
     }
 
+    protected function isVariationsAvailable($variationName): bool
+    {
+        $configuredVariations = $this->configResolver->getParameter('image_variations');
+
+        return isset($configuredVariations[$variationName]);
+    }
+
     /**
      * @param       $variationName
      * @param array $attrs
      *
+     * @return ImageVariation|FocusedVariation|null
      * @throws ReflectionException
      *
-     * @return ImageVariation|FocusedVariation|null
      */
     protected function appendRetinaVariationAttrs(
         Field $field,
