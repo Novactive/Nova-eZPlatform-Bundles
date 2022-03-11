@@ -68,7 +68,6 @@ class EzEnhancedImageAssetExtension extends Extension implements PrependExtensio
             'field_templates.yml' => 'ezpublish',
             'admin_ui_forms.yml' => 'ezpublish',
             'image_variations.yml' => 'ezpublish',
-            'twig.yml' => 'twig',
         ];
 
         foreach ($configs as $fileName => $extensionName) {

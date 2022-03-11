@@ -28,9 +28,10 @@ use Psr\Log\LoggerInterface;
 use ReflectionException;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Twig\Extension\AbstractExtension;
+use Twig\Extension\GlobalsInterface;
 use Twig\TwigFunction;
 
-class ImageExtension extends AbstractExtension
+class ImageExtension extends AbstractExtension implements GlobalsInterface
 {
     /** @var FocusedImageAliasGenerator */
     protected $focusedImageAliasGenerator;
@@ -43,6 +44,14 @@ class ImageExtension extends AbstractExtension
 
     /** @var ConfigResolverInterface */
     protected $configResolver;
+
+    public function getGlobals(): array
+    {
+        return [
+            'lazy_load_images' => $this->configResolver->getParameter('enable_lazy_load', 'ez_enhanced_image_asset'),
+            'enable_retina_variations' => $this->configResolver->getParameter('enable_retina', 'ez_enhanced_image_asset')
+        ];
+    }
 
     /**
      * @required
