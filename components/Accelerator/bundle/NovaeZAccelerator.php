@@ -30,7 +30,7 @@ final class NovaeZAccelerator extends Bundle
         $container->addCompilerPass(new EventPass());
     }
 
-    public function getContainerExtension()
+    public function getContainerExtension(): ?ExtensionInterface
     {
         if (null === $this->extension) {
             $extension = new Extension();

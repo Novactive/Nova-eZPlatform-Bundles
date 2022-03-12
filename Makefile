@@ -57,13 +57,15 @@ post-install:
 	@echo "..:: Do bundle specifics ::.."
 	@$(MYSQL) < components/SEOBundle/bundle/Resources/sql/schema.sql
 	@$(MYSQL) < components/2FABundle/bundle/Resources/sql/schema.sql
-	@cd $(EZ_DIR) && $(CONSOLE) novaezextra:contenttypes:create ../tests/vmcd.xlsx
-	@cd $(EZ_DIR) && $(CONSOLE) novaezprotectedcontent:install
-	@cd $(EZ_DIR) && $(CONSOLE) novaezhelptooltip:create
-	@cd $(EZ_DIR) && $(CONSOLE) doctrine:schema:update --dump-sql --force
-	@cd $(EZ_DIR) && $(CONSOLE) novaezmailing:install
-	@cp -rp components/ProtectedContentBundle/tests/provisioning/article.html.twig $(EZ_DIR)/templates/themes/standard/full/
-	@cp -rp components/StaticTemplatesBundle/tests/provisioning/static_ultimatenova $(EZ_DIR)/templates/themes/
+
+# TO BE ADDED BACK WHEN COMPLIANT WITH 4.x
+#	@cd $(EZ_DIR) && $(CONSOLE) novaezextra:contenttypes:create ../tests/vmcd.xlsx
+#	@cd $(EZ_DIR) && $(CONSOLE) novaezprotectedcontent:install
+#	@cd $(EZ_DIR) && $(CONSOLE) novaezhelptooltip:create
+#	@cd $(EZ_DIR) && $(CONSOLE) doctrine:schema:update --dump-sql --force
+#	@cd $(EZ_DIR) && $(CONSOLE) novaezmailing:install
+#	@cp -rp components/ProtectedContentBundle/tests/provisioning/article.html.twig $(EZ_DIR)/templates/themes/standard/full/
+#	@cp -rp components/StaticTemplatesBundle/tests/provisioning/static_ultimatenova $(EZ_DIR)/templates/themes/
 
 	@echo "..:: Final Cleaning Cache ::.."
 	@cd $(EZ_DIR) && $(CONSOLE) cache:clear
