@@ -29,7 +29,7 @@ final class NovaEzAlgoliaSearchEngine extends Bundle
         parent::build($container);
     }
 
-    public function getContainerExtension()
+    public function getContainerExtension(): ?ExtensionInterface
     {
         if (null === $this->extension) {
             $extension = new Extension();
