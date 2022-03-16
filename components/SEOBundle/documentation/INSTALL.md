@@ -51,3 +51,8 @@ Add a `#` at the beginning of the line
 ```
 #RewriteRule ^/robots\.txt - [L]
 ```
+
+#### Regenerate graphql schema
+```
+php bin/console ezplatform:graphql:generate-schema
+```

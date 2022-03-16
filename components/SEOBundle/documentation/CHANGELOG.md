@@ -9,6 +9,7 @@
 * Add new `sitemap_includes` configuration to specifically 'include' instead of 'exclude'.
 * Ignore `sitemap_excludes` misconfiguration when necessary
 * Update the Makefile for better contributor install 
+* Integrate meta field type with ezplatform's graphql schema
 
 ## 5.0.0
 
