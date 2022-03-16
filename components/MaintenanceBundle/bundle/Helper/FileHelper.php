@@ -236,6 +236,7 @@ class FileHelper
         if (IPUtils::checkIp($client_ip, $authorized_ips)) {
             return true;
         }
+
         return false;
     }
 

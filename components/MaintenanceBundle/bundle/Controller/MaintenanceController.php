@@ -27,14 +27,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MaintenanceController extends Controller
 {
-    /**
-     * @var FlashBagInterface
-     */
     private FlashBagInterface $flashBag;
 
-    /**
-     * @var FileHelper
-     */
     private FileHelper $fileHelper;
 
     public function __construct(FlashBagInterface $flashBag, FileHelper $fileHelper)
