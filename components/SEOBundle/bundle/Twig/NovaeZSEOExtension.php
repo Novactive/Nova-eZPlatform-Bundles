@@ -61,9 +61,9 @@ class NovaeZSEOExtension extends AbstractExtension implements GlobalsInterface
     public function getFilters()
     {
         return [
-            new TwigFilter('compute_novaseometas', [$this, 'computeMetas']),
+            new TwigFilter('compute_novaseometas', [$this->metaCompositionService, 'computeMetas']),
             new TwigFilter('getposixlocale_novaseometas', [$this, 'getPosixLocale']),
-            new TwigFilter('fallback_novaseometas', [$this, 'getFallbackedMetaContent']),
+            new TwigFilter('fallback_novaseometas', [$this->metaCompositionService, 'getFallbackedMetaContent']),
         ];
     }
 
