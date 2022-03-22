@@ -51,12 +51,12 @@ class FilterConfiguration extends BaseFilterConfiguration
         $config = $this->filterConfiguration->get($filter);
 
         $optionsResolver = new OptionsResolver();
-        $optionsResolver->setDefaults([
-                                           'quality' => 70,
-                                           'jpeg_quality' => 70,
-                                           'webp_quality' => 70,
-                                           'png_compression_level' => 6,
-                                       ]);
+        $optionsResolver->setDefaults(array_merge([
+            'quality' => 70,
+            'jpeg_quality' => 70,
+            'webp_quality' => 70,
+            'png_compression_level' => 6,
+        ], $config));
 
         $config = $optionsResolver->resolve($config);
 
