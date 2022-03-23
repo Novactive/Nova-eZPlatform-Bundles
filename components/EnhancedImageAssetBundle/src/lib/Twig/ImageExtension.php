@@ -142,7 +142,7 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
             $this->appendRetinaVariationAttrs($field, $versionInfo, $variationName, $defaultVariation, $attrs);
         }
 
-        if ($addMimeType) {
+        if ($addMimeType && $defaultVariation) {
             $attrs['type'] = $defaultVariation->mimeType;
         }
         if (is_array($attrs['srcset'])) {
