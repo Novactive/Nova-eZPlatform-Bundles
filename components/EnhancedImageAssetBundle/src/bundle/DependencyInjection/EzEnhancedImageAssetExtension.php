@@ -90,7 +90,7 @@ class EzEnhancedImageAssetExtension extends Extension implements PrependExtensio
                 }
 
                 foreach (array_keys($systemConfig['image_variations']) as $imageVariation) {
-                    if (strpos($imageVariation, '_retina') !== false) {
+                    if (false !== strpos($imageVariation, '_retina')) {
                         $webpVariationName = preg_replace('/^(.+)(_retina)$/', '$1_webp$2', $imageVariation);
                     } else {
                         $webpVariationName = $imageVariation.'_webp';
@@ -98,8 +98,8 @@ class EzEnhancedImageAssetExtension extends Extension implements PrependExtensio
                     $newConfig['system'][$system]['image_variations'][$webpVariationName] = [
                         'reference' => $imageVariation,
                         'filters' => [
-                            ['name' => 'toFormat', 'params'=> ['format' => 'webp']]
-                        ]
+                            ['name' => 'toFormat', 'params' => ['format' => 'webp']],
+                        ],
                     ];
                 }
             }
