@@ -17,6 +17,7 @@ DOCKER := docker
 DOCKER_DB_CONTAINER := dbezplbundl
 MYSQL := mysql -f -u root -pezplatform -h 127.0.0.1 -P 3300 ezplatform
 CONSOLE := $(PHP_BIN) bin/console
+IBEXA_VERSION ?= 4
 
 .DEFAULT_GOAL := list
 
@@ -71,7 +72,7 @@ post-install:
 .PHONY: installibexa
 installibexa: install ## Install Ibexa as the local project
 	@$(DOCKER) run -d -p 3300:3306 --name $(DOCKER_DB_CONTAINER) -e MYSQL_ROOT_PASSWORD=ezplatform mariadb:10.4
-	@$(COMPOSER) create-project ibexa/oss-skeleton --prefer-dist --no-progress --no-interaction $(EZ_DIR)
+	@$(COMPOSER) create-project "ibexa/oss-skeleton:${IBEXA_VERSION}.*" --prefer-dist --no-progress --no-interaction $(EZ_DIR)
 	@echo "..:: Do Ibexa Install ::.."
 	@echo "DATABASE_URL=mysql://root:ezplatform@127.0.0.1:3300/ezplatform" >>  $(EZ_DIR)/.env.local
 
