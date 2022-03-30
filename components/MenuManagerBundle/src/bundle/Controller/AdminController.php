@@ -15,6 +15,7 @@ namespace Novactive\EzMenuManagerBundle\Controller;
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use EzSystems\EzPlatformAdminUi\Notification\NotificationHandlerInterface;
+use EzSystems\EzPlatformAdminUiBundle\Controller\Controller;
 use Novactive\EzMenuManager\Form\Type\MenuDeleteType;
 use Novactive\EzMenuManager\Form\Type\MenuSearchType;
 use Novactive\EzMenuManager\Form\Type\MenuType;
@@ -24,9 +25,8 @@ use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use PDO;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class AdminController.
@@ -152,7 +152,7 @@ class AdminController extends Controller
             $this->configResolver->getParameter('content.tree_root.location_id')
         );
 
-        return $this->editAction($request, $menu);
+        return $this->editAction($request, $menu, $this->generateUrl('menu_manager.menu_list'));
     }
 
     /**
@@ -160,9 +160,9 @@ class AdminController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function editAction(Request $request, Menu $menu)
+    public function editAction(Request $request, Menu $menu, ?string $lastAccessedUrl = null)
     {
-        $lastAccessedUrl = $this->lastAccessedUrl($request);
+        $lastAccessedUrl = $lastAccessedUrl ?? $this->lastAccessedUrl($request);
 
         $form = $this->createForm(MenuType::class, $menu);
         $form->handleRequest($request);
@@ -183,7 +183,7 @@ class AdminController extends Controller
             '@EzMenuManager/themes/standard/menu_manager/admin/edit.html.twig',
             [
                 'form' => $form->createView(),
-                'title' => $menu->getId() ? $menu->getName() : 'menu.new',
+                'title' => $menu->getId() ? $menu->getName() : $this->translator->trans('menu.new', [], 'menu_manager'),
                 'lastUrl' => $lastAccessedUrl,
             ]
         );

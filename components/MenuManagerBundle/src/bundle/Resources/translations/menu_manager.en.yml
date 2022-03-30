@@ -1,11 +1,13 @@
 menu.list: Menu list
 menu:
   root: Menu root
+  new: New menu
   property:
     id: ID
     name: Name
     root_location: Root (location id)
     items: Items
+    type: Type
   edit_form:
     save: Save menu
     back: Back to the list
@@ -21,7 +23,7 @@ menu:
     edit: Edit menu
 menu_item:
   default_title: New link
-  default_container_title: Nouveau folder
+  default_container_title: New folder
   property:
     name: Link name
     container_name: Folder name
@@ -39,4 +41,5 @@ menu_item:
     desactivate: Desactivate
   edit_form:
     save: Save link
+    save_container: Save folder
     cancel: Cancel

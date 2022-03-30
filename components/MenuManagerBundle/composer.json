@@ -19,8 +19,7 @@
     ],
     "require": {
         "php": "^7.3",
-        "knplabs/knp-menu-bundle": "*",
-        "kaliop/ezmigrationbundle": "*"
+        "knplabs/knp-menu-bundle": "*"
     },
     "autoload": {
         "psr-4": {

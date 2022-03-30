@@ -19,11 +19,11 @@ use Novactive\EzMenuManager\MenuItem\MenuItemConverter;
 use Novactive\EzMenuManager\Service\MenuBuilder;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
-use Twig_Extension;
-use Twig_SimpleFilter;
-use Twig_SimpleFunction;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
 
-class MenuManagerExtension extends Twig_Extension
+class MenuManagerExtension extends AbstractExtension
 {
     /** @var TranslationHelper */
     protected $translationHelper;
@@ -57,27 +57,27 @@ class MenuManagerExtension extends Twig_Extension
         $this->menuItemConverter = $menuItemConverter;
     }
 
-    /**
-     * @return array|\Twig_Function[]
-     */
     public function getFunctions()
     {
-        $functions = parent::getFunctions();
-        $functions[] = new Twig_SimpleFunction('ezmenumanager_menu_jstree', [$this, 'getMenuJstree']);
-        $functions[] = new Twig_SimpleFunction('ezmenumanager_breadcrumb', [$this, 'buildBreadcrumb']);
-
-        return $functions;
+        return [
+            new TwigFunction('ezmenumanager_menu_jstree', [$this, 'getMenuJstree']),
+            new TwigFunction('ezmenumanager_breadcrumb', [$this, 'buildBreadcrumb']),
+        ];
     }
 
-    /**
-     * @return array|\Twig_Filter[]
-     */
     public function getFilters()
     {
-        $functions = parent::getFunctions();
-        $functions[] = new Twig_SimpleFilter('sort_menu_items_by_menu', [$this, 'sortMenuItemsByMenu']);
+        return [
+            new TwigFilter('sort_menu_items_by_menu', [$this, 'sortMenuItemsByMenu']),
+        ];
+    }
 
-        return $functions;
+    public function buildBreadcrumb(MenuItem $menuItem)
+    {
+        $breadcrumb = [];
+        $this->addMenuItemToBreadcrumb($menuItem, $breadcrumb);
+
+        return array_reverse($breadcrumb);
     }
 
     /**
@@ -93,17 +93,9 @@ class MenuManagerExtension extends Twig_Extension
         return $breadcrumb;
     }
 
-    public function buildBreadcrumb(MenuItem $menuItem)
-    {
-        $breadcrumb = [];
-        $this->addMenuItemToBreadcrumb($menuItem, $breadcrumb);
-
-        return array_reverse($breadcrumb);
-    }
-
     /**
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @return array
      */
