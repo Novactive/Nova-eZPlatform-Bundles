@@ -48,6 +48,17 @@ _novaezmaintenance_routes:
 php app|ezpublish/console cache:clear --env=dev
 ```
 
+### Step 5: check X-Maintenance response header to VCL
+Maintenance page will return 503 status code and VCL will abandon it,
+So update your vcl to force displaying response with 503 and X-Maintenance header
+
+```vcl
+if (bereq.http.accept ~ "application/vnd.fos.user-context-hash"
+        && beresp.status >= 500 && !beresp.http.X-Maintenance
+    ) {
+        return (abandon);
+    }
+```
 
 ## Configuration
 

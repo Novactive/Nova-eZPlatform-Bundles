@@ -135,6 +135,7 @@ class FileHelper
         if (null !== $status) {
             $response->setStatusCode($status);
         }
+        $response->headers->add(["X-Maintenance"=> 1]);
 
         return $response->setContent($content);
     }
