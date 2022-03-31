@@ -130,7 +130,7 @@ class DefaultMenuItemType extends AbstractMenuItemType
             return null;
         }
 
-        $link = new MenuItemValue($name);
+        $link = $this->createMenuItemValue($name);
         if (true === $menuItem->getOption('active', true)) {
             $url = $this->getUrl($menuItem);
             $link->setUri($url);

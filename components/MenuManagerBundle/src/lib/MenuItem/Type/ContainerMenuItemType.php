@@ -35,6 +35,6 @@ class ContainerMenuItemType extends DefaultMenuItemType
             return null;
         }
 
-        return new MenuItemValue($name);
+        return $this->createMenuItemValue($name);
     }
 }

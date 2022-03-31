@@ -13,15 +13,14 @@
 namespace Novactive\EzMenuManager\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
-use eZ\Publish\Core\SignalSlot\Signal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentService\PublishVersionSignal;
-use eZ\Publish\Core\SignalSlot\Slot;
+use eZ\Publish\API\Repository\Events\Content\PublishVersionEvent;
 use eZ\Publish\SPI\Persistence\Handler;
 use Novactive\EzMenuManager\FieldType\MenuItem\ValueConverter;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem\ContentMenuItem;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class PublishVersionSignalSlot extends Slot
+class PublishVersionSignalSlot implements EventSubscriberInterface
 {
     /** @var Handler */
     protected $persistenceHandler;
@@ -45,13 +44,19 @@ class PublishVersionSignalSlot extends Slot
         $this->valueConverter = $valueConverter;
     }
 
-    public function receive(Signal $signal): void
+    public static function getSubscribedEvents()
     {
-        if (!$signal instanceof PublishVersionSignal) {
-            return;
-        }
+        return [
+            PublishVersionEvent::class => 'onPublishVersion',
+        ];
+    }
 
-        $content = $this->persistenceHandler->contentHandler()->load($signal->contentId, $signal->versionNo);
+    public function onPublishVersion(PublishVersionEvent $event): void
+    {
+        $content = $this->persistenceHandler->contentHandler()->load(
+            $event->getContent()->id,
+            $event->getVersionInfo()->versionNo
+        );
         $fields = $content->fields;
         foreach ($fields as $field) {
             if ('menuitem' !== $field->type) {

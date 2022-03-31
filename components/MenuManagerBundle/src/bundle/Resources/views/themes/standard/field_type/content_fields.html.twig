@@ -1,7 +1,7 @@
 {% extends '@EzPublishCore/content_fields.html.twig' %}
 
 {% block menuitem_field %}
-    {% spaceless %}
+    {% apply spaceless %}
         {% set menuList = field.value.menuItems|sort_menu_items_by_menu() %}
         <ul>
             {% for menu in menuList %}
@@ -20,5 +20,5 @@
                 </li>
             {% endfor %}
         </ul>
-    {% endspaceless %}
-{% endblock %}
+    {% endapply %}
+{% endblock menuitem_field %}

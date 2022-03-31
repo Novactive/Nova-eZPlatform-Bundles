@@ -11,9 +11,76 @@
 
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { loadLocationItems } from '../../../../../../ezsystems/ezplatform-admin-ui-modules/src/modules/content-tree/services/content.tree.service'
 import $ from 'jquery'
 import 'jstree/dist/jstree'
+
+const NOTIFICATION_ERROR_LABEL = 'error';
+const ENDPOINT_LOAD_SUBITEMS = '/api/ezp/v2/location/tree/load-subitems';
+
+const showNotification = (detail) => {
+  const event = new CustomEvent('ez-notify', {
+    detail,
+  });
+
+  document.body.dispatchEvent(event);
+};
+
+const handleRequestError = (response) => {
+  if (!response.ok) {
+    throw Error(response.statusText);
+  }
+
+  return response;
+};
+
+const handleRequestResponse = (response) => {
+  return handleRequestError(response).json();
+};
+
+const showErrorNotification = (error) => {
+  const isErrorObj = error instanceof Error;
+  const message = isErrorObj ? error.message : error;
+
+  showNotification({
+    message,
+    label: NOTIFICATION_ERROR_LABEL,
+  });
+};
+
+const mapChildrenToSubitems = (location) => {
+  location.totalSubitemsCount = location.totalChildrenCount;
+  location.subitems = location.children;
+
+  delete location.totalChildrenCount;
+  delete location.children;
+  delete location.displayLimit;
+
+  return location;
+};
+
+const loadLocationItems = ({ siteaccess }, parentLocationId, callback, limit = 50, offset = 0) => {
+  const request = new Request(`${ENDPOINT_LOAD_SUBITEMS}/${parentLocationId}/${limit}/${offset}`, {
+    method: 'GET',
+    mode: 'same-origin',
+    credentials: 'same-origin',
+    headers: {
+      Accept: 'application/vnd.ez.api.ContentTreeNode+json',
+      'X-Siteaccess': siteaccess,
+    },
+  });
+
+  fetch(request)
+      .then(handleRequestResponse)
+      .then((data) => {
+        const location = data.ContentTreeNode;
+
+        location.children = location.children.map(mapChildrenToSubitems);
+
+        return mapChildrenToSubitems(location);
+      })
+      .then(callback)
+      .catch(showErrorNotification);
+};
 
 export default class ContentTreeView extends PureComponent {
   constructor (props) {

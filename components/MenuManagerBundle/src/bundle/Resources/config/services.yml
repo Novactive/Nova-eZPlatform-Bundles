@@ -11,8 +11,11 @@ services:
         # if you need to do this, you can override this setting on individual services
         public: false
         bind:
-            $httpCacheTagHandler: "@fos_http_cache.handler.tag_handler"
+            $translationHelper: "@ezpublish.translation_helper"
+            $knpHelper: "@knp_menu.helper"
+            $httpCachePurgeClient: '@ezplatform.http_cache.purge_client'
             $persistenceCacheAdapter: "@ezpublish.cache_pool"
+            $locationHandler: "@ezpublish.spi.persistence.location_handler"
 
     Novactive\EzMenuManagerBundle\Controller\:
         resource: "../../Controller/*"
@@ -40,16 +43,6 @@ services:
     Novactive\EzMenuManager\EventListener\PublishVersionSignalSlot:
         arguments:
             $persistenceHandler: "@ezpublish.api.persistence_handler"
-        tags:
-            - { name: ezpublish.api.slot, signal: ContentService\PublishVersionSignal }
-
-    Novactive\EzMenuManager\EventListener\AssignSectionSignalSlot:
-        tags:
-            - { name: ezpublish.api.slot, signal: SectionService\AssignSectionSignal }
-
-    Novactive\EzMenuManager\EventListener\AssignSectionToSubtreeSignalSlot:
-        tags:
-            - { name: ezpublish.api.slot, signal: SectionService\AssignSectionToSubtreeSignal }
 
     Novactive\EzMenuManager\EventListener\DoctrineEventListener:
         tags:
