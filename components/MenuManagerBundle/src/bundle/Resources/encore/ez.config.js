@@ -32,4 +32,12 @@ module.exports = (Encore) => {
     path.resolve(__dirname, '../public/css/menu-manager.css')
   ])
 
+  Encore.copyFiles({
+    from: path.resolve(__dirname, '../public/images/'),
+    to: '../images/[path][name].[ext]',
+  })
+  Encore.copyFiles({
+    from: path.resolve(__dirname, '../public/fonts/'),
+    to: '../fonts/[path][name].[ext]',
+  })
 }
