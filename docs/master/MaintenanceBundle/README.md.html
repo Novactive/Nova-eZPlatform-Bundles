@@ -111,6 +111,14 @@ img.img-fluid {
     resource: '@NovaeZMaintenanceBundle/Resources/config/routing/main.yaml'</code></pre>
 <h3 name="08cc9578c88dbf3eee20917aa63aed47">Step 4: Clear the cache and check</h3>
 <pre><code class=" bash">php app|ezpublish/console cache:clear --env=dev</code></pre>
+<h3 name="19f87dcae1966de1de78f6e3a3326c1e">Step 5: check X-Maintenance response header to VCL</h3>
+<p>Maintenance page will return 503 status code and VCL will abandon it,
+So update your vcl to force displaying response with 503 and X-Maintenance header</p>
+<pre><code class=" vcl">if (bereq.http.accept ~ "application/vnd.fos.user-context-hash"
+        &amp;&amp; beresp.status &gt;= 500 &amp;&amp; !beresp.http.X-Maintenance
+    ) {
+        return (abandon);
+    }</code></pre>
 <h2 name="254f642527b45bc260048e30704edb39">Configuration</h2>
 <pre><code class=" yaml">nova_ezmaintenance:
     system:
@@ -122,14 +130,14 @@ img.img-fluid {
 
             <p class="text-right">
                 <img width="204" height="20"
-                     src='https://img.shields.io/badge/Updated on-03--31--2022 07:37:00-green?style=flat-square&labelColor=black'
-                     alt='Updated on 03--31--2022 07:37:00'
+                     src='https://img.shields.io/badge/Updated on-04--04--2022 06:10:21-green?style=flat-square&labelColor=black'
+                     alt='Updated on 04--04--2022 06:10:21'
                 />
             </p>
         </div>
         <div class="col-md-4 col-sm-12 d-print-none sidebar">
                             <p><strong>In this page</strong>:</p>
-                <ul class="nav flex-column"><li class="nav-item first last"><a href="#078a378d8af1d759e69571c0435d4c28" class="nav-link">Novactive eZ Maintenance Bundle</a><ul class="menu_level_1"><li class="nav-item first"><a href="#7cd8fb6e31cc946c078d2740c76a9899" class="nav-link">Installation</a><ul class="menu_level_2"><li class="nav-item first"><a href="#c610b848dabf92d5b498d6e8ea64e85f" class="nav-link">Step 1: Download using composer</a></li><li class="nav-item"><a href="#bb6c5087283397e44b9b10981a83dad6" class="nav-link">Step 2: Enable the bundle</a></li><li class="nav-item"><a href="#448bc62803172f41bfddb22d9d8c14ff" class="nav-link">Step 3: Add the default routes</a></li><li class="nav-item last"><a href="#08cc9578c88dbf3eee20917aa63aed47" class="nav-link">Step 4: Clear the cache and check</a></li></ul></li><li class="nav-item last"><a href="#254f642527b45bc260048e30704edb39" class="nav-link">Configuration</a></li></ul></li></ul>
+                <ul class="nav flex-column"><li class="nav-item first last"><a href="#078a378d8af1d759e69571c0435d4c28" class="nav-link">Novactive eZ Maintenance Bundle</a><ul class="menu_level_1"><li class="nav-item first"><a href="#7cd8fb6e31cc946c078d2740c76a9899" class="nav-link">Installation</a><ul class="menu_level_2"><li class="nav-item first"><a href="#c610b848dabf92d5b498d6e8ea64e85f" class="nav-link">Step 1: Download using composer</a></li><li class="nav-item"><a href="#bb6c5087283397e44b9b10981a83dad6" class="nav-link">Step 2: Enable the bundle</a></li><li class="nav-item"><a href="#448bc62803172f41bfddb22d9d8c14ff" class="nav-link">Step 3: Add the default routes</a></li><li class="nav-item"><a href="#08cc9578c88dbf3eee20917aa63aed47" class="nav-link">Step 4: Clear the cache and check</a></li><li class="nav-item last"><a href="#19f87dcae1966de1de78f6e3a3326c1e" class="nav-link">Step 5: check X-Maintenance response header to VCL</a></li></ul></li><li class="nav-item last"><a href="#254f642527b45bc260048e30704edb39" class="nav-link">Configuration</a></li></ul></li></ul>
                     </div>
     </div>
     <footer class="pt-4 my-md-5 pt-md-5 border-top">
