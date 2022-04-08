@@ -3,8 +3,10 @@
 {% block enhancedimage_field %}
     {% apply spaceless %}
         {% set lazyLoad = parameters.lazyLoad is defined ? parameters.lazyLoad : lazy_load_images %}
+        {% set alias = parameters.alias|default( 'original' ) %}
+        {% set alternativeAliasList = parameters.alternativeAlias|default( [] ) %}
         {% if not ez_field_is_empty( content, field ) %}
-            {% set imageAttrs = ez_image_attrs( field, versionInfo, parameters.alias|default( 'original' ), {
+            {% set imageAttrs = ez_image_attrs( field, versionInfo, alias, {
                 lazyLoad: lazyLoad,
                 retina: parameters.retina|default( enable_retina_variations ),
                 attrs: {
@@ -12,18 +14,19 @@
                     'alt': parameters.alternativeText|default(field.value.alternativeText)
                 }
             }) %}
-            {% set alternativeAliasList = parameters.alternativeAlias|default( [] ) %}
 
             {% set attr = attr|merge({
                 'class': (attr.class|default('') ~ ' enhancedimage--wrapper enhancedimage--focused-img--wrapper')|trim,
             }) %}
+            {% set alternativeAliasList = alternativeAliasList|merge([{'alias': alias ~ '_webp'}]) %}
             <picture {{ block( 'field_attributes' ) }}>
                 {% for alternativeAlias in alternativeAliasList %}
                     {% set alternativeImageAttrs = ez_image_attrs( field, versionInfo, alternativeAlias.alias, {
                         lazyLoad: lazyLoad,
                         retina: parameters.retina|default( enable_retina_variations ),
+                        addMimeType: true,
                         attrs: {
-                            'media': alternativeAlias.media,
+                            'media': alternativeAlias.media|default,
                             'data-name': alternativeAlias.alias,
                         }
                     }) %}
@@ -57,8 +60,10 @@
 {% block ezimage_field %}
     {% apply spaceless %}
         {% set lazyLoad = parameters.lazyLoad is defined ? parameters.lazyLoad : lazy_load_images %}
+        {% set alias = parameters.alias|default( 'original' ) %}
+        {% set alternativeAliasList = parameters.alternativeAlias|default( [] ) %}
         {% if not ez_field_is_empty( content, field ) %}
-            {% set imageAttrs = ez_image_attrs( field, versionInfo, parameters.alias|default( 'original' ), {
+            {% set imageAttrs = ez_image_attrs( field, versionInfo, alias, {
                 lazyLoad: lazyLoad,
                 retina: parameters.retina|default( enable_retina_variations ),
                 attrs: {
@@ -66,18 +71,19 @@
                     'alt': parameters.alternativeText|default(field.value.alternativeText)
                 }
             }) %}
-            {% set alternativeAliasList = parameters.alternativeAlias|default( [] ) %}
 
             {% set attr = attr|merge({
                 'class': (attr.class|default('') ~ ' enhancedimage--wrapper')|trim,
             }) %}
+            {% set alternativeAliasList = alternativeAliasList|merge([{'alias': alias ~ '_webp'}]) %}
             <picture {{ block( 'field_attributes' ) }}>
                 {% for alternativeAlias in alternativeAliasList %}
                     {% set alternativeImageAttrs = ez_image_attrs( field, versionInfo, alternativeAlias.alias, {
                         lazyLoad: lazyLoad,
                         retina: parameters.retina|default( enable_retina_variations ),
+                        addMimeType: true,
                         attrs: {
-                            'media': alternativeAlias.media,
+                            'media': alternativeAlias.media|default,
                             'data-name': alternativeAlias.alias,
                         }
                     }) %}

@@ -38,6 +38,10 @@ services:
         tags:
             - { name: "liip_imagine.filter.loader", loader: 'webOptimization' }
 
+    Novactive\EzEnhancedImageAsset\Imagine\Filter\Loader\ToFormatFilterLoader:
+        tags:
+            - { name: "liip_imagine.filter.loader", loader: 'toFormat' }
+
     Novactive\EzEnhancedImageAsset\Imagine\FocusedImageAliasGenerator:
 
     ezpublish.image_alias.imagine.alias_generator:
@@ -65,3 +69,6 @@ services:
     Novactive\EzEnhancedImageAsset\Imagine\PlaceholderProvider\RemoteProvider:
         tags:
             - { name: 'ezpublish.placeholder_provider', type: 'enhanced_remote' }
+
+    Novactive\EzEnhancedImageAsset\Imagine\AliasDirectoryVariationPathGenerator:
+        decorates: 'ezpublish.image_alias.variation_path_generator.alias_directory'
