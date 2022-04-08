@@ -76,5 +76,34 @@ class EzEnhancedImageAssetExtension extends Extension implements PrependExtensio
             $container->prependExtensionConfig($extensionName, $config);
             $container->addResource(new FileResource($configFile));
         }
+
+        $configs = $container->getExtensionConfig('ezpublish');
+        $newConfig = [];
+        foreach ($configs as $config) {
+            if (!isset($config['system'])) {
+                continue;
+            }
+
+            foreach ($config['system'] as $system => $systemConfig) {
+                if (!isset($systemConfig['image_variations'])) {
+                    continue;
+                }
+
+                foreach (array_keys($systemConfig['image_variations']) as $imageVariation) {
+                    if (false !== strpos($imageVariation, '_retina')) {
+                        $webpVariationName = preg_replace('/^(.+)(_retina)$/', '$1_webp$2', $imageVariation);
+                    } else {
+                        $webpVariationName = $imageVariation.'_webp';
+                    }
+                    $newConfig['system'][$system]['image_variations'][$webpVariationName] = [
+                        'reference' => $imageVariation,
+                        'filters' => [
+                            ['name' => 'toFormat', 'params' => ['format' => 'webp']],
+                        ],
+                    ];
+                }
+            }
+        }
+        $container->prependExtensionConfig('ezpublish', $newConfig);
     }
 }

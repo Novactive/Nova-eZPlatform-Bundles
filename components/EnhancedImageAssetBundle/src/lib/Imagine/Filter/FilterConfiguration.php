@@ -49,18 +49,26 @@ class FilterConfiguration extends BaseFilterConfiguration
         $defaultConfig = $this->getDefaultConfig();
         $config = $this->filterConfiguration->get($filter);
 
-        if (!isset($config['jpeg_quality'])) {
-            $config['jpeg_quality'] = 70;
-        }
-        if (!isset($config['png_compression_level'])) {
-            $config['png_compression_level'] = 6;
-        }
+        $config = array_merge(
+            [
+                'quality' => 70,
+                'jpeg_quality' => 70,
+                'webp_quality' => 70,
+                'png_compression_level' => 6,
+            ],
+            $config
+        );
+
         if ($defaultPostProcessors && (!isset($config['post_processors']) || empty($config['post_processors']))) {
             $config['post_processors'] = $defaultPostProcessors;
         }
 
         if ($defaultConfig) {
             $config += $defaultConfig;
+        }
+
+        if (!isset($config['format']) && isset($config['filters']['toFormat'])) {
+            $config['format'] = $config['filters']['toFormat']['format'];
         }
 
         return $config;
