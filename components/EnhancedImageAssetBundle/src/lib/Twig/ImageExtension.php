@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\Twig;
 
+use eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver;
 use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -244,7 +245,8 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
     {
         $configuredVariations = $this->configResolver->getParameter('image_variations');
 
-        return isset($configuredVariations[$variationName]);
+        return isset($configuredVariations[$variationName]) ||
+               IORepositoryResolver::VARIATION_ORIGINAL === $variationName;
     }
 
     /**
