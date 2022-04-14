@@ -42,7 +42,7 @@ jobs:
                 options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
         strategy:
             matrix:
-                ibexa_version: [ 3.3.15 ]
+                ibexa_version: [ 3.* ]
                 php: [ 7.4 ]
         env:
             CACHE_POOL: cache.redis
