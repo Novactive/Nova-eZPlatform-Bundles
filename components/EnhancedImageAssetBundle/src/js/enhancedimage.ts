@@ -8,14 +8,12 @@
  * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
 
-import { Focus } from 'image-focus/dist/types/interfaces.d';
+import { Focus } from 'image-focus/dist/interfaces.d';
 import { FocusedImage } from 'image-focus';
-import 'lazysizes';
+import lazySizes from 'lazysizes';
+import 'lazysizes/plugins/print/ls.print';
 
-(window as any).lazySizesConfig = (window as any).lazySizesConfig || {};
-
-// use .lazy instead of .lazyload
-(window as any).lazySizesConfig.lazyClass = 'enhancedimage--img--lazyload';
+lazySizes.cfg.lazyClass = 'enhancedimage--img--lazyload';
 
 const regImg = /^img$/i;
 const regPicture = /^picture$/i;
