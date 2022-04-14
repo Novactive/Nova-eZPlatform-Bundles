@@ -28,6 +28,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\Core\FieldType\ImageAsset\Value as ImageAssetValue;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\SPI\Variation\VariationHandler;
 
 class ImageFieldValueConverter implements FieldValueConverterInterface
@@ -44,15 +45,15 @@ class ImageFieldValueConverter implements FieldValueConverterInterface
     /** @var ContentTypeService */
     protected $contentTypeService;
 
-    /** @var array */
-    protected $mappings = [];
+    /** @var ConfigResolverInterface */
+    protected $configResolver;
 
     /**
      * ImageFieldValueConverter constructor.
      */
-    public function __construct(array $mappings)
+    public function __construct(ConfigResolverInterface $configResolver)
     {
-        $this->mappings = $mappings;
+        $this->configResolver = $configResolver;
     }
 
     /**
@@ -156,19 +157,20 @@ class ImageFieldValueConverter implements FieldValueConverterInterface
      */
     protected function createAsset(string $name, string $remoteId, ImageValue $image, string $languageCode): Content
     {
+        $mappings = $this->getMappings();
         $contentType = $this->contentTypeService->loadContentTypeByIdentifier(
-            $this->mappings['content_type_identifier']
+            $mappings['content_type_identifier']
         );
 
         $contentCreateStruct = $this->contentService->newContentCreateStruct($contentType, $languageCode);
         $contentCreateStruct->remoteId = $remoteId;
-        $contentCreateStruct->setField($this->mappings['name_field_identifier'], $name, $languageCode);
-        $contentCreateStruct->setField($this->mappings['content_field_identifier'], $image, $languageCode);
+        $contentCreateStruct->setField($mappings['name_field_identifier'], $name, $languageCode);
+        $contentCreateStruct->setField($mappings['content_field_identifier'], $image, $languageCode);
 
         $contentDraft = $this->contentService->createContent(
             $contentCreateStruct,
             [
-                $this->locationService->newLocationCreateStruct($this->mappings['parent_location_id']),
+                $this->locationService->newLocationCreateStruct($mappings['parent_location_id']),
             ]
         );
 
@@ -184,11 +186,12 @@ class ImageFieldValueConverter implements FieldValueConverterInterface
      */
     protected function updateAsset(Content $content, string $name, ImageValue $image, string $languageCode): Content
     {
+        $mappings = $this->getMappings();
         $contentDraft = $this->contentService->createContentDraft($content->contentInfo);
 
         $contentUpdateStruct = $this->contentService->newContentUpdateStruct();
-        $contentUpdateStruct->setField($this->mappings['name_field_identifier'], $name, $languageCode);
-        $contentUpdateStruct->setField($this->mappings['content_field_identifier'], $image, $languageCode);
+        $contentUpdateStruct->setField($mappings['name_field_identifier'], $name, $languageCode);
+        $contentUpdateStruct->setField($mappings['content_field_identifier'], $image, $languageCode);
 
         $contentDraft = $this->contentService->updateContent(
             $contentDraft->versionInfo,
@@ -196,5 +199,10 @@ class ImageFieldValueConverter implements FieldValueConverterInterface
         );
 
         return $this->contentService->publishVersion($contentDraft->versionInfo);
+    }
+
+    protected function getMappings(): array
+    {
+        return $this->configResolver->getParameter('fieldtypes.ezimageasset.mappings');
     }
 }

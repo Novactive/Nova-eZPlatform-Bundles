@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\Imagine\Filter;
 
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration as BaseFilterConfiguration;
 
 /**
@@ -26,38 +27,17 @@ class FilterConfiguration extends BaseFilterConfiguration
     /** @var BaseFilterConfiguration */
     protected $filterConfiguration;
 
-    /**
-     * @var
-     */
-    protected $defaultPostProcessors;
-
-    /**
-     * @var
-     */
-    protected $defaultConfig;
+    /** @var ConfigResolverInterface */
+    protected $configResolver;
 
     /**
      * FilterConfiguration constructor.
      */
-    public function __construct(BaseFilterConfiguration $filterConfiguration)
+    public function __construct(BaseFilterConfiguration $filterConfiguration, ConfigResolverInterface $configResolver)
     {
         $this->filterConfiguration = $filterConfiguration;
-    }
-
-    /**
-     * @param $defaultPostProcessors
-     */
-    public function setDefaultPostProcessors($defaultPostProcessors): void
-    {
-        $this->defaultPostProcessors = $defaultPostProcessors;
-    }
-
-    /**
-     * @param $defaultConfig
-     */
-    public function setDefaultConfig($defaultConfig): void
-    {
-        $this->defaultConfig = $defaultConfig;
+        $this->configResolver = $configResolver;
+        parent::__construct();
     }
 
     /**
@@ -65,23 +45,49 @@ class FilterConfiguration extends BaseFilterConfiguration
      */
     public function get($filter): array
     {
+        $defaultPostProcessors = $this->getDefaultPostProcessors();
+        $defaultConfig = $this->getDefaultConfig();
         $config = $this->filterConfiguration->get($filter);
 
-        if (!isset($config['jpeg_quality'])) {
-            $config['jpeg_quality'] = 70;
-        }
-        if (!isset($config['png_compression_level'])) {
-            $config['png_compression_level'] = 6;
-        }
-        if ($this->defaultPostProcessors && (!isset($config['post_processors']) || empty($config['post_processors']))) {
-            $config['post_processors'] = $this->defaultPostProcessors;
+        $config = array_merge(
+            [
+                'quality' => 70,
+                'jpeg_quality' => 70,
+                'webp_quality' => 70,
+                'png_compression_level' => 6,
+            ],
+            $config
+        );
+
+        if ($defaultPostProcessors && (!isset($config['post_processors']) || empty($config['post_processors']))) {
+            $config['post_processors'] = $defaultPostProcessors;
         }
 
-        if ($this->defaultConfig) {
-            $config += $this->defaultConfig;
+        if ($defaultConfig) {
+            $config += $defaultConfig;
+        }
+
+        if (!isset($config['format']) && isset($config['filters']['toFormat'])) {
+            $config['format'] = $config['filters']['toFormat']['format'];
         }
 
         return $config;
+    }
+
+    public function getDefaultPostProcessors(): ?array
+    {
+        return $this->configResolver->getParameter(
+            'image_default_post_processors',
+            'ez_enhanced_image_asset'
+        );
+    }
+
+    public function getDefaultConfig(): ?array
+    {
+        return $this->configResolver->getParameter(
+            'image_default_config',
+            'ez_enhanced_image_asset'
+        );
     }
 
     /**

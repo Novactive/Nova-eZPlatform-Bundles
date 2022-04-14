@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\Form\Type\FieldType;
 
-use EzSystems\RepositoryForms\Form\Type\FieldType\ImageFieldType;
+use EzSystems\EzPlatformContentForms\Form\Type\FieldType\ImageFieldType;
 use Novactive\EzEnhancedImageAsset\Form\Type\FocusPointType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;

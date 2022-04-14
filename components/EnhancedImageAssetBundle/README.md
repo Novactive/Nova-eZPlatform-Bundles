@@ -19,10 +19,12 @@ An eZPlatform bundle providing new field type with enhanced features related to 
 
 ## Features
 
-- Focus point managment in admin UI
-- Lazy loading
-- Responsive loading
-- Progressive loading
+- [Focus point managment in admin UI](#1-focus-point)
+- [Default image configuration for file size optimization](#2-default-image-configuration)
+- [Lazy and Progressive loading](#3-lazyloading)
+- [Retina variations](#4-retina-variations)
+- [WebP variations](#5-webp-variations)
+- [Twig render field parameters](#6-twig-render-field-parameters)
 
 ## Installation
 
@@ -51,7 +53,17 @@ public function registerBundles()
 ```
 ## Features
 
-### 1. Default image configuration
+### 1. Focus point
+
+This bundle provide a new `enhancedimage` field type which extend the `ezimage` field type.
+This field type allow the user to select a focus point on the uploaded image.
+Variation can then be created based on the selected focus point.
+
+![Demo](doc/images/image-focus-demo.gif)
+
+[Check out the demo](https://image-focus.stackblitz.io/)
+
+### 2. Default image configuration
 
 Added to siteaccess aware parameters which allow to define the default post processors and configuration to use when generating image alias
 ```yaml
@@ -68,7 +80,7 @@ parameters:
     quality: 80
 ```
 
-### 2. LazyLoading
+### 3. LazyLoading
 Lazy loading is controlled globaly by the following settings (default to true) and can be overriden at field level.
 
 ```yaml
@@ -76,7 +88,7 @@ parameters:
   ez_enhanced_image_asset.default.enable_lazy_load: true
 ```
 
-#### 3. Retina variations 
+### 4. Retina variations 
 
 Retina variations should suffixed by `_retina` will be used automatically (if enabled) when using the provided field template.
 To be displayed, the generated variation width should be two time the width of the default variation.
@@ -93,7 +105,11 @@ parameters:
   ez_enhanced_image_asset.default.enable_retina: true
 ```
 
-### 4. Twig render field parameters
+### 5. WebP variations
+
+Auto-creation of a webp variation for each existing variations and will then automaticaly add this variation as an alternative source
+
+### 6. Twig render field parameters
 
 You can now specify the `alternativeAlias` parameter to define alternative image alias depending the screen size
 
@@ -113,16 +129,6 @@ You can now specify the `alternativeAlias` parameter to define alternative image
     }
 }) }}
 ```
-
-### 4. Focus point
-
-This bundle provide a new `enhancedimage` field type which extend the `ezimage` field type. 
-This field type allow the user to select a focus point on the uploaded image.
-Variation can then be created based on the selected focus point.
-
-![Demo](doc/images/image-focus-demo.gif)
-
-[Check out the demo](https://image-focus.stackblitz.io/)
 
 #### Variations configuration
 
