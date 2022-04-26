@@ -16,7 +16,7 @@ $ibexa-color-font: #131c26;
 
 $ibexa-border-radius: calculateRem(2px);
 
-$base-font-size: 16px;
+$base-font-size: 16;
 
 @function calculateRem($size) {
     $remSize: calc(#{$size} / #{$base-font-size});
