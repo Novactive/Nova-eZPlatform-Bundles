@@ -34,7 +34,7 @@ class NovaeZProtectedContentBundle extends Bundle
         $eZExtension->addPolicyProvider(new PolicyProvider());
     }
 
-    public function getContainerExtension()
+    public function getContainerExtension(): ?ExtensionInterface
     {
         if (null === $this->extension) {
             $extension = $this->createContainerExtension();
