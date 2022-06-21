@@ -74,7 +74,7 @@ class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAcc
         $params = [
             '_route' => 'static_template',
             '_controller' => function (string $template = 'index') {
-                return new Response($this->twig->render("@ezdesign/{$template}.html.twig"));
+                return new Response($this->twig->render("@ibexadesign/{$template}.html.twig"));
             },
         ];
         if (!empty($requestedPath)) {
