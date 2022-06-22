@@ -129,8 +129,7 @@ class ConvertToImageAsset extends Command
             ->addArgument(
                 'field_identifiers',
                 InputArgument::IS_ARRAY | InputArgument::REQUIRED,
-                'content_type_identifier/field_identifier',
-                []
+                'content_type_identifier/field_identifier'
             );
     }
 
@@ -151,7 +150,7 @@ class ConvertToImageAsset extends Command
         $this->repository->sudo(
             function () use ($input) {
                 /** @var array $fieldIdentifiers */
-                $fieldIdentifiers = $input->getArgument('field_identifiers');
+                $fieldIdentifiers = (array) $input->getArgument('field_identifiers');
                 foreach ($fieldIdentifiers as $fieldIdentifier) {
                     [$contentTypeIdentifier, $fieldIdentifier] = explode('/', $fieldIdentifier);
 
