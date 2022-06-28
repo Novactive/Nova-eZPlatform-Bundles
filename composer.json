@@ -52,7 +52,6 @@
         "phpunit/phpunit": "^9.5",
         "dbrekelmans/bdi": "^0.3.0",
         "symfony/panther": "^1.1",
-        "fzaninotto/faker": "*",
         "symfony/yaml": "^5.2",
         "symfony/phpunit-bridge": "^5.3",
         "symfony/browser-kit": "^5.2",

@@ -43,7 +43,7 @@ jobs:
         strategy:
             matrix:
                 ibexa_version: [ 4.* ]
-                php: [ 7.4 ]
+                php: [ 7.4, 8.1 ]
         env:
             CACHE_POOL: cache.redis
             DATABASE_URL: mysql://root@127.0.0.1:3306/ezplatform_test
@@ -145,10 +145,10 @@ jobs:
                 run: |
                     composer update && composer require -W phpunit/phpunit:^9.5 symfony/phpunit-bridge:^5.3
                     rm -f ezplatform/config/packages/test/doctrine.yaml
-
-            -   name: Finally Run the tests
-                run: |
                     php vendor/bin/bdi detect drivers
+
+            -   name: Components testing
+                run: |
                     for COMPONENT in `ls components`; do
                         if COMPONENT=${COMPONENT} bin/ci-should test; then
                             echo ::group::..:: ${COMPONENT} ::..
@@ -156,8 +156,7 @@ jobs:
                             echo ::endgroup::
                         fi
                     done
-                    
-                    echo ::group::..:: Global Mono Repo Testing ::..
-                    DATABASE_URL=mysql://root@127.0.0.1:3306/ezplatform APP_ENV=test php ./vendor/bin/phpunit -c "tests" "tests" --exclude-group behat
-                    echo ::endgroup::
-                    
+
+            -   name: Global Mono Repo Testing
+                run: |
+                    DATABASE_URL=mysql://root@127.0.0.1:3306/ezplatform APP_ENV=test php ./vendor/bin/phpunit -c "tests" "tests" --exclude-group behat                    

@@ -35,7 +35,8 @@
         "doctrine/persistence": "^2.0.0"
     },
     "require-dev": {
-        "doctrine/doctrine-fixtures-bundle": "^3.0"
+        "doctrine/doctrine-fixtures-bundle": "^3.0",
+        "fzaninotto/faker": "^1.9"
     },
     "autoload": {
         "psr-4": {
