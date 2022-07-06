@@ -1,4 +1,4 @@
-{% extends noLayout ? "@ezdesign/solr/pagelayout_ajax.html.twig" : "@ezdesign/layout.html.twig" %}
+{% extends noLayout ? "@ibexadesign/solr/pagelayout_ajax.html.twig" : "@ibexadesign/layout.html.twig" %}
 {% trans_default_domain 'solr_admin' %}
 
 {% form_theme add_form '@EzPlatformAdminUi/form_fields.html.twig'  %}
@@ -48,7 +48,7 @@
                                     <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#trash"></use>
                                 </svg>
                             </button>
-                            {% include '@ezdesign/admin/bulk_delete_confirmation_modal.html.twig' with {
+                            {% include '@ibexadesign/admin/bulk_delete_confirmation_modal.html.twig' with {
                                 'id': modal_data_target,
                                 'message': 'solr_admin.page.synonyms.table.action.msg_delete'|trans,
                                 'data_click': '#delete-terms-delete',

@@ -1,21 +1,11 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
-
 declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Api\Schema\Analysis\Synonyms;
 
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
-use EzSystems\EzPlatformSolrSearchEngine\Gateway\Message;
+use Ibexa\Core\Base\Exceptions\NotFoundException;
+use Ibexa\Solr\Gateway\Message;
 use Novactive\EzSolrSearchExtra\Api\Gateway;
 
 class SynonymsService
@@ -34,6 +24,9 @@ class SynonymsService
     }
 
     /**
+     * @throws \Exception
+     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
+     *
      * @return SynonymsMap[]
      */
     public function getMappings(string $setId, int $offset = 0, int $limit = 10): array
@@ -58,6 +51,9 @@ class SynonymsService
         return $maps;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function fetchTerm(string $setId, string $term): bool
     {
         $response = $this->gateway->request(
@@ -74,6 +70,11 @@ class SynonymsService
         return true;
     }
 
+    /**
+     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
+     * @throws \Exception
+     * @throws \Exception
+     */
     public function addMapping(string $setId, SynonymsMap $map): bool
     {
         $termExist = $this->fetchTerm($setId, $map->getTerm());
@@ -100,6 +101,11 @@ class SynonymsService
         return 0 === $response->responseHeader->status;
     }
 
+    /**
+     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
+     * @throws \Exception
+     * @throws \Exception
+     */
     public function deleteMapping(string $setId, string $term): bool
     {
         $response = $this->gateway->request(

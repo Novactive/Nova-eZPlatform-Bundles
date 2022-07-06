@@ -1,15 +1,5 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
-
 declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtraBundle\Controller\SolrAdmin;
@@ -19,7 +9,8 @@ use Novactive\EzSolrSearchExtra\Form\AddStopWordType;
 use Novactive\EzSolrSearchExtra\Pagination\Pagerfanta\StopwordsAdapter;
 use Pagerfanta\Pagerfanta;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -34,22 +25,29 @@ class StopwordsController extends BaseController
 {
     protected const RESULTS_PER_PAGE = 20;
 
-    /** @var StopwordsService */
+    /**
+     * @var StopwordsService
+     */
     protected $stopwordsService;
 
-    /** @var FormFactory */
+    /**
+     * @var FormFactoryInterface
+     */
     protected $formFactory;
 
     /**
      * StopwordsController constructor.
      */
-    public function __construct(StopwordsService $stopwordsService, FormFactory $formFactory)
+    public function __construct(StopwordsService $stopwordsService, FormFactoryInterface $formFactory)
     {
         $this->stopwordsService = $stopwordsService;
         $this->formFactory = $formFactory;
     }
 
-    public function getWordsData($words)
+    /**
+     * @param $words
+     */
+    public function getWordsData($words): array
     {
         $ids = [];
         foreach ($words as $word) {
@@ -61,7 +59,12 @@ class StopwordsController extends BaseController
 
     /**
      * @Route("/{setId}/{page}/{noLayout}", name="solr_admin.stopwords.index", requirements={"page" = "\d+"})
-     * @Template("@ezdesign/solr/admin/stopwords/list.html.Twig")
+     * @Template("@ibexadesign/solr/admin/stopwords/list.html.Twig")
+     *
+     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
      */
     public function stopwordsIndexAction(Request $request, string $setId, int $page = 1, bool $noLayout = false)
     {
@@ -71,7 +74,7 @@ class StopwordsController extends BaseController
         $viewParameters = [];
 
         if ($this->permissionResolver->hasAccess('solradmin', 'stopwords.create')) {
-            $addForm = $this->formFactory->create(AddStopWordType::class, null);
+            $addForm = $this->formFactory->create(AddStopWordType::class);
             $addForm->handleRequest($request);
             if ($addForm->isSubmitted() && $addForm->isValid()) {
                 $data = $addForm->getData();
@@ -116,8 +119,11 @@ class StopwordsController extends BaseController
 
     /**
      * @Route("/{setId}/add", name="solr_admin.stopwords.add")
+     *
+     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
      */
-    public function addStopwordAction(string $setId, Request $request)
+    public function addStopwordAction(string $setId, Request $request): RedirectResponse
     {
         $this->permissionAccess('solradmin', 'stopwords.create');
 
@@ -141,8 +147,11 @@ class StopwordsController extends BaseController
 
     /**
      * @Route("/{setId}/word/delete", name="solr_admin.stopwords.delete")
+     *
+     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
      */
-    public function deleteStopwordsAction(string $setId, Request $request)
+    public function deleteStopwordsAction(string $setId, Request $request): RedirectResponse
     {
         $this->permissionAccess('solradmin', 'stopwords.delete');
 

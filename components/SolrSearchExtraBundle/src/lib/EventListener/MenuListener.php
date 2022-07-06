@@ -1,20 +1,12 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
+declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\EventListener;
 
-use eZ\Publish\API\Repository\PermissionResolver;
-use EzSystems\EzPlatformAdminUi\Menu\Event\ConfigureMenuEvent;
-use Knp\Menu\ItemInterface;
+use Ibexa\AdminUi\Menu\Event\ConfigureMenuEvent;
+use Ibexa\AdminUi\Menu\MainMenuBuilder;
+use Ibexa\Contracts\Core\Repository\PermissionResolver;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class MenuListener implements EventSubscriberInterface
@@ -31,19 +23,21 @@ class MenuListener implements EventSubscriberInterface
         $this->permissionResolver = $permissionResolver;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             ConfigureMenuEvent::MAIN_MENU => ['onMenuConfigure', 0],
         ];
     }
 
+    /**
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
+     */
     public function onMenuConfigure(ConfigureMenuEvent $event)
     {
         $menu = $event->getMenu();
         if ($this->permissionResolver->hasAccess('solradmin', 'dashboard')) {
-            /** @var ItemInterface $topMenuItem */
-            $topMenuItem = $menu->addChild(
+            $topMenuItem = $menu[MainMenuBuilder::ITEM_ADMIN]->addChild(
                 'solr_admin',
                 [
                     'label' => 'solr_admin',

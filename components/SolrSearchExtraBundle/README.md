@@ -43,7 +43,11 @@ composer require novactive/ezsolrsearchextrabundle
 
 ### Register the bundle
 
-Register the bundle in your application's kernel class:
+Then inject the bundle in the `bundles.php` of your application.
+
+```php
+    Novactive\EzSolrSearchExtraBundle\EzSolrSearchExtraBundle::class => [ 'all'=> true ],
+```
 
 ```php
 // app/AppKernel.php
