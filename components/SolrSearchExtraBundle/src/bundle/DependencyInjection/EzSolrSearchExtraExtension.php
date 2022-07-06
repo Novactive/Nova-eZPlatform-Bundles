@@ -1,19 +1,11 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
+declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtraBundle\DependencyInjection;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ConfigurationProcessor;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
+use Ibexa\Bundle\Core\DependencyInjection\Configuration\SiteAccessAware\ConfigurationProcessor;
+use Ibexa\Bundle\Core\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -29,13 +21,16 @@ class EzSolrSearchExtraExtension extends Extension
     /**
      * {@inheritdoc}
      */
-    public function getAlias()
+    public function getAlias(): string
     {
         return 'ez_solr_search_extra';
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Exception
+     * @throws \Exception
      */
     public function load(array $configs, ContainerBuilder $container)
     {

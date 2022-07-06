@@ -1,18 +1,10 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
+declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtraBundle\DependencyInjection\Security\PolicyProvider;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider\YamlPolicyProvider;
+use Ibexa\Bundle\Core\DependencyInjection\Security\PolicyProvider\YamlPolicyProvider;
 
 class EZSolrSearchPolicyProvider extends YamlPolicyProvider
 {
@@ -27,10 +19,7 @@ class EZSolrSearchPolicyProvider extends YamlPolicyProvider
         $this->path = $path;
     }
 
-    /**
-     * @return array
-     */
-    public function getFiles()
+    public function getFiles(): array
     {
         return [$this->path.'/Resources/config/policies.yml'];
     }

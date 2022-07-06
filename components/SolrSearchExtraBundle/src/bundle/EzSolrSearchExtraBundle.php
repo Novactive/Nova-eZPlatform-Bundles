@@ -1,18 +1,9 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
+declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtraBundle;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
 use Novactive\EzSolrSearchExtraBundle\DependencyInjection\Security\PolicyProvider\EZSolrSearchPolicyProvider;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -28,8 +19,8 @@ class EzSolrSearchExtraBundle extends Bundle
     {
         parent::build($container);
 
-        /** @var EzPublishCoreExtension $eZExtension */
-        $eZExtension = $container->getExtension('ezpublish');
-        $eZExtension->addPolicyProvider(new EZSolrSearchPolicyProvider($this->getPath()));
+        /** @var \Ibexa\Bundle\Core\DependencyInjection\IbexaCoreExtension $ibexaCoreExtension */
+        $ibexaCoreExtension = $container->getExtension('ibexa');
+        $ibexaCoreExtension->addPolicyProvider(new EZSolrSearchPolicyProvider($this->getPath()));
     }
 }

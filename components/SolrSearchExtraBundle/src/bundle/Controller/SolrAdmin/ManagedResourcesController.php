@@ -1,15 +1,5 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
-
 declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtraBundle\Controller\SolrAdmin;
@@ -27,7 +17,9 @@ class ManagedResourcesController extends BaseController
 {
     protected const RESULTS_PER_PAGE = 20;
 
-    /** @var ManagedResourcesService */
+    /**
+     * @var ManagedResourcesService
+     */
     protected $managedResourcesService;
 
     /**
@@ -40,9 +32,12 @@ class ManagedResourcesController extends BaseController
 
     /**
      * @Route("/", name="solr_admin.dashboard")
-     * @Template("@ezdesign/solr/admin/dashboard.html.Twig")
+     * @Template("@ibexadesign/solr/admin/dashboard.html.Twig")
+     *
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
+     * @throws \Exception
      */
-    public function dashboardAction()
+    public function dashboardAction(): array
     {
         $this->permissionAccess('solradmin', 'dashboard');
         $sets = $this->managedResourcesService->getSets();
@@ -52,7 +47,10 @@ class ManagedResourcesController extends BaseController
         ];
     }
 
-    protected function getTermsData($terms)
+    /**
+     * @param $terms
+     */
+    protected function getTermsData($terms): array
     {
         $ids = [];
         foreach ($terms as $term) {

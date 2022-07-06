@@ -1,19 +1,15 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
+declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Query\Common\FacetBuilder;
 
-use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\FacetBuilder;
 
+/**
+ * @deprecated 4.0.0
+ * @see \Novactive\EzSolrSearchExtra\Query\Aggregation\EnhancedRawTermAggregation
+ */
 class CustomFieldFacetBuilder extends FacetBuilder
 {
     /**

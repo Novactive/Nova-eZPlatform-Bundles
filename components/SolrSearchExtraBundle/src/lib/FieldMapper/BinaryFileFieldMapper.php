@@ -1,25 +1,17 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
+declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\FieldMapper;
 
-use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
-use eZ\Publish\Core\IO\IOService;
-use eZ\Publish\Core\IO\Values\BinaryFile;
-use eZ\Publish\SPI\Persistence\Content\Field as SPIField;
-use eZ\Publish\SPI\Persistence\Content\Type as SPIContentType;
-use eZ\Publish\SPI\Search\Field as SPISearchField;
-use eZ\Publish\SPI\Search\FieldType as SPISearchFieldType;
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider;
+use Ibexa\Contracts\Core\Persistence\Content\Field as SPIField;
+use Ibexa\Contracts\Core\Persistence\Content\Type as SPIContentType;
+use Ibexa\Contracts\Core\Search\Field as SPISearchField;
+use Ibexa\Contracts\Core\Search\FieldType as SPISearchFieldType;
+use Ibexa\Core\IO\Exception\BinaryFileNotFoundException;
+use Ibexa\Core\IO\IOService;
+use Ibexa\Core\IO\Values\BinaryFile;
+use Ibexa\Solr\FieldMapper\BoostFactorProvider;
 use Novactive\EzSolrSearchExtra\TextExtractor\TextExtractorInterface;
 use Psr\Log\LoggerInterface;
 
@@ -65,8 +57,8 @@ class BinaryFileFieldMapper
     }
 
     /**
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @throws \Ibexa\Core\Base\Exceptions\InvalidArgumentValue
+     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
      */
     public function mapField(SPIField $field, SPIContentType $contentType): ?SPISearchField
     {
@@ -97,11 +89,9 @@ class BinaryFileFieldMapper
     }
 
     /**
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
-     *
-     * @return string|null
+     * @throws \Ibexa\Core\Base\Exceptions\InvalidArgumentValue
      */
-    private function getBinaryFileText(BinaryFile $binaryFile)
+    private function getBinaryFileText(BinaryFile $binaryFile): ?string
     {
         $resource = $this->ioService->getFileInputStream($binaryFile);
         $resourceMetadata = stream_get_meta_data($resource);
@@ -112,9 +102,9 @@ class BinaryFileFieldMapper
     /**
      * Return index field type for the given $contentType.
      *
-     * @return SPISearchFieldType\TextField
+     * @return \Ibexa\Contracts\Core\Search\FieldType\TextField
      */
-    private function getIndexFieldType(SPIContentType $contentType)
+    private function getIndexFieldType(SPIContentType $contentType): SPISearchFieldType\TextField
     {
         $newFieldType = new SPISearchFieldType\TextField();
         $newFieldType->boost = $this->boostFactorProvider->getContentMetaFieldBoostFactor(

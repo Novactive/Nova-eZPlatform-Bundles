@@ -1,15 +1,5 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
-
 declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtraBundle\Controller\SolrAdmin;
@@ -20,7 +10,8 @@ use Novactive\EzSolrSearchExtra\Form\AddSynonymsType;
 use Novactive\EzSolrSearchExtra\Pagination\Pagerfanta\SynonymsAdapter;
 use Pagerfanta\Pagerfanta;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -35,16 +26,20 @@ class SynonymsController extends BaseController
 {
     protected const RESULTS_PER_PAGE = 20;
 
-    /** @var SynonymsService */
+    /**
+     * @var SynonymsService
+     */
     protected $synonymsService;
 
-    /** @var FormFactory */
+    /**
+     * @var FormFactoryInterface
+     */
     protected $formFactory;
 
     /**
      * SynonymsController constructor.
      */
-    public function __construct(SynonymsService $synonymsService, FormFactory $formFactory)
+    public function __construct(SynonymsService $synonymsService, FormFactoryInterface $formFactory)
     {
         $this->synonymsService = $synonymsService;
         $this->formFactory = $formFactory;
@@ -52,7 +47,12 @@ class SynonymsController extends BaseController
 
     /**
      * @Route("/{setId}/{page}/{noLayout}", name="solr_admin.synonyms.index", requirements={"page" = "\d+"})
-     * @Template("@ezdesign/solr/admin/synonyms/list.html.Twig")
+     * @Template("@ibexadesign/solr/admin/synonyms/list.html.Twig")
+     *
+     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
      */
     public function synonymsIndexAction(Request $request, string $setId, int $page = 1, bool $noLayout = false)
     {
@@ -62,7 +62,7 @@ class SynonymsController extends BaseController
         $viewParameters = [];
 
         if ($this->permissionResolver->hasAccess('solradmin', 'synonyms.create')) {
-            $addForm = $this->formFactory->create(AddSynonymsType::class, null);
+            $addForm = $this->formFactory->create(AddSynonymsType::class);
             $addForm->handleRequest($request);
             if ($addForm->isSubmitted() && $addForm->isValid()) {
                 $data = $addForm->getData();
@@ -109,8 +109,11 @@ class SynonymsController extends BaseController
 
     /**
      * @Route("/{setId}/add", name="solr_admin.synonyms.add")
+     *
+     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
      */
-    public function addSynonymAction(string $setId, Request $request)
+    public function addSynonymAction(string $setId, Request $request): RedirectResponse
     {
         $this->permissionAccess('solradmin', 'synonyms.create');
 
@@ -137,8 +140,11 @@ class SynonymsController extends BaseController
 
     /**
      * @Route("/{setId}/terms/delete", name="solr_admin.synonyms.delete")
+     *
+     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
      */
-    public function deleteSynonymAction(string $setId, Request $request)
+    public function deleteSynonymAction(string $setId, Request $request): RedirectResponse
     {
         $this->permissionAccess('solradmin', 'synonyms.delete');
 
