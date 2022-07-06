@@ -1,15 +1,5 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
-
 declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Api\Schema;
@@ -31,7 +21,10 @@ class ManagedResourcesService
         $this->gateway = $gateway;
     }
 
-    public function getSets()
+    /**
+     * @throws \Exception
+     */
+    public function getSets(): array
     {
         $response = $this->gateway->request(
             'GET',

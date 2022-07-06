@@ -1,27 +1,16 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
+declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper;
 
-use eZ\Publish\SPI\Persistence\Content\Type as ContentType;
-use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
-use eZ\Publish\SPI\Search\Field;
-use eZ\Publish\SPI\Search\FieldType;
+use Ibexa\Contracts\Core\Persistence\Content\Type as ContentType;
+use Ibexa\Contracts\Core\Persistence\Content\Type\FieldDefinition;
+use Ibexa\Contracts\Core\Search\Field;
+use Ibexa\Contracts\Core\Search\FieldType;
 
 class CustomFulltextFieldMapper extends CustomFieldMapper
 {
-    /**
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
-     */
     protected function appendField(
         array &$fields,
         Field $indexField,
@@ -45,11 +34,9 @@ class CustomFulltextFieldMapper extends CustomFieldMapper
     /**
      * Return index field type for the given $contentType.
      *
-     * @param string $fieldName
-     *
-     * @return \eZ\Publish\SPI\Search\FieldType
+     * @return \Ibexa\Contracts\Core\Search\FieldType\TextField
      */
-    private function getIndexFieldType(ContentType $contentType, $fieldName = 'text')
+    private function getIndexFieldType(ContentType $contentType, string $fieldName = 'text'): FieldType\TextField
     {
         $newFieldType = new FieldType\TextField();
         $newFieldType->boost = $this->boostFactorProvider->getContentMetaFieldBoostFactor(

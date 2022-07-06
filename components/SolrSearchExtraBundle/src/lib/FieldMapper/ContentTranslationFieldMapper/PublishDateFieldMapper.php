@@ -1,23 +1,15 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
+declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper;
 
-use eZ\Publish\Core\Search\Common\FieldRegistry;
-use eZ\Publish\SPI\Persistence\Content;
-use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
-use eZ\Publish\SPI\Search\Field;
-use eZ\Publish\SPI\Search\FieldType;
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
+use Ibexa\Contracts\Core\Persistence\Content;
+use Ibexa\Contracts\Core\Persistence\Content\Type\Handler as ContentTypeHandler;
+use Ibexa\Contracts\Core\Search\Field;
+use Ibexa\Contracts\Core\Search\FieldType;
+use Ibexa\Contracts\Solr\FieldMapper\ContentTranslationFieldMapper;
+use Ibexa\Core\Search\Common\FieldRegistry;
 
 class PublishDateFieldMapper extends ContentTranslationFieldMapper
 {
@@ -34,12 +26,12 @@ class PublishDateFieldMapper extends ContentTranslationFieldMapper
     protected $fieldIdentifiers = [];
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
+     * @var \Ibexa\Contracts\Core\Persistence\Content\Type\Handler
      */
     protected $contentTypeHandler;
 
     /**
-     * @var \eZ\Publish\Core\Search\Common\FieldRegistry
+     * @var \Ibexa\Core\Search\Common\FieldRegistry
      */
     protected $fieldRegistry;
 
@@ -59,22 +51,20 @@ class PublishDateFieldMapper extends ContentTranslationFieldMapper
 
     /**
      * @param string $languageCode
-     *
-     * @return bool
      */
-    public function accept(Content $content, $languageCode)
+    public function accept(Content $content, $languageCode): bool
     {
         return true;
     }
 
     /**
-     * @param string $languageCode
+     * @param $languageCode
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException
      *
-     * @return array|Field[]
+     * @return \Ibexa\Contracts\Core\Search\Field[]
      */
-    public function mapFields(Content $content, $languageCode)
+    public function mapFields(Content $content, $languageCode): array
     {
         $contentType = $this->contentTypeHandler->load(
             $content->versionInfo->contentInfo->contentTypeId
@@ -89,11 +79,11 @@ class PublishDateFieldMapper extends ContentTranslationFieldMapper
                 if (
                     $fieldDefinition->id !== $field->fieldDefinitionId
                     || (
-                        !\in_array(
+                        !in_array(
                             $fieldDefinition->identifier,
                             $this->fieldIdentifiers
                         )
-                        && !\in_array(
+                        && !in_array(
                             "{$contentType->identifier}/{$fieldDefinition->identifier}",
                             $this->fieldIdentifiers
                         )
