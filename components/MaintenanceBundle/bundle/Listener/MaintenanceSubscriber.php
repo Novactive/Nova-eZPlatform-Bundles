@@ -6,6 +6,7 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use Novactive\NovaeZMaintenanceBundle\Helper\FileHelper;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -46,7 +47,7 @@ class MaintenanceSubscriber implements EventSubscriberInterface, SiteAccessAware
 
     public function onKernelRequest(RequestEvent $event): void
     {
-        if (null !== $this->siteAccess) {
+        if (null !== $this->siteAccess && $event->isMasterRequest()) {
             $siteaccessName = $this->siteAccess->name;
             if (
                 true === $this->fileHelper->isMaintenanceEnabled($siteaccessName)

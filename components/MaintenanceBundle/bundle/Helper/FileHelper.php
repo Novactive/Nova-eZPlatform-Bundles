@@ -19,6 +19,7 @@ use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use EzSystems\PlatformHttpCacheBundle\PurgeClient\PurgeClientInterface;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\IpUtils;
@@ -64,7 +65,7 @@ class FileHelper
      * @var PermissionResolver
      */
     private $permissionResolver;
-
+    private $purgeClient;
     public function __construct(
         IOServiceInterface $binaryFileIOService,
         Filesystem $fileSystem,
@@ -72,6 +73,7 @@ class FileHelper
         ConfigResolverInterface $configResolver,
         TranslatorInterface $translator,
         PermissionResolver $permissionResolver,
+        PurgeClientInterface $purgeClient,
         array $siteaccessList = []
     ) {
         $this->binaryfileIOService = $binaryFileIOService;
@@ -81,6 +83,7 @@ class FileHelper
         $this->translator = $translator;
         $this->permissionResolver = $permissionResolver;
         $this->siteaccessList = $siteaccessList;
+        $this->purgeClient = $purgeClient;
     }
 
     public function existFileCluster(string $siteaccess): bool
@@ -100,6 +103,7 @@ class FileHelper
         $this->assertMaintenanceEnabled($siteaccess);
         $isExistFile = $this->isMaintenanceModeRunning($siteaccess);
         $isExistFile ? $this->maintenanceUnLock($siteaccess) : $this->maintenanceLock($siteaccess);
+        $this->purgeClient->purgeAll();
     }
 
     public function maintenanceUnLock(string $siteaccess): bool
@@ -136,7 +140,6 @@ class FileHelper
             $response->setStatusCode($status);
         }
         $response->headers->add(["X-Maintenance"=> 1]);
-
         return $response->setContent($content);
     }
 

@@ -11,6 +11,7 @@ services:
         arguments:
             $binaryFileIOService: "@ezpublish.fieldType.ezbinaryfile.io_service"
             $siteaccessList: '%ezpublish.siteaccess.list%'
+            $purgeClient: '@ezplatform.http_cache.purge_client'
         lazy: true
 
     Novactive\NovaeZMaintenanceBundle\Controller\:
