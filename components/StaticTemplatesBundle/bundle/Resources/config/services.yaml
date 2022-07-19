@@ -4,6 +4,10 @@ services:
         autoconfigure: true
         public: false
 
+    _instanceof:
+        Novactive\StaticTemplates\Faker\GeneratorInterface:
+            tags: ['faker.generator']
+
     Novactive\Bundle\EzStaticTemplatesBundle\Routing\Router:
         arguments:
             - "%ibexa.site_access.groups%"
@@ -11,3 +15,25 @@ services:
             - [setSiteAccess, ['@Ibexa\Core\MVC\Symfony\SiteAccess']]
         tags:
             - {name: router, priority: 300}
+
+    Novactive\StaticTemplates\Templating\Twig\Loader:
+        class: Novactive\StaticTemplates\Templating\Twig\Loader
+        public: false
+        decorates: twig.loader.native_filesystem
+        arguments:
+            - '@Novactive\StaticTemplates\Templating\Twig\Loader.inner'
+
+    Novactive\StaticTemplates\Templating\Twig\Extension:
+        tags:
+            - {name: twig.extension}
+        calls:
+            - [setSiteAccess, ['@Ibexa\Core\MVC\Symfony\SiteAccess']]
+
+    Novactive\StaticTemplates\Faker\Generator:
+        arguments:
+            $generators: !tagged_iterator
+                tag: 'faker.generator'
+
+    Novactive\StaticTemplates\Faker\Generators\:
+        resource: '../../../lib/Faker/Generators/'
+        lazy: true

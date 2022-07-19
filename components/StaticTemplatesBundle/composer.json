@@ -17,11 +17,13 @@
         }
     ],
     "require": {
-        "php": "^7.3 || ^8.0"
+        "php": "^7.3 || ^8.0",
+        "fakerphp/faker": "^1.19"
     },
     "autoload": {
         "psr-4": {
-            "Novactive\\Bundle\\EzStaticTemplatesBundle\\": "bundle"
+            "Novactive\\Bundle\\EzStaticTemplatesBundle\\": "bundle",
+            "Novactive\\StaticTemplates\\": "lib"
         }
     },
     "extra": {
