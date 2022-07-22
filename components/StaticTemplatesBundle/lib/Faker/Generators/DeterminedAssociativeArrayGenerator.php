@@ -26,11 +26,15 @@ class DeterminedAssociativeArrayGenerator implements GeneratorInterface
 
     public function generate(string $type): array
     {
+        $matches = [];
         preg_match('/^\{(.*)\}$/', $type, $matches);
-        $els = explode(',', $matches[1]) ?? [];
+
+        $els = [];
+        preg_match_all('/(\w+):([^,\s{\[]+|{\S+}(\[(\d+)?\])?|\[\S+\])/', $matches[1] ?? '', $els, PREG_SET_ORDER);
+
         $items = [];
         foreach ($els as $el) {
-            [$elKey, $elType] = explode(':', $el);
+            [,$elKey, $elType] = $el;
             $items[trim($elKey)] = $this->generator->generate(trim($elType));
         }
 
