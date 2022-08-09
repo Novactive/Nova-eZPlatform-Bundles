@@ -34,7 +34,7 @@ class Extension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('generateFake', [$this, 'generateFake']),
+            new TwigFunction('generateFake', [$this, 'generateFake'], ['is_safe' => ['html']]),
         ];
     }
 
