@@ -30,7 +30,7 @@ final class NovaeZ2FABundle extends Bundle
         $eZExtension->addPolicyProvider(new PolicyProvider());
     }
 
-    public function getContainerExtension()
+    public function getContainerExtension(): ?ExtensionInterface
     {
         if (null === $this->extension) {
             $extension = new NovaeZ2FAExtension();

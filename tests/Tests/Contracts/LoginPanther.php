@@ -20,9 +20,9 @@ trait LoginPanther
     {
         $crawler = $helper->get('/admin/login');
 
-        $this->assertStringContainsString('ez-login__actions-wrapper', $helper->client()->getPageSource());
+        $this->assertStringContainsString('ibexa-login-view', $helper->client()->getPageSource());
 
-        $form = $crawler->filter('.ez-login__actions-wrapper form');
+        $form = $crawler->filter('.ibexa-login-view form');
         $form->form(
             [
                 '_username' => 'admin',
@@ -31,7 +31,7 @@ trait LoginPanther
         );
         $form->submit();
 
-        $tab = '.nav.nav-tabs .nav-item.last';
+        $tab = '.ibexa-main-menu';
         $crawler = $helper->waitFor($tab);
         $crawler->filter($tab)->count();
         $this->assertEquals(1, $crawler->filter($tab)->count());

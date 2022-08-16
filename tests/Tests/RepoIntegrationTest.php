@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Novactive\eZPlatform\Bundles\Tests;
 
-use eZ\Publish\API\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\Repository;
 
 class RepoIntegrationTest extends WebTestCase
 {

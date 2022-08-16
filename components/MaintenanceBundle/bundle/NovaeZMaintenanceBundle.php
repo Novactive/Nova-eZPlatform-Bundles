@@ -34,7 +34,7 @@ class NovaeZMaintenanceBundle extends Bundle
         $eZExtension->addPolicyProvider(new MaintenancePolicyProvider());
     }
 
-    public function getContainerExtension()
+    public function getContainerExtension(): ?ExtensionInterface
     {
         if (null === $this->extension) {
             $extension = $this->createContainerExtension();

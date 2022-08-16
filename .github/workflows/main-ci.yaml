@@ -42,8 +42,8 @@ jobs:
                 options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
         strategy:
             matrix:
-                ibexa_version: [ 3.3.15 ]
-                php: [ 7.4 ]
+                ibexa_version: [ 4.* ]
+                php: [ 7.4, 8.1 ]
         env:
             CACHE_POOL: cache.redis
             DATABASE_URL: mysql://root@127.0.0.1:3306/ezplatform_test
@@ -132,13 +132,6 @@ jobs:
                     echo ::group::..:: Do bundle specifics ::..
                     mysql -u root -h 127.0.0.1 -P 3306 ezplatform_test < ../components/SEOBundle/bundle/Resources/sql/schema.sql
                     mysql -u root -h 127.0.0.1 -P 3306 ezplatform_test < ../components/2FABundle/bundle/Resources/sql/schema.sql
-                    php bin/console novaezextra:contenttypes:create ../tests/vmcd.xlsx
-                    php bin/console novaezprotectedcontent:install
-                    php bin/console novaezmailing:install
-                    php bin/console novaezhelptooltip:create
-                    php bin/console doctrine:schema:update
-                    cp -rp ../components/ProtectedContentBundle/tests/provisioning/article.html.twig templates/themes/standard/full/
-                    cp -rp ../components/StaticTemplatesBundle/tests/provisioning/static_ultimatenova templates/themes/
                     echo ::endgroup::
 
                     echo ::group::..:: Final Steps ::..
@@ -152,13 +145,10 @@ jobs:
                 run: |
                     composer update && composer require -W phpunit/phpunit:^9.5 symfony/phpunit-bridge:^5.3
                     rm -f ezplatform/config/packages/test/doctrine.yaml
-
-            -   name: Finally Run the tests
-                run: |
                     php vendor/bin/bdi detect drivers
-                    echo  echo ::group::..:: Global Mono Repo Testing ::..
-                    DATABASE_URL=mysql://root@127.0.0.1:3306/ezplatform APP_ENV=test php ./vendor/bin/phpunit -c "tests" "tests" --exclude-group behat
-                    echo ::endgroup::
+
+            -   name: Components testing
+                run: |
                     for COMPONENT in `ls components`; do
                         if COMPONENT=${COMPONENT} bin/ci-should test; then
                             echo ::group::..:: ${COMPONENT} ::..
@@ -166,3 +156,7 @@ jobs:
                             echo ::endgroup::
                         fi
                     done
+
+            -   name: Global Mono Repo Testing
+                run: |
+                    DATABASE_URL=mysql://root@127.0.0.1:3306/ezplatform APP_ENV=test php ./vendor/bin/phpunit -c "tests" "tests" --exclude-group behat                    
