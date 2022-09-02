@@ -52,6 +52,7 @@ jobs:
             APP_DEBUG: 1
             COMPOSER_MEMORY_LIMIT: 4G
             PANTHER_EXTERNAL_BASE_URI: http://127.0.0.1:8000
+            SYMFONY_DEPRECATIONS_HELPER: 999999
         steps:
             -   uses: actions/checkout@v2
 
@@ -82,7 +83,8 @@ jobs:
             -   name: Install Symfony Server
                 run: |
                     wget https://get.symfony.com/cli/installer -O - | bash
-                    /home/runner/.symfony/bin/symfony local:php:list
+                    mv /home/runner/.symfony5/bin/symfony /usr/local/bin/symfony
+                    symfony local:php:list
 
             -   name: Get Composer Cache Directory
                 id: composer-cache
@@ -111,8 +113,8 @@ jobs:
             -   name: Run Webserver
                 run: |
                     cd ezplatform
-                    /home/runner/.symfony/bin/symfony local:server:start --no-tls -d
-                    /home/runner/.symfony/bin/symfony local:server:list
+                    symfony local:server:start --no-tls -d
+                    symfony local:server:list
 
             -   name: Install All the bundle on Top of a fresh eZ Installation
                 run: |
