@@ -18,25 +18,25 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use Exception;
-use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\API\Repository\ContentTypeService;
-use eZ\Publish\API\Repository\Exceptions\BadStateException;
-use eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException;
-use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
-use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
-use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
-use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
-use eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
-use eZ\Publish\Core\FieldType\ImageAsset\Value as ImageAssetValue;
+use Ibexa\Contracts\Core\Repository\ContentService;
+use Ibexa\Contracts\Core\Repository\ContentTypeService;
+use Ibexa\Contracts\Core\Repository\Exceptions\BadStateException;
+use Ibexa\Contracts\Core\Repository\Exceptions\ContentTypeFieldDefinitionValidationException;
+use Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException;
+use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException as APINotFoundException;
+use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException;
+use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content;
+use Ibexa\Contracts\Core\Repository\Values\Content\ContentInfo;
+use Ibexa\Contracts\Core\Repository\Values\Content\VersionInfo;
+use Ibexa\Contracts\Core\Repository\Values\ContentType\ContentType;
+use Ibexa\Contracts\Core\Repository\Values\ContentType\ContentTypeDraft;
+use Ibexa\Contracts\Core\Repository\Values\ContentType\FieldDefinition;
+use Ibexa\Contracts\Core\Repository\Values\ContentType\FieldDefinitionCreateStruct;
+use Ibexa\Core\Base\Exceptions\ContentFieldValidationException;
+use Ibexa\Core\Base\Exceptions\InvalidArgumentValue;
+use Ibexa\Core\Base\Exceptions\NotFoundException;
+use Ibexa\Core\FieldType\ImageAsset\Value as ImageAssetValue;
 use Novactive\EzEnhancedImageAsset\FieldValueConverter\ChainFieldValueConverter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\Console\Command\Command;
@@ -129,8 +129,7 @@ class ConvertToImageAsset extends Command
             ->addArgument(
                 'field_identifiers',
                 InputArgument::IS_ARRAY | InputArgument::REQUIRED,
-                'content_type_identifier/field_identifier',
-                []
+                'content_type_identifier/field_identifier'
             );
     }
 
@@ -151,7 +150,7 @@ class ConvertToImageAsset extends Command
         $this->repository->sudo(
             function () use ($input) {
                 /** @var array $fieldIdentifiers */
-                $fieldIdentifiers = $input->getArgument('field_identifiers');
+                $fieldIdentifiers = (array) $input->getArgument('field_identifiers');
                 foreach ($fieldIdentifiers as $fieldIdentifier) {
                     [$contentTypeIdentifier, $fieldIdentifier] = explode('/', $fieldIdentifier);
 

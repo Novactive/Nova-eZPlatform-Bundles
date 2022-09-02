@@ -14,11 +14,11 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage;
 
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\FieldTypeService;
-use EzSystems\EzPlatformAdminUi\FieldType\Mapper\ImageFormMapper;
-use EzSystems\EzPlatformContentForms\FieldType\FieldValueFormMapperInterface;
-use EzSystems\RepositoryForms\Data\Content\FieldData;
+use Ibexa\AdminUi\FieldType\Mapper\ImageFormMapper;
+use Ibexa\Contracts\ContentForms\Data\Content\FieldData;
+use Ibexa\Contracts\ContentForms\FieldType\FieldValueFormMapperInterface;
+use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
+use Ibexa\Contracts\Core\Repository\FieldTypeService;
 use Novactive\EzEnhancedImageAsset\Form\Type\FieldType\EnhancedImageFieldType;
 use Symfony\Component\Form\FormInterface;
 

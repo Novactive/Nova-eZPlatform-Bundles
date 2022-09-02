@@ -14,13 +14,13 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\Twig;
 
-use eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver;
-use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
-use eZ\Publish\API\Repository\Values\Content\Field;
-use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException;
-use eZ\Publish\SPI\Variation\Values\ImageVariation;
+use Ibexa\Bundle\Core\Imagine\IORepositoryResolver;
+use Ibexa\Contracts\Core\Repository\Exceptions\InvalidVariationException;
+use Ibexa\Contracts\Core\Repository\Values\Content\Field;
+use Ibexa\Contracts\Core\Repository\Values\Content\VersionInfo;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
+use Ibexa\Contracts\Core\Variation\Values\ImageVariation;
+use Ibexa\Core\MVC\Exception\SourceImageNotFoundException;
 use InvalidArgumentException;
 use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
 use Novactive\EzEnhancedImageAsset\Imagine\FocusedImageAliasGenerator;
@@ -97,7 +97,7 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
      */
     public function getName()
     {
-        return 'ezpublish.image';
+        return 'ibexa.image';
     }
 
     /**

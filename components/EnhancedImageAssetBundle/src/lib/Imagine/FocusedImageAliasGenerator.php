@@ -14,13 +14,14 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\Imagine;
 
-use eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver;
-use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
-use eZ\Publish\API\Repository\Values\Content\Field;
-use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException;
-use eZ\Publish\SPI\Variation\Values\ImageVariation;
-use eZ\Publish\SPI\Variation\VariationHandler;
+use Ibexa\Bundle\Core\Imagine\IORepositoryResolver;
+use Ibexa\Contracts\Core\Repository\Exceptions\InvalidVariationException;
+use Ibexa\Contracts\Core\Repository\Values\Content\Field;
+use Ibexa\Contracts\Core\Repository\Values\Content\VersionInfo;
+use Ibexa\Contracts\Core\Variation\Values\ImageVariation;
+use Ibexa\Contracts\Core\Variation\VariationHandler;
+use Ibexa\Core\FieldType\Image\Value as ImageValue;
+use Ibexa\Core\MVC\Exception\SourceImageNotFoundException;
 use Imagine\Image\Box;
 use InvalidArgumentException;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
@@ -74,7 +75,7 @@ class FocusedImageAliasGenerator implements VariationHandler
     /**
      * {@inheritdoc}
      *
-     * if field value is not an instance of \eZ\Publish\Core\FieldType\Image\Value
+     * if field value is not an instance of \Ibexa\Core\FieldType\Image\Value
      *
      * @throws InvalidArgumentException
      *
@@ -87,16 +88,30 @@ class FocusedImageAliasGenerator implements VariationHandler
      */
     public function getVariation(Field $field, VersionInfo $versionInfo, $variationName, array $parameters = [])
     {
-        $isFocusedVariation = IORepositoryResolver::VARIATION_ORIGINAL !== $variationName
-                              && $field->value instanceof EnhancedImageValue;
         $focusPoint = null;
-
-        if ($isFocusedVariation) {
+        if ($field->value instanceof EnhancedImageValue) {
+            /** @var FocusPoint $focusPoint */
+            $focusPoint = $field->value->focusPoint;
+        } elseif (
+            $field->value instanceof ImageValue &&
+            isset($field->value->additionalData['focalPointX']) &&
+            isset($field->value->additionalData['focalPointY'])
+        ) {
+            $focusPoint = new FocusPoint(
+                $field->value->additionalData['focalPointX'],
+                $field->value->additionalData['focalPointY']
+            );
+        } elseif (IORepositoryResolver::VARIATION_ORIGINAL !== $variationName) {
             $variationConfig = $this->filterConfiguration->get($variationName);
-            $isFocusedVariation = isset($variationConfig['filters']['focusedThumbnail']);
+            if (isset($variationConfig['filters']['focusedThumbnail']['focus'])) {
+                $focusPoint = new FocusPoint(...$variationConfig['filters']['focusedThumbnail']['focus']);
+            }
+        }
+
+        if (IORepositoryResolver::VARIATION_ORIGINAL !== $variationName) {
+            $variationConfig = $this->filterConfiguration->get($variationName);
+            $isFocusedVariation = $focusPoint && isset($variationConfig['filters']['focusedThumbnail']);
             if ($isFocusedVariation) {
-                /** @var FocusPoint $focusPoint */
-                $focusPoint = $field->value->focusPoint;
                 $parameters = [
                     'filters' => [
                         'focusedThumbnail' => [

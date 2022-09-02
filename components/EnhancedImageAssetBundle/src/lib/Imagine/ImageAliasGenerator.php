@@ -14,15 +14,15 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\Imagine;
 
-use eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver;
-use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
-use eZ\Publish\API\Repository\Values\Content\Field;
-use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
-use eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException;
-use eZ\Publish\SPI\FieldType\Value;
-use eZ\Publish\SPI\Variation\Values\ImageVariation;
-use eZ\Publish\SPI\Variation\VariationHandler;
+use Ibexa\Bundle\Core\Imagine\IORepositoryResolver;
+use Ibexa\Contracts\Core\FieldType\Value;
+use Ibexa\Contracts\Core\Repository\Exceptions\InvalidVariationException;
+use Ibexa\Contracts\Core\Repository\Values\Content\Field;
+use Ibexa\Contracts\Core\Repository\Values\Content\VersionInfo;
+use Ibexa\Contracts\Core\Variation\Values\ImageVariation;
+use Ibexa\Contracts\Core\Variation\VariationHandler;
+use Ibexa\Core\FieldType\Image\Value as ImageValue;
+use Ibexa\Core\MVC\Exception\SourceImageNotFoundException;
 use Imagine\Exception\RuntimeException;
 use InvalidArgumentException;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
@@ -39,7 +39,7 @@ use SplFileInfo;
  *
  * @package Novactive\EzEnhancedImageAsset\Imagine
  *
- * Copy of eZ\Bundle\EzPublishCoreBundle\Imagine\AliasGenerator to override the getVariation method
+ * Copy of Ibexa\Bundle\Core\Imagine\AliasGenerator to override the getVariation method
  * to pass the $runtimeFiltersConfig to the filterManager
  */
 class ImageAliasGenerator implements VariationHandler
@@ -87,7 +87,7 @@ class ImageAliasGenerator implements VariationHandler
     /**
      * {@inheritdoc}
      *
-     * if field value is not an instance of \eZ\Publish\Core\FieldType\Image\Value
+     * if field value is not an instance of \Ibexa\Core\FieldType\Image\Value
      *
      * @throws InvalidArgumentException
      *

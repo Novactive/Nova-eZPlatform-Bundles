@@ -1,6 +1,6 @@
 {% trans_default_domain 'ezplatform_content_forms_content' %}
 
-{% use '@ezdesign/ui/field_type/edit/ezimage.html.twig' %}
+{% use '@ibexadesign/ui/field_type/edit/ezimage.html.twig' %}
 
 {%- block ezplatform_fieldtype_enhancedimage_row -%}
     {% set preview_block_name = 'enhancedimage_preview' %}
@@ -10,7 +10,7 @@
 {%- endblock -%}
 
 {% block enhancedimage_preview %}
-    {% form_theme form '@ezdesign/ui/field_type/edit/binary_base_fields.html.twig' %}
+    {% form_theme form '@ibexadesign/ui/field_type/edit/binary_base_fields.html.twig' %}
 
     {% set image = form.parent.vars.value.value %}
     {% set focusPoint = image.focusPoint %}
@@ -77,7 +77,7 @@
             </div>
             <div class="ez-field-edit-preview__details">
                 <span class="ez-field-edit-preview__file-name">{{ image.fileName }}</span>
-                <span class="ez-field-edit-preview__file-size">{{ image.fileSize|ez_file_size(2) }}</span>
+                <span class="ez-field-edit-preview__file-size">{{ image.fileSize|ibexa_file_size(2) }}</span>
             </div>
             <div class="ez-field-edit-preview__image-alt">
                 {% set alternative_text_label_class = form.vars.is_alternative_text_required ? 'required' : '' %}

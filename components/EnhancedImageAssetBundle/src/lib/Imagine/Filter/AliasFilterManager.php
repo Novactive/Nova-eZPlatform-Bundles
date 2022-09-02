@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\Imagine\Filter;
 
-use eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver;
+use Ibexa\Bundle\Core\Imagine\IORepositoryResolver;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
