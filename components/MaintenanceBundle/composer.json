@@ -1,14 +1,14 @@
 {
     "name": "novactive/ezmaintenancebundle",
-    "description": "Novactive eZ Maintenance bundle is an eZ Platform bundle that helps you to easily enable a Maintenance page.",
+    "description": "Novactive eZ Maintenance bundle is an Ibexa bundle that helps you to easily enable a Maintenance page.",
     "keywords": [
         "performance",
-        "ezplatform",
+        "ibexa",
         "novactive",
         "maintenance"
     ],
     "homepage": "https://github.com/Novactive/NovaeZMaintenanceBundle",
-    "type": "ezplatform-bundle",
+    "type": "ibexa-bundle",
     "authors": [
         {
             "name": "Novactive",
@@ -20,7 +20,7 @@
         "MIT"
     ],
     "require": {
-        "php": "^7.3"
+        "php": "^8.1"
     },
     "autoload": {
         "psr-4": {

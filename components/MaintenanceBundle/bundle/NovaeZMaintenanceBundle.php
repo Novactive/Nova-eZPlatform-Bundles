@@ -29,7 +29,7 @@ class NovaeZMaintenanceBundle extends Bundle
         // ...
 
         // Retrieve "ezpublish" container extension
-        $eZExtension = $container->getExtension('ezpublish');
+        $eZExtension = $container->getExtension('ibexa');
         // Add the policy provider
         $eZExtension->addPolicyProvider(new MaintenancePolicyProvider());
     }
