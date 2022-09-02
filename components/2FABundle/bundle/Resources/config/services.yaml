@@ -15,12 +15,10 @@ services:
     Novactive\Bundle\eZ2FABundle\Core\:
         resource: '../../Core'
 
-    Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareQueryExecutor:
-        arguments:
-            $repositoryConfigurationProvider: "@ezpublish.api.repository_configuration_provider"
+    Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareQueryExecutor: ~
 
     Novactive\Bundle\eZ2FABundle\Security\TwoFactorUserProviderDecorator:
-        decorates: 'ezpublish.security.user_provider'
+        decorates: 'ibexa.security.user_provider'
 
     Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareAuthenticatorResolver:
         bind:
@@ -28,7 +26,7 @@ services:
 
     Novactive\Bundle\eZ2FABundle\Core\Tab\TwoFAManagement:
         tags:
-            - { name: ezplatform.tab, group: location-view }
+            - { name: ibexa.tab, group: location-view }
 
     Novactive\Bundle\eZ2FABundle\Core\EmailCodeGenerator:
         bind:

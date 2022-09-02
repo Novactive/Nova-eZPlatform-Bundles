@@ -57,11 +57,11 @@ security:
     ...
     firewalls:
         ...
-        ezpublish_front:
+        ibexa_front:
             pattern: ^/
             user_checker: eZ\Publish\Core\MVC\Symfony\Security\UserChecker
             anonymous: ~
-            ezpublish_rest_session: ~
+            ibexa_rest_session: ~
             form_login:
                 require_previous_session: false
                 csrf_token_generator: security.csrf.token_manager

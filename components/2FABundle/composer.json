@@ -1,15 +1,17 @@
 {
     "name": "novactive/ez2fabundle",
-    "description": "Novactive eZ 2FA Bundle is an eZ Platform bundle that provides two-factor authentication for your ezplatform project",
+    "description": "Novactive eZ 2FA Bundle is an Ibexa bundle that provides two-factor authentication for your Ibexa project",
     "keywords": [
         "two-factor",
         "authentication",
         "ezpublish",
         "novactive",
-        "ezplatform"
+        "almaviacx",
+        "ezplatform",
+        "ibexa"
     ],
     "homepage": "https://github.com/Novactive/NovaeZ2FABundle",
-    "type": "ezplatform-bundle",
+    "type": "ibexa-bundle",
     "authors": [
         {
             "name": "Novactive",
@@ -26,7 +28,7 @@
         "MIT"
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^8.1",
         "scheb/2fa-bundle": "^5.0",
         "scheb/2fa-google-authenticator": "^5.0",
         "scheb/2fa-totp": "^5.0",
