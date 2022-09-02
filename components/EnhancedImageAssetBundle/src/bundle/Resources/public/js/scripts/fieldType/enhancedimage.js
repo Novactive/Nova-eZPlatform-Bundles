@@ -9,12 +9,12 @@
  */
 
 (function (global) {
-    const SELECTOR_FIELD = '.ez-field-edit--enhancedimage';
+    const SELECTOR_FIELD = '.ibexa-field-edit--enhancedimage';
     const SELECTOR_INPUT_FILE = 'input[type="file"]';
-    const SELECTOR_LABEL_WRAPPER = '.ez-field-edit__label-wrapper';
-    const SELECTOR_ALT_WRAPPER = '.ez-field-edit-preview__image-alt';
+    const SELECTOR_LABEL_WRAPPER = '.ibexa-field-edit__label-wrapper';
+    const SELECTOR_ALT_WRAPPER = '.ibexa-field-edit-preview__image-alt';
     const SELECTOR_INPUT_ALT =
-        '.ez-field-edit-preview__image-alt .ez-data-source__input';
+        '.ibexa-field-edit-preview__image-alt .ibexa-data-source__input';
 
     const SELECTOR_FRAME = '.focuspoint-helper--frame';
     const SELECTOR_IMG = '.focuspoint-helper--img';
@@ -53,16 +53,16 @@
          */
         loadDroppedFilePreview(event) {
             const preview = this.fieldContainer.querySelector(
-                '.ez-field-edit__preview'
+                '.ibexa-field-edit__preview'
             );
             const images = preview.querySelectorAll(
-                '.ez-field-edit-preview__media'
+                '.ibexa-field-edit-preview__media'
             );
             const nameContainer = preview.querySelector(
-                '.ez-field-edit-preview__file-name'
+                '.ibexa-field-edit-preview__file-name'
             );
             const sizeContainer = preview.querySelector(
-                '.ez-field-edit-preview__file-size'
+                '.ibexa-field-edit-preview__file-size'
             );
             const files = [].slice.call(event.target.files);
             const fileSize = this.formatFileSize(files[0].size);
@@ -94,7 +94,7 @@
             sizeContainer.title = fileSize;
 
             preview.querySelector(
-                '.ez-field-edit-preview__action--preview'
+                '.ibexa-field-edit-preview__action--preview'
             ).href = URL.createObjectURL(files[0]);
             this.fieldContainer
                 .querySelector(SELECTOR_INPUT_ALT)
@@ -117,7 +117,7 @@
             const isError = isEmpty && isRequired;
             const label = event.target
                 .closest(SELECTOR_ALT_WRAPPER)
-                .querySelector('.ez-data-source__label').innerHTML;
+                .querySelector('.ibexa-data-source__label').innerHTML;
             const result = { isError };
 
             if (isEmpty) {
@@ -223,10 +223,10 @@
                     eventName: 'blur',
                     callback: 'validateAltInput',
                     invalidStateSelectors: [
-                        '.ez-data-source__field--alternativeText'
+                        '.ibexa-data-source__field--alternativeText'
                     ],
                     errorNodeSelectors: [
-                        `${SELECTOR_ALT_WRAPPER} .ez-data-source__label-wrapper`
+                        `${SELECTOR_ALT_WRAPPER} .ibexa-data-source__label-wrapper`
                     ]
                 },
                 {
@@ -242,10 +242,10 @@
                     eventName: 'cancelErrors',
                     callback: 'cancelErrors',
                     invalidStateSelectors: [
-                        '.ez-data-source__field--alternativeText'
+                        '.ibexa-data-source__field--alternativeText'
                     ],
                     errorNodeSelectors: [
-                        `${SELECTOR_ALT_WRAPPER} .ez-data-source__label-wrapper`
+                        `${SELECTOR_ALT_WRAPPER} .ibexa-data-source__label-wrapper`
                     ]
                 }
             ]

@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\Imagine\PlaceholderProvider;
 
-use eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProvider;
-use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
+use Ibexa\Bundle\Core\Imagine\PlaceholderProvider;
+use Ibexa\Core\FieldType\Image\Value as ImageValue;
 use RuntimeException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 

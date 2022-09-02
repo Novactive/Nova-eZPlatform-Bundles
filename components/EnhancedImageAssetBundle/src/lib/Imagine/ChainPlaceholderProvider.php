@@ -14,9 +14,9 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\Imagine;
 
-use eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProvider;
-use eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProviderRegistry;
-use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
+use Ibexa\Bundle\Core\Imagine\PlaceholderProvider;
+use Ibexa\Bundle\Core\Imagine\PlaceholderProviderRegistry;
+use Ibexa\Core\FieldType\Image\Value as ImageValue;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\OptionsResolver\OptionsResolver;

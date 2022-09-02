@@ -14,9 +14,9 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\FieldValueConverter;
 
-use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\Content\Field;
-use eZ\Publish\Core\FieldType\ImageAsset\Value as ImageAssetValue;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content;
+use Ibexa\Contracts\Core\Repository\Values\Content\Field;
+use Ibexa\Core\FieldType\ImageAsset\Value as ImageAssetValue;
 
 class ChainFieldValueConverter
 {
