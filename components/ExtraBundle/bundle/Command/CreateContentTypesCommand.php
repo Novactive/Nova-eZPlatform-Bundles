@@ -16,7 +16,7 @@ namespace Novactive\Bundle\eZExtraBundle\Command;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\FieldType\ValidationError;
-use eZ\Publish\Core\Helper\TranslationHelper;
+use Ibexa\Core\Helper\TranslationHelper;
 use Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\ContentType as ContentTypeManager;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\IOFactory;
