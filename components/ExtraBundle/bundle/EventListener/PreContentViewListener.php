@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\EventListener;
 
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\Values\Content\Location;
+use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 use Ibexa\Core\MVC\Symfony\Event\PreContentViewEvent;
 use Ibexa\Core\MVC\Symfony\Templating\GlobalHelper;
 use Ibexa\Core\MVC\Symfony\View\ContentView;

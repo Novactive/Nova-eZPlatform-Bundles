@@ -14,9 +14,9 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\Core\Helper\eZ;
 
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\Values\Content\Content as ValueContent;
-use eZ\Publish\API\Repository\Values\Content\Location as ValueLocation;
+use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content as ValueContent;
+use Ibexa\Contracts\Core\Repository\Values\Content\Location as ValueLocation;
 
 final class WrapperFactory
 {
