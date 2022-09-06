@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\Tests;
 
-use eZ\Publish\API\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\Repository;
 use Faker\Factory;
 use Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\Content as ContentManager;
 use Novactive\eZPlatform\Bundles\Tests\WebTestCase;

@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\Controller;
 
-use eZ\Bundle\EzPublishCoreBundle\Controller;
+use Ibexa\Bundle\Core\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
 

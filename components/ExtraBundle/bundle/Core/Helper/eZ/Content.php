@@ -14,14 +14,14 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\Core\Helper\eZ;
 
-use eZ\Publish\API\Repository\Repository as RepositoryInterface;
-use eZ\Publish\API\Repository\Values\Content\Content as RepositoryContent;
-use eZ\Publish\API\Repository\Values\Content\LocationQuery as Query;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
-use eZ\Publish\Core\FieldType\Date\Value as DateValue;
-use eZ\Publish\Core\FieldType\DateAndTime\Value as DateTimeValue;
+use Ibexa\Contracts\Core\Repository\Repository as RepositoryInterface;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content as RepositoryContent;
+use Ibexa\Contracts\Core\Repository\Values\Content\LocationQuery as Query;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\SortClause;
+use Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchResult;
+use Ibexa\Core\FieldType\Date\Value as DateValue;
+use Ibexa\Core\FieldType\DateAndTime\Value as DateTimeValue;
 
 class Content
 {

@@ -150,7 +150,7 @@ optimized_original_mobile:
 
 #### get_image_asset_content(field)
 
-> Returns the Content by the Image Asset field. Requires the eZ\Publish\API\Repository\Values\Content\Field to be specified.
+> Returns the Content by the Image Asset field. Requires the Ibexa\Contracts\Core\Repository\Values\Content\Field to be specified.
 
 > **IMPORTANT**: The image placeholder is enabled by default but can be disabled by setting the bool value to _ENABLE_IMAGE_PLACEHOLDER_ env variable.
 
@@ -206,7 +206,7 @@ Ex:
 ```php
 namespace Yoochoose\Bundle\GeneralBundle\ChildrenProvider;
 use Novactive\Bundle\eZExtraBundle\EventListener\Type;
-use eZ\Publish\API\Repository\Values\Content\Query;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 class PersonalizationEngine extends Type
 {
     //its also use as default to get the full view children

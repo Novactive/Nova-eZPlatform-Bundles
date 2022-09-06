@@ -15,13 +15,13 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZExtraBundle\Twig;
 
 use Exception;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\Core\FieldType\Relation\Value as RelationValue;
-use eZ\Publish\Core\FieldType\RelationList\Value as RelationListValue;
+use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
+use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content;
+use Ibexa\Contracts\Core\Repository\Values\Content\ContentInfo;
+use Ibexa\Contracts\Core\Repository\Values\Content\Location;
+use Ibexa\Core\FieldType\Relation\Value as RelationValue;
+use Ibexa\Core\FieldType\RelationList\Value as RelationListValue;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
