@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\Command;
 
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\Core\FieldType\ValidationError;
+use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\Contracts\Core\FieldType\ValidationError;
 use Ibexa\Core\Helper\TranslationHelper;
 use Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\ContentType as ContentTypeManager;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
