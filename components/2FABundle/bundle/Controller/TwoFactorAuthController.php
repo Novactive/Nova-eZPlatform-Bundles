@@ -12,10 +12,10 @@
 
 namespace Novactive\Bundle\eZ2FABundle\Controller;
 
-use eZ\Publish\API\Repository\PermissionResolver;
-use eZ\Publish\API\Repository\UserService;
-use eZ\Publish\Core\MVC\Symfony\Security\User;
-use EzSystems\EzPlatformAdminUiBundle\Controller\Controller;
+use Ibexa\Contracts\Core\Repository\PermissionResolver;
+use Ibexa\Contracts\Core\Repository\UserService;
+use Ibexa\Core\MVC\Symfony\Security\User;
+use Ibexa\Contracts\AdminUi\Controller\Controller;
 use Novactive\Bundle\eZ2FABundle\Core\QRCodeGenerator;
 use Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareAuthenticatorResolver;
 use Novactive\Bundle\eZ2FABundle\Form\Type\TwoFactorAuthType;

@@ -14,14 +14,14 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZ2FABundle\Core\Tab;
 
-use eZ\Publish\API\Repository\PermissionResolver;
-use eZ\Publish\API\Repository\UserService;
-use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\Core\MVC\Symfony\Security\User;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
-use EzSystems\EzPlatformAdminUi\Tab\AbstractTab;
-use EzSystems\EzPlatformAdminUi\Tab\ConditionalTabInterface;
-use EzSystems\EzPlatformAdminUi\Tab\OrderedTabInterface;
+use Ibexa\Contracts\Core\Repository\PermissionResolver;
+use Ibexa\Contracts\Core\Repository\UserService;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content;
+use Ibexa\Core\MVC\Symfony\Security\User;
+use Ibexa\Core\Repository\Values\ContentType\ContentType;
+use Ibexa\Contracts\AdminUi\Tab\AbstractTab;
+use Ibexa\Contracts\AdminUi\Tab\ConditionalTabInterface;
+use Ibexa\Contracts\AdminUi\Tab\OrderedTabInterface;
 use Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareAuthenticatorResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;

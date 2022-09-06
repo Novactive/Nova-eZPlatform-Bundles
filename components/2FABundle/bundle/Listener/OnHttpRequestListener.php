@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZ2FABundle\Listener;
 
-use eZ\Publish\Core\MVC\Symfony\Security\User;
+use Ibexa\Core\MVC\Symfony\Security\User;
 use Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareAuthenticatorResolver;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
