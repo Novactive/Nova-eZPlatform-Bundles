@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\NovaeZMaintenanceBundle\Controller;
 
-use eZ\Bundle\EzPublishCoreBundle\Controller;
+use Ibexa\Bundle\Core\Controller;
 use Novactive\NovaeZMaintenanceBundle\Form\Type\FilterType;
 use Novactive\NovaeZMaintenanceBundle\Helper\FileHelper;
 use Symfony\Component\HttpFoundation\Request;

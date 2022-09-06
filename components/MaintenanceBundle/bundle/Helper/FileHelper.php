@@ -15,10 +15,10 @@ declare(strict_types=1);
 namespace Novactive\NovaeZMaintenanceBundle\Helper;
 
 use Exception;
-use eZ\Publish\API\Repository\PermissionResolver;
-use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use eZ\Publish\Core\IO\IOServiceInterface;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Ibexa\Contracts\Core\Repository\PermissionResolver;
+use Ibexa\Core\Base\Exceptions\UnauthorizedException;
+use Ibexa\Core\IO\IOServiceInterface;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\IpUtils;
