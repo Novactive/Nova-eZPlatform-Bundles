@@ -17,12 +17,12 @@
         }
     ],
     "require": {
-        "php": ">8.1",
-        "novactive/collection": "1.*",
+        "php": "^7.3 || ^8.0",
+        "novactive/collection": "3.*",
         "phpoffice/phpspreadsheet": "*"
     },
     "require-dev": {
-        "fzaninotto/faker": "^1.9"
+        "fzaninotto/faker": "dev-master"
     },
     "autoload": {
         "psr-4": {
