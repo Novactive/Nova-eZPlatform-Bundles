@@ -57,7 +57,7 @@
                     {% set set_up_method = 'email' == method ? 'setup_form.method.email'|trans : method|capitalize %}
                     <div class="ez-data-source__message--main">{{ 'setup_form.already_set_up'|trans({'%method%': set_up_method}) }}</div>
                     <div class="ez-data-source__message--main">
-                        {% set resetLink %}<a href="{{ ez_path(ez_route('2fa_reset')) }}"><strong>{{ 'setup_form.here'|trans }}</strong></a>{% endset %}
+                        {% set resetLink %}<a href="{{ ibexa_path(ibexa_route('2fa_reset')) }}"><strong>{{ 'setup_form.here'|trans }}</strong></a>{% endset %}
                         {{ 'setup_form.reset'|trans({'%link%': resetLink})|raw }}
                     </div>
 
