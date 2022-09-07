@@ -68,7 +68,7 @@ Go to : */_novaezextra/dev/test*
 #### eznova_relationlist_field_to_content_list( fieldValue )
 
 ```twig
-{% set content = eznova_relationlist_field_to_content_list( ez_field_value( content, 'internal_links' ) ) %}
+{% set content = eznova_relationlist_field_to_content_list( ibexa_field_value( content, 'internal_links' ) ) %}
 ```
 
 > Note : return an array of direct linked contents by the relation objects FieldType
@@ -76,7 +76,7 @@ Go to : */_novaezextra/dev/test*
 #### eznova_is_rich_text_really_empty(richTextFieldValue)
 
 ```twig
-{% set content = eznova_is_rich_text_really_empty( ez_field_value( content, 'description' ) ) %}
+{% set content = eznova_is_rich_text_really_empty( ibexa_field_value( content, 'description' ) ) %}
 ```
 
 > Note : returns true if the value of RichText field is empty excluding the tags, whitespaces and line breaks, false otherwise
@@ -178,8 +178,8 @@ Usage:
 
 ```twig
     {% for child in children %}
-        <h2>{{ ez_field_value( child.content, "title" ) }}</h2>
-        {{ ez_render_field( child.content, "overview" ) }}
+        <h2>{{ ibexa_field_value( child.content, "title" ) }}</h2>
+        {{ ibexa_render_field( child.content, "overview" ) }}
         <a href="{{ path( "ez_urlalias", { "locationId" : child.content.contentInfo.mainLocationId } ) }}">{{ "Learn more" | trans() }}</a>
     {% endfor %}
 ```
