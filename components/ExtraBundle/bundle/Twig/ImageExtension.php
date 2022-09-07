@@ -231,7 +231,7 @@ final class ImageExtension extends AbstractExtension
         }
 
         return $this->twig->render(
-            '@ezdesign/fields/display_image_tag.html.twig',
+            '@ibexadesign/fields/display_image_tag.html.twig',
             [
                 'content' => $content,
                 'identifier' => $identifier,
