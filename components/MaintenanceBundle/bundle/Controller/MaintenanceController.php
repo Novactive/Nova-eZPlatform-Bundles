@@ -50,7 +50,7 @@ class MaintenanceController extends Controller
     {
         $this->fileHelper->checkManageAccess();
 
-        return $this->render('@ezdesign/maintenance/index.html.twig', [
+        return $this->render('@ibexadesign/maintenance/index.html.twig', [
             'maintenance_siteaccesses' => $this->fileHelper->getAvailableSiteaccessList(),
         ]);
     }
@@ -74,7 +74,7 @@ class MaintenanceController extends Controller
             $btnLabel = $this->fileHelper->translate($isExistFile ? 'maintenance.start' : 'maintenance.stop');
         }
 
-        return $this->render('@ezdesign/maintenance/manage.html.twig', [
+        return $this->render('@ibexadesign/maintenance/manage.html.twig', [
             'form' => $form->createView(),
             'maintenance_siteaccess' => $maintenanceSiteaccess,
             'btnLabel' => $btnLabel,
