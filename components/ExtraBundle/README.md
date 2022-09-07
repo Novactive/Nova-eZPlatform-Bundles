@@ -247,7 +247,7 @@ Then for example if you set the **business** value to the field that is set to i
 
 ```yaml
 article_business:
-    template: '@ezdesign/full/article_business.html.twig'
+    template: '@ibexadesign/full/article_business.html.twig'
     match:
         Identifier\ContentType: [ 'article' ]
         '@Novactive\Bundle\eZExtraBundle\Core\ViewMatcher\ContentTypeField': 'business'
