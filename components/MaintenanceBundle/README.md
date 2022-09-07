@@ -67,7 +67,7 @@ nova_ezmaintenance:
     system:
         default:
             enable: false # to enable to capability
-            template: '@ezdesign/maintenance.html.twig' # the template you want as a maintenace page
+            template: '@ibexadesign/maintenance.html.twig' # the template you want as a maintenace page
             lock_file_id: 'plop.lock' # the name of the lock file in the cluster
 
 ```
