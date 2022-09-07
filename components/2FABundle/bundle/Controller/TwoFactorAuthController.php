@@ -49,7 +49,7 @@ class TwoFactorAuthController extends Controller
 
         if ($saAuthenticatorResolver->checkIfUserSecretOrEmailExists($user)) {
             return $this->render(
-                '@ezdesign/2fa/setup.html.twig',
+                '@ibexadesign/2fa/setup.html.twig',
                 [
                     'reset' => true,
                     'method' => $saAuthenticatorResolver->getMethod(),
@@ -78,7 +78,7 @@ class TwoFactorAuthController extends Controller
 
         if (!isset($methodForm) && null === $saAuthenticatorResolver->getMethod()) {
             return $this->render(
-                '@ezdesign/2fa/setup.html.twig',
+                '@ibexadesign/2fa/setup.html.twig',
                 [
                     'form' => null,
                     'forced' => $saAuthenticatorResolver->isForceSetup(),
@@ -96,7 +96,7 @@ class TwoFactorAuthController extends Controller
             !($methodForm->isSubmitted() && $methodForm->isValid())
         ) {
             return $this->render(
-                '@ezdesign/2fa/setup.html.twig',
+                '@ibexadesign/2fa/setup.html.twig',
                 [
                     'form' => $methodForm->createView(),
                     'forced' => $saAuthenticatorResolver->isForceSetup(),
@@ -109,7 +109,7 @@ class TwoFactorAuthController extends Controller
             $saAuthenticatorResolver->setEmailAuthentication($user);
 
             return $this->render(
-                '@ezdesign/2fa/setup.html.twig',
+                '@ibexadesign/2fa/setup.html.twig',
                 [
                     'success' => true,
                     'method' => 'email',
@@ -124,7 +124,7 @@ class TwoFactorAuthController extends Controller
             $result = $saAuthenticatorResolver->validateCodeAndUpdateUser($user, $qrCodeForm->getData());
             if ($result['valid']) {
                 return $this->render(
-                    '@ezdesign/2fa/setup.html.twig',
+                    '@ibexadesign/2fa/setup.html.twig',
                     [
                         'success' => true,
                         'method' => $saAuthenticatorResolver->getMethod(),
@@ -145,7 +145,7 @@ class TwoFactorAuthController extends Controller
         }
 
         return $this->render(
-            '@ezdesign/2fa/setup.html.twig',
+            '@ibexadesign/2fa/setup.html.twig',
             [
                 'qrCode' => $QRCodeGenerator->createFromUser($user),
                 'form' => $qrCodeForm->createView(),
