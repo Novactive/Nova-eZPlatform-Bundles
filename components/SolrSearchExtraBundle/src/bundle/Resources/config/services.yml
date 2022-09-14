@@ -32,15 +32,15 @@ services:
 
   Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper\CustomFulltextFieldMapper:
     calls:
-    - ['setFieldsConfig', ['$fulltext_fields;nova_solr_extra$']]
+    - ['setFieldsConfig', ['fulltext_fields']]
     tags:
     - {name: ibexa.search.solr.field.mapper.block.translation}
 
   Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper\CustomFieldMapper:
     calls:
-    - ['setFieldsConfig', ['$custom_fields;nova_solr_extra$']]
+    - ['setFieldsConfig', ['custom_fields']]
     tags:
-    - {name: ibexa.search.solr.field_mapper.block_translation}
+    - {name: ibexa.search.solr.field.mapper.block.translation}
 
   Novactive\EzSolrSearchExtra\FieldMapper\BinaryFileFieldMapper:
     arguments:
@@ -50,17 +50,17 @@ services:
   Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper\BinaryFileFullTextFieldMapper:
     lazy: true
     arguments:
-      $binaryFileFieldTypeIndentifiers:
+      $binaryFileFieldTypeIdentifiers:
       - ezbinaryfile
     calls:
-    - ['setEnabled', ['$enable_pdf_indexation;nova_solr_extra$']]
+    - ['setEnabled', ['enable_pdf_indexation']]
     tags:
     - {name: ibexa.search.solr.field.mapper.block.translation}
 
   Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper\PublishDateFieldMapper:
     lazy: true
     calls:
-    - ['setFieldIdentifiers', ['$publishdate_fields;nova_solr_extra$']]
+    - ['setFieldIdentifiers', ['publishdate_fields']]
     tags:
     - {name: ibexa.search.solr.field.mapper.block.translation}
 
@@ -75,27 +75,28 @@ services:
   Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor\MultipleFieldsFullText:
     factory: ['@Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor\Factory\ContentFullTextFactory', 'createCriterionVisitor']
     tags:
-    - {name: ibexa.search.solr.query.content.criterion_visitor}
+    - {name: ibexa.search.solr.query.content.criterion.visitor}
 
   Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor\Factory\ContentFullTextFactory:
     parent: Ibexa\Solr\Query\Common\CriterionVisitor\Factory\FullTextFactoryAbstract
 
   Novactive\EzSolrSearchExtra\Query\Location\CriterionVisitor\MultipleFieldsFullText:
+    factory: ['@Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor\Factory\ContentFullTextFactory', 'createCriterionVisitor']
     tags:
-    - {name: ibexa.search.solr.query.location.criterion_visitor}
+    - {name: ibexa.search.solr.query.location.criterion.visitor}
 
   Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor\FilterTag:
     tags:
-    - {name: ibexa.search.solr.query.content.criterion_visitor}
-    - {name: ibexa.search.solr.query.location.criterion_visitor}
+    - {name: ibexa.search.solr.query.content.criterion.visitor}
+    - {name: ibexa.search.solr.query.location.criterion.visitor}
 
   Novactive\EzSolrSearchExtra\Query\CriterionHandler\MultipleFieldsFullText:
     parent: Ibexa\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FullText
 
   Novactive\EzSolrSearchExtra\Query\SortClauseVisitor\Score:
     tags:
-    - {name: ibexa.search.solr.query.content.sort_clause_visitor}
-    - {name: ibexa.search.solr.query.location.sort_clause_visitor}
+    - {name: ibexa.search.solr.query.content.sort_clause.visitor}
+    - {name: ibexa.search.solr.query.location.sort_clause.visitor}
 
   Novactive\EzSolrSearchExtra\Query\SortClauseHandler\Score:
     autowire: false
@@ -103,13 +104,13 @@ services:
     public: false
     parent: ibexa.search.legacy.gateway.sort_clause_handler.base
     tags:
-    - {name: ibexa.search.legacy.gateway.sort_clause_handler.content}
-    - {name: ibexa.search.legacy.gateway.sort_clause_handler.location}
+    - {name: ibexa.search.legacy.gateway.sort_clause.handler.content}
+    - {name: ibexa.search.legacy.gateway.sort_clause.handler.location}
 
   Novactive\EzSolrSearchExtra\Query\SortClauseVisitor\CustomField:
     tags:
-    - {name: ibexa.search.solr.query.content.sort_clause_visitor}
-    - {name: ibexa.search.solr.query.location.sort_clause_visitor}
+    - {name: ibexa.search.solr.query.content.sort_clause.visitor}
+    - {name: ibexa.search.solr.query.location.sort_clause.visitor}
 
   Novactive\EzSolrSearchExtra\Query\SortClauseHandler\CustomField:
     autowire: false
@@ -117,8 +118,8 @@ services:
     public: false
     parent: ibexa.search.legacy.gateway.sort_clause_handler.base
     tags:
-    - {name: ibexa.search.legacy.gateway.sort_clause_handler.content}
-    - {name: ibexa.search.legacy.gateway.sort_clause_handler.location}
+    - {name: ibexa.search.legacy.gateway.sort_clause.handler.content}
+    - {name: ibexa.search.legacy.gateway.sort_clause.handler.location}
 
 
   nova_solr_extra.search.solr.query.content.query_converter:
@@ -137,7 +138,4 @@ services:
       - '@nova_solr_extra.search.solr.query.location.query_converter.inner'
       - '@ibexa.solr.query.location.criterion_visitor.aggregate'
 
-  Novactive\EzSolrSearchExtra\Query\AggregationVisitor\EnhancedRawTermAggregationVisitor:
-    tags:
-      - { name: ibexa.search.solr.query.content.aggregation.visitor }
-      - { name: ibexa.search.solr.query.location.aggregation.visitor }
+

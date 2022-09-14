@@ -8,7 +8,7 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Query\FacetBuilder;
 
 /**
  * @deprecated 4.0.0
- * @see \Novactive\EzSolrSearchExtra\Query\Aggregation\EnhancedRawTermAggregation
+ * @see \Novactive\EzSolrSearchExtra\Query\Aggregation\RawTermAggregation
  */
 class CustomFieldFacetBuilder extends FacetBuilder
 {

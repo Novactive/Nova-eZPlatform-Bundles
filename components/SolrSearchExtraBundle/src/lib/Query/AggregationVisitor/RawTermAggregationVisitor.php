@@ -6,17 +6,17 @@ namespace Novactive\EzSolrSearchExtra\Query\AggregationVisitor;
 
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation;
 use Ibexa\Contracts\Solr\Query\AggregationVisitor;
-use Novactive\EzSolrSearchExtra\Query\Aggregation\EnhancedRawTermAggregation;
+use Novactive\EzSolrSearchExtra\Query\Aggregation\RawTermAggregation;
 
-class EnhancedRawTermAggregationVisitor implements AggregationVisitor
+class RawTermAggregationVisitor implements AggregationVisitor
 {
     public function canVisit(Aggregation $aggregation, array $languageFilter): bool
     {
-        return $aggregation instanceof EnhancedRawTermAggregation;
+        return $aggregation instanceof RawTermAggregation;
     }
 
     /**
-     * @param EnhancedRawTermAggregation $aggregation
+     * @param RawTermAggregation $aggregation
      *
      * @return array|string[]
      */

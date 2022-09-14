@@ -8,8 +8,8 @@ use Ibexa\Contracts\Core\Persistence\Content\Field as SPIField;
 use Ibexa\Contracts\Core\Persistence\Content\Type as SPIContentType;
 use Ibexa\Contracts\Core\Search\Field as SPISearchField;
 use Ibexa\Contracts\Core\Search\FieldType as SPISearchFieldType;
+use Ibexa\Core\IO\ConfigScopeChangeAwareIOService;
 use Ibexa\Core\IO\Exception\BinaryFileNotFoundException;
-use Ibexa\Core\IO\IOService;
 use Ibexa\Core\IO\Values\BinaryFile;
 use Ibexa\Solr\FieldMapper\BoostFactorProvider;
 use Novactive\EzSolrSearchExtra\TextExtractor\TextExtractorInterface;
@@ -29,7 +29,7 @@ class BinaryFileFieldMapper
      */
     private static $fieldName = 'meta_content__text';
 
-    /** @var IOService */
+    /** @var \Ibexa\Core\IO\IOServiceInterface */
     private $ioService;
 
     /** @var BoostFactorProvider */
@@ -45,7 +45,7 @@ class BinaryFileFieldMapper
      * BinaryFileFieldMapper constructor.
      */
     public function __construct(
-        IOService $ioService,
+        ConfigScopeChangeAwareIOService $ioService,
         BoostFactorProvider $boostFactorProvider,
         TextExtractorInterface $textExtractor,
         LoggerInterface $logger

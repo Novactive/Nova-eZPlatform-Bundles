@@ -1,12 +1,12 @@
-{% extends noLayout ? "@ibexadesign/solr/pagelayout_ajax.html.twig" : "@ibexadesign/layout.html.twig" %}
+{% extends noLayout ? "@ibexadesign/solr/pagelayout_ajax.html.twig" : "@ibexadesign/ui/layout.html.twig" %}
 {% trans_default_domain 'solr_admin' %}
 
-{% form_theme add_form '@EzPlatformAdminUi/form_fields.html.twig'  %}
+{% form_theme add_form '@ibexadesign/ui/form_fields.html.twig'  %}
 
 {% block title %}{{ 'solr_admin.page.stopwords.title'|trans }}{% endblock %}
 
 {%- block breadcrumbs -%}
-    {% include '@EzPlatformAdminUi/parts/breadcrumbs.html.twig' with { items: [
+    {% include '@ibexadesign/ui/breadcrumbs.html.twig' with { items: [
         { value: 'solr_admin.title'|trans },
         { value: 'solr_admin.page.dashboard.title'|trans, url: path('solr_admin.dashboard') },
         { value: 'solr_admin.page.stopwords.title'|trans }
@@ -14,7 +14,7 @@
 {%- endblock -%}
 
 {%- block page_title -%}
-    {% include '@EzPlatformAdminUi/parts/page_title.html.twig' with {
+    {% include '@ibexadesign/ui/page_title.html.twig' with {
         title: 'solr_admin.page.stopwords.title'|trans,
         iconName: 'list'
     } %}
@@ -28,7 +28,7 @@
                     <div>
                         <a href="{{ path('solr_admin.dashboard') }}" class="btn btn-primary">
                             <svg class="ez-icon ez-icon-trash">
-                                <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#back"></use>
+                                <use xlink:href="{{ asset('bundles/ibexaicons/img/ez-icons.svg') }}#back"></use>
                             </svg>
                         </a>
                     </div>
@@ -45,7 +45,7 @@
                                     data-target="#{{ modal_data_target }}"
                                     title="{{ 'solr_admin.page.stopwords.table.action.remove'|trans }}">
                                 <svg class="ez-icon ez-icon-trash">
-                                    <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#trash"></use>
+                                    <use xlink:href="{{ asset('bundles/ibexaicons/img/ez-icons.svg') }}#trash"></use>
                                 </svg>
                             </button>
                             {% include '@ibexadesign/admin/bulk_delete_confirmation_modal.html.twig' with {
@@ -86,7 +86,7 @@
                                     <div class="col-3">
                                         <button type="submit" title="{{ 'solr_admin.page.stopwords.table.action.add'|trans }}" class="btn btn-icon mx-2">
                                             <svg class="ez-icon ez-icon-edit">
-                                                <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#create"></use>
+                                                <use xlink:href="{{ asset('bundles/ibexaicons/img/ez-icons.svg') }}#create"></use>
                                             </svg>
                                         </button>
                                     </div>

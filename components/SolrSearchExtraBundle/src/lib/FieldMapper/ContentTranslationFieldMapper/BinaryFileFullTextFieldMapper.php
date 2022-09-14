@@ -6,6 +6,7 @@ namespace Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper;
 
 use Ibexa\Contracts\Core\Persistence\Content as SPIContent;
 use Ibexa\Contracts\Core\Persistence\Content\Type\Handler as ContentTypePersistenceHandler;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Ibexa\Contracts\Solr\FieldMapper\ContentTranslationFieldMapper;
 use Novactive\EzSolrSearchExtra\FieldMapper\BinaryFileFieldMapper;
 
@@ -22,12 +23,15 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
     /** @var ContentTypePersistenceHandler */
     private $contentTypeHandler;
 
+    /** @var ConfigResolverInterface */
+    private $configResolver;
+
     /**
      * List of field type which should be indexed.
      *
      * @var string[]
      */
-    private $binaryFileFieldTypeIndentifiers = [];
+    private $binaryFileFieldTypeIdentifiers = [];
 
     /**
      * Bool to enable indexation.
@@ -38,22 +42,22 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
 
     /**
      * BinaryFileFullTextFieldMapper constructor.
-     *
-     * @param string[] $binaryFileFieldTypeIndentifiers
      */
     public function __construct(
         BinaryFileFieldMapper $binaryFileFieldMapper,
         ContentTypePersistenceHandler $contentTypeHandler,
-        array $binaryFileFieldTypeIndentifiers
+        ConfigResolverInterface $configResolver,
+        array $binaryFileFieldTypeIdentifiers
     ) {
         $this->binaryFileFieldMapper = $binaryFileFieldMapper;
         $this->contentTypeHandler = $contentTypeHandler;
-        $this->binaryFileFieldTypeIndentifiers = $binaryFileFieldTypeIndentifiers;
+        $this->binaryFileFieldTypeIdentifiers = $binaryFileFieldTypeIdentifiers;
+        $this->configResolver = $configResolver;
     }
 
-    public function setEnabled(bool $enabled): void
+    public function setEnabled(string $enabled): void
     {
-        $this->enabled = $enabled;
+        $this->enabled = $this->configResolver->getParameter($enabled, 'nova_solr_extra');
     }
 
     /**
@@ -81,7 +85,7 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
         foreach ($content->fields as $field) {
             if (
                 $field->languageCode !== $languageCode
-                 || !in_array($field->type, $this->binaryFileFieldTypeIndentifiers)
+                 || !in_array($field->type, $this->binaryFileFieldTypeIdentifiers)
             ) {
                 continue;
             }
