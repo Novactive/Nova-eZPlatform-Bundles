@@ -8,6 +8,7 @@ use Ibexa\Contracts\Core\Persistence\Content;
 use Ibexa\Contracts\Core\Persistence\Content\Type\Handler as ContentTypeHandler;
 use Ibexa\Contracts\Core\Search\Field;
 use Ibexa\Contracts\Core\Search\FieldType;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Ibexa\Contracts\Solr\FieldMapper\ContentTranslationFieldMapper;
 use Ibexa\Core\Search\Common\FieldRegistry;
 
@@ -36,17 +37,26 @@ class PublishDateFieldMapper extends ContentTranslationFieldMapper
     protected $fieldRegistry;
 
     /**
+     * @var ConfigResolverInterface
+     */
+    private $configResolver;
+
+    /**
      * PublishDateFieldMapper constructor.
      */
-    public function __construct(ContentTypeHandler $contentTypeHandler, FieldRegistry $fieldRegistry)
-    {
+    public function __construct(
+        ContentTypeHandler $contentTypeHandler,
+        FieldRegistry $fieldRegistry,
+        ConfigResolverInterface $configResolver
+    ) {
         $this->contentTypeHandler = $contentTypeHandler;
         $this->fieldRegistry = $fieldRegistry;
+        $this->configResolver = $configResolver;
     }
 
-    public function setFieldIdentifiers(array $fieldIdentifiers): void
+    public function setFieldIdentifiers(string $fieldIdentifiers): void
     {
-        $this->fieldIdentifiers = $fieldIdentifiers;
+        $this->fieldIdentifiers = $this->configResolver->getParameter($fieldIdentifiers, 'nova_solr_extra');
     }
 
     /**

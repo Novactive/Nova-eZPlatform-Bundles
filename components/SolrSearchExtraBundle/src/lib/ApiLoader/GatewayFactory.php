@@ -47,7 +47,7 @@ class GatewayFactory implements ContainerAwareInterface
 
         return new Gateway(
             $client,
-            $this->container->get("ibexa.solr.connection.$connection.endpoint_resolver_id"),
+            $this->container->get("nova.solr.connection.$connection.endpoint_resolver_id"),
             $endpointRegistry
         );
     }

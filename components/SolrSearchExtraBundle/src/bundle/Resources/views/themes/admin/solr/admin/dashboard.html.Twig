@@ -1,18 +1,18 @@
-{% extends "@ibexadesign/layout.html.twig" %}
+{% extends "@ibexadesign/ui/layout.html.twig" %}
 
 {% trans_default_domain 'solr_admin' %}
 
 {% block title %}{{ 'solr_admin.page.dashboard.title'|trans }}{% endblock %}
 
 {%- block breadcrumbs -%}
-    {% include '@EzPlatformAdminUi/parts/breadcrumbs.html.twig' with { items: [
+    {% include '@ibexadesign/ui/breadcrumbs.html.twig' with { items: [
         { value: 'solr_admin.title'|trans },
         { value: 'solr_admin.page.dashboard.title'|trans }
     ]} %}
 {%- endblock -%}
 
 {%- block page_title -%}
-    {% include '@EzPlatformAdminUi/parts/page_title.html.twig' with {
+    {% include '@ibexadesign/ui/page_title.html.twig' with {
         title: 'solr_admin.page.dashboard.title'|trans,
         iconName: 'list'
     } %}
@@ -52,7 +52,7 @@
                                         href="{{ path('solr_admin.' ~ set.type ~ '.index', {'setId': set.id}) }}"
                                         class="btn btn-icon mx-2">
                                     <svg class="ez-icon ez-icon-view">
-                                        <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#view"></use>
+                                        <use xlink:href="{{ asset('bundles/ibexaicons/img/ez-icons.svg') }}#view"></use>
                                     </svg>
                                 </a>
                             </td>

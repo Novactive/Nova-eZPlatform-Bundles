@@ -9,6 +9,7 @@ use Ibexa\Contracts\Core\Persistence\Content\Type as ContentType;
 use Ibexa\Contracts\Core\Persistence\Content\Type\FieldDefinition;
 use Ibexa\Contracts\Core\Search\Field;
 use Ibexa\Contracts\Core\Search\FieldType;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Ibexa\Contracts\Solr\FieldMapper\ContentTranslationFieldMapper;
 use Ibexa\Core\Search\Common\FieldNameGenerator;
 use Ibexa\Core\Search\Common\FieldRegistry;
@@ -42,23 +43,30 @@ class CustomFieldMapper extends ContentTranslationFieldMapper
     protected $boostFactorProvider;
 
     /**
+     * @var ConfigResolverInterface
+     */
+    private $configResolver;
+
+    /**
      * CustomFulltextFieldMapper constructor.
      */
     public function __construct(
         ContentType\Handler $contentTypeHandler,
         FieldRegistry $fieldRegistry,
         FieldNameGenerator $fieldNameGenerator,
-        BoostFactorProvider $boostFactorProvider
+        BoostFactorProvider $boostFactorProvider,
+        ConfigResolverInterface $configResolver
     ) {
         $this->contentTypeHandler = $contentTypeHandler;
         $this->fieldRegistry = $fieldRegistry;
         $this->fieldNameGenerator = $fieldNameGenerator;
         $this->boostFactorProvider = $boostFactorProvider;
+        $this->configResolver = $configResolver;
     }
 
-    public function setFieldsConfig(array $fieldsConfig): void
+    public function setFieldsConfig(string $customFields): void
     {
-        $this->fieldsConfig = $fieldsConfig;
+        $this->fieldsConfig = $this->configResolver->getParameter($customFields, 'nova_solr_extra');
     }
 
     /**
