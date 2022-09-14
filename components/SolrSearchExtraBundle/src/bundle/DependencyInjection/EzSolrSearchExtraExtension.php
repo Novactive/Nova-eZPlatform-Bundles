@@ -41,6 +41,11 @@ class EzSolrSearchExtraExtension extends Extension
         $loader->load('services.yml');
         $loader->load('default_settings.yml');
 
+        $activatedBundles = array_keys($container->getParameter('kernel.bundles'));
+        if (in_array('IbexaTaxonomyBundle', $activatedBundles, true)) {
+            $loader->load('taxonomy_aggregator.yml');
+        }
+
         $processor = new ConfigurationProcessor($container, 'nova_solr_extra');
         $contextualizer = $processor->getContextualizer();
         $contextualizer->mapConfigArray(
