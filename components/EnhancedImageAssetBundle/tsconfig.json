@@ -7,7 +7,8 @@
     "lib": ["es5", "es6", "dom"],
     "target": "es5",
     "jsx": "react",
-    "allowJs": true
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "src/js/**/*"
