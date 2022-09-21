@@ -17,6 +17,7 @@ use Exception;
 use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\Core\Event\URLWildcardService;
 use EzSystems\EzPlatformAdminUiBundle\Controller\Controller;
+use EzSystems\PlatformHttpCacheBundle\PurgeClient\PurgeClientInterface;
 use Novactive\Bundle\eZSEOBundle\Core\Helper\ImportUrlsHelper;
 use Novactive\Bundle\eZSEOBundle\Entity\RedirectImportHistory;
 use Novactive\Bundle\eZSEOBundle\Form\Type\DeleteUrlType;
@@ -42,6 +43,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class RedirectController extends Controller
 {
     public const URL_LIMIT = 10;
+
+    private PurgeClientInterface $purgeClient;
+
+    public function __construct(PurgeClientInterface $purgeClient)
+    {
+        $this->purgeClient = $purgeClient;
+    }
 
     /**
      * @Route("/list", name="novaseo_redirect_list")
@@ -90,6 +98,7 @@ class RedirectController extends Controller
                     if ($result) {
                         $messages[] = $source.' '.$translator->trans('nova.redirect.create.info', [], 'redirect');
                     }
+                    $this->purgeClient->purgeAll();
                 } catch (Exception $e) {
                     $message = explode(':', $e->getMessage());
                     $errors[] = isset($message[1]) ? $source.' '.$message[1] : $e->getMessage();
@@ -106,6 +115,7 @@ class RedirectController extends Controller
             if (Response::HTTP_CREATED === $response->getStatusCode()) {
                 $messages[] = $translator->trans('nova.redirect.delete.info', [], 'redirect');
             }
+            $this->purgeClient->purgeAll();
         }
 
         $page = $request->query->get('page') ?? 1;
