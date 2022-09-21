@@ -101,10 +101,12 @@ img.img-fluid {
 <p>An eZPlatform bundle providing new field type with enhanced features related to image management</p>
 <h2 name="98f770b0af18ca763421bac22b4b6805">Features</h2>
 <ul>
-<li>Focus point managment in admin UI</li>
-<li>Lazy loading</li>
-<li>Responsive loading</li>
-<li>Progressive loading</li>
+<li><a href="#1-focus-point.html">Focus point managment in admin UI</a></li>
+<li><a href="#2-default-image-configuration.html">Default image configuration for file size optimization</a></li>
+<li><a href="#3-lazyloading.html">Lazy and Progressive loading</a></li>
+<li><a href="#4-retina-variations.html">Retina variations</a></li>
+<li><a href="#5-webp-variations.html">WebP variations</a></li>
+<li><a href="#6-twig-render-field-parameters.html">Twig render field parameters</a></li>
 </ul>
 <h2 name="7cd8fb6e31cc946c078d2740c76a9899">Installation</h2>
 <h3 name="6065c97227a6214bc68bad0f15ff16d1">Use Composer</h3>
@@ -122,7 +124,13 @@ public function registerBundles()
     );
 }</code></pre>
 <h2 name="98f770b0af18ca763421bac22b4b6805">Features</h2>
-<h3 name="1dec521f2b31fcdf89ad06a3b6f9c72e">1. Default image configuration</h3>
+<h3 name="2189d1ff890883362f78a09078bfedc0">1. Focus point</h3>
+<p>This bundle provide a new <code>enhancedimage</code> field type which extend the <code>ezimage</code> field type.
+This field type allow the user to select a focus point on the uploaded image.
+Variation can then be created based on the selected focus point.</p>
+<p><img src="doc/images/image-focus-demo.gif" alt="Demo" class="img-fluid" /></p>
+<p><a href="https://image-focus.stackblitz.io/">Check out the demo</a></p>
+<h3 name="56102dd36375573a9c8c4c288afc76e5">2. Default image configuration</h3>
 <p>Added to siteaccess aware parameters which allow to define the default post processors and configuration to use when generating image alias</p>
 <pre><code class=" yaml">parameters:
   ez_enhanced_image_asset.default.image_default_post_processors: 
@@ -135,11 +143,11 @@ public function registerBundles()
   ez_enhanced_image_asset.default.image_default_config: 
     animated: true
     quality: 80</code></pre>
-<h3 name="16629dd92f36c84a71c2820442e3d8f6">2. LazyLoading</h3>
+<h3 name="83b51d77586b6c1c1c59925efcc68fff">3. LazyLoading</h3>
 <p>Lazy loading is controlled globaly by the following settings (default to true) and can be overriden at field level.</p>
 <pre><code class=" yaml">parameters: 
   ez_enhanced_image_asset.default.enable_lazy_load: true</code></pre>
-<h4 name="57fc5188dec93f8548df2cc755d32af4">3. Retina variations</h4>
+<h3 name="57e9a450ff36a0d504c4881f5c49eb5a">4. Retina variations</h3>
 <p>Retina variations should suffixed by <code>_retina</code> will be used automatically (if enabled) when using the provided field template.
 To be displayed, the generated variation width should be two time the width of the default variation.</p>
 <p>Considering a variation named <code>my_alias</code>, the variation named <code>my_alias_retina</code> will be used and displayed on retina screens.</p>
@@ -148,7 +156,9 @@ To be displayed, the generated variation width should be two time the width of t
 <p>The automatic use of retina variations is controlled by this setting</p>
 <pre><code class=" yaml">parameters: 
   ez_enhanced_image_asset.default.enable_retina: true</code></pre>
-<h3 name="8effdf1f281f147ebf235368eeacb931">4. Twig render field parameters</h3>
+<h3 name="994aa22f6e9cb3046160f590359055b7">5. WebP variations</h3>
+<p>Auto-creation of a webp variation for each existing variations and will then automaticaly add this variation as an alternative source</p>
+<h3 name="448741a8596bc56cbb2e285051a2c784">6. Twig render field parameters</h3>
 <p>You can now specify the <code>alternativeAlias</code> parameter to define alternative image alias depending the screen size</p>
 <pre><code class=" twig">
 {{ ez_render_field(content, fieldIdentifier, {
@@ -164,12 +174,6 @@ To be displayed, the generated variation width should be two time the width of t
         retina: true|false // optionnal
     }
 }) }}</code></pre>
-<h3 name="f9b279793879b6339dba3a75214156f8">4. Focus point</h3>
-<p>This bundle provide a new <code>enhancedimage</code> field type which extend the <code>ezimage</code> field type.
-This field type allow the user to select a focus point on the uploaded image.
-Variation can then be created based on the selected focus point.</p>
-<p><img src="doc/images/image-focus-demo.gif" alt="Demo" class="img-fluid" /></p>
-<p><a href="https://image-focus.stackblitz.io/">Check out the demo</a></p>
 <h4 name="6182ea0872fd89f503b457bf91eeaadc">Variations configuration</h4>
 <p>Focused variations require the use of a &quot;focusedThumbnail&quot; filter to generate thumbnail based on the contributed focus point.</p>
 <pre><code class=" yaml"> - { name: focusedThumbnail, params: {size: [&lt;width&gt;, &lt;height&gt;], focus: [0, 0]} }</code></pre>
@@ -193,14 +197,14 @@ WHERE oa.data_type_string = "ezimage" AND ca.data_type_string="enhancedimage";</
 
             <p class="text-right">
                 <img width="204" height="20"
-                     src='https://img.shields.io/badge/Updated on-09--02--2022 13:00:36-green?style=flat-square&labelColor=black'
-                     alt='Updated on 09--02--2022 13:00:36'
+                     src='https://img.shields.io/badge/Updated on-09--21--2022 06:26:59-green?style=flat-square&labelColor=black'
+                     alt='Updated on 09--21--2022 06:26:59'
                 />
             </p>
         </div>
         <div class="col-md-4 col-sm-12 d-print-none sidebar">
                             <p><strong>In this page</strong>:</p>
-                <ul class="nav flex-column"><li class="nav-item first last"><a href="#b7e308dbe38ea527fde2d1d0292af1bd" class="nav-link">NovaeZEnhancedImageAssetBundle</a><ul class="menu_level_1"><li class="nav-item first"><a href="#98f770b0af18ca763421bac22b4b6805" class="nav-link">Features</a><ul class="menu_level_2"><li class="nav-item first"><a href="#1dec521f2b31fcdf89ad06a3b6f9c72e" class="nav-link">1. Default image configuration</a></li><li class="nav-item"><a href="#16629dd92f36c84a71c2820442e3d8f6" class="nav-link">2. LazyLoading</a><ul class="menu_level_3"><li class="nav-item first last"><a href="#57fc5188dec93f8548df2cc755d32af4" class="nav-link">3. Retina variations</a></li></ul></li><li class="nav-item"><a href="#8effdf1f281f147ebf235368eeacb931" class="nav-link">4. Twig render field parameters</a></li><li class="nav-item last"><a href="#f9b279793879b6339dba3a75214156f8" class="nav-link">4. Focus point</a><ul class="menu_level_3"><li class="nav-item first"><a href="#6182ea0872fd89f503b457bf91eeaadc" class="nav-link">Variations configuration</a></li><li class="nav-item last"><a href="#60865b597447dd898ce52486f00c632c" class="nav-link">Migrate existing ezimage fields</a></li></ul></li></ul></li><li class="nav-item"><a href="#7cd8fb6e31cc946c078d2740c76a9899" class="nav-link">Installation</a><ul class="menu_level_2"><li class="nav-item first"><a href="#6065c97227a6214bc68bad0f15ff16d1" class="nav-link">Use Composer</a></li><li class="nav-item last"><a href="#040da9acc61145e551bcf66b54f44420" class="nav-link">Register the bundle</a></li></ul></li><li class="nav-item last"><a href="#c64518704ce0c0d5501a45763f464276" class="nav-link">Usage</a></li></ul></li></ul>
+                <ul class="nav flex-column"><li class="nav-item first last"><a href="#b7e308dbe38ea527fde2d1d0292af1bd" class="nav-link">NovaeZEnhancedImageAssetBundle</a><ul class="menu_level_1"><li class="nav-item first"><a href="#98f770b0af18ca763421bac22b4b6805" class="nav-link">Features</a><ul class="menu_level_2"><li class="nav-item first"><a href="#2189d1ff890883362f78a09078bfedc0" class="nav-link">1. Focus point</a></li><li class="nav-item"><a href="#56102dd36375573a9c8c4c288afc76e5" class="nav-link">2. Default image configuration</a></li><li class="nav-item"><a href="#83b51d77586b6c1c1c59925efcc68fff" class="nav-link">3. LazyLoading</a></li><li class="nav-item"><a href="#57e9a450ff36a0d504c4881f5c49eb5a" class="nav-link">4. Retina variations</a></li><li class="nav-item"><a href="#994aa22f6e9cb3046160f590359055b7" class="nav-link">5. WebP variations</a></li><li class="nav-item last"><a href="#448741a8596bc56cbb2e285051a2c784" class="nav-link">6. Twig render field parameters</a><ul class="menu_level_3"><li class="nav-item first"><a href="#6182ea0872fd89f503b457bf91eeaadc" class="nav-link">Variations configuration</a></li><li class="nav-item last"><a href="#60865b597447dd898ce52486f00c632c" class="nav-link">Migrate existing ezimage fields</a></li></ul></li></ul></li><li class="nav-item"><a href="#7cd8fb6e31cc946c078d2740c76a9899" class="nav-link">Installation</a><ul class="menu_level_2"><li class="nav-item first"><a href="#6065c97227a6214bc68bad0f15ff16d1" class="nav-link">Use Composer</a></li><li class="nav-item last"><a href="#040da9acc61145e551bcf66b54f44420" class="nav-link">Register the bundle</a></li></ul></li><li class="nav-item last"><a href="#c64518704ce0c0d5501a45763f464276" class="nav-link">Usage</a></li></ul></li></ul>
                     </div>
     </div>
     <footer class="pt-4 my-md-5 pt-md-5 border-top">
