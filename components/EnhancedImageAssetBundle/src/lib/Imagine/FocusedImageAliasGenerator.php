@@ -16,11 +16,13 @@ namespace Novactive\EzEnhancedImageAsset\Imagine;
 
 use Ibexa\Bundle\Core\Imagine\IORepositoryResolver;
 use Ibexa\Contracts\Core\Repository\Exceptions\InvalidVariationException;
+use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
 use Ibexa\Contracts\Core\Repository\Values\Content\Field;
 use Ibexa\Contracts\Core\Repository\Values\Content\VersionInfo;
 use Ibexa\Contracts\Core\Variation\Values\ImageVariation;
 use Ibexa\Contracts\Core\Variation\VariationHandler;
 use Ibexa\Core\FieldType\Image\Value as ImageValue;
+use Ibexa\Core\FieldType\ImageAsset\Value as ImageAssetValue;
 use Ibexa\Core\MVC\Exception\SourceImageNotFoundException;
 use Imagine\Image\Box;
 use InvalidArgumentException;
@@ -31,6 +33,8 @@ use Novactive\EzEnhancedImageAsset\FocusPoint\FocusPointCalculator;
 use Novactive\EzEnhancedImageAsset\Values\FocusedVariation;
 use ReflectionClass;
 use ReflectionException;
+use Ibexa\Contracts\Core\Repository\ContentService;
+use Ibexa\Core\FieldType\ImageAsset\AssetMapper;
 
 /**
  * Class FocusedImageAliasGenerator.
@@ -47,6 +51,12 @@ class FocusedImageAliasGenerator implements VariationHandler
 
     /** @var FilterConfiguration */
     protected $filterConfiguration;
+
+    /** @var ContentService */
+    private $contentService;
+
+    /** @var AssetMapper */
+    private $assetMapper;
 
     /**
      * @required
@@ -73,6 +83,21 @@ class FocusedImageAliasGenerator implements VariationHandler
     }
 
     /**
+     * @required
+     */
+    public function setContentService(ContentService $contentService): void
+    {
+        $this->contentService = $contentService;
+    }
+
+    /**
+     * @required
+     */
+    public function setAssetMapper(AssetMapper $assetMapper): void
+    {
+        $this->assetMapper = $assetMapper;
+    }
+    /**
      * {@inheritdoc}
      *
      * if field value is not an instance of \Ibexa\Core\FieldType\Image\Value
@@ -89,6 +114,11 @@ class FocusedImageAliasGenerator implements VariationHandler
     public function getVariation(Field $field, VersionInfo $versionInfo, $variationName, array $parameters = [])
     {
         $focusPoint = null;
+        if ($field->value instanceof ImageAssetValue && null !== $field->value->destinationContentId) {
+            $destinationContent = $this->contentService->loadContent((int) $field->value->destinationContentId);
+            $field = $this->assetMapper->getAssetField($destinationContent);
+        }
+
         if ($field->value instanceof EnhancedImageValue) {
             /** @var FocusPoint $focusPoint */
             $focusPoint = $field->value->focusPoint;
@@ -98,8 +128,8 @@ class FocusedImageAliasGenerator implements VariationHandler
             isset($field->value->additionalData['focalPointY'])
         ) {
             $focusPoint = new FocusPoint(
-                $field->value->additionalData['focalPointX'],
-                $field->value->additionalData['focalPointY']
+                (float) $field->value->additionalData['focalPointX'] - ($field->value->width/2),
+                (float) $field->value->additionalData['focalPointY'] - ($field->value->height/2),
             );
         } elseif (IORepositoryResolver::VARIATION_ORIGINAL !== $variationName) {
             $variationConfig = $this->filterConfiguration->get($variationName);
@@ -107,7 +137,7 @@ class FocusedImageAliasGenerator implements VariationHandler
                 $focusPoint = new FocusPoint(...$variationConfig['filters']['focusedThumbnail']['focus']);
             }
         }
-
+        $isFocusedVariation = false;
         if (IORepositoryResolver::VARIATION_ORIGINAL !== $variationName) {
             $variationConfig = $this->filterConfiguration->get($variationName);
             $isFocusedVariation = $focusPoint && isset($variationConfig['filters']['focusedThumbnail']);
