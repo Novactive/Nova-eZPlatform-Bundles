@@ -7,7 +7,7 @@ namespace Novactive\EzSolrSearchExtra\Query\Aggregation;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation\AbstractTermAggregation;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation\RawAggregation;
 
-class EnhancedRawTermAggregation extends AbstractTermAggregation implements RawAggregation
+class RawTermAggregation extends AbstractTermAggregation implements RawAggregation
 {
     /**
      * @var string
@@ -19,15 +19,17 @@ class EnhancedRawTermAggregation extends AbstractTermAggregation implements RawA
      *
      * @var string[]
      */
-    public $excludeTags;
+    public array $excludeTags;
 
     public function __construct(
         string $name,
-        string $fieldName
+        string $fieldName,
+        $excludeTags
     ) {
         parent::__construct($name);
 
         $this->fieldName = $fieldName;
+        $this->excludeTags = $excludeTags;
     }
 
     public function getFieldName(): string
