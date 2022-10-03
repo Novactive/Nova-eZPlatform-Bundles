@@ -72,6 +72,14 @@ solr:
     prefix:   /
 ```
 
+### Multiple date field
+
+Add the following field to your solr schema
+
+```xml
+<dynamicField name="*_mdt" type="date" indexed="true" stored="true" multiValued="true"/>
+```
+
 ## Docs
 ### Publish date boosting
 http://lucene.apache.org/solr/guide/6_6/the-dismax-query-parser.html#TheDisMaxQueryParser-Thebf_BoostFunctions_Parameter
