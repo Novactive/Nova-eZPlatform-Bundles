@@ -63,5 +63,9 @@ class EzSolrSearchExtraExtension extends Extension
             $config,
             ContextualizerInterface::MERGE_FROM_SECOND_LEVEL
         );
+
+        $fieldNameGeneratorMap = $container->getParameter('ibexa.search.common.field_name_generator.map');
+        $fieldNameGeneratorMap['ez_mdate'] = 'mdt';
+        $container->setParameter('ibexa.search.common.field_name_generator.map', $fieldNameGeneratorMap);
     }
 }
