@@ -10,14 +10,12 @@ services:
     public: false
 
   Novactive\EzSolrSearchExtra\Query\AggregationVisitor\TaxonomyRawTermAggregationVisitor:
-    lazy: true
     class: Novactive\EzSolrSearchExtra\Query\AggregationVisitor\RawTermAggregationVisitor
     tags:
       - { name: ibexa.search.solr.query.content.aggregation.visitor }
       - { name: ibexa.search.solr.query.location.aggregation.visitor }
 
   Novactive\EzSolrSearchExtra\Query\AggregationResultExtractor\TaxonomyRawTermAggregationResultExtractor:
-    lazy: true
     class: Novactive\EzSolrSearchExtra\Query\AggregationResultExtractor\RawTermAggregationResultExtractor
     arguments:
       $aggregationClass: 'Novactive\EzSolrSearchExtra\Query\Aggregation\TaxonomyRawTermAggregation'
@@ -27,4 +25,3 @@ services:
       - { name: ibexa.search.solr.query.location.aggregation.result.extractor }
 
   Novactive\EzSolrSearchExtra\Query\AggregationResultExtractor\AggregationKeyMapper\TaxonomyRawTermAggregationKeyMapper:
-    lazy: true
