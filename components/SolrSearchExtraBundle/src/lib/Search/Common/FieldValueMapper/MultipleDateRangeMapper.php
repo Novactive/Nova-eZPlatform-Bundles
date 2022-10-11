@@ -7,7 +7,7 @@ namespace Novactive\EzSolrSearchExtra\Search\Common\FieldValueMapper;
 use Ibexa\Contracts\Core\Search\Field;
 use Ibexa\Core\Search\Common\FieldValueMapper;
 
-class MultipleDateMapper extends FieldValueMapper
+class MultipleDateRangeMapper extends FieldValueMapper
 {
     use DateMapperTrait;
 
@@ -21,7 +21,7 @@ class MultipleDateMapper extends FieldValueMapper
         $values = [];
 
         foreach ((array) $field->getValue() as $value) {
-            $values[] = $this->mapDate($value);
+            $values[] = $this->mapDateRange(...$value);
         }
 
         return $values;

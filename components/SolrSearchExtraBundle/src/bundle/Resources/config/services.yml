@@ -138,4 +138,14 @@ services:
       - '@nova_solr_extra.search.solr.query.location.query_converter.inner'
       - '@ibexa.solr.query.location.criterion_visitor.aggregate'
 
+  Novactive\EzSolrSearchExtra\Search\Common\FieldValueMapper\DateRangeMapper:
+    tags:
+      - { name: ibexa.search.common.field_value.mapper, maps: Novactive\EzSolrSearchExtra\Search\FieldType\DateRangeField }
 
+  Novactive\EzSolrSearchExtra\Search\Common\FieldValueMapper\MultipleDateMapper:
+    tags:
+      - { name: ibexa.search.common.field_value.mapper, maps: Novactive\EzSolrSearchExtra\Search\FieldType\MultipleDateField }
+
+  Novactive\EzSolrSearchExtra\Search\Common\FieldValueMapper\MultipleDateRangeMapper:
+    tags:
+      - { name: ibexa.search.common.field_value.mapper, maps: Novactive\EzSolrSearchExtra\Search\FieldType\MultipleDateRangeField }
