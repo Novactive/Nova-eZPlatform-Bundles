@@ -66,6 +66,8 @@ class EzSolrSearchExtraExtension extends Extension
 
         $fieldNameGeneratorMap = $container->getParameter('ibexa.search.common.field_name_generator.map');
         $fieldNameGeneratorMap['ez_mdate'] = 'mdt';
+        $fieldNameGeneratorMap['ez_daterange'] = 'dtr';
+        $fieldNameGeneratorMap['ez_mdaterange'] = 'mdtr';
         $container->setParameter('ibexa.search.common.field_name_generator.map', $fieldNameGeneratorMap);
     }
 }
