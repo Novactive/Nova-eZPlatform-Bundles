@@ -1,28 +1,28 @@
 <?php
 
-namespace Novactive\EzSolrSearchExtra\Query\AggregationResultExtractor;
+namespace Novactive\EzSolrSearchExtra\ResultExtractor;
 
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation;
 use Ibexa\Contracts\Core\Repository\Values\Content\Search\AggregationResult;
 use Ibexa\Contracts\Core\Repository\Values\Content\Search\AggregationResult\TermAggregationResult;
 use Ibexa\Contracts\Solr\ResultExtractor\AggregationResultExtractor;
-use Ibexa\Contracts\Solr\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper;
-use Ibexa\Solr\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\NullAggregationKeyMapper;
+use Novactive\EzSolrSearchExtra\ResultExtractor\AggregationKeyMapper\AbstractRawTermAggregationKeyMapper;
+use Novactive\EzSolrSearchExtra\ResultExtractor\AggregationKeyMapper\RawTermAggregationKeyMapper;
 use Novactive\EzSolrSearchExtra\Search\AggregationResult\RawTermAggregationResultEntry;
 use stdClass;
 
 class RawTermAggregationResultExtractor implements AggregationResultExtractor
 {
-    /** @var \Ibexa\Contracts\Solr\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper */
+    /** @var \Novactive\EzSolrSearchExtra\ResultExtractor\AggregationKeyMapper\AbstractRawTermAggregationKeyMapper */
     private $keyMapper;
 
     /** @var string */
     private $aggregationClass;
 
-    public function __construct(string $aggregationClass, TermAggregationKeyMapper $keyMapper = null)
+    public function __construct(string $aggregationClass, AbstractRawTermAggregationKeyMapper $keyMapper = null)
     {
         if (null === $keyMapper) {
-            $keyMapper = new NullAggregationKeyMapper();
+            $keyMapper = new RawTermAggregationKeyMapper();
         }
 
         $this->keyMapper = $keyMapper;

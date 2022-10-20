@@ -17,7 +17,7 @@ class RawTermAggregationResultEntry extends ValueObject
     /** @var int */
     private $count;
 
-    public function __construct($key, int $count, ?string $name = null, string $identifier = null)
+    public function __construct($key, int $count, ?string $name = null, ?string $identifier = null)
     {
         parent::__construct();
 
