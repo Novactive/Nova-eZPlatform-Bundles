@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Novactive\EzSolrSearchExtra\Query\AggregationResultExtractor\AggregationKeyMapper;
+namespace Novactive\EzSolrSearchExtra\ResultExtractor\AggregationKeyMapper;
 
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation;
-use Ibexa\Contracts\Solr\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper;
+use Ibexa\Contracts\Solr\ResultExtractor\ResultExtractor\TermAggregationKeyMapper;
 use Novactive\EzSolrSearchExtra\Query\Aggregation\RawTermAggregation;
 
-abstract class RawTermAggregationKeyMapper implements TermAggregationKeyMapper
+abstract class AbstractRawTermAggregationKeyMapper implements TermAggregationKeyMapper
 {
     /**
      * @param RawTermAggregation $aggregation
@@ -23,5 +23,5 @@ abstract class RawTermAggregationKeyMapper implements TermAggregationKeyMapper
         return $results;
     }
 
-    abstract public function mapKey(Aggregation $aggregation, int $key): ?array;
+    abstract public function mapKey(Aggregation $aggregation, int $key): array;
 }

@@ -24,7 +24,7 @@ class RawTermAggregation extends AbstractTermAggregation implements RawAggregati
     public function __construct(
         string $name,
         string $fieldName,
-        $excludeTags
+        ?array $excludeTags = []
     ) {
         parent::__construct($name);
 

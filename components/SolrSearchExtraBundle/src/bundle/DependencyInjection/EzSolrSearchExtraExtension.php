@@ -45,6 +45,7 @@ class EzSolrSearchExtraExtension extends Extension
         if (in_array('IbexaTaxonomyBundle', $activatedBundles, true)) {
             $loader->load('taxonomy_aggregator.yml');
         }
+        $loader->load('aggregators.yml');
 
         $processor = new ConfigurationProcessor($container, 'nova_solr_extra');
         $contextualizer = $processor->getContextualizer();
