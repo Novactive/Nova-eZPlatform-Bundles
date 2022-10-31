@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Novactive\EzSolrSearchExtra\Query\AggregationResultExtractor\AggregationKeyMapper;
+namespace Novactive\EzSolrSearchExtra\ResultExtractor\AggregationKeyMapper;
 
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation;
 use Ibexa\Contracts\Taxonomy\Service\TaxonomyServiceInterface;
 
-final class TaxonomyRawTermAggregationKeyMapper extends RawTermAggregationKeyMapper
+final class TaxonomyRawTermAggregationKeyMapper extends AbstractRawTermAggregationKeyMapper
 {
     private $taxonomyService;
 
