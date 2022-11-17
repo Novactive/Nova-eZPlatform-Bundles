@@ -1,4 +1,10 @@
 services:
+    Novactive\Bundle\eZSEOBundle\Controller\Admin\RedirectController:
+        autowire: true
+        autoconfigure: true
+        tags: [ 'controller.service_arguments' ]
+        arguments:
+            $purgeClient: '@ibexa.http_cache.purge_client'
 
     # FIELD TYPE
     Novactive\Bundle\eZSEOBundle\Core\FieldType\Metas\Type:
