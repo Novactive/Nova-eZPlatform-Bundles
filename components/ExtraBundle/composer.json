@@ -17,8 +17,8 @@
         }
     ],
     "require": {
-        "php": ">7.3",
-        "novactive/collection": "1.*",
+        "php": "^7.3 || ^8.0",
+        "novactive/collection": "^3.0",
         "phpoffice/phpspreadsheet": "*"
     },
     "require-dev": {
