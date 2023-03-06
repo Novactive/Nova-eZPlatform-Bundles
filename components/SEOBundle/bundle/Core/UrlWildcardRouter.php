@@ -34,30 +34,17 @@ class UrlWildcardRouter extends BaseUrlWildcardRouter
         try {
             // Manage full url : http://host.com/uri
             $requestedPath = $request->attributes->get('semanticPathinfo', $request->getPathInfo());
-
-            $host = substr($request->getSchemeAndHttpHost(), 0, -6);
-            $requestUriFull = $host . $requestedPath;
+            $requestUriFull = $request->getSchemeAndHttpHost() . $requestedPath;
             $urlWildcard = $this->wildcardService->translate($requestUriFull);
-
-            $params = $this->manageParams($urlWildcard);
-
-            return $params;
         } catch (Exception $e) {
             try {
                 // Manage full url : /uri
-                $requestedPath = $request->attributes->get('semanticPathinfo', $request->getPathInfo());
                 $urlWildcard = $this->wildcardService->translate($requestedPath);
-                $params = $this->manageParams($urlWildcard);
-                return $params;
-
             }  catch (Exception $e) {
                 throw new ResourceNotFoundException($e->getMessage(), $e->getCode(), $e);
             }
         }
-    }
 
-    private function manageParams($urlWildcard): array
-    {
         $params = [
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
         ];
@@ -77,4 +64,5 @@ class UrlWildcardRouter extends BaseUrlWildcardRouter
 
         return $params;
     }
+
 }
