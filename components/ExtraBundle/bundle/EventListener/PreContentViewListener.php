@@ -17,31 +17,28 @@ namespace Novactive\Bundle\eZExtraBundle\EventListener;
 use Ibexa\Contracts\Core\Repository\Repository;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 use Ibexa\Core\MVC\Symfony\Event\PreContentViewEvent;
+use Ibexa\Core\MVC\Symfony\MVCEvents;
 use Ibexa\Core\MVC\Symfony\Templating\GlobalHelper;
 use Ibexa\Core\MVC\Symfony\View\ContentView;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class PreContentViewListener
+class PreContentViewListener implements EventSubscriberInterface
 {
-    /**
-     * @var Repository
-     */
-    protected $repository;
-
-    /**
-     * @var GlobalHelper
-     */
-    protected $templateGlobalHelper;
-
     /**
      * @var array
      */
-    protected $types;
+    protected array $types;
 
-    public function __construct(Repository $repository, GlobalHelper $gHelper)
+    public function __construct(protected Repository $repository, protected GlobalHelper $templateGlobalHelper)
     {
-        $this->repository = $repository;
-        $this->templateGlobalHelper = $gHelper;
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            MVCEvents::PRE_CONTENT_VIEW => 'onPreContentView',
+        ];
     }
 
     public function addManagedType(Type $type, string $contentTypeIdentifier): void
@@ -54,7 +51,7 @@ class PreContentViewListener
      */
     public function getType(string $contentTypeIdentifier)
     {
-        if (\is_array($this->types) && \array_key_exists($contentTypeIdentifier, $this->types)) {
+        if (\array_key_exists($contentTypeIdentifier, $this->types)) {
             return $this->types[$contentTypeIdentifier];
         }
 
@@ -97,10 +94,10 @@ class PreContentViewListener
                 $children = [];
 
                 $method = 'get'.preg_replace_callback(
-                    '/(?:^|_)(.?)/',
-                    create_function('$matches', 'return strtoupper($matches[1]);'),
-                    $viewType
-                ).'Children';
+                        '/(?:^|_)(.?)/',
+                        static fn(array $matches): string => strtolower($matches[0]),
+                        $viewType
+                    ).'Children';
 
                 if (method_exists($type, $method)) {
                     $children = $type->$method(
