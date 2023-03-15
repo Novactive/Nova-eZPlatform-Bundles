@@ -25,7 +25,7 @@ services:
 
     Novactive\Bundle\eZExtraBundle\EventListener\PreContentViewListener:
         arguments:
-            $templateGlobalHelper: '@ibexa.templating.global_helper']
+            $templateGlobalHelper: '@ibexa.templating.global_helper'
 
     Novactive\Bundle\eZExtraBundle\Core\ViewMatcher\ContentTypeField:
         tags: [ 'ibexa.view.matcher' ]
