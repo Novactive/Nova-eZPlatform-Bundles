@@ -24,9 +24,8 @@ services:
             $enableImagePlaceholder: '%env(bool:ENABLE_IMAGE_PLACEHOLDER)%'
 
     Novactive\Bundle\eZExtraBundle\EventListener\PreContentViewListener:
-        arguments: ['@ibexa.api.repository', '@ibexa.templating.global_helper']
-        tags:
-            - {name: kernel.event_listener, event: ibexa.pre_content_view, method: onPreContentView}
+        arguments:
+            $templateGlobalHelper: '@ibexa.templating.global_helper']
 
     Novactive\Bundle\eZExtraBundle\Core\ViewMatcher\ContentTypeField:
         tags: [ 'ibexa.view.matcher' ]
