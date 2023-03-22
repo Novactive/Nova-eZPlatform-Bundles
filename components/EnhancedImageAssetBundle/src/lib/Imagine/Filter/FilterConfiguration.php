@@ -46,7 +46,7 @@ class FilterConfiguration extends BaseFilterConfiguration
     public function get($filter): array
     {
         $defaultPostProcessors = $this->getDefaultPostProcessors();
-        $defaultConfig = $this->getDefaultConfig();
+        $defaultConfig = (array) $this->getDefaultConfig();
         $config = $this->filterConfiguration->get($filter);
 
         $config = array_merge(
@@ -56,7 +56,7 @@ class FilterConfiguration extends BaseFilterConfiguration
                 'webp_quality' => 70,
                 'png_compression_level' => 6,
             ],
-            $config
+            $defaultConfig, $config
         );
 
         if ($defaultPostProcessors && (!isset($config['post_processors']) || empty($config['post_processors']))) {
