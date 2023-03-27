@@ -42,8 +42,11 @@ jobs:
                 options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
         strategy:
             matrix:
-                ibexa_version: [ 4.* ]
                 php: [ 7.4, 8.1 ]
+                include:
+                    -   ibexa_version: 4.*
+                    -   ibexa_version: 4.3.0
+                        php: 7.4
         env:
             CACHE_POOL: cache.redis
             DATABASE_URL: mysql://root@127.0.0.1:3306/ezplatform_test
@@ -88,9 +91,9 @@ jobs:
 
             -   name: Get Composer Cache Directory
                 id: composer-cache
-                run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+                run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-            -   uses: actions/cache@v1
+            -   uses: actions/cache@v3
                 with:
                     path: ${{ steps.composer-cache.outputs.dir }}
                     key: ${{ runner.os }}-composer-cache-dir
@@ -105,6 +108,7 @@ jobs:
                     composer create-project "ibexa/oss-skeleton:${{ matrix.ibexa_version }}" --prefer-dist --no-progress --no-interaction ezplatform
                     mkdir -p ezplatform/node_modules && ln -s ezplatform/node_modules
                     cd ezplatform
+                    composer require --dev -W phpunit/phpunit:^9.5 --no-scripts
                     php bin/console ibexa:install
                     php bin/console ibexa:graphql:generate-schema
                     composer run post-update-cmd
