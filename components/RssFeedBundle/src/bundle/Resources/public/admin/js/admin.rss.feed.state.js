@@ -26,7 +26,7 @@
             const data = JSON.parse(response.target.responseText);
 
             if (data.success === true) {
-                event.target.closest('.ez-checkbox-icon').classList.toggle('is-checked')
+                event.target.closest('.ibexa-checkbox-icon').classList.toggle('is-checked')
             }
         };
 
@@ -36,7 +36,7 @@
 
     }
 
-    [...doc.querySelectorAll('.ez-checkbox-icon__checkbox')].forEach(btn => {
+    [...doc.querySelectorAll('.ibexa-checkbox-icon__checkbox')].forEach(btn => {
         btn.addEventListener('click', updateVisibility, false);
     });
 

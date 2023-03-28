@@ -29,7 +29,22 @@ jQuery(document).ready(function () {
             e.preventDefault();
             handleSelectLocationClick($(this));
         });
+
     });
+
+    $('.items-rss section').find("div[id*='rss_feeds_feed_items_']").addClass('row');
+
+    document.addEventListener('rss.item.add', function (e) {
+        const dropdowns = e.detail.selector.find('.ibexa-dropdown');
+        e.detail.selector.find("div[id*='rss_feeds_feed_items_']").addClass('row');
+        dropdowns.each((index, dropdownContainer) => {
+            const dropdown = new window.ibexa.core.Dropdown({
+                container: dropdownContainer,
+            });
+
+            dropdown.init();
+        });
+    })
 
     $(document).on('click', '.delete-rss-items', function (e) {
         e.preventDefault();
@@ -41,10 +56,13 @@ jQuery(document).ready(function () {
         $.get($templateValues.data('rss-info-location') + '/' + $($(feedItem).data('location-input-selector')).val(), function (data) {
             if (typeof data.content !== undefined && typeof data.content.name !== undefined) {
                 const selectedLocation = `<li class="path-location">
-                    <div class="pull-left">${data.content.name}</div>
-                    <a class="btn btn-primary delete-rss-items pull-right">
-                        <svg class="ez-icon ez-icon-trash"><use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#trash"></use></svg> 
+                    <div class="pull-left">${data.content.name}
+                    <a class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text delete-rss-items pull-right">
+                        <svg class="ibexa-icon ibexa-icon-trash ibexa-icon--small">
+                            <use xlink:href="/bundles/ibexaicons/img/all-icons.svg#trash"></use>
+                        </svg> 
                     </a> 
+                    </div>
                 </li>`;
                 $($(feedItem).data('selected-location-list-selector')).html(selectedLocation);
             }
@@ -71,7 +89,7 @@ jQuery(document).ready(function () {
         const siteaccess = document.querySelector('meta[name="SiteAccess"]').content;
         const udwContainer = $("#react-udw").get(0);
         const configFromYaml = $(clickedButton).data('udw-config');
-        ReactDOM.render(React.createElement(eZ.modules.UniversalDiscovery, {
+        ReactDOM.render(React.createElement(ibexa.modules.UniversalDiscovery, {
             ...configFromYaml,
             onCancel: function () {
                 ReactDOM.unmountComponentAtNode(udwContainer)
@@ -80,7 +98,17 @@ jQuery(document).ready(function () {
             confirmLabel: 'Add locations',
             title: 'Choose locations',
             onConfirm: function (data) {
-                const selectedItems = data.reduce((total, item) => total + `<li class="path-location"><div class="pull-left">${item.ContentInfo.Content.Name}</div><a class="btn btn-primary delete-rss-items pull-right"><svg class="ez-icon ez-icon-trash"><use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#trash"></use></svg> </a> </li>`, '');
+                const selectedItems = data.reduce((total, item) =>
+                    total + `<li class="path-location">
+                        <div class="pull-left">${item.ContentInfo.Content.Name}
+                        <a class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text delete-rss-items pull-right">
+                            <svg class="ibexa-icon ibexa-icon-trash ibexa-icon--small">
+                                <use xlink:href="/bundles/ibexaicons/img/all-icons.svg#trash">
+                                </use>
+                            </svg
+                        </a>
+                        </div>
+                    </li>`, '');
                 $($(clickedButton).data('location-input-selector')).val(data.map(item => item.id).join());
                 $($(clickedButton).data('selected-location-list-selector')).html(selectedItems);
                 ReactDOM.unmountComponentAtNode(udwContainer);
@@ -91,21 +119,23 @@ jQuery(document).ready(function () {
     function addChildForm($collectionHolder, containerId) {
         const prototype = $collectionHolder.data('prototype');
         const index = $collectionHolder.data('index');
-        const removeForm = $('<a class="btn btn-primary delete-rss-items pull-right">' +
-            '<svg><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#trash"></use></svg>' +
+        const removeForm = $('<a class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text delete-rss-items pull-right">' +
+            '<svg class="ibexa-icon ibexa-icon-trash ibexa-icon--medium">' +
+                '<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/bundles/ibexaicons/img/all-icons.svg#trash"></use>' +
+            '</svg>' +
             '</a>');
         const newForm = prototype.replace(/__name__/g, index);
-        const newRow = $('<section class="container mt-4">' + '<div class="card ez-card"><div class="card-body">' + newForm + '</div></div></section>');
-        newRow.find('.card-body').prepend(removeForm);
+        const newRow = $('<section class="card ibexa-container">' + newForm + '</section>');
+        newRow.prepend(removeForm);
         containerId.append(newRow);
         const newIndex = index + 1;
         $collectionHolder.data('index', newIndex);
-        document.dispatchEvent(new CustomEvent("rss.item.add", {"selector": newRow}));
+        document.dispatchEvent(new CustomEvent("rss.item.add", {detail : {"selector": newRow}}));
         setCTEvent(index);
     }
 
     function setCTEvent(index) {
-        $(document).on('change', '#rss_feeds_feed_items_' + index + '_contenttype_id', function (e) {
+        $(`#rss_feeds_feed_items_${index}_contenttype_id`).on('change', function (e) {
             const val = $(this).val();
             const prefixItem = "#rss_feeds_feed_items";
             const selectFields = ["title", "description", "category", "media"];

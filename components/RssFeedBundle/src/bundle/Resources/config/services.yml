@@ -22,7 +22,7 @@ services:
 
   Novactive\EzRssFeedBundle\Core\SiteAccessAwareEntityManagerFactory:
     arguments:
-      $repositoryConfigurationProvider: "@ezpublish.api.repository_configuration_provider"
+      $repositoryConfigurationProvider: '@Ibexa\Bundle\Core\ApiLoader\RepositoryConfigurationProvider'
       $resolver: "@doctrine.orm.default_entity_listener_resolver"
       $settings: { debug: "%kernel.debug%", cache_dir: "%kernel.cache_dir%" }
 

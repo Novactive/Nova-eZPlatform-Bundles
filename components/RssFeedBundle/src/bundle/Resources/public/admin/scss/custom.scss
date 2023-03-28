@@ -1,0 +1,125 @@
+/*
+ * NovaeZRssFeedBundle.
+ *
+ * @package   NovaeZRssFeedBundle
+ *
+ * @author    Novactive
+ * @copyright 2018 Novactive
+ * @license   https://github.com/Novactive/NovaeZRssFeedBundle/blob/master/LICENSE
+ *
+ */
+
+.rss-toolbar {
+    background-color: #131c26;
+    border: 0.0625rem solid #4191ff;
+    border-radius: 0.625rem;
+    padding: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    margin: 1rem 0;
+    .ibexa-btn--secondary.ibexa-btn {
+        &:hover {
+            color: #4191ff;
+            border-color: #4191ff;
+            .ibexa-icon {
+                fill: #4191ff;
+            }
+        }
+    }
+}
+
+.rss-toolbar-title {
+    padding: 0.25rem 0.75rem;
+    font-size: 1.125rem;
+    line-height: 40px;
+    font-weight: 700;
+    color: white;
+}
+
+.items-rss {
+    background-color: #fff;
+    min-height: 50px;
+    display: inline-block;
+    width: 100%;
+    padding: 5px;
+
+    &-location {
+        background: #e5e3e3;
+        padding: 1rem 0;
+        text-align: center;
+        width: 100%;
+    }
+    .ibexa-card {
+        .form-group {
+            width: 100%;
+        }
+    }
+    .form-check-label {
+        display: inline-block;
+    }
+}
+
+
+.loading-image {
+    position: absolute;
+    width: 97%;
+    height: 200px;
+    z-index: 10;
+    background-color: #f5f5f5;
+    opacity: 0.7;
+    img {
+        top: 37%;
+        left: 45%;
+        position: absolute;
+    }
+}
+
+.path-location {
+    padding: 5px 10px;
+    background-color: #fff;
+    height: 58px;
+    list-style-type: none;
+    i {
+        margin-top: 0.1rem;
+        width: 1.5rem;
+        height: 1.5rem;
+        font-size: 30px;
+        color: #fff;
+    }
+}
+
+.location-tree {
+    padding: 0;
+    margin: 0;
+    div {
+        line-height: 50px;
+        font-weight: 700;
+        padding: 0 10px;
+    }
+}
+
+
+.pull-right {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.rss-link {
+    input {
+        width: 80%;
+        float: left;
+    }
+    em {
+        width: 12%;
+        float: left;
+        line-height: 36px;
+    }
+}
+
+.rss-feeds-form  {
+    .form-group {
+        width: 100%;
+    }
+}
+
