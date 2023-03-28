@@ -1,16 +1,16 @@
-{% set feed_content = mapping.description is empty ? '' : ez_field_value(content, mapping.description) %}
-<item>
-    <title>{{ ez_field_value( content, mapping.title ) }}</title>
-    <link>{{ ez_url(location) }}</link>
-    {% if feed_content.xml is defined and feed_content.xml.textContent is defined %}
-        <description>{{ feed_content.xml.textContent|raw }}</description>
-    {% elseif feed_content is not empty %}
-        <description>{{ feed_content }}</description>
-    {% endif %}
-    <pubDate>{{ content.versionInfo.creationDate|date('r') }}</pubDate>
-    {% if mapping.media is not empty and not(ez_field_is_empty(content,  mapping.media)) %}
-        {{ ez_render_field( content, mapping.media, {
-            'template': '@EzRssFeed/default/fields.html.twig',
-        }) }}
-    {% endif %}
-</item>
+{% set feed_content = mapping.description is empty ? '' : ibexa_field_value(content, mapping.description) %}
+{% autoescape 'html' %}
+    <item>
+        <title>{{- ibexa_field_value(content, mapping.title ) -}}</title>
+        <link>{{- ibexa_url(location) -}}</link>
+        {% if feed_content.xml is defined and feed_content.xml.textContent is defined %}
+            <description>{{- feed_content.xml.textContent|raw -}}</description>
+        {% elseif feed_content is not empty %}
+            <description>{{- feed_content -}}</description>
+        {% endif %}
+            <pubDate>{{- content.versionInfo.creationDate|date('r') -}}</pubDate>
+        {% if mapping.media is not empty and not(ibexa_field_is_empty(content,  mapping.media)) %}
+            {{- ibexa_render_field(content, mapping.media, {'template': '@EzRssFeed/default/fields.html.twig'}) }}
+        {% endif %}
+    </item>
+{% endautoescape %}

@@ -18,4 +18,4 @@ services:
 
   Novactive\EzRssFeedBundle\PlatformAdminUI\Menu\RssEditRightSidebarBuilder:
     tags:
-    - { name: knp_menu.menu_builder, method: build, alias: ezplatform_admin_ui.menu.rss_edit.sidebar_right }
+    - { name: knp_menu.menu_builder, method: build, alias: ibexa_admin_ui.menu_configure.rss_edit_sidebar_right }

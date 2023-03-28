@@ -1,4 +1,4 @@
-{% extends '@EzPlatformAdminUi/themes/admin/ui/form_fields.html.twig' %}
+{% extends '@IbexaAdminUi/themes/admin/ui/form_fields.html.twig' %}
 
 {% block tree_discovery_widget %}
 
@@ -7,16 +7,16 @@
                value="{{ form.location.vars["value"] }}"/>
     </div>
 
-    <div class="items-rss-location">
+    <div>
         <button class="{{ form.vars.attr['class'] }}"
-                data-udw-config="{{ ez_udw_config('nova_ezrssfeed') }}"
+                data-udw-config="{{ ibexa_udw_config('nova_ezrssfeed') }}"
                 data-location-input-selector="#{{ form.location.vars["id"] }}"
                 data-selected-location-list-selector="#{{ form.location.vars["id"] }}-selected-location"
                 type="button">
-            <svg class="ez-icon">
-                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#relations"></use>
+            <svg class="ibexa-icon">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ ibexa_icon_path('relations') }}"></use>
             </svg>
-            <span class="ez-relations__cta-btn-label"
+            <span class="ibexa-relations__cta-btn-label"
                   data-location-input-selector="#{{ form.location.vars["id"] }}"
                   data-selected-location-list-selector="#{{ form.location.vars["id"] }}-selected-location"
             >
@@ -77,7 +77,7 @@
     </div>
 {% endblock _rss_feeds_feed_items_entry_description_row %}
 {% block _rss_feeds_feed_items_entry_category_row %}
-    <div class="form-group col-md-6 col-sm-12 col-xs-12 pull-left">
+    <div class="form-group col-md-6 col-sm-12 col-xs-12">
         <label class="form-label">
             {{- form_label(form) -}}
         </label>
@@ -88,7 +88,7 @@
     </div>
 {% endblock _rss_feeds_feed_items_entry_category_row %}
 {% block _rss_feeds_feed_items_entry_media_row %}
-    <div class="form-group col-md-6 col-sm-12 col-xs-12 pull-left">
+    <div class="form-group col-md-6 col-sm-12 col-xs-12">
         <label class="form-label">
             {{- form_label(form) -}}
         </label>

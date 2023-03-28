@@ -12,9 +12,9 @@
 
 namespace Novactive\EzRssFeedBundle\Controller;
 
-use eZ\Bundle\EzPublishCoreBundle\Controller;
-use eZ\Publish\API\Repository\PermissionResolver;
-use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use Ibexa\Bundle\Core\Controller;
+use Ibexa\Contracts\Core\Repository\PermissionResolver;
+use Ibexa\Core\Base\Exceptions\UnauthorizedException;
 use Novactive\EzRssFeedBundle\Entity\RssFeeds;
 use Novactive\EzRssFeedBundle\Services\RssFeedsService;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,7 +38,7 @@ class RssFeedViewController extends Controller
         /**
          * @var PermissionResolver
          */
-        $permissionResolver = $this->container->get('ezpublish.api.repository')->getPermissionResolver();
+        $permissionResolver = $this->container->get('ibexa.api.repository')->getPermissionResolver();
 
         if (!$permissionResolver->hasAccess('rss', 'read')) {
             throw new UnauthorizedException('rss', 'read', []);
@@ -55,10 +55,9 @@ class RssFeedViewController extends Controller
 
         if ($rssFeed) {
             $feedItems = $rssFeedsService->fetchContent($rssFeed);
-
             $response = new Response(
                 $this->renderView(
-                    '@ezdesign/rssfeed/view.html.twig',
+                    '@ibexadesign/rssfeed/view.html.twig',
                     [
                         'rssFeed' => [
                             'meta' => [

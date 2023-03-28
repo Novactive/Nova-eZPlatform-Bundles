@@ -1,86 +1,83 @@
-{% extends '@ezdesign/ui/layout.html.twig' %}
+{% extends '@ibexadesign/ui/layout.html.twig' %}
 
 {% block content %}
-    <section class="container mt-4 px-5">
-        <div class="ez-table-header">
-            <div class="ez-table-header__headline">{{ 'ez_rss_feed.list.title'|trans() }}</div>
+    <section class="ibexa-container">
+        <div class="ibexa-table-header">
+            <div class="ibexa-table-header__headline">{{ 'ez_rss_feed.list.title'|trans() }}</div>
             {% if canCreate %}
                 <div>
                     <a title="{{ 'ez_rss_feed.new'|trans }}"
                        href="{{ path('platform_admin_ui_rss_feeds_create') }}"
-                       class="btn btn-primary">
-                        <svg class="ez-icon ez-icon-create">
+                       class="btn ibexa-btn ibexa-btn--primary">
+                        <svg class="ibexa-icon ibexa-icon-create ibexa-icon--small">
                             <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                                 xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#create"></use>
+                                 xlink:href="{{ ibexa_icon_path('create') }}">
+                            </use>
                         </svg>
+                        {{ 'ez_rss_feed.new'|trans }}
                     </a>
                 </div>
             {% endif %}
         </div>
-
-        <table class="table mb-3">
+        <table class="ibexa-table table">
             <thead>
-            <tr>
-                <th>{{ 'ez_rss_feed.title'|trans }}</th>
-                <th>{{ 'ez_rss_feed.created_at'|trans }}</th>
-                <th>{{ 'ez_rss_feed.modified_at'|trans }}</th>
-                <th>{{ 'ez_rss_feed.status'|trans }}</th>
-                <th></th>
+            <tr class="ibexa-table__head-row">
+                <th class="ibexa-table__header-cell">{{ 'ez_rss_feed.title'|trans }}</th>
+                <th class="ibexa-table__header-cell">{{ 'ez_rss_feed.created_at'|trans }}</th>
+                <th class="ibexa-table__header-cell">{{ 'ez_rss_feed.modified_at'|trans }}</th>
+                <th class="ibexa-table__header-cell">{{ 'ez_rss_feed.status'|trans }}</th>
+                <th class="ibexa-table__header-cell text-end">{{ 'ez_rss_feed.actions'|trans }}</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody class="ibexa-table__body">
             {% for rss in pager.currentPageResults %}
-                <tr id="{{ 'rssfeed-' ~ rss.urlSlug }}">
-                    <td>{{ rss.title }}</td>
-                    <td>{{ rss.createdAt|date("d/m/Y H:i") }}</td>
-                    <td>{{ rss.modifiedAt|date("d/m/Y H:i") }}</td>
-                    <td>
-                        <label class="ez-checkbox-icon {% if rss.status %}is-checked{% endif %}">
-                            <svg class="ez-icon ez-icon-view">
-                                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#view"></use>
-                            </svg>
-                            <svg class="ez-icon ez-icon-view-hide">
-                                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#view-hide"></use>
-                            </svg>
-                            <input class="ez-checkbox-icon__checkbox" checked="" type="checkbox" name="updateVisibility" value="{{ rss.id }}">
-                        </label>
+                <tr id="{{ 'rssfeed-' ~ rss.urlSlug }}" class="ibexa-table__row">
+                    <td class="ibexa-table__cell">{{ rss.title }}</td>
+                    <td class="ibexa-table__cell">{{ rss.createdAt|date("d/m/Y H:i") }}</td>
+                    <td class="ibexa-table__cell">{{ rss.modifiedAt|date("d/m/Y H:i") }}</td>
+                    <td class="ibexa-table__cell ibexa-table__cell--has-checkbox ">
+                         <div class="form-check">
+                            <label class="ibexa-checkbox-icon {% if rss.status %}is-checked{% endif %}">
+                                <input class="ibexa-checkbox-icon__checkbox" checked="" type="checkbox" name="updateVisibility" value="{{ rss.id }}">
+                            </label>
+                         </div>
                     </td>
-                    <td class="text-right">
-                        <a title="{{ 'ez_rss_feed.edit'|trans|desc('Edit') }}"
-                           href="{{ path('platform_admin_ui_rss_feeds_edit', {'id': rss.id}) }}"
-                           class="btn btn-icon mx-3">
-                            <svg class="ez-icon ez-icon-edit">
-                                <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#edit"></use>
-                            </svg>
-                        </a>
-                        {% if canDelete %}
-                            <a title="{{ 'ez_rss_feed.delete'|trans|desc('Delete') }}"
-                               href="{{ path('platform_admin_ui_rss_feeds_delete', {'id': rss.id}) }}"
-                               data-toggle='modal'
-                               data-target='#delete-rss-modal-{{ rss.id }}'
-                               class="btn btn-icon mx-3 rssfeed-delete">
-                                <svg class="ez-icon ez-icon-trash">
-                                    <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#trash"></use>
+                    <td class="ibexa-table__cell ibexa-table__cell--has-action-btns">
+                        <div class="ibexa-table__cell-btns-wrapper">
+                            <a title="{{ 'ez_rss_feed.edit'|trans|desc('Edit') }}"
+                               href="{{ path('platform_admin_ui_rss_feeds_edit', {'id': rss.id}) }}"
+                               class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text">
+                                <svg class="ibexa-icon ibexa-icon-edit ibexa-icon--small">
+                                    <use xlink:href="{{ ibexa_icon_path('edit') }}"></use>
                                 </svg>
                             </a>
-                            {% include '@ezdesign/rssfeed/modal_rss_delete.html.twig' with {'rss': rss} only %}
-                        {% endif %}
+                            {% if canDelete %}
+                                <button title="{{ 'ez_rss_feed.delete'|trans|desc('Delete') }}"
+                                   data-bs-toggle='modal'
+                                   data-bs-target='#delete-rss-modal-{{ rss.id }}'
+                                   class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text rssfeed-delete">
+                                    <svg class="ibexa-icon ibexa-icon-trash ibexa-icon--small ">
+                                        <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
+                                    </svg>
+                                </button>
+                                {% include '@ibexadesign/rssfeed/modal_rss_delete.html.twig' with {'rss': rss} only %}
+                            {% endif %}
+                        </div>
                     </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
-
         {% if pager.haveToPaginate %}
-            <div class="row justify-content-center align-items-center mb-2">
-                <span>
+            <div class="ibexa-pagination mt-3">
+                <span class="ibexa-pagination__info">
                     {{ 'ez_rss_feed.viewing'|trans({
                         '%viewing%': pager.currentPageResults|length,
                         '%total%': pager.nbResults})|desc('Viewing <strong>%viewing%</strong> out of <strong>%total%</strong> items')|raw }}
                 </span>
-            </div>
-            <div class="row justify-content-center align-items-center">
-                {{ pagerfanta(pager, 'ez') }}
+                <div class="pagination ibexa-pagination__navigation">
+                    {{ pagerfanta(pager, 'ibexa') }}
+                </div>
             </div>
         {% endif %}
     </section>

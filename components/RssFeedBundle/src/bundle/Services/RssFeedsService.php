@@ -12,8 +12,8 @@
 
 namespace Novactive\EzRssFeedBundle\Services;
 
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\Values\Content\Query;
+use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 use Novactive\EzRssFeedBundle\Entity\RssFeeds;
 use Novactive\EzRssFeedBundle\Repository\Values\FeedValueObject;
 use Symfony\Component\Routing\RouterInterface;

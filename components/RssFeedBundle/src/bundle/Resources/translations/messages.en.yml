@@ -5,6 +5,7 @@ ez_rss_feed.title: Name
 ez_rss_feed.created_at: Creation date
 ez_rss_feed.modified_at: Modification date
 ez_rss_feed.status: Visibility
+ez_rss_feed.actions: Actions
 ez_rss_feed.edit: Edit
 ez_rss_feed.delete: Delete
 ez_rss_feed.viewing: Viewing <strong>%viewing%</strong> out of <strong>%total%</strong> items

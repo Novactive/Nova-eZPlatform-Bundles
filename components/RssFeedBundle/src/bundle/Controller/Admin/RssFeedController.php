@@ -14,10 +14,10 @@ namespace Novactive\EzRssFeedBundle\Controller\Admin;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-use eZ\Bundle\EzPublishCoreBundle\Controller;
+use Ibexa\Bundle\Core\Controller;
 use eZ\Publish\API\Repository\PermissionResolver;
-use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use EzSystems\EzPlatformAdminUi\Notification\NotificationHandlerInterface;
+use Ibexa\Core\Base\Exceptions\UnauthorizedException;
+use Ibexa\Contracts\AdminUi\Notification\NotificationHandlerInterface;
 use Novactive\EzRssFeedBundle\Controller\EntityManagerTrait;
 use Novactive\EzRssFeedBundle\Entity\RssFeeds;
 use Novactive\EzRssFeedBundle\Form\RssFeedsType;
@@ -61,7 +61,7 @@ class RssFeedController extends Controller
         /**
          * @var PermissionResolver
          */
-        $permissionResolver = $this->container->get('ezpublish.api.repository')->getPermissionResolver();
+        $permissionResolver = $this->container->get('ibexa.api.repository')->getPermissionResolver();
 
         $page = $request->query->get('page') ?? 1;
 
@@ -73,7 +73,7 @@ class RssFeedController extends Controller
         $pagerfanta->setCurrentPage(min($page, $pagerfanta->getNbPages()));
 
         return $this->render(
-            '@ezdesign/rssfeed/list.html.twig',
+            '@ibexadesign/rssfeed/list.html.twig',
             [
                 'pager' => $pagerfanta,
                 'canCreate' => $permissionResolver->hasAccess('rss', 'create'),
@@ -122,7 +122,7 @@ class RssFeedController extends Controller
         }
 
         return $this->render(
-            '@ezdesign/rssfeed/edit.html.twig',
+            '@ibexadesign/rssfeed/edit.html.twig',
             [
                 'form' => $form->createView(),
             ]
@@ -131,7 +131,7 @@ class RssFeedController extends Controller
 
     /**
      * @Route("/edit/{id}", name="platform_admin_ui_rss_feeds_edit")
-     * @ParamConverter("rssFeed", class="EzRssFeedBundle:RssFeeds")
+     * @ParamConverter("rssFeed", class="Novactive\EzRssFeedBundle\Entity\RssFeeds")
      */
     public function editAction(Request $request, RssFeeds $rssFeed): Response
     {
@@ -184,7 +184,7 @@ class RssFeedController extends Controller
         }
 
         return $this->render(
-            '@ezdesign/rssfeed/edit.html.twig',
+            '@ibexadesign/rssfeed/edit.html.twig',
             [
                 'form' => $feedForm->createView(),
             ]
@@ -198,7 +198,7 @@ class RssFeedController extends Controller
 
     /**
      * @Route("/delete/{id}", name="platform_admin_ui_rss_feeds_delete")
-     * @ParamConverter("rssFeed", class="EzRssFeedBundle:RssFeeds")
+     * @ParamConverter("rssFeed", class="Novactive\EzRssFeedBundle\Entity\RssFeeds")
      */
     public function deleteAction(Request $request, RssFeeds $rssFeed): RedirectResponse
     {
