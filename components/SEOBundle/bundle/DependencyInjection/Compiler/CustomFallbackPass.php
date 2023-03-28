@@ -12,7 +12,7 @@
 
 namespace Novactive\Bundle\eZSEOBundle\DependencyInjection\Compiler;
 
-use Novactive\Bundle\eZSEOBundle\Twig\NovaeZSEOExtension;
+use Novactive\Bundle\eZSEOBundle\Service\MetaCompositionService;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -27,7 +27,7 @@ class CustomFallbackPass implements CompilerPassInterface
         if (isset($configs[0]['system']['default']['custom_fallback_service'])) {
             $fallbackService = $configs[0]['system']['default']['custom_fallback_service'];
             if (null !== $fallbackService) {
-                $container->getDefinition(NovaeZSEOExtension::class)->addMethodCall(
+                $container->getDefinition(MetaCompositionService::class)->addMethodCall(
                     'setCustomFallbackService',
                     [new Reference($fallbackService)]
                 );

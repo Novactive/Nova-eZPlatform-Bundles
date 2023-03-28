@@ -1,0 +1,20 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter:
+        alias: 'serializer.name_converter.camel_case_to_snake_case'
+
+    Novactive\Bundle\eZSEOBundle\GraphQL\Helper\:
+        resource: '../../GraphQL/Helper'
+
+    Novactive\Bundle\eZSEOBundle\GraphQL\Schema\Domain\Content\Mapper\FieldDefinition\NovaeZSEOFieldDefinitionMapper:
+        decorates: EzSystems\EzPlatformGraphQL\Schema\Domain\Content\Mapper\FieldDefinition\FieldDefinitionMapper
+
+    Novactive\Bundle\eZSEOBundle\GraphQL\Schema\Domain\MetaFieldsDomain:
+        tags:
+            - "ezplatform_graphql.schema_domain_iterator"
+            - "ezplatform_graphql.domain_schema_worker"
+
+    Novactive\Bundle\eZSEOBundle\GraphQL\Resolver\NovaEZSeoFieldResolver: ~

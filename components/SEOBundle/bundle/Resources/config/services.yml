@@ -50,6 +50,7 @@ services:
 
     Novactive\Bundle\eZSEOBundle\Twig\NovaeZSEOExtension: ~
     Novactive\Bundle\eZSEOBundle\Core\DummyCustomFallback: ~
+    Novactive\Bundle\eZSEOBundle\Service\MetaCompositionService: ~
 
     Novactive\Bundle\eZSEOBundle\Core\MetaNameSchema:
         lazy: true
