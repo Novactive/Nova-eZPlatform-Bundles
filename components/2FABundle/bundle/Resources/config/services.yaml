@@ -27,7 +27,7 @@ services:
 
     Novactive\Bundle\eZ2FABundle\Core\Tab\TwoFAManagement:
         tags:
-            - { name: ibexa.tab, group: location-view }
+            - { name: ibexa.admin_ui.tab, group: location-view }
 
     Novactive\Bundle\eZ2FABundle\Core\EmailCodeGenerator:
         bind:
