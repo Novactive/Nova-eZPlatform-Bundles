@@ -28,7 +28,7 @@ use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticator;
 
-final class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
+class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
 {
     /**
      * @var SiteAccess|null
