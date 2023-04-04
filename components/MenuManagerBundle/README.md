@@ -35,18 +35,10 @@ composer require novactive/ezmenumanagerbundle
 
 ### Register the bundle
 
-Register the bundle in your application's kernel class:
+Register the bundle in the `bundles.php` of your application.
 
 ```php
-// app/AppKernel.php
-public function registerBundles()
-{
-    $bundles = array(
-        // ...
-        new Novactive\EzMenuManagerBundle\EzMenuManagerBundle(),
-        // ...
-    );
-}
+   Novactive\EzMenuManagerBundle\EzMenuManagerBundle::class => [ 'all'=> true ],
 ```
 
 ### Routing config

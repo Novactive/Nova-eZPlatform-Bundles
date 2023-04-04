@@ -1,17 +1,17 @@
-{% extends "@ezdesign/ui/layout.html.twig" %}
+{% extends "@ibexadesign/ui/layout.html.twig" %}
 
 
 {% block title %}{{ title|trans([], 'menu_manager') }}{% endblock %}
 
 {%- block breadcrumbs -%}
-    {% include '@ezdesign/ui/breadcrumbs.html.twig' with { items: [
+    {% include '@ibexadesign/ui/breadcrumbs.html.twig' with { items: [
         { url: path('menu_manager.menu_list'), value: 'menu.list'|trans([], 'menu_manager') },
         { value: title|trans([], 'menu_manager') }
     ]} %}
 {%- endblock -%}
 
 {%- block page_title -%}
-    {% include '@ezdesign/ui/page_title.html.twig' with {
+    {% include '@ibexadesign/ui/page_title.html.twig' with {
         title: title|trans([], 'menu_manager'),
         iconName: 'list'
     } %}

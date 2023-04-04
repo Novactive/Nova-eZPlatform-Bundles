@@ -15,11 +15,11 @@ import $ from 'jquery'
 import 'jstree/dist/jstree'
 
 const NOTIFICATION_ERROR_LABEL = 'error';
-const ENDPOINT_LOAD_SUBITEMS = '/api/ezp/v2/location/tree/load-subitems';
+const ENDPOINT_LOAD_SUBITEMS = '/api/ibexa/v2/location/tree/load-subitems';
 
 const showNotification = (detail) => {
-  const event = new CustomEvent('ez-notify', {
-    detail,
+  const event = new CustomEvent('ibexa-notify', {
+    detail: detail
   });
 
   document.body.dispatchEvent(event);
@@ -64,7 +64,7 @@ const loadLocationItems = ({ siteaccess }, parentLocationId, callback, limit = 5
     mode: 'same-origin',
     credentials: 'same-origin',
     headers: {
-      Accept: 'application/vnd.ez.api.ContentTreeNode+json',
+      Accept: 'application/vnd.ibexa.api.ContentTreeNode+json',
       'X-Siteaccess': siteaccess,
     },
   });

@@ -1,137 +1,160 @@
-{% extends "@ezdesign/ui/layout.html.twig" %}
+{% extends "@ibexadesign/ui/layout.html.twig" %}
 
-{% form_theme menu_delete_form '@ezdesign/ui/form_fields.html.twig'  %}
-{% form_theme search_form 'bootstrap_4_layout.html.twig'  %}
+{% from '@ibexadesign/ui/component/macros.html.twig' import results_headline %}
+
+{% form_theme menu_delete_form '@ibexadesign/ui/form_fields.html.twig'  %}
+{% form_theme search_form '@ibexadesign/ui/form_fields.html.twig'  %}
 
 {% trans_default_domain 'menu_manager' %}
 
 {% block title %}{{ 'menu.list'|trans }}{% endblock %}
 
 {%- block breadcrumbs -%}
-    {% include '@ezdesign/ui/breadcrumbs.html.twig' with { items: [
+    {% include '@ibexadesign/ui/breadcrumbs.html.twig' with { items: [
         { value: 'menu.list'|trans }
     ]} %}
 {%- endblock -%}
 
 {%- block page_title -%}
-    {% include '@ezdesign/ui/page_title.html.twig' with {
+    {% include '@ibexadesign/ui/page_title.html.twig' with {
         title: 'menu.list'|trans,
         iconName: 'list'
     } %}
 {%- endblock -%}
 
 {%- block content -%}
-    <section class="container my-4">
+    <div class="ibexa-container">
+        {% set collapsible_items = [
+            form_row(search_form.type)
+        ] %}
 
-        {{ form_start(search_form, {'attr': {'class': 'form-inline'}}) }}
-            <div class="form-group mb-2">
-                {{ form_label(search_form.name, search_form.name.vars.label, {'label_attr': {'class': 'mx-sm-3'}}) }}
-                {{ form_widget(search_form.name) }}
-            </div>
-            {% if search_form.type is defined %}
-                <div class="form-group mb-2 mx-sm-3 ">
-                    {{ form_label(search_form.type, search_form.type.vars.label, {'label_attr': {'class': 'mx-sm-3'}}) }}
-                    {{ form_widget(search_form.type) }}
-                </div>
-            {% endif %}
-            <button type="submit" class="btn btn-primary font-weight-bold mb-2">
-                <span class="ez-btn ez-btn--search-label">{{ 'search.perform'|trans({}, 'search')|desc('Search') }}</span>
-            </button>
-        {{ form_end(search_form) }}
+        {% embed '@ibexadesign/ui/component/adaptive_filters/adaptive_filters.html.twig' with {
+            form: search_form,
+            is_inside_container: true,
+            collapsible_items: collapsible_items,
+            attr: {
+                class: 'menu_manager-search-form'
+            }
+        } %}
+            {% trans_default_domain 'menu_manager' %}
 
-        <div class="ez-table-header">
-            <div class="ez-table-header__headline">{{ 'menu.list'|trans }}</div>
-            <div>
-                <a class="btn btn-primary" href="{{ path('menu_manager.menu_new') }}">
-                    <svg class="ez-icon ez-icon-create">
-                        <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                             xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#create"></use>
-                    </svg>
-                </a>
-                {% set modal_data_target = 'delete-menus-modal' %}
+            {% block static_left_input %}
+                {{ form_row(search_form.name) }}
+            {% endblock %}
+            {% block actions %}
                 <button
-                        id="delete-menus"
-                        type="button"
-                        class="btn btn-danger"
-                        disabled
-                        data-toggle="modal"
-                        data-target="#{{ modal_data_target }}"
-                        title="{{ 'menu.action.delete'|trans }}">
-                    <svg class="ez-icon ez-icon-trash">
-                        <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#trash"></use>
-                    </svg>
+                        type="submit"
+                        class="btn ibexa-btn ibexa-btn--secondary ibexa-adaptive-filters__submit-btn"
+                >
+                    {{ 'actions.apply_btn'|trans|desc('Apply') }}
                 </button>
-                {% include '@ezdesign/ui/modal/bulk_delete_confirmation.html.twig' with {
-                    'id': modal_data_target,
-                    'message': 'menu.action.confirm_delete'|trans,
-                    'data_click': '#menu_delete_delete',
-                }%}
-            </div>
-        </div>
+            {% endblock %}
+        {% endembed %}
+
 
         {{ form_start(menu_delete_form, {
             'action': path('menu_manager.menu_delete'),
-            'attr': { 'class': 'ez-toggle-btn-state', 'data-toggle-button-id': '#delete-menus' }
+            'attr': { 'class': 'ibexa-toggle-btn-state', 'data-toggle-button-id': '#delete-menus' }
         }) }}
-        <table class="ez-table table">
-            <thead>
-            <tr>
-                <th></th>
-                <th>{{ 'menu.property.id'|trans }}</th>
-                <th>{{ 'menu.property.name'|trans }}</th>
-                <th>{{ 'menu.property.type'|trans }}</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for menu in pager.currentPageResults %}
-                <tr>
-                    <td class="ez-table__cell ez-table__cell--has-checkbox">
-                        {{ form_widget(menu_delete_form.menus[menu.id]) }}
-                    </td>
-                    <td class="ez-table__cell">{{ menu.id }}</td>
-                    <td class="ez-table__cell">{{ menu.name }}</a></td>
-                    <td class="ez-table__cell">{{ menu_types[menu.type]|default(menu.type)|trans() }}</a></td>
-                    <td class="ez-table__cell ez-table__cell--has-action-btns text-right">
-                        <a
-                                title="{{ 'menu.action.view'|trans }}"
-                                href="{{ path('menu_manager.menu_view', {'menu': menu.id}) }}"
-                                class="btn btn-icon mx-2">
-                            <svg class="ez-icon ez-icon-view">
-                                <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#view"></use>
+
+
+        {% set body_rows = [] %}
+        {% for menu in pager.currentPageResults %}
+            {% set col_checkbox %}
+                {{ form_widget(menu_delete_form.menus[menu.id]) }}
+            {% endset %}
+
+            {% set col_action_btns %}
+                <a
+                        title="{{ 'menu.action.view'|trans }}"
+                        href="{{ path('menu_manager.menu_view', {'menu': menu.id}) }}"
+                        class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text">
+                    <svg class="ibexa-icon ibexa-icon--small ibexa-icon--view">
+                        <use xlink:href="{{ ibexa_icon_path('view') }}"></use>
+                    </svg>
+                </a>
+                <a
+                        title="{{ 'menu.action.edit'|trans }}"
+                        href="{{ path('menu_manager.menu_edit', {'menu': menu.id}) }}"
+                        class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text">
+                    <svg class="ibexa-icon ibexa-icon--small ibexa-icon--edit">
+                        <use xlink:href="{{ ibexa_icon_path('edit') }}"></use>
+                    </svg>
+                </a>
+            {% endset %}
+
+            {% set body_rows = body_rows|merge([{ cols: [
+                { has_checkbox: true, content: col_checkbox, raw: true },
+                { content: menu.id, raw: true },
+                { content: menu.name, raw: true},
+                { content: menu_types[menu.type]|default(menu.type)|trans(), raw: true },
+                { has_action_btns: true, content: col_action_btns, raw: true },
+            ]}]) %}
+        {% endfor %}
+
+
+        {% embed '@ibexadesign/ui/component/table/table.html.twig' with {
+            headline: custom_results_headline ?? results_headline(pager.getNbResults()),
+            head_cols: [
+                { has_checkbox: true },
+                { content: 'menu.property.id'|trans|desc('ID') },
+                { content: 'menu.property.name'|trans|desc('Name') },
+                { content: 'menu.property.type'|trans|desc('Type') },
+                { },
+            ],
+            body_rows,
+            empty_table_info_text: 'menu.list.empty'|trans|desc('You have no menu yet. Your menus will show up here.'),
+        } %}
+            {% set modal_create_data_target = 'create-wildcards-modal' %}
+            {% set modal_delete_data_target = 'delete-wildcards-modal' %}
+
+            {% block header %}
+                {% embed '@ibexadesign/ui/component/table/table_header.html.twig' %}
+                    {% block actions %}
+                        <a class="btn ibexa-btn ibexa-btn--tertiary ibexa-btn--small" href="{{ path('menu_manager.menu_new') }}">
+                            <svg class="ibexa-icon ibexa-icon--small ibexa-icon--create">
+                                <use xlink:href="{{ ibexa_icon_path('create') }}"></use>
                             </svg>
+                            <span class="ibexa-btn__label">
+                                {{ 'menu.action.create'|trans|desc('Create') }}
+                            </span>
                         </a>
-                        <a
-                                title="{{ 'menu.action.edit'|trans }}"
-                                href="{{ path('menu_manager.menu_edit', {'menu': menu.id}) }}"
-                                class="btn btn-icon mx-2">
-                            <svg class="ez-icon ez-icon-edit">
-                                <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#edit"></use>
+                        {% set modal_data_target = 'delete-menus-modal' %}
+                        <button
+                                id="delete-menus"
+                                type="button"
+                                class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
+                                disabled
+                                data-toggle="modal"
+                                data-target="#{{ modal_data_target }}"
+                        >
+                            <svg class="ibexa-icon ibexa-icon--small ibexa-icon--trash">
+                                <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
                             </svg>
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                            <span class="ibexa-btn__label">
+                                {{ 'menu.action.delete'|trans|desc('Delete') }}
+                            </span>
+                        </button>
+                        {% include '@ibexadesign/ui/modal/bulk_delete_confirmation.html.twig' with {
+                            'id': modal_data_target,
+                            'message': 'menu.action.confirm_delete'|trans,
+                            'data_click': '#menu_delete_delete',
+                        }%}
+                    {% endblock %}
+                {% endembed %}
+            {% endblock %}
+        {% endembed %}
 
         {{ form_end(menu_delete_form) }}
 
         {% if pager.haveToPaginate %}
-            <div class="row justify-content-center align-items-center mb-2 ez-pagination__spacing">
-                <span class="ez-pagination__text">
-                    {{ 'pagination.viewing'|trans({
-                        '%viewing%': pager.currentPageResults|length,
-                        '%total%': pager.nbResults}, 'pagination')|desc('Viewing <strong>%viewing%</strong> out of <strong>%total%</strong> items')|raw }}
-                </span>
-            </div>
-            <div class="row justify-content-center align-items-center ez-pagination__btn mb-5">
-                {{ pagerfanta(pager, 'ez') }}
-            </div>
+            {% include '@ibexadesign/ui/pagination.html.twig' with {
+                'pager': pager
+            } %}
         {% endif %}
-    </section>
+    </div>
 {%- endblock -%}
 
 {% block javascripts %}
-    {{ encore_entry_script_tags('ezplatform-admin-ui-modules-menu-manager-js', null, 'ezplatform') }}
+    {{ encore_entry_script_tags('ibexa-admin-ui-modules-menu-manager-js', null, 'ibexa') }}
 {% endblock %}

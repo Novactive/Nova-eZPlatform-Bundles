@@ -97,7 +97,7 @@ import DefaultMenuItemType from './type/DefaultMenuItemType'
 
   const SELECTOR_FORM = '.menu-edit-form'
   const SELECTOR_MENU_MANAGER = '.menu-manager'
-  const SELECTOR_INPUT = '.ez-data-source__input'
+  const SELECTOR_INPUT = '.ibexa-data-source__input'
 
   document.querySelectorAll(SELECTOR_FORM).forEach((formContainer) => {
     global.Novactive.MenuManagerRenderer.render(
