@@ -1,7 +1,7 @@
 services:
-    ezmenumanager.ezadminui.component.stylesheets:
-         parent: EzSystems\EzPlatformAdminUi\Component\TwigComponent
+    ezmenumanager.ibexa.admin.component.stylesheets:
+         parent: Ibexa\AdminUi\Component\TwigComponent
          arguments:
             $template: '@@EzMenuManager/themes/standard/ezadminui/stylesheets.html.twig'
          tags:
-             - { name: ezplatform.admin_ui.component, group: 'stylesheet-head' }
+             - { name: ibexa.admin_ui.component, group: 'stylesheet-head' }

@@ -12,7 +12,7 @@
 
 namespace Novactive\EzMenuManager\FieldType\MenuItem;
 
-use eZ\Publish\Core\FieldType\Value as BaseValue;
+use Ibexa\Core\FieldType\Value as BaseValue;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 
 class Value extends BaseValue

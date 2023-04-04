@@ -12,8 +12,8 @@
 
 namespace Novactive\EzMenuManager\Twig;
 
-use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\Core\Helper\TranslationHelper;
+use Ibexa\Contracts\Core\Repository\ContentService;
+use Ibexa\Core\Helper\TranslationHelper;
 use Knp\Menu\Twig\Helper;
 use Novactive\EzMenuManager\MenuItem\MenuItemConverter;
 use Novactive\EzMenuManager\Service\MenuBuilder;

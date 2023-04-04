@@ -12,11 +12,11 @@
 
 namespace Novactive\EzMenuManager\Form\Type\FieldType;
 
-use eZ\Publish\API\Repository\FieldTypeService;
-use eZ\Publish\API\Repository\LocationService;
-use eZ\Publish\Core\Helper\TranslationHelper;
-use EzSystems\EzPlatformContentForms\Data\Content\ContentCreateData;
-use EzSystems\EzPlatformContentForms\Data\Content\ContentUpdateData;
+use Ibexa\ContentForms\Data\Content\ContentCreateData;
+use Ibexa\ContentForms\Data\Content\ContentUpdateData;
+use Ibexa\Contracts\Core\Repository\FieldTypeService;
+use Ibexa\Contracts\Core\Repository\LocationService;
+use Ibexa\Core\Helper\TranslationHelper;
 use Novactive\EzMenuManager\Service\DataTransformer\MenuItemValueTransformer;
 use Novactive\EzMenuManager\Service\MenuService;
 use Symfony\Component\Form\AbstractType;
@@ -73,7 +73,7 @@ class MenuItemFieldType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'ezplatform_fieldtype_menuitem';
+        return 'ibexa_fieldtype_menuitem';
     }
 
     public function getParent()

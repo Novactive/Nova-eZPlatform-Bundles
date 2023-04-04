@@ -12,7 +12,7 @@
 
 namespace Novactive\EzMenuManager\Form\Type;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Novactive\EzMenuManagerBundle\Entity\MenuSearch;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;

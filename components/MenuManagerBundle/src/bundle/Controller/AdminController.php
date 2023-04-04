@@ -13,9 +13,9 @@
 namespace Novactive\EzMenuManagerBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use EzSystems\EzPlatformAdminUi\Notification\NotificationHandlerInterface;
-use EzSystems\EzPlatformAdminUiBundle\Controller\Controller;
+use Ibexa\Contracts\AdminUi\Controller\Controller;
+use Ibexa\Contracts\AdminUi\Notification\NotificationHandlerInterface;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Novactive\EzMenuManager\Form\Type\MenuDeleteType;
 use Novactive\EzMenuManager\Form\Type\MenuSearchType;
 use Novactive\EzMenuManager\Form\Type\MenuType;
@@ -115,7 +115,7 @@ class AdminController extends Controller
         $menuDeleteForm = $this->createForm(MenuDeleteType::class, $formData);
 
         return $this->render(
-            '@EzMenuManager/themes/standard/menu_manager/admin/list.html.twig',
+            '@ibexadesign/menu_manager/admin/list.html.twig',
             [
                 'search_form' => $searchForm->createView(),
                 'pager' => $pagerfanta,
@@ -180,7 +180,7 @@ class AdminController extends Controller
         }
 
         return $this->render(
-            '@EzMenuManager/themes/standard/menu_manager/admin/edit.html.twig',
+            '@ibexadesign/menu_manager/admin/edit.html.twig',
             [
                 'form' => $form->createView(),
                 'title' => $menu->getId() ? $menu->getName() : $this->translator->trans('menu.new', [], 'menu_manager'),

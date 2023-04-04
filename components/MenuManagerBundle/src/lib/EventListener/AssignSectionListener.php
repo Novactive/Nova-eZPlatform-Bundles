@@ -14,10 +14,10 @@ declare(strict_types=1);
 
 namespace Novactive\EzMenuManager\EventListener;
 
-use eZ\Publish\API\Repository\Events\Section\AssignSectionEvent;
+use Ibexa\Contracts\Core\Repository\Events\Section\AssignSectionEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class AssignSectionSignalSlot implements EventSubscriberInterface
+class AssignSectionListener implements EventSubscriberInterface
 {
     use CachePurgerTrait;
 

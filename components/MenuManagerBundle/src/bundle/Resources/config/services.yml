@@ -11,38 +11,38 @@ services:
         # if you need to do this, you can override this setting on individual services
         public: false
         bind:
-            $translationHelper: "@ezpublish.translation_helper"
-            $knpHelper: "@knp_menu.helper"
-            $httpCachePurgeClient: '@ezplatform.http_cache.purge_client'
-            $persistenceCacheAdapter: "@ezpublish.cache_pool"
-            $locationHandler: "@ezpublish.spi.persistence.location_handler"
+            $translationHelper: '@Ibexa\Core\Helper\TranslationHelper'
+            $knpHelper: '@knp_menu.helper'
+            $httpCachePurgeClient: '@ibexa.http_cache.purge_client'
+            $persistenceCacheAdapter: '@ibexa.cache_pool'
+#            $locationHandler: '@Ibexa\Contracts\Core\Persistence\Content\Location\Handler'
 
     Novactive\EzMenuManagerBundle\Controller\:
-        resource: "../../Controller/*"
+        resource: '../../Controller/*'
         public: true
 
     Novactive\EzMenuManager\Form\Type\:
-        resource: "../../../lib/Form/Type/*"
+        resource: '../../../lib/Form/Type/*'
 
     Novactive\EzMenuManager\Service\:
-        resource: "../../../lib/Service/*"
+        resource: '../../../lib/Service/*'
 
     Novactive\EzMenuManager\Service\MenuCacheService:
         arguments:
-            $cache: '@ezpublish.cache_pool'
+            $cache: '@ibexa.cache_pool'
         calls:
-            - [setSiteAccess, ['@ezpublish.siteaccess']]
+            - [setSiteAccess, ['@Ibexa\Core\MVC\Symfony\SiteAccess']]
 
     Novactive\EzMenuManager\Twig\:
-        resource: "../../../lib/Twig/*"
+        resource: '../../../lib/Twig/*'
 
     Novactive\EzMenuManager\EventListener\:
-        resource: "../../../lib/EventListener/*"
+        resource: '../../../lib/EventListener/*'
         public: true
 
-    Novactive\EzMenuManager\EventListener\PublishVersionSignalSlot:
+    Novactive\EzMenuManager\EventListener\PublishVersionListener:
         arguments:
-            $persistenceHandler: "@ezpublish.api.persistence_handler"
+            $persistenceHandler: '@ibexa.api.persistence_handler'
 
     Novactive\EzMenuManager\EventListener\DoctrineEventListener:
         tags:
@@ -51,16 +51,16 @@ services:
             - { name: doctrine.event_listener, event: postRemove, lazy: true }
 
     Novactive\EzMenuManager\MenuItem\:
-        resource: "../../../lib/MenuItem/*"
+        resource: '../../../lib/MenuItem/*'
 
     Novactive\EzMenuManager\MenuItem\Type\ContentMenuItemType:
         calls:
-            - ['setTranslationHelper', ['@ezpublish.translation_helper']]
-            - ['setContentService', ['@ezpublish.siteaccessaware.service.content']]
-            - ['setLocationService', ['@ezpublish.siteaccessaware.service.location']]
+            - ['setTranslationHelper', ['@Ibexa\Core\Helper\TranslationHelper']]
+            - ['setContentService', ['@ibexa.siteaccessaware.service.content']]
+            - ['setLocationService', ['@ibexa.siteaccessaware.service.location']]
             - ['setRouter', ['@router']]
-            - ['setCache', ['@ezpublish.cache_pool']]
-            - ['setSiteAccess', ['@ezpublish.siteaccess']]
+            - ['setCache', ['@ibexa.cache_pool']]
+            - ['setSiteAccess', ['@Ibexa\Core\MVC\Symfony\SiteAccess']]
 
     Novactive\EzMenuManager\MenuItem\MenuItemTypeRegistry:
         arguments: [!tagged ezmenumanager.menuitemtype]
