@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\EventListener;
 
+use Doctrine\DBAL\ForwardCompatibility\Result;
 use Ibexa\Bundle\Core\DependencyInjection\Configuration\ChainConfigResolver as ConfigResolver;
 use Ibexa\Contracts\Core\Repository\Repository;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
@@ -66,7 +67,7 @@ abstract class Type
      * @deprecated Now use dynamic children instead.
      *             Example : for full view children build a method getFullChildren
      */
-    public function getChildren(array $viewParameters, ?SiteAccess $siteAccess = null): array
+    public function getChildren(array $viewParameters, ?SiteAccess $siteAccess = null): array|Result
     {
         return [];
     }
