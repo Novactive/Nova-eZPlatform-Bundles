@@ -15,7 +15,7 @@ namespace Novactive\EzMenuManager\Service;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
-use eZ\Publish\API\Repository\LocationService;
+use Ibexa\Contracts\Core\Repository\LocationService;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use Novactive\EzMenuManager\MenuItem\MenuItemTypeRegistry;
 use Novactive\EzMenuManagerBundle\Entity\Menu;

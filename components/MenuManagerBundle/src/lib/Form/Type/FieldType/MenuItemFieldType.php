@@ -12,8 +12,8 @@
 
 namespace Novactive\EzMenuManager\Form\Type\FieldType;
 
-use eZ\Publish\API\Repository\FieldTypeService;
-use eZ\Publish\API\Repository\LocationService;
+use Ibexa\Contracts\Core\Repository\FieldTypeService;
+use Ibexa\Contracts\Core\Repository\LocationService;
 use Ibexa\Core\Helper\TranslationHelper;
 use EzSystems\EzPlatformContentForms\Data\Content\ContentCreateData;
 use EzSystems\EzPlatformContentForms\Data\Content\ContentUpdateData;
