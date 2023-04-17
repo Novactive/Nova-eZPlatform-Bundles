@@ -14,11 +14,11 @@ namespace Novactive\EzMenuManager\MenuItem\Type;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
-use eZ\Publish\Core\Helper\TranslationHelper;
+use Ibexa\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
-use eZ\Publish\Core\MVC\Symfony\siteAccess;
-use eZ\Publish\Core\Repository\siteAccessAware\ContentService;
-use eZ\Publish\Core\Repository\siteAccessAware\LocationService;
+use Ibexa\Core\MVC\Symfony\SiteAccess;
+use Ibexa\Contracts\Core\Repository\ContentService;
+use Ibexa\Contracts\Core\Repository\LocationService;
 use Novactive\EzMenuManager\MenuItem\MenuItemValue;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;

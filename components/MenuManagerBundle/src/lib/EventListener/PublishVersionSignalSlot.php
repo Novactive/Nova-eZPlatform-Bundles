@@ -14,7 +14,7 @@ namespace Novactive\EzMenuManager\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\API\Repository\Events\Content\PublishVersionEvent;
-use eZ\Publish\SPI\Persistence\Handler;
+use Ibexa\Contracts\Core\Persistence\Handler as PersistenceHandler;
 use Novactive\EzMenuManager\FieldType\MenuItem\ValueConverter;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem\ContentMenuItem;
@@ -22,7 +22,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class PublishVersionSignalSlot implements EventSubscriberInterface
 {
-    /** @var Handler */
+    /** @var PersistenceHandler */
     protected $persistenceHandler;
 
     /** @var EntityManagerInterface */
@@ -35,7 +35,7 @@ class PublishVersionSignalSlot implements EventSubscriberInterface
      * SignalListener constructor.
      */
     public function __construct(
-        Handler $persistenceHandler,
+        PersistenceHandler $persistenceHandler,
         EntityManagerInterface $em,
         ValueConverter $valueConverter
     ) {

@@ -13,8 +13,8 @@
 namespace Novactive\EzMenuManager\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
-use eZ\Publish\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface;
-use EzSystems\PlatformHttpCacheBundle\PurgeClient\PurgeClientInterface;
+use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
+use Ibexa\Contracts\HttpCache\PurgeClient\PurgeClientInterface;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 

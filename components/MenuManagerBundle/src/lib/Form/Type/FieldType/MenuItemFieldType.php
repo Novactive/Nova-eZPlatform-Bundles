@@ -14,7 +14,7 @@ namespace Novactive\EzMenuManager\Form\Type\FieldType;
 
 use eZ\Publish\API\Repository\FieldTypeService;
 use eZ\Publish\API\Repository\LocationService;
-use eZ\Publish\Core\Helper\TranslationHelper;
+use Ibexa\Core\Helper\TranslationHelper;
 use EzSystems\EzPlatformContentForms\Data\Content\ContentCreateData;
 use EzSystems\EzPlatformContentForms\Data\Content\ContentUpdateData;
 use Novactive\EzMenuManager\Service\DataTransformer\MenuItemValueTransformer;
