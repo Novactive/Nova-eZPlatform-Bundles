@@ -14,7 +14,7 @@ namespace Novactive\EzMenuManagerBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use EzSystems\EzPlatformAdminUi\Notification\NotificationHandlerInterface;
+use Ibexa\Contracts\AdminUi\Notification\NotificationHandlerInterface;
 use EzSystems\EzPlatformAdminUiBundle\Controller\Controller;
 use Novactive\EzMenuManager\Form\Type\MenuDeleteType;
 use Novactive\EzMenuManager\Form\Type\MenuSearchType;
