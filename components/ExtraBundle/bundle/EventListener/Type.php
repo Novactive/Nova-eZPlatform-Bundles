@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\EventListener;
 
-use Doctrine\DBAL\ForwardCompatibility\Result;
+use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Result;
 use Ibexa\Bundle\Core\DependencyInjection\Configuration\ChainConfigResolver as ConfigResolver;
 use Ibexa\Contracts\Core\Repository\Repository;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
