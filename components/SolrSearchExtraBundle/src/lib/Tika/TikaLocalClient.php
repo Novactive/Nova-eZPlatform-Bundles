@@ -31,7 +31,7 @@ class TikaLocalClient implements TikaClientInterface
      */
     protected function run($command): string
     {
-        $shellCommand = sprintf('java -Dpdfbox.fontcache=/tmp -jar %s %s', $this->jar, $command);
+        $shellCommand = [sprintf('java -Dpdfbox.fontcache=/tmp -jar %s %s', $this->jar, $command)];
 
         $process = new Process($shellCommand);
         $process->setWorkingDirectory(__DIR__.'/../../../');
