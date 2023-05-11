@@ -51,6 +51,7 @@ class NovaeZProtectedContentBundle extends Bundle
                 $this->extension = false;
             }
         }
+
         return $this->extension;
     }
 }

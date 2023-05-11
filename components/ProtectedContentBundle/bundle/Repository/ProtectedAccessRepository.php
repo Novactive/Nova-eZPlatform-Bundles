@@ -15,8 +15,8 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZProtectedContentBundle\Repository;
 
 use Ibexa\Contracts\Core\Repository\Repository;
-use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
+use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
 
 class ProtectedAccessRepository extends EntityRepository
