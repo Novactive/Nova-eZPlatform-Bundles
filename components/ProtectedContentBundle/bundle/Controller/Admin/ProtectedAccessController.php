@@ -33,14 +33,15 @@ class ProtectedAccessController
      *                                           defaults={"accessId": null})
      */
     public function handle(
-        Location $location,
-        Request $request,
-        FormFactoryInterface $formFactory,
+        Location               $location,
+        Request                $request,
+        FormFactoryInterface   $formFactory,
         EntityManagerInterface $entityManager,
-        RouterInterface $router,
-        PurgeClientInterface $httpCachePurgeClient,
-        ?ProtectedAccess $access = null
-    ): RedirectResponse {
+        RouterInterface        $router,
+        PurgeClientInterface   $httpCachePurgeClient,
+        ?ProtectedAccess       $access = null
+    ): RedirectResponse
+    {
         if ($request->isMethod('post')) {
             $now = new DateTime();
             if (null === $access) {
@@ -56,15 +57,16 @@ class ProtectedAccessController
                 $entityManager->flush();
                 $httpCachePurgeClient->purge(
                     [
-                        'location-'.$location->id,
-                        'location-'.$location->parentLocationId,
+                        'location-' . $location->id,
+                        'location-' . $location->parentLocationId,
                     ]
                 );
             }
         }
 
         return new RedirectResponse(
-            $router->generate('ibexa.content.view', ['contentId' => $location->contentId, 'locationId' => $location->id]).
+            $router->generate('ibexa.content.view',
+                ['contentId' => $location->contentId, 'locationId' => $location->id]) .
             '#ibexa-tab-location-view-protect-content#tab'
         );
     }
@@ -73,24 +75,26 @@ class ProtectedAccessController
      * @Route("/remove/{locationId}/{access}", name="novaezprotectedcontent_bundle_admin_remove_protection")
      */
     public function remove(
-        Location $location,
+        Location               $location,
         EntityManagerInterface $entityManager,
-        RouterInterface $router,
-        ProtectedAccess $access,
-        PurgeClientInterface $httpCachePurgeClient
-    ): RedirectResponse {
+        RouterInterface        $router,
+        ProtectedAccess        $access,
+        PurgeClientInterface   $httpCachePurgeClient
+    ): RedirectResponse
+    {
         $entityManager->remove($access);
         $entityManager->flush();
 
         $httpCachePurgeClient->purge(
             [
-                'location-'.$location->id,
-                'location-'.$location->parentLocationId,
+                'location-' . $location->id,
+                'location-' . $location->parentLocationId,
             ]
         );
 
         return new RedirectResponse(
-            $router->generate('ibexa.content.view', ['contentId' => $location->contentId, 'locationId' => $location->id]).
+            $router->generate('ibexa.content.view',
+                ['contentId' => $location->contentId, 'locationId' => $location->id]) .
             '#ibexa-tab-location-view-protect-content#tab'
         );
     }
