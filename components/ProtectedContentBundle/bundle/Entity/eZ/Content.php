@@ -15,8 +15,8 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZProtectedContentBundle\Entity\eZ;
 
 use Doctrine\ORM\Mapping as ORM;
-use eZ\Publish\API\Repository\Values\Content\Content as eZContent;
-use eZ\Publish\API\Repository\Values\Content\Location as eZLocation;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content as eZContent;
+use Ibexa\Contracts\Core\Repository\Values\Content\Location as eZLocation;
 use Symfony\Component\Validator\Constraints as Assert;
 
 trait Content

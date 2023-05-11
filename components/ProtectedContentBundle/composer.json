@@ -1,24 +1,24 @@
 {
     "name": "novactive/ezprotectedcontentbundle",
-    "description": "Novactive eZ Protected Content Bundle is an eZ Platform bundle that provides quick protection on Contents",
+    "description": "Novactive eZ Protected Content Bundle is an Ibexa bundle that provides quick protection on Contents",
     "keywords": [
         "protected content",
         "private content",
-        "novactive",
-        "ezplatform"
+        "almaviacx",
+        "ibexa"
     ],
     "homepage": "https://github.com/Novactive/NovaeZProtectedContentBundle",
-    "type": "ezplatform-bundle",
+    "type": "ibexa-bundle",
     "authors": [
         {
-            "name": "Novactive",
-            "homepage": "https://www.novactive.com",
-            "email": "dir.tech@novactive.com"
+            "name": "AlmaviaCX",
+            "homepage": "https://almaviacx.com",
+            "email": "dirtech.web@almaviacx.com"
         },
         {
             "name": "Makrem Bouhlel",
             "homepage": "https://github.com/mbouhlel75",
-            "email": "m.bouhlel@novactive.com"
+            "email": "makrem.bouhlel@almaviacx.com"
         },
         {
             "name": "Sebastien Morel",
@@ -30,7 +30,7 @@
         "MIT"
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^7.3 || ^8.0",
         "ext-json": "*"
     },
     "autoload": {
@@ -40,8 +40,8 @@
     },
     "extra": {
         "thanks": {
-            "name": "ezsystems/ezplatform",
-            "url": "https://github.com/ezsystems/ezplatform"
+            "name": "ibexa/core",
+            "url": "https://github.com/ibexa/core"
         }
     }
 }

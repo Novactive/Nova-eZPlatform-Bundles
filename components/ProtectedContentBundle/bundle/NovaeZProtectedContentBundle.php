@@ -30,7 +30,7 @@ class NovaeZProtectedContentBundle extends Bundle
     public function build(ContainerBuilder $container): void
     {
         parent::build($container);
-        $eZExtension = $container->getExtension('ezpublish');
+        $eZExtension = $container->getExtension('ibexa');
         $eZExtension->addPolicyProvider(new PolicyProvider());
     }
 
@@ -51,8 +51,6 @@ class NovaeZProtectedContentBundle extends Bundle
                 $this->extension = false;
             }
         }
-        if ($this->extension) {
-            return $this->extension;
-        }
+        return $this->extension;
     }
 }

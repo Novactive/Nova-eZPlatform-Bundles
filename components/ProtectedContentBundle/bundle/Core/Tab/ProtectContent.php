@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Core\Tab;
 
-use EzSystems\EzPlatformAdminUi\Tab\AbstractTab;
-use EzSystems\EzPlatformAdminUi\Tab\OrderedTabInterface;
+use Ibexa\Contracts\AdminUi\Tab\AbstractTab;
+use Ibexa\Contracts\AdminUi\Tab\OrderedTabInterface;
 use Novactive\Bundle\eZProtectedContentBundle\Core\Compose\EntityManager;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
 use Novactive\Bundle\eZProtectedContentBundle\Form\ProtectedAccessType;
@@ -66,7 +66,7 @@ class ProtectContent extends AbstractTab implements OrderedTabInterface
         $items = $this->entityManager->getRepository(ProtectedAccess::class)->findByContent($content);
 
         return $this->twig->render(
-            '@NovaeZProtectedContent/tabs/protected_content.html.twig',
+            '@ibexadesign/tabs/protected_content.html.twig',
             [
                 'form' => $form->createView(),
                 'items' => $items,

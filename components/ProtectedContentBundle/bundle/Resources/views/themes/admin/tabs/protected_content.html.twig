@@ -1,22 +1,22 @@
 {% trans_default_domain 'ezprotectedcontent' %}
 
-<div class="ez-table-header ">
-    <div class="ez-table-header__headline">{{ "tab.header.title"|trans }}</div>
+<div class="ibexa-table-header ">
+    <div class="ibexa-table-header__headline">{{ "tab.header.title"|trans }}</div>
     <div>
-        <button class="btn btn-primary ez-btn--prevented" data-toggle="modal" data-target="#ez-modal--add-content-protection" title="{{ "tab.modal.title"|trans }}">
-            <svg class="ez-icon ez-icon-create">
-                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#create"></use>
+        <button class="btn btn-primary ibexa-btn--prevented" data-toggle="modal" data-target="#ibexa-modal--add-content-protection" title="{{ "tab.modal.title"|trans }}">
+            <svg class="ibexa-icon ibexa-icon--tiny ibexa-icon-create">
+                <use xlink:href="/bundles/ibexaicons/img/all-icons.svg#create"></use>
             </svg>
         </button>
-        <div class="modal fade ez-modal ez-modal--add-content-protection" id="ez-modal--add-content-protection" tabindex="-1" role="dialog">
+        <div class="modal fade ibexa-modal ibexa-modal--add-content-protection" id="ibexa-modal--add-content-protection" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     {{ form_start(form, {action: path("novaezprotectedcontent_bundle_admin_handle_form", {locationId: location.id })}) }}
                     <div class="modal-header">
                         <h3 class="modal-title">{{ "tab.modal.title"|trans }}</h3>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <svg class="ez-icon ez-icon--medium" aria-hidden="true">
-                                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#discard"></use>
+                            <svg class="ibexa-icon ibexa-icon--medium" aria-hidden="true">
+                                <use xlink:href="/bundles/ibexaicons/img/all-icons.svg#discard"></use>
                             </svg>
                         </button>
                     </div>
@@ -40,8 +40,8 @@
     </div>
 </div>
 
-<div class="ez-table">
-    <table class="ez-table table">
+<div class="ibexa-table">
+    <table class="ibexa-table table">
         <thead>
         <tr>
             <th>{{ 'tab.table.th.password'|trans }}</th>
@@ -53,20 +53,20 @@
         <tbody>
         {% for item in items %}
             <tr class="{% if item.contentId != location.contentInfo.id %} disabled {% endif %}">
-                <td class="ez-table__cell">{{ item.password }}</td>
-                <td class="ez-table__cell">
+                <td class="ibexa-table__cell">{{ item.password }}</td>
+                <td class="ibexa-table__cell">
                     {% if item.contentId == location.contentInfo.id %}
                         {{ item.protectChildren ? 'tab.yes'|trans:'tab.no'|trans }}
                     {% else %}
                         {{ 'tab.no'|trans }}
                     {% endif %}
                 </td>
-                <td class="ez-table__cell">{{ item.enabled ? 'tab.yes'|trans:'tab.no'|trans }}</td>
-                <td class="ez-table__cell">
+                <td class="ibexa-table__cell">{{ item.enabled ? 'tab.yes'|trans:'tab.no'|trans }}</td>
+                <td class="ibexa-table__cell">
                     {% if item.contentId == location.contentInfo.id %}
                         <a href="{{ path("novaezprotectedcontent_bundle_admin_remove_protection", {locationId: location.id, access: item.id }) }}" class="button">
-                            <svg class="ez-icon ez-icon--medium">
-                                <use xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#trash"></use>
+                            <svg class="ibexa-icon ibexa-icon--medium">
+                                <use xlink:href="/bundles/ibexaicons/img/all-icons.svg#trash"></use>
                             </svg>
                         </a>
                     {% endif %}

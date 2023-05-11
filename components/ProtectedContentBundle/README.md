@@ -25,7 +25,7 @@ Once a Password is set, the Content becomes Protected. In this situation you wil
 Allowing you do:
 
 ```twig
-<h2>{{ ez_content_name(content) }}</h2>
+<h2>{{ ibexa_content_name(content) }}</h2>
 {% if not canReadProtectedContent %}
     <p>This content has been protected by a password</p>
     <div class="protected-content-form">
