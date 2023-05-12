@@ -59,8 +59,8 @@ class EzStaticTemplatesExtension extends Extension implements PrependExtensionIn
                 $ezpublishConfig['system'][$theme] = ['design' => "{$theme}_design"];
                 $ezdesignConfig['design_list']["{$theme}_design"] = [$theme];
             }
-            $container->prependExtensionConfig('ezpublish', $ezpublishConfig);
-            $container->prependExtensionConfig('ezdesign', $ezdesignConfig);
+            $container->prependExtensionConfig('ibexa', $ezpublishConfig);
+            $container->prependExtensionConfig('ibexa_design_engine', $ezdesignConfig);
         }
     }
 
