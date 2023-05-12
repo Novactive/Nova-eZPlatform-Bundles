@@ -2,17 +2,18 @@ system:
     default:
         fielddefinition_settings_templates:
             -
-                template: "@ezdesign/enhanced_image_asset/fielddefinition_settings.html.twig"
+                template: "@ibexadesign/content_type/enhanced_image_fielddefinition_settings_templates.html.twig"
         fielddefinition_edit_templates:
             -
-                template: "@ezdesign/enhanced_image_asset/fielddefinition_edit_templates.html.twig"
+                template: "@ibexadesign/content_type/enhanced_image_fielddefinition_edit_templates.html.twig"
+    site:
         field_templates:
             -
-                template: "@ezdesign/enhanced_image_asset/content_fields.html.twig"
+                template: "@ibexadesign/enhanced_image_content_fields.html.twig"
                 priority: 1000
 
     admin_group:
         field_templates:
             -
-                template: "@ezdesign/enhanced_image_asset/admin_content_fields.html.twig"
+                template: "@ibexadesign/ui/field_type/preview/enhanced_image_content_fields.html.twig"
                 priority: 10000

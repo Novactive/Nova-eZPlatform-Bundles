@@ -1,35 +1,33 @@
 services:
     Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\EnhancedImageStorage:
-        parent: ezpublish.fieldType.ezimage.externalStorage
+        parent: Ibexa\Core\FieldType\Image\ImageStorage
         tags:
-            - {name: ezplatform.field_type.external_storage_handler, alias: enhancedimage}
+            - {name: ibexa.field_type.storage.external.handler, alias: enhancedimage}
 
-    ezpublish.field_type.indexable.enhancedimage:
-        parent: ezpublish.fieldType.indexable.ezimage
-        class: eZ\Publish\Core\FieldType\Image\SearchField
+    ibexa.field_type.indexable.enhancedimage:
+        parent: Ibexa\Core\FieldType\Image\SearchField
+        class: Ibexa\Core\FieldType\Image\SearchField
         tags:
-            - {name: ezplatform.field_type.indexable, alias: enhancedimage}
+            - {name: ibexa.field_type.indexable, alias: enhancedimage}
 
-    ezpublish_rest.field_type_processor.enhancedimage:
-        parent: ezpublish_rest.field_type_processor.ezimage
+    ibexa_rest.field_type_processor.enhancedimage:
+        parent: Ibexa\Rest\FieldTypeProcessor\ImageProcessor
         tags:
             - { name: ibexa.rest.field_type.processor, alias: enhancedimage }
 
     Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\Type:
-        parent: ezpublish.fieldType.ezimage
+        parent: Ibexa\Core\FieldType\Image\Type
         tags:
-            - {name: ezplatform.field_type, alias: enhancedimage}
+            - {name: ibexa.field_type, alias: enhancedimage}
 
     Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\ValueConverter:
-        parent: ezpublish.fieldType.ezimage.converter
+        parent: Ibexa\Core\Persistence\Legacy\Content\FieldValue\Converter\ImageConverter
         tags:
-            - {name: ezplatform.field_type.legacy_storage.converter, alias: enhancedimage}
-
-    eZ\Publish\Core\FieldType\Image\Type: '@ezpublish.fieldType.ezimage'
+            - {name: ibexa.field_type.storage.legacy.converter, alias: enhancedimage}
 
     Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\FormMapper:
         autoconfigure: true
         autowire: true
         tags:
-            - { name: ezplatform.field_type.form_mapper.definition, fieldType: enhancedimage }
-            - { name: ezplatform.field_type.form_mapper.value, fieldType: enhancedimage }
+            - { name: ibexa.admin_ui.field_type.form.mapper.definition, fieldType: enhancedimage }
+            - { name: ibexa.admin_ui.field_type.form.mapper.value, fieldType: enhancedimage }

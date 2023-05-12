@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\Values;
 
-use eZ\Publish\SPI\Variation\Values\ImageVariation;
+use Ibexa\Contracts\Core\Variation\Values\ImageVariation;
 use Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\FocusPoint;
 
 /**

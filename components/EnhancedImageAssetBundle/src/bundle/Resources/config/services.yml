@@ -5,9 +5,9 @@ services:
         public: false
 
         bind:
-            $imageVariationService: '@ezpublish.fieldType.ezimage.variation_service'
+            $imageVariationService: '@ibexa.field_type.ezimage.variation_service'
             $filterConfiguration: '@liip_imagine.filter.configuration'
-            $cache: "@ezpublish.cache_pool"
+            $cache: "@ibexa.cache_pool"
             $assetExtension: '@twig.extension.assets'
 
     Novactive\EzEnhancedImageAsset\Twig\:
@@ -20,11 +20,6 @@ services:
         resource: '../../Command/*'
 
     Novactive\EzEnhancedImageAsset\FocusPoint\FocusPointCalculator:
-
-    Novactive\EzEnhancedImageAsset\Imagine\Filter\AliasFilterManager:
-        arguments:
-            $filterManager: "@liip_imagine.filter.manager"
-            $filterConfiguration: "@liip_imagine.filter.configuration"
 
     Novactive\EzEnhancedImageAsset\Imagine\Filter\Loader\FocusedThumbnailFilterLoader:
         tags:
@@ -43,13 +38,18 @@ services:
             - { name: "liip_imagine.filter.loader", loader: 'toFormat' }
 
     Novactive\EzEnhancedImageAsset\Imagine\FocusedImageAliasGenerator:
-
-    ezpublish.image_alias.imagine.alias_generator:
-        class: Novactive\EzEnhancedImageAsset\Imagine\ImageAliasGenerator
+        decorates: 'Ibexa\Bundle\Core\Imagine\Variation\ImagineAwareAliasGenerator'
         arguments:
-            $dataLoader: "@ezpublish.image_alias.imagine.binary_loader"
-            $ioResolver: "@ezpublish.image_alias.imagine.cache_resolver"
-            $logger:
+            $imageVariationService: '@Novactive\EzEnhancedImageAsset\Imagine\FocusedImageAliasGenerator.inner'
+
+    Novactive\EzEnhancedImageAsset\Imagine\ImageAliasGenerator:
+        decorates: 'ibexa.image_alias.imagine.alias_generator'
+        decoration_priority: 10
+        arguments:
+            $dataLoader: '@Ibexa\Bundle\Core\Imagine\BinaryLoader'
+            $filterManager: "@liip_imagine.filter.manager"
+            $ioResolver: '@ibexa.image_alias.imagine.cache_resolver'
+            $logger: "@?logger"
 
     Novactive\EzEnhancedImageAsset\Imagine\Filter\FilterConfiguration:
         decorates: 'liip_imagine.filter.configuration'
@@ -62,13 +62,13 @@ services:
 
     Novactive\EzEnhancedImageAsset\Imagine\ChainPlaceholderProvider:
         arguments:
-            $providerRegistry: '@ezpublish.image_alias.imagine.placeholder_provider.registry'
+            $providerRegistry: '@ibexa.image_alias.imagine.placeholder_provider.registry'
         tags:
-            - { name: 'ezpublish.placeholder_provider', type: 'chain_provider' }
+            - { name: 'ibexa.placeholder_provider', type: 'chain_provider' }
 
     Novactive\EzEnhancedImageAsset\Imagine\PlaceholderProvider\RemoteProvider:
         tags:
-            - { name: 'ezpublish.placeholder_provider', type: 'enhanced_remote' }
+            - { name: 'ibexa.placeholder_provider', type: 'enhanced_remote' }
 
     Novactive\EzEnhancedImageAsset\Imagine\AliasDirectoryVariationPathGenerator:
-        decorates: 'ezpublish.image_alias.variation_path_generator.alias_directory'
+        decorates: Ibexa\Bundle\Core\Imagine\VariationPathGenerator\AliasDirectoryVariationPathGenerator
