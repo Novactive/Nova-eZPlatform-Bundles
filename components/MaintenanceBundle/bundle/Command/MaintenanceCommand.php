@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Novactive\NovaeZMaintenanceBundle\Command;
 
-use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
+use Ibexa\Core\MVC\Symfony\SiteAccess;
+use Ibexa\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use Novactive\NovaeZMaintenanceBundle\Helper\FileHelper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
