@@ -161,7 +161,7 @@ To be displayed, the generated variation width should be two time the width of t
 <h3 name="448741a8596bc56cbb2e285051a2c784">6. Twig render field parameters</h3>
 <p>You can now specify the <code>alternativeAlias</code> parameter to define alternative image alias depending the screen size</p>
 <pre><code class=" twig">
-{{ ez_render_field(content, fieldIdentifier, {
+{{ ibexa_render_field(content, fieldIdentifier, {
     parameters: {
         alias: 'desktop_alias',
         alternativeAlias: [
@@ -169,8 +169,8 @@ To be displayed, the generated variation width should be two time the width of t
                 alias: 'mobile_alias',
                 media: '(max-width: 320px)'
             }
-        ]
-        lazyLoad: true|false // optionnal
+        ],
+        lazyLoad: true|false, // optionnal
         retina: true|false // optionnal
     }
 }) }}</code></pre>
@@ -192,13 +192,13 @@ SET oa.data_type_string = "enhancedimage"
 WHERE oa.data_type_string = "ezimage" AND ca.data_type_string="enhancedimage";</code></pre>
 <h2 name="c64518704ce0c0d5501a45763f464276">Usage</h2>
 <p>Some feature will require the following assets</p>
-<pre><code class=" twig">&lt;link rel="stylesheet" href="{{ asset("bundles/ezenhancedimageasset/css/enhancedimage.css") }}" /&gt;</code></pre>
-<pre><code class=" twig">&lt;script src="{{ asset("bundles/ezenhancedimageasset/js/enhancedimage.js") }}"&gt;&lt;/script&gt;</code></pre>
+<pre><code class=" twig">{{ encore_entry_link_tags('enhancedimage-css', null, 'ibexa') }}</code></pre>
+<pre><code class=" twig">{{ encore_entry_script_tags('enhancedimage-js', null, 'ibexa') }}</code></pre>
 
             <p class="text-right">
                 <img width="204" height="20"
-                     src='https://img.shields.io/badge/Updated on-05--12--2023 07:58:14-green?style=flat-square&labelColor=black'
-                     alt='Updated on 05--12--2023 07:58:14'
+                     src='https://img.shields.io/badge/Updated on-05--12--2023 08:14:17-green?style=flat-square&labelColor=black'
+                     alt='Updated on 05--12--2023 08:14:17'
                 />
             </p>
         </div>
