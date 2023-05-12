@@ -15,9 +15,9 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZProtectedContentBundle\Listener;
 
 use Doctrine\ORM\EntityManagerInterface;
-use eZ\Publish\API\Repository\PermissionResolver;
-use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;
-use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use Ibexa\Contracts\Core\Repository\PermissionResolver;
+use Ibexa\Core\MVC\Symfony\Event\PreContentViewEvent;
+use Ibexa\Core\MVC\Symfony\View\ContentView;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
 use Novactive\Bundle\eZProtectedContentBundle\Form\RequestProtectedAccessType;
 use Symfony\Component\Form\FormFactoryInterface;

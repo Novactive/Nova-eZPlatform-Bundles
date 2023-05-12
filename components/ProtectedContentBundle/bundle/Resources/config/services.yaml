@@ -6,7 +6,7 @@ services:
         autoconfigure: true
         public: false
         bind:
-            $httpCachePurgeClient: '@ezplatform.http_cache.purge_client'
+            $httpCachePurgeClient: '@ibexa.http_cache.purge_client'
             $entityManager: "@novaezprotectedcontent.doctrine.entity_manager"
 
     Novactive\Bundle\eZProtectedContentBundle\Command\:
@@ -21,7 +21,7 @@ services:
 
     Novactive\Bundle\eZProtectedContentBundle\Core\Tab\ProtectContent:
         tags:
-            - { name: ezplatform.tab, group: location-view }
+            - { name: ibexa.admin_ui.tab, group: location-view }
 
     Novactive\Bundle\eZProtectedContentBundle\Listener\EntityContentLink:
         tags:
@@ -37,10 +37,10 @@ services:
 
     novaezprotectedcontent.doctrine.entity_manager:
         class: Doctrine\ORM\EntityManagerInterface
-        factory: ['@Novactive\Bundle\eZSEOBundle\Core\SiteAccessAwareEntityManagerFactory', 'get']
+        factory: ['@Novactive\Bundle\eZProtectedContentBundle\Core\SiteAccessAwareEntityManagerFactory', 'get']
 
     Novactive\Bundle\eZProtectedContentBundle\Core\SiteAccessAwareEntityManagerFactory:
         arguments:
-            $repositoryConfigurationProvider: "@ezpublish.api.repository_configuration_provider"
+            $repositoryConfigurationProvider: "@Ibexa\\Bundle\\Core\\ApiLoader\\RepositoryConfigurationProvider"
             $resolver: "@doctrine.orm.default_entity_listener_resolver"
             $settings: { debug: "%kernel.debug%", cache_dir: "%kernel.cache_dir%" }

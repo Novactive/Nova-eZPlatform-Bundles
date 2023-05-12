@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Entity\eZ;
 
-use eZ\Publish\API\Repository\Values\Content\Content as eZContent;
-use eZ\Publish\API\Repository\Values\Content\Location as eZLocation;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content as eZContent;
+use Ibexa\Contracts\Core\Repository\Values\Content\Location as eZLocation;
 
 interface ContentInterface
 {
