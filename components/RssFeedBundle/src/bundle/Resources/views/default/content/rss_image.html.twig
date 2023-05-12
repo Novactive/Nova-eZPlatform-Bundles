@@ -1,7 +1,7 @@
-{% set image_field_identifier = ez_content_field_identifier_image_asset() %}
+{% set image_field_identifier = ibexa_content_field_identifier_image_asset() %}
 
-{% if image_field_identifier is not null and not ez_field_is_empty(content,  image_field_identifier) %}
-    {{ ez_render_field( content, image_field_identifier, {
+{% if image_field_identifier is not null and not ibexa_field_is_empty(content,  image_field_identifier) %}
+    {{- ibexa_render_field(content, image_field_identifier, {
         'template': '@EzRssFeed/default/fields.html.twig',
-    }) }}
+    }) -}}
 {% endif %}

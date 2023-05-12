@@ -12,9 +12,9 @@
 
 namespace Novactive\EzRssFeedBundle\PlatformAdminUI\EventListener;
 
-use eZ\Publish\API\Repository\PermissionResolver;
-use eZ\Publish\API\Repository\Repository;
-use EzSystems\EzPlatformAdminUi\Menu\Event\ConfigureMenuEvent;
+use Ibexa\Contracts\Core\Repository\PermissionResolver;
+use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\AdminUi\Menu\Event\ConfigureMenuEvent;
 use Knp\Menu\ItemInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -42,7 +42,6 @@ class MainMenuBuilderListener implements EventSubscriberInterface
          * @var PermissionResolver
          */
         $permissionResolver = $this->getRepository()->getPermissionResolver();
-
         if ($permissionResolver->hasAccess('rss', 'edit')) {
             $this->addSubMenu($event->getMenu());
         }
@@ -60,6 +59,12 @@ class MainMenuBuilderListener implements EventSubscriberInterface
     {
         $menu
             ->addChild('rss', ['route' => 'platform_admin_ui_rss_feeds_list'])
-            ->setLabel('ez_rss_feed.menu.main_menu.header');
+            ->setLabel('ez_rss_feed.menu.main_menu.header')
+            ->setExtra('translation_domain', 'messages')
+            ->setExtra('bottom_item', true)
+            ->setExtra('icon', 'rss')
+            ->setExtra('orderNumber', 160)
+            ->setAttribute('data-tooltip-placement', 'right')
+            ->setAttribute('data-tooltip-extra-class', 'ibexa-tooltip--info-neon');
     }
 }

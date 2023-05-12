@@ -12,10 +12,10 @@
 
 namespace Novactive\EzRssFeedBundle\Form;
 
-use eZ\Publish\API\Repository\ContentTypeService;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Ibexa\Contracts\Core\Repository\ContentTypeService;
+use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
+use Ibexa\Contracts\Core\Repository\Values\ContentType\ContentType;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Novactive\EzRssFeedBundle\Entity\RssFeedItems;
 use Novactive\EzRssFeedBundle\Form\Type\TreeDiscoveryType;
 use Symfony\Component\Form\AbstractType;
@@ -60,11 +60,11 @@ class RssFeedItemsType extends AbstractType
                     'label' => 'ez_rss_feed.form.subtree_path',
                     'compound' => true,
                     'attr' => [
-                        'class' => 'ez-button-tree 
+                        'class' => 'ibexa-button-tree 
                             pure-button 
-                            ez-font-icon 
-                            ez-button btn 
-                            btn-primary
+                            ibexa-font-icon 
+                            ibexa-btn btn 
+                            ibexa-btn--secondary
                             js-novaezrssfeed-select-location-id',
                         'data-location-input-selector' => 'input-location-'.uniqid('', false),
                         'data-selected-location-list-selector' => 'location-values-'.uniqid('', false),

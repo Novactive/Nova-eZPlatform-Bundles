@@ -44,7 +44,7 @@ class EzRssFeedExtension extends Extension implements PrependExtensionInterface
     public function prepend(ContainerBuilder $container): void
     {
         $configs = [
-            'views.yml' => 'ezpublish',
+            'views.yml' => 'ibexa',
         ];
 
         foreach ($configs as $fileName => $extensionName) {
