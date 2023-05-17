@@ -19,7 +19,7 @@ use Novactive\Bundle\eZProtectedContentBundle\Entity\eZ\ContentInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedAccessRepository")
+ * @ORM\Entity()
  * @ORM\Table(name="novaezprotectedcontent")
  * @ORM\EntityListeners({"Novactive\Bundle\eZProtectedContentBundle\Listener\EntityContentLink"})
  */
