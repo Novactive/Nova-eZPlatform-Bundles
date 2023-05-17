@@ -13,13 +13,15 @@
 namespace Novactive\EzRssFeedBundle\Core;
 
 use Doctrine\Bundle\DoctrineBundle\Mapping\ContainerEntityListenerResolver;
-use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\Psr6\DoctrineProvider;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Doctrine\Persistence\ManagerRegistry as Registry;
 use Ibexa\Bundle\Core\ApiLoader\RepositoryConfigurationProvider;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 class SiteAccessAwareEntityManagerFactory
 {
@@ -62,7 +64,7 @@ class SiteAccessAwareEntityManagerFactory
         return $config['storage']['connection'] ?? 'default';
     }
 
-    public function get()
+    public function get(): EntityManagerInterface
     {
         $connectionName = $this->getConnectionName();
         // If it is the default connection then we don't bother we can directly use the default entity Manager
@@ -73,12 +75,12 @@ class SiteAccessAwareEntityManagerFactory
         $connection = $this->registry->getConnection($connectionName);
 
         /** @var Connection $connection */
-        $cache = new ArrayCache();
+        $cache = new ArrayAdapter();
         $config = new Configuration();
-        $config->setMetadataCacheImpl($cache);
+        $config->setMetadataCacheImpl(DoctrineProvider::wrap($cache));
         $driverImpl = $config->newDefaultAnnotationDriver(__DIR__.'/../Entity', false);
         $config->setMetadataDriverImpl($driverImpl);
-        $config->setQueryCacheImpl($cache);
+        $config->setQueryCacheImpl(DoctrineProvider::wrap($cache));
         $config->setProxyDir($this->settings['cache_dir'].'/EzRssFeedBundle/');
         $config->setProxyNamespace('EzRssFeedBundle\Proxies');
         $config->setAutoGenerateProxyClasses($this->settings['debug']);
