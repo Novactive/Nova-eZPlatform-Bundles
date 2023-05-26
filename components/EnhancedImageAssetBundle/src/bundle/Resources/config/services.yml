@@ -61,14 +61,12 @@ services:
             $converters: !tagged ez_enhanced_image_asset.field_value_converter
 
     Novactive\EzEnhancedImageAsset\Imagine\ChainPlaceholderProvider:
-        arguments:
-            $providerRegistry: '@ibexa.image_alias.imagine.placeholder_provider.registry'
         tags:
-            - { name: 'ibexa.placeholder_provider', type: 'chain_provider' }
+            - { name: 'ibexa.media.images.placeholder.provider', type: 'chain_provider' }
 
     Novactive\EzEnhancedImageAsset\Imagine\PlaceholderProvider\RemoteProvider:
         tags:
-            - { name: 'ibexa.placeholder_provider', type: 'enhanced_remote' }
+            - { name: 'ibexa.media.images.placeholder.provider', type: 'enhanced_remote' }
 
     Novactive\EzEnhancedImageAsset\Imagine\AliasDirectoryVariationPathGenerator:
         decorates: Ibexa\Bundle\Core\Imagine\VariationPathGenerator\AliasDirectoryVariationPathGenerator
