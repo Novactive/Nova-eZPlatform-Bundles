@@ -38,13 +38,22 @@
                         {{ form_widget(form.description) }}
                     </div>
                 </div>
-                <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                <div class="form-group col-md-6 col-sm-12 col-xs-12">
                     <label class="form-label">
                         {{ form_label(form.number_of_object) }}
                     </label>
                     <div class="controls">
                         {{ form_errors(form.number_of_object) }}
                         {{ form_widget(form.number_of_object) }}
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                    <label class="form-label">
+                        {{ form_label(form.feed_sites) }}
+                    </label>
+                    <div class="controls">
+                        {{ form_errors(form.feed_sites) }}
+                        {{ form_widget(form.feed_sites) }}
                     </div>
                 </div>
                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
@@ -71,7 +80,7 @@
                     </label>
                     <div class="controls rss-link">
                         {{ form_errors(form.url_slug) }}
-                        <em>/rss/feed/</em>
+                        <em>/rss/feed/siteaccess/</em>
                         {{ form_widget(form.url_slug) }}
                     </div>
                 </div>

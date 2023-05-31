@@ -8,11 +8,20 @@ services:
 
   Novactive\EzRssFeedBundle\Controller\RssFeedViewController:
     autowire: true
-    tags: ['controller.service_arguments']
+    tags:
+    - { name: controller.service_arguments }
 
   Novactive\EzRssFeedBundle\Form\RssFeedItemsType:
     tags:
     - { name: form.type }
+
+  Novactive\EzRssFeedBundle\Form\Transformer\MultipleChoicesTransformer:
+
+  Novactive\EzRssFeedBundle\Form\RssFeedsType:
+    arguments:
+      $choicesTransformer: '@Novactive\EzRssFeedBundle\Form\Transformer\MultipleChoicesTransformer'
+    tags:
+      - { name: form.type }
 
   Novactive\EzRssFeedBundle\Form\Type\TreeDiscoveryType:
     tags:
@@ -29,3 +38,8 @@ services:
   novaezrssfeed.doctrine.entity_manager:
     class: Doctrine\ORM\EntityManagerInterface
     factory: ['@Novactive\EzRssFeedBundle\Core\SiteAccessAwareEntityManagerFactory', 'get']
+
+  Novactive\EzRssFeedBundle\Services\SiteListService:
+
+  Novactive\EzRssFeedBundle\Services\SiteListServiceInterface: '@Novactive\EzRssFeedBundle\Services\SiteListService'
+

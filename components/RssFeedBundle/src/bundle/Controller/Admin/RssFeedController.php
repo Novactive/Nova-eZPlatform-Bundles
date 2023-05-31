@@ -143,7 +143,10 @@ class RssFeedController extends Controller
         if (!$permissionResolver->hasAccess('rss', 'edit')) {
             throw new UnauthorizedException('rss', 'edit', []);
         }
-
+        $originalSites = new ArrayCollection();
+        foreach ($rssFeed->getFeedSites() as $site) {
+            $originalSites->add($site);
+        }
         $originalFeedsItems = new ArrayCollection();
         foreach ($rssFeed->getFeedItems() as $item) {
             $originalFeedsItems->add($item);
@@ -171,6 +174,13 @@ class RssFeedController extends Controller
             foreach ($originalFeedsItems as $originalChild) {
                 if (false === $rssFeed->getFeedItems()->contains($originalChild)) {
                     $rssFeed->removeFeedItem($originalChild);
+                    $originalChild->setRssFeeds(null);
+                    $this->entityManager->remove($originalChild);
+                }
+            }
+             foreach ($originalSites as $originalChild) {
+                if (false === $rssFeed->getFeedSites()->contains($originalChild)) {
+                    $rssFeed->removeFeedSite($originalChild);
                     $originalChild->setRssFeeds(null);
                     $this->entityManager->remove($originalChild);
                 }

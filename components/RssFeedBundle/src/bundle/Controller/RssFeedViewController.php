@@ -15,11 +15,14 @@ namespace Novactive\EzRssFeedBundle\Controller;
 use Ibexa\Bundle\Core\Controller;
 use Ibexa\Contracts\Core\Repository\PermissionResolver;
 use Ibexa\Core\Base\Exceptions\UnauthorizedException;
+use Ibexa\Core\MVC\Symfony\SiteAccess;
+use Knp\Menu\FactoryInterface;
 use Novactive\EzRssFeedBundle\Entity\RssFeeds;
 use Novactive\EzRssFeedBundle\Services\RssFeedsService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 /**
  * @Route("/rss/feed")
@@ -31,7 +34,7 @@ class RssFeedViewController extends Controller
     use EntityManagerTrait;
 
     /**
-     * @Route("/{urlSlug}", name="rss_feed_view_index")
+     * @Route("/{site}/{urlSlug}", name="rss_feed_view_index")
      */
     public function indexAction(Request $request, RssFeedsService $rssFeedsService): Response
     {
@@ -46,14 +49,12 @@ class RssFeedViewController extends Controller
 
         $rssFeedRepository = $this->entityManager->getRepository(RssFeeds::class);
 
-        $rssFeed = $rssFeedRepository->findOneBy(
-            [
-                'urlSlug' => $request->get('urlSlug'),
-                'status' => RssFeeds::STATUS_ENABLED,
-            ]
+        $rssFeed = $rssFeedRepository->findFeedBySiteIdentifierAndUrlSlug(
+           $request->get('site'),
+           $request->get('urlSlug')
         );
 
-        if ($rssFeed) {
+        if ($rssFeed instanceof RssFeeds) {
             $feedItems = $rssFeedsService->fetchContent($rssFeed);
             $response = new Response(
                 $this->renderView(
@@ -77,5 +78,38 @@ class RssFeedViewController extends Controller
         }
 
         throw $this->createNotFoundException();
+    }
+
+    public function rssHeadLinkTagsAction(SiteAccess $siteAccess, FactoryInterface $knpMenuFactory) {
+        $rssFeedRepository = $this->entityManager->getRepository(RssFeeds::class);
+        /**@var RssFeeds[] $rssFeeds */
+        $rssFeeds = $rssFeedRepository->findFeedsBySiteIdentifier(
+            $siteAccess->name
+        );
+        $links = [];
+        foreach ($rssFeeds as $rssFeed) {
+            if (empty($links) || $rssFeed->getFeedSites()->count() !== 0) {
+                $links[] = $knpMenuFactory->createItem(
+                    $rssFeed->getTitle(),
+                    [
+                        'route' => 'rss_feed_view_index',
+                        'routeParameters' => [
+                            'site' => $siteAccess->name,
+                            'urlSlug' => $rssFeed->getUrlSlug()
+                        ],
+                        'routeAbsolute' => true
+                    ]
+                );
+            }
+
+        }
+
+        return $this->render(
+            '@ibexadesign/rssfeed/meta_links.html.twig',
+            [
+                'links' => $links
+            ]
+        );
+
     }
 }
