@@ -99,4 +99,33 @@
     </div>
 {% endblock _rss_feeds_feed_items_entry_media_row %}
 
+{% block _rss_feeds_feed_items_entry_row %}
+    {%- if compound is defined and compound -%}
+        {%- set element = 'fieldset' -%}
+    {%- endif -%}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+    <{{ element|default('div') }}{% with {attr: row_attr|merge({class: (row_attr.class|default('') ~ ' form-group')|trim})} %}{{ block('attributes') }}{% endwith %}>
+        {{- form_widget(form, widget_attr) -}}
+        {{- form_help(form) -}}
+        {{- form_errors(form) -}}
+    </{{ element|default('div') }}>
+{% endblock _rss_feeds_feed_items_entry_row %}
 
+
+{% block _rss_feeds_feed_items_entry_widget %}
+    <div {{ block('widget_container_attributes') }}>
+        <a class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text delete-rss-items pull-right">
+            <svg class="ibexa-icon ibexa-icon--medium">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ ibexa_icon_path('trash') }}"></use>
+            </svg>
+        </a>
+        {%- if form is rootform -%}
+            {{ form_errors(form) }}
+        {%- endif -%}
+        {{- block('form_rows') -}}
+        {{- form_rest(form) -}}
+    </div>
+{% endblock _rss_feeds_feed_items_entry_widget %}

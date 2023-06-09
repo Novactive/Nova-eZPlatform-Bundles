@@ -1,5 +1,16 @@
 {% extends '@IbexaAdminUi/themes/admin/ui/base.html.twig' %}
 
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('nova_ezrssfeed_edit', null, 'ibexa') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('nova_ezrssfeed_edit', null, 'ibexa') }}
+{% endblock %}
+
 {% form_theme form '@EzRssFeed/Form/form_fields.html.twig' %}
 {% set itemIndexes = [] %}
 {% block form %}
@@ -76,11 +87,6 @@
                     </div>
                     {% for feed_item in form.feed_items %}
                         <section class="card ibexa-container">
-                            <a class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text delete-rss-items pull-right">
-                                <svg class="ibexa-icon ibexa-icon--medium">
-                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ ibexa_icon_path('trash') }}"></use>
-                                </svg>
-                            </a>
                             {{ form_row(feed_item) }}
                         </section>
                         {% set itemIndexes = itemIndexes|merge([feed_item.vars["name"]]) %}

@@ -14,10 +14,10 @@ namespace Novactive\EzRssFeedBundle\Controller\Admin;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-use Ibexa\Bundle\Core\Controller;
 use eZ\Publish\API\Repository\PermissionResolver;
-use Ibexa\Core\Base\Exceptions\UnauthorizedException;
+use Ibexa\Bundle\Core\Controller;
 use Ibexa\Contracts\AdminUi\Notification\NotificationHandlerInterface;
+use Ibexa\Core\Base\Exceptions\UnauthorizedException;
 use Novactive\EzRssFeedBundle\Controller\EntityManagerTrait;
 use Novactive\EzRssFeedBundle\Entity\RssFeeds;
 use Novactive\EzRssFeedBundle\Form\RssFeedsType;
