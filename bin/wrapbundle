@@ -15,7 +15,7 @@ $configDir = "components/{$_SERVER['COMPONENT']}/tests/provisioning";
 if (!file_exists($configDir)) {
     exit(0);
 }
-$appRootDir = __DIR__."/../ezplatform";
+$appRootDir = __DIR__."/../ibexa";
 $componentDir = __DIR__."/../components/".$_SERVER['COMPONENT'];
 
 $bundleName = "nova_ez".strtolower($_SERVER['COMPONENT']);

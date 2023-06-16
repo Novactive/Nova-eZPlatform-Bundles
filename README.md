@@ -11,7 +11,9 @@ This is the Mono Repo that manages all the Novactive Ibexa Bundles that have eac
 
 ```bash
 git clone
-make installibexa
+ddev start
+make installibexa IBEXA_VERSION=4.*
+ddev describe
 ```
 
 This will install the last version of Ibexa and bundles on top of it.
