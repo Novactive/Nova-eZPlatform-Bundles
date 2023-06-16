@@ -31,6 +31,12 @@ class PantherTestCase extends BaseTestCase
                 'browser' => 'chrome',
                 'external_base_uri' => getenv('PANTHER_EXTERNAL_BASE_URI') ? :
                     $_SERVER['PANTHER_EXTERNAL_BASE_URI'] ?? self::BASE_URI,
+            ],
+            [],
+            [
+                'capabilities' => [
+                    'acceptInsecureCerts' => true,
+                ]
             ]
         );
     }

@@ -51,7 +51,7 @@ jobs:
             CACHE_POOL: cache.redis
             DATABASE_URL: mysql://root@127.0.0.1:3306/ezplatform_test
             CACHE_DSN: 127.0.0.1:6379
-            APP_ENV: dev
+            APP_ENV: prod
             APP_DEBUG: 1
             COMPOSER_MEMORY_LIMIT: 4G
             PANTHER_EXTERNAL_BASE_URI: http://127.0.0.1:8000
@@ -111,7 +111,6 @@ jobs:
                     composer require --dev -W phpunit/phpunit:^9.5 --no-scripts
                     php bin/console ibexa:install
                     php bin/console ibexa:graphql:generate-schema
-                    composer run post-update-cmd
                     yarn add --dev algoliasearch react react-collapsible react-dom react-instantsearch-dom
 
             -   name: Run Webserver
@@ -131,8 +130,9 @@ jobs:
                     done
                     cd ezplatform
                     echo ::group::..:: Update Composer ::..
+                    rm var/cache/prod -rf
                     composer update
-                    php bin/console cache:clear
+                    bin/console d:s:u --force
                     echo ::endgroup::
 
                     echo ::group::..:: Do bundle specifics ::..
@@ -163,6 +163,12 @@ jobs:
                         fi
                     done
 
+            -   name: Dump logs
+                if: ${{ failure() }}
+                run: |
+                    cd ezplatform
+                    ls -al var/log/
+                    cat var/log/prod*
             -   name: Global Mono Repo Testing
                 run: |
                     DATABASE_URL=mysql://root@127.0.0.1:3306/ezplatform APP_ENV=test php ./vendor/bin/phpunit -c "tests" "tests" --exclude-group behat                    
