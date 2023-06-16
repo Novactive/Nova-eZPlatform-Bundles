@@ -12,9 +12,9 @@
 
 namespace Novactive\EzRssFeedBundle\PlatformAdminUI\EventListener;
 
+use Ibexa\AdminUi\Menu\Event\ConfigureMenuEvent;
 use Ibexa\Contracts\Core\Repository\PermissionResolver;
 use Ibexa\Contracts\Core\Repository\Repository;
-use Ibexa\AdminUi\Menu\Event\ConfigureMenuEvent;
 use Knp\Menu\ItemInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;

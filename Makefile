@@ -54,6 +54,7 @@ post-install:
 	done
 	@cd $(EZ_DIR) && $(COMPOSER) update
 	@cd $(EZ_DIR) && $(CONSOLE) cache:clear
+	@cd $(EZ_DIR) && $(CONSOLE) d:s:u --force
 
 	@echo "..:: Do bundle specifics ::.."
 	@$(MYSQL) < components/SEOBundle/bundle/Resources/sql/schema.sql
@@ -105,11 +106,11 @@ stop: ## Stop the web server if it is running
 .PHONY: tests
 tests: ## Run the tests
 	@echo " ..:: Global Mono Repo Testing ::.."
-	@PANTHER_NO_HEADLESS=${SHOW_CHROME} DATABASE_URL="mysql://root:ezplatform@127.0.0.1:3300/ezplatform" PANTHER_EXTERNAL_BASE_URI="https://127.0.0.1:11083" $(PHP_BIN) ./vendor/bin/phpunit -c "tests" "tests" --exclude-group behat
+	@PANTHER_NO_HEADLESS=${SHOW_CHROME} DATABASE_URL="mysql://root:ezplatform@127.0.0.1:3300/ezplatform" APP_ENV=test PANTHER_CHROME_ARGUMENTS='--ignore-certificate-errors' PANTHER_EXTERNAL_BASE_URI="https://127.0.0.1:11083" $(PHP_BIN) ./vendor/bin/phpunit -c "tests" "tests" --exclude-group behat
 	@for COMPONENT in $(shell ls components); do \
     	if COMPONENT=$${COMPONENT} bin/ci-should test; then \
     		echo " ..:: Testing $${COMPONENT} ::.."; \
-    		PANTHER_NO_HEADLESS=${SHOW_CHROME} DATABASE_URL="mysql://root:ezplatform@127.0.0.1:3300/ezplatform" PANTHER_EXTERNAL_BASE_URI="https://127.0.0.1:11083" $(PHP_BIN) ./vendor/bin/phpunit -c "components/$${COMPONENT}/tests" "components/$${COMPONENT}/tests" --exclude-group behat; \
+    		PANTHER_NO_HEADLESS=${SHOW_CHROME} DATABASE_URL="mysql://root:ezplatform@127.0.0.1:3300/ezplatform" APP_ENV=test PANTHER_CHROME_ARGUMENTS='--ignore-certificate-errors' PANTHER_EXTERNAL_BASE_URI="https://127.0.0.1:11083" $(PHP_BIN) ./vendor/bin/phpunit -c "components/$${COMPONENT}/tests" "components/$${COMPONENT}/tests" --exclude-group behat; \
 		fi \
 	done
 

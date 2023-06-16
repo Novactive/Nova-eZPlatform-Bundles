@@ -1,5 +1,15 @@
 {% extends '@ibexadesign/ui/layout.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('nova_ezrssfeed', null, 'ibexa') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('nova_ezrssfeed', null, 'ibexa') }}
+{% endblock %}
+
 {% block content %}
     <section class="ibexa-container">
         <div class="ibexa-table-header">
