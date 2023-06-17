@@ -23,13 +23,12 @@ use Novactive\EzRssFeedBundle\Entity\RssFeeds;
  */
 class RssFeedsRepository extends EntityRepository
 {
-
     public function findFeedBySiteIdentifierAndUrlSlug(string $siteIdentifier, string $urlSlug)
     {
         $qb = $this->createQueryBuilder('f');
         $qb->leftJoin('f.feedSites', 'fs')
             ->andWhere('fs.identifier = :siteIdentifier')
-            ->orWhere('fs.identifier IS NULL') 
+            ->orWhere('fs.identifier IS NULL')
             ->andWhere('f.urlSlug = :urlSlug')
             ->andWhere('f.status = :status')
             ->setParameter('siteIdentifier', $siteIdentifier)

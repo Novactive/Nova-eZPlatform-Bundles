@@ -117,7 +117,6 @@ class RssFeedsType extends AbstractType
                 'choices' => $this->siteListService->addSiteAccessList(),
                 'multiple' => true,
                 'required' => false,
-
             ]
         );
 

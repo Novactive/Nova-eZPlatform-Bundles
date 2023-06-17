@@ -1,6 +1,8 @@
 <?php
+
 namespace Novactive\EzRssFeedBundle\Services;
 
-interface SiteListServiceInterface {
+interface SiteListServiceInterface
+{
     public function addSiteAccessList(): array;
 }

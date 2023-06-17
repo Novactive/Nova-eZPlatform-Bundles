@@ -13,7 +13,6 @@
 namespace Novactive\EzRssFeedBundle\PlatformAdminUI\EventListener;
 
 use Ibexa\AdminUi\Menu\Event\ConfigureMenuEvent;
-use Ibexa\Contracts\Core\Repository\PermissionResolver;
 use Ibexa\Contracts\Core\Repository\Repository;
 use Knp\Menu\ItemInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -21,10 +20,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class MainMenuBuilderListener implements EventSubscriberInterface
 {
-    /**
-     * @var Repository
-     */
-    private $repository;
+    private Repository $repository;
 
     public function __construct(AuthorizationCheckerInterface $authorizationChecker, Repository $repository)
     {
@@ -38,9 +34,6 @@ class MainMenuBuilderListener implements EventSubscriberInterface
 
     public function onMainMenuBuild(ConfigureMenuEvent $event): void
     {
-        /**
-         * @var PermissionResolver
-         */
         $permissionResolver = $this->getRepository()->getPermissionResolver();
         if ($permissionResolver->hasAccess('rss', 'edit')) {
             $this->addSubMenu($event->getMenu());

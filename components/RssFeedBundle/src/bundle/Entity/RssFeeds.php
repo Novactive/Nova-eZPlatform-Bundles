@@ -69,7 +69,7 @@ class RssFeeds
      * @ORM\Column(name="url_slug", type="string", length=255, unique=true)
      */
     private $urlSlug;
-     /**
+    /**
      * @ORM\OneToMany(targetEntity="Novactive\EzRssFeedBundle\Entity\RssFeedSite",
      *     mappedBy="rssFeeds",
      *     cascade={"all"})
@@ -278,5 +278,4 @@ class RssFeeds
     {
         return $this->feedSites;
     }
-
 }

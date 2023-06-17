@@ -23,7 +23,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-
 /**
  * @Route("/rss/feed")
  *
@@ -39,7 +38,7 @@ class RssFeedViewController extends Controller
     public function indexAction(Request $request, RssFeedsService $rssFeedsService): Response
     {
         /**
-         * @var PermissionResolver
+         * @var PermissionResolver $permissionResolver
          */
         $permissionResolver = $this->container->get('ibexa.api.repository')->getPermissionResolver();
 
@@ -50,8 +49,8 @@ class RssFeedViewController extends Controller
         $rssFeedRepository = $this->entityManager->getRepository(RssFeeds::class);
 
         $rssFeed = $rssFeedRepository->findFeedBySiteIdentifierAndUrlSlug(
-           $request->get('site'),
-           $request->get('urlSlug')
+            $request->get('site'),
+            $request->get('urlSlug')
         );
 
         if ($rssFeed instanceof RssFeeds) {
@@ -80,36 +79,35 @@ class RssFeedViewController extends Controller
         throw $this->createNotFoundException();
     }
 
-    public function rssHeadLinkTagsAction(SiteAccess $siteAccess, FactoryInterface $knpMenuFactory) {
+    public function rssHeadLinkTagsAction(SiteAccess $siteAccess, FactoryInterface $knpMenuFactory): Response
+    {
         $rssFeedRepository = $this->entityManager->getRepository(RssFeeds::class);
-        /**@var RssFeeds[] $rssFeeds */
+        /** @var RssFeeds[] $rssFeeds */
         $rssFeeds = $rssFeedRepository->findFeedsBySiteIdentifier(
             $siteAccess->name
         );
         $links = [];
         foreach ($rssFeeds as $rssFeed) {
-            if (empty($links) || $rssFeed->getFeedSites()->count() !== 0) {
+            if (empty($links) || 0 !== $rssFeed->getFeedSites()->count()) {
                 $links[] = $knpMenuFactory->createItem(
                     $rssFeed->getTitle(),
                     [
                         'route' => 'rss_feed_view_index',
                         'routeParameters' => [
                             'site' => $siteAccess->name,
-                            'urlSlug' => $rssFeed->getUrlSlug()
+                            'urlSlug' => $rssFeed->getUrlSlug(),
                         ],
-                        'routeAbsolute' => true
+                        'routeAbsolute' => true,
                     ]
                 );
             }
-
         }
 
         return $this->render(
             '@ibexadesign/rssfeed/meta_links.html.twig',
             [
-                'links' => $links
+                'links' => $links,
             ]
         );
-
     }
 }

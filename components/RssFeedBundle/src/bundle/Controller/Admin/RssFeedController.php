@@ -178,7 +178,7 @@ class RssFeedController extends Controller
                     $this->entityManager->remove($originalChild);
                 }
             }
-             foreach ($originalSites as $originalChild) {
+            foreach ($originalSites as $originalChild) {
                 if (false === $rssFeed->getFeedSites()->contains($originalChild)) {
                     $rssFeed->removeFeedSite($originalChild);
                     $originalChild->setRssFeeds(null);
