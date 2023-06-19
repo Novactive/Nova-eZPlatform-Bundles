@@ -87,7 +87,7 @@ class Campaign extends Voter
             return true;
         }
 
-        //@improvment: maybe we should add a module/function for that specific purpose
+        // @improvment: maybe we should add a module/function for that specific purpose
         return $this->repository->getPermissionResolver()->hasAccess('setup', 'administrate');
     }
 
