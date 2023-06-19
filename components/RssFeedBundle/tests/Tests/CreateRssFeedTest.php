@@ -63,6 +63,7 @@ class CreateRssFeedTest extends PantherTestCase
                 'rss_feeds[title]' => 'Test Feed',
                 'rss_feeds[description]' => 'Test Description',
                 'rss_feeds[url_slug]' => self::FEED_URL_SLUG,
+                'rss_feeds[feed_sites]' => ['site'],
             ]
         );
 
@@ -88,7 +89,7 @@ class CreateRssFeedTest extends PantherTestCase
         }
 
         // Testing the Feed content
-        $helper->get('/rss/feed/'.self::FEED_URL_SLUG);
+        $helper->get('/rss/feed/site/'.self::FEED_URL_SLUG);
         $source = $helper->client()->getPageSource();
         self::assertStringContainsString('Test Feed', $source);
 
