@@ -149,7 +149,7 @@ class Query
             return new Criterion\FullText($term->token->quote.$term->token->phrase.$term->token->quote);
         }
         if ($term->token instanceof VToken\Tag) {
-            //@todo: treat them like real tag, eZ Tag?
+            // @todo: treat them like real tag, eZ Tag?
             return new Criterion\FullText($term->token->tag);
         }
 

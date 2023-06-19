@@ -109,7 +109,7 @@ class ContentMenuItemType extends DefaultMenuItemType
         $hash = parent::toHash($menuItem);
         try {
             $contentInfo = $this->contentService->loadContentInfo($menuItem->getContentId());
-        } catch (NotFoundException | UnauthorizedException $exception) {
+        } catch (NotFoundException|UnauthorizedException $exception) {
             return $hash;
         }
         $hash['name'] = $this->translationHelper->getTranslatedContentNameByContentInfo($contentInfo);

@@ -16,9 +16,9 @@ namespace Novactive\NovaeZMaintenanceBundle\Helper;
 
 use Exception;
 use Ibexa\Contracts\Core\Repository\PermissionResolver;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Ibexa\Core\Base\Exceptions\UnauthorizedException;
 use Ibexa\Core\IO\IOServiceInterface;
-use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\IpUtils;
@@ -135,7 +135,7 @@ class FileHelper
         if (null !== $status) {
             $response->setStatusCode($status);
         }
-        $response->headers->add(["X-Maintenance"=> 1]);
+        $response->headers->add(['X-Maintenance' => 1]);
 
         return $response->setContent($content);
     }
@@ -237,6 +237,7 @@ class FileHelper
         if (IPUtils::checkIp($client_ip, $authorized_ips)) {
             return true;
         }
+
         return false;
     }
 

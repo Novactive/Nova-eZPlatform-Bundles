@@ -65,7 +65,7 @@ class SendMailing extends Processor implements SendMailingProcessorInterface
                     null !== $mailing->getLastSent() &&
                     $mailing->getLastSent()->format('Y-m-d-H') === $clockDate->format('Y-m-d-H')
                 ) {
-                    //Security here, if is has been sent during this current hour already, do nothing
+                    // Security here, if is has been sent during this current hour already, do nothing
                     $this->logger->debug(
                         "{$mailing->getName()} has been matched and IGNORED. It has been sent during this hour already."
                     );

@@ -61,7 +61,7 @@ final class FindSingle extends Command
 
         $criterion = new Criterion\ContentId($contentId);
 
-        //$this->repository->getPermissionResolver()->setCurrentUserReference($this->repository->getUserService()->loadUserByLogin('admin'));
+        // $this->repository->getPermissionResolver()->setCurrentUserReference($this->repository->getUserService()->loadUserByLogin('admin'));
 
         $result = $this->repository->getSearchService()->findSingle($criterion);
         $io->newLine();
