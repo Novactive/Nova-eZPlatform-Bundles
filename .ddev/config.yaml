@@ -9,9 +9,7 @@ router_http_port: "80"
 router_https_port: "443"
 xdebug_enabled: false
 additional_hostnames:
-    - bo.novabundles
     - novarnish.novabundles
-    - novarnish.bo.novabundles
 additional_fqdns: []
 database:
     type: mariadb
