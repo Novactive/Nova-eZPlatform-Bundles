@@ -105,9 +105,9 @@ jobs:
 
             -   name: Install Ibexa DXP and Yarn deps
                 run: |
-                    composer create-project "ibexa/oss-skeleton:${{ matrix.ibexa_version }}" --prefer-dist --no-progress --no-interaction ezplatform
-                    mkdir -p ezplatform/node_modules && ln -s ezplatform/node_modules
-                    cd ezplatform
+                    composer create-project "ibexa/oss-skeleton:${{ matrix.ibexa_version }}" --prefer-dist --no-progress --no-interaction ibexa
+                    mkdir -p ibexa/node_modules && ln -s ibexa/node_modules
+                    cd ibexa
                     composer require --dev -W phpunit/phpunit:^9.5 --no-scripts
                     php bin/console ibexa:install
                     php bin/console ibexa:graphql:generate-schema
@@ -115,7 +115,7 @@ jobs:
 
             -   name: Run Webserver
                 run: |
-                    cd ezplatform
+                    cd ibexa
                     symfony local:server:start --no-tls -d
                     symfony local:server:list
 
@@ -128,7 +128,7 @@ jobs:
                             echo ::endgroup::
                         fi
                     done
-                    cd ezplatform
+                    cd ibexa
                     echo ::group::..:: Update Composer ::..
                     rm var/cache/prod -rf
                     composer update
@@ -150,7 +150,7 @@ jobs:
             -   name: Update PHP Unit
                 run: |
                     composer update && composer require -W phpunit/phpunit:^9.5 symfony/phpunit-bridge:^5.3
-                    rm -f ezplatform/config/packages/test/doctrine.yaml
+                    rm -f ibexa/config/packages/test/doctrine.yaml
                     php vendor/bin/bdi detect drivers
 
             -   name: Components testing
@@ -166,7 +166,7 @@ jobs:
             -   name: Dump logs
                 if: ${{ failure() }}
                 run: |
-                    cd ezplatform
+                    cd ibexa
                     ls -al var/log/
                     cat var/log/prod*
             -   name: Global Mono Repo Testing
