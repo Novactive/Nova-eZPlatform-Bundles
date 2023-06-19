@@ -12,12 +12,12 @@ PHP_BIN := php
 COMPOSER := composer
 CURRENT_DIR := $(shell pwd)
 SYMFONY := symfony
-EZ_DIR := $(CURRENT_DIR)/ezplatform
+EZ_DIR := $(CURRENT_DIR)/ibexa
 DOCKER := docker
 DOCKER_DB_CONTAINER := dbezplbundl
 MYSQL := mysql -f -u root -pezplatform -h 127.0.0.1 -P 3300 ezplatform
 CONSOLE := $(PHP_BIN) bin/console
-IBEXA_VERSION ?= 4
+IBEXA_VERSION ?= 4.*
 
 .DEFAULT_GOAL := list
 
@@ -30,106 +30,79 @@ list:
 
 .PHONY: codeclean
 codeclean: ## Coding Standard checks
-	$(PHP_BIN) ./vendor/bin/php-cs-fixer fix --config=.cs/.php_cs.php
-	$(PHP_BIN) ./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src/ components/ bin/
-	$(PHP_BIN) ./vendor/bin/phpmd src,components,bin text .cs/md_ruleset.xml
+	@ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/php-cs-fixer fix --config=.cs/.php_cs.php"
+	@ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src/ components/ bin/"
+	@ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/phpmd src,components,bin text .cs/md_ruleset.xml"
 
 .PHONY: install
 install: ## Install vendors
-	@$(COMPOSER) install
-	@$(PHP) vendor/bin/bdi detect drivers
+	@ddev exec -d /var/www/html "$(COMPOSER) install"
 
 .PHONY: post-install
 post-install:
 	@echo "..:: Do bundle YARN deps ::.."
 	@ln -sf $(EZ_DIR)/node_modules
-	@cd $(EZ_DIR) && yarn add --dev algoliasearch react react-collapsible react-dom react-instantsearch-dom
+	@ddev exec "yarn add --dev algoliasearch react react-collapsible react-dom react-instantsearch-dom"
 
 	@echo "..:: Put Bundles in there ::.."
 	@for COMPONENT in $(shell ls components); do \
 		if COMPONENT=$${COMPONENT} bin/ci-should install; then \
     		echo " ..:: Installing $${COMPONENT} ::.."; \
-			COMPONENT_CONFIG_DIR="components/$${COMPONENT}/tests/provisioning" COMPONENT=$${COMPONENT} bin/wrapbundle; \
+			ddev exec -d /var/www/html "COMPONENT_CONFIG_DIR='components/$${COMPONENT}/tests/provisioning' COMPONENT=$${COMPONENT} bin/wrapbundle"; \
 		fi \
 	done
-	@cd $(EZ_DIR) && $(COMPOSER) update
-	@cd $(EZ_DIR) && $(CONSOLE) cache:clear
-	@cd $(EZ_DIR) && $(CONSOLE) d:s:u --force
+	@ddev exec "$(COMPOSER) update"
+	@ddev exec "$(CONSOLE) d:s:u --force"
 
 	@echo "..:: Do bundle specifics ::.."
-	@$(MYSQL) < components/SEOBundle/bundle/Resources/sql/schema.sql
-	@$(MYSQL) < components/2FABundle/bundle/Resources/sql/schema.sql
+	cat components/SEOBundle/bundle/Resources/sql/schema.sql | ddev mysql
+	cat components/2FABundle/bundle/Resources/sql/schema.sql | ddev mysql
 
 # TO BE ADDED BACK WHEN COMPLIANT WITH 4.x
-#	@cd $(EZ_DIR) && $(CONSOLE) novaezextra:contenttypes:create ../tests/vmcd.xlsx
-#	@cd $(EZ_DIR) && $(CONSOLE) novaezprotectedcontent:install
-#	@cd $(EZ_DIR) && $(CONSOLE) novaezhelptooltip:create
-#	@cd $(EZ_DIR) && $(CONSOLE) doctrine:schema:update --dump-sql --force
-#	@cd $(EZ_DIR) && $(CONSOLE) novaezmailing:install
+#	@ddev exec "$(CONSOLE) novaezextra:contenttypes:create ../tests/vmcd.xlsx"
+#	@ddev exec "$(CONSOLE) novaezprotectedcontent:install"
+#	@ddev exec "$(CONSOLE) novaezhelptooltip:create"
+#	@ddev exec "$(CONSOLE) doctrine:schema:update --dump-sql --force"
+#	@ddev exec "$(CONSOLE) novaezmailing:install"
 #	@cp -rp components/ProtectedContentBundle/tests/provisioning/article.html.twig $(EZ_DIR)/templates/themes/standard/full/
 #	@cp -rp components/StaticTemplatesBundle/tests/provisioning/static_ultimatenova $(EZ_DIR)/templates/themes/
 
 	@echo "..:: Final Cleaning Cache ::.."
-	@cd $(EZ_DIR) && $(CONSOLE) cache:clear
+	@ddev exec "$(CONSOLE) cache:clear"
 
 .PHONY: installibexa
 installibexa: install ## Install Ibexa as the local project
-	@$(DOCKER) run -d -p 3300:3306 --name $(DOCKER_DB_CONTAINER) -e MYSQL_ROOT_PASSWORD=ezplatform mariadb:10.4
-	@$(COMPOSER) create-project "ibexa/oss-skeleton:${IBEXA_VERSION}.*" --prefer-dist --no-progress --no-interaction $(EZ_DIR)
+	@ddev exec -d /var/www/html "$(COMPOSER) create-project 'ibexa/oss-skeleton:${IBEXA_VERSION}' --prefer-dist --no-progress --no-interaction ibexa"
 	@echo "..:: Do Ibexa Install ::.."
-	@echo "DATABASE_URL=mysql://root:ezplatform@127.0.0.1:3300/ezplatform" >>  $(EZ_DIR)/.env.local
 
-	@cd $(EZ_DIR) && $(CONSOLE) ibexa:install
-	@cd $(EZ_DIR) && $(CONSOLE) ibexa:graphql:generate-schema
-	@cd $(EZ_DIR) && $(COMPOSER) run post-update-cmd
+	@ddev exec "$(CONSOLE) ibexa:install"
+	@ddev exec "$(CONSOLE) ibexa:graphql:generate-schema"
 	@$(MAKE) post-install
-	@cd $(EZ_DIR) && $(COMPOSER) update
-	@cd $(EZ_DIR) && $(COMPOSER) require -W phpunit/phpunit:^9.5 symfony/phpunit-bridge:^5.3
+	@ddev exec "$(COMPOSER) update"
+	@ddev exec "$(COMPOSER) require -W phpunit/phpunit:^9.5 symfony/phpunit-bridge:^5.3"
 	@rm -f $(EZ_DIR)/config/packages/test/doctrine.yaml
-
-
-.PHONY: serve
-serve: stop ## Clear the cache and start the web server
-	@cd $(EZ_DIR) && rm -rf var/cache/*
-	@$(DOCKER) start $(DOCKER_DB_CONTAINER)
-	@cd $(EZ_DIR) && $(CONSOLE) cache:clear
-	@cd $(EZ_DIR) && $(SYMFONY) local:server:start -d --port=11083
-	@cd $(EZ_DIR) && $(SYMFONY) run -d --watch=ezplatform/config,ezplatform/src,ezplatform/vendor,components symfony console messenger:consume ezaccelerator
-
-
-.PHONY: stop
-stop: ## Stop the web server if it is running
-	@-cd $(EZ_DIR) && $(SYMFONY) local:server:stop
-	@-$(DOCKER) stop $(DOCKER_DB_CONTAINER)
-
 
 .PHONY: tests
 tests: ## Run the tests
 	@echo " ..:: Global Mono Repo Testing ::.."
-	@PANTHER_NO_HEADLESS=${SHOW_CHROME} DATABASE_URL="mysql://root:ezplatform@127.0.0.1:3300/ezplatform" APP_ENV=test PANTHER_CHROME_ARGUMENTS='--ignore-certificate-errors' PANTHER_EXTERNAL_BASE_URI="https://127.0.0.1:11083" $(PHP_BIN) ./vendor/bin/phpunit -c "tests" "tests" --exclude-group behat
+	@ddev exec -d /var/www/html "PANTHER_NO_HEADLESS=${SHOW_CHROME} APP_ENV=test $(PHP_BIN) ./vendor/bin/phpunit -c 'tests' 'tests' --exclude-group behat"
 	@for COMPONENT in $(shell ls components); do \
     	if COMPONENT=$${COMPONENT} bin/ci-should test; then \
     		echo " ..:: Testing $${COMPONENT} ::.."; \
-    		PANTHER_NO_HEADLESS=${SHOW_CHROME} DATABASE_URL="mysql://root:ezplatform@127.0.0.1:3300/ezplatform" APP_ENV=test PANTHER_CHROME_ARGUMENTS='--ignore-certificate-errors' PANTHER_EXTERNAL_BASE_URI="https://127.0.0.1:11083" $(PHP_BIN) ./vendor/bin/phpunit -c "components/$${COMPONENT}/tests" "components/$${COMPONENT}/tests" --exclude-group behat; \
+    		ddev exec -d /var/www/html "PANTHER_NO_HEADLESS=${SHOW_CHROME} APP_ENV=test $(PHP_BIN) ./vendor/bin/phpunit -c 'components/$${COMPONENT}/tests' 'components/$${COMPONENT}/tests' --exclude-group behat"; \
+    		ddev exec -d /var/www/html "PANTHER_NO_HEADLESS=${SHOW_CHROME} APP_ENV=test php ./vendor/bin/phpunit -c 'components/RssFeedBundle/tests' 'components/RssFeedBundle/tests' --exclude-group behat"; \
 		fi \
 	done
 
-
-.PHONY: ps
-ps: ## Show docker-compose services
-	@cd $(EZ_DIR) && $(SYMFONY) server:status
-	@echo "\n!!!${RED}careful${RESTORE}!!!, if you change files outside the watched folders, you need to ${YELLOW}kill $PID${RESTORE} and re-rerun ${YELLOW}make consume${RESTORE}."
-
-
 .PHONY: documentation
 documentation: ## Generate the documention
-	@$(SYMFONY) run --watch src,documentation/templates,components  bin/releaser doc -n
+	@ddev exec "$(SYMFONY) run --watch src,documentation/templates,components  bin/releaser doc -n"
 
 .PHONY: clean
-clean: stop ## Removes the vendors, and caches
+clean: ## Removes the vendors, and caches
+	@ddev delete -O
 	@-rm -f .php_cs.cache
 	@-rm -rf vendor
 	@-rm -rf drivers
-	@-rm -rf ezplatform
+	@-rm -rf $(EZ_DIR)
 	@-rm  node_modules
-	@-$(DOCKER) rm $(DOCKER_DB_CONTAINER)
