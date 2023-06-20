@@ -33,10 +33,13 @@ class RssFeedViewController extends Controller
     use EntityManagerTrait;
 
     /**
-     * @Route("/{site}/{urlSlug}", name="rss_feed_view_index")
+     * @Route("/{urlSlug}/{site?}", name="rss_feed_view_index")
      */
-    public function indexAction(Request $request, RssFeedsService $rssFeedsService): Response
-    {
+    public function indexAction(
+        Request $request,
+        SiteAccess $siteAccess,
+        RssFeedsService $rssFeedsService
+    ): Response {
         /**
          * @var PermissionResolver $permissionResolver
          */
@@ -49,7 +52,7 @@ class RssFeedViewController extends Controller
         $rssFeedRepository = $this->entityManager->getRepository(RssFeeds::class);
 
         $rssFeed = $rssFeedRepository->findFeedBySiteIdentifierAndUrlSlug(
-            $request->get('site'),
+            $request->query->get('site', $siteAccess->name),
             $request->get('urlSlug')
         );
 
@@ -94,7 +97,6 @@ class RssFeedViewController extends Controller
                     [
                         'route' => 'rss_feed_view_index',
                         'routeParameters' => [
-                            'site' => $siteAccess->name,
                             'urlSlug' => $rssFeed->getUrlSlug(),
                         ],
                         'routeAbsolute' => true,

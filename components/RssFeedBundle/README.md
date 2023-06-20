@@ -82,23 +82,22 @@ system:
 
 To render meta link tag into your page head :
 ```
-{{ render(controller('Novactive\\\EzRssFeedBundle\\Controller\\RssFeedViewController::rssHeadLinkTagsAction'))
-}}
+{{ render(controller('Novactive\\\EzRssFeedBundle\\Controller\\RssFeedViewController::rssHeadLinkTagsAction')) }}
 ```
 ### Custom SiteListService
 
-As default `Novactive\EzRssFeedBundle\Services\SiteListService` is implimented to fetch for Site Access list within Site Factory
-To do your own implimenation you have to impliment the given Interface :
-`Novactive\EzRssFeedBundle\Services\SiteListInterface` then config your service as following :
+As default `Novactive\EzRssFeedBundle\Services\SiteListService` is implemented to fetch for Site Accesses list
+To do your own implementation you have to implement the given Interface :
+`Novactive\EzRssFeedBundle\Services\SiteListServiceInterface` then config your service as following :
 ```yaml
 Services:
   Novactive\EzRssFeedBundle\Services\SiteListServiceInterface: '@your_own.service_alias'
 ```
 
 ### Site label Translation
-You can add site accesses translations with `novarss_sites` translation domain as following :
-Inside your translation locale file (example novarss_sites.fr.yaml) 
-Note : This translation is enabled using the default SiteListService
+You can add site accesses translations with `novarss_sites` translation domain.
+Inside your locale file (example novarss_sites.fr.yaml) put your translation as following :
 ```yaml
 site_access_identifier: My site
 ```
+Note : This translation is enabled using the default SiteListService
