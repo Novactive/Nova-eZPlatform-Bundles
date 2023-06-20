@@ -1,9 +1,9 @@
 {
     "name": "novactive/ezfastlyiobundle",
-    "description": "Novactive eZ Fastly Image Optimizer Bundle is an eZPlatform bundle for Images optimizations and manipulations.",
-    "keywords": ["images", "ezpublish", "novactive", "ezplatform"],
+    "description": "Novactive eZ Fastly Image Optimizer Bundle is an Ibexa bundle for Images optimizations and manipulations.",
+    "keywords": ["images", "ibexa", "novactive"],
     "homepage": "https://github.com/Novactive/NovaeZFastlyImageOptimizerBundle",
-    "type": "ezplatform-bundle",
+    "type": "ibexa-bundle",
     "authors": [
         {
             "name": "Novactive",
@@ -15,17 +15,11 @@
         "MIT"
     ],
     "require": {
-        "php": "^7.3"
+        "php": "^7.3 || ^8.0"
     },
     "autoload": {
         "psr-4": {
             "Novactive\\Bundle\\eZFastlyImageOptimizerBundle\\": "bundle"
-        }
-    },
-    "extra": {
-        "thanks": {
-            "name": "ezsystems/ezplatform",
-            "url": "https://github.com/ezsystems/ezplatform"
         }
     }
 }

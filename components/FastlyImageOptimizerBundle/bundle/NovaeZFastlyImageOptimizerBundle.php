@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZFastlyImageOptimizerBundle;
 
 use LogicException;
+use Novactive\Bundle\eZFastlyImageOptimizerBundle\DependencyInjection\NovaeZFastlyImageOptimizerExtension;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -21,25 +22,15 @@ class NovaeZFastlyImageOptimizerBundle extends Bundle
     public function getContainerExtension(): ?ExtensionInterface
     {
         if (null === $this->extension) {
-            $extension = $this->createContainerExtension();
-
-            if (null !== $extension) {
+            $extension = new NovaeZFastlyImageOptimizerExtension();
                 if (!$extension instanceof ExtensionInterface) {
-                    throw new LogicException(
-                        sprintf(
-                            'Extension %s must implement '.ExtensionInterface::class,
-                            \get_class($extension)
-                        )
-                    );
+                $fqdn = \get_class($extension);
+                $message = 'Extension %s must implement %s.';
+                throw new LogicException(sprintf($message, $fqdn, ExtensionInterface::class));
                 }
                 $this->extension = $extension;
-            } else {
-                $this->extension = false;
             }
-        }
 
-        if ($this->extension) {
-            return $this->extension;
-        }
+        return $this->extension;
     }
 }
