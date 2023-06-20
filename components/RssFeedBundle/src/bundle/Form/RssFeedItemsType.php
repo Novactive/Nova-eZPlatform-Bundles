@@ -29,14 +29,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RssFeedItemsType extends AbstractType
 {
-    /** @var ContentTypeService */
-    protected $contentTypeService;
-
-    /** @var ConfigResolverInterface */
-    protected $configResolver;
-
-    /** @var array */
-    protected $fieldTypeMap;
+    protected ContentTypeService $contentTypeService;
+    protected ConfigResolverInterface $configResolver;
+    protected array $fieldTypeMap;
 
     public function __construct(
         ContentTypeService $contentTypeService,

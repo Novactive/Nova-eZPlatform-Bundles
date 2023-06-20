@@ -23,18 +23,16 @@ class RssFeedSite
     private $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="identifier", type="string", length=255)
      */
-    private $identifier;
+    private string $identifier;
     /**
      * @ORM\ManyToOne(targetEntity="Novactive\EzRssFeedBundle\Entity\RssFeeds",
      *     inversedBy="feedSites",
      *     cascade={"persist"})
      * @ORM\JoinColumn(name="rss_feeds_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      */
-    private $rssFeeds;
+    private ?RssFeeds $rssFeeds;
 
     public function getId(): int
     {

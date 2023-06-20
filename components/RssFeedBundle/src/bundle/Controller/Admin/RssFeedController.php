@@ -42,9 +42,9 @@ class RssFeedController extends Controller
 {
     use EntityManagerTrait;
 
-    private $defaultPaginationLimit = 10;
+    private int $defaultPaginationLimit = 10;
 
-    private $notificationHandler;
+    private NotificationHandlerInterface $notificationHandler;
 
     public function __construct(NotificationHandlerInterface $notificationHandler)
     {
@@ -59,7 +59,7 @@ class RssFeedController extends Controller
         $rssFeedRepository = $this->entityManager->getRepository(RssFeeds::class);
 
         /**
-         * @var PermissionResolver
+         * @var PermissionResolver $permissionResolver
          */
         $permissionResolver = $this->container->get('ibexa.api.repository')->getPermissionResolver();
 
@@ -88,7 +88,7 @@ class RssFeedController extends Controller
     public function createAction(Request $request): Response
     {
         /**
-         * @var PermissionResolver
+         * @var PermissionResolver $permissionResolver
          */
         $permissionResolver = $this->getRepository()->getPermissionResolver();
 
@@ -136,7 +136,7 @@ class RssFeedController extends Controller
     public function editAction(Request $request, RssFeeds $rssFeed): Response
     {
         /**
-         * @var PermissionResolver
+         * @var PermissionResolver $permissionResolver
          */
         $permissionResolver = $this->getRepository()->getPermissionResolver();
 
@@ -213,7 +213,7 @@ class RssFeedController extends Controller
     public function deleteAction(Request $request, RssFeeds $rssFeed): RedirectResponse
     {
         /**
-         * @var PermissionResolver
+         * @var PermissionResolver $permissionResolver
          */
         $permissionResolver = $this->getRepository()->getPermissionResolver();
 
@@ -235,7 +235,7 @@ class RssFeedController extends Controller
     public function loadLocationAjaxAction(Request $request, $locationId = null): Response
     {
         /**
-         * @var PermissionResolver
+         * @var PermissionResolver $permissionResolver
          */
         $permissionResolver = $this->getRepository()->getPermissionResolver();
 
@@ -272,7 +272,7 @@ class RssFeedController extends Controller
     public function getAjaxFieldByContentTypeIdAction(Request $request): JsonResponse
     {
         /**
-         * @var PermissionResolver
+         * @var PermissionResolver $permissionResolver
          */
         $permissionResolver = $this->getRepository()->getPermissionResolver();
 
@@ -284,8 +284,8 @@ class RssFeedController extends Controller
 
         if ($request->get('contenttype_id')) {
             $contentType = $this->getRepository()
-                                ->getContentTypeService()
-                                ->loadContentType($request->get('contenttype_id'));
+                ->getContentTypeService()
+                ->loadContentType($request->get('contenttype_id'));
 
             foreach ($contentType->getFieldDefinitions() as $fieldDefinition) {
                 $fieldsMap[ucfirst($fieldDefinition->getName())] =
@@ -305,7 +305,7 @@ class RssFeedController extends Controller
     public function changeAjaxVisibilityFeed(Request $request): JsonResponse
     {
         /**
-         * @var PermissionResolver
+         * @var PermissionResolver $permissionResolver
          */
         $permissionResolver = $this->getRepository()->getPermissionResolver();
 
@@ -315,7 +315,7 @@ class RssFeedController extends Controller
         $repository = $this->entityManager->getRepository(RssFeeds::class);
 
         /**
-         * @var RssFeeds
+         * @var RssFeeds $rssFeed
          */
         $rssFeed = $repository->find($request->get('feedId'));
 

@@ -20,15 +20,8 @@ use Symfony\Component\Routing\RouterInterface;
 
 class RssFeedsService
 {
-    /**
-     * @var Repository
-     */
-    private $repository;
-
-    /**
-     * @var RouterInterface
-     */
-    private $urlAliasRouter;
+    private Repository $repository;
+    private RouterInterface $urlAliasRouter;
 
     public function __construct(Repository $repository, RouterInterface $urlAliasRouter)
     {

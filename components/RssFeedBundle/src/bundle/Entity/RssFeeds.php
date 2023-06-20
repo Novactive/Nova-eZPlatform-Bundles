@@ -50,75 +50,62 @@ class RssFeeds
     private $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="title", type="string", length=255)
      */
-    private $title;
+    private string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="string", length=255)
      */
-    private $description;
+    private string $description;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="url_slug", type="string", length=255, unique=true)
      */
-    private $urlSlug;
+    private string $urlSlug;
     /**
      * @ORM\OneToMany(targetEntity="Novactive\EzRssFeedBundle\Entity\RssFeedSite",
      *     mappedBy="rssFeeds",
      *     cascade={"all"})
      */
-    private $feedSites;
+    private Collection $feedSites;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="status", type="integer")
      */
-    private $status;
+    private int $status;
 
     /**
-     * @var DateTime
      * @ORM\Column(name="created_at", type="datetime")
      */
-    private $createdAt;
+    private DateTime $createdAt;
 
     /**
-     * @var int
      * @ORM\Column(name="number_of_object", type="integer")
      */
-    private $numberOfObject;
+    private int $numberOfObject;
 
     /**
-     * @var int
      * @ORM\Column(name="sort_type", type="integer")
      */
-    private $sortType;
+    private int $sortType;
 
     /**
-     * @var string
      * @ORM\Column(name="sort_direction", type="string")
      */
-    private $sortDirection;
+    private string $sortDirection;
 
     /**
-     * @var DateTime
      * @ORM\Column(name="modified_at", type="datetime", nullable=true)
      */
-    private $modifiedAt;
+    private DateTime $modifiedAt;
 
     /**
      * @ORM\OneToMany(targetEntity="Novactive\EzRssFeedBundle\Entity\RssFeedItems",
      *     mappedBy="rssFeeds",
      *     cascade={"all"})
      */
-    private $feedItems;
+    private Collection $feedItems;
 
     /**
      * Constructor.

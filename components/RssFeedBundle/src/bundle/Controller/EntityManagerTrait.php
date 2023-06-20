@@ -6,8 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 trait EntityManagerTrait
 {
-    /** @var EntityManagerInterface */
-    public $entityManager;
+    public EntityManagerInterface $entityManager;
 
     /**
      * @required

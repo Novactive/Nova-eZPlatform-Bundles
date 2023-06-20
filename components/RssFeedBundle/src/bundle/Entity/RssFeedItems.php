@@ -33,65 +33,49 @@ class RssFeedItems
     private $id;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="include_subtree", type="boolean")
      */
-    private $includeSubtree;
+    private bool $includeSubtree;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="contenttype_id", type="integer")
      */
-    private $contentTypeId;
+    private int $contentTypeId;
 
     /**
-     * @var DateTime
      * @ORM\Column(name="modified_at", type="datetime", nullable=true)
      */
-    private $modifiedAt;
+    private DateTime $modifiedAt;
 
     /**
-     * @var DateTime
      * @ORM\Column(name="created_at", type="datetime", nullable=true)
      */
-    private $createdAt;
+    private DateTime $createdAt;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="subtree_path", type="integer")
      */
-    private $subtreePath;
+    private int $subtreePath;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="title", type="string")
      */
-    private $title;
+    private string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="string", nullable=true)
      */
-    private $description;
+    private string $description;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="category", type="string", nullable=true)
      */
-    private $category;
+    private string $category;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="media", type="string", nullable=true)
      */
-    private $media;
+    private string $media;
 
     /**
      * @ORM\ManyToOne(targetEntity="Novactive\EzRssFeedBundle\Entity\RssFeeds",
@@ -99,7 +83,7 @@ class RssFeedItems
      *     cascade={"persist"})
      * @ORM\JoinColumn(name="rss_feeds_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      */
-    private $rssFeeds;
+    private ?RssFeeds $rssFeeds;
 
     /**
      * Constructor.
