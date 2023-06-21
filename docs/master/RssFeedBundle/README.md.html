@@ -130,17 +130,30 @@ The override rule supports all types of content items.</p>
                     template: "AcmeBlogBundle:eZViews:line/article.html.twig"
                     match:
                         Identifier\ContentType: [article]</code></pre>
+<p>To render meta link tag into your page head :</p>
+<pre><code>{{ render(controller('Novactive\\\EzRssFeedBundle\\Controller\\RssFeedViewController::rssHeadLinkTagsAction')) }}</code></pre>
+<h3 name="cda6003828ede8f20b66bba5685fd49a">Custom SiteListService</h3>
+<p>As default <code>Novactive\EzRssFeedBundle\Services\SiteListService</code> is implemented to fetch for Site Accesses list
+To do your own implementation you have to implement the given Interface :
+<code>Novactive\EzRssFeedBundle\Services\SiteListServiceInterface</code> then config your service as following :</p>
+<pre><code class=" yaml">Services:
+  Novactive\EzRssFeedBundle\Services\SiteListServiceInterface: '@your_own.service_alias'</code></pre>
+<h3 name="9e2a6e25bb5e8fbfd9ae8cda7f06e55b">Site label Translation</h3>
+<p>You can add site accesses translations with <code>novarss_sites</code> translation domain.
+Inside your locale file (example novarss_sites.fr.yaml) put your translation as following :</p>
+<pre><code class=" yaml">site_access_identifier: My site</code></pre>
+<p>Note : This translation is enabled using the default SiteListService</p>
 
             <p class="text-right">
                 <img width="204" height="20"
-                     src='https://img.shields.io/badge/Updated on-06--19--2023 18:49:02-green?style=flat-square&labelColor=black'
-                     alt='Updated on 06--19--2023 18:49:02'
+                     src='https://img.shields.io/badge/Updated on-06--21--2023 12:46:53-green?style=flat-square&labelColor=black'
+                     alt='Updated on 06--21--2023 12:46:53'
                 />
             </p>
         </div>
         <div class="col-md-4 col-sm-12 d-print-none sidebar">
                             <p><strong>In this page</strong>:</p>
-                <ul class="nav flex-column"><li class="nav-item first last"><a href="#6fbf59719ca40763cd4904420afdfc5b" class="nav-link">RSS Bundle installation instructions</a><ul class="menu_level_1"><li class="nav-item first last"><a href="#fa9f2b3fde8a1ecd921517ebbf88a4fb" class="nav-link">Installation steps</a><ul class="menu_level_2"><li class="nav-item first"><a href="#6065c97227a6214bc68bad0f15ff16d1" class="nav-link">Use Composer</a></li><li class="nav-item"><a href="#814b1401d1a609253b98ac549a68a493" class="nav-link">Add routes</a></li><li class="nav-item"><a href="#0205945e7d6df58c73e84776c8a24700" class="nav-link">Import database tables</a></li><li class="nav-item"><a href="#82b2ef72828846d45666a475154fc6d2" class="nav-link">Clear the caches</a></li><li class="nav-item"><a href="#c38a260ed214b3c2c9e4a0119fd0bb29" class="nav-link">Install and dump assets</a></li><li class="nav-item last"><a href="#0cd472dc2e1d35d777f3b39b62b90344" class="nav-link">Templating</a></li></ul></li></ul></li></ul>
+                <ul class="nav flex-column"><li class="nav-item first last"><a href="#6fbf59719ca40763cd4904420afdfc5b" class="nav-link">RSS Bundle installation instructions</a><ul class="menu_level_1"><li class="nav-item first last"><a href="#fa9f2b3fde8a1ecd921517ebbf88a4fb" class="nav-link">Installation steps</a><ul class="menu_level_2"><li class="nav-item first"><a href="#6065c97227a6214bc68bad0f15ff16d1" class="nav-link">Use Composer</a></li><li class="nav-item"><a href="#814b1401d1a609253b98ac549a68a493" class="nav-link">Add routes</a></li><li class="nav-item"><a href="#0205945e7d6df58c73e84776c8a24700" class="nav-link">Import database tables</a></li><li class="nav-item"><a href="#82b2ef72828846d45666a475154fc6d2" class="nav-link">Clear the caches</a></li><li class="nav-item"><a href="#c38a260ed214b3c2c9e4a0119fd0bb29" class="nav-link">Install and dump assets</a></li><li class="nav-item"><a href="#0cd472dc2e1d35d777f3b39b62b90344" class="nav-link">Templating</a></li><li class="nav-item"><a href="#cda6003828ede8f20b66bba5685fd49a" class="nav-link">Custom SiteListService</a></li><li class="nav-item last"><a href="#9e2a6e25bb5e8fbfd9ae8cda7f06e55b" class="nav-link">Site label Translation</a></li></ul></li></ul></li></ul>
                     </div>
     </div>
     <footer class="pt-4 my-md-5 pt-md-5 border-top">
