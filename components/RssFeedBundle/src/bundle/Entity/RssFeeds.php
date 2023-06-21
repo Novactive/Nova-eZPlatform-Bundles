@@ -69,6 +69,12 @@ class RssFeeds
      * @ORM\Column(name="url_slug", type="string", length=255, unique=true)
      */
     private $urlSlug;
+    /**
+     * @ORM\OneToMany(targetEntity="Novactive\EzRssFeedBundle\Entity\RssFeedSite",
+     *     mappedBy="rssFeeds",
+     *     cascade={"all"})
+     */
+    private $feedSites;
 
     /**
      * @var int
@@ -120,6 +126,7 @@ class RssFeeds
     public function __construct()
     {
         $this->feedItems = new ArrayCollection();
+        $this->feedSites = new ArrayCollection();
         $this->sortType = self::SORT_TYPE_PUBLICATION;
         $this->sortDirection = self::SORT_DIRECTION_DESC;
         $this->numberOfObject = 10;
@@ -252,5 +259,23 @@ class RssFeeds
         $this->sortDirection = $sortDirection;
 
         return $this;
+    }
+
+    public function addFeedSite(RssFeedSite $feedSite): self
+    {
+        $this->feedSites[] = $feedSite;
+        $feedSite->setRssFeeds($this);
+
+        return $this;
+    }
+
+    public function removeFeedSite(RssFeedSite $feedSite): bool
+    {
+        return $this->feedSites->removeElement($feedSite);
+    }
+
+    public function getFeedSites(): Collection
+    {
+        return $this->feedSites;
     }
 }

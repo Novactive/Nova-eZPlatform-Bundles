@@ -17,6 +17,7 @@
     width: 100%;
     display: flex;
     flex-direction: row-reverse;
+    justify-content: space-between;
     margin: 1rem 0;
     .ibexa-btn--secondary.ibexa-btn {
         &:hover {

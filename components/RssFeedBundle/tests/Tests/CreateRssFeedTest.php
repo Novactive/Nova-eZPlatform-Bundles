@@ -63,6 +63,7 @@ class CreateRssFeedTest extends PantherTestCase
                 'rss_feeds[title]' => 'Test Feed',
                 'rss_feeds[description]' => 'Test Description',
                 'rss_feeds[url_slug]' => self::FEED_URL_SLUG,
+                'rss_feeds[feed_sites]' => ['site'],
             ]
         );
 

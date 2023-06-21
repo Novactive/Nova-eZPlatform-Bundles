@@ -13,6 +13,7 @@
 namespace Novactive\EzRssFeedBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Novactive\EzRssFeedBundle\Entity\RssFeeds;
 
 /**
  * RssFeedsRepository.
@@ -22,4 +23,29 @@ use Doctrine\ORM\EntityRepository;
  */
 class RssFeedsRepository extends EntityRepository
 {
+    public function findFeedBySiteIdentifierAndUrlSlug(string $siteIdentifier, string $urlSlug)
+    {
+        $qb = $this->createQueryBuilder('f');
+        $qb->leftJoin('f.feedSites', 'fs')
+            ->andWhere('fs.identifier = :siteIdentifier')
+            ->orWhere('fs.identifier IS NULL')
+            ->andWhere('f.urlSlug = :urlSlug')
+            ->andWhere('f.status = :status')
+            ->setParameter('siteIdentifier', $siteIdentifier)
+            ->setParameter('urlSlug', $urlSlug)
+            ->setParameter('status', RssFeeds::STATUS_ENABLED);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function findFeedsBySiteIdentifier(string $siteIdentifier)
+    {
+        $qb = $this->createQueryBuilder('f');
+        $qb->leftJoin('f.feedSites', 'fs')
+            ->andWhere('fs.identifier = :siteIdentifier')
+            ->orWhere('fs.identifier IS NULL')
+            ->setParameter('siteIdentifier', $siteIdentifier);
+
+        return $qb->getQuery()->getResult();
+    }
 }

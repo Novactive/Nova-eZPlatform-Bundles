@@ -38,8 +38,10 @@ class RssFeedItemsType extends AbstractType
     /** @var array */
     protected $fieldTypeMap;
 
-    public function __construct(ContentTypeService $contentTypeService, ConfigResolverInterface $configResolver)
-    {
+    public function __construct(
+        ContentTypeService $contentTypeService,
+        ConfigResolverInterface $configResolver
+    ) {
         $this->contentTypeService = $contentTypeService;
         $this->configResolver = $configResolver;
     }
