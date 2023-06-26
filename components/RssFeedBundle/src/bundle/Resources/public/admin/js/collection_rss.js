@@ -89,19 +89,20 @@
 
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function () {
-                if (this.readyState != 4) return;
+                if (this.readyState !== 4) return;
 
-                if (this.status == 200) {
+                if (this.status === 200) {
                     for (const fieldName of selectFields) {
                         const mainSelector = document.querySelector(prefixItem + "_" + index + "_" + fieldName);
                         mainSelector.innerHTML = '';
-                        mainSelector.append(htmlToElement("<option value=''>[Passer]</option>").prop("selected", true));
+                        mainSelector.append(htmlToElement("<option value='' selected>[Passer]</option>"));
                         const response = JSON.parse(this.responseText);
                         for (const responseElement in response) {
-                            mainSelector.append(htmlToElement("<option></option>")
-                                .attr("value", response[responseElement]).text(responseElement));
+                            const option = htmlToElement('<option value="">' + responseElement + '</option>');
+                            option.setAttribute("value", response[responseElement]);
+                            mainSelector.append(option);
                         }
-                    };
+                    }
                     loader.remove();
                 }
             };
@@ -144,7 +145,7 @@
      * @returns {HTMLElement}
      */
     function htmlToElement(html) {
-        var template = document.createElement('template');
+        const template = doc.createElement('template');
         html = html.trim(); // Never return a text node of whitespace as the result
         template.innerHTML = html;
         return template.content.firstChild;
