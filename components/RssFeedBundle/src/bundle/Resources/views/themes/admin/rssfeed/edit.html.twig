@@ -95,9 +95,7 @@
                         <span class="rss-toolbar-title">{{ 'ez_rss_feed.form.fields.title' | trans }}</span>
                     </div>
                     {% for feed_item in form.feed_items %}
-                        <section class="card ibexa-container">
-                            {{ form_row(feed_item) }}
-                        </section>
+                        {{ form_row(feed_item) }}
                         {% set itemIndexes = itemIndexes|merge([feed_item.vars["name"]]) %}
                     {% endfor %}
                 </div>
