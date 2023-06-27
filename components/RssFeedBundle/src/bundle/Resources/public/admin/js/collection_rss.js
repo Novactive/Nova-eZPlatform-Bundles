@@ -20,7 +20,7 @@
         setCTEvent(rssFieldsIndex);
     }
 
-    document.querySelector('#open-child-form').addEventListener('click', function (e) {
+    doc.querySelector('#open-child-form').addEventListener('click', function (e) {
         e.preventDefault();
         addChildForm(collectionHolder, containerId);
     });
@@ -67,7 +67,8 @@
         const index = collectionHolder.dataset.index;
         const newForm = prototype.replace(/__name__/g, index);
         const newRow = htmlToElement('<section class="card ibexa-container">' + newForm + '</section>');
-        containerId.append(newRow);
+        const subtreePath = newRow.querySelector('#rss_feeds_feed_items_'+index+'_subtree_path_location');
+        subtreePath.setAttribute('required', 'required');
         collectionHolder.dataset.index = index + 1;
         doc.dispatchEvent(new CustomEvent("rss.item.add", {detail : {"selector": newRow}}));
         setCTEvent(index);
@@ -85,23 +86,23 @@
 
 
             e.currentTarget.after(loader);
-            // $('#loading-image').show();
 
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function () {
-                if (this.readyState != 4) return;
+                if (this.readyState !== 4) return;
 
-                if (this.status == 200) {
+                if (this.status === 200) {
                     for (const fieldName of selectFields) {
                         const mainSelector = document.querySelector(prefixItem + "_" + index + "_" + fieldName);
                         mainSelector.innerHTML = '';
-                        mainSelector.append(htmlToElement("<option value=''>[Passer]</option>").prop("selected", true));
+                        mainSelector.append(htmlToElement("<option value='' selected>[Passer]</option>"));
                         const response = JSON.parse(this.responseText);
                         for (const responseElement in response) {
-                            mainSelector.append(htmlToElement("<option></option>")
-                                .attr("value", response[responseElement]).text(responseElement));
+                            const option = htmlToElement('<option value="">' + responseElement + '</option>');
+                            option.setAttribute("value", response[responseElement]);
+                            mainSelector.append(option);
                         }
-                    };
+                    }
                     loader.remove();
                 }
             };
@@ -112,7 +113,7 @@
 
 
         const selectLocationButton = itemContainer.querySelector('.js-novaezrssfeed-select-location-id');
-        const selectedLocationId = document.querySelector(selectLocationButton.dataset.locationInputSelector).value
+        const selectedLocationId = doc.querySelector(selectLocationButton.dataset.locationInputSelector).value
         if(selectedLocationId) {
             fetch(templateValues.dataset.rssInfoLocation + '/' + selectedLocationId)
                 .then( (response) => response.json())
@@ -121,7 +122,7 @@
                         const selectedLocation = `<li class="path-location">
                 <div class="pull-left">${data.content.name}</div>
             </li>`;
-                        document.querySelector(selectLocationButton.dataset.selectedLocationListSelector).innerHTML = selectedLocation;
+                        doc.querySelector(selectLocationButton.dataset.selectedLocationListSelector).innerHTML = selectedLocation;
                     }
                 });
         }
@@ -135,7 +136,11 @@
 
         itemContainer.querySelector('.delete-rss-items').addEventListener('click', function (e) {
             e.preventDefault();
-            e.currentTarget.parent.remove();
+            try {
+                e.currentTarget.parentNode.parentNode.remove();
+            } catch (e) {
+                console.log(e)
+            }
         });
     }
 
@@ -144,7 +149,7 @@
      * @returns {HTMLElement}
      */
     function htmlToElement(html) {
-        var template = document.createElement('template');
+        const template = doc.createElement('template');
         html = html.trim(); // Never return a text node of whitespace as the result
         template.innerHTML = html;
         return template.content.firstChild;
