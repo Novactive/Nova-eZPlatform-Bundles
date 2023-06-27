@@ -16,7 +16,7 @@
     const rssFieldsIndexes = JSON.parse(templateValues.dataset.rssFieldsIndexes)
     collectionHolder.dataset.index = rssFieldsIndexes.length;
 
-    for(const rssFieldsIndex of rssFieldsIndexes ) {
+    for (const rssFieldsIndex of rssFieldsIndexes ) {
         setCTEvent(rssFieldsIndex);
     }
 
@@ -66,9 +66,8 @@
         const prototype = collectionHolder.dataset.prototype;
         const index = collectionHolder.dataset.index;
         const newForm = prototype.replace(/__name__/g, index);
-        const newRow = htmlToElement('<section class="card ibexa-container">' + newForm + '</section>');
-        const subtreePath = newRow.querySelector('#rss_feeds_feed_items_'+index+'_subtree_path_location');
-        subtreePath.setAttribute('required', 'required');
+        const newRow = htmlToElement('<fieldset class="ibexa-container">' + newForm + '</fieldset>');
+        containerId.append(newRow);
         collectionHolder.dataset.index = index + 1;
         doc.dispatchEvent(new CustomEvent("rss.item.add", {detail : {"selector": newRow}}));
         setCTEvent(index);
@@ -76,19 +75,18 @@
 
     function setCTEvent(index) {
         const itemContainer = doc.querySelector(`#rss_feeds_feed_items_${index}`)
-        itemContainer.querySelector(`#rss_feeds_feed_items_${index}_contenttype_id`).addEventListener('change', function (e) {
-            const val = e.currentTarget.value;
-            const prefixItem = "#rss_feeds_feed_items";
-            const selectFields = ["title", "description", "category", "media"];
-            const loader = htmlToElement('<div class="loading-image">' +
-                '<img src="' + templateValues.dataset.loaderPath + '" class="img-responsive"  alt=""/>' +
-                '</div>');
+        itemContainer.querySelector(`#rss_feeds_feed_items_${index}_contenttype_id`)
+            .addEventListener('change', function (e) {
+                const val = e.currentTarget.value;
+                const prefixItem = "#rss_feeds_feed_items";
+                const selectFields = ["title", "description", "category", "media"];
+                const loader = htmlToElement('<div class="loading-image">' +
+                    '<img src="' + templateValues.dataset.loaderPath + '" class="img-responsive"  alt=""/>' +
+                    '</div>');
+                e.currentTarget.after(loader);
 
-
-            e.currentTarget.after(loader);
-
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function () {
+                const xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function () {
                 if (this.readyState !== 4) return;
 
                 if (this.status === 200) {

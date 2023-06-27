@@ -102,7 +102,7 @@ class RssFeedsType extends AbstractType
             [
                 'entry_type' => RssFeedItemsType::class,
                 'entry_options' => [
-                    'attr' => ['class' => 'rss_feeds_feed_item row'],
+                    'attr' => ['class' => 'row'],
                 ],
                 'allow_add' => true,
                 'allow_delete' => true,

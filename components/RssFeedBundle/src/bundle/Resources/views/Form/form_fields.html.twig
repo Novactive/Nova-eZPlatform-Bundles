@@ -4,7 +4,7 @@
 
     <div>
         <input type="hidden" id="{{ form.location.vars["id"] }}" name="{{ form.location.vars["full_name"] }}"
-               value="{{ form.location.vars["value"] }}"/>
+               value="{{ form.location.vars["value"] }}" required="required"/>
     </div>
 
     <div>
@@ -107,7 +107,7 @@
     {%- if help is not empty -%}
         {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
     {%- endif -%}
-    <{{ element|default('div') }}{% with {attr: row_attr|merge({class: (row_attr.class|default('') ~ ' form-group')|trim})} %}{{ block('attributes') }}{% endwith %}>
+    <{{ element|default('div') }}{% with {attr: row_attr|merge({class: (row_attr.class|default('') ~ ' form-group ibexa-container')|trim})} %}{{ block('attributes') }}{% endwith %}>
         {{- form_widget(form, widget_attr) -}}
         {{- form_help(form) -}}
         {{- form_errors(form) -}}
