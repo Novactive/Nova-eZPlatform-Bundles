@@ -3,24 +3,25 @@
 <div class="ibexa-table-header ">
     <div class="ibexa-table-header__headline">{{ "tab.header.title"|trans }}</div>
     <div>
-        <button class="btn btn-primary ibexa-btn--prevented"
+        <button class="btn ibexa-btn ibexa-btn--primary ibexa-btn--extra-actions ibexa-btn--create"
                 title="{{ "tab.modal.title"|trans }}"
                 data-toggle="modal"
                 data-target="#ibexa-modal--add-content-protection"
                 data-bs-toggle="modal"
                 data-bs-target="#ibexa-modal--add-content-protection"
         >
-            <svg class="ibexa-icon ibexa-icon--tiny ibexa-icon-create">
-                <use xlink:href="/bundles/ibexaicons/img/all-icons.svg#create"></use>
+            <svg class="ibexa-icon ibexa-icon--small">
+                <use xlink:href="{{ asset('bundles/ibexaicons/img/all-icons.svg') }}#create"></use>
             </svg>
+            <span class="ibexa-btn__label">{{ "tab.modal.title"|trans }}</span>
         </button>
         <div class="modal fade ibexa-modal ibexa-modal--add-content-protection" id="ibexa-modal--add-content-protection" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
+                {{ form_start(form, {action: path("novaezprotectedcontent_bundle_admin_handle_form", {locationId: location.id })}) }}
                 <div class="modal-content">
-                    {{ form_start(form, {action: path("novaezprotectedcontent_bundle_admin_handle_form", {locationId: location.id })}) }}
                     <div class="modal-header">
                         <h3 class="modal-title">{{ "tab.modal.title"|trans }}</h3>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-dismiss="modal" data-bs-dismiss="modal" aria-label="Close">
                             <svg class="ibexa-icon ibexa-icon--medium" aria-hidden="true">
                                 <use xlink:href="/bundles/ibexaicons/img/all-icons.svg#discard"></use>
                             </svg>
@@ -32,15 +33,15 @@
                         {{ form_row(form.enabled) }}
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn--no" data-dismiss="modal">
+                        <button type="button" class="btn btn-secondary btn--no" data-dismiss="modal" data-bs-dismiss="modal">
                             {{ "tab.modal.buttons.cancel"|trans }}
                         </button>
                         <button class="btn btn-danger font-weight-bold" type="submit">
                             {{ "tab.modal.buttons.add"|trans }}
                         </button>
                     </div>
-                    {{ form_end(form) }}
                 </div>
+                {{ form_end(form) }}
             </div>
         </div>
     </div>
