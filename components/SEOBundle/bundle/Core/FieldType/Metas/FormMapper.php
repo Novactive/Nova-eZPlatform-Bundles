@@ -107,6 +107,9 @@ class FormMapper implements FieldDefinitionFormMapperInterface, FieldValueFormMa
                 unset($data->value->metas[$key]);
             }
         }
+                
+        // order form from configuration order
+        $data->value->metas = array_merge(array_flip(array_keys($metasConfig)), $data->value->metas);
 
         $fieldForm
             ->add(
