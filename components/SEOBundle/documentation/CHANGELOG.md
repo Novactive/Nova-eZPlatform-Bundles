@@ -2,6 +2,10 @@
 
 # <i class="fa fa-file"></i>Changelog
 
+## 7.0.2
+
+* Add form order from configuration
+
 ## 7.0.1
 
 * Fix siteaccess aware for multisite
