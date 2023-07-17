@@ -1,4 +1,4 @@
-Copyright (c) 2020 Novactive, https://github.com/Novactive/NovaeZAlgoliaSearchEngine <dir.tech@novactive.com>
+Copyright (c) 2020 Novactive, https://github.com/Novactive/NovaeZAlgoliaSearchEngine <dirtech.web@almaviacx.com>
 
 # Preamble
 
