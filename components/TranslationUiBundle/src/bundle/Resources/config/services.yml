@@ -1,0 +1,10 @@
+services:
+  AlmaviaCX\Bundle\IbexaTranslationUi\Translation\Translator:
+    decorates: 'lexik_translation.translator'
+    parent: 'lexik_translation.translator'
+    calls:
+      - [ 'setDefaultTranslator', [ '@translator.default' ] ]
+
+  AlmaviaCX\Bundle\IbexaTranslationUi\EventListener\AdminMenuListener:
+    tags:
+      - { name: kernel.event_subscriber }
