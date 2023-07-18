@@ -93,22 +93,34 @@ img.img-fluid {
 <div class="container-fluid">
         <div class="row flex-column-reverse flex-md-row">
         <div class="col-md-8 col-sm-12">
-            <p>Copyright (c) 2020 Novactive, <a href="https://github.com/Novactive/NovaeZStaticTemplatesBundle">https://github.com/Novactive/NovaeZStaticTemplatesBundle</a> <a href="mailto:dirtech.web@almaviacx.com">dirtech.web@almaviacx.com</a></p>
-<p>Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the &quot;Software&quot;), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:</p>
-<p>The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.</p>
-<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.</p>
+            <h1 name="740805b3b59d3f6539959959416e5e4e">AlmaviaCX Ibexa Translation UI Bundle</h1>
+<hr />
+<p>This bundle integrate the UI provided by <a href="https://github.com/lexik/LexikTranslationBundle/tree/v6.0">https://github.com/lexik/LexikTranslationBundle/tree/v6.0</a> into the Ibexa Admin UI.</p>
+<h2 name="7cd8fb6e31cc946c078d2740c76a9899">Installation</h2>
+<h3 name="5a2ebfb8baa378cfcfcba58bbb1380c2">Requirements</h3>
+<ul>
+<li>Ibexa 4</li>
+<li>PHP 7.3 || 8.0</li>
+</ul>
+<h3 name="6065c97227a6214bc68bad0f15ff16d1">Use Composer</h3>
+<p>Add the lib to your composer.json, run <code>composer require almaviacx/ibexatranslationuibundle</code> to refresh dependencies.</p>
+<h3 name="040da9acc61145e551bcf66b54f44420">Register the bundle</h3>
+<p>Then inject the bundle in the <code>config\bundles.php</code> of your application.</p>
+<pre><code class=" php">    return [
+        // ...
+        Lexik\Bundle\TranslationBundle\LexikTranslationBundle::class =&gt; ['all' =&gt; true],
+        AlmaviaCX\Bundle\IbexaTranslationUiBundle\AlmaviaCXIbexaTranslationUiBundle::class =&gt; [ 'all'=&gt; true ],
+    ];</code></pre>
+<h3 name="814b1401d1a609253b98ac549a68a493">Add routes</h3>
+<p>Make sure you add this route to your routing:</p>
+<pre><code class=" yaml"># config/routes.yaml
+
+lexik_translation_edition:
+  resource: "@LexikTranslationBundle/Resources/config/routing.yml"
+  prefix:   /translations-ui
+</code></pre>
+<h3 name="254f642527b45bc260048e30704edb39">Configuration</h3>
+<p>Follow the lexik translation bundle documentation : <a href="https://github.com/lexik/LexikTranslationBundle/blob/v6.0/Resources/doc/index.md">https://github.com/lexik/LexikTranslationBundle/blob/v6.0/Resources/doc/index.md</a></p>
 
             <p class="text-right">
                 <img width="204" height="20"
@@ -118,6 +130,8 @@ THE SOFTWARE.</p>
             </p>
         </div>
         <div class="col-md-4 col-sm-12 d-print-none sidebar">
+                            <p><strong>In this page</strong>:</p>
+                <ul class="nav flex-column"><li class="nav-item first last"><a href="#740805b3b59d3f6539959959416e5e4e" class="nav-link">AlmaviaCX Ibexa Translation UI Bundle</a><ul class="menu_level_1"><li class="nav-item first last"><a href="#7cd8fb6e31cc946c078d2740c76a9899" class="nav-link">Installation</a><ul class="menu_level_2"><li class="nav-item first"><a href="#5a2ebfb8baa378cfcfcba58bbb1380c2" class="nav-link">Requirements</a></li><li class="nav-item"><a href="#6065c97227a6214bc68bad0f15ff16d1" class="nav-link">Use Composer</a></li><li class="nav-item"><a href="#040da9acc61145e551bcf66b54f44420" class="nav-link">Register the bundle</a></li><li class="nav-item"><a href="#814b1401d1a609253b98ac549a68a493" class="nav-link">Add routes</a></li><li class="nav-item last"><a href="#254f642527b45bc260048e30704edb39" class="nav-link">Configuration</a></li></ul></li></ul></li></ul>
                     </div>
     </div>
     <footer class="pt-4 my-md-5 pt-md-5 border-top">
