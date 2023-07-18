@@ -1,0 +1,39 @@
+{
+    "name": "almaviacx/ibexatranslationuibundle",
+    "description": "This bundle allows to import translation files content into the database and provide a GUI to edit translations.",
+    "keywords": [
+        "ibexa",
+        "bundle",
+        "translation",
+        "i18n"
+    ],
+    "homepage": "https://github.com/Novactive/AlmaviaCXIbexaTranslationUiBundle",
+    "type": "ibexa-bundle",
+    "authors": [
+        {
+            "name": "AlmaviaCX",
+            "homepage": "https://almaviacx.com/expertises/web-mobile/",
+            "email": "dirtech.web@almaviacx.com"
+        }
+    ],
+    "license": [
+        "MIT"
+    ],
+    "require": {
+        "php": "^7.3 || ^8.0",
+        "ibexa/admin-ui": "^4.0",
+        "lexik/translation-bundle": "^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "AlmaviaCX\\Bundle\\IbexaTranslationUiBundle\\": "src/bundle",
+            "AlmaviaCX\\Bundle\\IbexaTranslationUi\\": "src/lib"
+        }
+    },
+    "extra": {
+        "thanks": {
+            "name": "lexik/translation-bundle",
+            "url": "https://github.com/lexik/LexikTranslationBundle"
+        }
+    }
+}
