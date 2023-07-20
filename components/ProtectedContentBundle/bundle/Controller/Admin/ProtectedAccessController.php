@@ -17,7 +17,7 @@ namespace Novactive\Bundle\eZProtectedContentBundle\Controller\Admin;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use EzSystems\PlatformHttpCacheBundle\PurgeClient\PurgeClientInterface;
+use Ibexa\Contracts\HttpCache\Handler\ContentTagInterface;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
 use Novactive\Bundle\eZProtectedContentBundle\Form\ProtectedAccessType;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -38,7 +38,7 @@ class ProtectedAccessController
         FormFactoryInterface $formFactory,
         EntityManagerInterface $entityManager,
         RouterInterface $router,
-        PurgeClientInterface $httpCachePurgeClient,
+        ContentTagInterface $responseTagger,
         ?ProtectedAccess $access = null
     ): RedirectResponse {
         if ($request->isMethod('post')) {
@@ -54,12 +54,8 @@ class ProtectedAccessController
                 $access->setUpdated($now);
                 $entityManager->persist($access);
                 $entityManager->flush();
-                $httpCachePurgeClient->purge(
-                    [
-                        'location-'.$location->id,
-                        'location-'.$location->parentLocationId,
-                    ]
-                );
+                $responseTagger->addLocationTags([$location->id]);
+                $responseTagger->addParentLocationTags([$location->parentLocationId]);
             }
         }
 
@@ -78,18 +74,14 @@ class ProtectedAccessController
         Location $location,
         EntityManagerInterface $entityManager,
         RouterInterface $router,
-        ProtectedAccess $access,
-        PurgeClientInterface $httpCachePurgeClient
+        int $access,
+        ContentTagInterface $responseTagger
     ): RedirectResponse {
+        $access = $entityManager->find(ProtectedAccess::class, $access);
         $entityManager->remove($access);
         $entityManager->flush();
-
-        $httpCachePurgeClient->purge(
-            [
-                'location-'.$location->id,
-                'location-'.$location->parentLocationId,
-            ]
-        );
+        $responseTagger->addLocationTags([$location->id]);
+        $responseTagger->addParentLocationTags([$location->parentLocationId]);
 
         return new RedirectResponse(
             $router->generate('ibexa.content.view', ['contentId' => $location->contentId,

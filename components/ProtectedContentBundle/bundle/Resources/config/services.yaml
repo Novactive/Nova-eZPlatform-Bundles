@@ -6,7 +6,6 @@ services:
         autoconfigure: true
         public: false
         bind:
-            $httpCachePurgeClient: '@ibexa.http_cache.purge_client'
             $entityManager: "@novaezprotectedcontent.doctrine.entity_manager"
 
     Novactive\Bundle\eZProtectedContentBundle\Command\:
