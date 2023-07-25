@@ -12,14 +12,15 @@ declare(strict_types=1);
 
 namespace Novactive\eZPlatform\Bundles\Core\Collection;
 
+use Novactive\eZPlatform\Bundles\Core\Component;
 use Symfony\Component\HttpClient\HttpClient;
 
 final class RemoteTags
 {
-    public function __invoke(string $component): array
+    public function __invoke(Component $component): array
     {
         $client = HttpClient::create();
-        $response = $client->request('GET', "https://api.github.com/repos/Novactive/NovaeZ{$component}/tags");
+        $response = $client->request('GET', "https://api.github.com/repos/{$component->getRepo()}/tags");
 
         return $response->toArray(false);
     }

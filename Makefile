@@ -38,12 +38,9 @@ codeclean: ## Coding Standard checks
 install: ## Install vendors
 	@ddev exec -d /var/www/html "$(COMPOSER) install"
 
-.PHONY: post-install
-post-install:
-	@echo "..:: Do bundle YARN deps ::.."
-	@ln -sf $(EZ_DIR)/node_modules
-	@ddev exec "yarn add --dev algoliasearch react react-collapsible react-dom react-instantsearch-dom"
 
+.PHONY: wrap-bundles
+wrap-bundles:
 	@echo "..:: Put Bundles in there ::.."
 	@for COMPONENT in $(shell ls components); do \
 		if COMPONENT=$${COMPONENT} bin/ci-should install; then \
@@ -51,6 +48,13 @@ post-install:
 			ddev exec -d /var/www/html "COMPONENT_CONFIG_DIR='components/$${COMPONENT}/tests/provisioning' COMPONENT=$${COMPONENT} bin/wrapbundle"; \
 		fi \
 	done
+
+.PHONY: post-install
+post-install: wrap-bundles
+	@echo "..:: Do bundle YARN deps ::.."
+	@ln -sf $(EZ_DIR)/node_modules
+	@ddev exec "yarn add --dev algoliasearch react react-collapsible react-dom react-instantsearch-dom"
+
 	@ddev exec "$(COMPOSER) update"
 	@ddev exec "$(CONSOLE) d:s:u --force"
 

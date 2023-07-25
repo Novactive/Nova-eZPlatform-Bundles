@@ -14,7 +14,7 @@ namespace Novactive\eZPlatform\Bundles\Core;
 
 final class Splitter
 {
-    public function __invoke(string $component, string $branch)
+    public function __invoke(Component $component, string $branch)
     {
         $localBranchName = uniqid("{$component}-{$branch}-", false);
         $commands = [
@@ -22,7 +22,7 @@ final class Splitter
                 'splitsh-lite', "--prefix=components/{$component}", "--origin=refs/heads/{$branch}",
                 "--target=refs/heads/{$localBranchName}",
             ],
-            ['git', 'remote', 'add', $component, "git@github.com:Novactive/NovaeZ{$component}.git"],
+            ['git', 'remote', 'add', $component, "git@github.com:{$component->getRepo()}.git"],
             ['git', 'push', '-f', $component, "refs/heads/{$localBranchName}:refs/heads/{$branch}"],
             ['git', 'remote', 'rm', $component],
             ['git', 'update-ref', '-d', "refs/heads/{$localBranchName}"],

@@ -14,7 +14,7 @@ namespace Novactive\eZPlatform\Bundles\Core;
 
 final class Tagger
 {
-    public function __invoke(string $component, string $branch, string $tag, string $message)
+    public function __invoke(Component $component, string $branch, string $tag, string $message)
     {
         $localBranchName = uniqid("{$component}-{$branch}-", false);
         $commands = [
@@ -22,7 +22,7 @@ final class Tagger
                 'splitsh-lite', "--prefix=components/{$component}", "--origin=refs/heads/{$branch}",
                 "--target=refs/heads/{$localBranchName}",
             ],
-            ['git', 'remote', 'add', $component, "git@github.com:Novactive/NovaeZ{$component}.git"],
+            ['git', 'remote', 'add', $component, "git@github.com:{$component->getRepo()}.git"],
             ['git', 'tag', '-s', '-a', $tag, '-m', $message, "refs/heads/{$localBranchName}"],
             ['git', 'push', '-f', $component, $tag],
             ['git', 'remote', 'rm', $component],
