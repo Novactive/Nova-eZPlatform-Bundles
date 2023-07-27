@@ -12,19 +12,18 @@ declare(strict_types=1);
 
 namespace Novactive\eZPlatform\Bundles\Command;
 
-use Novactive\eZPlatform\Bundles\Core\Collection\Components;
 use Novactive\eZPlatform\Bundles\Core\Collection\RemoteTags;
 use Novactive\eZPlatform\Bundles\Core\Tagger;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class TagCommand extends Command
 {
     use AskValidLocaleBranch;
+    use AskValidComponents;
 
     protected static $defaultName = 'tag';
 
@@ -37,21 +36,12 @@ final class TagCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $components = (new Components())();
-
-        $helper = $this->getHelper('question');
-        $question = new Question('Please enter the name of the component to tag : ');
-        $question->setAutocompleterValues($components);
-        $question->setValidator(
-            function ($answer) use ($components) {
-                if (!\is_string($answer) || !\in_array($answer, $components, true)) {
-                    throw new RuntimeException('This component does not exist.');
-                }
-
-                return $answer;
-            }
+        $component = $this->askValidComponent(
+            'Please enter the name of the component to sync',
+            $input,
+            $output
         );
-        $component = $helper->ask($input, $output, $question);
+
         $branch = $this->askValidLocaleBranch(
             'Please enter the name of the branch you want to tag',
             'master',
