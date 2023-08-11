@@ -1,3 +1,6 @@
+parameters:
+    faker.generator.image.breakpoints: ['(min-width: 0)', '(min-width: 754px)', '(min-width: 1024px)']
+
 services:
     _defaults:
         autowire: true
@@ -44,3 +47,7 @@ services:
             $richTextOutputConverter: '@ibexa.richtext.converter.output.xhtml5'
         tags:
             - 'faker.generator'
+
+    Novactive\StaticTemplates\Faker\Generators\ImageGenerator:
+        arguments:
+            $breakpoints: '%faker.generator.image.breakpoints%'

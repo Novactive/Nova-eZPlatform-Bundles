@@ -18,11 +18,25 @@ class ImageGenerator implements GeneratorInterface
 {
     use FakerGeneratorTrait;
 
+    protected array $breakpoints = [];
+
+    public function __construct(array $breakpoints)
+    {
+        $this->breakpoints = $breakpoints;
+    }
+
     public function generateMatchRegex(string $parametersRegex = '(<([\S]+)>)?'): string
     {
         $fqcn = '\\'.Image::class;
 
-        return '^('.addslashes($fqcn).'|image)(<(\d+)?x(\d+)?>)?(<(\d+)?x(\d+)?>)?(<(\d+)?x(\d+)?>)?$';
+        $regex = '^('.addslashes($fqcn).'|image)';
+
+        $breakpointCount = count($this->breakpoints);
+        for ($i = 0; $i < $breakpointCount; ++$i) {
+            $regex .= '(<(\d+)?x(\d+)?>)?';
+        }
+
+        return $regex.'$';
     }
 
     public function support(string $type): bool
@@ -36,28 +50,19 @@ class ImageGenerator implements GeneratorInterface
 
         $matches = [];
         preg_match('/'.$this->generateMatchRegex().'/', $type, $matches);
-        $sourceRequirements = [
-            [
-                'width' => $matches[3] ?? null,
-                'height' => $matches[4] ?? null,
-                'media' => '(min-width: 1024px)',
-            ],
-        ];
 
-        if (isset($matches[5])) {
-            $sourceRequirements[] = [
-                'width' => $matches[6] ?? null,
-                'height' => $matches[7] ?? null,
-                'media' => '(min-width: 754px)',
-            ];
+        $sourceRequirements = [];
+        foreach ($this->breakpoints as $i => $breakpoint) {
+            $index = 2 + $i * 3;
+            if (isset($matches[$index])) {
+                $sourceRequirements[] = [
+                    'width' => $matches[$index + 1] ?? null,
+                    'height' => $matches[$index + 2] ?? null,
+                    'media' => $breakpoint,
+                ];
+            }
         }
-        if (isset($matches[8])) {
-            $sourceRequirements[] = [
-                'width' => $matches[9] ?? null,
-                'height' => $matches[10] ?? null,
-                'media' => '(min-width: 0)',
-            ];
-        }
+        dd($matches, $sourceRequirements);
 
         $sources = [];
         foreach ($sourceRequirements as $sourceReqs) {
@@ -68,18 +73,18 @@ class ImageGenerator implements GeneratorInterface
                 $faker->imageUrl($width * 2, $height * 2, null, false, null, true).' 2x',
             ];
             $sources[] = new ImageSource([
-               'uri' => implode(', ', $uris),
-               'width' => $width,
-               'height' => $height,
-               'media' => $sourceReqs['media'],
-            ]);
+                                             'uri' => implode(', ', $uris),
+                                             'width' => $width,
+                                             'height' => $height,
+                                             'media' => $sourceReqs['media'],
+                                         ]);
         }
 
         return new Image([
-             'alt' => $faker->sentence(),
-             'caption' => $faker->sentence(),
-             'credit' => $faker->sentence(),
-             'sources' => $sources,
-         ]);
+                             'alt' => $faker->sentence(),
+                             'caption' => $faker->sentence(),
+                             'credit' => $faker->sentence(),
+                             'sources' => $sources,
+                         ]);
     }
 }
