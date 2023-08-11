@@ -62,7 +62,6 @@ class ImageGenerator implements GeneratorInterface
                 ];
             }
         }
-        dd($matches, $sourceRequirements);
 
         $sources = [];
         foreach ($sourceRequirements as $sourceReqs) {
