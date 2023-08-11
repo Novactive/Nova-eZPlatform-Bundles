@@ -37,3 +37,10 @@ services:
     Novactive\StaticTemplates\Faker\Generators\:
         resource: '../../../lib/Faker/Generators/'
         lazy: true
+
+    Novactive\StaticTemplates\Faker\Generators\RichTextGenerator:
+        lazy: true
+        arguments:
+            $richTextOutputConverter: '@ibexa.richtext.converter.output.xhtml5'
+        tags:
+            - 'faker.generator'
