@@ -156,7 +156,6 @@ final class QueryFactory
             try {
                 $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
             } catch (NotFoundException $exception) {
-                dd($contentTypeIdentifier);
                 continue;
             }
             $validContentTypeIdentifiers[] = $contentTypeIdentifier;
