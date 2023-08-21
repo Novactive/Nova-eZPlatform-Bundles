@@ -39,27 +39,20 @@ TODO Cette partie du bundle est a revoir en respecter la nouvelle façon de pré
 
 
 
-     <section class="container mt-4 px-5 mb-5"
-              style="color: red; background-color: pink; border: solid 1px green"
-     >
+     <section class="container mt-4 px-5 mb-5">
 
          {% set items = items|default({}) %}
-
-         {{ dump(items) }}
 
          <div class="card ibexa-card ibexa-card--light">
              <div class="card-body">
 
                  {% for field in form.fieldsData -%}
-                     {{ dump(field.vars.name) }}
                      {#                     {% not field.rendered %}#}
                      {% if field.value is defined %}
                          {% if items[field.vars.name] is defined %}
 
                              <div class="position-absolute" data-toggle="modal" data-target="#modal-{{ field.vars.name }}"
                                   aria-expanded="false" aria-controls="modal-{{ field.vars.name }}">
-
-                                 dsfdfdf
 
                                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                       width="20px" height="20px" viewBox="0 0 20 20" version="1.1">
