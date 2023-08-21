@@ -1,9 +1,3 @@
-{#
-
-    @var Content   documentation
-    @var Content[] documentation_items (Indexé par l'identifier du field
-    
-#}
 {% trans_default_domain 'ezedithelp' %}
 {% if documentation is defined %}
     <div class="alert ibexa-alert ibexa-alert--info ibexa-alert--toast" role="alert">
@@ -13,15 +7,17 @@
                 <div class="row">
                     <div class="col-4">
                         <div class="card p-2">
-                            {% if not ez_field_is_empty(documentation, 'image') %}
-                                {{ ez_render_field(documentation, 'image') }}
+                            {% if not ibexa_field_is_empty(documentation, 'image') %}
+                                {{ ibexa_render_field(documentation, 'image', {
+                                    template: '@ibexadesign/fields/simple_ezimage_field.html.twig'
+                                }) }}
                             {% endif %}
                             <div class="card-body">
-                                {% if not ez_field_is_empty(documentation, 'title') %}
-                                    <h5>{{ ez_render_field(documentation, 'title') }}</h5>
+                                {% if not ibexa_field_is_empty(documentation, 'title') %}
+                                    <h5>{{ ibexa_render_field(documentation, 'title') }}</h5>
                                 {% endif %}
-                                {% if not ez_field_is_empty(documentation, 'body') %}
-                                    {{ ez_render_field(documentation, 'body') }}
+                                {% if not ibexa_field_is_empty(documentation, 'body') %}
+                                    {{ ibexa_render_field(documentation, 'body') }}
                                 {% endif %}
                             </div>
                         </div>
@@ -30,13 +26,13 @@
                         <div class="row">
                             <div class="col-3">
                                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                    {% for identifier, item in documentation_items|default([]) %}
+                                    {% for identifier, item in documentation_items %}
                                         <a class="nav-link {% if loop.first %} active {% endif %}" id="{{ identifier }}" data-bs-toggle="pill"
                                            href="#v-pills-{{ identifier }}"
                                            data-bs-target="#v-pills-{{ identifier }}"
                                            role="tab">
-                                            {% if not ez_field_is_empty(item, 'title') %}
-                                                {{ ez_render_field(item, 'title') }}
+                                            {% if not ibexa_field_is_empty(item, 'title') %}
+                                                {{ ibexa_render_field(item, 'title') }}
                                             {% else %}
                                                 {{ identifier }}
                                             {% endif %}
@@ -48,11 +44,13 @@
                                 <div class="tab-content" id="v-pills-tabContent">
                                     {% for identifier, item in documentation_items %}
                                         <div class="tab-pane fade show {% if loop.first %} active {% endif %}" id="v-pills-{{ identifier }}" role="tabpanel">
-                                            {% if not ez_field_is_empty(item, 'body') %}
-                                                {{ ez_render_field(item, 'body') }}
+                                            {% if not ibexa_field_is_empty(item, 'body') %}
+                                                {{ ibexa_render_field(item, 'body') }}
                                             {% endif %}
-                                            {% if not ez_field_is_empty(item, 'image') %}
-                                                {{ ez_render_field(item, 'image') }}
+                                            {% if not ibexa_field_is_empty(item, 'image') %}
+                                                {{ ibexa_render_field(item, 'image', {
+                                                    template: '@ibexadesign/fields/simple_ezimage_field.html.twig'
+                                                }) }}
                                             {% endif %}
                                         </div>
                                     {% endfor %}
