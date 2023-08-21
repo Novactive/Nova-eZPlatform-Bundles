@@ -1,5 +1,5 @@
 {
-    "name": "novactive/ibexaedithelpbundle",
+    "name": "novactive/ezedithelpbundle",
     "description": "Add a helper when editing or creating a Content. This helper allows you to display personalised text for the Content creation/edition",
     "keywords": [
         "tooltip",
