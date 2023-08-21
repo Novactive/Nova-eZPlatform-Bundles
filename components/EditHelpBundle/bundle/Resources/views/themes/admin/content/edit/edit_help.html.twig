@@ -1,24 +1,66 @@
+{#
+
+    @var Content   documentation
+    @var Content[] documentation_items (Indexé par l'identifier du field
+
+    extend_from_template = "@ibexadesign/content/edit/edit.html.twig"
+
+@admin/content/edit/edit_help.html.twig (templates/themes/admin/content/edit/edit_help.html.twig)
+@admin/content/edit/edit.html.twig (@admin/content/edit/edit.html.twig)
+@IbexaAdminUi/themes/admin/content/edit_base.html.twig (@IbexaAdminUi/themes/admin/content/edit_base.html.twig)
+@IbexaAdminUi/themes/admin/ui/edit_base.html.twig (@IbexaAdminUi/themes/admin/ui/edit_base.html.twig)
+@IbexaAdminUi/themes/admin/ui/layout.html.twig (@IbexaAdminUi/themes/admin/ui/layout.html.twig)
+
+#}
 {% extends extend_from_template %}
 
 {% trans_default_domain 'content_edit' %}
 
 {% block form_before %}
     {{ parent() }}
-    {% include "@ezdesign/content/edit/tophelp.html.twig" %}
+    {% include "@ibexadesign/content/edit/tophelp.html.twig" %}
 {% endblock %}
 
- {% block form_fields %}
+{#
+TODO Cette partie du bundle est a revoir en respecter la nouvelle façon de présenter le formulaire d'édition sans le casser.
+#}
+ {% block form_fields__TODO %}
 
-     <section class="container mt-4 px-5 mb-5">
-         <div class="card ez-card">
+     {#     <div class="card ibexa-card ibexa-card--light">#}
+     {#         <div class="card-body">#}
+     {#             {{ parent() }}#}
+     {#             {{ form_widget(form.publish, {'attr': {'hidden': 'hidden'}}) }}#}
+     {#             {{ form_widget(form.saveDraft, {'attr': {'hidden': 'hidden'}}) }}#}
+     {#             {{ form_widget(form.cancel, {'attr': {'hidden': 'hidden'}}) }}#}
+     {#         </div>#}
+     {#     </div>#}
+
+
+
+
+
+     <section class="container mt-4 px-5 mb-5"
+              style="color: red; background-color: pink; border: solid 1px green"
+     >
+
+         {% set items = items|default({}) %}
+
+         {{ dump(items) }}
+
+         <div class="card ibexa-card ibexa-card--light">
              <div class="card-body">
 
-                 {% for field in form.fieldsData if not field.rendered -%}
+                 {% for field in form.fieldsData -%}
+                     {{ dump(field.vars.name) }}
+                     {#                     {% not field.rendered %}#}
                      {% if field.value is defined %}
                          {% if items[field.vars.name] is defined %}
 
                              <div class="position-absolute" data-toggle="modal" data-target="#modal-{{ field.vars.name }}"
                                   aria-expanded="false" aria-controls="modal-{{ field.vars.name }}">
+
+                                 dsfdfdf
+
                                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                       width="20px" height="20px" viewBox="0 0 20 20" version="1.1">
                                      <g>

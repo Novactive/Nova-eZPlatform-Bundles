@@ -28,15 +28,9 @@ class FetchDocumentation
 {
     public const TOOLTIP_CONTENT_TYPE = 'nova_help_tooltip';
 
-    /**
-     * @var Repository
-     */
-    protected $repository;
-
-    public function __construct(Repository $repository)
-    {
-        $this->repository = $repository;
-    }
+    public function __construct(
+        protected Repository $repository
+    ) { }
 
     public function getByContentType(ContentType $contentType): ?Content
     {
