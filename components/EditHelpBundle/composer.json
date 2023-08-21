@@ -1,5 +1,5 @@
 {
-    "name": "novactive/ezedithelpbundle",
+    "name": "novactive/ibexaedithelpbundle",
     "description": "Add a helper when editing or creating a Content. This helper allows you to display personalised text for the Content creation/edition",
     "keywords": [
         "tooltip",
@@ -8,7 +8,7 @@
         "ezplatform"
     ],
     "homepage": "https://github.com/Novactive/NovaeZEditHelpBundle",
-    "type": "ezplatform-bundle",
+    "type": "ibexa-bundle",
     "authors": [
         {
             "name": "Novactive",
@@ -20,7 +20,7 @@
         "MIT"
     ],
     "require": {
-        "php": "^7.3"
+        "php": "^8.1"
     },
     "autoload": {
         "psr-4": {
