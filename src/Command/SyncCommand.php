@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace Novactive\eZPlatform\Bundles\Command;
 
-use Novactive\eZPlatform\Bundles\Core\Collection\Components;
 use Novactive\eZPlatform\Bundles\Core\Splitter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,7 +21,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 final class SyncCommand extends Command
 {
     use AskValidLocaleBranch;
-    use AskValidComponent;
+    use AskValidComponents;
 
     protected static $defaultName = 'sync';
 
@@ -41,7 +40,7 @@ final class SyncCommand extends Command
             $output
         );
 
-        $component = $this->askValidComponent(
+        $components = $this->askValidComponents(
             'Please enter the name of the component to sync',
             'all',
             $input,
@@ -59,13 +58,6 @@ final class SyncCommand extends Command
         }
 
         $splitter = new Splitter();
-
-        if ('all' === $component) {
-            $components = (new Components())();
-        } else {
-            $components = [$component];
-        }
-
         foreach ($components as $component) {
             $io->section("Component {$component}");
             $splitter($component, $branch);
