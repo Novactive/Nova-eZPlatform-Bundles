@@ -1,5 +1,7 @@
 parameters:
     faker.generator.image.breakpoints: ['(min-width: 0)', '(min-width: 754px)', '(min-width: 1024px)']
+    faker.generator.image.provider: ~
+    faker.generator.image.provider_parameters: {category: null, randomize: false, word: null, gray: true, format: 'png'}
 
 services:
     _defaults:
@@ -51,3 +53,5 @@ services:
     Novactive\StaticTemplates\Faker\Generators\ImageGenerator:
         arguments:
             $breakpoints: '%faker.generator.image.breakpoints%'
+            $providerParameters: '%faker.generator.image.provider_parameters%'
+            $providerClass: '%faker.generator.image.provider%'

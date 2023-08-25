@@ -19,10 +19,14 @@ class ImageGenerator implements GeneratorInterface
     use FakerGeneratorTrait;
 
     protected array $breakpoints = [];
+    protected ?string $providerClass = null;
+    protected array $providerParameters = [];
 
-    public function __construct(array $breakpoints)
+    public function __construct(array $breakpoints, array $providerParameters = [], ?string $providerClass = null)
     {
         $this->breakpoints = $breakpoints;
+        $this->providerParameters = $providerParameters;
+        $this->providerClass = $providerClass;
     }
 
     public function generateMatchRegex(string $parametersRegex = '(<([\S]+)>)?'): string
@@ -47,6 +51,9 @@ class ImageGenerator implements GeneratorInterface
     public function generate(string $type): Image
     {
         $faker = $this->getFaker();
+        if ($this->providerClass) {
+            $faker->addProvider(new $this->providerClass($faker));
+        }
 
         $matches = [];
         preg_match('/'.$this->generateMatchRegex().'/', $type, $matches);
@@ -67,23 +74,30 @@ class ImageGenerator implements GeneratorInterface
         foreach ($sourceRequirements as $sourceReqs) {
             $width = !empty($sourceReqs['width']) ? $sourceReqs['width'] : $faker->numberBetween(100, 1000);
             $height = !empty($sourceReqs['height']) ? $sourceReqs['height'] : $faker->numberBetween(3, 1000);
+
             $uris = [
-                $faker->imageUrl($width, $height, null, false, null, true),
-                $faker->imageUrl($width * 2, $height * 2, null, false, null, true).' 2x',
+                call_user_func_array(
+                    [$faker, 'imageUrl'],
+                    ['width' => $width, 'height' => $height, ...$this->providerParameters]
+                ),
+                call_user_func_array(
+                    [$faker, 'imageUrl'],
+                    ['width' => $width * 2, 'height' => $height * 2, ...$this->providerParameters]
+                ).' 2x',
             ];
             $sources[] = new ImageSource([
-                                             'uri' => implode(', ', $uris),
-                                             'width' => $width,
-                                             'height' => $height,
-                                             'media' => $sourceReqs['media'],
-                                         ]);
+                                              'uri' => implode(', ', $uris),
+                                              'width' => $width,
+                                              'height' => $height,
+                                              'media' => $sourceReqs['media'],
+                                          ]);
         }
 
         return new Image([
-                             'alt' => $faker->sentence(),
-                             'caption' => $faker->sentence(),
-                             'credit' => $faker->sentence(),
-                             'sources' => $sources,
-                         ]);
+                              'alt' => $faker->sentence(),
+                              'caption' => $faker->sentence(),
+                              'credit' => $faker->sentence(),
+                              'sources' => $sources,
+                          ]);
     }
 }
