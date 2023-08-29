@@ -146,8 +146,7 @@ final class QueryFactory
         array $contentTypeIdentifiers,
         array $locationIds,
         array $subtreeLocationsId,
-    )
-    {
+    ) {
         $contentTypeService = $this->repository->getContentTypeService();
         $criterions = [];
 
