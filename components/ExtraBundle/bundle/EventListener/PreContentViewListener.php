@@ -22,6 +22,7 @@ use Ibexa\Core\MVC\Symfony\Templating\GlobalHelper;
 use Ibexa\Core\MVC\Symfony\View\ContentView;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\String\UnicodeString;
 
 class PreContentViewListener implements EventSubscriberInterface
 {
@@ -92,12 +93,15 @@ class PreContentViewListener implements EventSubscriberInterface
                 $type->setContent($content);
 
                 $children = [];
-
-                $method = 'get'.preg_replace_callback(
-                        '/(?:^|_)(.?)/',
-                        static fn(array $matches): string => strtolower($matches[0]),
-                        $viewType
-                    ).'Children';
+                try {
+                    $method =  (new UnicodeString('get_'.$viewType.'_children'))->camel()->toString();
+                } catch (\Throwable $e) {
+                    $method = 'get'.preg_replace_callback(
+                            '/(?:^|_)(.?)/',
+                            static fn(array $matches): string => strtoupper($matches[1]),
+                            $viewType
+                        ).'Children';
+                }
 
                 if (method_exists($type, $method)) {
                     $children = $type->$method(
