@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZExtraBundle\EventListener;
 
 use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Result;
-use Ibexa\Bundle\Core\DependencyInjection\Configuration\ChainConfigResolver as ConfigResolver;
 use Ibexa\Contracts\Core\Repository\Repository;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location;
@@ -24,6 +23,7 @@ use Ibexa\Core\MVC\Symfony\View\ContentView;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Content as ContentHelper;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\WrapperFactory;
 use Symfony\Contracts\Service\Attribute\Required;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 
 abstract class Type
 {
@@ -32,14 +32,14 @@ abstract class Type
     protected Content $content;
     protected Repository $repository;
     protected ContentHelper $contentHelper;
-    protected ConfigResolver $configResolver;
+    protected ConfigResolverInterface $configResolver;
     protected WrapperFactory $wrapperFactory;
 
     #[Required]
     public function setDependencies(
         Repository $repository,
         ContentHelper $contentHelper,
-        ConfigResolver $configResolver,
+        ConfigResolverInterface $configResolver,
         WrapperFactory $wrapperFactory
     ): void {
         $this->repository = $repository;
