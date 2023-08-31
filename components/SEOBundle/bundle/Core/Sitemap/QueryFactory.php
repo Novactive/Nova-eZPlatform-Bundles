@@ -145,7 +145,7 @@ final class QueryFactory
     private function getCriterionsForIncludeConfig(
         array $contentTypeIdentifiers,
         array $locationIds,
-        array $subtreeLocationsId,
+        array $subtreeLocationsId
     ) {
         $contentTypeService = $this->repository->getContentTypeService();
         $criterions = [];
