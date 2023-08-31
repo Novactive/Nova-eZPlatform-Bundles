@@ -74,6 +74,10 @@ class PreContentView
 
         $content = $contentView->getContent();
 
+        if ($content->contentInfo->isDraft()) {
+            return;
+        }
+
         $protections = $this->protectedAccessRepository->findByContent($content);
 
         if (0 === count($protections)) {
