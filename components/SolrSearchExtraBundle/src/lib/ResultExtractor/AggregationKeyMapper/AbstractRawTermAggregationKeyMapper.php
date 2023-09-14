@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Novactive\EzSolrSearchExtra\ResultExtractor\AggregationKeyMapper;
 
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation;
-use Ibexa\Contracts\Solr\ResultExtractor\ResultExtractor\TermAggregationKeyMapper;
+use Ibexa\Contracts\Solr\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper;
 use Novactive\EzSolrSearchExtra\Query\Aggregation\RawTermAggregation;
 
 abstract class AbstractRawTermAggregationKeyMapper implements TermAggregationKeyMapper
