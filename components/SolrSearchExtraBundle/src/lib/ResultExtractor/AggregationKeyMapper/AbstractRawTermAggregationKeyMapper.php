@@ -23,5 +23,5 @@ abstract class AbstractRawTermAggregationKeyMapper implements TermAggregationKey
         return $results;
     }
 
-    abstract public function mapKey(Aggregation $aggregation, int $key): array;
+    abstract public function mapKey(Aggregation $aggregation, $key): array;
 }
