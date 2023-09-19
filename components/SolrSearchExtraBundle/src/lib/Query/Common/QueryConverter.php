@@ -34,6 +34,19 @@ class QueryConverter extends NativeQueryConverter
     {
         $params = $this->baseConverter->convert($query, $languageSettings);
 
+        if ($query->filter instanceof Query\Criterion\LogicalAnd) {
+            $params['fq'] = [];
+            foreach ($query->filter->criteria as $criterion) {
+                if ($criterion instanceof Query\Criterion\LogicalAnd) {
+                    foreach ($criterion->criteria as $subcriterion) {
+                        $params['fq'][] = $this->criterionVisitor->visit($subcriterion);
+                    }
+                } else {
+                    $params['fq'][] = $this->criterionVisitor->visit($criterion);
+                }
+            }
+        }
+
         if ($query instanceof AdvancedContentQuery && $query->groupConfig) {
             $params = array_merge($params, $query->groupConfig);
         }
