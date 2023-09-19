@@ -17,9 +17,9 @@ final class TaxonomyRawTermAggregationKeyMapper extends AbstractRawTermAggregati
         $this->taxonomyService = $taxonomyService;
     }
 
-    public function mapKey(Aggregation $aggregation, int $key): array
+    public function mapKey(Aggregation $aggregation, $key): array
     {
-        $taxonomyEntry = $this->taxonomyService->loadEntryById($key);
+        $taxonomyEntry = $this->taxonomyService->loadEntryById((int) $key);
 
         return [
             'name' => $taxonomyEntry->name,

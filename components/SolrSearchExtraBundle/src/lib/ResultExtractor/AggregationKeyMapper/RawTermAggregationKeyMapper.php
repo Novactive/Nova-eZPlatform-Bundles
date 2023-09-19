@@ -8,7 +8,7 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation;
 
 final class RawTermAggregationKeyMapper extends AbstractRawTermAggregationKeyMapper
 {
-    public function mapKey(Aggregation $aggregation, int $key): array
+    public function mapKey(Aggregation $aggregation, $key): array
     {
         return [
             'name' => null,
