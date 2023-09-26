@@ -1,7 +1,7 @@
 {#
 
 @var Content   documentation
-@var Content[] documentation_items (Indexé par l'identifier du field
+@var Content[] documentation_items (Indexé par l'identifier du field)
 
 extend_from_template = "@ibexadesign/content/edit/edit.html.twig"
 
@@ -14,7 +14,7 @@ extend_from_template = "@ibexadesign/content/edit/edit.html.twig"
 #}
 {% extends extend_from_template %}
 
-{% trans_default_domain 'content_edit' %}
+{% trans_default_domain 'ezedithelp' %}
 
 {% block form_before %}
     {{ parent() }}
@@ -29,19 +29,17 @@ extend_from_template = "@ibexadesign/content/edit/edit.html.twig"
     Je trouve que ça fait trop d'override de templates critiques
 
     Je préfère donc ajouter le bt et la popin après et déplacer le bt avec du js.
-
-    Mais pour dépacer ce bt au bon endoit il faut une cible.
-    Et pour le moment, cette cible, je la crée avec une surchage de edit_macros.html.twig ...
-    C'est pas terrible...
 #}
 {% block form_fields %}
-    {{ parent() }}
+    {{ parent() }} {# On ne touche pas au formulaire existant. #}
 
+    {# Pour chaque item de documentation de champ. #}
     {% for identifier, item in documentation_items %}
         {% set button_id = 'nova-help-button--' ~ identifier %}
-        {% set button_place_id = 'nova-help-button-place--' ~ identifier %}
+        {% set label_for = 'ezplatform_content_forms_content_edit_fieldsData_' ~ identifier ~ '_value' %}
         {% set modal_id = 'nova-help-modal--' ~ identifier %}
 
+        {# Création d'un boutton pour ouvrir la modal d'aide #}
         <button
                 id="{{ button_id }}"
                 type="button"
@@ -59,8 +57,9 @@ extend_from_template = "@ibexadesign/content/edit/edit.html.twig"
             </span>
         </button>
 
+        {# Création de la modal d'aide #}
         {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
-            title: '' ~ identifier,
+            title: ibexa_content_name(item),
             id: modal_id,
         } %}
             {% block body_content %}
@@ -73,12 +72,18 @@ extend_from_template = "@ibexadesign/content/edit/edit.html.twig"
                     }) }}
                 {% endif %}
             {% endblock %}
+            {% block footer %}
+                <pre>identifier: {{ identifier }}</pre>
+            {% endblock %}
         {% endembed %}
 
+        {# Déplacement du boutton juste après le label #}
         <script>
-            var bt=document.getElementById('{{ button_id }}')
-            var place=document.getElementById('{{ button_place_id }}').nextElementSibling
-            place.append(bt)
+            var bt = document.getElementById('{{ button_id }}')
+            var label = document.querySelector('[for="{{ label_for }}"]');
+            if (bt && label) {
+                label.after(bt)
+            }
         </script>
     {% endfor %}
 {% endblock %}
