@@ -57,7 +57,7 @@ class EzStaticTemplatesExtension extends Extension implements PrependExtensionIn
                 $ezpublishConfig['siteaccess']['groups']['static_group'][] = $theme;
                 $ezpublishConfig['siteaccess']['match']['Map\URI'][$uri] = $theme;
                 $ezpublishConfig['system'][$theme] = ['design' => "{$theme}_design"];
-                $ezdesignConfig['design_list']["{$theme}_design"] = [$theme];
+                $ezdesignConfig['design_list']["{$theme}_design"] = [$theme, 'static_standard', 'standard'];
             }
             $container->prependExtensionConfig('ibexa', $ezpublishConfig);
             $container->prependExtensionConfig('ibexa_design_engine', $ezdesignConfig);
@@ -83,7 +83,7 @@ class EzStaticTemplatesExtension extends Extension implements PrependExtensionIn
 
             /** @var SplFileInfo $directoryInfo */
             foreach ($finder->directories()->in($themeDir)->depth('== 0') as $directoryInfo) {
-                if (preg_match("/^{$StaticTemplatesThemePrefix}(.*)$/", $directoryInfo->getBasename())) {
+                if (preg_match("/^{$StaticTemplatesThemePrefix}(?!standard)(.*)$/", $directoryInfo->getBasename())) {
                     $siteaccessList[] = $directoryInfo->getBasename();
                 }
             }
@@ -93,7 +93,7 @@ class EzStaticTemplatesExtension extends Extension implements PrependExtensionIn
         $appLevelThemesDir = $container->getParameter('kernel.project_dir').'/templates/themes';
         if ($fs->exists($appLevelThemesDir)) {
             foreach ((new Finder())->directories()->in($appLevelThemesDir)->depth('== 0') as $directoryInfo) {
-                if (preg_match("/^{$StaticTemplatesThemePrefix}(.*)$/", $directoryInfo->getBasename())) {
+                if (preg_match("/^{$StaticTemplatesThemePrefix}(?!standard)(.*)$/", $directoryInfo->getBasename())) {
                     $siteaccessList[] = $directoryInfo->getBasename();
                 }
             }
