@@ -23,6 +23,9 @@ import DefaultMenuItemType from './type/DefaultMenuItemType'
       jsTreeTypes: {
         root: {
           icon: 'oi oi-menu'
+        },
+        loadMore: {
+          icon: 'oi oi-reload'
         }
       }
     },

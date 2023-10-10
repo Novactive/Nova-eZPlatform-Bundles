@@ -73,10 +73,14 @@ const loadLocationItems = ({ siteaccess }, parentLocationId, callback, limit = 5
       .then(handleRequestResponse)
       .then((data) => {
         const location = data.ContentTreeNode;
+        let loadMoreOffset = null;
+        if(offset + limit < location.totalChildrenCount) {
+          loadMoreOffset = offset+limit;
+        }
 
         location.children = location.children.map(mapChildrenToSubitems);
 
-        return mapChildrenToSubitems(location);
+        return {'location': mapChildrenToSubitems(location), 'loadMoreOffset': loadMoreOffset};
       })
       .then(callback)
       .catch(showErrorNotification);
@@ -93,28 +97,37 @@ export default class ContentTreeView extends PureComponent {
   getTreeData (node, callback) {
     const parentLocationId = node.id === '#' ? this.props.treeRootLocationId : node.data.locationId
     if (parentLocationId !== undefined) {
-      this.loadMoreSubitems({ parentLocationId, offet: 0, limit: 100 }, (location) => {
+      this.loadMoreSubitems({ parentLocationId, offet: 0, limit: 50 }, ({location, loadMoreOffset}) => {
         if (node.id === '#') {
-          callback.call(this, this.generateNodeFromLocation(location, '#'))
+          callback.call(this, this.generateNodeFromLocation(location, '#', loadMoreOffset))
         } else {
-          callback.call(this, this.generateNodesFromLocationChildren(location))
+          callback.call(this, this.generateNodesFromLocationChildren(location, loadMoreOffset))
         }
       })
     }
   }
 
-  generateNodesFromLocationChildren (location) {
+  generateNodesFromLocationChildren (location, loadMoreOffset) {
     const children = []
     for (const subitem of location.subitems) {
       children.push(this.generateNodeFromLocation(subitem, location.id))
     }
-
+    if(loadMoreOffset) {
+      children.push({
+        text: Translator.trans('menu.load_more'),
+        type: 'loadMore',
+        data: {
+          parentLocationId: location.locationId,
+          loadMoreOffset: loadMoreOffset
+        }
+      })
+    }
     return children
   }
 
-  generateNodeFromLocation (location, parentId) {
+  generateNodeFromLocation (location, parentId, loadMoreOffset) {
     const hasChildren = location.totalSubitemsCount > 0
-    const children = this.generateNodesFromLocationChildren(location)
+    const children = this.generateNodesFromLocationChildren(location, loadMoreOffset)
 
     return {
       id: String(
@@ -161,6 +174,24 @@ export default class ContentTreeView extends PureComponent {
 
   componentDidMount () {
     this.tree = $(this.treeContainer)
+      .on('select_node.jstree', (e, {node}) => {
+        if(node.type !== 'loadMore') {
+          return;
+        }
+        const parent = this.tree.get_node(node.parent)
+        this.loadMoreSubitems({
+          parentLocationId: node.data.parentLocationId,
+          offset: node.data.loadMoreOffset,
+          limit: 50
+        }, ({location, loadMoreOffset}) => {
+          const children = this.generateNodesFromLocationChildren(location, loadMoreOffset)
+          this.tree.deselect_node(node.id)
+          this.tree.delete_node(node)
+          for(const child of children){
+            this.tree.create_node(parent, child)
+          }
+        })
+      })
       .jstree({
         core: {
           data: this.getTreeData,
@@ -177,6 +208,7 @@ export default class ContentTreeView extends PureComponent {
       .jstree(true)
     $(document)
       .on('dnd_stop.vakata.jstree', this.onDnDStart.bind(this))
+
   }
 
   onDnDStart (e, data) {
