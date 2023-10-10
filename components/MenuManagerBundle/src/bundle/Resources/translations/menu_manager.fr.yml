@@ -23,6 +23,7 @@ menu:
     edit: Editer le menu
   type:
     default: Défaut
+  load_more: Charger plus
 menu_item:
   default_title: Nouveau lien
   default_container_title: Nouveau dossier

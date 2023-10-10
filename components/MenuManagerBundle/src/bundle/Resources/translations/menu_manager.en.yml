@@ -21,6 +21,7 @@ menu:
     delete: Delete menu
     view: View menu
     edit: Edit menu
+  load_more: Load more
 menu_item:
   default_title: New link
   default_container_title: New folder
