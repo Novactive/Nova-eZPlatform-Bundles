@@ -1,0 +1,30 @@
+{
+  "name": "almaviacx/ibexarichtextextrabundle",
+  "description": "",
+  "keywords": [
+    "ibexa",
+    "bundle"
+  ],
+  "homepage": "https://github.com/Novactive/AlmaviaCXIbexaRichTextExtraBundle",
+  "type": "ibexa-bundle",
+  "authors": [
+    {
+      "name": "AlmaviaCX",
+      "homepage": "https://almaviacx.com/expertises/web-mobile/",
+      "email": "dirtech.web@almaviacx.com"
+    }
+  ],
+  "license": [
+    "MIT"
+  ],
+  "require": {
+    "php": "^7.3 || ^8.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "AlmaviaCX\\Bundle\\IbexaRichTextExtraBundle\\": "src/bundle",
+      "AlmaviaCX\\Bundle\\IbexaRichTextExtra\\": "src/lib"
+    }
+  },
+  "extra": {}
+}
