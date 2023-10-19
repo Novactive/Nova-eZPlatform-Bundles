@@ -42,7 +42,8 @@ class Translator extends LexikTranslator
         $catalogue = $this->getCatalogue($locale);
         $locale = $catalogue->getLocale();
         while (!$catalogue->defines($id, $domain)) {
-            if ($cat = $catalogue->getFallbackCatalogue()) {
+            $cat = $catalogue->getFallbackCatalogue();
+            if ($cat) {
                 $catalogue = $cat;
                 $locale = $catalogue->getLocale();
             } else {
