@@ -5,7 +5,7 @@ module.exports = (ibexaConfig, ibexaConfigManager) => {
     ibexaConfig,
     entryName: 'ibexa-richtext-onlineeditor-js',
     newItems: [
-      path.resolve(__dirname, '../public/js/CKEditor/embed/extraconfig.js')
+      path.resolve(__dirname, '../public/js/CKEditor/embed/extraconfig.js'),
     ]
   })
 }
