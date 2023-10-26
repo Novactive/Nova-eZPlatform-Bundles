@@ -11,7 +11,7 @@ final class RawTermAggregationKeyMapper extends AbstractRawTermAggregationKeyMap
     public function mapKey(Aggregation $aggregation, $key): array
     {
         return [
-            'name' => null,
+            'name' => $key,
             'identifier' => null,
         ];
     }
