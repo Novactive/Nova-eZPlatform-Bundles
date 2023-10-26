@@ -28,6 +28,6 @@ class FilterTag extends BaseVisitor
     {
         $stringQuery = strtr($subVisitor->visit($criterion->criterion), ['(' => '', ')' => '']);
 
-        return '({!tag='.$criterion->tag.'}'.$stringQuery.')';
+        return '{!tag='.$criterion->tag.'}('.$stringQuery.')';
     }
 }
