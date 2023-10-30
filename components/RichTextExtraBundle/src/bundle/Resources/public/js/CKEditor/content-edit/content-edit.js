@@ -1,11 +1,11 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 
-import ContentEditUI from './contentEditUI';
-// import IbexaBlockAlignmentEditing from './block-alignment-editing';
+import ContentEditUI from './content-edit-ui';
+import ContentEditEditing from './content-edit-editing';
 
 class ContentEdit extends Plugin {
     static get requires() {
-        return [ContentEditUI];
+        return [ContentEditUI, ContentEditEditing];
     }
 }
 
