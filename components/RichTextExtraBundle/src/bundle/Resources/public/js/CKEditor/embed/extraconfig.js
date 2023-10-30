@@ -1,4 +1,4 @@
-import ContentEdit from '../contentEdit/ContentEdit'
+import ContentEdit from '../content-edit/content-edit'
 
 (function (ibexa) {
 
@@ -17,6 +17,11 @@ import ContentEdit from '../contentEdit/ContentEdit'
                 'contentEdit',
             ],
         },
+        embed: {
+            toolbar: [
+                'contentEdit',
+            ],
+        }
     }, true);
 
 
