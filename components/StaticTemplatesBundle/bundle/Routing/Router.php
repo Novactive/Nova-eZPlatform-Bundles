@@ -16,7 +16,6 @@ namespace Novactive\Bundle\EzStaticTemplatesBundle\Routing;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
-use GuzzleHttp\Psr7\Query;
 use Symfony\Cmf\Component\Routing\ChainedRouterInterface;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -104,7 +103,7 @@ class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAcc
     {
         $template = $parameters['template'];
         unset($parameters['template']);
-        $query = Query::build($parameters);
+        $query = http_build_query($parameters);
         $linkUri = "$template?$query";
 
         return $this->siteAccess->matcher->analyseLink($linkUri);
