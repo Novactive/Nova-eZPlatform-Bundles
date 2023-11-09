@@ -1,7 +1,14 @@
 services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
     ezmenumanager.ibexa.admin.component.stylesheets:
-         parent: Ibexa\AdminUi\Component\TwigComponent
-         arguments:
+        parent: Ibexa\AdminUi\Component\TwigComponent
+        arguments:
             $template: '@@EzMenuManager/themes/standard/ezadminui/stylesheets.html.twig'
-         tags:
-             - { name: ibexa.admin_ui.component, group: 'stylesheet-head' }
+        tags:
+            - { name: ibexa.admin_ui.component, group: 'stylesheet-head' }
+    Novactive\EzMenuManager\AdminUI\Menu\MenuItemEditRightSidebarBuilder:
+        tags:
+            - { name: knp_menu.menu_builder, method: build, alias: ibexa_admin_ui.menu_configure.menu_manager_item_edit_sidebar_right }

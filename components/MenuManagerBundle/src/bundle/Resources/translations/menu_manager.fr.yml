@@ -21,9 +21,14 @@ menu:
     delete: Supprimer le menu
     view: Voir le menu
     edit: Editer le menu
+  load_more: Charger plus
   type:
     default: Défaut
-  load_more: Charger plus
+    main: 'Menu principal'
+    footer: 'Pied de page'
+    placeholder: Tous
+  list:
+    empty: Vous n'avez pas encore de menu. Vos menus apparaîtront ici.
 menu_item:
   default_title: Nouveau lien
   default_container_title: Nouveau dossier
@@ -46,3 +51,4 @@ menu_item:
     save: Enregistrer le lien
     save_container: Enregistrer le dossier
     cancel: Annuler
+actions.apply_btn: Appliquer
