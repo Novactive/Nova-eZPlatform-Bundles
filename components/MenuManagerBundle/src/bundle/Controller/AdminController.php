@@ -152,7 +152,7 @@ class AdminController extends Controller
             $this->configResolver->getParameter('content.tree_root.location_id')
         );
 
-        return $this->editAction($request, $menu, $this->generateUrl('menu_manager.menu_list'));
+        return $this->editAction($request, $menu);
     }
 
     /**
@@ -160,10 +160,8 @@ class AdminController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function editAction(Request $request, Menu $menu, ?string $lastAccessedUrl = null)
+    public function editAction(Request $request, Menu $menu)
     {
-        $lastAccessedUrl = $lastAccessedUrl ?? $this->lastAccessedUrl($request);
-
         $form = $this->createForm(MenuType::class, $menu);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -176,7 +174,7 @@ class AdminController extends Controller
                 $this->translator->trans('menu.notification.saved', [], 'menu_manager')
             );
 
-            return $this->redirect($lastAccessedUrl);
+            return $this->redirect($this->generateUrl('menu_manager.menu_list'));
         }
 
         return $this->render(
@@ -184,7 +182,6 @@ class AdminController extends Controller
             [
                 'form' => $form->createView(),
                 'title' => $menu->getId() ? $menu->getName() : $this->translator->trans('menu.new', [], 'menu_manager'),
-                'lastUrl' => $lastAccessedUrl,
             ]
         );
     }
@@ -212,18 +209,5 @@ class AdminController extends Controller
         }
 
         return $this->redirectToRoute('menu_manager.menu_list');
-    }
-
-    /**
-     * @return string
-     */
-    protected function lastAccessedUrl(Request $request)
-    {
-        $targetUrl = $request->headers->get('Referer');
-        if ($targetUrl && false === strpos($targetUrl, '/login')) {
-            return $targetUrl;
-        }
-
-        return $this->generateUrl('menu_manager.menu_list');
     }
 }

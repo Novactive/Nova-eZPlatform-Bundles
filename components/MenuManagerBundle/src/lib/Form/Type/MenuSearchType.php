@@ -67,6 +67,7 @@ class MenuSearchType extends AbstractType
                         'choices' => array_combine(array_values($menuTypes), array_keys($menuTypes)),
                         'choice_translation_domain' => 'menu_manager',
                         'required' => false,
+                        'placeholder' => 'menu.type.placeholder',
                     ]
                 );
         }

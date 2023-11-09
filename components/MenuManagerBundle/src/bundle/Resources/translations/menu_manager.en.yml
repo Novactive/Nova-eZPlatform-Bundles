@@ -22,6 +22,13 @@ menu:
     view: View menu
     edit: Edit menu
   load_more: Load more
+  type:
+    default: Default
+    main: 'Main menu'
+    footer: 'Footer menu'
+    placeholder: All
+  list:
+    empty: 'You have no menu yet. Your menus will show up here.'
 menu_item:
   default_title: New link
   default_container_title: New folder
@@ -44,3 +51,4 @@ menu_item:
     save: Save link
     save_container: Save folder
     cancel: Cancel
+actions.apply_btn: Apply
