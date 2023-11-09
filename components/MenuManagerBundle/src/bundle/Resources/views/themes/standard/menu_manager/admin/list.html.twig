@@ -11,6 +11,7 @@
 
 {%- block breadcrumbs -%}
     {% include '@ibexadesign/ui/breadcrumbs.html.twig' with { items: [
+        { value: 'breadcrumb.admin'|trans(domain='messages')|desc('Admin') },
         { value: 'menu.list'|trans }
     ]} %}
 {%- endblock -%}
@@ -105,8 +106,6 @@
             body_rows,
             empty_table_info_text: 'menu.list.empty'|trans|desc('You have no menu yet. Your menus will show up here.'),
         } %}
-            {% set modal_create_data_target = 'create-wildcards-modal' %}
-            {% set modal_delete_data_target = 'delete-wildcards-modal' %}
 
             {% block header %}
                 {% embed '@ibexadesign/ui/component/table/table_header.html.twig' %}
@@ -125,8 +124,8 @@
                                 type="button"
                                 class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
                                 disabled
-                                data-toggle="modal"
-                                data-target="#{{ modal_data_target }}"
+                                data-bs-toggle="modal"
+                                data-bs-target="#{{ modal_data_target }}"
                         >
                             <svg class="ibexa-icon ibexa-icon--small ibexa-icon--trash">
                                 <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
