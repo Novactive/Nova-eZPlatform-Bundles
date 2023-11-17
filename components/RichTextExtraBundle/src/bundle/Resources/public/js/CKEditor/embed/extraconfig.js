@@ -1,9 +1,11 @@
 import ContentEdit from '../content-edit/content-edit'
+import IbexaEmbedToolbar from "./embed-toolbar";
 
 (function (ibexa) {
 
     ibexa.addConfig('richText.CKEditor.extraPlugins', [
-        ContentEdit
+        ContentEdit,
+        IbexaEmbedToolbar
     ], true);
 
     ibexa.addConfig('richText.CKEditor.extraConfig', {
