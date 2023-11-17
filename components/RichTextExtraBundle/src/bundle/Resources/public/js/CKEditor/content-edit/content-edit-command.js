@@ -1,4 +1,11 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
+import { useContext } from 'react';
+import {
+    EditOnTheFlyDataContext, RestInfoContext
+} from "../../../../../../../../../ibexa/vendor/ibexa/admin-ui/src/bundle/ui-dev/src/modules/universal-discovery/universal.discovery.module";
+import {
+    createDraft
+} from "../../../../../../../../../ibexa/vendor/ibexa/admin-ui/src/bundle/ui-dev/src/modules/universal-discovery/services/universal.discovery.service";
 
 class ContentEditCommand extends Command {
     refresh() {
@@ -13,8 +20,9 @@ class ContentEditCommand extends Command {
             document.querySelector('div[data-udw-config-name="richtext_embed_image"]').getAttribute('data-udw-config')
         );
 
+        const contentId = modelElement.getAttribute('contentId')
         const content = await this.getContentFromRestApiWithContentId(
-            modelElement.getAttribute('contentId'),
+            contentId,
             document
         );
 
@@ -22,13 +30,30 @@ class ContentEditCommand extends Command {
 
         config['startingLocationId'] = location_id;
         config['selectedLocations'] = [location_id];
+        config['active_tab'] = 'content-edit';
 
-        ReactDOM.render(React.createElement(eZ.modules.UniversalDiscovery, {
-            onConfirm: () => ReactDOM.unmountComponentAtNode(container),
-            onCancel: () => ReactDOM.unmountComponentAtNode(container),
-            ...config
-        }), container);
+        const [, setEditOnTheFlyData] = useContext(EditOnTheFlyDataContext);
+        const restInfo = useContext(RestInfoContext);
 
+        createDraft(
+            {
+                ...restInfo,
+                contentId,
+            },
+            (response) =>   {
+                setEditOnTheFlyData({
+                    contentId,
+                    versionNo: response.Version.VersionInfo.versionNo,
+                    languageCode: 'fre-FR',
+                    location_id,
+                })
+                ReactDOM.render(React.createElement(eZ.modules.UniversalDiscovery, {
+                    onConfirm: () => ReactDOM.unmountComponentAtNode(container),
+                    onCancel: () => ReactDOM.unmountComponentAtNode(container),
+                    ...config
+                }), container);
+            }
+        );
     }
 
 
