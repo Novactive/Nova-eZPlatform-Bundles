@@ -1,11 +1,11 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
-import { useContext } from 'react';
-import {
-    EditOnTheFlyDataContext, RestInfoContext
-} from "../../../../../../../../../ibexa/vendor/ibexa/admin-ui/src/bundle/ui-dev/src/modules/universal-discovery/universal.discovery.module";
-import {
-    createDraft
-} from "../../../../../../../../../ibexa/vendor/ibexa/admin-ui/src/bundle/ui-dev/src/modules/universal-discovery/services/universal.discovery.service";
+// import {
+//     EditOnTheFlyDataContext,
+//     RestInfoContext
+// } from "../../../../../../../../../ibexa/vendor/ibexa/admin-ui/src/bundle/ui-dev/src/modules/universal-discovery/universal.discovery.module";
+// import {
+//     createDraft
+// } from "../../../../../../../../../ibexa/vendor/ibexa/admin-ui/src/bundle/ui-dev/src/modules/universal-discovery/services/universal.discovery.service";
 
 class ContentEditCommand extends Command {
     refresh() {
@@ -32,28 +32,28 @@ class ContentEditCommand extends Command {
         config['selectedLocations'] = [location_id];
         config['active_tab'] = 'content-edit';
 
-        const [, setEditOnTheFlyData] = useContext(EditOnTheFlyDataContext);
-        const restInfo = useContext(RestInfoContext);
+        // const [, setEditOnTheFlyData] = React.useContext(EditOnTheFlyDataContext);
+        // const restInfo = React.useContext(RestInfoContext);
 
-        createDraft(
-            {
-                ...restInfo,
-                contentId,
-            },
-            (response) =>   {
-                setEditOnTheFlyData({
-                    contentId,
-                    versionNo: response.Version.VersionInfo.versionNo,
-                    languageCode: 'fre-FR',
-                    location_id,
-                })
+        // createDraft(
+        //     {
+        //         ...restInfo,
+        //         contentId,
+        //     },
+        //     (response) =>   {
+        //         setEditOnTheFlyData({
+        //             contentId,
+        //             versionNo: response.Version.VersionInfo.versionNo,
+        //             languageCode: 'fre-FR',
+        //             location_id,
+        //         })
                 ReactDOM.render(React.createElement(eZ.modules.UniversalDiscovery, {
                     onConfirm: () => ReactDOM.unmountComponentAtNode(container),
                     onCancel: () => ReactDOM.unmountComponentAtNode(container),
                     ...config
                 }), container);
-            }
-        );
+        //     }
+        // );
     }
 
 
