@@ -55,7 +55,20 @@ class MaintenanceSubscriber implements EventSubscriberInterface, SiteAccessAware
                     $this->siteAccess
                 )
             ) {
-                $event->setResponse($this->fileHelper->getResponse($siteaccessName));
+
+                // In case front siteaccess locked and back not locked
+                // Include request used in preview mode page builder
+                $isPreviewPageBuilder = false;
+                if(
+                    $event->getRequest()->attributes->get('_route') != 'ibexa.url.alias' &&
+                    strstr($this->siteAccess->name, 'admin') === false
+                ){
+                    $isPreviewPageBuilder = true;
+                }
+
+                if(!$isPreviewPageBuilder){
+                    $event->setResponse($this->fileHelper->getResponse($siteaccessName));
+                }
             }
         }
     }
