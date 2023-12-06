@@ -32,7 +32,9 @@
         <table class="ibexa-table table">
             <thead>
             <tr class="ibexa-table__head-row">
+                <th class="ibexa-table__header-cell">{{ 'ez_rss_feed.status'|trans }}</th>
                 <th class="ibexa-table__header-cell">{{ 'ez_rss_feed.title'|trans }}</th>
+                <th class="ibexa-table__header-cell">{{ 'ez_rss_feed.url_slug'|trans }}</th>
                 <th class="ibexa-table__header-cell">{{ 'ez_rss_feed.created_at'|trans }}</th>
                 <th class="ibexa-table__header-cell">{{ 'ez_rss_feed.modified_at'|trans }}</th>
                 <th class="ibexa-table__header-cell">{{ 'ez_rss_feed.status'|trans }}</th>
@@ -42,7 +44,20 @@
             <tbody class="ibexa-table__body">
             {% for rss in pager.currentPageResults %}
                 <tr id="{{ 'rssfeed-' ~ rss.urlSlug }}" class="ibexa-table__row">
-                    <td class="ibexa-table__cell">{{ rss.title }}</td>
+                    {# STATUS_ENABLED=1 STATUS_DISABLED=0 #}
+                    {% set statusString = 'UNKNOW' %}
+                    {% set statusCOLOR = 'gray' %}
+                    {% if rss.status == 0 %}
+                        {% set statusString = 'DISABLED' %}
+                        {% set statusCOLOR = 'orange' %}
+                    {% endif %}
+                    {% if rss.status == 1 %}
+                        {% set statusString = 'ENABLED' %}
+                        {% set statusCOLOR = 'green' %}
+                    {% endif %}
+                    <td class="ibexa-table__cell"><span style="color: {{ statusCOLOR }}">{{ statusString }}</span></td>
+                    <td class="ibexa-table__cell" title="{{ rss.description|escape('html_attr') }}">{{ rss.title }}</td>
+                    <td class="ibexa-table__cell"><a href="/rss/feed/{{ rss.urlSlug }}" target="_blank">{{ rss.urlSlug }}</a></td>
                     <td class="ibexa-table__cell">{{ rss.createdAt|date("d/m/Y H:i") }}</td>
                     <td class="ibexa-table__cell">{{ rss.modifiedAt|date("d/m/Y H:i") }}</td>
                     <td class="ibexa-table__cell ibexa-table__cell--has-checkbox ">

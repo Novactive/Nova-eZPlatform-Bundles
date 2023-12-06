@@ -8,6 +8,7 @@ ez_rss_feed.status: Visibility
 ez_rss_feed.actions: Actions
 ez_rss_feed.edit: Edit
 ez_rss_feed.delete: Delete
+ez_rss_feed.url_slug: URL
 ez_rss_feed.viewing: Viewing <strong>%viewing%</strong> out of <strong>%total%</strong> items
 ez_rss_feed.modal.message: Are you sure you want to delete feed ?
 ez_rss_feed.form.cancel: Cancel

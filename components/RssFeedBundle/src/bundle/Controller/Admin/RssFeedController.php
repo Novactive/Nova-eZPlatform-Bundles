@@ -131,10 +131,14 @@ class RssFeedController extends Controller
 
     /**
      * @Route("/edit/{id}", name="platform_admin_ui_rss_feeds_edit")
-     * @ParamConverter("rssFeed", class="Novactive\EzRssFeedBundle\Entity\RssFeeds")
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editAction(Request $request, RssFeeds $rssFeed): Response
+    public function editAction(Request $request, int $id)
     {
+        $rssFeedRepository = $this->entityManager->getRepository(RssFeeds::class);
+        $rssFeed = $rssFeedRepository->find($id);
+
         /**
          * @var PermissionResolver
          */
@@ -147,6 +151,7 @@ class RssFeedController extends Controller
         foreach ($rssFeed->getFeedSites() as $site) {
             $originalSites->add($site);
         }
+
         $originalFeedsItems = new ArrayCollection();
         foreach ($rssFeed->getFeedItems() as $item) {
             $originalFeedsItems->add($item);
@@ -186,7 +191,7 @@ class RssFeedController extends Controller
                 }
             }
 
-            $this->entityManager->flush();
+            $this->entityManager->flush(); // ICI
 
             $this->getNotificationHandler()->success('Mise à jour effectuée avec succès.');
 
