@@ -1,0 +1,2 @@
+_almaviacx_ibexa_rich_text_extra_bundle_routes:
+    resource: '@AlmaviaCXIbexaRichTextExtraBundle/Resources/config/routing.yaml'

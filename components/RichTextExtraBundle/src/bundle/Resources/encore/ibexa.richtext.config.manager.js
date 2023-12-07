@@ -5,8 +5,13 @@ module.exports = (ibexaConfig, ibexaConfigManager) => {
     ibexaConfig,
     entryName: 'ibexa-richtext-onlineeditor-js',
     newItems: [
-      path.resolve(__dirname, '../public/js/CKEditor/embed/extraconfig.js'),
-      path.resolve(__dirname, '../public/js/modules/universal-discovery/richtext.content.edit.tab.module.js')
+      path.resolve(__dirname, '../public/js/CKEditor/extraconfig.js')
     ]
   })
+
+  Object.assign(ibexaConfig.resolve.alias, {
+    '@ibexa-richtext': path.resolve('./vendor/ibexa/fieldtype-richtext'),
+    '@ibexa-admin-ui': path.resolve('./vendor/ibexa/admin-ui')
+  });
+
 }
