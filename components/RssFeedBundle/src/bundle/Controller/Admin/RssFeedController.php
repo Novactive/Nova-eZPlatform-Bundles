@@ -191,7 +191,7 @@ class RssFeedController extends Controller
                 }
             }
 
-            $this->entityManager->flush(); // ICI
+            $this->entityManager->flush();
 
             $this->getNotificationHandler()->success('Mise à jour effectuée avec succès.');
 
