@@ -64,7 +64,7 @@ class PreContentView
     {
         $contentView = $event->getContentView();
 
-        if (!$contentView instanceof ContentView) {
+        if (!$contentView instanceof ContentView || !$contentView->getContent()) {
             return;
         }
 
