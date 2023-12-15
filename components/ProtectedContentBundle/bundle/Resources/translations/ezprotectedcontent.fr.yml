@@ -7,7 +7,17 @@ tab.modal.buttons.add: "Ajouter"
 tab.table.th.password: "Mot de passe"
 tab.table.th.children_protection: "Protéger les contenus enfants?"
 tab.table.th.enabled: "Activer?"
+tab.table.th.as_email: "Protection par courriel"
+tab.table.th.message_email: "Message à afficher dans le courriel envoyé"
+tab.table.th.email: "Votre adresse courriel"
+tab.table.th.as_email_message: "Message courriel défini"
 tab.table.th.remove: "Supprimer"
+
+mail.help_message: Ajoutez {{ url }} dans votre message, cela sera remplacé par "Cliquez ici" et un lien
+mail.link: "Cliquez ici"
+mail.subject: "Votre demande d'accès à un contenu protégé"
 
 tab.yes: "OUI"
 tab.no: "NON"
+
+'This area is email protected.': 'Cette zone est protégé par une vérification de courriel'
