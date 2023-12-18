@@ -30,6 +30,7 @@ list:
 
 .PHONY: codeclean
 codeclean: ## Coding Standard checks
+	@ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/phpcbf --standard=.cs/cs_ruleset.xml --extensions=php src/ components/ bin/"
 	@ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/php-cs-fixer fix --config=.cs/.php_cs.php"
 	@ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src/ components/ bin/"
 	@ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/phpmd src,components,bin text .cs/md_ruleset.xml"
