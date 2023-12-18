@@ -10,14 +10,14 @@
  */
 
 (function (global, $) {
-  const SELECTOR_FIELD = '.ez-field-edit--menuitem'
+  const SELECTOR_FIELD = '.ibexa-field-edit--menuitem'
   const SELECT_MENU_WRAPPER = '.menu__wrapper'
   const SELECT_MENU_TREE_WRAPPER = '.menu-tree__wrapper'
-  const SELECTOR_INPUT = '.ez-data-source__input'
-  const SELECTOR_LABEL_WRAPPER = '.ez-field-edit__label-wrapper'
+  const SELECTOR_INPUT = '.ibexa-data-source__input'
+  const SELECTOR_LABEL_WRAPPER = '.ibexa-field-edit__label-wrapper'
   const SELECTOR_COLLAPSE = '.collapse'
 
-  class MenuItemValidator extends global.eZ.BaseFieldValidator {
+  class MenuItemValidator extends window.ibexa.BaseFieldValidator {
     /**
          * Validates the input
          *
@@ -27,7 +27,7 @@
          * @memberof EzStringValidator
          */
     validateInput (event) {
-      const label = event.target.closest(SELECTOR_FIELD).querySelector('.ez-field-edit__label').innerHTML
+      const label = event.target.closest(SELECTOR_FIELD).querySelector('.ibexa-field-edit__label').innerHTML
       const isRequired = event.target.required
       const isEmpty = !event.target.value
       let hasCorrectValues = true
@@ -41,10 +41,10 @@
 
       if (isRequired && isEmpty) {
         result.isError = true
-        result.errorMessage = global.eZ.errors.emptyField.replace('{fieldName}', label)
+        result.errorMessage = window.ibexa.errors.emptyField.replace('{fieldName}', label)
       } else if (!isEmpty && !hasCorrectValues) {
         result.isError = true
-        result.errorMessage = global.eZ.errors.invalidValue.replace('{fieldName}', label)
+        result.errorMessage = window.ibexa.errors.invalidValue.replace('{fieldName}', label)
       }
 
       return result
@@ -214,7 +214,7 @@
 
       $(this.tree.element).on('changed.jstree', this.onTreeChange.bind(this))
       $(this.tree.element).on('move_node.jstree', this.onTreeChange.bind(this))
-      this.element.classList.remove('ez-visually-hidden')
+      this.element.classList.remove('ibexa-visually-hidden')
     }
 
     onTreeChange (e, data) {
@@ -374,6 +374,6 @@
       menu.init()
     })
     validator.init()
-    global.eZ.fieldTypeValidators = global.eZ.fieldTypeValidators ? [...global.eZ.fieldTypeValidators, validator] : [validator]
+    window.ibexa.fieldTypeValidators = window.ibexa.fieldTypeValidators ? [...window.ibexa.fieldTypeValidators, validator] : [validator]
   })
 })(window, window.jQuery)
