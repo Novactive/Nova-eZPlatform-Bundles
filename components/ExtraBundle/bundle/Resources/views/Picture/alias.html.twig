@@ -1,5 +1,5 @@
 {% if options is not empty and options.render == 'inline' %}
-    {% if not ez_is_field_empty( picture, fieldIdentifier ) %}
+    {% if not ibexa_field_is_empty( picture, fieldIdentifier ) %}
         {% set field = picture.getField(fieldIdentifier) %}
 
         {% set imageAlias = ibexa_image_alias( field, picture.versionInfo, alias|default( 'original' ) ) %}
