@@ -180,7 +180,7 @@ Usage:
     {% for child in children %}
         <h2>{{ ibexa_field_value( child.content, "title" ) }}</h2>
         {{ ibexa_render_field( child.content, "overview" ) }}
-        <a href="{{ path( "ez_urlalias", { "locationId" : child.content.contentInfo.mainLocationId } ) }}">{{ "Learn more" | trans() }}</a>
+        <a href="{{ path( "ibexa.url.alias", { "locationId" : child.content.contentInfo.mainLocationId } ) }}">{{ "Learn more" | trans() }}</a>
     {% endfor %}
 ```
 
