@@ -148,7 +148,7 @@ final class ImageExtension extends AbstractExtension
 
     private function fillPlaceholderForAlias(array &$params, string $alias): void
     {
-        if (!isset($params['placeholder'])) {
+        if (!isset($params['placeholder']) && true === $this->enablePlaceholder) {
             // check if we have a variation Fastly and get the retina
             $imageVariationsList = $this->configResolver->getParameter('image_variations');
             $variation = $imageVariationsList[$alias] ?? $imageVariationsList['default_placeholder'];
