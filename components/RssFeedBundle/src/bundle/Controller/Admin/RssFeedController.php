@@ -213,10 +213,12 @@ class RssFeedController extends Controller
 
     /**
      * @Route("/delete/{id}", name="platform_admin_ui_rss_feeds_delete")
-     * @ParamConverter("rssFeed", class="Novactive\EzRssFeedBundle\Entity\RssFeeds")
      */
-    public function deleteAction(Request $request, RssFeeds $rssFeed): RedirectResponse
+    public function deleteAction(Request $request, int $id): RedirectResponse
     {
+        $rssFeedRepository = $this->entityManager->getRepository(RssFeeds::class);
+        $rssFeed = $rssFeedRepository->find($id);
+
         /**
          * @var PermissionResolver
          */
