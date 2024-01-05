@@ -22,16 +22,17 @@ class Value extends BaseValue
      *
      * @var MenuItem\ContentMenuItem[]
      */
-    public $menuItems;
+    public array $menuItems;
 
     /**
      * Construct a new Value object and initialize it $text.
      *
      * @param array $menuItems
      */
-    public function __construct($menuItems = [])
+    public function __construct(array $menuItems = [])
     {
         $this->menuItems = $menuItems;
+        parent::__construct();
     }
 
     /**
@@ -39,6 +40,6 @@ class Value extends BaseValue
      */
     public function __toString()
     {
-        return (string) $this->menuItems;
+        return (string) $this->menuItems; // TODO Array to string conversion
     }
 }
