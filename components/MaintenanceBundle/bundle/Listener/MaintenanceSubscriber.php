@@ -56,11 +56,11 @@ class MaintenanceSubscriber implements EventSubscriberInterface, SiteAccessAware
                 )
             ) {
                 $isPreviewPageBuilder = false;
-                if($this->isAdminPreview($event)){
+                if ($this->isAdminPreview($event)) {
                     $isPreviewPageBuilder = true;
                 }
 
-                if(!$isPreviewPageBuilder){
+                if (!$isPreviewPageBuilder) {
                     $event->setResponse($this->fileHelper->getResponse($siteaccessName));
                 }
             }
@@ -70,11 +70,14 @@ class MaintenanceSubscriber implements EventSubscriberInterface, SiteAccessAware
     private function isAdminPreview(RequestEvent $event): bool
     {
         //paramaters initial request admin preview
-        $params = $event->getRequest()->attributes->has('params') ? $event->getRequest()->attributes->get('params') : false;
+        $params = $event->getRequest()->attributes->has('params') ?
+            $event->getRequest()->attributes->get('params') : false;
         //parameters sub request admin preview
-        $isPreview = $event->getRequest()->attributes->has('isPreview') ? $event->getRequest()->attributes->get('isPreview') : false;
+        $isPreview = $event->getRequest()->attributes->has('isPreview') ?
+            $event->getRequest()->attributes->get('isPreview') : false;
         //route render
-        $route = $event->getRequest()->attributes->has('_route') ? $event->getRequest()->attributes->get('_route') : false;
+        $route = $event->getRequest()->attributes->has('_route') ?
+            $event->getRequest()->attributes->get('_route') : false;
 
         if ($isPreview || ($params['isPreview'] ?? false)) {
             return true;
