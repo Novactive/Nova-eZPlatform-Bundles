@@ -14,17 +14,15 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\Twig;
 
-use Ibexa\Bundle\Core\Imagine\IORepositoryResolver;
-use Ibexa\Contracts\Core\Repository\Exceptions\InvalidVariationException;
-use Ibexa\Contracts\Core\Repository\Values\Content\Field;
-use Ibexa\Contracts\Core\Repository\Values\Content\VersionInfo;
-use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
-use Ibexa\Contracts\Core\Variation\Values\ImageVariation;
-use Ibexa\Contracts\Core\Variation\Values\Variation;
-use Ibexa\Core\MVC\Exception\SourceImageNotFoundException;
+use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
+use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException;
+use eZ\Publish\SPI\Variation\Values\ImageVariation;
 use InvalidArgumentException;
 use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
-use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
+use Novactive\EzEnhancedImageAsset\Imagine\FocusedImageAliasGenerator;
 use Novactive\EzEnhancedImageAsset\Values\FocusedVariation;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
@@ -35,8 +33,8 @@ use Twig\TwigFunction;
 
 class ImageExtension extends AbstractExtension implements GlobalsInterface
 {
-    /** @var \Ibexa\Contracts\Core\Variation\VariationHandler */
-    protected $imageVariationService;
+    /** @var FocusedImageAliasGenerator */
+    protected $focusedImageAliasGenerator;
 
     /** @var LoggerInterface */
     protected $logger;
@@ -46,23 +44,6 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
 
     /** @var ConfigResolverInterface */
     protected $configResolver;
-
-    /** @var FilterConfiguration */
-    protected $filterConfiguration;
-
-    public function __construct(
-        \Ibexa\Contracts\Core\Variation\VariationHandler $imageVariationService,
-        LoggerInterface $logger,
-        AssetExtension $assetExtension,
-        ConfigResolverInterface $configResolver,
-        FilterConfiguration $filterConfiguration
-    ) {
-        $this->imageVariationService = $imageVariationService;
-        $this->logger = $logger;
-        $this->assetExtension = $assetExtension;
-        $this->configResolver = $configResolver;
-        $this->filterConfiguration = $filterConfiguration;
-    }
 
     public function getGlobals(): array
     {
@@ -79,11 +60,43 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
     }
 
     /**
+     * @required
+     */
+    public function setFocusedImageAliasGenerator(FocusedImageAliasGenerator $focusedImageAliasGenerator): void
+    {
+        $this->focusedImageAliasGenerator = $focusedImageAliasGenerator;
+    }
+
+    /**
+     * @required
+     */
+    public function setLogger(LoggerInterface $logger): void
+    {
+        $this->logger = $logger;
+    }
+
+    /**
+     * @required
+     */
+    public function setAssetExtension(AssetExtension $assetExtension): void
+    {
+        $this->assetExtension = $assetExtension;
+    }
+
+    /**
+     * @required
+     */
+    public function setConfigResolver(ConfigResolverInterface $configResolver): void
+    {
+        $this->configResolver = $configResolver;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'ibexa.image';
+        return 'ezpublish.image';
     }
 
     /**
@@ -142,6 +155,8 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
         }
 
         $attrs['class'] = implode(' ', $attrs['class']);
+        if(!isset($attrs["alt"]))
+            $attrs['alt'] = $field->value->alternativeText;
 
         return $attrs;
     }
@@ -158,18 +173,19 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
     }
 
     /**
-     * @param $variationName
+     * @param       $variationName
+     * @param array $attrs
      *
-     *@throws ReflectionException
+     * @throws ReflectionException
      *
      * @return ImageVariation|FocusedVariation|null
      */
     protected function appendDefaultVariationAttrs(
         Field $field,
         VersionInfo $versionInfo,
-        string $variationName,
-        array &$attrs = []
-    ): ?ImageVariation {
+        $variationName,
+        &$attrs = []
+    ) {
         $defaultVariation = $this->getImageVariation($field, $versionInfo, $variationName);
         if (!$defaultVariation) {
             return null;
@@ -183,6 +199,8 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
         $attrs['srcset'][] = str_replace(' ', '%20', $this->assetExtension->getAssetUrl($defaultVariation->uri));
         $attrs['data-width'] = $defaultVariation->width;
         $attrs['data-height'] = $defaultVariation->height;
+        $attrs['width'] = $defaultVariation->width;
+        $attrs['height'] = $defaultVariation->height;
 
         return $defaultVariation;
     }
@@ -192,15 +210,15 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
      *
      * @throws ReflectionException
      *
-     * @return \Ibexa\Contracts\Core\Variation\Values\Variation
+     * @return ImageVariation|FocusedVariation|null
      */
-    public function getImageVariation(Field $field, VersionInfo $versionInfo, string $variationName): ?Variation
+    public function getImageVariation(Field $field, VersionInfo $versionInfo, string $variationName)
     {
         if (!$this->isVariationsAvailable($variationName)) {
             return null;
         }
         try {
-            return $this->imageVariationService->getVariation($field, $versionInfo, $variationName);
+            return $this->focusedImageAliasGenerator->getVariation($field, $versionInfo, $variationName);
         } catch (InvalidVariationException $e) {
             if (isset($this->logger)) {
                 $this->logger->error(
@@ -226,22 +244,16 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
         return null;
     }
 
-    protected function isVariationsAvailable(string $variationName): bool
+    protected function isVariationsAvailable($variationName): bool
     {
-        if (IORepositoryResolver::VARIATION_ORIGINAL === $variationName) {
-            return true;
-        }
-        try {
-            $this->filterConfiguration->get($variationName);
+        $configuredVariations = $this->configResolver->getParameter('image_variations');
 
-            return true;
-        } catch (NonExistingFilterException $e) {
-            return false;
-        }
+        return isset($configuredVariations[$variationName]);
     }
 
     /**
-     * @param $variationName
+     * @param       $variationName
+     * @param array $attrs
      *
      * @throws ReflectionException
      *
@@ -250,10 +262,10 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
     protected function appendRetinaVariationAttrs(
         Field $field,
         VersionInfo $versionInfo,
-        string $variationName,
+        $variationName,
         ImageVariation $defaultVariation,
-        array &$attrs = []
-    ): ?ImageVariation {
+        &$attrs = []
+    ) {
         try {
             $retinaVariation = $this->getImageVariation(
                 $field,

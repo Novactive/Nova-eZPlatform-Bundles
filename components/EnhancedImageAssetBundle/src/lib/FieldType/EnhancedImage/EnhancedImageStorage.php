@@ -14,12 +14,12 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage;
 
-use Ibexa\Contracts\Core\Persistence\Content\Field;
-use Ibexa\Contracts\Core\Persistence\Content\VersionInfo;
-use Ibexa\Core\Base\Exceptions\InvalidArgumentException;
-use Ibexa\Core\Base\Exceptions\InvalidArgumentValue;
-use Ibexa\Core\Base\Exceptions\NotFoundException;
-use Ibexa\Core\FieldType\Image\ImageStorage;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\FieldType\Image\ImageStorage;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 class EnhancedImageStorage extends ImageStorage
 {
@@ -39,8 +39,8 @@ class EnhancedImageStorage extends ImageStorage
                 && !isset($field->value->externalData['inputUri'])
                 && isset($field->value->externalData['id'])
             ) {
-                $binaryFile = $this->ioService->loadBinaryFile($field->value->externalData['id']);
-                $stream = $this->ioService->getFileInputStream($binaryFile);
+                $binaryFile      = $this->ioService->loadBinaryFile($field->value->externalData['id']);
+                $stream          = $this->ioService->getFileInputStream($binaryFile);
                 $streamMetadatas = stream_get_meta_data($stream);
 
                 $field->value->externalData['inputUri'] = $streamMetadatas['uri'];

@@ -1,0 +1,3 @@
+globals:
+  lazy_load_images: $enable_lazy_load;ez_enhanced_image_asset$
+  enable_retina_variations: $enable_retina;ez_enhanced_image_asset$

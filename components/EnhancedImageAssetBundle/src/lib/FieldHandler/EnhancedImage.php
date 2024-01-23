@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\FieldHandler;
 
-use Ibexa\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use Kaliop\eZMigrationBundle\API\FieldValueConverterInterface;
 use Kaliop\eZMigrationBundle\Core\FieldHandler\FileFieldHandler;
 use Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\FocusPoint;
@@ -31,13 +31,11 @@ class EnhancedImage extends FileFieldHandler implements FieldValueConverterInter
      *
      * @throws InvalidArgumentType
      *
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     *
      * @todo resolve refs more
      */
     public function hashToFieldValue($fieldValue, array $context = []): EnhancedImageValue
     {
-        $altText = '';
+        $altText  = '';
         $fileName = '';
 
         if (null === $fieldValue) {
@@ -79,11 +77,11 @@ class EnhancedImage extends FileFieldHandler implements FieldValueConverterInter
 
         return new EnhancedImageValue(
             [
-                'path' => $realFilePath,
-                'fileSize' => filesize($realFilePath),
-                'fileName' => '' !== $fileName ? $fileName : basename($realFilePath),
+                'path'            => $realFilePath,
+                'fileSize'        => filesize($realFilePath),
+                'fileName'        => '' !== $fileName ? $fileName : basename($realFilePath),
                 'alternativeText' => $altText,
-                'focusPoint' => $focusPoint,
+                'focusPoint'      => $focusPoint,
             ]
         );
     }
@@ -93,21 +91,21 @@ class EnhancedImage extends FileFieldHandler implements FieldValueConverterInter
      *
      * @todo check out if this works in ezplatform
      */
-    public function fieldValueToHash($fieldValue, array $context = []): ?array
+    public function fieldValueToHash($fieldValue, array $context = []): array
     {
         if (null === $fieldValue->uri) {
             return null;
         }
 
         return [
-            'path' => sprintf(
+            'path'            => sprintf(
                 '%s/%s',
                 realpath($this->ioRootDir),
                 ($this->ioDecorator ? $this->ioDecorator->undecorate($fieldValue->uri) : $fieldValue->uri)
             ),
-            'filename' => $fieldValue->fileName,
+            'filename'        => $fieldValue->fileName,
             'alternativeText' => $fieldValue->alternativeText,
-            'focuspoint' => [
+            'focuspoint'      => [
                 $fieldValue->focusPoint->getPosX(),
                 $fieldValue->focusPoint->getPosY(),
             ],

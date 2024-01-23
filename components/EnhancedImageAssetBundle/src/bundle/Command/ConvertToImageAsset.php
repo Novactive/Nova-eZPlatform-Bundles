@@ -18,25 +18,26 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use Exception;
-use Ibexa\Contracts\Core\Repository\ContentService;
-use Ibexa\Contracts\Core\Repository\ContentTypeService;
-use Ibexa\Contracts\Core\Repository\Exceptions\BadStateException;
-use Ibexa\Contracts\Core\Repository\Exceptions\ContentTypeFieldDefinitionValidationException;
-use Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException;
-use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException as APINotFoundException;
-use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException;
-use Ibexa\Contracts\Core\Repository\Repository;
-use Ibexa\Contracts\Core\Repository\Values\Content\Content;
-use Ibexa\Contracts\Core\Repository\Values\Content\ContentInfo;
-use Ibexa\Contracts\Core\Repository\Values\Content\VersionInfo;
-use Ibexa\Contracts\Core\Repository\Values\ContentType\ContentType;
-use Ibexa\Contracts\Core\Repository\Values\ContentType\ContentTypeDraft;
-use Ibexa\Contracts\Core\Repository\Values\ContentType\FieldDefinition;
-use Ibexa\Contracts\Core\Repository\Values\ContentType\FieldDefinitionCreateStruct;
-use Ibexa\Core\Base\Exceptions\ContentFieldValidationException;
-use Ibexa\Core\Base\Exceptions\InvalidArgumentValue;
-use Ibexa\Core\Base\Exceptions\NotFoundException;
-use Ibexa\Core\FieldType\ImageAsset\Value as ImageAssetValue;
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\Exceptions\BadStateException;
+use eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException;
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
+use eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\FieldType\ImageAsset\Value as ImageAssetValue;
+use eZ\Publish\Core\Repository\ContentTypeService;
+use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use Novactive\EzEnhancedImageAsset\FieldValueConverter\ChainFieldValueConverter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\Console\Command\Command;
@@ -46,9 +47,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * @SuppressWarnings(PHPMD)
- */
 class ConvertToImageAsset extends Command
 {
     /** @var Connection */
@@ -65,6 +63,9 @@ class ConvertToImageAsset extends Command
 
     /** @var ChainFieldValueConverter */
     protected $valueConverter;
+
+    /** @var SignalDispatcher */
+    protected $signalDispatcher;
 
     /** @var TagAwareAdapterInterface */
     protected $cache;
@@ -115,6 +116,14 @@ class ConvertToImageAsset extends Command
     /**
      * @required
      */
+    public function setSignalDispatcher(SignalDispatcher $signalDispatcher): void
+    {
+        $this->signalDispatcher = $signalDispatcher;
+    }
+
+    /**
+     * @required
+     */
     public function setCache(TagAwareAdapterInterface $cache): void
     {
         $this->cache = $cache;
@@ -129,7 +138,8 @@ class ConvertToImageAsset extends Command
             ->addArgument(
                 'field_identifiers',
                 InputArgument::IS_ARRAY | InputArgument::REQUIRED,
-                'content_type_identifier/field_identifier'
+                'content_type_identifier/field_identifier',
+                []
             );
     }
 
@@ -150,7 +160,7 @@ class ConvertToImageAsset extends Command
         $this->repository->sudo(
             function () use ($input) {
                 /** @var array $fieldIdentifiers */
-                $fieldIdentifiers = (array) $input->getArgument('field_identifiers');
+                $fieldIdentifiers = $input->getArgument('field_identifiers');
                 foreach ($fieldIdentifiers as $fieldIdentifier) {
                     [$contentTypeIdentifier, $fieldIdentifier] = explode('/', $fieldIdentifier);
 
@@ -212,14 +222,14 @@ class ConvertToImageAsset extends Command
             'ezimageasset'
         );
 
-        $createStruct->names = $originalFieldDefinition->getNames();
-        $createStruct->descriptions = $originalFieldDefinition->getDescriptions();
-        $createStruct->position = $originalFieldDefinition->position;
-        $createStruct->isRequired = $originalFieldDefinition->isRequired;
-        $createStruct->isSearchable = $originalFieldDefinition->isSearchable;
+        $createStruct->names           = $originalFieldDefinition->getNames();
+        $createStruct->descriptions    = $originalFieldDefinition->getDescriptions();
+        $createStruct->position        = $originalFieldDefinition->position;
+        $createStruct->isRequired      = $originalFieldDefinition->isRequired;
+        $createStruct->isSearchable    = $originalFieldDefinition->isSearchable;
         $createStruct->isInfoCollector = $originalFieldDefinition->isInfoCollector;
-        $createStruct->isTranslatable = $originalFieldDefinition->isTranslatable;
-        $createStruct->fieldGroup = $originalFieldDefinition->fieldGroup;
+        $createStruct->isTranslatable  = $originalFieldDefinition->isTranslatable;
+        $createStruct->fieldGroup      = $originalFieldDefinition->fieldGroup;
 
         return $createStruct;
     }
@@ -260,10 +270,10 @@ class ConvertToImageAsset extends Command
 
         $countQuery = clone $query;
         $countQuery->select('count(*)');
-        $totalCount = $countQuery->execute()->fetch(FetchMode::COLUMN);
+        $totalCount  = $countQuery->execute()->fetch(FetchMode::COLUMN);
         $progressBar = new ProgressBar($this->io, $totalCount);
 
-        $batch = 500;
+        $batch  = 500;
         $offset = 0;
         $query->select('id');
         $query->setMaxResults($batch);
@@ -295,7 +305,7 @@ class ConvertToImageAsset extends Command
         FieldDefinition $originalFieldDefinition,
         FieldDefinition $fieldDefinition
     ): void {
-        $versions = $this->contentService->loadVersions($contentInfo);
+        $versions        = $this->contentService->loadVersions($contentInfo);
         $invalidateCache = false;
         foreach ($versions as $versionInfo) {
             $content = $this->contentService->loadContent(

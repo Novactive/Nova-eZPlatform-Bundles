@@ -1,11 +1,11 @@
-{% extends '@IbexaCore/content_fields.html.twig' %}
+{% extends '@EzPublishCore/content_fields.html.twig' %}
 
 {% block enhancedimage_field %}
-    {% apply spaceless %}
+    {% spaceless %}
         {% set lazyLoad = parameters.lazyLoad is defined ? parameters.lazyLoad : lazy_load_images %}
         {% set alias = parameters.alias|default( 'original' ) %}
         {% set alternativeAliasList = parameters.alternativeAlias|default( [] ) %}
-        {% if not ibexa_field_is_empty( content, field ) %}
+        {% if not ez_is_field_empty( content, field ) %}
             {% set imageAttrs = ez_image_attrs( field, versionInfo, alias, {
                 lazyLoad: lazyLoad,
                 retina: parameters.retina|default( enable_retina_variations ),
@@ -14,6 +14,7 @@
                     'alt': parameters.alternativeText|default(field.value.alternativeText)
                 }
             }) %}
+
             {% set attr = attr|merge({
                 'class': (attr.class|default('') ~ ' enhancedimage--wrapper enhancedimage--focused-img--wrapper')|trim,
             }) %}
@@ -23,45 +24,32 @@
                     {% set alternativeImageAttrs = ez_image_attrs( field, versionInfo, alternativeAlias.alias, {
                         lazyLoad: lazyLoad,
                         retina: parameters.retina|default( enable_retina_variations ),
-                        addMimeType: true,
                         attrs: {
                             'media': alternativeAlias.media|default,
                             'data-name': alternativeAlias.alias,
                         }
                     }) %}
 
-                    <source {% for attrname, attrvalue in alternativeImageAttrs|filter(attrvalue => attrvalue is not empty) %}{{ attrname }}="{{ attrvalue }}" {% endfor %}/>
+                    <source {% for attrname, attrvalue in alternativeImageAttrs if attrvalue is not empty %}{{ attrname }}="{{ attrvalue }}" {% endfor %}/>
                 {% endfor %}
 
-                {% if parameters.ezlink|default({}) is not empty %}
-                    <a
-                            href="{{ parameters.ezlink.href }}"
-                            {% if parameters.ezlink.title is defined %} title="{{ parameters.ezlink.title|e('html_attr') }}"{% endif %}
-                            {% if parameters.ezlink.target is defined %} target="{{ parameters.ezlink.target|e('html_attr') }}"{% endif %}
-                    >
-                {% endif %}
-
-                <img {% for attrname, attrvalue in imageAttrs|filter(attrvalue => attrvalue is not empty) %}{{ attrname }}="{{ attrvalue }}" {% endfor %}/>
+                <img {% for attrname, attrvalue in imageAttrs if attrvalue is not empty %}{{ attrname }}="{{ attrvalue }}" {% endfor %}/>
 
                 {% if lazyLoad %}
-                    {% set placeholderAlias = ibexa_image_alias(field, versionInfo, 'placeholder') %}
-                    <img src="{{ placeholderAlias.uri }}" class="placeholder" width="{{ imageAttrs['data-width'] }}" height="{{ imageAttrs['data-height'] }}" alt=""/>
-                {% endif %}
-
-                {% if parameters.ezlink|default({}) is not empty %}
-                    </a>
+                    {% set placeholderAlias = ez_image_alias(field, versionInfo, 'placeholder') %}
+                    <img src="{{ placeholderAlias.uri }}" class="placeholder" width="{{ imageAttrs['data-width'] }}" height="{{ imageAttrs['data-height'] }}" alt="{{ field.value.alternativeText }}"/>
                 {% endif %}
             </picture>
         {% endif %}
-    {% endapply %}
+    {% endspaceless %}
 {% endblock %}
 
 {% block ezimage_field %}
-    {% apply spaceless %}
+    {% spaceless %}
         {% set lazyLoad = parameters.lazyLoad is defined ? parameters.lazyLoad : lazy_load_images %}
         {% set alias = parameters.alias|default( 'original' ) %}
         {% set alternativeAliasList = parameters.alternativeAlias|default( [] ) %}
-        {% if not ibexa_field_is_empty( content, field ) %}
+        {% if not ez_is_field_empty( content, field ) %}
             {% set imageAttrs = ez_image_attrs( field, versionInfo, alias, {
                 lazyLoad: lazyLoad,
                 retina: parameters.retina|default( enable_retina_variations ),
@@ -80,35 +68,22 @@
                     {% set alternativeImageAttrs = ez_image_attrs( field, versionInfo, alternativeAlias.alias, {
                         lazyLoad: lazyLoad,
                         retina: parameters.retina|default( enable_retina_variations ),
-                        addMimeType: true,
                         attrs: {
                             'media': alternativeAlias.media|default,
                             'data-name': alternativeAlias.alias,
                         }
                     }) %}
 
-                    <source {% for attrname, attrvalue in alternativeImageAttrs|filter(attrvalue => attrvalue is not empty) %}{{ attrname }}="{{ attrvalue }}" {% endfor %}/>
+                    <source {% for attrname, attrvalue in alternativeImageAttrs if attrvalue is not empty %}{{ attrname }}="{{ attrvalue }}" {% endfor %}/>
                 {% endfor %}
 
-                {% if parameters.ezlink|default({}) is not empty %}
-                    <a
-                        href="{{ parameters.ezlink.href }}"
-                        {% if parameters.ezlink.title is defined %} title="{{ parameters.ezlink.title|e('html_attr') }}"{% endif %}
-                        {% if parameters.ezlink.target is defined %} target="{{ parameters.ezlink.target|e('html_attr') }}"{% endif %}
-                    >
-                {% endif %}
-
-                <img {% for attrname, attrvalue in imageAttrs|filter(attrvalue => attrvalue is not empty) %}{{ attrname }}="{{ attrvalue }}" {% endfor %}/>
+                <img {% for attrname, attrvalue in imageAttrs if attrvalue is not empty %}{{ attrname }}="{{ attrvalue }}" {% endfor %}/>
 
                 {% if lazyLoad %}
-                    {% set placeholderAlias = ibexa_image_alias(field, versionInfo, 'placeholder') %}
-                    <img src="{{ placeholderAlias.uri }}" class="placeholder" width="{{ imageAttrs['data-width'] }}" height="{{ imageAttrs['data-height'] }}" alt=""/>
-                {% endif %}
-
-                {% if parameters.ezlink|default({}) is not empty %}
-                    </a>
+                    {% set placeholderAlias = ez_image_alias(field, versionInfo, 'placeholder') %}
+                    <img src="{{ placeholderAlias.uri }}" class="placeholder" width="{{ imageAttrs['data-width'] }}" height="{{ imageAttrs['data-height'] }}" alt="{{ field.value.alternativeText }}"/>
                 {% endif %}
             </picture>
         {% endif %}
-    {% endapply %}
+    {% endspaceless %}
 {% endblock %}

@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\Imagine\Filter;
 
-use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration as BaseFilterConfiguration;
 
 /**
@@ -49,14 +49,14 @@ class FilterConfiguration extends BaseFilterConfiguration
         $defaultConfig = $this->getDefaultConfig();
         $config = $this->filterConfiguration->get($filter);
 
-        $defaultConfig = array_merge(
+        $config = array_merge(
             [
                 'quality' => 70,
                 'jpeg_quality' => 70,
                 'webp_quality' => 70,
                 'png_compression_level' => 6,
             ],
-            $defaultConfig ?? []
+            $config
         );
 
         if ($defaultPostProcessors && (!isset($config['post_processors']) || empty($config['post_processors']))) {

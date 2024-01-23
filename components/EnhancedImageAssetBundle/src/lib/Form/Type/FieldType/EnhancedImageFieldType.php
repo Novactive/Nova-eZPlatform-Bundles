@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\Form\Type\FieldType;
 
-use Ibexa\ContentForms\Form\Type\FieldType\ImageFieldType;
+use EzSystems\RepositoryForms\Form\Type\FieldType\ImageFieldType;
 use Novactive\EzEnhancedImageAsset\Form\Type\FocusPointType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -67,9 +67,9 @@ class EnhancedImageFieldType extends AbstractType
                 'isNewFocusPoint',
                 CheckboxType::class,
                 [
-                    'label' => /* @Desc("Is new focus point ?") */
+                    'label'      => /* @Desc("Is new focus point ?") */
                     'content.field_type.enhancedimage.isNewFocusPoint',
-                    'attr' => [
+                    'attr'       => [
                         'class' => 'focuspoint-helper--cb-is-new',
                     ],
                 ]
@@ -78,11 +78,6 @@ class EnhancedImageFieldType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-                                   'translation_domain' => 'ezplatform_content_forms_fieldtype',
-                                   'is_alternative_text_required' => false,
-                               ]);
-
-        $resolver->setAllowedTypes('is_alternative_text_required', 'bool');
+        $resolver->setDefaults(['translation_domain' => 'ezrepoforms_fieldtype']);
     }
 }

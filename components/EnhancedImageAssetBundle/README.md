@@ -1,30 +1,18 @@
 # NovaeZEnhancedImageAssetBundle
 
-----
-
-This repository is what we call a "subtree split": a read-only copy of one directory of the main repository. 
-It is used by Composer to allow developers to depend on specific bundles.
-
-If you want to report or contribute, you should instead open your issue on the main repository: https://github.com/Novactive/Nova-eZPlatform-Bundles
-
-Documentation is available in this repository via `.md` files but also packaged here: https://novactive.github.io/Nova-eZPlatform-Bundles/master/EnhancedImageAssetBundle/README.md.html
-
-----
-
-[![Downloads](https://img.shields.io/packagist/dt/novactive/ezenhancedimageassetbundle.svg?style=flat-square)](https://packagist.org/packages/novactive/ezenhancedimageassetbundle)
-[![Latest version](https://img.shields.io/github/release/Novactive/NovaeZEnhancedImageAssetBundle.svg?style=flat-square)](https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/releases)
-[![License](https://img.shields.io/packagist/l/novactive/ezenhancedimageassetbundle.svg?style=flat-square)](LICENSE)
-
 An eZPlatform bundle providing new field type with enhanced features related to image management
 
 ## Features
 
-- [Focus point managment in admin UI](#1-focus-point)
-- [Default image configuration for file size optimization](#2-default-image-configuration)
-- [Lazy and Progressive loading](#3-lazyloading)
-- [Retina variations](#4-retina-variations)
-- [WebP variations](#5-webp-variations)
-- [Twig render field parameters](#6-twig-render-field-parameters)
+- Focus point managment in admin UI
+- Lazy loading
+- Responsive loading
+- Progressive loading
+
+## Requirements
+
+- eZ Platform Admin UI
+- PHP 7.1+
 
 ## Installation
 
@@ -53,17 +41,7 @@ public function registerBundles()
 ```
 ## Features
 
-### 1. Focus point
-
-This bundle provide a new `enhancedimage` field type which extend the `ezimage` field type.
-This field type allow the user to select a focus point on the uploaded image.
-Variation can then be created based on the selected focus point.
-
-![Demo](doc/images/image-focus-demo.gif)
-
-[Check out the demo](https://image-focus.stackblitz.io/)
-
-### 2. Default image configuration
+### 1. Default image configuration
 
 Added to siteaccess aware parameters which allow to define the default post processors and configuration to use when generating image alias
 ```yaml
@@ -80,7 +58,7 @@ parameters:
     quality: 80
 ```
 
-### 3. LazyLoading
+### 2. LazyLoading
 Lazy loading is controlled globaly by the following settings (default to true) and can be overriden at field level.
 
 ```yaml
@@ -88,7 +66,7 @@ parameters:
   ez_enhanced_image_asset.default.enable_lazy_load: true
 ```
 
-### 4. Retina variations 
+#### 3. Retina variations 
 
 Retina variations should suffixed by `_retina` will be used automatically (if enabled) when using the provided field template.
 To be displayed, the generated variation width should be two time the width of the default variation.
@@ -105,17 +83,13 @@ parameters:
   ez_enhanced_image_asset.default.enable_retina: true
 ```
 
-### 5. WebP variations
-
-Auto-creation of a webp variation for each existing variations and will then automaticaly add this variation as an alternative source
-
-### 6. Twig render field parameters
+### 4. Twig render field parameters
 
 You can now specify the `alternativeAlias` parameter to define alternative image alias depending the screen size
 
 ```twig
 
-{{ ibexa_render_field(content, fieldIdentifier, {
+{{ ez_render_field(content, fieldIdentifier, {
     parameters: {
         alias: 'desktop_alias',
         alternativeAlias: [
@@ -123,12 +97,22 @@ You can now specify the `alternativeAlias` parameter to define alternative image
                 alias: 'mobile_alias',
                 media: '(max-width: 320px)'
             }
-        ],
-        lazyLoad: true|false, // optionnal
+        ]
+        lazyLoad: true|false // optionnal
         retina: true|false // optionnal
     }
 }) }}
 ```
+
+### 4. Focus point
+
+This bundle provide a new `enhancedimage` field type which extend the `ezimage` field type. 
+This field type allow the user to select a focus point on the uploaded image.
+Variation can then be created based on the selected focus point.
+
+![Demo](doc/images/image-focus-demo.gif)
+
+[Check out the demo](https://image-focus.stackblitz.io/)
 
 #### Variations configuration
 
@@ -158,11 +142,11 @@ WHERE oa.data_type_string = "ezimage" AND ca.data_type_string="enhancedimage";
 ## Usage
 Some feature will require the following assets
 ```twig
-{{ encore_entry_link_tags('enhancedimage-css', null, 'ibexa') }}
+<link rel="stylesheet" href="{{ asset("bundles/ezenhancedimageasset/css/enhancedimage.css") }}" />
 ```
  
 ```twig
-{{ encore_entry_script_tags('enhancedimage-js', null, 'ibexa') }}
+<script src="{{ asset("bundles/ezenhancedimageasset/js/enhancedimage.js") }}"></script>
 ```
 
 

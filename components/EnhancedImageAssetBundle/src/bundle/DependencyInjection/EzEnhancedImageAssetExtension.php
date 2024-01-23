@@ -48,6 +48,7 @@ class EzEnhancedImageAssetExtension extends Extension implements PrependExtensio
         $loader->load('fieldtypes.yml');
         $loader->load('field_value_converters.yml');
         $loader->load('migration.yml');
+        $loader->load('ezadminui/components.yml');
     }
 
     /**
@@ -65,19 +66,26 @@ class EzEnhancedImageAssetExtension extends Extension implements PrependExtensio
         );
 
         $configs = [
-            'field_templates.yml' => 'ibexa',
-            'admin_ui_forms.yml' => 'ibexa',
-            'image_variations.yml' => 'ibexa',
+            'field_templates.yml'   => 'ezpublish',
+            'admin_ui_forms.yml'    => 'ezpublish',
+            'image_variations.yml'  => 'ezpublish',
+            'twig.yml'              => 'twig',
         ];
+
+        $activatedBundles = array_keys($container->getParameter('kernel.bundles'));
+
+        if (in_array('EzPlatformAdminUiBundle', $activatedBundles, true)) {
+            $configs['ezadminui/twig.yml'] = 'twig';
+        }
 
         foreach ($configs as $fileName => $extensionName) {
             $configFile = __DIR__.'/../Resources/config/'.$fileName;
-            $config = Yaml::parse((string) file_get_contents($configFile));
+            $config     = Yaml::parse((string) file_get_contents($configFile));
             $container->prependExtensionConfig($extensionName, $config);
             $container->addResource(new FileResource($configFile));
         }
 
-        $configs = $container->getExtensionConfig('ibexa');
+        $configs = $container->getExtensionConfig('ezpublish');
         $newConfig = [];
         foreach ($configs as $config) {
             if (!isset($config['system'])) {
@@ -104,6 +112,6 @@ class EzEnhancedImageAssetExtension extends Extension implements PrependExtensio
                 }
             }
         }
-        $container->prependExtensionConfig('ibexa', $newConfig);
+        $container->prependExtensionConfig('ezpublish', $newConfig);
     }
 }

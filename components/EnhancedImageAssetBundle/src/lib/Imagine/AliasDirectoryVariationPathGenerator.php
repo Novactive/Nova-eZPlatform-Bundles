@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\Imagine;
 
-use Ibexa\Bundle\Core\Imagine\VariationPathGenerator;
+use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 
 class AliasDirectoryVariationPathGenerator implements VariationPathGenerator

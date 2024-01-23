@@ -14,14 +14,13 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\Imagine;
 
-use Ibexa\Bundle\Core\Imagine\IORepositoryResolver;
-use Ibexa\Contracts\Core\Repository\Exceptions\InvalidVariationException;
-use Ibexa\Contracts\Core\Repository\Values\Content\Field;
-use Ibexa\Contracts\Core\Repository\Values\Content\VersionInfo;
-use Ibexa\Contracts\Core\Variation\Values\ImageVariation;
-use Ibexa\Contracts\Core\Variation\VariationHandler;
-use Ibexa\Core\FieldType\Image\Value as ImageValue;
-use Ibexa\Core\MVC\Exception\SourceImageNotFoundException;
+use eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver;
+use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
+use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException;
+use eZ\Publish\SPI\Variation\Values\ImageVariation;
+use eZ\Publish\SPI\Variation\VariationHandler;
 use Imagine\Image\Box;
 use InvalidArgumentException;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
@@ -48,57 +47,34 @@ class FocusedImageAliasGenerator implements VariationHandler
     /** @var FilterConfiguration */
     protected $filterConfiguration;
 
-    public function __construct(
-        VariationHandler $imageVariationService,
-        FocusPointCalculator $focusPointCalculator,
-        FilterConfiguration $filterConfiguration
-    ) {
+    /**
+     * @required
+     */
+    public function setImageVariationService(VariationHandler $imageVariationService): void
+    {
         $this->imageVariationService = $imageVariationService;
+    }
+
+    /**
+     * @required
+     */
+    public function setFocusPointCalculator(FocusPointCalculator $focusPointCalculator): void
+    {
         $this->focusPointCalculator = $focusPointCalculator;
+    }
+
+    /**
+     * @required
+     */
+    public function setFilterConfiguration(FilterConfiguration $filterConfiguration): void
+    {
         $this->filterConfiguration = $filterConfiguration;
-    }
-
-    protected function getFocusPointFromFilter(string $variationName): ?FocusPoint
-    {
-        if (IORepositoryResolver::VARIATION_ORIGINAL !== $variationName) {
-            $variationConfig = $this->filterConfiguration->get($variationName);
-            if (isset($variationConfig['filters']['focusedThumbnail']['focus'])) {
-                return new FocusPoint(...$variationConfig['filters']['focusedThumbnail']['focus']);
-            }
-
-            return $this->getFocusPointFromFilter(
-                $variationConfig['reference'] ?? IORepositoryResolver::VARIATION_ORIGINAL
-            );
-        }
-
-        return null;
-    }
-
-    protected function getFocusPoint(\Ibexa\Core\FieldType\Value $fieldValue, string $variationName): ?FocusPoint
-    {
-        if ($fieldValue instanceof EnhancedImageValue) {
-            /* @var FocusPoint $focusPoint */
-            return $fieldValue->focusPoint;
-        } elseif (
-            $fieldValue instanceof ImageValue &&
-            isset($fieldValue->additionalData['focalPointX']) &&
-            isset($fieldValue->additionalData['focalPointY'])
-        ) {
-            return new FocusPoint(
-                ($fieldValue->additionalData['focalPointX'] / $fieldValue->width - 0.5) * 2,
-                ($fieldValue->additionalData['focalPointY'] / $fieldValue->height - 0.5) * -2
-            );
-        } elseif (IORepositoryResolver::VARIATION_ORIGINAL !== $variationName) {
-            return $this->getFocusPointFromFilter($variationName);
-        }
-
-        return null;
     }
 
     /**
      * {@inheritdoc}
      *
-     * if field value is not an instance of \Ibexa\Core\FieldType\Image\Value
+     * if field value is not an instance of \eZ\Publish\Core\FieldType\Image\Value
      *
      * @throws InvalidArgumentException
      *
@@ -111,15 +87,20 @@ class FocusedImageAliasGenerator implements VariationHandler
      */
     public function getVariation(Field $field, VersionInfo $versionInfo, $variationName, array $parameters = [])
     {
-        $focusPoint = $this->getFocusPoint($field->value, $variationName);
+        $isFocusedVariation = IORepositoryResolver::VARIATION_ORIGINAL !== $variationName
+                              && $field->value instanceof EnhancedImageValue;
+        $focusPoint         = null;
 
-        if (IORepositoryResolver::VARIATION_ORIGINAL !== $variationName) {
-            $variationConfig = $this->filterConfiguration->get($variationName);
-            if (isset($variationConfig['filters']['focusedThumbnail'])) {
+        if ($isFocusedVariation) {
+            $variationConfig    = $this->filterConfiguration->get($variationName);
+            $isFocusedVariation = isset($variationConfig['filters']['focusedThumbnail']);
+            if ($isFocusedVariation) {
+                /** @var FocusPoint $focusPoint */
+                $focusPoint = $field->value->focusPoint;
                 $parameters = [
                     'filters' => [
                         'focusedThumbnail' => [
-                            'focusPoint' => $focusPoint,
+                            'focusPoint'   => $focusPoint,
                             'originalSize' => new Box($field->value->width, $field->value->height),
                         ],
                     ],
@@ -135,25 +116,27 @@ class FocusedImageAliasGenerator implements VariationHandler
             $parameters
         );
 
-        if (!$focusPoint) {
+        if (!$isFocusedVariation) {
             return $variation;
         }
 
-        /** @var ImageVariation $originalVariation */
-        $originalVariation = $this->imageVariationService->getVariation(
-            $field,
-            $versionInfo,
-            IORepositoryResolver::VARIATION_ORIGINAL
-        );
+        if ($focusPoint) {
+            /** @var ImageVariation $originalVariation */
+            $originalVariation = $this->imageVariationService->getVariation(
+                $field,
+                $versionInfo,
+                IORepositoryResolver::VARIATION_ORIGINAL
+            );
 
-        $focusPoint = $this->focusPointCalculator->calculateCropFocusPoint(
-            new Box($originalVariation->width, $originalVariation->height),
-            new Box($variation->width, $variation->height),
-            $focusPoint
-        );
+            $focusPoint = $this->focusPointCalculator->calculateCropFocusPoint(
+                new Box($originalVariation->width, $originalVariation->height),
+                new Box($variation->width, $variation->height),
+                $focusPoint
+            );
+        }
 
         $reflectionClass = new ReflectionClass(get_class($variation));
-        $array = [];
+        $array           = [];
         foreach ($reflectionClass->getProperties() as $property) {
             $property->setAccessible(true);
             $array[$property->getName()] = $property->getValue($variation);

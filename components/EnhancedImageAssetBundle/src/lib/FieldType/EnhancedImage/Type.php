@@ -14,14 +14,15 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage;
 
-use Ibexa\Contracts\Core\FieldType\ValidationError;
-use Ibexa\Contracts\Core\FieldType\Value as SPIValue;
-use Ibexa\Contracts\Core\Persistence\Content\FieldValue;
-use Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException;
-use Ibexa\Contracts\Core\Repository\Values\ContentType\FieldDefinition;
-use Ibexa\Core\Base\Exceptions\InvalidArgumentType;
-use Ibexa\Core\FieldType\Image\Type as ImageType;
-use Ibexa\Core\FieldType\Value as BaseValue;
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\FieldType\Image\Type as ImageType;
+use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
+use eZ\Publish\SPI\FieldType\ValidationError;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 /**
  * The Image field type.
@@ -69,6 +70,24 @@ class Type extends ImageType
             }
 
             $inputValue = new Value($inputValue);
+        }
+
+        if ($inputValue instanceof ImageValue) {
+            return new Value(
+                [
+                    'id'              => $inputValue->id,
+                    'alternativeText' => $inputValue->alternativeText,
+                    'fileName'        => $inputValue->fileName,
+                    'fileSize'        => $inputValue->fileSize,
+                    'uri'             => $inputValue->uri,
+                    'imageId'         => $inputValue->imageId,
+                    'inputUri'        => $inputValue->inputUri,
+                    'width'           => $inputValue->width,
+                    'height'          => $inputValue->height,
+                    'focusPoint'      => $inputValue->focusPoint,
+                    'isNewFocusPoint' => $inputValue->isNewFocusPoint,
+                ]
+            );
         }
 
         return $inputValue;
@@ -154,7 +173,7 @@ class Type extends ImageType
             return $this->getEmptyValue();
         }
 
-        $baseValue = parent::fromPersistenceValue($fieldValue);
+        $baseValue  = parent::fromPersistenceValue($fieldValue);
         $properties = [];
         foreach (get_object_vars($baseValue) as $property => $propertyValue) {
             if ($baseValue->__isset($property)) {

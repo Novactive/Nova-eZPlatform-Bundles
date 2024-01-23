@@ -14,22 +14,21 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\FieldValueConverter;
 
-use Ibexa\Contracts\Core\Repository\ContentService;
-use Ibexa\Contracts\Core\Repository\ContentTypeService;
-use Ibexa\Contracts\Core\Repository\Exceptions\BadStateException;
-use Ibexa\Contracts\Core\Repository\Exceptions\ContentFieldValidationException;
-use Ibexa\Contracts\Core\Repository\Exceptions\ContentValidationException;
-use Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException;
-use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
-use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException;
-use Ibexa\Contracts\Core\Repository\LocationService;
-use Ibexa\Contracts\Core\Repository\Values\Content\Content;
-use Ibexa\Contracts\Core\Repository\Values\Content\Field;
-use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
-use Ibexa\Contracts\Core\Variation\VariationHandler;
-use Ibexa\Core\Base\Exceptions\InvalidArgumentType;
-use Ibexa\Core\FieldType\Image\Value as ImageValue;
-use Ibexa\Core\FieldType\ImageAsset\Value as ImageAssetValue;
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\ContentTypeService;
+use eZ\Publish\API\Repository\Exceptions\BadStateException;
+use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
+use eZ\Publish\API\Repository\Exceptions\ContentValidationException;
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
+use eZ\Publish\Core\FieldType\ImageAsset\Value as ImageAssetValue;
+use eZ\Publish\SPI\Variation\VariationHandler;
 
 class ImageFieldValueConverter implements FieldValueConverterInterface
 {
@@ -45,15 +44,15 @@ class ImageFieldValueConverter implements FieldValueConverterInterface
     /** @var ContentTypeService */
     protected $contentTypeService;
 
-    /** @var ConfigResolverInterface */
-    protected $configResolver;
+    /** @var array */
+    protected $mappings = [];
 
     /**
      * ImageFieldValueConverter constructor.
      */
-    public function __construct(ConfigResolverInterface $configResolver)
+    public function __construct(array $mappings)
     {
-        $this->configResolver = $configResolver;
+        $this->mappings = $mappings;
     }
 
     /**
@@ -157,20 +156,19 @@ class ImageFieldValueConverter implements FieldValueConverterInterface
      */
     protected function createAsset(string $name, string $remoteId, ImageValue $image, string $languageCode): Content
     {
-        $mappings = $this->getMappings();
         $contentType = $this->contentTypeService->loadContentTypeByIdentifier(
-            $mappings['content_type_identifier']
+            $this->mappings['content_type_identifier']
         );
 
-        $contentCreateStruct = $this->contentService->newContentCreateStruct($contentType, $languageCode);
+        $contentCreateStruct           = $this->contentService->newContentCreateStruct($contentType, $languageCode);
         $contentCreateStruct->remoteId = $remoteId;
-        $contentCreateStruct->setField($mappings['name_field_identifier'], $name, $languageCode);
-        $contentCreateStruct->setField($mappings['content_field_identifier'], $image, $languageCode);
+        $contentCreateStruct->setField($this->mappings['name_field_identifier'], $name, $languageCode);
+        $contentCreateStruct->setField($this->mappings['content_field_identifier'], $image, $languageCode);
 
         $contentDraft = $this->contentService->createContent(
             $contentCreateStruct,
             [
-                $this->locationService->newLocationCreateStruct($mappings['parent_location_id']),
+                $this->locationService->newLocationCreateStruct($this->mappings['parent_location_id']),
             ]
         );
 
@@ -186,12 +184,11 @@ class ImageFieldValueConverter implements FieldValueConverterInterface
      */
     protected function updateAsset(Content $content, string $name, ImageValue $image, string $languageCode): Content
     {
-        $mappings = $this->getMappings();
         $contentDraft = $this->contentService->createContentDraft($content->contentInfo);
 
         $contentUpdateStruct = $this->contentService->newContentUpdateStruct();
-        $contentUpdateStruct->setField($mappings['name_field_identifier'], $name, $languageCode);
-        $contentUpdateStruct->setField($mappings['content_field_identifier'], $image, $languageCode);
+        $contentUpdateStruct->setField($this->mappings['name_field_identifier'], $name, $languageCode);
+        $contentUpdateStruct->setField($this->mappings['content_field_identifier'], $image, $languageCode);
 
         $contentDraft = $this->contentService->updateContent(
             $contentDraft->versionInfo,
@@ -199,10 +196,5 @@ class ImageFieldValueConverter implements FieldValueConverterInterface
         );
 
         return $this->contentService->publishVersion($contentDraft->versionInfo);
-    }
-
-    protected function getMappings(): array
-    {
-        return $this->configResolver->getParameter('fieldtypes.ezimageasset.mappings');
     }
 }

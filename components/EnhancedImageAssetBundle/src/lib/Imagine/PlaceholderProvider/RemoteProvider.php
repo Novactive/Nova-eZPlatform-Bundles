@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\Imagine\PlaceholderProvider;
 
-use Ibexa\Bundle\Core\Imagine\PlaceholderProvider;
-use Ibexa\Core\FieldType\Image\Value as ImageValue;
+use eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProvider;
+use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use RuntimeException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -28,7 +28,7 @@ class RemoteProvider implements PlaceholderProvider
     {
         $options = $this->resolveOptions($options);
 
-        $path = $this->getTemporaryPath();
+        $path           = $this->getTemporaryPath();
         $placeholderUrl = $this->getPlaceholderUrl($options['url_pattern'], $value);
 
         try {
@@ -37,9 +37,9 @@ class RemoteProvider implements PlaceholderProvider
             curl_setopt_array(
                 $handler,
                 [
-                    CURLOPT_URL => $placeholderUrl,
-                    CURLOPT_FILE => fopen($path, 'wb'),
-                    CURLOPT_TIMEOUT => $options['timeout'],
+                    CURLOPT_URL         => $placeholderUrl,
+                    CURLOPT_FILE        => fopen($path, 'wb'),
+                    CURLOPT_TIMEOUT     => $options['timeout'],
                     CURLOPT_FAILONERROR => true,
                 ]
             );
@@ -61,7 +61,7 @@ class RemoteProvider implements PlaceholderProvider
         $resolver->setDefaults(
             [
                 'url_pattern' => '',
-                'timeout' => 5,
+                'timeout'     => 5,
             ]
         );
         $resolver->setAllowedTypes('url_pattern', 'string');
@@ -90,8 +90,8 @@ class RemoteProvider implements PlaceholderProvider
         return strtr(
             $urlPattern,
             [
-                '%id%' => $imageId,
-                '%width%' => $value->width,
+                '%id%'     => $imageId,
+                '%width%'  => $value->width,
                 '%height%' => $value->height,
             ]
         );
