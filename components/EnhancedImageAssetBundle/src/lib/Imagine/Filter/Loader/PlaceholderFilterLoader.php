@@ -32,11 +32,17 @@ class PlaceholderFilterLoader implements LoaderInterface
         $origWidth = $size->getWidth();
         $origHeight = $size->getHeight();
 
-        if (null === $width || null === $height) {
-            if (null === $height) {
-                $height = (int) (($width / $origWidth) * $origHeight);
-            } elseif (null === $width) {
-                $width = (int) (($height / $origHeight) * $origWidth);
+        if (! $width || ! $height) {
+            // In /var/www/html/ibexa/vendor/imagine/imagine/src/Image/Box.php:42
+            // [TypeError]
+            // round(): Argument #1 ($num) must be of type int|float, string given
+            if (!$height && !$width) {
+                $height = $origWidth;
+                $width = $origHeight;
+            } elseif (!$height) {
+                $height = (int)(($width / $origWidth) * $origHeight);
+            } elseif (!$width) {
+                $width = (int)(($height / $origHeight) * $origWidth);
             }
         }
 
