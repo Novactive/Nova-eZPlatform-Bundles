@@ -48,14 +48,6 @@ class ChainPlaceholderProvider implements PlaceholderProvider
         foreach ($providersConfigs as $providersConfig) {
             $provider = $this->providerRegistry->getProvider($providersConfig['provider']);
             try {
-                // In /var/www/html/ibexa/vendor/imagine/imagine/src/Image/Box.php:42
-                // round(): Argument #1 ($num) must be of type int|float, string given
-                if ($value->width === '') {
-                    $value->width = 0;
-                }
-                if ($value->height === '') {
-                    $value->height = 0;
-                }
                 return $provider->getPlaceholder($value, $providersConfig['options']);
             } catch (RuntimeException $exception) {
                 $this->logger->warning($exception->getMessage());
