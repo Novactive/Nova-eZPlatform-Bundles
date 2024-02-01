@@ -86,7 +86,6 @@ class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAcc
 
     public function generate($name, $parameters = [], $referenceType = self::ABSOLUTE_PATH): string
     {
-        // Alors là ça m'étonnerait qu'on ne retourne rien !
         return '';
     }
 
