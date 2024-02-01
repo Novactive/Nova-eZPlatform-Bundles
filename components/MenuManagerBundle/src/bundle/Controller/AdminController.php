@@ -159,7 +159,6 @@ class AdminController extends Controller
      */
     public function editAction(Request $request, Menu $menu): RedirectResponse|Response
     {
-        // dump($menu); // Ici on a bien un Novactive\EzMenuManagerBundle\Entity\Menu
         $form = $this->createForm(MenuType::class, $menu);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
