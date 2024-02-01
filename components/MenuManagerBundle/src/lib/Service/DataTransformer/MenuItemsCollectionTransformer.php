@@ -12,8 +12,10 @@
 
 namespace Novactive\EzMenuManager\Service\DataTransformer;
 
+use Novactive\EzMenuManager\Exception\MenuItemTypeNotFoundException;
 use Novactive\EzMenuManager\Exception\UnexpectedTypeException;
 use Novactive\EzMenuManager\MenuItem\MenuItemConverter;
+use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 use Symfony\Component\Form\DataTransformerInterface;
 
 class MenuItemsCollectionTransformer implements DataTransformerInterface
@@ -37,8 +39,6 @@ class MenuItemsCollectionTransformer implements DataTransformerInterface
      */
     public function transform($value): bool|string
     {
-        dump($value); // ici on a un Doctrine\ORM\PersistentCollection
-        dump($value->getValues()); // ERROR 500 TypeError ReflectionProperty::getValue(): Argument #1 ($object) must be provided for instance properties
         return json_encode($this->menuItemConverter->toHashArray($value->getValues()));
     }
 
@@ -46,9 +46,10 @@ class MenuItemsCollectionTransformer implements DataTransformerInterface
      * Transforms a hash into a FieldType Value using `FieldType::fromHash()`.
      * The FieldValue is compatible with `transform()`.
      *
-     * @return \eZ\Publish\SPI\FieldType\Value
+     * @return MenuItem[]
+     * @throws MenuItemTypeNotFoundException
      */
-    public function reverseTransform($value): \eZ\Publish\SPI\FieldType\Value
+    public function reverseTransform($value): array
     {
         return $this->menuItemConverter->fromHashArray(json_decode($value, true));
     }
