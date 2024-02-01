@@ -65,7 +65,6 @@ class MenuItem
      *     targetEntity="Novactive\EzMenuManagerBundle\Entity\MenuItem",
      *     mappedBy="parent",
      *     cascade={"persist","remove"},
-     *     fetch="EAGER",
      *     orphanRemoval=true
      *     )
      * @ORM\OrderBy({"position" = "ASC"})
