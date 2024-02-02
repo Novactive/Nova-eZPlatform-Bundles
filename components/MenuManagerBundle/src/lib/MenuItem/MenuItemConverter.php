@@ -86,7 +86,7 @@ class MenuItemConverter
                 $menuItems[$hashItem['id']] = $menuItem;
                 if (
                     !$menuItem->getParent()
-                    && str_starts_with($hashItem['parentId'], '_')
+                    && 0 === strpos($hashItem['parentId'], '_')
                     && ($parent = $menuItems[$hashItem['parentId']] ?? null)
                 ) {
                     $parent->addChildren($menuItem);

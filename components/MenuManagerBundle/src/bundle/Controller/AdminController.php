@@ -157,7 +157,7 @@ class AdminController extends Controller
      * @param Menu $menu
      * @return RedirectResponse|Response
      */
-    public function editAction(Request $request, Menu $menu): RedirectResponse|Response
+    public function editAction(Request $request, Menu $menu)
     {
         $form = $this->createForm(MenuType::class, $menu);
         $form->handleRequest($request);

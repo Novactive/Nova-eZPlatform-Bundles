@@ -37,7 +37,7 @@ class MenuItemsCollectionTransformer implements DataTransformerInterface
      * @return string|false the value's hash, or null if $value was not a FieldType Value
      * @throws UnexpectedTypeException
      */
-    public function transform($value): bool|string
+    public function transform($value)
     {
         return json_encode($this->menuItemConverter->toHashArray($value->getValues()));
     }
