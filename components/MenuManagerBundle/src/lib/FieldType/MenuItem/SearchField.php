@@ -12,7 +12,6 @@
 
 namespace Novactive\EzMenuManager\FieldType\MenuItem;
 
-use eZ\Publish\SPI\Search;
 use Ibexa\Contracts\Core\FieldType\Indexable;
 use Ibexa\Contracts\Core\Persistence\Content\Field;
 use Ibexa\Contracts\Core\Persistence\Content\Type\FieldDefinition;
@@ -24,7 +23,7 @@ class SearchField implements Indexable
      *
      * @return \eZ\Publish\SPI\Search\Field[]
      */
-    public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
+    public function getIndexData(Field $field, FieldDefinition $fieldDefinition): array
     {
         return [];
     }
@@ -34,7 +33,7 @@ class SearchField implements Indexable
      *
      * @return \eZ\Publish\SPI\Search\FieldType[]
      */
-    public function getIndexDefinition()
+    public function getIndexDefinition(): array
     {
         return [];
     }
@@ -46,9 +45,9 @@ class SearchField implements Indexable
      * implementation of this interface), this method is used to define default
      * field for matching. Default field is typically used by Field criterion.
      *
-     * @return string
+     * @return string|null
      */
-    public function getDefaultMatchField()
+    public function getDefaultMatchField(): ?string
     {
         return null;
     }
@@ -60,9 +59,9 @@ class SearchField implements Indexable
      * implementation of this interface), this method is used to define default
      * field for sorting. Default field is typically used by Field sort clause.
      *
-     * @return string
+     * @return string|null
      */
-    public function getDefaultSortField()
+    public function getDefaultSortField(): ?string
     {
         return null;
     }

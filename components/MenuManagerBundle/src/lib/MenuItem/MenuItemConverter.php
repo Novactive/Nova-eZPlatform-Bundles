@@ -12,22 +12,22 @@
 
 namespace Novactive\EzMenuManager\MenuItem;
 
+use Novactive\EzMenuManager\Exception\MenuItemTypeNotFoundException;
 use Novactive\EzMenuManager\Exception\UnexpectedTypeException;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 
 class MenuItemConverter
 {
-    /** @var MenuItemTypeRegistry */
-    protected $menuItemTypeRegistry;
+    protected MenuItemTypeRegistry $menuItemTypeRegistry;
 
-    /**
-     * MenuItemConverter constructor.
-     */
     public function __construct(MenuItemTypeRegistry $menuItemTypeRegistry)
     {
         $this->menuItemTypeRegistry = $menuItemTypeRegistry;
     }
 
+    /**
+     * @throws MenuItemTypeNotFoundException
+     */
     public function toHash(MenuItem $menuItem): array
     {
         $type = $this->menuItemTypeRegistry->getMenuItemEntityType($menuItem);
@@ -37,10 +37,11 @@ class MenuItemConverter
 
     /**
      * @param $hash
-     *
-     * @return MenuItem
+     * @param string $defaultClass
+     * @return MenuItem|null
+     * @throws MenuItemTypeNotFoundException
      */
-    public function fromHash($hash, $defaultClass = MenuItem::class): ?MenuItem
+    public function fromHash($hash, string $defaultClass = MenuItem::class): ?MenuItem
     {
         $type = $this->menuItemTypeRegistry->getMenuItemType($defaultClass);
 
@@ -50,6 +51,7 @@ class MenuItemConverter
     /**
      * @param $menuItems
      *
+     * @return array
      * @throws UnexpectedTypeException
      */
     public function toHashArray($menuItems): array
@@ -66,18 +68,20 @@ class MenuItemConverter
     }
 
     /**
+     * @param array $hashArray
      * @param string $defaultClass
      *
+     * @return MenuItem[]
      * @SuppressWarnings(PHPMD.IfStatementAssignment)
      *
-     * @return MenuItem[]
+     * @throws MenuItemTypeNotFoundException
      */
-    public function fromHashArray(array $hashArray, $defaultClass = MenuItem::class): array
+    public function fromHashArray(array $hashArray, string $defaultClass = MenuItem::class): array
     {
         /** @var MenuItem[] $menuItems */
         $menuItems = [];
         foreach ($hashArray as $hashItem) {
-            $menuItem = $this->fromHash($hashItem, isset($hashItem['type']) ? $hashItem['type'] : $defaultClass);
+            $menuItem = $this->fromHash($hashItem, $hashItem['type'] ?? $defaultClass);
             if ($menuItem) {
                 $menuItems[$hashItem['id']] = $menuItem;
                 if (

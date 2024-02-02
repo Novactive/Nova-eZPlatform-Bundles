@@ -295,7 +295,7 @@ class MenuItem
         return (string) $this->id;
     }
 
-    public function update(array $properties)
+    public function update(array $properties): void
     {
         foreach ($properties as $property => $value) {
             $this->$property = $value;
