@@ -24,8 +24,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MenuType extends AbstractType
 {
-    /** @var ConfigResolverInterface */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
     /**
      * @required
@@ -35,7 +34,7 @@ class MenuType extends AbstractType
         $this->configResolver = $configResolver;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
             ->setDefaults(
@@ -45,7 +44,7 @@ class MenuType extends AbstractType
             );
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $menuTypes = $this->configResolver->getParameter('menu_types', 'nova_menu_manager') ?? [];
         $builder

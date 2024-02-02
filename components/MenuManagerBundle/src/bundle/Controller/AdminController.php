@@ -25,7 +25,9 @@ use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use PDO;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -39,17 +41,10 @@ class AdminController extends Controller
 {
     public const RESULTS_PER_PAGE = 20;
 
-    /** @var TranslatorInterface */
-    protected $translator;
-
-    /** @var NotificationHandlerInterface */
-    protected $notificationHandler;
-
-    /** @var EntityManagerInterface */
-    protected $em;
-
-    /** @var ConfigResolverInterface */
-    protected $configResolver;
+    protected TranslatorInterface $translator;
+    protected NotificationHandlerInterface $notificationHandler;
+    protected EntityManagerInterface $em;
+    protected ConfigResolverInterface $configResolver;
 
     /**
      * AdminController constructor.
@@ -73,7 +68,7 @@ class AdminController extends Controller
      *
      * @SuppressWarnings(PHPMD.IfStatementAssignment)
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function listAction(Request $request, $page = 1)
     {
@@ -143,7 +138,7 @@ class AdminController extends Controller
     /**
      * @Route("/new", name="menu_manager.menu_new")
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function newAction(Request $request)
     {
@@ -158,7 +153,9 @@ class AdminController extends Controller
     /**
      * @Route("/edit/{menu}", name="menu_manager.menu_edit")
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @param Request $request
+     * @param Menu $menu
+     * @return RedirectResponse|Response
      */
     public function editAction(Request $request, Menu $menu)
     {

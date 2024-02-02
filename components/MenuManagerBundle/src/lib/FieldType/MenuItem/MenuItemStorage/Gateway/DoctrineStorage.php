@@ -13,8 +13,8 @@
 namespace Novactive\EzMenuManager\FieldType\MenuItem\MenuItemStorage\Gateway;
 
 use Doctrine\ORM\EntityManagerInterface;
-use eZ\Publish\SPI\Persistence\Content\Field;
-use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use Ibexa\Contracts\Core\Persistence\Content\Field;
+use Ibexa\Contracts\Core\Persistence\Content\VersionInfo;
 use Novactive\EzMenuManager\FieldType\MenuItem\MenuItemStorage\Gateway;
 use Novactive\EzMenuManager\FieldType\MenuItem\Value;
 use Novactive\EzMenuManager\FieldType\MenuItem\ValueConverter;
@@ -23,11 +23,9 @@ use Novactive\EzMenuManagerBundle\Entity\MenuItem\ContentMenuItem;
 
 class DoctrineStorage extends Gateway
 {
-    /** @var EntityManagerInterface */
-    protected $em;
+    protected EntityManagerInterface $em;
 
-    /** @var ValueConverter */
-    protected $valueConverter;
+    protected ValueConverter $valueConverter;
 
     /**
      * DoctrineStorage constructor.
@@ -42,7 +40,7 @@ class DoctrineStorage extends Gateway
     {
     }
 
-    public function getFieldData(VersionInfo $versionInfo, Field $field)
+    public function getFieldData(VersionInfo $versionInfo, Field $field): void
     {
         $menuItems = $this->em->getRepository(MenuItem::class)->findBy(
             [
@@ -53,7 +51,7 @@ class DoctrineStorage extends Gateway
         $field->value->externalData = $this->valueConverter->toHash(new Value($menuItems));
     }
 
-    public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds)
+    public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds): void
     {
         /** @var ContentMenuItem[] $menuItems */
         $menuItems = $this->em->getRepository(MenuItem::class)->findBy(
