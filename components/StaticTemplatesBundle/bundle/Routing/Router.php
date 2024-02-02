@@ -29,10 +29,25 @@ use Twig\Environment;
 
 class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAccessAware
 {
-    protected array $siteAccessGroups;
-    protected SiteAccess $siteAccess;
-    protected RequestContext $context;
-    protected Environment $twig;
+    /**
+     * @var array
+     */
+    protected $siteAccessGroups;
+
+    /**
+     * @var SiteAccess
+     */
+    protected $siteAccess;
+
+    /**
+     * @var RequestContext
+     */
+    protected $context;
+
+    /**
+     * @var Environment
+     */
+    protected $twig;
 
     public function __construct(array $siteAccessGroups, Environment $twig)
     {
@@ -84,9 +99,9 @@ class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAcc
         return new RouteCollection();
     }
 
-    public function generate($name, $parameters = [], $referenceType = self::ABSOLUTE_PATH): string
+    public function generate($name, $parameters = [], $referenceType = self::ABSOLUTE_PATH)
     {
-        return '';
+        // nothing to do
     }
 
     public function match($pathinfo)

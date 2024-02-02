@@ -36,10 +36,15 @@ class Value extends BaseValue
     }
 
     /**
-     * @see \eZ\Publish\Core\FieldType\Value
+     * @see \Ibexa\Core\FieldType\Value
+     * @see MenuItem
      */
     public function __toString()
     {
-        return (string) $this->menuItems; // TODO Array to string conversion
+        $string = '';
+        foreach ($this->menuItems as $menuItem) {
+            $string .= ', ' . $menuItem->__toString();
+        }
+        return $string;
     }
 }
