@@ -14,9 +14,11 @@ namespace Novactive\EzMenuManager\Form\Type\FieldType;
 
 use Ibexa\ContentForms\Data\Content\ContentCreateData;
 use Ibexa\ContentForms\Data\Content\ContentUpdateData;
+use Ibexa\Contracts\Core\Persistence\Content\ContentInfo;
 use Ibexa\Contracts\Core\Repository\FieldTypeService;
 use Ibexa\Contracts\Core\Repository\LocationService;
 use Ibexa\Core\Helper\TranslationHelper;
+use Ibexa\Core\MVC\Symfony\Templating\GlobalHelper;
 use Novactive\EzMenuManager\Service\DataTransformer\MenuItemValueTransformer;
 use Novactive\EzMenuManager\Service\MenuService;
 use Symfony\Component\Form\AbstractType;
@@ -47,23 +49,29 @@ class MenuItemFieldType extends AbstractType
     /** @var TranslatorInterface */
     protected $translator;
 
+    /** @var GlobalHelper */
+    protected $globalHelper;
+
     /**
      * MenuItemFieldType constructor.
      */
     public function __construct(
-        FieldTypeService $fieldTypeService,
-        MenuService $menuService,
-        LocationService $locationService,
+        FieldTypeService         $fieldTypeService,
+        MenuService              $menuService,
+        LocationService          $locationService,
         MenuItemValueTransformer $fieldValueTransformer,
-        TranslationHelper $translationHelper,
-        TranslatorInterface $translator
-    ) {
+        TranslationHelper        $translationHelper,
+        TranslatorInterface      $translator,
+        GlobalHelper             $globalHelper
+    )
+    {
         $this->fieldTypeService = $fieldTypeService;
         $this->menuService = $menuService;
         $this->locationService = $locationService;
         $this->fieldValueTransformer = $fieldValueTransformer;
         $this->translationHelper = $translationHelper;
         $this->translator = $translator;
+        $this->globalHelper = $globalHelper;
     }
 
     public function getName()
@@ -99,6 +107,7 @@ class MenuItemFieldType extends AbstractType
         $view->vars['menu_items'] = $form->getData()->menuItems;
 
         $formData = $form->getParent()->getParent()->getParent()->getData();
+
         $parentLocationsId = [];
         if ($formData instanceof ContentCreateData) {
             $view->vars['content_name'] = $this->translator->trans(
@@ -114,11 +123,15 @@ class MenuItemFieldType extends AbstractType
                 $formData->contentDraft,
                 'getName'
             );
+            $contentInfo = $formData->contentDraft->contentInfo;
+            if ($contentInfo->status == ContentInfo::STATUS_DRAFT) {
+                $parentLocationsId[] = $this->globalHelper->getRootLocation()->id;
+            } else {
+                $locations = $this->locationService->loadLocations($contentInfo);
 
-            $locations = $this->locationService->loadLocations($formData->contentDraft->contentInfo);
-
-            foreach ($locations as $location) {
-                $parentLocationsId[] = $location->parentLocationId;
+                foreach ($locations as $location) {
+                    $parentLocationsId[] = $location->parentLocationId;
+                }
             }
         }
 
