@@ -67,7 +67,7 @@ class MetaNameSchema extends NameSchemaService
     /**
      * @var FieldTypeRegistry
      */
-    protected $fieldTypeRegistry;
+    protected FieldTypeRegistry $fieldTypeRegistry;
 
     /**
      * @var RelationListType
