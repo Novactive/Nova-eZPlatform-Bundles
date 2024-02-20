@@ -40,9 +40,11 @@ class PlaceholderFilterLoader implements LoaderInterface
             }
         }
 
-        if ($origWidth > $width || $origHeight > $height) {
-            $filter = new Thumbnail(new Box($width, $height), ImageInterface::THUMBNAIL_OUTBOUND);
-            $image = $filter->apply($image);
+        if ($width && $height) {
+            if ($origWidth > $width || $origHeight > $height) {
+                $filter = new Thumbnail(new Box($width, $height), ImageInterface::THUMBNAIL_OUTBOUND);
+                $image = $filter->apply($image);
+            }
         }
 
         $image->strip();
