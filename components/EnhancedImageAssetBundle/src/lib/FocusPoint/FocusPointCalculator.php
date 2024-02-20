@@ -101,6 +101,10 @@ class FocusPointCalculator
         $width = $options['size'][0] ?? null;
         $height = $options['size'][1] ?? null;
 
+        if (!$width && !$height) {
+            return null;
+        }
+
         $origWidth = $imageSize->getWidth();
         $origHeight = $imageSize->getHeight();
 
