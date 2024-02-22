@@ -18,8 +18,10 @@ use Ibexa\Contracts\Core\Repository\PermissionResolver;
 use Ibexa\Core\MVC\Symfony\Event\PreContentViewEvent;
 use Ibexa\Core\MVC\Symfony\View\ContentView;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
+use Novactive\Bundle\eZProtectedContentBundle\Form\RequestEmailProtectedAccessType;
 use Novactive\Bundle\eZProtectedContentBundle\Form\RequestProtectedAccessType;
 use Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedAccessRepository;
+use Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedTokenStorageRepository;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -36,6 +38,11 @@ class PreContentView
     private $protectedAccessRepository;
 
     /**
+     * @var ProtectedAccessRepository
+     */
+    private $protectedTokenStorageRepository;
+
+    /**
      * @var FormFactoryInterface
      */
     private $formFactory;
@@ -48,11 +55,13 @@ class PreContentView
     public function __construct(
         PermissionResolver $permissionResolver,
         ProtectedAccessRepository $protectedAccessRepository,
+        ProtectedTokenStorageRepository $protectedTokenStorageRepository,
         FormFactoryInterface $factory,
         RequestStack $requestStack
     ) {
         $this->permissionResolver = $permissionResolver;
         $this->protectedAccessRepository = $protectedAccessRepository;
+        $this->protectedTokenStorageRepository = $protectedTokenStorageRepository;
         $this->formFactory = $factory;
         $this->requestStack = $requestStack;
     }
@@ -87,18 +96,37 @@ class PreContentView
         $canRead = $this->permissionResolver->canUser('private_content', 'read', $content);
 
         if (!$canRead) {
-            $cookies = $this->requestStack->getCurrentRequest()->cookies;
-            foreach ($cookies as $name => $value) {
-                if (PasswordProvided::COOKIE_PREFIX !== substr($name, 0, \strlen(PasswordProvided::COOKIE_PREFIX))) {
-                    continue;
+            $request = $this->requestStack->getCurrentRequest();
+
+            if (
+                $request->query->has('mail')
+                && $request->query->has('token')
+                && !$request->query->has('waiting_validation')
+            ) {
+                $unexpiredToken = $this->protectedTokenStorageRepository->findUnexpiredBy([
+                    'content_id' => $content->id,
+                    'token' => $request->get('token'),
+                    'mail' => $request->get('mail'),
+                ]);
+
+                if (count($unexpiredToken) > 0) {
+                    $canRead = true;
                 }
-                if (str_replace(PasswordProvided::COOKIE_PREFIX, '', $name) !== $value) {
-                    continue;
-                }
-                foreach ($protections as $protection) {
-                    /** @var ProtectedAccess $protection */
-                    if (md5($protection->getPassword()) === $value) {
-                        $canRead = true;
+            } else {
+                $cookies = $this->requestStack->getCurrentRequest()->cookies;
+                foreach ($cookies as $name => $value) {
+                    $cookiePrefix = substr($name, 0, \strlen(PasswordProvided::COOKIE_PREFIX));
+                    if (PasswordProvided::COOKIE_PREFIX !== $cookiePrefix) {
+                        continue;
+                    }
+                    if (str_replace(PasswordProvided::COOKIE_PREFIX, '', $name) !== $value) {
+                        continue;
+                    }
+                    foreach ($protections as $protection) {
+                        /** @var ProtectedAccess $protection */
+                        if (md5($protection->getPassword()) === $value) {
+                            $canRead = true;
+                        }
                     }
                 }
             }
@@ -106,8 +134,25 @@ class PreContentView
         $contentView->addParameters(['canReadProtectedContent' => $canRead]);
 
         if (!$canRead) {
-            $form = $this->formFactory->create(RequestProtectedAccessType::class);
-            $contentView->addParameters(['requestProtectedContentPasswordForm' => $form->createView()]);
+            if ('by_mail' == $this->getContentProtectionType($protections)) {
+                $form = $this->formFactory->create(RequestEmailProtectedAccessType::class);
+                $contentView->addParameters(['requestProtectedContentEmailForm' => $form->createView()]);
+            } else {
+                $form = $this->formFactory->create(RequestProtectedAccessType::class);
+                $contentView->addParameters(['requestProtectedContentPasswordForm' => $form->createView()]);
+            }
         }
+    }
+
+    private function getContentProtectionType(array $protections): string
+    {
+        foreach ($protections as $protection) {
+            /** @var ProtectedAccess $protection */
+            if (!is_null($protection->getPassword()) && '' != $protection->getPassword()) {
+                return 'by_password';
+            }
+        }
+
+        return 'by_mail';
     }
 }
