@@ -5,10 +5,18 @@ parameters:
     env(SAML_IDENTITY_PROVIDER_LOGOUT_URL): ~
     env(SAML_IDENTITY_PROVIDER_LOGOUT_BINDING): ~
     env(SAML_IDENTITY_PROVIDER_X509_CERT): ~
+    env(SAML_IDENTITY_PROVIDER_EMAIL_ATTRIBUTE): ~
 
     env(SAML_SERVICE_PROVIDER_URL): ~
     env(SAML_SERVICE_PROVIDER_NAMEID_FORMAT): ~
 
     env(SAML_SERVICE_PROVIDER_USER_GROUP_ID): ~
 
+    saml.identity.provider.email.attribute: '%env(resolve:SAML_IDENTITY_PROVIDER_EMAIL_ATTRIBUTE)%'
+
+    # Content Id or Remote Content Id of the user group where new users will be created
     almaviacx.saml.config.default.user_group_id: '%env(resolve:SAML_SERVICE_PROVIDER_USER_GROUP_ID)%'
+
+    # Map user content type fields to the saml response attributes
+    almaviacx.saml.config.default.user_attributes_mapping: ~
+
