@@ -27,5 +27,10 @@
       "AlmaviaCX\\Bundle\\IbexaSaml\\": "src/lib"
     }
   },
-  "extra": {}
+  "extra": {
+    "thanks": {
+      "name": "hslavich/oneloginsaml-bundle",
+      "url": "https://github.com/hslavich/OneloginSamlBundle"
+    }
+  }
 }

@@ -1,5 +1,6 @@
 <?php
-declare( strict_types=1 );
+
+declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaSaml\Security\Saml;
 
@@ -10,7 +11,6 @@ use Throwable;
 
 class SamlExceptionLogger
 {
-    /** @var LoggerInterface */
     protected LoggerInterface $logger;
 
     /**
@@ -26,7 +26,7 @@ class SamlExceptionLogger
      *
      * @param Exception $exception The \Exception instance
      */
-    public function logException( Throwable $exception): void
+    public function logException(Throwable $exception): void
     {
         if (null !== $this->logger) {
             $message = sprintf(
@@ -36,7 +36,7 @@ class SamlExceptionLogger
                 $exception->getFile(),
                 $exception->getLine()
             );
-            if ( $exception instanceof SamlException) {
+            if ($exception instanceof SamlException) {
                 $this->logger->warning($message, ['exception' => $exception]);
             } elseif (!$exception instanceof HttpExceptionInterface || $exception->getStatusCode() >= 500) {
                 $this->logger->critical($message, ['exception' => $exception]);
@@ -50,6 +50,7 @@ class SamlExceptionLogger
     {
         $this->logger->info($message);
     }
+
     public function logError(string $message): void
     {
         $this->logger->error($message);
