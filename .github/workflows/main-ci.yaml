@@ -42,11 +42,16 @@ jobs:
                 options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
         strategy:
             matrix:
-                php: [ 7.4, 8.1 ]
                 include:
                     -   ibexa_version: 4.*
+                        php: 8.1
+                        node: 18.x
+                    -   ibexa_version: 4.5.*
+                        php: 8.1
+                        node: 14.x
                     -   ibexa_version: 4.3.0
                         php: 7.4
+                        node: 14.x
         env:
             CACHE_POOL: cache.redis
             DATABASE_URL: mysql://root@127.0.0.1:3306/ezplatform_test
@@ -61,9 +66,8 @@ jobs:
 
             -   uses: volta-cli/action@v4
                 with:
-                    node-version: 14.18
-                    yarn-version: 1.22
-
+                    node-version: ${{ matrix.node }}
+                    yarn-version: 1.x
             -   name: Check JS Version
                 run: |
                     node --version

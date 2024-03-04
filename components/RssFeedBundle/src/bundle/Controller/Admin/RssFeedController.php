@@ -23,7 +23,6 @@ use Novactive\EzRssFeedBundle\Entity\RssFeeds;
 use Novactive\EzRssFeedBundle\Form\RssFeedsType;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;

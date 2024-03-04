@@ -69,13 +69,13 @@ class MaintenanceSubscriber implements EventSubscriberInterface, SiteAccessAware
 
     private function isAdminPreview(RequestEvent $event): bool
     {
-        //paramaters initial request admin preview
+        // paramaters initial request admin preview
         $params = $event->getRequest()->attributes->has('params') ?
             $event->getRequest()->attributes->get('params') : false;
-        //parameters sub request admin preview
+        // parameters sub request admin preview
         $isPreview = $event->getRequest()->attributes->has('isPreview') ?
             $event->getRequest()->attributes->get('isPreview') : false;
-        //route render
+        // route render
         $route = $event->getRequest()->attributes->has('_route') ?
             $event->getRequest()->attributes->get('_route') : false;
 
