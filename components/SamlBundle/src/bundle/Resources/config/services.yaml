@@ -17,7 +17,7 @@ services:
             $repository: '@ibexa.api.repository'
             $logger: '@AlmaviaCX\Bundle\IbexaSaml\Security\Saml\SamlExceptionLogger'
             $notificationHandler: '@Ibexa\Contracts\AdminUi\Notification\TranslatableNotificationHandlerInterface'
-            $emailAttribute: '%saml.identity.provider.email.attribute%'
+            $emailAttribute: '%almaviacx.saml.identity.provider.email.attribute%'
 
 
     almaviacx.saml.user_factory: '@AlmaviaCX\Bundle\IbexaSaml\Security\Saml\SamlUserFactory'
@@ -27,6 +27,8 @@ services:
         arguments:
             $permissionResolver: '@Ibexa\Contracts\Core\Repository\PermissionService'
             $baseProvider: '@AlmaviaCX\Bundle\IbexaSaml\Security\Saml\SamlUserProvider.inner'
+            $userService: '@ibexa.api.service.user'
+            $configResolver: '@ibexa.config.resolver'
 
     # override to make it lazy
     OneLogin\Saml2\Auth:

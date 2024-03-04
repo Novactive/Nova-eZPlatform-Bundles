@@ -12,7 +12,11 @@ parameters:
 
     env(SAML_SERVICE_PROVIDER_USER_GROUP_ID): ~
 
-    saml.identity.provider.email.attribute: '%env(resolve:SAML_IDENTITY_PROVIDER_EMAIL_ATTRIBUTE)%'
+
+    almaviacx.saml.identity.provider.email.attribute: '%env(resolve:SAML_IDENTITY_PROVIDER_EMAIL_ATTRIBUTE)%'
+
+    # Method used to load existing users
+    almaviacx.saml.config.default.user_load_method: !php/const AlmaviaCX\Bundle\IbexaSaml\Security\Saml\SamlUserProvider::LOAD_METHOD_LOGIN
 
     # Content Id or Remote Content Id of the user group where new users will be created
     almaviacx.saml.config.default.user_group_id: '%env(resolve:SAML_SERVICE_PROVIDER_USER_GROUP_ID)%'

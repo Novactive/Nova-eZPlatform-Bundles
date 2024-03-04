@@ -46,6 +46,9 @@ SAML_SERVICE_PROVIDER_USER_GROUP_ID=sdf1sd61868sd1fdsvc
 
 The following parameters are also available to tweak the behavior
 ```yaml
+# Method used to load existing users 
+almaviacx.saml.config.default.user_load_method: !php/const AlmaviaCX\Bundle\IbexaSaml\Security\Saml\SamlUserProvider::LOAD_METHOD_LOGIN
+
 # Content Id or Remote Content Id of the user group where new users will be created
 almaviacx.saml.config.default.user_group_id: '%env(resolve:SAML_SERVICE_PROVIDER_USER_GROUP_ID)%'
 
@@ -54,5 +57,3 @@ almaviacx.saml.config.default.user_attributes_mapping:
     first_name: http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name
     last_name: http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name
 ```
-
-## 
