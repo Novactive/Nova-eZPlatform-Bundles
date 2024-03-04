@@ -180,7 +180,7 @@ class ContentMenuItemType extends DefaultMenuItemType
             'extras' => [
                 'contentId' => $location->contentId,
                 'locationId' => $location->id,
-                'remoteId' => $location->remoteId
+                'locationRemoteId' => $location->remoteId
             ],
         ];
 
