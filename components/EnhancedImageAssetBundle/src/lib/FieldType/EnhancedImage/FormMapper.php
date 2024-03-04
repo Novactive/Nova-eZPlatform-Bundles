@@ -14,25 +14,72 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage;
 
-use Ibexa\AdminUi\FieldType\Mapper\ImageFormMapper;
+use Ibexa\AdminUi\Form\Data\FieldDefinitionData;
+use Ibexa\ContentForms\ConfigResolver\MaxUploadSize;
 use Ibexa\Contracts\ContentForms\Data\Content\FieldData;
 use Ibexa\Contracts\ContentForms\FieldType\FieldValueFormMapperInterface;
 use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
 use Ibexa\Contracts\Core\Repository\FieldTypeService;
 use Novactive\EzEnhancedImageAsset\Form\Type\FieldType\EnhancedImageFieldType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Range;
 
-class FormMapper extends ImageFormMapper implements FieldValueFormMapperInterface
+class FormMapper implements FieldValueFormMapperInterface
 {
     /** @var FieldTypeService */
     private $fieldTypeService;
 
-    /**
-     * @required
-     */
-    public function setFieldTypeService(FieldTypeService $fieldTypeService): void
+    /** @var \Ibexa\ContentForms\ConfigResolver\MaxUploadSize */
+    private $maxUploadSize;
+
+    public function __construct(FieldTypeService $fieldTypeService, MaxUploadSize $maxUploadSize)
     {
         $this->fieldTypeService = $fieldTypeService;
+        $this->maxUploadSize = $maxUploadSize;
+    }
+
+    public function mapFieldDefinitionForm(FormInterface $fieldDefinitionForm, FieldDefinitionData $data): void
+    {
+        $isTranslation = $data->contentTypeData->languageCode !== $data->contentTypeData->mainLanguageCode;
+        $fieldDefinitionForm
+            ->add('maxSize', IntegerType::class, [
+                'required' => false,
+                'property_path' => 'validatorConfiguration[FileSizeValidator][maxFileSize]',
+                'label' => /* @Desc("Maximum file size (MB)") */ 'field_definition.ezimage.max_file_size',
+                'constraints' => [
+                    new Range([
+                                  'min' => 0,
+                                  'max' => $this->maxUploadSize->get(MaxUploadSize::MEGABYTES),
+                              ]),
+                ],
+                'attr' => [
+                    'min' => 0,
+                    'max' => $this->maxUploadSize->get(MaxUploadSize::MEGABYTES),
+                ],
+                'disabled' => $isTranslation,
+            ])
+            ->add('isAlternativeTextRequired', CheckboxType::class, [
+                'required' => false,
+                'property_path' => 'validatorConfiguration[AlternativeTextValidator][required]',
+                'label' => 'field_definition.ezimage.is_alternative_text_required',
+                'disabled' => $isTranslation,
+            ]);
+    }
+
+    /**
+     * Fake method to set the translation domain for the extractor.
+     *
+     * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver
+            ->setDefaults([
+                              'translation_domain' => 'content_type',
+                          ]);
     }
 
     /**
