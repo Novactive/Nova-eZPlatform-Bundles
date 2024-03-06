@@ -11,7 +11,6 @@ use Ibexa\Contracts\Core\Repository\Values\User\User as APIUser;
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Ibexa\Core\MVC\Symfony\Security\User;
 use Ibexa\Core\MVC\Symfony\Security\User\BaseProvider;
-use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class SamlUserProvider implements UserProviderInterface
@@ -68,7 +67,7 @@ class SamlUserProvider implements UserProviderInterface
                 $this->userService->{$loadMethod}($identifier)
             );
         } catch (NotFoundException $e) {
-            throw new UserNotFoundException($e->getMessage(), 0, $e);
+            return $this->baseProvider->loadUserByUsername($identifier);
         }
     }
 
