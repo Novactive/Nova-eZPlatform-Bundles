@@ -63,10 +63,10 @@ class SamlUserFactory implements SamlUserFactoryInterface
                     $userService = $this->repository->getUserService();
 
                     $userGroupId = $this->configResolver->getParameter('user_group_id', 'almaviacx.saml.config');
-                    if (is_string($userGroupId)) {
-                        $userGroup = $userService->loadUserGroupByRemoteId($userGroupId);
+                    if (is_numeric($userGroupId)) {
+                        $userGroup = $userService->loadUserGroup((int) $userGroupId);
                     } else {
-                        $userGroup = $userService->loadUserGroup($userGroupId);
+                        $userGroup = $userService->loadUserGroupByRemoteId($userGroupId);
                     }
 
                     $mainLanguageCode = $this->getMainLanguage();
