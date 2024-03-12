@@ -6,4 +6,4 @@ services:
 
     Novactive\EzMenuManager\FieldType\MenuItem\SearchField:
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: menuitem}
+            - {name: ibexa.field_type.indexable, alias: menuitem}

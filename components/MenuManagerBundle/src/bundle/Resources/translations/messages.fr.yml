@@ -1,1 +1,6 @@
 menu_manager: Gestion des menus
+menu:
+  action:
+    create: Créer
+    delete: Supprimer
+    confirm_delete: Êtes vous sûr de vouloir effectuer cette action

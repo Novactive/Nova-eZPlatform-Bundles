@@ -12,10 +12,10 @@
 
 namespace Novactive\EzMenuManager\FieldType\Mapper;
 
-use EzSystems\EzPlatformAdminUi\FieldType\FieldDefinitionFormMapperInterface;
-use EzSystems\EzPlatformAdminUi\Form\Data\FieldDefinitionData;
-use EzSystems\EzPlatformContentForms\Data\Content\FieldData;
-use EzSystems\EzPlatformContentForms\FieldType\FieldValueFormMapperInterface;
+use Ibexa\AdminUi\FieldType\FieldDefinitionFormMapperInterface;
+use Ibexa\AdminUi\Form\Data\FieldDefinitionData;
+use Ibexa\Contracts\ContentForms\Data\Content\FieldData;
+use Ibexa\Contracts\ContentForms\FieldType\FieldValueFormMapperInterface;
 use Novactive\EzMenuManager\Form\Type\FieldType\MenuItemFieldType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -26,7 +26,7 @@ class MenuItemFormMapper implements FieldDefinitionFormMapperInterface, FieldVal
     {
     }
 
-    public function mapFieldValueForm(FormInterface $fieldForm, FieldData $data)
+    public function mapFieldValueForm(FormInterface $fieldForm, FieldData $data): void
     {
         $fieldDefinition = $data->fieldDefinition;
         $formConfig = $fieldForm->getConfig();
@@ -50,7 +50,7 @@ class MenuItemFormMapper implements FieldDefinitionFormMapperInterface, FieldVal
             );
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
             ->setDefaults(

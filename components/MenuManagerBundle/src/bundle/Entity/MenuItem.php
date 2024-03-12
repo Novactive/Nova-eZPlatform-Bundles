@@ -65,7 +65,6 @@ class MenuItem
      *     targetEntity="Novactive\EzMenuManagerBundle\Entity\MenuItem",
      *     mappedBy="parent",
      *     cascade={"persist","remove"},
-     *     fetch="EAGER",
      *     orphanRemoval=true
      *     )
      * @ORM\OrderBy({"position" = "ASC"})
@@ -296,7 +295,7 @@ class MenuItem
         return (string) $this->id;
     }
 
-    public function update(array $properties)
+    public function update(array $properties): void
     {
         foreach ($properties as $property => $value) {
             $this->$property = $value;

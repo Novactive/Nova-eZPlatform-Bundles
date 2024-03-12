@@ -1,38 +1,44 @@
-{% extends "@ezdesign/ui/layout.html.twig" %}
+{% extends "@ibexadesign/ui/layout.html.twig" %}
 
-{% form_theme form '@ezdesign/menu_manager/admin/form_fields.html.twig' %}
+{% form_theme form '@ibexadesign/menu_manager/admin/form_fields.html.twig' %}
 
 {% block title %}{{ title|trans([], 'menu_manager') }}{% endblock %}
 
 {%- block breadcrumbs -%}
-    {% include '@ezdesign/ui/breadcrumbs.html.twig' with { items: [
+    {% include '@ibexadesign/ui/breadcrumbs.html.twig' with { items: [
+        { value: 'breadcrumb.admin'|trans(domain='messages')|desc('Admin') },
         { url: path('menu_manager.menu_list'), value: 'menu.list'|trans([], 'menu_manager') },
         { value: title|trans([], 'menu_manager') }
     ]} %}
 {%- endblock -%}
 
 {%- block page_title -%}
-    {% include '@ezdesign/ui/page_title.html.twig' with {
+    {% include '@ibexadesign/ui/page_title.html.twig' with {
         title: title|trans([], 'menu_manager'),
         iconName: 'list'
     } %}
 {%- endblock -%}
 
 {%- block content -%}
-    <section class="container my-4">
+    <section class="ibexa-container">
         {{ form_start(form, {'attr': {'class': 'menu-edit-form'}}) }}
             {{ form_row(form.name) }}
             {{ form_row(form.rootLocationId) }}
             {% if form.type is defined %}{{ form_row(form.type) }}{% endif %}
             {{ form_row(form.items) }}
-        <div class="mt-3">
-            <button class="btn btn-primary pull-right" type="submit">{{ 'menu.edit_form.save'|trans([], 'menu_manager') }}</button>
-            <a href="{{ lastUrl }}" class="btn btn-secondary">{{ 'menu.edit_form.back'|trans([], 'menu_manager') }}</a>
-        </div>
+            {{ form_widget(form.submit, {'id': 'menu_item_edit_edit', 'attr': {'hidden': 'hidden'}}) }}
         {{ form_end(form) }}
     </section>
 {%- endblock -%}
 
+{% block header %}
+    {% set menu_manager_item_edit_sidebar_right = knp_menu_get('ibexa_admin_ui.menu_configure.menu_manager_item_edit_sidebar_right') %}
+    {{ knp_menu_render(menu_manager_item_edit_sidebar_right, {
+        'template': '@ibexadesign/ui/menu/context_menu.html.twig',
+        'primary_item_class': 'ibexa-btn--filled-info'
+    }) }}
+{% endblock %}
+
 {% block javascripts %}
-    {{ encore_entry_script_tags('ezplatform-admin-ui-modules-menu-manager-js', null, 'ezplatform') }}
+    {{ encore_entry_script_tags('ibexa-admin-ui-modules-menu-manager-js', null, 'ibexa') }}
 {% endblock %}

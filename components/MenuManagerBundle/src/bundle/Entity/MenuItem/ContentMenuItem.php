@@ -36,7 +36,7 @@ class ContentMenuItem extends MenuItem
     /**
      * @param int $contentId
      */
-    public function setContentId($contentId): void
+    public function setContentId(int $contentId): void
     {
         if (!$contentId) {
             $this->setUrl(null);

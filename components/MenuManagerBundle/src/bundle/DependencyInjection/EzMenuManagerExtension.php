@@ -63,13 +63,13 @@ class EzMenuManagerExtension extends Extension implements PrependExtensionInterf
         );
 
         $configs = [
-            'field_templates.yml' => 'ezpublish',
-            'field_templates_ui.yml' => 'ezpublish',
+            'field_templates.yml' => 'ibexa',
+            'field_templates_ui.yml' => 'ibexa',
         ];
 
         $activatedBundles = array_keys($container->getParameter('kernel.bundles'));
 
-        if (in_array('EzPlatformAdminUiBundle', $activatedBundles, true)) {
+        if (in_array('IbexaAdminUiBundle', $activatedBundles, true)) {
             $configs['ezadminui/twig.yml'] = 'twig';
         }
 

@@ -83,27 +83,19 @@ if( !empty( $bundleComposerJson['require-dev']) ) {
     $data['require-dev'] = ($data['require-dev'] ?? []) +  $bundleComposerJson['require-dev'];
 }
 
+
+
+/**
+ * Trick Yarn/NPM
+ * do yarn install inside the component folder
+ */
+$bundlePackageJsonPath = "{$componentDir}/package.json";
+if(file_exists($bundlePackageJsonPath)) {
+    $data["scripts"]['auto-scripts'] = ["yarn install --cwd ../components/{$_SERVER['COMPONENT']}" => "script"] + $data["scripts"]['auto-scripts'];
+}
+
 // write the composer.json
 file_put_contents(
     $composerJsonPath,
     json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
 );
-
-/**
- * Trick Yarn/NPM
- */
-
-$bundlePackageJsonPath = "{$componentDir}/package.json";
-if(file_exists($bundlePackageJsonPath)) {
-    $packageJsonPath = "{$appRootDir}/package.json";
-    $data = json_decode(file_get_contents($packageJsonPath), true);
-    $bundlePackageJson = json_decode(file_get_contents($bundlePackageJsonPath), true);
-
-    $data['devDependencies'] += $bundlePackageJson['dependencies'] ?? [];
-
-    // write the composer.json
-    file_put_contents(
-        $packageJsonPath,
-        json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
-    );
-}

@@ -12,19 +12,19 @@
 
 namespace Novactive\EzMenuManager\Form\Type;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MenuType extends AbstractType
 {
-    /** @var ConfigResolverInterface */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
     /**
      * @required
@@ -34,7 +34,7 @@ class MenuType extends AbstractType
         $this->configResolver = $configResolver;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
             ->setDefaults(
@@ -44,7 +44,7 @@ class MenuType extends AbstractType
             );
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $menuTypes = $this->configResolver->getParameter('menu_types', 'nova_menu_manager') ?? [];
         $builder
@@ -96,5 +96,6 @@ class MenuType extends AbstractType
                     ]
                 );
         }
+        $builder->add('submit', SubmitType::class);
     }
 }

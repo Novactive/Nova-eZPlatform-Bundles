@@ -15,12 +15,12 @@ declare(strict_types=1);
 namespace Novactive\EzMenuManager\EventListener;
 
 use Doctrine\DBAL\Connection;
-use eZ\Publish\API\Repository\Events\Section\AssignSectionToSubtreeEvent;
-use eZ\Publish\SPI\Persistence\Content\Location\Handler;
+use Ibexa\Contracts\Core\Persistence\Content\Location\Handler;
+use Ibexa\Contracts\Core\Repository\Events\Section\AssignSectionToSubtreeEvent;
 use PDO;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class AssignSectionToSubtreeSignalSlot implements EventSubscriberInterface
+class AssignSectionToSubtreeListener implements EventSubscriberInterface
 {
     use CachePurgerTrait;
 

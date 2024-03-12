@@ -12,7 +12,7 @@
 
 namespace Novactive\EzMenuManager\MenuItem\Type;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Novactive\EzMenuManager\MenuItem\AbstractMenuItemType;
 use Novactive\EzMenuManager\MenuItem\MenuItemValue;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
