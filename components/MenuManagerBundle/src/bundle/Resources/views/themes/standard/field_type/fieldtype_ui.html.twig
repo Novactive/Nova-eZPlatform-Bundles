@@ -12,7 +12,7 @@
                         {% set breadcrumb = ezmenumanager_breadcrumb(menuItem) %}
                         <li>
                             {% for item in breadcrumb %}
-                                <a href="{{ item.uri }}">{{ item.label }}</a>{% if not loop.last %} /{% endif %}
+                                <a href="{{ item ? item.uri : ''}}">{{ item ? item.label : ''}}</a>{% if not loop.last %} /{% endif %}
                             {% endfor %}
                         </li>
                     {% endfor %}
