@@ -1,0 +1,9 @@
+system:
+    admin_group:
+        fieldtypes:
+            ezrichtext:
+                toolbar:
+                    group5:
+                        buttons:
+                            ibexaUploadFile:
+                                priority: 25

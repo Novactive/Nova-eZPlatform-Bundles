@@ -1,0 +1,13 @@
+services:
+    _defaults:
+        autoconfigure: true
+        autowire: true
+
+    AlmaviaCX\Bundle\IbexaRichTextExtraBundle\Controller\UploadFileController:
+        public: true
+
+    AlmaviaCX\Bundle\IbexaRichTextExtra\FieldType\BinaryFile\Mapper:
+
+    AlmaviaCX\Bundle\IbexaRichTextExtra\UI\Config\Provider\UploadFileConfiguration:
+        tags:
+            - { name: ibexa.admin_ui.config.provider, key: 'fileUpload' }

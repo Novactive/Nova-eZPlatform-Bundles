@@ -1,0 +1,8 @@
+content_edit:
+    label: Edit content
+image_edit:
+    label: Edit image
+upload_file_btn:
+    label: Upload file
+    message:
+        error: "Error while creating file: %error%"

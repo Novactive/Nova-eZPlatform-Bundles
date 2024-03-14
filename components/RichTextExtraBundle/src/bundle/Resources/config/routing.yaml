@@ -1,0 +1,7 @@
+almaviacx.upload_file:
+    path: /asset/file
+    options:
+        expose: true
+    defaults:
+        _controller: 'AlmaviaCX\Bundle\IbexaRichTextExtraBundle\Controller\UploadFileController::uploadBinaryFileAction'
+    methods: [POST]

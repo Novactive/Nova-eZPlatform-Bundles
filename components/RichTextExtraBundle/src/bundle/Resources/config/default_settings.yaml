@@ -1,0 +1,16 @@
+parameters:
+    # Binary files mappings
+    ibexa.site_access.config.default.fieldtypes.binaryfile.mappings:
+        content_type_identifier: file
+        content_field_identifier: file
+        name_field_identifier: name
+        parent_location_id: 52
+        mime_types:
+            - image/svg+xml
+            - application/msword
+            - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+            - application/vnd.ms-excel
+            - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+            - application/vnd.ms-powerpoint
+            - application/vnd.openxmlformats-officedocument.presentationml.presentation
+            - application/pdf
