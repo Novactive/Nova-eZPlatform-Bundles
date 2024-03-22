@@ -18,6 +18,7 @@ services:
             $logger: '@AlmaviaCX\Bundle\IbexaSaml\Security\Saml\SamlExceptionLogger'
             $notificationHandler: '@Ibexa\Contracts\AdminUi\Notification\TranslatableNotificationHandlerInterface'
             $emailAttribute: '%almaviacx.saml.identity.provider.email.attribute%'
+            $loginAttribute: '%almaviacx.saml.identity.provider.login.attribute%'
 
 
     almaviacx.saml.user_factory: '@AlmaviaCX\Bundle\IbexaSaml\Security\Saml\SamlUserFactory'

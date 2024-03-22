@@ -6,6 +6,7 @@ parameters:
     env(SAML_IDENTITY_PROVIDER_LOGOUT_BINDING): ~
     env(SAML_IDENTITY_PROVIDER_X509_CERT): ~
     env(SAML_IDENTITY_PROVIDER_EMAIL_ATTRIBUTE): ~
+    env(SAML_IDENTITY_PROVIDER_LOGIN_ATTRIBUTE): ~
 
     env(SAML_SERVICE_PROVIDER_URL): ~
     env(SAML_SERVICE_PROVIDER_NAMEID_FORMAT): ~
@@ -14,6 +15,7 @@ parameters:
 
 
     almaviacx.saml.identity.provider.email.attribute: '%env(resolve:SAML_IDENTITY_PROVIDER_EMAIL_ATTRIBUTE)%'
+    almaviacx.saml.identity.provider.login.attribute: '%env(resolve:SAML_IDENTITY_PROVIDER_LOGIN_ATTRIBUTE)%'
 
     # Method used to load existing users
     almaviacx.saml.config.default.user_load_method: !php/const AlmaviaCX\Bundle\IbexaSaml\Security\Saml\SamlUserProvider::LOAD_METHOD_LOGIN
