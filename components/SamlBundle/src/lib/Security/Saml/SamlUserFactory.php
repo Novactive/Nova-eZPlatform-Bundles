@@ -23,6 +23,7 @@ class SamlUserFactory implements SamlUserFactoryInterface
     protected SamlExceptionLogger $logger;
     protected TranslatableNotificationHandlerInterface $notificationHandler;
     protected string $emailAttribute;
+    protected string $loginAttribute;
 
     /**
      * @param \AlmaviaCX\Bundle\IbexaSaml\Security\Saml\SamlExceptionLogger $logger
@@ -32,13 +33,15 @@ class SamlUserFactory implements SamlUserFactoryInterface
         Repository $repository,
         SamlExceptionLogger $logger,
         TranslatableNotificationHandlerInterface $notificationHandler,
-        string $emailAttribute
+        string $emailAttribute,
+        string $loginAttribute
     ) {
         $this->configResolver = $configResolver;
         $this->repository = $repository;
         $this->logger = $logger;
         $this->notificationHandler = $notificationHandler;
         $this->emailAttribute = $emailAttribute;
+        $this->loginAttribute = $loginAttribute;
     }
 
     /**
@@ -54,7 +57,7 @@ class SamlUserFactory implements SamlUserFactoryInterface
                 SamlTokenInterface::class
             );
 
-            [ $username, $attributes ] = [$username->getUserIdentifier(), $username->getAttributes()];
+            [$username, $attributes] = [$username->getUserIdentifier(), $username->getAttributes()];
         }
 
         return $this->repository->sudo(
@@ -71,8 +74,11 @@ class SamlUserFactory implements SamlUserFactoryInterface
 
                     $mainLanguageCode = $this->getMainLanguage();
                     $emailAddress = $this->getAttributeValue($attributes, $this->emailAttribute);
+                    $login = $this->loginAttribute ?
+                        $this->getAttributeValue($attributes, $this->loginAttribute) :
+                        $username;
                     $newUserCreateStruct = $userService->newUserCreateStruct(
-                        $username,
+                        $login,
                         $emailAddress,
                         $this->generateRandomPassword(),
                         $mainLanguageCode
@@ -104,7 +110,7 @@ class SamlUserFactory implements SamlUserFactoryInterface
                     $this->notificationHandler->success(
                         sprintf(
                             'Votre Compte BO avec Login: "%s" et Email: "%s " est bien créé dans le Group "%s".',
-                            $username,
+                            $login,
                             $emailAddress,
                             $userGroup->contentInfo->name
                         )
@@ -122,7 +128,7 @@ class SamlUserFactory implements SamlUserFactoryInterface
                     $this->notificationHandler->error($exception->getMessage());
                 }
 
-                $ex = new UserNotFoundException(sprintf('There is no user with identifier "%s".', $username));
+                $ex = new UserNotFoundException(sprintf('There is no user with identifier "%s".', $login));
                 $ex->setUserIdentifier($username);
                 throw $ex;
             }
