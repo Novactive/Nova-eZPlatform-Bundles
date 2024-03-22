@@ -128,7 +128,7 @@ class SamlUserFactory implements SamlUserFactoryInterface
                     $this->notificationHandler->error($exception->getMessage());
                 }
 
-                $ex = new UserNotFoundException(sprintf('There is no user with identifier "%s".', $login));
+                $ex = new UserNotFoundException(sprintf('There is no user with identifier "%s".', $username));
                 $ex->setUserIdentifier($username);
                 throw $ex;
             }
