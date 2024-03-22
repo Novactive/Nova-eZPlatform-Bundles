@@ -1,0 +1,37 @@
+services:
+
+    AlmaviaCX\Bundle\IbexaSaml\Security\Saml\SamlExceptionLogger:
+        arguments:
+            - '@monolog.logger.saml'
+
+    almaviacx.saml.components.saml_login:
+        parent: Ibexa\AdminUi\Component\TwigComponent
+        arguments:
+            $template: '@@ibexadesign/account/login/saml_login.html.twig'
+        tags:
+            - { name: ibexa.admin_ui.component, group: login-form-before }
+
+    AlmaviaCX\Bundle\IbexaSaml\Security\Saml\SamlUserFactory:
+        arguments:
+            $configResolver: '@ibexa.config.resolver'
+            $repository: '@ibexa.api.repository'
+            $logger: '@AlmaviaCX\Bundle\IbexaSaml\Security\Saml\SamlExceptionLogger'
+            $notificationHandler: '@Ibexa\Contracts\AdminUi\Notification\TranslatableNotificationHandlerInterface'
+            $emailAttribute: '%almaviacx.saml.identity.provider.email.attribute%'
+            $loginAttribute: '%almaviacx.saml.identity.provider.login.attribute%'
+
+
+    almaviacx.saml.user_factory: '@AlmaviaCX\Bundle\IbexaSaml\Security\Saml\SamlUserFactory'
+
+    AlmaviaCX\Bundle\IbexaSaml\Security\Saml\SamlUserProvider:
+        decorates: 'ibexa.security.user_provider'
+        arguments:
+            $permissionResolver: '@Ibexa\Contracts\Core\Repository\PermissionService'
+            $baseProvider: '@AlmaviaCX\Bundle\IbexaSaml\Security\Saml\SamlUserProvider.inner'
+            $userService: '@ibexa.api.service.user'
+            $configResolver: '@ibexa.config.resolver'
+
+    # override to make it lazy
+    OneLogin\Saml2\Auth:
+        arguments: [ '%hslavich_onelogin_saml.settings%' ]
+        lazy: true
