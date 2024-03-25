@@ -1,15 +1,5 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
-
 declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Pagination\Pagerfanta;
@@ -39,8 +29,10 @@ class StopwordsAdapter implements AdapterInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
      */
-    public function getNbResults()
+    public function getNbResults(): int
     {
         if (isset($this->nbResults)) {
             return $this->nbResults;
@@ -53,8 +45,10 @@ class StopwordsAdapter implements AdapterInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
      */
-    public function getSlice($offset, $length)
+    public function getSlice($offset, $length): array
     {
         $resuls = $this->stopwordsService->getWords($this->setId, $offset, $length);
         if (!isset($this->nbResults)) {

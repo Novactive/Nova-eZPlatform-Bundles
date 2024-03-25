@@ -1,23 +1,19 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
+declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper;
 
-use eZ\Publish\SPI\Persistence\Content;
-use eZ\Publish\SPI\Persistence\Content\Type as ContentType;
-use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
-use eZ\Publish\SPI\Search\Field;
-use eZ\Publish\SPI\Search\FieldType;
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
+use Ibexa\Contracts\Core\Persistence\Content;
+use Ibexa\Contracts\Core\Persistence\Content\Type as ContentType;
+use Ibexa\Contracts\Core\Persistence\Content\Type\FieldDefinition;
+use Ibexa\Contracts\Core\Search\Field;
+use Ibexa\Contracts\Core\Search\FieldType;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
+use Ibexa\Contracts\Solr\FieldMapper\ContentTranslationFieldMapper;
+use Ibexa\Core\Search\Common\FieldNameGenerator;
+use Ibexa\Core\Search\Common\FieldRegistry;
+use Ibexa\Solr\FieldMapper\BoostFactorProvider;
 
 class CustomFieldMapper extends ContentTranslationFieldMapper
 {
@@ -27,63 +23,66 @@ class CustomFieldMapper extends ContentTranslationFieldMapper
     protected $fieldsConfig = [];
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
+     * @var \Ibexa\Contracts\Core\Persistence\Content\Type\Handler
      */
     protected $contentTypeHandler;
 
     /**
-     * @var \eZ\Publish\Core\Search\Common\FieldRegistry
+     * @var \Ibexa\Core\Search\Common\FieldRegistry
      */
     protected $fieldRegistry;
 
     /**
-     * @var \eZ\Publish\Core\Search\Common\FieldNameGenerator
+     * @var \Ibexa\Core\Search\Common\FieldNameGenerator
      */
     protected $fieldNameGenerator;
 
     /**
-     * @var \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider
+     * @var \Ibexa\Solr\FieldMapper\BoostFactorProvider
      */
     protected $boostFactorProvider;
+
+    /**
+     * @var ConfigResolverInterface
+     */
+    private $configResolver;
 
     /**
      * CustomFulltextFieldMapper constructor.
      */
     public function __construct(
         ContentType\Handler $contentTypeHandler,
-        \eZ\Publish\Core\Search\Common\FieldRegistry $fieldRegistry,
-        \eZ\Publish\Core\Search\Common\FieldNameGenerator $fieldNameGenerator,
-        \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider $boostFactorProvider
+        FieldRegistry $fieldRegistry,
+        FieldNameGenerator $fieldNameGenerator,
+        BoostFactorProvider $boostFactorProvider,
+        ConfigResolverInterface $configResolver
     ) {
         $this->contentTypeHandler = $contentTypeHandler;
         $this->fieldRegistry = $fieldRegistry;
         $this->fieldNameGenerator = $fieldNameGenerator;
         $this->boostFactorProvider = $boostFactorProvider;
+        $this->configResolver = $configResolver;
     }
 
-    public function setFieldsConfig(array $fieldsConfig): void
+    public function setFieldsConfig(string $customFields): void
     {
-        $this->fieldsConfig = $fieldsConfig;
+        $this->fieldsConfig = $this->configResolver->getParameter($customFields, 'nova_solr_extra');
     }
 
     /**
      * @param string $languageCode
-     *
-     * @return bool
      */
-    public function accept(Content $content, $languageCode)
+    public function accept(Content $content, $languageCode): bool
     {
         return !empty($this->fieldsConfig);
     }
 
     /**
-     * @param string $languageCode
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     *
-     * @return array|\eZ\Publish\SPI\Search\Field[]
+     * @return array|\Ibexa\Contracts\Core\Search\Field[]
      */
-    public function mapFields(Content $content, $languageCode)
+    public function mapFields(Content $content, $languageCode): array
     {
         $fields = [];
         $contentType = $this->contentTypeHandler->load(
@@ -153,18 +152,16 @@ class CustomFieldMapper extends ContentTranslationFieldMapper
     /**
      * @param $fieldDefinition
      * @param $contentType
-     *
-     * @return array
      */
-    protected function getFieldNames($fieldDefinition, $contentType)
+    protected function getFieldNames($fieldDefinition, $contentType): array
     {
         $fieldNames = [];
         foreach ($this->fieldsConfig as $fieldName => $fieldIdentifiers) {
             if (
-                \in_array(
+                in_array(
                     $fieldDefinition->identifier,
                     $fieldIdentifiers
-                ) || \in_array(
+                ) || in_array(
                     "{$contentType->identifier}/{$fieldDefinition->identifier}",
                     $fieldIdentifiers
                 )
@@ -179,15 +176,13 @@ class CustomFieldMapper extends ContentTranslationFieldMapper
     /**
      * Return index field type for the given arguments.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     *
-     * @return \eZ\Publish\SPI\Search\FieldType
+     * @param \Ibexa\Contracts\Core\Persistence\Content\Type\FieldDefinition $fieldDefinition
      */
     private function getIndexFieldType(
         ContentType $contentType,
         ContentType\FieldDefinition $fieldDefinition,
         FieldType $fieldType
-    ) {
+    ): FieldType {
         if (!$fieldType instanceof FieldType\TextField) {
             return $fieldType;
         }

@@ -1,14 +1,6 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
+declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\TextExtractor;
 
@@ -45,9 +37,8 @@ class TikaTextExtractor implements TextExtractorInterface
     {
         try {
             $plaintext = $this->tikaClient->getText($fileName);
-            $cleanText = preg_replace('([\x09]+)', ' ', (string) $plaintext);
 
-            return $cleanText;
+            return preg_replace('([\x09]+)', ' ', (string) $plaintext);
         } catch (RuntimeException $e) {
             $errorMsg = $e->getMessage();
             $this->logger->error("Error when converting file $fileName\n$errorMsg");

@@ -43,7 +43,11 @@ composer require novactive/ezsolrsearchextrabundle
 
 ### Register the bundle
 
-Register the bundle in your application's kernel class:
+Then inject the bundle in the `bundles.php` of your application.
+
+```php
+    Novactive\EzSolrSearchExtraBundle\EzSolrSearchExtraBundle::class => [ 'all'=> true ],
+```
 
 ```php
 // app/AppKernel.php
@@ -66,6 +70,24 @@ solr:
     resource: "@EzSolrSearchExtraBundle/Controller/"
     type:     annotation
     prefix:   /
+```
+
+### Multiple date field
+
+Add the following field to your solr schema
+
+```xml
+<dynamicField name="*_mdt" type="date" indexed="true" stored="true" multiValued="true"/>
+```
+
+### Date range and multiple date range field
+
+Add the following field to your solr schema
+
+```xml
+<fieldType name="daterange" class="solr.DateRangeField" docValues="false"/>
+<dynamicField name="*_dtr" type="daterange" indexed="true" stored="true"/>
+<dynamicField name="*_mdtr" type="daterange" indexed="true" stored="true" multiValued="true"/>
 ```
 
 ## Docs

@@ -1,25 +1,15 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
-
 declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Api;
 
 use Exception;
-use EzSystems\EzPlatformSolrSearchEngine\Gateway\Endpoint;
-use EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry;
-use EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver;
-use EzSystems\EzPlatformSolrSearchEngine\Gateway\HttpClient;
-use EzSystems\EzPlatformSolrSearchEngine\Gateway\Message;
+use Ibexa\Solr\Gateway\Endpoint;
+use Ibexa\Solr\Gateway\EndpointRegistry;
+use Ibexa\Solr\Gateway\EndpointResolver;
+use Ibexa\Solr\Gateway\HttpClient;
+use Ibexa\Solr\Gateway\Message;
 use stdClass;
 
 class Gateway
@@ -56,13 +46,16 @@ class Gateway
         $this->endpointRegistry = $endpointRegistry;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function reload()
     {
         $endpoint = $this->getAdminEndpoint();
 
         $this->request(
             'GET',
-            sprintf('&action=RELOAD'),
+            '&action=RELOAD',
             null,
             $endpoint
         );
@@ -92,6 +85,9 @@ class Gateway
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function request(
         string $method,
         string $path,

@@ -1,31 +1,29 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
+declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtraBundle\Controller\SolrAdmin;
 
-use eZ\Publish\API\Repository\PermissionResolver;
-use EzSystems\EzPlatformAdminUi\Notification\NotificationHandlerInterface;
-use EzSystems\EzPlatformAdminUiBundle\Controller\Controller;
-use Symfony\Component\Translation\TranslatorInterface;
+use Ibexa\Contracts\AdminUi\Controller\Controller;
+use Ibexa\Contracts\AdminUi\Notification\NotificationHandlerInterface;
+use Ibexa\Contracts\Core\Repository\PermissionResolver;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class BaseController extends Controller
 {
-    /** @var PermissionResolver */
+    /**
+     * @var PermissionResolver
+     */
     protected $permissionResolver;
 
-    /** @var TranslatorInterface */
+    /**
+     * @var TranslatorInterface
+     */
     protected $translator;
 
-    /** @var NotificationHandlerInterface */
+    /**
+     * @var NotificationHandlerInterface
+     */
     protected $notificationHandler;
 
     /**
@@ -53,7 +51,7 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
      */
     protected function permissionAccess(string $module, string $function)
     {
@@ -73,9 +71,9 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
      */
-    protected function permissionManageAccess(string $module, array $functions)
+    protected function permissionManageAccess(string $module, array $functions): array
     {
         $access = [];
         foreach ($functions as $function) {

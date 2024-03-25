@@ -1,21 +1,11 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
-
 declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Api\Schema\Analysis\Stopwords;
 
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
-use EzSystems\EzPlatformSolrSearchEngine\Gateway\Message;
+use Ibexa\Core\Base\Exceptions\NotFoundException;
+use Ibexa\Solr\Gateway\Message;
 use Novactive\EzSolrSearchExtra\Api\Gateway;
 
 class StopwordsService
@@ -33,6 +23,10 @@ class StopwordsService
         $this->gateway = $gateway;
     }
 
+    /**
+     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
+     * @throws \Exception
+     */
     public function getWords(string $setId, int $offset = 0, int $limit = 10): array
     {
         $response = $this->gateway->request(
@@ -47,6 +41,10 @@ class StopwordsService
         return $response->wordSet->managedList;
     }
 
+    /**
+     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
+     * @throws \Exception
+     */
     public function addWords(string $setId, array $words): bool
     {
         $response = $this->gateway->request(
@@ -69,6 +67,10 @@ class StopwordsService
         return 0 === $response->responseHeader->status;
     }
 
+    /**
+     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
+     * @throws \Exception
+     */
     public function deleteWord(string $setId, string $word): bool
     {
         $response = $this->gateway->request(

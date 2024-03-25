@@ -1,13 +1,3 @@
-/*
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
-
 jQuery(function ($) {
   $('.ez-field-edit__error').hide()
   $(document).on('click', '#edit-terms', function (e) {

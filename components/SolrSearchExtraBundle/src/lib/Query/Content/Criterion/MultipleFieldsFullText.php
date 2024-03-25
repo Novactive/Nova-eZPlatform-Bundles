@@ -1,20 +1,12 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
+declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Query\Content\Criterion;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
-use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\CustomFieldInterface;
 use InvalidArgumentException;
 
 /**
@@ -26,7 +18,7 @@ use InvalidArgumentException;
  * Normalization and querying capabilities might depend on the system
  * configuration or the used search engine and might differ. To find about
  * supported querying capabilities you can use
- * {@link \eZ\Publish\API\Repository\SearchService::supports()} method.
+ * {@link \Ibexa\Contracts\Core\Repository\SearchService::supports()} method.
  *
  * If supported, advanced full text query has the following semantics:
  *
@@ -133,6 +125,9 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
      */
     public $boostFunctions = [];
 
+    /**
+     * @param $value
+     */
     public function __construct($value, array $properties = [])
     {
         parent::__construct(null, Criterion\Operator::LIKE, $value);
@@ -148,7 +143,7 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
         }
     }
 
-    public function getSpecifications()
+    public function getSpecifications(): array
     {
         return [
             new Specifications(Criterion\Operator::LIKE, Specifications::FORMAT_SINGLE),
@@ -156,27 +151,11 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
     }
 
     /**
-     * @deprecated since 7.2, will be removed in 8.0. Use the constructor directly instead.
-     * @SuppressWarnings(PHPMD)
-     */
-    public static function createFromQueryBuilder($target, $operator, $value)
-    {
-        @trigger_error('The '.__METHOD__.' method is deprecated 
-        since version 7.2 and will be removed in 8.0.', E_USER_DEPRECATED);
-
-        return new self($value);
-    }
-
-    /**
      * Set a custom field to query.
      *
      * Set a custom field to query for a defined field in a defined type.
-     *
-     * @param string $type
-     * @param string $field
-     * @param string $customField
      */
-    public function setCustomField($type, $field, $customField)
+    public function setCustomField(string $type, string $field, string $customField): void
     {
         $this->customFields[$type][$field] = $customField;
     }
@@ -186,15 +165,11 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
      *
      * If no custom field is set, return null
      *
-     * @param string $type
-     * @param string $field
+     * @return mixed
      */
-    public function getCustomField($type, $field)
+    public function getCustomField(string $type, string $field): ?string
     {
-        if (
-            !isset($this->customFields[$type]) ||
-            !isset($this->customFields[$type][$field])
-        ) {
+        if (!isset($this->customFields[$type]) || !isset($this->customFields[$type][$field])) {
             return null;
         }
 
