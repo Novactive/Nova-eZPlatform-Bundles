@@ -28,7 +28,7 @@
                     <div>
                         <a href="{{ path('solr_admin.dashboard') }}" class="btn btn-primary">
                             <svg class="ez-icon ez-icon-trash">
-                                <use xlink:href="{{ asset('bundles/ibexaicons/img/ez-icons.svg') }}#back"></use>
+                                <use xlink:href="{{ asset('bundles/ibexaicons/img/all-icons.svg') }}#back"></use>
                             </svg>
                         </a>
                     </div>
@@ -45,13 +45,13 @@
                                     data-target="#{{ modal_data_target }}"
                                     title="{{ 'solr_admin.page.synonyms.table.action.remove'|trans }}">
                                 <svg class="ez-icon ez-icon-trash">
-                                    <use xlink:href="{{ asset('bundles/ibexaicons/img/ez-icons.svg') }}#trash"></use>
+                                    <use xlink:href="{{ asset('bundles/ibexaicons/img/all-icons.svg') }}#trash"></use>
                                 </svg>
                             </button>
-                            {% include '@ibexadesign/admin/bulk_delete_confirmation_modal.html.twig' with {
+                            {% include '@ibexadesign/ui/modal/bulk_delete_confirmation.html.twig' with {
                                 'id': modal_data_target,
-                                'message': 'solr_admin.page.synonyms.table.action.msg_delete'|trans,
-                                'data_click': '#delete-terms-delete',
+                                'message': 'solr_admin.page.stopwords.table.action.msg_delete'|trans,
+                                'data_click': '#delete-words-delete',
                             }%}
                         </div>
                     {% endif %}
@@ -88,7 +88,7 @@
                                                     class="btn btn-icon mx-2"
                                                     id="edit-terms">
                                                 <svg class="ez-icon ez-icon-edit">
-                                                    <use xlink:href="{{ asset('bundles/ibexaicons/img/ez-icons.svg') }}#edit"></use>
+                                                    <use xlink:href="{{ asset('bundles/ibexaicons/img/all-icons.svg') }}#edit"></use>
                                                 </svg>
                                             </a>
 
@@ -97,7 +97,7 @@
                                                     href="{{ path('solr_admin.synonyms.add', {'setId': setId}) }}"
                                                     class="btn btn-icon mx-2 valid-update-terms" style="display: none">
                                                 <svg class="ez-icon ez-icon-edit">
-                                                    <use xlink:href="{{ asset('bundles/ibexaicons/img/ez-icons.svg') }}#checkmark"></use>
+                                                    <use xlink:href="{{ asset('bundles/ibexaicons/img/all-icons.svg') }}#checkmark"></use>
                                                 </svg>
                                             </a>
 
@@ -106,7 +106,7 @@
                                                     href=""
                                                     class="btn btn-icon mx-2 cancel-update-terms"  style="display: none">
                                                 <svg class="ez-icon ez-icon-edit">
-                                                    <use xlink:href="{{ asset('bundles/ibexaicons/img/ez-icons.svg') }}#discard"></use>
+                                                    <use xlink:href="{{ asset('bundles/ibexaicons/img/all-icons.svg') }}#discard"></use>
                                                 </svg>
                                             </a>
                                         </td>
@@ -128,7 +128,7 @@
                                     <div class="col-2">
                                         <button type="submit" title="{{ 'solr_admin.page.synonyms.table.action.add'|trans }}" class="btn btn-icon mx-2">
                                             <svg class="ez-icon ez-icon-edit">
-                                                <use xlink:href="{{ asset('bundles/ibexaicons/img/ez-icons.svg') }}#create"></use>
+                                                <use xlink:href="{{ asset('bundles/ibexaicons/img/all-icons.svg') }}#create"></use>
                                             </svg>
                                         </button>
                                     </div>
@@ -157,10 +157,6 @@
 {%- endblock -%}
 
 {% block javascripts %}
-    {% javascripts
-        '@EzPlatformAdminUiBundle/Resources/public/js/scripts/button.state.toggle.js'
-    %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-    {{ encore_entry_script_tags('ezplatform-admin-ui-solr-config-js', null, 'ezplatform') }}
+    <script type="text/javascript" src="{{ asset('/bundles/ibexaadminui/js/scripts/button.state.toggle.js') }}"></script>
+    {{ encore_entry_script_tags('ibexa-admin-ui-solr-config-js', null, 'ibexa') }}
 {% endblock %}

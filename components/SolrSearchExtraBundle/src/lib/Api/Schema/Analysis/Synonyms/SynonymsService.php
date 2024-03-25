@@ -56,10 +56,15 @@ class SynonymsService
      */
     public function fetchTerm(string $setId, string $term): bool
     {
-        $response = $this->gateway->request(
-            'GET',
-            sprintf('%s/%s/%s', self::API_PATH, $setId, $term)
-        );
+        $response = null;
+        try {
+            $response = $this->gateway->request(
+                'GET',
+                sprintf('%s/%s/%s', self::API_PATH, $setId, $term)
+            );
+        } catch (\Exception $exception) {
+            return false;
+        }
         if (null === $response) {
             return false;
         }
