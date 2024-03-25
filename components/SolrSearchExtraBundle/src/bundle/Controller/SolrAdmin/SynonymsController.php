@@ -77,9 +77,8 @@ class SynonymsController extends BaseController
                 );
 
                 $this->notificationHandler->success(
-                    $this->translator->transChoice(
+                    $this->translator->trans(
                         'solr_admin.action.synonyms.added',
-                        count($synonyms),
                         ['%synonyms%' => $synonyms, '%term%' => $term],
                         'solr_admin'
                     )

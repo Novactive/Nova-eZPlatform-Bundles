@@ -28,7 +28,7 @@
                     <div>
                         <a href="{{ path('solr_admin.dashboard') }}" class="btn btn-primary">
                             <svg class="ez-icon ez-icon-trash">
-                                <use xlink:href="{{ asset('bundles/ibexaicons/img/ez-icons.svg') }}#back"></use>
+                                <use xlink:href="{{ asset('bundles/ibexaicons/img/all-icons.svg') }}#back"></use>
                             </svg>
                         </a>
                     </div>
@@ -41,14 +41,14 @@
                                     type="button"
                                     class="btn btn-danger"
                                     disabled
-                                    data-toggle="modal"
-                                    data-target="#{{ modal_data_target }}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#{{ modal_data_target }}"
                                     title="{{ 'solr_admin.page.stopwords.table.action.remove'|trans }}">
                                 <svg class="ez-icon ez-icon-trash">
-                                    <use xlink:href="{{ asset('bundles/ibexaicons/img/ez-icons.svg') }}#trash"></use>
+                                    <use xlink:href="{{ asset('bundles/ibexaicons/img/all-icons.svg') }}#trash"></use>
                                 </svg>
                             </button>
-                            {% include '@ibexadesign/admin/bulk_delete_confirmation_modal.html.twig' with {
+                            {% include '@ibexadesign/ui/modal/bulk_delete_confirmation.html.twig' with {
                                 'id': modal_data_target,
                                 'message': 'solr_admin.page.stopwords.table.action.msg_delete'|trans,
                                 'data_click': '#delete-words-delete',
@@ -86,7 +86,7 @@
                                     <div class="col-3">
                                         <button type="submit" title="{{ 'solr_admin.page.stopwords.table.action.add'|trans }}" class="btn btn-icon mx-2">
                                             <svg class="ez-icon ez-icon-edit">
-                                                <use xlink:href="{{ asset('bundles/ibexaicons/img/ez-icons.svg') }}#create"></use>
+                                                <use xlink:href="{{ asset('bundles/ibexaicons/img/all-icons.svg') }}#create"></use>
                                             </svg>
                                         </button>
                                     </div>
@@ -115,10 +115,6 @@
 {%- endblock -%}
 
 {% block javascripts %}
-    {% javascripts
-        '@EzPlatformAdminUiBundle/Resources/public/js/scripts/button.state.toggle.js'
-    %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-    {{ encore_entry_script_tags('ezplatform-admin-ui-solr-config-js', null, 'ezplatform') }}
+    <script type="text/javascript" src="{{ asset('/bundles/ibexaadminui/js/scripts/button.state.toggle.js') }}"></script>
+    {{ encore_entry_script_tags('ibexa-admin-ui-solr-config-js', null, 'ibexa') }}
 {% endblock %}

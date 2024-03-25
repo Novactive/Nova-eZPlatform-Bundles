@@ -89,7 +89,7 @@ class StopwordsController extends BaseController
                         'solr_admin.action.stopwords.added',
                         [
                             '%words%' => $words,
-                            'count' => count($words),
+                            'count' => count(explode(',', $words)),
                         ],
                         'solr_admin'
                     )
