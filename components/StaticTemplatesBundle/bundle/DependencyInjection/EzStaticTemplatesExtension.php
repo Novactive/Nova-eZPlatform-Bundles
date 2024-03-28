@@ -58,7 +58,11 @@ class EzStaticTemplatesExtension extends Extension implements PrependExtensionIn
                 $ezpublishConfig['siteaccess']['groups']['static_group'][] = $theme;
                 $ezpublishConfig['siteaccess']['match']['Map\URI'][$uri] = $theme;
                 $ezpublishConfig['system'][$theme] = ['design' => "{$theme}_design"];
-                $ezdesignConfig['design_list']["{$theme}_design"] = [$theme, 'static_standard', 'standard'];
+                $parameterName = "{$theme}_design_themes";
+                if (!$container->hasParameter($parameterName)) {
+                    $container->setParameter($parameterName, [$theme, 'static_standard', 'standard']);
+                }
+                $ezdesignConfig['design_list']["{$theme}_design"] = "%{$parameterName}%";
             }
             $container->prependExtensionConfig('ibexa', $ezpublishConfig);
             $container->prependExtensionConfig('ibexa_design_engine', $ezdesignConfig);
