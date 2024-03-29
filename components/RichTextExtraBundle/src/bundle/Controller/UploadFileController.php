@@ -6,6 +6,8 @@ use AlmaviaCX\Bundle\IbexaRichTextExtra\FieldType\BinaryFile\Mapper;
 use AlmaviaCX\Bundle\IbexaRichTextExtra\Form\Data\FileUploadData;
 use Exception;
 use Ibexa\Contracts\AdminUi\Controller\Controller;
+use Ibexa\Contracts\Core\Repository\Exceptions\ContentFieldValidationException;
+use Ibexa\Core\Base\Translatable;
 use Ibexa\Core\FieldType\BinaryFile\Value as BinaryFileValue;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -81,8 +83,15 @@ class UploadFileController extends Controller
                                                  ],
                                                  'value' => $this->imageAssetMapper->getAssetValue($content),
                                              ]);
-                } catch (Exception $e) {
-                    return $this->createGenericErrorResponse($e->getMessage());
+                } catch (ContentFieldValidationException $exception) {
+                    $exception = \Ibexa\Core\Base\Exceptions\ContentFieldValidationException::createNewWithMultiline(
+                        $exception->getFieldErrors(),
+                        $file->getClientOriginalName()
+                    );
+
+                    return $this->createGenericExceptionResponse($exception);
+                } catch (Exception $exception) {
+                    return $this->createGenericExceptionResponse($exception);
                 }
             } else {
                 return $this->createInvalidInputResponse($errors);
@@ -112,6 +121,20 @@ class UploadFileController extends Controller
         }
 
         return $this->createGenericErrorResponse(implode(', ', $errorMessages));
+    }
+
+    private function createGenericExceptionResponse(Exception $exception): JsonResponse
+    {
+        $message = $exception->getMessage();
+        if ($exception instanceof Translatable) {
+            $message = $this->translator->trans(
+                $exception->getMessageTemplate(),
+                $exception->getParameters(),
+                'repository_exceptions'
+            );
+        }
+
+        return $this->createGenericErrorResponse($message);
     }
 
     private function createGenericErrorResponse(string $errorMessage): JsonResponse

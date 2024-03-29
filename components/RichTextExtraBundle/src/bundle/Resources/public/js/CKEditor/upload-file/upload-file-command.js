@@ -28,6 +28,11 @@ class UploadFileCommand  extends Command {
             .then(ibexa.helpers.request.getJsonFromResponse)
             .then(ibexa.helpers.request.handleRequest)
             .then((response) => {
+                if(response.status === 'failed') {
+                    showErrorNotification(response.error);
+                    return
+                }
+
                 this.editor.execute('insertIbexaEmbed', {
                     contentId: response.destinationContent.id,
                     contentName: response.destinationContent.name,

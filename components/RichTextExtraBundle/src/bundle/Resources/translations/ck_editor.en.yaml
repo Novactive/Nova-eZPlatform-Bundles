@@ -4,5 +4,6 @@ image_edit:
     label: Edit image
 upload_file_btn:
     label: Upload file
+upload_file:
     message:
         error: "Error while creating file: %error%"
