@@ -122,6 +122,14 @@ class MenuItem
     }
 
     /**
+     * @return string
+     */
+    public function getRemoteId(): ?string
+    {
+        return $this->remoteId;
+    }
+
+    /**
      * @param $language
      */
     public function getTranslatedName($language): ?string
