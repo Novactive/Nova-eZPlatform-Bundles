@@ -175,8 +175,11 @@ class ImageAliasGenerator implements VariationHandler
             isset($filterConfig['reference']) &&
             IORepositoryResolver::VARIATION_ORIGINAL !== $filterConfig['reference']
         ) {
-            unset($runtimeFiltersConfig['filters']);
             $image = $this->applyFilter($image, $filterConfig['reference'], $runtimeFiltersConfig);
+        }
+
+        if (!isset($filterConfig['filters']['focusedThumbnail'])) {
+            unset($runtimeFiltersConfig['filters']['focusedThumbnail']);
         }
 
         return $this->filterManager->applyFilter($image, $variationName, $runtimeFiltersConfig);
