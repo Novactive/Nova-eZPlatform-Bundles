@@ -51,8 +51,8 @@
                                         title="{{ ('solr_admin.page.' ~ set.type ~ '.action.view')|trans }}"
                                         href="{{ path('solr_admin.' ~ set.type ~ '.index', {'setId': set.id}) }}"
                                         class="btn btn-icon mx-2">
-                                    <svg class="ez-icon ez-icon-view">
-                                        <use xlink:href="{{ asset('bundles/ibexaicons/img/all-icons.svg') }}#view"></use>
+                                    <svg class="ibexa-icon ibexa-icon--view">
+                                        <use xlink:href="{{ ibexa_icon_path('view') }}"></use>
                                     </svg>
                                 </a>
                             </td>
