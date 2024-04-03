@@ -27,8 +27,8 @@
                 <div class="ez-table-header">
                     <div>
                         <a href="{{ path('solr_admin.dashboard') }}" class="btn btn-primary">
-                            <svg class="ez-icon ez-icon-trash">
-                                <use xlink:href="{{ asset('bundles/ibexaicons/img/all-icons.svg') }}#back"></use>
+                            <svg class="ibexa-icon ibexa-icon--back">
+                                <use xlink:href="{{ ibexa_icon_path('back') }}"></use>
                             </svg>
                         </a>
                     </div>
@@ -44,8 +44,8 @@
                                     data-bs-toggle="modal"
                                     data-bs-target="#{{ modal_data_target }}"
                                     title="{{ 'solr_admin.page.stopwords.table.action.remove'|trans }}">
-                                <svg class="ez-icon ez-icon-trash">
-                                    <use xlink:href="{{ asset('bundles/ibexaicons/img/all-icons.svg') }}#trash"></use>
+                                <svg class="ibexa-icon ibexa-icon--trash">
+                                    <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
                                 </svg>
                             </button>
                             {% include '@ibexadesign/ui/modal/bulk_delete_confirmation.html.twig' with {
@@ -85,8 +85,8 @@
                                     </div>
                                     <div class="col-3">
                                         <button type="submit" title="{{ 'solr_admin.page.stopwords.table.action.add'|trans }}" class="btn btn-icon mx-2">
-                                            <svg class="ez-icon ez-icon-edit">
-                                                <use xlink:href="{{ asset('bundles/ibexaicons/img/all-icons.svg') }}#create"></use>
+                                            <svg class="ibexa-icon ibexa-icon--create">
+                                                <use xlink:href="{{ ibexa_icon_path('create') }}"></use>
                                             </svg>
                                         </button>
                                     </div>
