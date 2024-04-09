@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage;
 
+use Ibexa\AdminUi\FieldType\FieldDefinitionFormMapperInterface;
 use Ibexa\AdminUi\Form\Data\FieldDefinitionData;
 use Ibexa\ContentForms\ConfigResolver\MaxUploadSize;
 use Ibexa\Contracts\ContentForms\Data\Content\FieldData;
@@ -27,7 +28,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Range;
 
-class FormMapper implements FieldValueFormMapperInterface
+class FormMapper implements FieldValueFormMapperInterface, FieldDefinitionFormMapperInterface
 {
     /** @var FieldTypeService */
     private $fieldTypeService;
