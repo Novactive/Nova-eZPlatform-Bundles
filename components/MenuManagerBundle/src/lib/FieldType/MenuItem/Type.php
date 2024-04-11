@@ -55,7 +55,7 @@ class Type extends FieldType
      * Validates a field based on the validators in the field definition.
      *
      * @param FieldDefinition $fieldDefinition The field definition of the field
-     * @param SPIValue $value The field value for which an action is performed
+     * @param SPIValue        $value           The field value for which an action is performed
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
@@ -72,8 +72,6 @@ class Type extends FieldType
 
     /**
      * Returns the field type identifier for this field type.
-     *
-     * @return string
      */
     public function getFieldTypeIdentifier(): string
     {
@@ -91,6 +89,7 @@ class Type extends FieldType
         if ($value instanceof Value) {
             return (string) $value->menuItems;
         }
+
         return '';
     }
 
@@ -101,10 +100,6 @@ class Type extends FieldType
 
     /**
      * Returns if the given $value is considered empty by the field type.
-     *
-     * @param SPIValue $value
-     *
-     * @return bool
      */
     public function isEmptyValue(SPIValue $value): bool
     {
@@ -138,8 +133,6 @@ class Type extends FieldType
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
      * @param Value $value
-     *
-     * @return array|null
      */
     protected function getSortInfo(BaseValue $value): ?array
     {
@@ -148,9 +141,6 @@ class Type extends FieldType
 
     /**
      * Converts a persistence $fieldValue to a Value.
-     *
-     * @param PersistenceValue $fieldValue
-     * @return value
      */
     public function fromPersistenceValue(PersistenceValue $fieldValue): Value
     {
@@ -191,8 +181,6 @@ class Type extends FieldType
 
     /**
      * Returns whether the field type is searchable.
-     *
-     * @return bool
      */
     public function isSearchable(): bool
     {

@@ -153,8 +153,6 @@ class AdminController extends Controller
     /**
      * @Route("/edit/{menu}", name="menu_manager.menu_edit")
      *
-     * @param Request $request
-     * @param Menu $menu
      * @return RedirectResponse|Response
      */
     public function editAction(Request $request, Menu $menu)

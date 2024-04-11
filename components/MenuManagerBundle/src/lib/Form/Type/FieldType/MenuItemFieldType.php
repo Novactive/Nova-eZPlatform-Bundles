@@ -56,15 +56,14 @@ class MenuItemFieldType extends AbstractType
      * MenuItemFieldType constructor.
      */
     public function __construct(
-        FieldTypeService         $fieldTypeService,
-        MenuService              $menuService,
-        LocationService          $locationService,
+        FieldTypeService $fieldTypeService,
+        MenuService $menuService,
+        LocationService $locationService,
         MenuItemValueTransformer $fieldValueTransformer,
-        TranslationHelper        $translationHelper,
-        TranslatorInterface      $translator,
-        GlobalHelper             $globalHelper
-    )
-    {
+        TranslationHelper $translationHelper,
+        TranslatorInterface $translator,
+        GlobalHelper $globalHelper
+    ) {
         $this->fieldTypeService = $fieldTypeService;
         $this->menuService = $menuService;
         $this->locationService = $locationService;
@@ -124,7 +123,7 @@ class MenuItemFieldType extends AbstractType
                 'getName'
             );
             $contentInfo = $formData->contentDraft->contentInfo;
-            if ($contentInfo->status == ContentInfo::STATUS_DRAFT) {
+            if (ContentInfo::STATUS_DRAFT == $contentInfo->status) {
                 $parentLocationsId[] = $this->globalHelper->getRootLocation()->id;
             } else {
                 $locations = $this->locationService->loadLocations($contentInfo);

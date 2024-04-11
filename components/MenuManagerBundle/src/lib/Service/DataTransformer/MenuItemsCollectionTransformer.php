@@ -34,8 +34,9 @@ class MenuItemsCollectionTransformer implements DataTransformerInterface
      * Transforms a FieldType Value into a hash using `FieldTpe::toHash()`.
      * This hash is compatible with `reverseTransform()`.
      *
-     * @return string|false the value's hash, or null if $value was not a FieldType Value
      * @throws UnexpectedTypeException
+     *
+     * @return string|false the value's hash, or null if $value was not a FieldType Value
      */
     public function transform($value)
     {
@@ -46,8 +47,9 @@ class MenuItemsCollectionTransformer implements DataTransformerInterface
      * Transforms a hash into a FieldType Value using `FieldType::fromHash()`.
      * The FieldValue is compatible with `transform()`.
      *
-     * @return MenuItem[]
      * @throws MenuItemTypeNotFoundException
+     *
+     * @return MenuItem[]
      */
     public function reverseTransform($value): array
     {

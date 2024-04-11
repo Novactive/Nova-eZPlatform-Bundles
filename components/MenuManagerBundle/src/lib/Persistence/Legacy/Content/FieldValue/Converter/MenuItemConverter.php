@@ -25,9 +25,7 @@ class MenuItemConverter implements Converter
      *
      * Note: Class should instead be configured as service if it gains dependencies.
      *
-     * @return MenuItemConverter
      * @deprecated since 6.8, will be removed in 7.x, use default constructor instead.
-     *
      */
     public static function create(): MenuItemConverter
     {
@@ -77,8 +75,6 @@ class MenuItemConverter implements Converter
      * Returns the name of the index column the datatype uses, which is either
      * "sort_key_int" or "sort_key_string". This column is then used for
      * filtering and sorting for this type.
-     *
-     * @return string
      */
     public function getIndexColumn(): string
     {

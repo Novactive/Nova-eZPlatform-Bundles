@@ -44,8 +44,6 @@ class SearchField implements Indexable
      * As field types can index multiple fields (see MapLocation field type's
      * implementation of this interface), this method is used to define default
      * field for matching. Default field is typically used by Field criterion.
-     *
-     * @return string|null
      */
     public function getDefaultMatchField(): ?string
     {
@@ -58,8 +56,6 @@ class SearchField implements Indexable
      * As field types can index multiple fields (see MapLocation field type's
      * implementation of this interface), this method is used to define default
      * field for sorting. Default field is typically used by Field sort clause.
-     *
-     * @return string|null
      */
     public function getDefaultSortField(): ?string
     {

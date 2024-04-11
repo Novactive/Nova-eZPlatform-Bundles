@@ -33,9 +33,6 @@ class ContentMenuItem extends MenuItem
         return (int) ltrim($this->getUrl(), static::URL_PREFIX);
     }
 
-    /**
-     * @param int $contentId
-     */
     public function setContentId(int $contentId): void
     {
         if (!$contentId) {

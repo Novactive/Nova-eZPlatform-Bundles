@@ -128,10 +128,6 @@ class ContentMenuItemType extends DefaultMenuItemType
         return $menuItem;
     }
 
-    /**
-     * @param MenuItem $menuItem
-     * @return MenuItemValue|null
-     */
     public function toMenuItemLink(MenuItem $menuItem): ?MenuItemValue
     {
         try {
@@ -162,7 +158,7 @@ class ContentMenuItemType extends DefaultMenuItemType
         }
 
         if (!$menuItem instanceof MenuItem\ContentMenuItem) {
-            throw new RuntimeException(sprintf("%s only works with ContentMenuItem", __METHOD__));
+            throw new RuntimeException(sprintf('%s only works with ContentMenuItem', __METHOD__));
         }
         $content = $this->contentService->loadContent($menuItem->getContentId());
         $location = $this->locationService->loadLocation($content->contentInfo->mainLocationId);
@@ -180,7 +176,7 @@ class ContentMenuItemType extends DefaultMenuItemType
             'extras' => [
                 'contentId' => $location->contentId,
                 'locationId' => $location->id,
-                'locationRemoteId' => $location->remoteId
+                'locationRemoteId' => $location->remoteId,
             ],
         ];
 

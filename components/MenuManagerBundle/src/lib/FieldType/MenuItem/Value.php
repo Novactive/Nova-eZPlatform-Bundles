@@ -26,8 +26,6 @@ class Value extends BaseValue
 
     /**
      * Construct a new Value object and initialize it $text.
-     *
-     * @param array $menuItems
      */
     public function __construct(array $menuItems = [])
     {
@@ -43,8 +41,9 @@ class Value extends BaseValue
     {
         $string = '';
         foreach ($this->menuItems as $menuItem) {
-            $string .= ', ' . $menuItem->__toString();
+            $string .= ', '.$menuItem->__toString();
         }
+
         return $string;
     }
 }
