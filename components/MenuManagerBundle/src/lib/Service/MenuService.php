@@ -86,4 +86,12 @@ class MenuService
     {
         return $this->em->getRepository(Menu::class)->find($menuId);
     }
+
+    /**
+     * @return Menu|object|null
+     */
+    public function loadMenuByRemoteId(string $remoteId)
+    {
+        return $this->em->getRepository(Menu::class)->findOneBy(['remoteId' => $remoteId]);
+    }
 }
