@@ -230,16 +230,13 @@ class MenuItem
         $this->childrens->removeElement($children);
     }
 
-    /**
-     * @return MenuItem
-     */
     public function getParent(): ?MenuItem
     {
         return $this->parent;
     }
 
     /**
-     * @param MenuItem $parent
+     * @param MenuItem|null $parent
      */
     public function setParent($parent): void
     {
