@@ -1,0 +1,5 @@
+'Components configuration': 'Components configuration'
+'Job configuration': 'Job configuration'
+breadcrumb.admin: Admin
+job.list.title: Jobs
+job.options.empty: 'There is no options to configure'

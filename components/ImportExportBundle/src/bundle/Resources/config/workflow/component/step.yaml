@@ -1,0 +1,17 @@
+services:
+    AlmaviaCX\Bundle\IbexaImportExport\Step\Callback\CallbackStep:
+        tags:
+            - {name: almaviacx.import_export.component, alias: CallbackStep}
+
+    AlmaviaCX\Bundle\IbexaImportExport\Step\Filter\Unique\UniqueFilterStep:
+        arguments:
+            $sourceResolver: '@AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\SourceResolver'
+        tags:
+            - {name: almaviacx.import_export.component, alias: UniqueFilterStep}
+
+
+    AlmaviaCX\Bundle\IbexaImportExport\Step\Filter\NotEmpty\NotEmptyFilterStep:
+        arguments:
+            $sourceResolver: '@AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\SourceResolver'
+        tags:
+            - {name: almaviacx.import_export.component, alias: NotEmptyFilterStep}

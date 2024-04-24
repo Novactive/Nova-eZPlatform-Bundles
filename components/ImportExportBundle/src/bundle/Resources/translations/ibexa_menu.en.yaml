@@ -1,0 +1,7 @@
+export_import: 'Import / Export'
+export_import_job_list: Jobs
+job_create__sidebar_right__back: Back
+job_create__sidebar_right__cancel: 'Discard changes'
+job_create__sidebar_right__finish: Create
+job_create__sidebar_right__next: Next
+job_create__sidebar_right__reset: Reset

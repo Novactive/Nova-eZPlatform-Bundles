@@ -1,0 +1,16 @@
+csv_reader.form.options.delimiter.label: Delimiter
+csv_reader.form.options.enclosure.label: Enclosure
+csv_reader.form.options.escape.label: Escape
+csv_reader.form.options.headerRowNumber.label: 'Header row number'
+file_reader.form.options.file.label: File
+job.label: Label
+job.workflowIdentifier: Workflow
+reader.ibexa.content_list.options.parentLocationId.label: 'Parent location id'
+workflow.options: 'Workflow options'
+writer.stream.options.filepath.label: 'File path'
+writer.stream.options.filepath.tokens: 'Tokens: %tokens%'
+xls_reader.form.options.colsRange.end.label: End
+xls_reader.form.options.colsRange.label: 'Columns range'
+xls_reader.form.options.colsRange.start.label: Start
+xls_reader.form.options.headerRowNumber.label: 'Header row number'
+xls_reader.form.options.tabName.label: 'Tab name'
