@@ -1,0 +1,15 @@
+{% trans_default_domain 'import_export' %}
+{% embed '@ibexadesign/ui/component/details/details.html.twig' %}
+    {% block details_header %}
+        <div class="ibexa-details__header">
+            {% include '@ibexadesign/ui/component/table/table_header.html.twig' with {
+                headline: writer.name|trans(),
+                actions: headline_items|default([])
+            } %}
+        </div>
+    {% endblock %}
+    {% block details_items %}
+        <div class="ibexa-details__items {{ view_mode|default('') == 'vertical' ? 'ibexa-details__items--vertical' }}">
+        </div>
+    {% endblock %}
+{% endembed %}

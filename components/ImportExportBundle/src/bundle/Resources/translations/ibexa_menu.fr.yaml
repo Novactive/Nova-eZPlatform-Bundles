@@ -1,0 +1,7 @@
+export_import: 'Import / Export'
+export_import_job_list: Tâches
+job_create__sidebar_right__back: Retour
+job_create__sidebar_right__cancel: 'Annuler les changements'
+job_create__sidebar_right__finish: Créer
+job_create__sidebar_right__next: Suivant
+job_create__sidebar_right__reset: Réinitialiser

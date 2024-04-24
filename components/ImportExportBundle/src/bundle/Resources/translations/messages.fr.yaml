@@ -1,0 +1,5 @@
+'Components configuration': 'Configuration des composants'
+'Job configuration': 'Configuration de la tâche'
+breadcrumb.admin: Admin
+job.list.title: Tâches
+job.options.empty: 'Il n''y a pas d''options à configurer'

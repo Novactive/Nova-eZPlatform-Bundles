@@ -1,0 +1,12 @@
+services:
+    AlmaviaCX\Bundle\IbexaImportExport\Event\Subscriber\RemoveWrittenFilesEventSubscriber:
+        arguments:
+            $fileHandler: '@AlmaviaCX\Bundle\IbexaImportExport\File\FileHandler'
+        tags:
+            - kernel.event_subscriber
+
+    AlmaviaCX\Bundle\IbexaImportExport\Event\Subscriber\PostJobCreateFormSubmitEventSubscriber:
+        arguments:
+            $fileHandler: '@AlmaviaCX\Bundle\IbexaImportExport\File\FileHandler'
+        tags:
+            - kernel.event_subscriber
