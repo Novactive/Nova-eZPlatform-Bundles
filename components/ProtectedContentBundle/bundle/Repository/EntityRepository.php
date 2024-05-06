@@ -27,7 +27,8 @@ abstract class EntityRepository extends ServiceEntityRepository
     // Novactive\Bundle\eZProtectedContentBundle\Repository\EntityRepository::__construct():
     // Argument #1 ($registry) must be of type Doctrine\Persistence\ManagerRegistry,
     // Doctrine\ORM\EntityManager given,
-    // called in /var/www/html/ibexa/vendor/doctrine/orm/lib/Doctrine/ORM/Repository/DefaultRepositoryFactory.php on line 55
+    // called in
+    // /var/www/html/ibexa/vendor/doctrine/orm/lib/Doctrine/ORM/Repository/DefaultRepositoryFactory.php on line 55
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, $this->getEntityClass());
