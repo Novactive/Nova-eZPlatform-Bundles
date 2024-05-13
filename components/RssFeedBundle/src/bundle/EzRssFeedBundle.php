@@ -26,7 +26,7 @@ class EzRssFeedBundle extends Bundle
     public function build(ContainerBuilder $container): void
     {
         parent::build($container);
-        $eZExtension = $container->getExtension('ezpublish');
+        $eZExtension = $container->getExtension('ibexa');
         $eZExtension->addPolicyProvider(new RssPolicyProvider());
     }
 }

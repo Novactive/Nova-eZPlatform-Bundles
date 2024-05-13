@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\NovaeZMaintenanceBundle\Controller;
 
-use eZ\Bundle\EzPublishCoreBundle\Controller;
+use Ibexa\Bundle\Core\Controller;
 use Novactive\NovaeZMaintenanceBundle\Form\Type\FilterType;
 use Novactive\NovaeZMaintenanceBundle\Helper\FileHelper;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,14 +27,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MaintenanceController extends Controller
 {
-    /**
-     * @var FlashBagInterface
-     */
     private FlashBagInterface $flashBag;
 
-    /**
-     * @var FileHelper
-     */
     private FileHelper $fileHelper;
 
     public function __construct(FlashBagInterface $flashBag, FileHelper $fileHelper)
@@ -50,7 +44,7 @@ class MaintenanceController extends Controller
     {
         $this->fileHelper->checkManageAccess();
 
-        return $this->render('@ezdesign/maintenance/index.html.twig', [
+        return $this->render('@ibexadesign/maintenance/index.html.twig', [
             'maintenance_siteaccesses' => $this->fileHelper->getAvailableSiteaccessList(),
         ]);
     }
@@ -74,7 +68,7 @@ class MaintenanceController extends Controller
             $btnLabel = $this->fileHelper->translate($isExistFile ? 'maintenance.start' : 'maintenance.stop');
         }
 
-        return $this->render('@ezdesign/maintenance/manage.html.twig', [
+        return $this->render('@ibexadesign/maintenance/manage.html.twig', [
             'form' => $form->createView(),
             'maintenance_siteaccess' => $maintenanceSiteaccess,
             'btnLabel' => $btnLabel,

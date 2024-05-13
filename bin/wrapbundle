@@ -15,7 +15,7 @@ $configDir = "components/{$_SERVER['COMPONENT']}/tests/provisioning";
 if (!file_exists($configDir)) {
     exit(0);
 }
-$appRootDir = __DIR__."/../ezplatform";
+$appRootDir = __DIR__."/../ibexa";
 $componentDir = __DIR__."/../components/".$_SERVER['COMPONENT'];
 
 $bundleName = "nova_ez".strtolower($_SERVER['COMPONENT']);
@@ -34,7 +34,7 @@ $bundles = array_map(
     file($configDir."/bundles.yaml")
 );
 
-$bundleList = \str_replace('];', implode(PHP_EOL, $bundles).PHP_EOL.'];', $bundleList);
+$bundleList = str_replace( '];', implode( PHP_EOL, $bundles) . PHP_EOL . '];', $bundleList);
 file_put_contents($bundleFile, $bundleList);
 
 /**
@@ -66,8 +66,8 @@ if (file_exists($configDir."/routes.yaml") && trim(file_get_contents($configDir.
  */
 
 $composerJsonPath = "{$appRootDir}/composer.json";
-$data = json_decode(file_get_contents($composerJsonPath), true);
-$bundleComposerJson = json_decode(file_get_contents("{$componentDir}/composer.json"), true);
+$data = json_decode(file_get_contents($composerJsonPath), true, 512, JSON_THROW_ON_ERROR);
+$bundleComposerJson = json_decode(file_get_contents("{$componentDir}/composer.json"), true, 512, JSON_THROW_ON_ERROR);
 
 // re map paths, one directory before because composer create-project install in a dir
 $psr4 = array_map(
@@ -78,8 +78,10 @@ $psr4 = array_map(
 );
 
 $data["autoload"]['psr-4'] = array_merge($data["autoload"]['psr-4'], $psr4);
-$data['require'] += $bundleComposerJson['require'] ?? [];
-$data['require-dev'] += $bundleComposerJson['require-dev'] ?? [];
+$data['require'] = ($data['require'] ?? []) + ($bundleComposerJson['require'] ?? []);
+if( !empty( $bundleComposerJson['require-dev']) ) {
+    $data['require-dev'] = ($data['require-dev'] ?? []) +  $bundleComposerJson['require-dev'];
+}
 
 // write the composer.json
 file_put_contents(
@@ -105,4 +107,3 @@ if(file_exists($bundlePackageJsonPath)) {
         json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
     );
 }
-

@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage;
 
 use DOMDocument;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\ImageConverter;
+use Ibexa\Core\Persistence\Legacy\Content\FieldValue\Converter\ImageConverter;
 
 class ValueConverter extends ImageConverter
 {

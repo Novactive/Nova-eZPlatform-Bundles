@@ -14,15 +14,15 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\FieldValueConverter;
 
-use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\API\Repository\ContentTypeService;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
-use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\Content\Field;
-use eZ\Publish\Core\FieldType\ImageAsset\AssetMapper;
-use eZ\Publish\Core\FieldType\ImageAsset\Value as ImageAssetValue;
-use eZ\Publish\Core\FieldType\Relation\Value;
+use Ibexa\Contracts\Core\Repository\ContentService;
+use Ibexa\Contracts\Core\Repository\ContentTypeService;
+use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
+use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content;
+use Ibexa\Contracts\Core\Repository\Values\Content\Field;
+use Ibexa\Core\FieldType\ImageAsset\AssetMapper;
+use Ibexa\Core\FieldType\ImageAsset\Value as ImageAssetValue;
+use Ibexa\Core\FieldType\Relation\Value;
 
 class ObjectRelationFieldValueConverter implements FieldValueConverterInterface
 {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "be0f9fa8acef9e1f3c42e32f22d36afa",
+    "content-hash": "35b5ea38e74e07cd31c8aeb39cf1af42",
     "packages": [
         {
             "name": "behat/behat",
@@ -489,16 +489,16 @@
         },
         {
             "name": "dbrekelmans/bdi",
-            "version": "0.3",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dbrekelmans/bdi.git",
-                "reference": "d94d818ebe20b419a7d9f17dc21e9c66a10b171f"
+                "reference": "41f42576647789d15259baa7931e3928273940a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dbrekelmans/bdi/zipball/d94d818ebe20b419a7d9f17dc21e9c66a10b171f",
-                "reference": "d94d818ebe20b419a7d9f17dc21e9c66a10b171f",
+                "url": "https://api.github.com/repos/dbrekelmans/bdi/zipball/41f42576647789d15259baa7931e3928273940a2",
+                "reference": "41f42576647789d15259baa7931e3928273940a2",
                 "shasum": ""
             },
             "require": {
@@ -532,9 +532,9 @@
                 "browser-driver-installer"
             ],
             "support": {
-                "source": "https://github.com/dbrekelmans/bdi/tree/0.3"
+                "source": "https://github.com/dbrekelmans/bdi/tree/1.0.4"
             },
-            "time": "2020-12-13T21:43:40+00:00"
+            "time": "2023-01-22T17:23:00+00:00"
         },
         {
             "name": "doctrine/annotations",

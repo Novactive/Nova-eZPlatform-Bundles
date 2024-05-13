@@ -14,16 +14,15 @@ namespace Novactive\EzRssFeedBundle\Controller\Admin;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-use eZ\Bundle\EzPublishCoreBundle\Controller;
 use eZ\Publish\API\Repository\PermissionResolver;
-use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use EzSystems\EzPlatformAdminUi\Notification\NotificationHandlerInterface;
+use Ibexa\Bundle\Core\Controller;
+use Ibexa\Contracts\AdminUi\Notification\NotificationHandlerInterface;
+use Ibexa\Core\Base\Exceptions\UnauthorizedException;
 use Novactive\EzRssFeedBundle\Controller\EntityManagerTrait;
 use Novactive\EzRssFeedBundle\Entity\RssFeeds;
 use Novactive\EzRssFeedBundle\Form\RssFeedsType;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -61,7 +60,7 @@ class RssFeedController extends Controller
         /**
          * @var PermissionResolver
          */
-        $permissionResolver = $this->container->get('ezpublish.api.repository')->getPermissionResolver();
+        $permissionResolver = $this->container->get('ibexa.api.repository')->getPermissionResolver();
 
         $page = $request->query->get('page') ?? 1;
 
@@ -73,7 +72,7 @@ class RssFeedController extends Controller
         $pagerfanta->setCurrentPage(min($page, $pagerfanta->getNbPages()));
 
         return $this->render(
-            '@ezdesign/rssfeed/list.html.twig',
+            '@ibexadesign/rssfeed/list.html.twig',
             [
                 'pager' => $pagerfanta,
                 'canCreate' => $permissionResolver->hasAccess('rss', 'create'),
@@ -122,7 +121,7 @@ class RssFeedController extends Controller
         }
 
         return $this->render(
-            '@ezdesign/rssfeed/edit.html.twig',
+            '@ibexadesign/rssfeed/edit.html.twig',
             [
                 'form' => $form->createView(),
             ]
@@ -131,10 +130,14 @@ class RssFeedController extends Controller
 
     /**
      * @Route("/edit/{id}", name="platform_admin_ui_rss_feeds_edit")
-     * @ParamConverter("rssFeed", class="EzRssFeedBundle:RssFeeds")
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editAction(Request $request, RssFeeds $rssFeed): Response
+    public function editAction(Request $request, int $id)
     {
+        $rssFeedRepository = $this->entityManager->getRepository(RssFeeds::class);
+        $rssFeed = $rssFeedRepository->find($id);
+
         /**
          * @var PermissionResolver
          */
@@ -142,6 +145,10 @@ class RssFeedController extends Controller
 
         if (!$permissionResolver->hasAccess('rss', 'edit')) {
             throw new UnauthorizedException('rss', 'edit', []);
+        }
+        $originalSites = new ArrayCollection();
+        foreach ($rssFeed->getFeedSites() as $site) {
+            $originalSites->add($site);
         }
 
         $originalFeedsItems = new ArrayCollection();
@@ -175,6 +182,13 @@ class RssFeedController extends Controller
                     $this->entityManager->remove($originalChild);
                 }
             }
+            foreach ($originalSites as $originalChild) {
+                if (false === $rssFeed->getFeedSites()->contains($originalChild)) {
+                    $rssFeed->removeFeedSite($originalChild);
+                    $originalChild->setRssFeeds(null);
+                    $this->entityManager->remove($originalChild);
+                }
+            }
 
             $this->entityManager->flush();
 
@@ -184,7 +198,7 @@ class RssFeedController extends Controller
         }
 
         return $this->render(
-            '@ezdesign/rssfeed/edit.html.twig',
+            '@ibexadesign/rssfeed/edit.html.twig',
             [
                 'form' => $feedForm->createView(),
             ]
@@ -198,10 +212,12 @@ class RssFeedController extends Controller
 
     /**
      * @Route("/delete/{id}", name="platform_admin_ui_rss_feeds_delete")
-     * @ParamConverter("rssFeed", class="EzRssFeedBundle:RssFeeds")
      */
-    public function deleteAction(Request $request, RssFeeds $rssFeed): RedirectResponse
+    public function deleteAction(Request $request, int $id): RedirectResponse
     {
+        $rssFeedRepository = $this->entityManager->getRepository(RssFeeds::class);
+        $rssFeed = $rssFeedRepository->find($id);
+
         /**
          * @var PermissionResolver
          */
@@ -274,8 +290,8 @@ class RssFeedController extends Controller
 
         if ($request->get('contenttype_id')) {
             $contentType = $this->getRepository()
-                                ->getContentTypeService()
-                                ->loadContentType($request->get('contenttype_id'));
+                ->getContentTypeService()
+                ->loadContentType($request->get('contenttype_id'));
 
             foreach ($contentType->getFieldDefinitions() as $fieldDefinition) {
                 $fieldsMap[ucfirst($fieldDefinition->getName())] =

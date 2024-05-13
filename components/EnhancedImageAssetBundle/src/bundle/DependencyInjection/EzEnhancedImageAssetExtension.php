@@ -65,9 +65,9 @@ class EzEnhancedImageAssetExtension extends Extension implements PrependExtensio
         );
 
         $configs = [
-            'field_templates.yml' => 'ezpublish',
-            'admin_ui_forms.yml' => 'ezpublish',
-            'image_variations.yml' => 'ezpublish',
+            'field_templates.yml' => 'ibexa',
+            'admin_ui_forms.yml' => 'ibexa',
+            'image_variations.yml' => 'ibexa',
         ];
 
         foreach ($configs as $fileName => $extensionName) {
@@ -77,7 +77,7 @@ class EzEnhancedImageAssetExtension extends Extension implements PrependExtensio
             $container->addResource(new FileResource($configFile));
         }
 
-        $configs = $container->getExtensionConfig('ezpublish');
+        $configs = $container->getExtensionConfig('ibexa');
         $newConfig = [];
         foreach ($configs as $config) {
             if (!isset($config['system'])) {
@@ -104,6 +104,6 @@ class EzEnhancedImageAssetExtension extends Extension implements PrependExtensio
                 }
             }
         }
-        $container->prependExtensionConfig('ezpublish', $newConfig);
+        $container->prependExtensionConfig('ibexa', $newConfig);
     }
 }

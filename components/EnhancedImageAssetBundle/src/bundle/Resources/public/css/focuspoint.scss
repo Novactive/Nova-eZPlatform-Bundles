@@ -8,6 +8,11 @@
  * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
 
+.ibexa-field-preview__meta-wrapper {
+    .focuspoint-helper {
+        max-width: 100px;
+    }
+}
 .focuspoint-helper {
     position: relative;
 
@@ -61,9 +66,6 @@
     }
 
     .focuspoint-helper--frames {
-        position: relative;
-        height: 700px;
-
         .focuspoint-helper--frame {
             position: absolute !important;
             overflow: hidden;
@@ -118,7 +120,7 @@
     }
 }
 
-.ez-field-preview--ezimage {
+.ibexa-field-preview--ezimage {
     .focuspoint-helper--target {
         width: auto;
         margin: 1em;

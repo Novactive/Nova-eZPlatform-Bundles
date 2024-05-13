@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage;
 
-use EzSystems\EzPlatformAdminUi\Form\DataTransformer\FieldType\ImageValueTransformer;
+use Ibexa\AdminUi\Form\DataTransformer\FieldType\ImageValueTransformer;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class ValueTransformer extends ImageValueTransformer

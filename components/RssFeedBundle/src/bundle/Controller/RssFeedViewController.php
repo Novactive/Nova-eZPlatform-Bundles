@@ -12,9 +12,11 @@
 
 namespace Novactive\EzRssFeedBundle\Controller;
 
-use eZ\Bundle\EzPublishCoreBundle\Controller;
-use eZ\Publish\API\Repository\PermissionResolver;
-use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use Ibexa\Bundle\Core\Controller;
+use Ibexa\Contracts\Core\Repository\PermissionResolver;
+use Ibexa\Core\Base\Exceptions\UnauthorizedException;
+use Ibexa\Core\MVC\Symfony\SiteAccess;
+use Knp\Menu\FactoryInterface;
 use Novactive\EzRssFeedBundle\Entity\RssFeeds;
 use Novactive\EzRssFeedBundle\Services\RssFeedsService;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,14 +33,17 @@ class RssFeedViewController extends Controller
     use EntityManagerTrait;
 
     /**
-     * @Route("/{urlSlug}", name="rss_feed_view_index")
+     * @Route("/{urlSlug}/{site?}", name="rss_feed_view_index")
      */
-    public function indexAction(Request $request, RssFeedsService $rssFeedsService): Response
-    {
+    public function indexAction(
+        Request $request,
+        SiteAccess $siteAccess,
+        RssFeedsService $rssFeedsService
+    ): Response {
         /**
-         * @var PermissionResolver
+         * @var PermissionResolver $permissionResolver
          */
-        $permissionResolver = $this->container->get('ezpublish.api.repository')->getPermissionResolver();
+        $permissionResolver = $this->container->get('ibexa.api.repository')->getPermissionResolver();
 
         if (!$permissionResolver->hasAccess('rss', 'read')) {
             throw new UnauthorizedException('rss', 'read', []);
@@ -46,19 +51,16 @@ class RssFeedViewController extends Controller
 
         $rssFeedRepository = $this->entityManager->getRepository(RssFeeds::class);
 
-        $rssFeed = $rssFeedRepository->findOneBy(
-            [
-                'urlSlug' => $request->get('urlSlug'),
-                'status' => RssFeeds::STATUS_ENABLED,
-            ]
+        $rssFeed = $rssFeedRepository->findFeedBySiteIdentifierAndUrlSlug(
+            $request->query->get('site', $siteAccess->name),
+            $request->get('urlSlug')
         );
 
-        if ($rssFeed) {
+        if ($rssFeed instanceof RssFeeds) {
             $feedItems = $rssFeedsService->fetchContent($rssFeed);
-
             $response = new Response(
                 $this->renderView(
-                    '@ezdesign/rssfeed/view.html.twig',
+                    '@ibexadesign/rssfeed/view.html.twig',
                     [
                         'rssFeed' => [
                             'meta' => [
@@ -78,5 +80,36 @@ class RssFeedViewController extends Controller
         }
 
         throw $this->createNotFoundException();
+    }
+
+    public function rssHeadLinkTagsAction(SiteAccess $siteAccess, FactoryInterface $knpMenuFactory): Response
+    {
+        $rssFeedRepository = $this->entityManager->getRepository(RssFeeds::class);
+        /** @var RssFeeds[] $rssFeeds */
+        $rssFeeds = $rssFeedRepository->findFeedsBySiteIdentifier(
+            $siteAccess->name
+        );
+        $links = [];
+        foreach ($rssFeeds as $rssFeed) {
+            if (empty($links) || 0 !== $rssFeed->getFeedSites()->count()) {
+                $links[] = $knpMenuFactory->createItem(
+                    $rssFeed->getTitle(),
+                    [
+                        'route' => 'rss_feed_view_index',
+                        'routeParameters' => [
+                            'urlSlug' => $rssFeed->getUrlSlug(),
+                        ],
+                        'routeAbsolute' => true,
+                    ]
+                );
+            }
+        }
+
+        return $this->render(
+            '@ibexadesign/rssfeed/meta_links.html.twig',
+            [
+                'links' => $links,
+            ]
+        );
     }
 }

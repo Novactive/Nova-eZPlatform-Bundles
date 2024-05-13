@@ -150,8 +150,8 @@ class EnhancedImage {
     const throttle = function (fn: Function): Function {
         let running: boolean;
         let lastTime = 0;
-        const gDelay = window.lazySizesConfig.throttleDelay;
-        let rICTimeout = window.lazySizesConfig.ricTimeout;
+        const gDelay = window.lazySizes.cfg.throttleDelay;
+        let rICTimeout = window.lazySizes.cfg.ricTimeout;
         const run = function (): void {
             running = false;
             lastTime = Date.now();
@@ -162,8 +162,8 @@ class EnhancedImage {
                 ? function (): void {
                       window.requestIdleCallback(run, { timeout: rICTimeout });
 
-                      if (rICTimeout !== window.lazySizesConfig.ricTimeout) {
-                          rICTimeout = window.lazySizesConfig.ricTimeout;
+                      if (rICTimeout !== window.lazySizes.cfg.ricTimeout) {
+                          rICTimeout = window.lazySizes.cfg.ricTimeout;
                       }
                   }
                 : rAFIt(function (): void {

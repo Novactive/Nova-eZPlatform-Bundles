@@ -13,13 +13,14 @@
 namespace Novactive\Bundle\eZProtectedContentBundle\Core;
 
 use Doctrine\Bundle\DoctrineBundle\Mapping\ContainerEntityListenerResolver;
-use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\Psr6\DoctrineProvider;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Doctrine\Persistence\ManagerRegistry as Registry;
-use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
+use Ibexa\Bundle\Core\ApiLoader\RepositoryConfigurationProvider;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 class SiteAccessAwareEntityManagerFactory
 {
@@ -73,14 +74,14 @@ class SiteAccessAwareEntityManagerFactory
         $connection = $this->registry->getConnection($connectionName);
 
         /** @var \Doctrine\DBAL\Connection $connection */
-        $cache = new ArrayCache();
+        $cache = new ArrayAdapter();
         $config = new Configuration();
-        $config->setMetadataCacheImpl($cache);
+        $config->setMetadataCacheImpl(DoctrineProvider::wrap($cache));
         $driverImpl = $config->newDefaultAnnotationDriver(__DIR__.'/../Entity', false);
         $config->setMetadataDriverImpl($driverImpl);
-        $config->setQueryCacheImpl($cache);
-        $config->setProxyDir($this->settings['cache_dir'].'/eZSEOBundle/');
-        $config->setProxyNamespace('eZSEOBundle\Proxies');
+        $config->setQueryCacheImpl(DoctrineProvider::wrap($cache));
+        $config->setProxyDir($this->settings['cache_dir'].'/eZProtectedContent/');
+        $config->setProxyNamespace('eZProtectedContent\Proxies');
         $config->setAutoGenerateProxyClasses($this->settings['debug']);
         $config->setEntityListenerResolver($this->resolver);
         $config->setNamingStrategy(new UnderscoreNamingStrategy());

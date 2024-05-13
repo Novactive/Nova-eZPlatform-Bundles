@@ -1,22 +1,22 @@
-{% extends '@EzPlatformAdminUi/themes/admin/ui/form_fields.html.twig' %}
+{% extends '@IbexaAdminUi/themes/admin/ui/form_fields.html.twig' %}
 
 {% block tree_discovery_widget %}
 
     <div>
         <input type="hidden" id="{{ form.location.vars["id"] }}" name="{{ form.location.vars["full_name"] }}"
-               value="{{ form.location.vars["value"] }}"/>
+               value="{{ form.location.vars["value"] }}" required="required"/>
     </div>
 
-    <div class="items-rss-location">
+    <div>
         <button class="{{ form.vars.attr['class'] }}"
-                data-udw-config="{{ ez_udw_config('nova_ezrssfeed') }}"
+                data-udw-config="{{ ibexa_udw_config('nova_ezrssfeed') }}"
                 data-location-input-selector="#{{ form.location.vars["id"] }}"
                 data-selected-location-list-selector="#{{ form.location.vars["id"] }}-selected-location"
                 type="button">
-            <svg class="ez-icon">
-                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#relations"></use>
+            <svg class="ibexa-icon">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ ibexa_icon_path('relations') }}"></use>
             </svg>
-            <span class="ez-relations__cta-btn-label"
+            <span class="ibexa-relations__cta-btn-label"
                   data-location-input-selector="#{{ form.location.vars["id"] }}"
                   data-selected-location-list-selector="#{{ form.location.vars["id"] }}-selected-location"
             >
@@ -77,7 +77,7 @@
     </div>
 {% endblock _rss_feeds_feed_items_entry_description_row %}
 {% block _rss_feeds_feed_items_entry_category_row %}
-    <div class="form-group col-md-6 col-sm-12 col-xs-12 pull-left">
+    <div class="form-group col-md-6 col-sm-12 col-xs-12">
         <label class="form-label">
             {{- form_label(form) -}}
         </label>
@@ -88,7 +88,7 @@
     </div>
 {% endblock _rss_feeds_feed_items_entry_category_row %}
 {% block _rss_feeds_feed_items_entry_media_row %}
-    <div class="form-group col-md-6 col-sm-12 col-xs-12 pull-left">
+    <div class="form-group col-md-6 col-sm-12 col-xs-12">
         <label class="form-label">
             {{- form_label(form) -}}
         </label>
@@ -99,4 +99,33 @@
     </div>
 {% endblock _rss_feeds_feed_items_entry_media_row %}
 
+{% block _rss_feeds_feed_items_entry_row %}
+    {%- if compound is defined and compound -%}
+        {%- set element = 'fieldset' -%}
+    {%- endif -%}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+    <{{ element|default('div') }}{% with {attr: row_attr|merge({class: (row_attr.class|default('') ~ ' form-group ibexa-container')|trim})} %}{{ block('attributes') }}{% endwith %}>
+        {{- form_widget(form, widget_attr) -}}
+        {{- form_help(form) -}}
+        {{- form_errors(form) -}}
+    </{{ element|default('div') }}>
+{% endblock _rss_feeds_feed_items_entry_row %}
 
+
+{% block _rss_feeds_feed_items_entry_widget %}
+    <div {{ block('widget_container_attributes') }}>
+        <a class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text delete-rss-items pull-right">
+            <svg class="ibexa-icon ibexa-icon--medium">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ ibexa_icon_path('trash') }}"></use>
+            </svg>
+        </a>
+        {%- if form is rootform -%}
+            {{ form_errors(form) }}
+        {%- endif -%}
+        {{- block('form_rows') -}}
+        {{- form_rest(form) -}}
+    </div>
+{% endblock _rss_feeds_feed_items_entry_widget %}

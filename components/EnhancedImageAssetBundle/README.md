@@ -115,7 +115,7 @@ You can now specify the `alternativeAlias` parameter to define alternative image
 
 ```twig
 
-{{ ez_render_field(content, fieldIdentifier, {
+{{ ibexa_render_field(content, fieldIdentifier, {
     parameters: {
         alias: 'desktop_alias',
         alternativeAlias: [
@@ -123,8 +123,8 @@ You can now specify the `alternativeAlias` parameter to define alternative image
                 alias: 'mobile_alias',
                 media: '(max-width: 320px)'
             }
-        ]
-        lazyLoad: true|false // optionnal
+        ],
+        lazyLoad: true|false, // optionnal
         retina: true|false // optionnal
     }
 }) }}
@@ -158,11 +158,11 @@ WHERE oa.data_type_string = "ezimage" AND ca.data_type_string="enhancedimage";
 ## Usage
 Some feature will require the following assets
 ```twig
-<link rel="stylesheet" href="{{ asset("bundles/ezenhancedimageasset/css/enhancedimage.css") }}" />
+{{ encore_entry_link_tags('enhancedimage-css', null, 'ibexa') }}
 ```
  
 ```twig
-<script src="{{ asset("bundles/ezenhancedimageasset/js/enhancedimage.js") }}"></script>
+{{ encore_entry_script_tags('enhancedimage-js', null, 'ibexa') }}
 ```
 
 

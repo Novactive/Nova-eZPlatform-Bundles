@@ -35,7 +35,6 @@ class EzRssFeedExtension extends Extension implements PrependExtensionInterface
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('PlatformAdminUI/services.yml');
-        $loader->load('ezadminui.yml');
     }
 
     /**
@@ -44,7 +43,7 @@ class EzRssFeedExtension extends Extension implements PrependExtensionInterface
     public function prepend(ContainerBuilder $container): void
     {
         $configs = [
-            'views.yml' => 'ezpublish',
+            'views.yml' => 'ibexa',
         ];
 
         foreach ($configs as $fileName => $extensionName) {

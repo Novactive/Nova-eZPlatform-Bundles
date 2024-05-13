@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Novactive\NovaeZMaintenanceBundle\Listener;
 
-use EzSystems\EzPlatformAdminUi\Menu\Event\ConfigureMenuEvent;
-use EzSystems\EzPlatformAdminUi\Menu\MainMenuBuilder;
+use Ibexa\AdminUi\Menu\Event\ConfigureMenuEvent;
+use Ibexa\AdminUi\Menu\MainMenuBuilder;
 use Novactive\NovaeZMaintenanceBundle\Helper\FileHelper;
 
 class AdminTopMenu

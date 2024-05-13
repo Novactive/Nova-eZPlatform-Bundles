@@ -9,8 +9,8 @@ services:
 
     Novactive\NovaeZMaintenanceBundle\Helper\FileHelper:
         arguments:
-            $binaryFileIOService: "@ezpublish.fieldType.ezbinaryfile.io_service"
-            $siteaccessList: '%ezpublish.siteaccess.list%'
+            $binaryFileIOService: "@ibexa.field_type.ezbinaryfile.io_service"
+            $siteaccessList: '%ibexa.site_access.list%'
         lazy: true
 
     Novactive\NovaeZMaintenanceBundle\Controller\:

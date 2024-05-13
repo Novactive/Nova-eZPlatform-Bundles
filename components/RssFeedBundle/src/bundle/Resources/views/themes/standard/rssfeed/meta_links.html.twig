@@ -1,0 +1,3 @@
+{% for link in links %}
+    <link rel="alternate" type="application/rss+xml" title="{{ link.name }}" href="{{ link.uri }}">
+{% endfor %}

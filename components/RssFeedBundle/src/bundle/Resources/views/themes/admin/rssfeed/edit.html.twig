@@ -1,15 +1,26 @@
-{% extends '@EzPlatformAdminUi/themes/admin/ui/base.html.twig' %}
+{% extends '@IbexaAdminUi/themes/admin/ui/base.html.twig' %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('nova_ezrssfeed_edit', null, 'ibexa') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('nova_ezrssfeed_edit', null, 'ibexa') }}
+{% endblock %}
 
 {% form_theme form '@EzRssFeed/Form/form_fields.html.twig' %}
 {% set itemIndexes = [] %}
 {% block form %}
-
-    {{ form_start(form) }}
-
-    <section class="container mt-4 px-5">
-        <div class="card ez-card">
-            <div class="card-body">
-                <div class="form-group col-md-12 col-sm-12 col-xs-12 pull-left">
+    {{ form_start(form, { attr: {
+        class: 'ibexa-form'
+    }}) }}
+    <section class="ibexa-container">
+        <div class="ibexa-content-container">
+            <div class="card-body form-row row">
+                <div class="form-group col-md-6 col-sm-12 col-xs-12">
                     <label class="form-label">
                         {{ form_label(form.title) }}
                     </label>
@@ -18,7 +29,7 @@
                         {{ form_widget(form.title) }}
                     </div>
                 </div>
-                <div class="form-group col-md-12 col-sm-12 col-xs-12 pull-left">
+                <div class="form-group col-md-6 col-sm-12 col-xs-12">
                     <label class="form-label">
                         {{ form_label(form.description) }}
                     </label>
@@ -27,7 +38,7 @@
                         {{ form_widget(form.description) }}
                     </div>
                 </div>
-                <div class="form-group col-md-12 col-sm-12 col-xs-12 pull-left">
+                <div class="form-group col-md-6 col-sm-12 col-xs-12">
                     <label class="form-label">
                         {{ form_label(form.number_of_object) }}
                     </label>
@@ -36,8 +47,16 @@
                         {{ form_widget(form.number_of_object) }}
                     </div>
                 </div>
-
-                <div class="form-group col-md-6 col-sm-12 col-xs-12 pull-left">
+                <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                    <label class="form-label">
+                        {{ form_label(form.feed_sites) }}
+                    </label>
+                    <div class="controls">
+                        {{ form_errors(form.feed_sites) }}
+                        {{ form_widget(form.feed_sites) }}
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12 col-xs-12">
                     <label class="form-label">
                         {{ form_label(form.sort_type) }}
                     </label>
@@ -46,8 +65,7 @@
                         {{ form_widget(form.sort_type) }}
                     </div>
                 </div>
-
-                <div class="form-group col-md-6 col-sm-12 col-xs-12 pull-left">
+                <div class="form-group col-md-6 col-sm-12 col-xs-12">
                     <label class="form-label">
                         {{ form_label(form.sort_direction) }}
                     </label>
@@ -56,8 +74,7 @@
                         {{ form_widget(form.sort_direction) }}
                     </div>
                 </div>
-
-                <div class="form-group col-md-12 col-sm-12 col-xs-12 pull-left">
+                <div class="form-group col-md-12 col-sm-12 col-xs-12">
                     <label class="form-label">
                         {{ form_label(form.url_slug) }}
                     </label>
@@ -67,34 +84,18 @@
                         {{ form_widget(form.url_slug) }}
                     </div>
                 </div>
-
-
-                <div class="rss-toolbar">
-                    <div class="pull-left">
-                        <span class="rss-toolbar-title">{{ 'ez_rss_feed.form.fields.title' | trans }}</span></div>
-                    <div class="pull-right">
-                        <a id="open-child-form" class="btn btn-primary btn-add-rss">
-                            <svg>
-                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#create"></use>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-
                 <div class="items-rss" data-prototype="{{ form_widget(form.feed_items.vars['prototype'])|e }}">
+                    <div class="rss-toolbar">
+                        <a id="open-child-form" class="btn ibexa-btn ibexa-btn--secondary">
+                            <svg class="ibexa-icon ibexa-icon--small">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ ibexa_icon_path('create') }}"></use>
+                            </svg>
+                            {{ 'ez_rss_feed.new'|trans }}
+                        </a>
+                        <span class="rss-toolbar-title">{{ 'ez_rss_feed.form.fields.title' | trans }}</span>
+                    </div>
                     {% for feed_item in form.feed_items %}
-                        <section class="container mt-4">
-                            <div class="card ez-card">
-                                <div class="card-body">
-                                    <a class="btn btn-primary delete-rss-items pull-right">
-                                        <svg>
-                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/bundles/ezplatformadminui/img/ez-icons.svg#trash"></use>
-                                        </svg>
-                                    </a>
-                                    {{ form_row(feed_item) }}
-                                </div>
-                            </div>
-                        </section>
+                        {{ form_row(feed_item) }}
                         {% set itemIndexes = itemIndexes|merge([feed_item.vars["name"]]) %}
                     {% endfor %}
                 </div>
@@ -112,7 +113,10 @@
     ></div>
 {% endblock %}
 
-{% block right_sidebar %}
-    {% set rss_edit_sidebar_right = knp_menu_get('ezplatform_admin_ui.menu.rss_edit.sidebar_right') %}
-    {{ knp_menu_render(rss_edit_sidebar_right, {'template': '@EzPlatformAdminUi/themes/admin/ui/menu/sidebar_right.html.twig'}) }}
+{% block header %}
+    {% set rss_edit_sidebar_right = knp_menu_get('ibexa_admin_ui.menu_configure.rss_edit_sidebar_right') %}
+    {{ knp_menu_render(rss_edit_sidebar_right, {
+        'template': '@ibexadesign/ui/menu/context_menu.html.twig',
+        'primary_item_class': 'ibexa-btn--filled-info'
+    }) }}
 {% endblock %}

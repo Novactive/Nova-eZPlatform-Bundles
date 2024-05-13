@@ -14,21 +14,32 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Core\Tab;
 
-use EzSystems\EzPlatformAdminUi\Tab\AbstractTab;
-use EzSystems\EzPlatformAdminUi\Tab\OrderedTabInterface;
-use Novactive\Bundle\eZProtectedContentBundle\Core\Compose\EntityManager;
+use Ibexa\Contracts\AdminUi\Tab\AbstractTab;
+use Ibexa\Contracts\AdminUi\Tab\OrderedTabInterface;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
 use Novactive\Bundle\eZProtectedContentBundle\Form\ProtectedAccessType;
+use Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedAccessRepository;
 use Symfony\Component\Form\FormFactoryInterface;
 
 class ProtectContent extends AbstractTab implements OrderedTabInterface
 {
-    use EntityManager;
+    /**
+     * @var ProtectedAccessRepository
+     */
+    private $protectedAccessRepository;
 
     /**
      * @var FormFactoryInterface
      */
     private $formFactory;
+
+    /**
+     * @required
+     */
+    public function setProtectedAccessRepository(ProtectedAccessRepository $protectedAccessRepository): void
+    {
+        $this->protectedAccessRepository = $protectedAccessRepository;
+    }
 
     /**
      * @required
@@ -63,10 +74,10 @@ class ProtectContent extends AbstractTab implements OrderedTabInterface
         $privateAccess->setContentId($content->id);
         $form = $this->formFactory->create(ProtectedAccessType::class, $privateAccess);
 
-        $items = $this->entityManager->getRepository(ProtectedAccess::class)->findByContent($content);
+        $items = $this->protectedAccessRepository->findByContent($content);
 
         return $this->twig->render(
-            '@NovaeZProtectedContent/tabs/protected_content.html.twig',
+            '@ibexadesign/tabs/protected_content.html.twig',
             [
                 'form' => $form->createView(),
                 'items' => $items,

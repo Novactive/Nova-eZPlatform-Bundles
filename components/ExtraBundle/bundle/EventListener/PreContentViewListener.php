@@ -16,9 +16,9 @@ namespace Novactive\Bundle\eZExtraBundle\EventListener;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;
-use eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper;
-use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use Ibexa\Core\MVC\Symfony\Event\PreContentViewEvent;
+use Ibexa\Core\MVC\Symfony\Templating\GlobalHelper;
+use Ibexa\Core\MVC\Symfony\View\ContentView;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PreContentViewListener

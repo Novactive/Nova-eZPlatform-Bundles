@@ -14,12 +14,12 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Listener;
 
-use Doctrine\ORM\EntityManagerInterface;
-use eZ\Publish\API\Repository\PermissionResolver;
-use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;
-use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use Ibexa\Contracts\Core\Repository\PermissionResolver;
+use Ibexa\Core\MVC\Symfony\Event\PreContentViewEvent;
+use Ibexa\Core\MVC\Symfony\View\ContentView;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
 use Novactive\Bundle\eZProtectedContentBundle\Form\RequestProtectedAccessType;
+use Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedAccessRepository;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -31,9 +31,9 @@ class PreContentView
     private $permissionResolver;
 
     /**
-     * @var EntityManagerInterface
+     * @var ProtectedAccessRepository
      */
-    private $entityManager;
+    private $protectedAccessRepository;
 
     /**
      * @var FormFactoryInterface
@@ -47,12 +47,12 @@ class PreContentView
 
     public function __construct(
         PermissionResolver $permissionResolver,
-        EntityManagerInterface $manager,
+        ProtectedAccessRepository $protectedAccessRepository,
         FormFactoryInterface $factory,
         RequestStack $requestStack
     ) {
         $this->permissionResolver = $permissionResolver;
-        $this->entityManager = $manager;
+        $this->protectedAccessRepository = $protectedAccessRepository;
         $this->formFactory = $factory;
         $this->requestStack = $requestStack;
     }
@@ -64,7 +64,7 @@ class PreContentView
     {
         $contentView = $event->getContentView();
 
-        if (!$contentView instanceof ContentView) {
+        if (!$contentView instanceof ContentView || !$contentView->getContent()) {
             return;
         }
 
@@ -74,7 +74,11 @@ class PreContentView
 
         $content = $contentView->getContent();
 
-        $protections = $this->entityManager->getRepository(ProtectedAccess::class)->findByContent($content);
+        if ($content->contentInfo->isDraft()) {
+            return;
+        }
+
+        $protections = $this->protectedAccessRepository->findByContent($content);
 
         if (0 === count($protections)) {
             return;

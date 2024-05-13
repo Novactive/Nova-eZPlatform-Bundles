@@ -12,8 +12,8 @@
 
 namespace Novactive\EzRssFeedBundle\Services;
 
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\Values\Content\Query;
+use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 use Novactive\EzRssFeedBundle\Entity\RssFeeds;
 use Novactive\EzRssFeedBundle\Repository\Values\FeedValueObject;
 use Symfony\Component\Routing\RouterInterface;
@@ -55,6 +55,7 @@ class RssFeedsService
         $queryFilter = [];
         $mappingFieldIdentifier = [];
         $query = new Query();
+        $queryFilter[] = new Query\Criterion\MatchNone();
 
         foreach ($rssFeed->getFeedItems()->toArray() as $filter) {
             $filter = $filter->toArray();
@@ -72,10 +73,9 @@ class RssFeedsService
             }
 
             $criterion[] = new Query\Criterion\ContentTypeId($filter['contentTypeId']);
-
+            $criterion[] = new Query\Criterion\Visibility(Query\Criterion\Visibility::VISIBLE);
             $queryFilter[] = new Query\Criterion\LogicalAnd($criterion);
         }
-
         $query->filter = new Query\Criterion\LogicalOr($queryFilter);
         $query->limit = $numberObjects;
 

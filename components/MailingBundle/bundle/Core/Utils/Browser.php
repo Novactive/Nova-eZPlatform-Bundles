@@ -87,8 +87,8 @@ class Browser
         // see how many we have
         $i = count($matches['browser']);
         if (1 != $i) {
-            //we will have two since we are not using 'other' argument yet
-            //see if version is before or after the name
+            // we will have two since we are not using 'other' argument yet
+            // see if version is before or after the name
             if (strripos($userAgent, 'Version') < strripos($userAgent, $userAgentBrand)) {
                 $version = $matches['version'][0];
             } else {

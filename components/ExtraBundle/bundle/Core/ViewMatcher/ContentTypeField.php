@@ -14,10 +14,10 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\Core\ViewMatcher;
 
-use eZ\Publish\Core\MVC\RepositoryAware;
-use eZ\Publish\Core\MVC\Symfony\Matcher\ViewMatcherInterface;
-use eZ\Publish\Core\MVC\Symfony\View\ContentView;
-use eZ\Publish\Core\MVC\Symfony\View\View;
+use Ibexa\Core\MVC\RepositoryAware;
+use Ibexa\Core\MVC\Symfony\Matcher\ViewMatcherInterface;
+use Ibexa\Core\MVC\Symfony\View\ContentView;
+use Ibexa\Core\MVC\Symfony\View\View;
 
 final class ContentTypeField extends RepositoryAware implements ViewMatcherInterface
 {

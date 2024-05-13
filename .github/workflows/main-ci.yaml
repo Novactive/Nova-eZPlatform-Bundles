@@ -42,16 +42,21 @@ jobs:
                 options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
         strategy:
             matrix:
-                php: [ 7.4, 8.1 ]
                 include:
                     -   ibexa_version: 4.*
+                        php: 8.1
+                        node: 18.x
+                    -   ibexa_version: 4.5.*
+                        php: 8.1
+                        node: 14.x
                     -   ibexa_version: 4.3.0
                         php: 7.4
+                        node: 14.x
         env:
             CACHE_POOL: cache.redis
             DATABASE_URL: mysql://root@127.0.0.1:3306/ezplatform_test
             CACHE_DSN: 127.0.0.1:6379
-            APP_ENV: dev
+            APP_ENV: prod
             APP_DEBUG: 1
             COMPOSER_MEMORY_LIMIT: 4G
             PANTHER_EXTERNAL_BASE_URI: http://127.0.0.1:8000
@@ -59,11 +64,10 @@ jobs:
         steps:
             -   uses: actions/checkout@v2
 
-            -   uses: volta-cli/action@v1
+            -   uses: volta-cli/action@v4
                 with:
-                    node-version: 14.18
-                    yarn-version: 1.22
-
+                    node-version: ${{ matrix.node }}
+                    yarn-version: 1.x
             -   name: Check JS Version
                 run: |
                     node --version
@@ -105,18 +109,17 @@ jobs:
 
             -   name: Install Ibexa DXP and Yarn deps
                 run: |
-                    composer create-project "ibexa/oss-skeleton:${{ matrix.ibexa_version }}" --prefer-dist --no-progress --no-interaction ezplatform
-                    mkdir -p ezplatform/node_modules && ln -s ezplatform/node_modules
-                    cd ezplatform
+                    composer create-project "ibexa/oss-skeleton:${{ matrix.ibexa_version }}" --prefer-dist --no-progress --no-interaction ibexa
+                    mkdir -p ibexa/node_modules && ln -s ibexa/node_modules
+                    cd ibexa
                     composer require --dev -W phpunit/phpunit:^9.5 --no-scripts
                     php bin/console ibexa:install
                     php bin/console ibexa:graphql:generate-schema
-                    composer run post-update-cmd
                     yarn add --dev algoliasearch react react-collapsible react-dom react-instantsearch-dom
 
             -   name: Run Webserver
                 run: |
-                    cd ezplatform
+                    cd ibexa
                     symfony local:server:start --no-tls -d
                     symfony local:server:list
 
@@ -129,10 +132,11 @@ jobs:
                             echo ::endgroup::
                         fi
                     done
-                    cd ezplatform
+                    cd ibexa
                     echo ::group::..:: Update Composer ::..
+                    rm var/cache/prod -rf
                     composer update
-                    php bin/console cache:clear
+                    bin/console d:s:u --force
                     echo ::endgroup::
 
                     echo ::group::..:: Do bundle specifics ::..
@@ -150,7 +154,7 @@ jobs:
             -   name: Update PHP Unit
                 run: |
                     composer update && composer require -W phpunit/phpunit:^9.5 symfony/phpunit-bridge:^5.3
-                    rm -f ezplatform/config/packages/test/doctrine.yaml
+                    rm -f ibexa/config/packages/test/doctrine.yaml
                     php vendor/bin/bdi detect drivers
 
             -   name: Components testing
@@ -163,6 +167,12 @@ jobs:
                         fi
                     done
 
+            -   name: Dump logs
+                if: ${{ failure() }}
+                run: |
+                    cd ibexa
+                    ls -al var/log/
+                    cat var/log/prod*
             -   name: Global Mono Repo Testing
                 run: |
                     DATABASE_URL=mysql://root@127.0.0.1:3306/ezplatform APP_ENV=test php ./vendor/bin/phpunit -c "tests" "tests" --exclude-group behat                    

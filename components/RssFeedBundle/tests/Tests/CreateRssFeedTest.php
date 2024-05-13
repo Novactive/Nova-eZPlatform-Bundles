@@ -37,7 +37,6 @@ class CreateRssFeedTest extends PantherTestCase
         // Creating Feed
         $crawler = $helper->get('/admin/rssfeeds/add');
         $helper->waitFor('form');
-        $rssForm = $crawler->filter('form');
 
         $addItemLink = $crawler->filter('#open-child-form');
         $addItemLink->click();
@@ -48,23 +47,30 @@ class CreateRssFeedTest extends PantherTestCase
         $helper->wait(2);
 
         $helper->waitFor('#react-udw');
-        $ezPlatformSpan = $crawler->filter('span[data-original-title="eZ Platform"]');
+        $ezPlatformSpan = $crawler->filter('span[data-original-title="Ibexa Platform"]');
         $ezPlatformSpan->click();
 
-        $confirmButton = $crawler->filter('button.c-selected-locations__confirm-button');
+        $helper->client()->waitForEnabled('button.c-actions-menu__confirm-btn');
+        $confirmButton = $crawler->filter('button.c-actions-menu__confirm-btn');
         $confirmButton->click();
 
-        $form = $rssForm->form(
+        $rssForm = $crawler->filter('form.ibexa-form');
+
+        /** @var \Symfony\Component\Panther\DomCrawler\Form $form */
+        $form = $rssForm->form();
+        $form->setValues(
             [
                 'rss_feeds[title]' => 'Test Feed',
                 'rss_feeds[description]' => 'Test Description',
                 'rss_feeds[url_slug]' => self::FEED_URL_SLUG,
+                'rss_feeds[feed_sites]' => ['site'],
             ]
         );
 
-        $form['rss_feeds[feed_items][0][contenttype_id]']->select('1');
+        $form['rss_feeds[feed_items][0][contenttype_id]']->select('2');
         $helper->wait(2);
-        $form['rss_feeds[feed_items][0][title]']->select('name');
+        $form['rss_feeds[feed_items][0][title]']->select('title');
+        $form['rss_feeds[feed_items][0][subtree_path][location]']->getValue();
 
         $rssForm->submit();
 
@@ -85,11 +91,11 @@ class CreateRssFeedTest extends PantherTestCase
         // Testing the Feed content
         $helper->get('/rss/feed/'.self::FEED_URL_SLUG);
         $source = $helper->client()->getPageSource();
-        self::assertStringContainsString('Welcome to eZ Platform', $source);
+        self::assertStringContainsString('Test Feed', $source);
 
         // deleting the created feed
         $listCrawler = $helper->get('/admin/rssfeeds/');
-        $listCrawler->filter('#rssfeed-'.self::FEED_URL_SLUG)->filter('a.rssfeed-delete')->click();
+        $listCrawler->filter('#rssfeed-'.self::FEED_URL_SLUG)->filter('button.rssfeed-delete')->click();
         $helper->waitFor('form#form-delete-rss-feed-'.self::FEED_URL_SLUG);
         $listCrawler->filter('form#form-delete-rss-feed-'.self::FEED_URL_SLUG)->submit();
     }

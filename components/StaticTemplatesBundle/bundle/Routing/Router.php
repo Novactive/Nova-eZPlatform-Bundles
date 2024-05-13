@@ -74,7 +74,7 @@ class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAcc
         $params = [
             '_route' => 'static_template',
             '_controller' => function (string $template = 'index') {
-                return new Response($this->twig->render("@ezdesign/{$template}.html.twig"));
+                return new Response($this->twig->render("@ibexadesign/{$template}.html.twig"));
             },
         ];
         if (!empty($requestedPath)) {
@@ -101,7 +101,12 @@ class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAcc
 
     public function generate($name, $parameters = [], $referenceType = self::ABSOLUTE_PATH)
     {
-        // nothing to do
+        $template = $parameters['template'];
+        unset($parameters['template']);
+        $query = http_build_query($parameters);
+        $linkUri = "$template?$query";
+
+        return $this->siteAccess->matcher->analyseLink($linkUri);
     }
 
     public function match($pathinfo)
@@ -111,7 +116,7 @@ class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAcc
 
     public function supports($name): bool
     {
-        return 'maquette' === $name;
+        return 'static_template' === $name;
     }
 
     public function getRouteDebugMessage($name, array $parameters = [])

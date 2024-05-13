@@ -6,8 +6,8 @@ services:
 
     Novactive\Bundle\EzStaticTemplatesBundle\Routing\Router:
         arguments:
-            - "%ezpublish.siteaccess.groups%"
+            - "%ibexa.site_access.groups%"
         calls:
-            - [setSiteaccess, ["@ezpublish.siteaccess"]]
+            - [setSiteAccess, ['@Ibexa\Core\MVC\Symfony\SiteAccess']]
         tags:
             - {name: router, priority: 300}

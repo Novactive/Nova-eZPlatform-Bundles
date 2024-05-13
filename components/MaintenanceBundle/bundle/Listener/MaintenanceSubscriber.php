@@ -2,11 +2,10 @@
 
 namespace Novactive\NovaeZMaintenanceBundle\Listener;
 
-use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
+use Ibexa\Core\MVC\Symfony\SiteAccess;
+use Ibexa\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use Novactive\NovaeZMaintenanceBundle\Helper\FileHelper;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -56,8 +55,39 @@ class MaintenanceSubscriber implements EventSubscriberInterface, SiteAccessAware
                     $this->siteAccess
                 )
             ) {
-                $event->setResponse($this->fileHelper->getResponse($siteaccessName));
+                $isPreviewPageBuilder = false;
+                if ($this->isAdminPreview($event)) {
+                    $isPreviewPageBuilder = true;
+                }
+
+                if (!$isPreviewPageBuilder) {
+                    $event->setResponse($this->fileHelper->getResponse($siteaccessName));
+                }
             }
         }
+    }
+
+    private function isAdminPreview(RequestEvent $event): bool
+    {
+        // paramaters initial request admin preview
+        $params = $event->getRequest()->attributes->has('params') ?
+            $event->getRequest()->attributes->get('params') : false;
+        // parameters sub request admin preview
+        $isPreview = $event->getRequest()->attributes->has('isPreview') ?
+            $event->getRequest()->attributes->get('isPreview') : false;
+        // route render
+        $route = $event->getRequest()->attributes->has('_route') ?
+            $event->getRequest()->attributes->get('_route') : false;
+
+        if ($isPreview || ($params['isPreview'] ?? false)) {
+            return true;
+        }
+
+        // Render controller pagebuilder
+        if (!$route) {
+            return true;
+        }
+
+        return false;
     }
 }
