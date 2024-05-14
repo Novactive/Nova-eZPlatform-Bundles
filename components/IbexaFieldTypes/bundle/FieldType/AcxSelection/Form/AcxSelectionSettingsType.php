@@ -17,7 +17,8 @@ class AcxSelectionSettingsType extends AbstractType
             [
                 'required' => false,
                 'label' => 'Multiple',
-            ]);
+            ]
+        );
         $builder->add('choices_entry', TextType::class);
         $builder->add('template', TextType::class);
     }

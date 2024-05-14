@@ -38,5 +38,4 @@ class AcxSelectionType extends AbstractType
             'choices' => [],
         ]);
     }
-
 }

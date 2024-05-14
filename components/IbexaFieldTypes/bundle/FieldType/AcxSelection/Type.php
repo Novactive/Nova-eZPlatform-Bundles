@@ -20,7 +20,7 @@ use Symfony\Component\Form\FormInterface;
 use Ibexa\Contracts\Core\Search;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class Type extends GenericType implements FieldValueFormMapperInterface, FieldDefinitionFormMapperInterface,  Indexable
+class Type extends GenericType implements FieldValueFormMapperInterface, FieldDefinitionFormMapperInterface, Indexable
 {
     public const IDENTIFIER = 'acxselection';
 
@@ -54,7 +54,7 @@ class Type extends GenericType implements FieldValueFormMapperInterface, FieldDe
 
     public function fromHash($hash): Value
     {
-        return new Value((array)$hash);
+        return new Value((array) $hash);
     }
 
     public function toHash(SPIValue $value): ?array
@@ -64,7 +64,7 @@ class Type extends GenericType implements FieldValueFormMapperInterface, FieldDe
         }
         return (array) $value->selection;
     }
-    
+
     public function getName(SPIValue $value, FieldDefinition $fieldDefinition, string $languageCode): string
     {
         if (empty($value->selection)) {
@@ -74,7 +74,7 @@ class Type extends GenericType implements FieldValueFormMapperInterface, FieldDe
         $names = [];
         $fieldSettings = $fieldDefinition->getFieldSettings();
 
-        $choices = array_flip($this->selectionService->getChoices((string)$fieldSettings['choices_entry']));
+        $choices = array_flip($this->selectionService->getChoices((string) $fieldSettings['choices_entry']));
         foreach ($value->selection as $selectedName) {
             $name = $choices[$selectedName]?? null;
             if ($name === null) {
@@ -93,7 +93,7 @@ class Type extends GenericType implements FieldValueFormMapperInterface, FieldDe
             'required' => $definition->isRequired,
             'label' => $definition->getName(),
             'multiple' => $fieldSettings['isMultiple']?? true,
-            'choices' => $this->selectionService->getChoices((string)$fieldSettings['choices_entry'])
+            'choices' => $this->selectionService->getChoices((string) $fieldSettings['choices_entry'])
         ]);
     }
     public function mapFieldDefinitionForm(FormInterface $fieldDefinitionForm, FieldDefinitionData $data): void
@@ -110,8 +110,8 @@ class Type extends GenericType implements FieldValueFormMapperInterface, FieldDe
     public function getIndexData(Field $field, SPIFieldDefinition $fieldDefinition): array
     {
         $fieldValue = $field->value->data??[];
-        $fieldValue = (string)reset($fieldValue);
-        $values = (array)$field->value->data;
+        $fieldValue = (string) reset($fieldValue);
+        $values = (array) $field->value->data;
         return [
             new Search\Field(
                 'value',

@@ -22,24 +22,16 @@ final class AlmaviaCXFieldTypesExtension extends Extension implements PrependExt
     }
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $loader = new YamlFileLoader(
-            $container,
-            new FileLocator(__DIR__ . '/../Resources/config')
-        );
-
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('default_settings.yaml');
-        $processor = new ConfigurationProcessor($container, Configuration::CONFIG_RESOLVER_NAMESPACE    );
+        $processor = new ConfigurationProcessor($container, Configuration::CONFIG_RESOLVER_NAMESPACE);
         $processor->mapConfigArray('acx_selection', $config, ContextualizerInterface::MERGE_FROM_SECOND_LEVEL);
 
 
         $loader->load('services.yaml');
-
-
-
     }
 
     public function prepend(ContainerBuilder $container): void
