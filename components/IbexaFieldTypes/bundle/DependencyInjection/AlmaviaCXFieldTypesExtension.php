@@ -20,23 +20,23 @@ final class AlmaviaCXFieldTypesExtension extends Extension implements PrependExt
     {
         return Configuration::CONFIG_RESOLVER_NAMESPACE;
     }
+
     public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('default_settings.yaml');
         $processor = new ConfigurationProcessor($container, Configuration::CONFIG_RESOLVER_NAMESPACE);
         $processor->mapConfigArray('acx_selection', $config, ContextualizerInterface::MERGE_FROM_SECOND_LEVEL);
-
 
         $loader->load('services.yaml');
     }
 
     public function prepend(ContainerBuilder $container): void
     {
-        $configFile = __DIR__ . '/../Resources/config/field_types_templates.yaml';
+        $configFile = __DIR__.'/../Resources/config/field_types_templates.yaml';
         $container->prependExtensionConfig('ibexa', Yaml::parse(file_get_contents($configFile)));
         $container->addResource(new FileResource($configFile));
     }

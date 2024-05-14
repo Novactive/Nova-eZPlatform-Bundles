@@ -8,6 +8,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 class Configuration extends SAConfiguration
 {
     public const CONFIG_RESOLVER_NAMESPACE = 'acx_field_types';
+
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder(self::CONFIG_RESOLVER_NAMESPACE);

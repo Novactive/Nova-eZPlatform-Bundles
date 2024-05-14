@@ -15,6 +15,7 @@ class SelectionService implements SelectionInterface
         if (empty($choiceEntry)) {
             $choiceEntry = 'default';
         }
-        return (array) ($this->configResolver->getParameter('acx_selection', 'acx_field_types')[$choiceEntry]?? []);
+
+        return (array) ($this->configResolver->getParameter('acx_selection', 'acx_field_types')[$choiceEntry] ?? []);
     }
 }

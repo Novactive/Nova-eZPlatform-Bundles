@@ -12,6 +12,7 @@ final class FieldValueTransformer implements DataTransformerInterface
     public function __construct(protected bool $isMultiple = false)
     {
     }
+
     public function transform($value)
     {
         if (!$value instanceof Value) {
@@ -19,12 +20,13 @@ final class FieldValueTransformer implements DataTransformerInterface
         }
         $selection = (array) ($value->selection ?? []);
 
-        return $this->isMultiple === true ? $selection : ($selection[0] ?? null);
+        return true === $this->isMultiple ? $selection : ($selection[0] ?? null);
     }
 
     public function reverseTransform($value): ?Value
     {
         $value = (array) $value;
-        return new Value($this->isMultiple === false ? [reset($value)]: $value);
+
+        return new Value(false === $this->isMultiple ? [reset($value)] : $value);
     }
 }
