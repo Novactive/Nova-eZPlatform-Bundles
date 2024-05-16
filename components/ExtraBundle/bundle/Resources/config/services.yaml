@@ -21,7 +21,7 @@ services:
     Novactive\Bundle\eZExtraBundle\Twig\TextParsingExtension: ~
     Novactive\Bundle\eZExtraBundle\Twig\ImageExtension:
         bind:
-            $enableImagePlaceholder: '%env(bool:ENABLE_IMAGE_PLACEHOLDER)%'
+            $enablePlaceholder: '%env(bool:ENABLE_IMAGE_PLACEHOLDER)%'
 
     Novactive\Bundle\eZExtraBundle\EventListener\PreContentViewListener:
         arguments:
