@@ -20,14 +20,9 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Location as ValueLocation;
 
 final class WrapperFactory
 {
-    /**
-     * @var Repository
-     */
-    private $repository;
 
-    public function __construct(Repository $eZRepo)
+    public function __construct(private Repository $repository)
     {
-        $this->repository = $eZRepo;
     }
 
     /**

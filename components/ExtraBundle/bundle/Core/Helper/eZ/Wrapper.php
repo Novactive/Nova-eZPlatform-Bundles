@@ -39,37 +39,18 @@ final class Wrapper implements ArrayAccess
     private $location;
 
     /**
-     * Extra Data.
-     */
-    private $extraData;
-
-    /**
      * @var Repository
      */
     private $repository;
 
-    /**
-     * @var int
-     */
-    private $locationId;
-
-    /**
-     * @var int
-     */
-    private $contentId;
-
-    /**
-     * @param ValueContent|int  $contentId
-     * @param ValueLocation|int $locationId
-     */
-    public function __construct($contentId = null, $locationId = null, array $extraData = [])
-    {
+    public function __construct(
+        private ValueContent|int|null $contentId = null,
+        private ValueLocation|int|null $locationId = null,
+        private array $extraData = []
+    ) {
         if (null === $contentId && null === $locationId) {
             throw new Exception('NovaExtraWrapper: you must provide at least contentId or locationId');
         }
-
-        $this->contentId = $contentId;
-        $this->locationId = $locationId;
 
         // Ensure the backward compatibility
         if ($contentId instanceof ValueContent) {
@@ -84,7 +65,6 @@ final class Wrapper implements ArrayAccess
             $this->contentId = $locationId->contentInfo->id;
             $this->location = $locationId;
         }
-        $this->extraData = $extraData;
     }
 
     public function setRepository(Repository $repository): self

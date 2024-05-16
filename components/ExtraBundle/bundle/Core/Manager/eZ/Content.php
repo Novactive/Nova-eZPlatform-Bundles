@@ -27,14 +27,10 @@ use Ibexa\Core\Repository\Values\ContentType\FieldDefinition;
 
 class Content
 {
-    /**
-     * @var Repository
-     */
-    private $eZPublishRepository;
 
-    public function __construct(Repository $api)
+
+    public function __construct( private Repository $eZPublishRepository)
     {
-        $this->eZPublishRepository = $api;
     }
 
     public function getRepository(): Repository
