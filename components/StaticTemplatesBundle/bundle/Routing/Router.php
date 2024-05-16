@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\EzStaticTemplatesBundle\Routing;
 
-use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
+use Ibexa\Core\MVC\Symfony\SiteAccess;
+use Ibexa\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use Symfony\Cmf\Component\Routing\ChainedRouterInterface;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,11 +30,6 @@ use Twig\Environment;
 class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAccessAware
 {
     /**
-     * @var array
-     */
-    protected $siteAccessGroups;
-
-    /**
      * @var SiteAccess
      */
     protected $siteAccess;
@@ -44,15 +39,8 @@ class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAcc
      */
     protected $context;
 
-    /**
-     * @var Environment
-     */
-    protected $twig;
-
-    public function __construct(array $siteAccessGroups, Environment $twig)
+    public function __construct(protected array $siteAccessGroups, protected Environment $twig)
     {
-        $this->siteAccessGroups = $siteAccessGroups;
-        $this->twig = $twig;
     }
 
     public function setSiteAccess(SiteAccess $siteAccess = null): void
