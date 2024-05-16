@@ -22,7 +22,6 @@ class RawTermAggregationResultExtractor implements AggregationResultExtractor
         }
 
         $this->keyMapper = $keyMapper;
-        $this->aggregationClass = $aggregationClass;
     }
 
     public function canVisit(Aggregation $aggregation, array $languageFilter): bool

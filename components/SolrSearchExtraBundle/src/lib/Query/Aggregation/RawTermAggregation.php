@@ -10,14 +10,11 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation\RawAggregat
 class RawTermAggregation extends AbstractTermAggregation implements RawAggregation
 {
     public function __construct(
-        protected string $name,
+        string $name,
         private string $fieldName,
         public ?array $excludeTags = []
     ) {
         parent::__construct($name);
-
-        $this->fieldName = $fieldName;
-        $this->excludeTags = $excludeTags;
     }
 
     public function getFieldName(): string

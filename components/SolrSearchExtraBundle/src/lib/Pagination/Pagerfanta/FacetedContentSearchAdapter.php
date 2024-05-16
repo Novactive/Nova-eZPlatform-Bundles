@@ -13,18 +13,29 @@ use Pagerfanta\Adapter\AdapterInterface;
 class FacetedContentSearchAdapter implements AdapterInterface
 {
     /**
+     * @var int
+     */
+    private $nbResults;
+
+    /**
+     * @var \Ibexa\Contracts\Core\Repository\Values\Content\Search\AggregationResultCollection
+     */
+    private $aggregations;
+
+    /**
+     * @var Facet[]
+     *
+     * @deprecated since eZ Platform 3.2.0, to be removed in Ibexa 4.0.0.
+     */
+    private $facets;
+
+    /**
      * @param Query $query
      * @param SearchService $searchService
-     * @param AggregationResultCollection $aggregations
-     * @param int $nbResults
-     * @param array $facets
      */
     public function __construct(
         private Query $query, 
-        private SearchService $searchService, 
-        private AggregationResultCollection $aggregations,
-        private int $nbResults,
-        private array $facets
+        private SearchService $searchService
     ) {
     }
 

@@ -9,10 +9,14 @@ use Pagerfanta\Adapter\AdapterInterface;
 
 class SynonymsAdapter implements AdapterInterface
 {
+
+    /** @var int */
+    private $nbResults;
+
     /**
      * SynonymsAdapter constructor.
      */
-    public function __construct(private string $setId, private SynonymsService $synonymsService, private int $nbResults)
+    public function __construct(private string $setId, private SynonymsService $synonymsService)
     {
     }
 
