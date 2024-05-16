@@ -15,15 +15,11 @@ use Symfony\Component\Process\Process;
  */
 class TikaLocalClient implements TikaClientInterface
 {
-    /** @var string */
-    protected $jar;
-
     /**
      * Client constructor.
      */
-    public function __construct(string $jar)
+    public function __construct(protected string $jar)
     {
-        $this->jar = $jar;
     }
 
     /**

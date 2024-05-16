@@ -24,25 +24,12 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class SynonymsController extends BaseController
 {
-    protected const RESULTS_PER_PAGE = 20;
-
-    /**
-     * @var SynonymsService
-     */
-    protected $synonymsService;
-
-    /**
-     * @var FormFactoryInterface
-     */
-    protected $formFactory;
-
+    protected const int RESULTS_PER_PAGE = 20;
     /**
      * SynonymsController constructor.
      */
-    public function __construct(SynonymsService $synonymsService, FormFactoryInterface $formFactory)
+    public function __construct(protected SynonymsService $synonymsService, protected FormFactoryInterface $formFactory)
     {
-        $this->synonymsService = $synonymsService;
-        $this->formFactory = $formFactory;
     }
 
     /**

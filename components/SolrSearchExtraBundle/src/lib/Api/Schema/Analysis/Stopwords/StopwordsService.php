@@ -10,17 +10,13 @@ use Novactive\EzSolrSearchExtra\Api\Gateway;
 
 class StopwordsService
 {
-    public const API_PATH = '/schema/analysis/stopwords';
-
-    /** @var Gateway */
-    protected $gateway;
-
+    public const string API_PATH = '/schema/analysis/stopwords';
+    
     /**
      * StopwordsService constructor.
      */
-    public function __construct(Gateway $gateway)
+    public function __construct(protected Gateway $gateway)
     {
-        $this->gateway = $gateway;
     }
 
     /**

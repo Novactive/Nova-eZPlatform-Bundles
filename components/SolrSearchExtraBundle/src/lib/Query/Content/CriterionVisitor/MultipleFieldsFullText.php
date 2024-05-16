@@ -15,49 +15,17 @@ use QueryTranslator\Languages\Galach\Tokenizer;
 class MultipleFieldsFullText extends CriterionVisitor
 {
     /**
-     * Field map.
-     *
-     * @var \Ibexa\Core\Search\Common\FieldNameResolver
-     */
-    protected $fieldNameResolver;
-
-    /**
-     * @var \QueryTranslator\Languages\Galach\Tokenizer
-     */
-    protected $tokenizer;
-
-    /**
-     * @var \QueryTranslator\Languages\Galach\Parser
-     */
-    protected $parser;
-
-    /**
-     * @var \QueryTranslator\Languages\Galach\Generators\ExtendedDisMax
-     */
-    protected $generator;
-
-    /**
-     * @var int
-     */
-    protected $maxDepth;
-
-    /**
      * Create from content type handler and field registry.
      *
      * @param int $maxDepth
      */
     public function __construct(
-        FieldNameResolver $fieldNameResolver,
-        Tokenizer $tokenizer,
-        Parser $parser,
-        ExtendedDisMax $generator,
-        $maxDepth = 0
+        protected FieldNameResolver $fieldNameResolver,
+        protected Tokenizer $tokenizer,
+        protected Parser $parser,
+        protected ExtendedDisMax $generator,
+        protected int $maxDepth = 0
     ) {
-        $this->fieldNameResolver = $fieldNameResolver;
-        $this->tokenizer = $tokenizer;
-        $this->parser = $parser;
-        $this->generator = $generator;
-        $this->maxDepth = $maxDepth;
     }
 
     /**

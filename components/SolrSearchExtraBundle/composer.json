@@ -1,6 +1,6 @@
 {
     "name": "novactive/ezsolrsearchextrabundle",
-    "type": "ezplatform-bundle",
+    "type": "ibexa-bundle",
     "description": "A bundle which extend ezplatform solr search handler",
     "keywords": [
         "novactive",
@@ -19,7 +19,7 @@
     ],
     "require": {
         "ezsystems/ezplatform-solr-search-engine": "*",
-        "php": "^7.3 || ^8.0"
+        "php": "^8.0"
     },
     "autoload": {
         "psr-4": {

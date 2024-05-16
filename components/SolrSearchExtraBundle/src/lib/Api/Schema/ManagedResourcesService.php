@@ -10,15 +10,11 @@ class ManagedResourcesService
 {
     public const API_PATH = '/schema/managed';
 
-    /** @var Gateway */
-    protected $gateway;
-
     /**
      * ManagedResourcesService constructor.
      */
-    public function __construct(Gateway $gateway)
+    public function __construct(protected Gateway $gateway)
     {
-        $this->gateway = $gateway;
     }
 
     /**

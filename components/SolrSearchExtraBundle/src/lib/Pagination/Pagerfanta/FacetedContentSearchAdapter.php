@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Pagination\Pagerfanta;
 
-use eZ\Publish\API\Repository\Values\Content\Search\Facet;
+use Ibexa\Contracts\Core\Repository\Values\Content\Search\Facet;
 use Ibexa\Contracts\Core\Repository\SearchService;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 use Ibexa\Contracts\Core\Repository\Values\Content\Search\AggregationResultCollection;
@@ -13,36 +13,19 @@ use Pagerfanta\Adapter\AdapterInterface;
 class FacetedContentSearchAdapter implements AdapterInterface
 {
     /**
-     * @var \Ibexa\Contracts\Core\Repository\Values\Content\Query
+     * @param Query $query
+     * @param SearchService $searchService
+     * @param AggregationResultCollection $aggregations
+     * @param int $nbResults
+     * @param array $facets
      */
-    private $query;
-
-    /**
-     * @var \Ibexa\Contracts\Core\Repository\SearchService
-     */
-    private $searchService;
-
-    /**
-     * @var int
-     */
-    private $nbResults;
-
-    /**
-     * @var \Ibexa\Contracts\Core\Repository\Values\Content\Search\AggregationResultCollection
-     */
-    private $aggregations;
-
-    /**
-     * @var Facet[]
-     *
-     * @deprecated since eZ Platform 3.2.0, to be removed in Ibexa 4.0.0.
-     */
-    private $facets;
-
-    public function __construct(Query $query, SearchService $searchService)
-    {
-        $this->query = $query;
-        $this->searchService = $searchService;
+    public function __construct(
+        private Query $query, 
+        private SearchService $searchService, 
+        private AggregationResultCollection $aggregations,
+        private int $nbResults,
+        private array $facets
+    ) {
     }
 
     /**

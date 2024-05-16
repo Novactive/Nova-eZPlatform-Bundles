@@ -15,19 +15,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ManagedResourcesController extends BaseController
 {
-    protected const RESULTS_PER_PAGE = 20;
-
-    /**
-     * @var ManagedResourcesService
-     */
-    protected $managedResourcesService;
-
+    protected const int RESULTS_PER_PAGE = 20;
+    
     /**
      * ManagedResourcesController constructor.
      */
-    public function __construct(ManagedResourcesService $managedResourcesService)
+    public function __construct(protected ManagedResourcesService $managedResourcesService)
     {
-        $this->managedResourcesService = $managedResourcesService;
     }
 
     /**

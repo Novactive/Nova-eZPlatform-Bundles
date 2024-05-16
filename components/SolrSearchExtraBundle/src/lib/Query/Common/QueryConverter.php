@@ -12,18 +12,11 @@ use Novactive\EzSolrSearchExtra\Query\AdvancedContentQuery;
 
 class QueryConverter extends NativeQueryConverter
 {
-    /** @var BaseQueryConverter */
-    protected $baseConverter;
-
-    /** @var \Ibexa\Contracts\Solr\Query\CriterionVisitor */
-    protected $criterionVisitor;
-
     /**
      * QueryConverter constructor.
      */
-    public function __construct(BaseQueryConverter $baseConverter, CriterionVisitor $criterionVisitor)
+    public function __construct(protected BaseQueryConverter $baseConverter, CriterionVisitor $criterionVisitor)
     {
-        $this->baseConverter = $baseConverter;
         $this->criterionVisitor = $criterionVisitor;
     }
 

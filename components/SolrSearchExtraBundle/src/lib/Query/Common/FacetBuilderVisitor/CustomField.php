@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Query\Common\FacetBuilderVisitor;
 
-use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
-use EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor;
-use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\FacetBuilder;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\FacetBuilder\FacetBuilderVisitor;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\FacetBuilder\FacetFieldVisitor;
 use Novactive\EzSolrSearchExtra\Query\Common\FacetBuilder\CustomFieldFacetBuilder;
 use Novactive\EzSolrSearchExtra\Values\Content\Search\Facet\CustomFieldFacet;
 

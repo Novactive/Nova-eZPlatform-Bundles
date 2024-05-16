@@ -15,47 +15,15 @@ use QueryTranslator\Languages\Galach\Tokenizer;
 class ContentFullTextFactory
 {
     /**
-     * Field map.
-     *
-     * @var \Ibexa\Core\Search\Common\FieldNameResolver
-     */
-    protected $fieldNameResolver;
-
-    /**
-     * @var \QueryTranslator\Languages\Galach\Tokenizer
-     */
-    protected $tokenizer;
-
-    /**
-     * @var \QueryTranslator\Languages\Galach\Parser
-     */
-    protected $parser;
-
-    /**
-     * @var \QueryTranslator\Languages\Galach\Generators\ExtendedDisMax
-     */
-    protected $generator;
-
-    /**
-     * @var \Ibexa\Solr\FieldMapper\IndexingDepthProvider
-     */
-    protected $indexingDepthProvider;
-
-    /**
      * Create from content type handler and field registry.
      */
     public function __construct(
-        FieldNameResolver $fieldNameResolver,
-        Tokenizer $tokenizer,
-        Parser $parser,
-        ExtendedDisMax $generator,
-        IndexingDepthProvider $indexingDepthProvider
+        protected FieldNameResolver $fieldNameResolver,
+        protected Tokenizer $tokenizer,
+        protected Parser $parser,
+        protected ExtendedDisMax $generator,
+        protected IndexingDepthProvider $indexingDepthProvider
     ) {
-        $this->fieldNameResolver = $fieldNameResolver;
-        $this->tokenizer = $tokenizer;
-        $this->parser = $parser;
-        $this->generator = $generator;
-        $this->indexingDepthProvider = $indexingDepthProvider;
     }
 
     /**

@@ -15,35 +15,13 @@ use stdClass;
 class Gateway
 {
     /**
-     * HTTP client to communicate with Solr server.
-     *
-     * @var HttpClient
-     */
-    protected $client;
-
-    /**
-     * @var EndpointResolver
-     */
-    protected $endpointResolver;
-
-    /**
-     * Endpoint registry service.
-     *
-     * @var EndpointRegistry
-     */
-    protected $endpointRegistry;
-
-    /**
      * Gateway constructor.
      */
     public function __construct(
-        HttpClient $client,
-        EndpointResolver $endpointResolver,
-        EndpointRegistry $endpointRegistry
+        protected HttpClient $client,
+        protected EndpointResolver $endpointResolver,
+        protected EndpointRegistry $endpointRegistry
     ) {
-        $this->client = $client;
-        $this->endpointResolver = $endpointResolver;
-        $this->endpointRegistry = $endpointRegistry;
     }
 
     /**
@@ -68,12 +46,12 @@ class Gateway
         return new AdminEndpoint(
             [
                 'scheme' => $endpoint->scheme,
-                'user' => $endpoint->user,
-                'pass' => $endpoint->pass,
-                'host' => $endpoint->host,
-                'port' => $endpoint->port,
-                'path' => $endpoint->path,
-                'core' => $endpoint->core,
+                'user'   => $endpoint->user,
+                'pass'   => $endpoint->pass,
+                'host'   => $endpoint->host,
+                'port'   => $endpoint->port,
+                'path'   => $endpoint->path,
+                'core'   => $endpoint->core,
             ]
         );
     }

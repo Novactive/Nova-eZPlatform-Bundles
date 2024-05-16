@@ -27,31 +27,13 @@ class PublishDateFieldMapper extends ContentTranslationFieldMapper
     protected $fieldIdentifiers = [];
 
     /**
-     * @var \Ibexa\Contracts\Core\Persistence\Content\Type\Handler
-     */
-    protected $contentTypeHandler;
-
-    /**
-     * @var \Ibexa\Core\Search\Common\FieldRegistry
-     */
-    protected $fieldRegistry;
-
-    /**
-     * @var ConfigResolverInterface
-     */
-    private $configResolver;
-
-    /**
      * PublishDateFieldMapper constructor.
      */
     public function __construct(
-        ContentTypeHandler $contentTypeHandler,
-        FieldRegistry $fieldRegistry,
-        ConfigResolverInterface $configResolver
+        protected ContentTypeHandler $contentTypeHandler,
+        protected FieldRegistry $fieldRegistry,
+        protected ConfigResolverInterface $configResolver
     ) {
-        $this->contentTypeHandler = $contentTypeHandler;
-        $this->fieldRegistry = $fieldRegistry;
-        $this->configResolver = $configResolver;
     }
 
     public function setFieldIdentifiers(string $fieldIdentifiers): void

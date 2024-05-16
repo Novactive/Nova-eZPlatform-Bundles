@@ -21,47 +21,17 @@ class CustomFieldMapper extends ContentTranslationFieldMapper
      * @var array
      */
     protected $fieldsConfig = [];
-
-    /**
-     * @var \Ibexa\Contracts\Core\Persistence\Content\Type\Handler
-     */
-    protected $contentTypeHandler;
-
-    /**
-     * @var \Ibexa\Core\Search\Common\FieldRegistry
-     */
-    protected $fieldRegistry;
-
-    /**
-     * @var \Ibexa\Core\Search\Common\FieldNameGenerator
-     */
-    protected $fieldNameGenerator;
-
-    /**
-     * @var \Ibexa\Solr\FieldMapper\BoostFactorProvider
-     */
-    protected $boostFactorProvider;
-
-    /**
-     * @var ConfigResolverInterface
-     */
-    private $configResolver;
-
+    
     /**
      * CustomFulltextFieldMapper constructor.
      */
     public function __construct(
-        ContentType\Handler $contentTypeHandler,
-        FieldRegistry $fieldRegistry,
-        FieldNameGenerator $fieldNameGenerator,
-        BoostFactorProvider $boostFactorProvider,
-        ConfigResolverInterface $configResolver
+        protected ContentType\Handler $contentTypeHandler,
+        protected FieldRegistry $fieldRegistry,
+        protected FieldNameGenerator $fieldNameGenerator,
+        protected BoostFactorProvider $boostFactorProvider,
+        protected ConfigResolverInterface $configResolver
     ) {
-        $this->contentTypeHandler = $contentTypeHandler;
-        $this->fieldRegistry = $fieldRegistry;
-        $this->fieldNameGenerator = $fieldNameGenerator;
-        $this->boostFactorProvider = $boostFactorProvider;
-        $this->configResolver = $configResolver;
     }
 
     public function setFieldsConfig(string $customFields): void

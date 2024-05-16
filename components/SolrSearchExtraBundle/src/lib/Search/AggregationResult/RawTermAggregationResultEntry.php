@@ -6,25 +6,13 @@ use Ibexa\Contracts\Core\Repository\Values\ValueObject;
 
 class RawTermAggregationResultEntry extends ValueObject
 {
-    private $key;
-
-    /** @var string|null */
-    private $name;
-
-    /** @var string|null */
-    private $identifier;
-
-    /** @var int */
-    private $count;
-
-    public function __construct($key, int $count, ?string $name = null, ?string $identifier = null)
+    public function __construct(
+        private $key,
+        private int $count,
+        private ?string $name = null,
+        private ?string $identifier = null)
     {
         parent::__construct();
-
-        $this->key = $key;
-        $this->count = $count;
-        $this->name = $name;
-        $this->identifier = $identifier;
     }
 
     public function getKey()

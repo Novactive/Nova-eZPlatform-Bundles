@@ -9,22 +9,14 @@ use Pagerfanta\Adapter\AdapterInterface;
 
 class StopwordsAdapter implements AdapterInterface
 {
-    /** @var string */
-    private $setId;
-
-    /** @var StopwordsService */
-    private $stopwordsService;
-
-    /** @var int */
-    private $nbResults;
-
     /**
      * StopwordsAdapter constructor.
      */
-    public function __construct(string $setId, StopwordsService $stopwordsService)
-    {
-        $this->setId = $setId;
-        $this->stopwordsService = $stopwordsService;
+    public function __construct(
+        private string $setId, 
+        private StopwordsService $stopwordsService,
+        private int $nbResults
+    ) {
     }
 
     /**

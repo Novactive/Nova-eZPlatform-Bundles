@@ -9,22 +9,10 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation\RawAggregat
 
 class RawTermAggregation extends AbstractTermAggregation implements RawAggregation
 {
-    /**
-     * @var string
-     */
-    private $fieldName;
-
-    /**
-     * @see https://solr.apache.org/guide/7_7/json-facet-api.html#filter-exclusions
-     *
-     * @var string[]
-     */
-    public array $excludeTags;
-
     public function __construct(
-        string $name,
-        string $fieldName,
-        ?array $excludeTags = []
+        protected string $name,
+        private string $fieldName,
+        public ?array $excludeTags = []
     ) {
         parent::__construct($name);
 

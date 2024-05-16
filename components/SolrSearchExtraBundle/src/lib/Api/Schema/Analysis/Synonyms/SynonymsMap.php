@@ -6,21 +6,13 @@ namespace Novactive\EzSolrSearchExtra\Api\Schema\Analysis\Synonyms;
 
 class SynonymsMap
 {
-    /** @var string */
-    protected $term;
-
-    /** @var string[] */
-    protected $synonyms;
-
     /**
      * SynonymsMapping constructor.
      *
      * @param string[] $synonyms
      */
-    public function __construct(string $term, array $synonyms)
+    public function __construct(protected string $term, protected array $synonyms)
     {
-        $this->term = $term;
-        $this->synonyms = $synonyms;
     }
 
     public function getTerm(): string

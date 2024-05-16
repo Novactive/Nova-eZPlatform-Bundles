@@ -23,25 +23,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class StopwordsController extends BaseController
 {
-    protected const RESULTS_PER_PAGE = 20;
-
-    /**
-     * @var StopwordsService
-     */
-    protected $stopwordsService;
-
-    /**
-     * @var FormFactoryInterface
-     */
-    protected $formFactory;
-
+    protected const int RESULTS_PER_PAGE = 20;
+    
     /**
      * StopwordsController constructor.
      */
-    public function __construct(StopwordsService $stopwordsService, FormFactoryInterface $formFactory)
+    public function __construct(protected StopwordsService $stopwordsService, protected FormFactoryInterface $formFactory)
     {
-        $this->stopwordsService = $stopwordsService;
-        $this->formFactory = $formFactory;
     }
 
     /**

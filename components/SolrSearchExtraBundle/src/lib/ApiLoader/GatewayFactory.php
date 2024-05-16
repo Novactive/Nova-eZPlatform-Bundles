@@ -14,26 +14,14 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 class GatewayFactory implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
-
-    /**
-     * @var \Ibexa\Bundle\Core\ApiLoader\RepositoryConfigurationProvider
-     */
-    private $repositoryConfigurationProvider;
-
-    /**
-     * @var string
-     */
-    private $defaultConnection;
-
+    
     /**
      * @param $defaultConnection
      */
     public function __construct(
-        RepositoryConfigurationProvider $repositoryConfigurationProvider,
-        $defaultConnection
+        protected RepositoryConfigurationProvider $repositoryConfigurationProvider,
+        protected $defaultConnection
     ) {
-        $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
-        $this->defaultConnection = $defaultConnection;
     }
 
     public function buildGateway(HttpClient $client, EndpointRegistry $endpointRegistry): Gateway

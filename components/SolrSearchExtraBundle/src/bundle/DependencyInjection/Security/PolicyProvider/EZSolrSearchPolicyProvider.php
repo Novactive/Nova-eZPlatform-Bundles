@@ -8,15 +8,11 @@ use Ibexa\Bundle\Core\DependencyInjection\Security\PolicyProvider\YamlPolicyProv
 
 class EZSolrSearchPolicyProvider extends YamlPolicyProvider
 {
-    /** @var string bundle path */
-    protected $path;
-
     /**
      * EZSolrSearchPolicyProvider constructor.
      */
-    public function __construct(string $path)
+    public function __construct(protected string $path)
     {
-        $this->path = $path;
     }
 
     public function getFiles(): array

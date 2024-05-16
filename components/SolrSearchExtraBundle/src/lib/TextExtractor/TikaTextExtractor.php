@@ -15,19 +15,11 @@ use RuntimeException;
  */
 class TikaTextExtractor implements TextExtractorInterface
 {
-    /** @var TikaClientInterface */
-    private $tikaClient;
-
-    /** @var LoggerInterface */
-    private $logger;
-
     /**
      * TikaTextExtractor constructor.
      */
-    public function __construct(TikaClientInterface $tikaClient, LoggerInterface $logger)
+    public function __construct(private TikaClientInterface $tikaClient, private LoggerInterface $logger)
     {
-        $this->tikaClient = $tikaClient;
-        $this->logger = $logger;
     }
 
     /**

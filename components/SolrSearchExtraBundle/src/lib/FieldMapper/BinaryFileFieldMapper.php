@@ -28,32 +28,16 @@ class BinaryFileFieldMapper
      * @var string
      */
     private static $fieldName = 'meta_content__text';
-
-    /** @var \Ibexa\Core\IO\IOServiceInterface */
-    private $ioService;
-
-    /** @var BoostFactorProvider */
-    private $boostFactorProvider;
-
-    /** @var TextExtractorInterface */
-    private $textExtractor;
-
-    /** @var LoggerInterface */
-    private $logger;
-
+    
     /**
      * BinaryFileFieldMapper constructor.
      */
     public function __construct(
-        ConfigScopeChangeAwareIOService $ioService,
-        BoostFactorProvider $boostFactorProvider,
-        TextExtractorInterface $textExtractor,
-        LoggerInterface $logger
+        protected ConfigScopeChangeAwareIOService $ioService,
+        protected BoostFactorProvider $boostFactorProvider,
+        protected TextExtractorInterface $textExtractor,
+        protected LoggerInterface $logger
     ) {
-        $this->ioService = $ioService;
-        $this->boostFactorProvider = $boostFactorProvider;
-        $this->textExtractor = $textExtractor;
-        $this->logger = $logger;
     }
 
     /**
@@ -73,7 +57,7 @@ class BinaryFileFieldMapper
 
             try {
                 $binaryFile = $this->ioService->loadBinaryFile($field->value->externalData['id']);
-                $plaintext = $this->getBinaryFileText($binaryFile);
+                $plaintext  = $this->getBinaryFileText($binaryFile);
 
                 return new SPISearchField(
                     self::$fieldName,

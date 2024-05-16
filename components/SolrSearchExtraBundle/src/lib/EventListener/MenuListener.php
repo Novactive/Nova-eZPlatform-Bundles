@@ -11,16 +11,12 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class MenuListener implements EventSubscriberInterface
 {
-    /** @var PermissionResolver */
-    private $permissionResolver;
-
     /**
      * MenuListener constructor.
      */
     public function __construct(
-        PermissionResolver $permissionResolver
+        protected PermissionResolver $permissionResolver
     ) {
-        $this->permissionResolver = $permissionResolver;
     }
 
     public static function getSubscribedEvents(): array

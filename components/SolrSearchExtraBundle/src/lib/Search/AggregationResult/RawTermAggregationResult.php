@@ -13,14 +13,9 @@ use IteratorAggregate;
 
 class RawTermAggregationResult extends AggregationResult implements IteratorAggregate, Countable
 {
-    /** @var RawTermAggregationResultEntry[] */
-    private $entries;
-
-    public function __construct(string $name, iterable $entries = [])
+    public function __construct(private string $name, private iterable $entries = [])
     {
         parent::__construct($name);
-
-        $this->entries = $entries;
     }
 
     /**
