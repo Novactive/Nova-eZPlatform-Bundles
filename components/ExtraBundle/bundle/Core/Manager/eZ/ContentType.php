@@ -28,14 +28,9 @@ use Ibexa\Core\Base\Exceptions\BadStateException;
 
 class ContentType
 {
-    /**
-     * @var Repository
-     */
-    protected $eZPublishRepository;
 
-    public function __construct(Repository $api)
+    public function __construct(protected Repository $eZPublishRepository)
     {
-        $this->eZPublishRepository = $api;
     }
 
     public function getRepository(): Repository

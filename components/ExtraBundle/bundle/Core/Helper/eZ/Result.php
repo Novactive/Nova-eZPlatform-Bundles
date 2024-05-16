@@ -19,25 +19,10 @@ use Novactive\Collection\Factory;
 
 class Result extends Collection
 {
-    /**
-     * @var array
-     */
-    protected $extras;
-
-    /**
-     * @var int
-     */
-    protected $resultTotalCount;
-
-    /**
-     * @var int
-     */
-    protected $resultLimit;
-
-    /**
-     * @var int
-     */
-    protected $resultOffset;
+    protected array $extras;
+    protected int $resultTotalCount;
+    protected int $resultLimit;
+    protected int $resultOffset;
 
     public function __construct()
     {
