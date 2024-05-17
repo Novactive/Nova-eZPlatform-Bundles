@@ -21,26 +21,12 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator\CodeGenera
 
 final class EmailCodeGenerator implements CodeGeneratorInterface
 {
-    /**
-     * @var AuthCodeMailerInterface
-     */
-    private $mailer;
 
-    /**
-     * @var int
-     */
-    private $digits;
-
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-
-    public function __construct(UserRepository $userRepository, AuthCodeMailerInterface $mailer, int $digits)
-    {
-        $this->userRepository = $userRepository;
-        $this->mailer = $mailer;
-        $this->digits = $digits;
+    public function __construct(
+        private UserRepository $userRepository,
+        private AuthCodeMailerInterface $mailer,
+        private int $digits
+    ){
     }
 
     public function generateAndSend(TwoFactorInterface $user): void

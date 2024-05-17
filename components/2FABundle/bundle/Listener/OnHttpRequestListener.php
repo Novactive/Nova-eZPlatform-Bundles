@@ -24,29 +24,11 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 final class OnHttpRequestListener
 {
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    /**
-     * @var SiteAccessAwareAuthenticatorResolver
-     */
-    private $saAuthenticatorResolver;
-
-    /**
-     * @var RouterInterface
-     */
-    private $router;
-
     public function __construct(
-        TokenStorageInterface $tokenStorage,
-        SiteAccessAwareAuthenticatorResolver $saAuthenticatorResolver,
-        RouterInterface $router
+        private TokenStorageInterface $tokenStorage,
+        private SiteAccessAwareAuthenticatorResolver $saAuthenticatorResolver,
+        private RouterInterface $router
     ) {
-        $this->tokenStorage = $tokenStorage;
-        $this->saAuthenticatorResolver = $saAuthenticatorResolver;
-        $this->router = $router;
     }
 
     public function onKernelRequest(RequestEvent $event): void

@@ -21,14 +21,8 @@ use PDO;
  */
 final class UserRepository
 {
-    /**
-     * @var SiteAccessAwareQueryExecutor
-     */
-    private $queryExecutor;
-
-    public function __construct(SiteAccessAwareQueryExecutor $queryExecutor)
+    public function __construct(private SiteAccessAwareQueryExecutor $queryExecutor)
     {
-        $this->queryExecutor = $queryExecutor;
     }
 
     public function insertUpdateUserAuthSecret(int $userId, string $secret, string $prefix, string $backupCodes): void

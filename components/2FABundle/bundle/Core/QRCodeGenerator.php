@@ -24,20 +24,10 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticator;
 
 final class QRCodeGenerator
 {
-    /**
-     * @var GoogleAuthenticator
-     */
-    private $googleAuthenticator;
-
-    /**
-     * @var TotpAuthenticator
-     */
-    private $totpAuthenticator;
-
-    public function __construct(GoogleAuthenticator $googleAuthenticator, TotpAuthenticator $totpAuthenticator)
-    {
-        $this->googleAuthenticator = $googleAuthenticator;
-        $this->totpAuthenticator = $totpAuthenticator;
+    public function __construct(
+        private GoogleAuthenticator $googleAuthenticator,
+        private TotpAuthenticator $totpAuthenticator
+    ) {
     }
 
     public function createFromUser($user): string

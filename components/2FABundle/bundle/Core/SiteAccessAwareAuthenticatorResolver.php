@@ -46,31 +46,6 @@ class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
     private $config;
 
     /**
-     * @var ConfigResolverInterface
-     */
-    private $configResolver;
-
-    /**
-     * @var GoogleAuthenticator
-     */
-    private $googleAuthenticator;
-
-    /**
-     * @var TotpAuthenticator
-     */
-    private $totpAuthenticator;
-
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-
-    /**
-     * @var bool
-     */
-    private $backupCodesEnabled;
-
-    /**
      * @var bool
      */
     private $emailMethodEnabled;
@@ -81,17 +56,12 @@ class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
     private $forceSetup;
 
     public function __construct(
-        ConfigResolverInterface $configResolver,
-        GoogleAuthenticator $googleAuthenticator,
-        TotpAuthenticator $totpAuthenticator,
-        UserRepository $userRepository,
-        bool $backupCodesEnabled
+        private ConfigResolverInterface $configResolver,
+        private GoogleAuthenticator $googleAuthenticator,
+        private TotpAuthenticator $totpAuthenticator,
+        private UserRepository $userRepository,
+        private bool $backupCodesEnabled
     ) {
-        $this->configResolver = $configResolver;
-        $this->googleAuthenticator = $googleAuthenticator;
-        $this->totpAuthenticator = $totpAuthenticator;
-        $this->userRepository = $userRepository;
-        $this->backupCodesEnabled = $backupCodesEnabled;
     }
 
     /**

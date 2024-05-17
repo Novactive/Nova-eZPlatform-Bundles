@@ -28,20 +28,6 @@ use Twig\Environment;
 
 final class TwoFAManagement extends AbstractTab implements OrderedTabInterface, ConditionalTabInterface
 {
-    /**
-     * @var SiteAccessAwareAuthenticatorResolver
-     */
-    private $saAuthenticatorResolver;
-
-    /**
-     * @var UserService
-     */
-    private $userService;
-
-    /**
-     * @var PermissionResolver
-     */
-    private $permissionResolver;
 
     public function getIdentifier(): string
     {
@@ -61,15 +47,11 @@ final class TwoFAManagement extends AbstractTab implements OrderedTabInterface, 
     public function __construct(
         Environment $twig,
         TranslatorInterface $translator,
-        SiteAccessAwareAuthenticatorResolver $saAuthenticatorResolver,
-        UserService $userService,
-        PermissionResolver $permissionResolver
+        private SiteAccessAwareAuthenticatorResolver $saAuthenticatorResolver,
+        private UserService $userService,
+        private PermissionResolver $permissionResolver
     ) {
         parent::__construct($twig, $translator);
-
-        $this->saAuthenticatorResolver = $saAuthenticatorResolver;
-        $this->userService = $userService;
-        $this->permissionResolver = $permissionResolver;
     }
 
     public function evaluate(array $parameters): bool

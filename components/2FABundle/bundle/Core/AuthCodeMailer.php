@@ -23,30 +23,19 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class AuthCodeMailer implements AuthCodeMailerInterface
 {
-    /**
-     * @var MailerInterface
-     */
-    private $mailer;
 
     /**
      * @var Address
      */
     private $senderAddress;
 
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
     public function __construct(
-        MailerInterface $mailer,
+        private MailerInterface $mailer,
         string $senderEmail,
         ?string $senderName,
-        TranslatorInterface $translator
+        private TranslatorInterface $translator
     ) {
-        $this->mailer = $mailer;
         $this->senderAddress = new Address($senderEmail, $senderName ?? '');
-        $this->translator = $translator;
     }
 
     public function sendAuthCode(TwoFactorInterface $user): void

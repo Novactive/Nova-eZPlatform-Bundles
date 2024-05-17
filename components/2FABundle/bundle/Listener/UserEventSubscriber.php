@@ -20,14 +20,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class UserEventSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(private UserRepository $userRepository)
     {
-        $this->userRepository = $userRepository;
     }
 
     public static function getSubscribedEvents(): array

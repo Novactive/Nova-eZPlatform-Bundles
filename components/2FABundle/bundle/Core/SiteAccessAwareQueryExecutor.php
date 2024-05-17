@@ -20,20 +20,11 @@ use Ibexa\Bundle\Core\ApiLoader\RepositoryConfigurationProvider;
 
 final class SiteAccessAwareQueryExecutor
 {
-    /**
-     * @var Registry
-     */
-    private $registry;
 
-    /**
-     * @var RepositoryConfigurationProvider
-     */
-    private $repositoryConfigurationProvider;
-
-    public function __construct(Registry $registry, RepositoryConfigurationProvider $repositoryConfigurationProvider)
-    {
-        $this->registry = $registry;
-        $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
+    public function __construct(
+        private Registry $registry, 
+        private RepositoryConfigurationProvider $repositoryConfigurationProvider
+    ) {
     }
 
     private function getConnectionName(): string
