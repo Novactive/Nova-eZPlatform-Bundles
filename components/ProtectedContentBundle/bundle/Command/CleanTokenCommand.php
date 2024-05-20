@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Command;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedTokenStorage;
+use Novactive\Bundle\eZProtectedContentBundle\Repository\EntityRepository;
 use Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedTokenStorageRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,11 +25,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class CleanTokenCommand extends Command
 {
     /**
-     * @var EntityManagerInterface
+     * @var EntityRepository
      */
-    private $entityManager;
+    private EntityRepository $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityRepository $entityManager)
     {
         parent::__construct();
         $this->entityManager = $entityManager;
