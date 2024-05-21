@@ -87,6 +87,10 @@ class PreContentView
             return;
         }
 
+        if ($contentView->hasParameter('isPreview') && $contentView->getParameter('isPreview')) {
+            return;
+        }
+
         $protections = $this->protectedAccessRepository->findByContent($content);
 
         if (0 === count($protections)) {
