@@ -25,10 +25,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class CleanTokenCommand extends Command
 {
     /**
-     * @var EntityManagerInterface
+     * @param EntityManagerInterface $entityManager
      */
-    private $entityManager;
-
     public function __construct(EntityManagerInterface $entityManager)
     {
         parent::__construct();
@@ -45,7 +43,7 @@ class CleanTokenCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
@@ -62,5 +60,7 @@ class CleanTokenCommand extends Command
 
         $io->success(sprintf('%d entities deleted', count($entities)));
         $io->success('Done.');
+
+        return Command::SUCCESS;
     }
 }
