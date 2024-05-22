@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZProtectedContentBundle\Listener;
 
 use Ibexa\Contracts\Core\Repository\PermissionResolver;
+use Ibexa\Core\Helper\ContentPreviewHelper;
 use Ibexa\Core\MVC\Symfony\Event\PreContentViewEvent;
 use Ibexa\Core\MVC\Symfony\View\ContentView;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
@@ -52,18 +53,22 @@ class PreContentView
      */
     private $requestStack;
 
+    private ContentPreviewHelper $contentPreviewHelper;
+
     public function __construct(
         PermissionResolver $permissionResolver,
         ProtectedAccessRepository $protectedAccessRepository,
         ProtectedTokenStorageRepository $protectedTokenStorageRepository,
         FormFactoryInterface $factory,
-        RequestStack $requestStack
+        RequestStack $requestStack,
+        ContentPreviewHelper $contentPreviewHelper
     ) {
         $this->permissionResolver = $permissionResolver;
         $this->protectedAccessRepository = $protectedAccessRepository;
         $this->protectedTokenStorageRepository = $protectedTokenStorageRepository;
         $this->formFactory = $factory;
         $this->requestStack = $requestStack;
+        $this->contentPreviewHelper = $contentPreviewHelper;
     }
 
     /**
@@ -84,6 +89,10 @@ class PreContentView
         $content = $contentView->getContent();
 
         if ($content->contentInfo->isDraft()) {
+            return;
+        }
+
+        if ($this->contentPreviewHelper->isPreviewActive()) {
             return;
         }
 
