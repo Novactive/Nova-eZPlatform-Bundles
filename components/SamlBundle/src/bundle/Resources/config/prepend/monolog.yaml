@@ -1,0 +1,9 @@
+channels:
+    - saml
+
+handlers:
+    saml:
+        type:  rotating_file
+        path: '%kernel.logs_dir%/saml.log'
+        channels: ['saml']
+        max_files: 30
