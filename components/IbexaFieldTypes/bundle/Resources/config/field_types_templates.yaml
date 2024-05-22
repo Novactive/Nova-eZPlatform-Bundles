@@ -1,0 +1,6 @@
+system:
+  default:
+    field_templates:
+      - {template: '@ibexadesign/fields/acxselection.html.twig', priority: 0}
+    fielddefinition_edit_templates:
+      - { template: '@ibexadesign/fields/definition/acxselection.html.twig', priority: 0 }
