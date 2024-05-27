@@ -22,6 +22,8 @@ services:
         tags:
             - { name: 'novaezprotectedcontent:cleantoken', command: 'novaezprotectedcontent:cleantoken' }
             - { name: ibexa.cron.job, schedule: '0 1 * * *' }
+        arguments:
+            $entityManager: "@ibexa.doctrine.orm.entity_manager"
 
     Novactive\Bundle\eZProtectedContentBundle\Core\Tab\ProtectContent:
         tags:
