@@ -18,8 +18,9 @@ final class Tagger
     {
         $localBranchName = uniqid("{$component}-{$branch}-", false);
         $commands = [
+            ['git', 'fetch', 'origin'],
             [
-                'splitsh-lite', "--prefix=components/{$component}", "--origin=refs/heads/{$branch}",
+                'splitsh-lite', "--prefix=components/{$component}", "--origin=origin/{$branch}",
                 "--target=refs/heads/{$localBranchName}",
             ],
             ['git', 'remote', 'add', $component, "git@github.com:{$component->getRepo()}.git"],
