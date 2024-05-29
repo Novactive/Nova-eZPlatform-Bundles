@@ -12,20 +12,20 @@
 
 namespace Novactive\EzMenuManager\FieldType\MenuItem;
 
-use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
-use eZ\Publish\Core\FieldType\FieldType;
-use eZ\Publish\Core\FieldType\Value as BaseValue;
-use eZ\Publish\SPI\FieldType\Value as SPIValue;
-use eZ\Publish\SPI\FieldType\Value as ValueInterface;
-use eZ\Publish\SPI\Persistence\Content\FieldValue as PersistenceValue;
+use Ibexa\Contracts\Core\FieldType\ValidationError;
+use Ibexa\Contracts\Core\FieldType\Value as SPIValue;
+use Ibexa\Contracts\Core\FieldType\Value as ValueInterface;
+use Ibexa\Contracts\Core\Persistence\Content\FieldValue as PersistenceValue;
+use Ibexa\Contracts\Core\Repository\Values\ContentType\FieldDefinition;
+use Ibexa\Core\Base\Exceptions\InvalidArgumentType;
+use Ibexa\Core\FieldType\FieldType;
+use Ibexa\Core\FieldType\Value as BaseValue;
 
 class Type extends FieldType
 {
     protected $validatorConfigurationSchema = [];
 
-    /** @var ValueConverter */
-    protected $valueConverter;
+    protected ValueConverter $valueConverter;
 
     /**
      * Type constructor.
@@ -38,9 +38,9 @@ class Type extends FieldType
     /**
      * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
      *
-     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     * @return ValidationError[]
      */
-    public function validateValidatorConfiguration($validatorConfiguration)
+    public function validateValidatorConfiguration($validatorConfiguration): array
     {
         $validationErrors = [];
 
@@ -55,17 +55,15 @@ class Type extends FieldType
      * Validates a field based on the validators in the field definition.
      *
      * @param FieldDefinition $fieldDefinition The field definition of the field
-     * @param Value           $fieldValue      The field value for which an action is performed
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @param SPIValue        $value           The field value for which an action is performed
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue)
+    public function validate(FieldDefinition $fieldDefinition, SPIValue $value): array
     {
         $validationErrors = [];
 
-        if ($this->isEmptyValue($fieldValue)) {
+        if ($this->isEmptyValue($value)) {
             return $validationErrors;
         }
 
@@ -74,10 +72,8 @@ class Type extends FieldType
 
     /**
      * Returns the field type identifier for this field type.
-     *
-     * @return string
      */
-    public function getFieldTypeIdentifier()
+    public function getFieldTypeIdentifier(): string
     {
         return 'menuitem';
     }
@@ -90,24 +86,24 @@ class Type extends FieldType
      */
     public function getName(ValueInterface $value, FieldDefinition $fieldDefinition, string $languageCode): string
     {
-        return (string) $value->menuItems;
+        if ($value instanceof Value) {
+            return (string) $value->menuItems;
+        }
+
+        return '';
     }
 
-    public function getEmptyValue()
+    public function getEmptyValue(): Value
     {
         return new Value();
     }
 
     /**
      * Returns if the given $value is considered empty by the field type.
-     *
-     * @param mixed $value
-     *
-     * @return bool
      */
-    public function isEmptyValue(SPIValue $value)
+    public function isEmptyValue(SPIValue $value): bool
     {
-        return null === $value->menuItems || empty($value->menuItems);
+        return empty($value->menuItems);
     }
 
     protected function createValueFromInput($inputValue)
@@ -124,9 +120,9 @@ class Type extends FieldType
      *
      * @param Value $value
      *
-     * @throws InvalidArgumentException if the value does not match the expected structure
+     * @throws InvalidArgumentType if the value does not match the expected structure
      */
-    protected function checkValueStructure(BaseValue $value)
+    protected function checkValueStructure(BaseValue $value): void
     {
         if (!is_array($value->menuItems)) {
             throw new InvalidArgumentType('$value->menuItems', 'array', $value->menuItems);
@@ -137,20 +133,16 @@ class Type extends FieldType
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
      * @param Value $value
-     *
-     * @return array
      */
-    protected function getSortInfo(BaseValue $value)
+    protected function getSortInfo(BaseValue $value): ?array
     {
         return null;
     }
 
     /**
      * Converts a persistence $fieldValue to a Value.
-     *
-     * @return \eZ\Publish\Core\FieldType\Value
      */
-    public function fromPersistenceValue(PersistenceValue $fieldValue)
+    public function fromPersistenceValue(PersistenceValue $fieldValue): Value
     {
         return $this->fromHash(
             is_array($fieldValue->externalData) && !empty($fieldValue->externalData) ?
@@ -160,11 +152,11 @@ class Type extends FieldType
     }
 
     /**
-     * Converts an $hash to the Value defined by the field type.
+     * Converts a $hash to the Value defined by the field type.
      *
      * @return Value $value
      */
-    public function fromHash($hash)
+    public function fromHash($hash): Value
     {
         if (null === $hash) {
             return $this->getEmptyValue();
@@ -189,10 +181,8 @@ class Type extends FieldType
 
     /**
      * Returns whether the field type is searchable.
-     *
-     * @return bool
      */
-    public function isSearchable()
+    public function isSearchable(): bool
     {
         return true;
     }

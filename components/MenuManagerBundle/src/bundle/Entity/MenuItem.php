@@ -65,7 +65,6 @@ class MenuItem
      *     targetEntity="Novactive\EzMenuManagerBundle\Entity\MenuItem",
      *     mappedBy="parent",
      *     cascade={"persist","remove"},
-     *     fetch="EAGER",
      *     orphanRemoval=true
      *     )
      * @ORM\OrderBy({"position" = "ASC"})
@@ -120,6 +119,14 @@ class MenuItem
     public function getName(): ?string
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRemoteId(): ?string
+    {
+        return $this->remoteId;
     }
 
     /**
@@ -223,16 +230,13 @@ class MenuItem
         $this->childrens->removeElement($children);
     }
 
-    /**
-     * @return MenuItem
-     */
     public function getParent(): ?MenuItem
     {
         return $this->parent;
     }
 
     /**
-     * @param MenuItem $parent
+     * @param MenuItem|null $parent
      */
     public function setParent($parent): void
     {
@@ -296,7 +300,7 @@ class MenuItem
         return (string) $this->id;
     }
 
-    public function update(array $properties)
+    public function update(array $properties): void
     {
         foreach ($properties as $property => $value) {
             $this->$property = $value;

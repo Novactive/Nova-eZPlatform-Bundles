@@ -15,8 +15,8 @@ namespace Novactive\EzMenuManager\Service;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
-use eZ\Publish\API\Repository\LocationService;
-use eZ\Publish\API\Repository\Values\Content\Location;
+use Ibexa\Contracts\Core\Repository\LocationService;
+use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 use Novactive\EzMenuManager\MenuItem\MenuItemTypeRegistry;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
@@ -85,5 +85,13 @@ class MenuService
     public function loadMenu($menuId)
     {
         return $this->em->getRepository(Menu::class)->find($menuId);
+    }
+
+    /**
+     * @return Menu|object|null
+     */
+    public function loadMenuByRemoteId(string $remoteId)
+    {
+        return $this->em->getRepository(Menu::class)->findOneBy(['remoteId' => $remoteId]);
     }
 }

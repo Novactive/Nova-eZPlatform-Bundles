@@ -12,7 +12,7 @@
 
 namespace Novactive\EzMenuManager\MenuItem\Type;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Novactive\EzMenuManager\MenuItem\AbstractMenuItemType;
 use Novactive\EzMenuManager\MenuItem\MenuItemValue;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
@@ -88,6 +88,8 @@ class DefaultMenuItemType extends AbstractMenuItemType
         if (isset($hash['parentId']) && $hash['parentId']) {
             $parent = $menuItemRepo->find($hash['parentId']);
             $menuItem->setParent($parent);
+        } else {
+            $menuItem->setParent(null);
         }
 
         if (isset($hash['menuId'])) {

@@ -13,7 +13,7 @@
 namespace Novactive\EzMenuManager\Migration\ReferenceResolver;
 
 use Doctrine\ORM\EntityManagerInterface;
-use eZ\Publish\API\Repository\LocationService;
+use Ibexa\Contracts\Core\Repository\LocationService;
 use Kaliop\eZMigrationBundle\Core\ReferenceResolver\AbstractResolver;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem\ContentMenuItem;
 
