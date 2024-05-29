@@ -10,14 +10,14 @@
 
 const path = require('path');
 
-module.exports = (eZConfig, eZConfigManager) => {
-    eZConfigManager.add({
-        eZConfig,
+module.exports = (ibexaConfig, ibexaConfigManager) => {
+    ibexaConfigManager.add({
+        eZConfig: ibexaConfig,
         entryName: 'ezplatform-admin-ui-location-view-css',
         newItems: [path.resolve(__dirname, '../public/css/focuspoint.scss')]
     });
-    eZConfigManager.add({
-        eZConfig,
+    ibexaConfigManager.add({
+        eZConfig: ibexaConfig,
         entryName: 'ezplatform-admin-ui-content-edit-parts-css',
         newItems: [
             path.resolve(__dirname, '../public/css/focuspoint.scss'),
@@ -25,8 +25,8 @@ module.exports = (eZConfig, eZConfigManager) => {
             path.resolve(__dirname, '../public/css/enhancedimage.scss')
         ]
     });
-    eZConfigManager.add({
-        eZConfig,
+    ibexaConfigManager.add({
+        eZConfig: ibexaConfig,
         entryName: 'ezplatform-admin-ui-content-edit-parts-js',
         newItems: [
             path.resolve(__dirname, '../public/js/enhancedimage.js'),
