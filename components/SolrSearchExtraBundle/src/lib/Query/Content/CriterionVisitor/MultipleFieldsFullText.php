@@ -1,20 +1,12 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
+declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\Search\Common\FieldNameResolver;
-use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
+use Ibexa\Contracts\Solr\Query\CriterionVisitor;
+use Ibexa\Core\Search\Common\FieldNameResolver;
 use Novactive\EzSolrSearchExtra\Query\Content\Criterion\MultipleFieldsFullText as MultipleFieldsFullTextCriterion;
 use QueryTranslator\Languages\Galach\Generators\ExtendedDisMax;
 use QueryTranslator\Languages\Galach\Parser;
@@ -25,7 +17,7 @@ class MultipleFieldsFullText extends CriterionVisitor
     /**
      * Field map.
      *
-     * @var \eZ\Publish\Core\Search\Common\FieldNameResolver
+     * @var \Ibexa\Core\Search\Common\FieldNameResolver
      */
     protected $fieldNameResolver;
 
@@ -45,18 +37,27 @@ class MultipleFieldsFullText extends CriterionVisitor
     protected $generator;
 
     /**
+     * @var int
+     */
+    protected $maxDepth;
+
+    /**
      * Create from content type handler and field registry.
+     *
+     * @param int $maxDepth
      */
     public function __construct(
         FieldNameResolver $fieldNameResolver,
         Tokenizer $tokenizer,
         Parser $parser,
-        ExtendedDisMax $generator
+        ExtendedDisMax $generator,
+        $maxDepth = 0
     ) {
         $this->fieldNameResolver = $fieldNameResolver;
         $this->tokenizer = $tokenizer;
         $this->parser = $parser;
         $this->generator = $generator;
+        $this->maxDepth = $maxDepth;
     }
 
     /**
@@ -83,8 +84,6 @@ class MultipleFieldsFullText extends CriterionVisitor
 
     /**
      * Map field value to a proper Solr representation.
-     *
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $subVisitor
      *
      * @return string
      */
@@ -127,25 +126,36 @@ class MultipleFieldsFullText extends CriterionVisitor
         return "{!edismax {$queryParamsString}}";
     }
 
-    /**
-     * @return string
-     */
-    private function getQueryFields(Criterion $criterion)
+    private function getQueryFields(Criterion $criterion): string
     {
         /** @var \Novactive\EzSolrSearchExtra\Query\Content\Criterion\MultipleFieldsFullText $criterion */
         $queryFields = ['meta_content__text_t', 'meta_content__text_t_raw'];
 
+        for ($i = 1; $i <= $this->maxDepth; ++$i) {
+            $queryFields[] = "meta_related_content_{$i}__text_t^{$this->getBoostFactorForRelatedContent($i)}";
+        }
+
         foreach ($criterion->boost as $field => $boost) {
             $searchFields = $this->getSearchFields($criterion, $field);
+
             foreach (array_keys($searchFields) as $name) {
                 $queryFields[] = "{$name}^{$boost}";
             }
         }
+
         foreach ($criterion->metaBoost as $field => $boost) {
             $queryFields[] = "meta_{$field}__text_t^{$boost}";
             $queryFields[] = "meta_{$field}__text_t_raw^{$boost}";
         }
 
         return implode(' ', $queryFields);
+    }
+
+    /**
+     * Returns boost factor for the related content.
+     */
+    private function getBoostFactorForRelatedContent(int $depth): float
+    {
+        return 1.0 / pow(2.0, $depth);
     }
 }

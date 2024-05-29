@@ -1,14 +1,6 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
+declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Tika;
 
@@ -36,12 +28,16 @@ class TikaLocalClient implements TikaClientInterface
 
     /**
      * @param $command
-     *
-     * @return string
      */
-    protected function run($command)
+    protected function run($command): string
     {
-        $shellCommand = sprintf('java -Dpdfbox.fontcache=/tmp -jar %s %s', $this->jar, $command);
+        $shellCommand = [
+            'java',
+            '-Dpdfbox.fontcache=/tmp',
+            '-jar',
+            $this->jar,
+        ];
+        $shellCommand = array_merge($shellCommand, explode(" ", $command));
 
         $process = new Process($shellCommand);
         $process->setWorkingDirectory(__DIR__.'/../../../');
