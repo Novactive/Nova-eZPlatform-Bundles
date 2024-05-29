@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZSEOBundle SeoMetadataDefaultFieldType.
  *
@@ -17,7 +18,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class SeoMetadataDefaultFieldType implements SeoMetadataFieldTypeInterface
 {
-    public const string IDENTIFIER = 'text';
+    public const IDENTIFIER = 'text';
 
     public function support(string $fieldType): bool
     {

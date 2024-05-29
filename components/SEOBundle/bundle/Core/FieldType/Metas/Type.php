@@ -19,11 +19,12 @@ use Ibexa\Core\Base\Exceptions\InvalidArgumentType;
 use Ibexa\Core\FieldType\FieldType;
 use Ibexa\Core\FieldType\ValidationError;
 use Ibexa\Core\FieldType\Value as CoreValue;
-use Novactive\Bundle\eZSEOBundle\Core\Meta;
 use Novactive\Bundle\eZSEOBundle\Core\FieldType\MetaFieldConverter\SeoMetadataFieldTypeRegistry;
+use Novactive\Bundle\eZSEOBundle\Core\Meta;
+
 class Type extends FieldType
 {
-    public const string IDENTIFIER = 'novaseometas';
+    public const IDENTIFIER = 'novaseometas';
 
     /**
      * @var array
@@ -34,9 +35,12 @@ class Type extends FieldType
             'default' => [],
         ],
     ];
+    protected SeoMetadataFieldTypeRegistry $metadataFieldTypeRegistry;
+
     public function __construct(
-        protected SeoMetadataFieldTypeRegistry $metadataFieldTypeRegistry
+        SeoMetadataFieldTypeRegistry $metadataFieldTypeRegistry
     ) {
+        $this->metadataFieldTypeRegistry = $metadataFieldTypeRegistry;
     }
 
     /**
@@ -167,7 +171,7 @@ class Type extends FieldType
             $name = $meta->getName();
             $hash[$name] = [
                 'meta_name' => $name,
-                'meta_content' => $meta->getContent()
+                'meta_content' => $meta->getContent(),
             ];
         }
 

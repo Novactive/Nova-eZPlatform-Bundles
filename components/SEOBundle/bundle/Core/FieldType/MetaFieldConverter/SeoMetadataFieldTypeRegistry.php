@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZSEOBundle SeoMetadataFieldTypeRegistry.
  *
@@ -36,9 +37,8 @@ class SeoMetadataFieldTypeRegistry
 
     /**
      * @required
-     * @param ConfigResolverInterface $configResolver
      */
-    public function setConfigResolver( ConfigResolverInterface $configResolver ): void
+    public function setConfigResolver(ConfigResolverInterface $configResolver): void
     {
         $this->configResolver = $configResolver;
     }

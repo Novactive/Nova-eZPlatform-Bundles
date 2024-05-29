@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZSEOBundle SeoMetadataChoiceFieldType.
  *
@@ -11,13 +12,12 @@
 
 namespace Novactive\Bundle\eZSEOBundle\Core\FieldType\MetaFieldConverter;
 
-use Novactive\Bundle\eZSEOBundle\Core\Meta;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class SeoMetadataChoiceFieldType extends SeoMetadataDefaultFieldType
 {
-    public const string IDENTIFIER = 'select';
+    public const IDENTIFIER = 'select';
 
     public function mapForm(FormBuilderInterface &$builder, array $params)
     {

@@ -16,17 +16,30 @@ use Ibexa\Contracts\Core\Repository\Exceptions\PropertyNotFoundException;
 
 class Meta
 {
+    protected ?string $name = null;
+    protected $content = null;
+    protected ?string $fieldType = null;
+    protected ?bool $required = null;
+    protected ?string $minLength = null;
+    protected ?string $maxLength = null;
+
     /**
      * Constructor.
      */
     public function __construct(
-        protected ?string $name = null,
-        protected mixed $content = null,
-        protected ?string $fieldType = null,
-        protected ?bool $required = null,
-        protected ?string $minLength = null,
-        protected ?string $maxLength = null
+        ?string $name = null,
+        $content = null,
+        ?string $fieldType = null,
+        ?bool $required = null,
+        ?string $minLength = null,
+        ?string $maxLength = null
     ) {
+        $this->maxLength = $maxLength;
+        $this->minLength = $minLength;
+        $this->required = $required;
+        $this->fieldType = $fieldType;
+        $this->content = $content;
+        $this->name = $name;
     }
 
     public function getName(): string
@@ -41,12 +54,12 @@ class Meta
         return $this;
     }
 
-    public function getContent(): mixed
+    public function getContent()
     {
         return $this->content;
     }
 
-    public function setContent(mixed $content): self
+    public function setContent($content): self
     {
         $this->content = $content;
 

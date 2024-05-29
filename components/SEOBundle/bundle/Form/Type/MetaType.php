@@ -12,6 +12,8 @@
 
 namespace Novactive\Bundle\eZSEOBundle\Form\Type;
 
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
+use Novactive\Bundle\eZSEOBundle\Core\FieldType\MetaFieldConverter\SeoMetadataFieldTypeRegistry;
 use Novactive\Bundle\eZSEOBundle\Core\Meta;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -19,18 +21,21 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
-use Novactive\Bundle\eZSEOBundle\Core\FieldType\MetaFieldConverter\SeoMetadataFieldTypeRegistry;
 
 /**
  * Form Type representing meta field type.
  */
 class MetaType extends AbstractType
 {
+    protected SeoMetadataFieldTypeRegistry $metadataFieldTypeRegistry;
+    protected ConfigResolverInterface $configResolver;
+
     public function __construct(
-        protected ConfigResolverInterface $configResolver,
-        protected SeoMetadataFieldTypeRegistry $metadataFieldTypeRegistry
+        ConfigResolverInterface $configResolver,
+        SeoMetadataFieldTypeRegistry $metadataFieldTypeRegistry
     ) {
+        $this->configResolver = $configResolver;
+        $this->metadataFieldTypeRegistry = $metadataFieldTypeRegistry;
     }
 
     public function getName(): string
@@ -46,17 +51,17 @@ class MetaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $config = [];
-        $type    = 'text';
+        $type = 'text';
         $options = [
             'label' => false,
-            'label_attr' => ['style' => 'display:none']
+            'label_attr' => ['style' => 'display:none'],
         ];
         $novaEzseo = $this->configResolver->getParameter('fieldtype_metas', 'nova_ezseo');
 
         if (isset($novaEzseo[$builder->getName()])) {
             $config = $novaEzseo[$builder->getName()];
-            $type    = $config['type'] ?? $type;
-            if ($type === 'select') {
+            $type = $config['type'] ?? $type;
+            if ('select' === $type) {
                 $options = array_merge($options, $config['params']);
             }
         }
@@ -67,7 +72,6 @@ class MetaType extends AbstractType
         $builder
             ->add('name', HiddenType::class);
         $this->metadataFieldTypeRegistry->mapForm($builder, $options, $type);
-
     }
 
     private function getConstraints(array $config)
