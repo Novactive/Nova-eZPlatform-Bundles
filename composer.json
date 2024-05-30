@@ -40,6 +40,10 @@
         }
     },
     "require": {
+        "php": ">=8.1",
+        "ext-simplexml": "*",
+        "ext-json": "*",
+        "ext-pdo": "*",
         "symfony/console": "^5.2",
         "symfony/process": "^5.2",
         "squizlabs/php_codesniffer": "^3.5",
@@ -48,7 +52,6 @@
         "symfony/var-dumper": "^5.2",
         "symfony/finder": "^5.2",
         "symfony/http-client": "^5.2",
-        "ext-json": "*",
         "phpunit/phpunit": "^9.5",
         "dbrekelmans/bdi": "1.0.4",
         "symfony/panther": "^1.1",
@@ -60,7 +63,6 @@
         "twig/twig": "^3.0",
         "knplabs/knp-menu": "^3.1",
         "behat/behat": "^3.8",
-        "friends-of-behat/mink-extension": "^2.5",
-        "ext-pdo": "*"
+        "friends-of-behat/mink-extension": "^2.5"
     }
 }
