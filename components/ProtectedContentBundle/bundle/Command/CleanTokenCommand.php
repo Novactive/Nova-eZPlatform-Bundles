@@ -14,8 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Command;
 
-use Doctrine\ORM\EntityManagerInterface;
-use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedTokenStorage;
 use Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedTokenStorageRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,13 +22,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class CleanTokenCommand extends Command
 {
-    /**
-     * @param EntityManagerInterface $entityManager
-     */
-    public function __construct(EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        protected ProtectedTokenStorageRepository $protectedTokenStorageRepository,
+    ) {
         parent::__construct();
-        $this->entityManager = $entityManager;
     }
 
     protected function configure(): void
@@ -47,16 +42,15 @@ class CleanTokenCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        /** @var ProtectedTokenStorageRepository $protectedTokenStorageRepository */
-        $protectedTokenStorageRepository = $this->entityManager->getRepository(ProtectedTokenStorage::class);
+        $entities = $this->protectedTokenStorageRepository->findExpired();
 
-        $entities = $protectedTokenStorageRepository->findExpired();
+        $io->comment(sprintf('%d entities to delete', count($entities)));
 
         foreach ($entities as $entity) {
-            $this->entityManager->remove($entity);
+            $this->protectedTokenStorageRepository->remove($entity);
         }
 
-        $this->entityManager->flush();
+        $this->protectedTokenStorageRepository->flush();
 
         $io->success(sprintf('%d entities deleted', count($entities)));
         $io->success('Done.');
