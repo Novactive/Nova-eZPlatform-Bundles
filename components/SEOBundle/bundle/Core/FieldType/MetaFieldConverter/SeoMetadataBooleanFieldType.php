@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZSEOBundle SeoMetadataBooleanFieldType.
  *
@@ -18,10 +19,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 class SeoMetadataBooleanFieldType extends SeoMetadataDefaultFieldType
 {
     public const IDENTIFIER = 'boolean';
+
     public function fromHash($hash): Meta
     {
         $meta = parent::fromHash($hash);
-        $content = $hash['meta_content'] == "1" ? true : false;
+        $content = '1' == $hash['meta_content'] ? true : false;
         $meta->setContent($content);
 
         return $meta;
@@ -30,8 +32,8 @@ class SeoMetadataBooleanFieldType extends SeoMetadataDefaultFieldType
     public function mapForm(FormBuilderInterface &$builder, array $params)
     {
         $option = [
-            'class'        => 'form-control',
-            'false_values' => '0'
+            'class' => 'form-control',
+            'false_values' => '0',
         ];
         $builder->add(
             'content',

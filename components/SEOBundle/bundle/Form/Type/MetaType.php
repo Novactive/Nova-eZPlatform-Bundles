@@ -54,16 +54,16 @@ class MetaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $config = [];
-        $type    = 'text';
+        $type = 'text';
         $options = [
             'label' => false,
-            'label_attr' => ['style' => 'display:none']
+            'label_attr' => ['style' => 'display:none'],
         ];
 
         $novaEzseo = $this->configResolver->getParameter('fieldtype_metas', 'nova_ezseo');
         if (isset($novaEzseo[$builder->getName()])) {
             $config = $novaEzseo[$builder->getName()];
-            $type    = $config['type'];
+            $type = $config['type'];
             $options = array_merge($options, $config['params']);
         }
 
@@ -72,8 +72,7 @@ class MetaType extends AbstractType
 
         $builder
             ->add('name', HiddenType::class);
-           $this->metadataFieldTypeRegistry->mapForm($builder, $options, $type);
-
+        $this->metadataFieldTypeRegistry->mapForm($builder, $options, $type);
     }
 
     private function getConstraints(array $config)

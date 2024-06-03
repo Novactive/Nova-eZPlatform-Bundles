@@ -1,4 +1,5 @@
 <?php
+
 /**
  * NovaeZSEOBundle SeoMetadataFieldTypeInterface.
  *
@@ -18,21 +19,10 @@ interface SeoMetadataFieldTypeInterface
 {
     /**
      * @param $hash
-     *
-     * @return Meta
      */
     public function fromHash($hash): Meta;
 
-    /**
-     * @param string $fieldType
-     *
-     * @return bool
-     */
     public function support(string $fieldType): bool;
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $params
-     */
     public function mapForm(FormBuilderInterface &$builder, array $params);
 }

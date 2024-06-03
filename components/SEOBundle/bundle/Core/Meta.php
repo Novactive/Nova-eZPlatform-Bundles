@@ -30,7 +30,7 @@ class Meta
         ?string $name = null,
         ?string $content = null,
         ?string $fieldType = null,
-        ?bool   $required = null,
+        ?bool $required = null,
         ?string $minLength = null,
         ?string $maxLength = null
     ) {
