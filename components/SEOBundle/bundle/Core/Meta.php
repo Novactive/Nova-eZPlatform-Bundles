@@ -28,7 +28,7 @@ class Meta
      */
     public function __construct(
         ?string $name = null,
-        $content = null,
+        ?string $content = null,
         ?string $fieldType = null,
         ?bool $required = null,
         ?string $minLength = null,
@@ -54,12 +54,12 @@ class Meta
         return $this;
     }
 
-    public function getContent()
+    public function getContent(): ?string
     {
         return $this->content;
     }
 
-    public function setContent($content): self
+    public function setContent(?string $content): self
     {
         $this->content = $content;
 
