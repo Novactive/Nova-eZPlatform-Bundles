@@ -35,13 +35,6 @@ class Type extends FieldType
             'default' => [],
         ],
     ];
-    protected SeoMetadataFieldTypeRegistry $metadataFieldTypeRegistry;
-
-    public function __construct(
-        SeoMetadataFieldTypeRegistry $metadataFieldTypeRegistry
-    ) {
-        $this->metadataFieldTypeRegistry = $metadataFieldTypeRegistry;
-    }
 
     protected SeoMetadataFieldTypeRegistry $metadataFieldTypeRegistry;
 

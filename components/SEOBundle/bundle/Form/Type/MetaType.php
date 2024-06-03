@@ -61,7 +61,6 @@ class MetaType extends AbstractType
         ];
 
         $novaEzseo = $this->configResolver->getParameter('fieldtype_metas', 'nova_ezseo');
-
         if (isset($novaEzseo[$builder->getName()])) {
             $config = $novaEzseo[$builder->getName()];
             $type = $config['type'] ?? $type;

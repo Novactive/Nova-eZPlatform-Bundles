@@ -116,7 +116,7 @@ class MetaNameSchema extends NameSchemaService
         $languages = $this->configurationResolver->getParameter('languages');
 
         $resolveMultilingue = $this->resolveNameSchema(
-            $meta->getContent() ?? '',
+            $meta->getContent(),
             $content->getContentType(),
             $content->fields,
             $content->versionInfo->languageCodes
