@@ -14,25 +14,18 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Repository;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Ibexa\Contracts\Core\Repository\Repository;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
 
-class ProtectedAccessRepository extends EntityRepository
+class ProtectedAccessRepository
 {
-    /**
-     * @var Repository
-     */
-    private $repository;
-
-    /**
-     * @required
-     */
-    public function setRepository(Repository $repository): void
-    {
-        $this->repository = $repository;
-    }
+    public function __construct(
+        protected readonly Repository $repository,
+        protected readonly EntityManagerInterface $entityManager,
+    ) { }
 
     protected function getAlias(): string
     {
@@ -63,7 +56,10 @@ class ProtectedAccessRepository extends EntityRepository
             }
         );
 
-        $qb = parent::createQueryBuilderForFilters();
+        $entityRepository = $this->entityManager->getRepository($this->getEntityClass());
+
+        $qb = $entityRepository->createQueryBuilder($this->getAlias());
+
         $qb->where($qb->expr()->eq($this->getAlias().'.enabled', true));
         $qb->andWhere(
             $qb->expr()->in($this->getAlias().'.contentId', ':contentIds')

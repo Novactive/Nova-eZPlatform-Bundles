@@ -62,7 +62,7 @@ class ProtectedAccessController
         return new RedirectResponse(
             $router->generate('ibexa.content.view', ['contentId' => $location->contentId,
                 'locationId' => $location->id,
-                ]).
+            ]).
             '#ibexa-tab-location-view-protect-content#tab'
         );
     }
@@ -86,7 +86,7 @@ class ProtectedAccessController
         return new RedirectResponse(
             $router->generate('ibexa.content.view', ['contentId' => $location->contentId,
                 'locationId' => $location->id,
-                ]).
+            ]).
             '#ibexa-tab-location-view-protect-content#tab'
         );
     }
