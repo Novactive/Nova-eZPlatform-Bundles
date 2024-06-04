@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedTokenStorageRepository")
+ * @ORM\Entity()
  * @ORM\Table(name="novaezprotectedcontentstorage")
  */
 class ProtectedTokenStorage
