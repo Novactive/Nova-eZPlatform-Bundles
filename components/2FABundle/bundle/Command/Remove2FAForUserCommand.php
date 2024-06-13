@@ -12,7 +12,7 @@
 
 namespace Novactive\Bundle\eZ2FABundle\Command;
 
-use eZ\Publish\Core\MVC\Symfony\Security\User;
+use Ibexa\Core\MVC\Symfony\Security\User;
 use Novactive\Bundle\eZ2FABundle\Core\UserRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
