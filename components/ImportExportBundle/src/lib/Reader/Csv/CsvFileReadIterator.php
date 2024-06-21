@@ -17,7 +17,7 @@ class CsvFileReadIterator extends FileReadIterator
         int $firstLineNumber = 0,
         string $delimiter = ',',
         string $enclosure = '"',
-        string $escape = '\\',
+        string $escape = '\\'
     ) {
         $this->escape = $escape;
         $this->enclosure = $enclosure;

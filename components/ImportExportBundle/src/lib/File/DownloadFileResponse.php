@@ -72,12 +72,13 @@ class DownloadFileResponse extends Response
 
     public function setContentDisposition($disposition, $filename = '', $filenameFallback = ''): DownloadFileResponse
     {
-        $filename = pathinfo($this->filepath, PATHINFO_FILENAME);
+        if (empty($filename)) {
+            $filename = pathinfo($this->filepath, PATHINFO_FILENAME);
+        }
 
         if (empty($filenameFallback)) {
             $filenameFallback = mb_convert_encoding($filename, 'ASCII');
         }
-
         $dispositionHeader = $this->headers->makeDisposition($disposition, $filename, $filenameFallback);
         $this->headers->set('Content-Disposition', $dispositionHeader);
 

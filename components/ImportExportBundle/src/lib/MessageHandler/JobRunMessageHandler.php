@@ -4,22 +4,27 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\MessageHandler;
 
+use AlmaviaCX\Bundle\IbexaImportExport\Job\Job;
 use AlmaviaCX\Bundle\IbexaImportExport\Job\JobRepository;
 use AlmaviaCX\Bundle\IbexaImportExport\Job\JobRunnerInterface;
 use AlmaviaCX\Bundle\IbexaImportExport\Message\JobRunMessage;
 use AlmaviaCX\Bundle\IbexaImportExport\Notification\NotificationSender;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class JobRunMessageHandler
 {
     protected JobRepository $jobRepository;
     protected JobRunnerInterface $jobRunner;
     protected NotificationSender $notificationSender;
+    protected MessageBusInterface $messageBus;
 
     public function __construct(
         JobRepository $jobRepository,
         JobRunnerInterface $jobRunner,
-        NotificationSender $notificationSender
+        NotificationSender $notificationSender,
+        MessageBusInterface $messageBus
     ) {
+        $this->messageBus = $messageBus;
         $this->notificationSender = $notificationSender;
         $this->jobRepository = $jobRepository;
         $this->jobRunner = $jobRunner;
@@ -31,19 +36,30 @@ class JobRunMessageHandler
     public function __invoke(JobRunMessage $message): void
     {
         $job = $this->jobRepository->findById($message->getJobId());
-        ($this->jobRunner)($job, true);
-        ($this->notificationSender)(
-            $job->getCreatorId(),
-            NotificationSender::JOB_DONE_TYPE,
-            [
-                'job_id' => $job->getId(),
-                'job_label' => $job->getLabel(),
-                'message' => NotificationSender::MESSAGES[NotificationSender::JOB_DONE_TYPE],
-                'message_parameters' => [
-                    '%job_id%' => $job->getId(),
-                    '%job_label%' => $job->getLabel(),
-                ],
-            ]
-        );
+        $status = ($this->jobRunner)($job, $message->getBatchLimit());
+
+        if (Job::STATUS_COMPLETED === $status) {
+            ($this->notificationSender)(
+                $job->getCreatorId(),
+                NotificationSender::JOB_DONE_TYPE,
+                [
+                    'job_id' => $job->getId(),
+                    'job_label' => $job->getLabel(),
+                    'message' => NotificationSender::MESSAGES[NotificationSender::JOB_DONE_TYPE],
+                    'message_parameters' => [
+                        '%job_id%' => $job->getId(),
+                        '%job_label%' => $job->getLabel(),
+                    ],
+                ]
+            );
+        }
+        if (Job::STATUS_PAUSED === $status) {
+            $this->triggerRun($job, $message->getBatchLimit());
+        }
+    }
+
+    public function triggerRun(Job $job, int $batchLimit = -1): void
+    {
+        $this->messageBus->dispatch(new JobRunMessage($job->getId(), $batchLimit));
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AlmaviaCX\Bundle\IbexaImportExport\Reader\Ibexa\Iterator\ItemTransformer;
+namespace AlmaviaCX\Bundle\IbexaImportExport\Reader\Ibexa\IteratorItemTransformer;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\ObjectAccessorBuilder;
 use AlmaviaCX\Bundle\IbexaImportExport\Item\Iterator\IteratorItemTransformerInterface;
@@ -22,7 +22,7 @@ class ContentSearchHitTransformerIterator implements IteratorItemTransformerInte
     /**
      * {@inheritDoc}
      */
-    public function __invoke($item): mixed
+    public function __invoke($item)
     {
         if ($item instanceof SearchHit && $item->valueObject instanceof Content) {
             return $this->valueAccessorBuilder->buildFromContent($item->valueObject);

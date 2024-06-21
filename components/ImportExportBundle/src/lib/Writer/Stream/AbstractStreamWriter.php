@@ -9,16 +9,19 @@ use AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\ItemTransformer;
 use AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\SourceResolver;
 use AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag;
 use AlmaviaCX\Bundle\IbexaImportExport\Writer\AbstractWriter;
-use AlmaviaCX\Bundle\IbexaImportExport\Writer\WriterResults;
 use League\Flysystem\Config;
+use League\Flysystem\FilesystemException;
 
 abstract class AbstractStreamWriter extends AbstractWriter
 {
+    public const MODE_NEW_FILE = 'new';
+    public const MODE_APPEND_FILE = 'append';
     /**
      * @var resource
      */
     protected $stream;
     protected FileHandler $fileHandler;
+    protected string $mode = self::MODE_NEW_FILE;
 
     public function __construct(
         FileHandler $fileHandler,
@@ -32,24 +35,35 @@ abstract class AbstractStreamWriter extends AbstractWriter
 
     public function prepare(): void
     {
-        $tmpName = tempnam(sys_get_temp_dir(), 'import_export_writer_');
-        $this->stream = fopen($tmpName, 'w+');
+        $this->stream = fopen('php://temp', 'w+');
+        $filepath = $this->results->getResult('filepath');
+        if (!$filepath) {
+            /** @var \AlmaviaCX\Bundle\IbexaImportExport\Writer\Stream\StreamWriterOptions $options */
+            $options = $this->getOptions();
+            $filepath = ($this->fileHandler)->resolvePath($options->filepath);
+            $this->results->setResult('filepath', $filepath);
+        } else {
+            try {
+                $existingStream = $this->fileHandler->readStream($filepath);
+                stream_copy_to_stream($existingStream, $this->stream);
+                $this->mode = self::MODE_APPEND_FILE;
+            } catch (FilesystemException $e) {
+                $this->logger->logException($e);
+            }
+        }
     }
 
-    public function finish(): WriterResults
+    public function finish(): void
     {
-        /** @var \AlmaviaCX\Bundle\IbexaImportExport\Writer\Stream\StreamWriterOptions $options */
-        $options = $this->getOptions();
-        $filepath = ($this->fileHandler)->resolvePath($options->filepath);
+        parent::finish();
 
         rewind($this->stream);
+        $filepath = $this->results->getResult('filepath');
         $this->fileHandler->writeStream($filepath, $this->stream, new Config());
 
         if (is_resource($this->stream)) {
             fclose($this->stream);
         }
-
-        return new WriterResults(static::class, ['filepath' => $filepath]);
     }
 
     public static function getOptionsFormType(): ?string

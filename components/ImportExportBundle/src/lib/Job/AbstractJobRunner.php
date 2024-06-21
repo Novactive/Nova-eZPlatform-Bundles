@@ -4,16 +4,31 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Job;
 
+use AlmaviaCX\Bundle\IbexaImportExport\Event\ResetJobRunEvent;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+
 abstract class AbstractJobRunner implements JobRunnerInterface
 {
-    public function __invoke(Job $job, bool $force = false): void
+    protected EventDispatcherInterface $eventDispatcher;
+
+    public function __construct(EventDispatcherInterface $eventDispatcher)
     {
-        if (!$force && (Job::STATUS_PENDING !== $job->getStatus() && Job::STATUS_COMPLETED !== $job->getStatus())) {
-            return;
-        }
-        $job->reset();
-        $this->run($job);
+        $this->eventDispatcher = $eventDispatcher;
     }
 
-    abstract protected function run(Job $job): void;
+    public function __invoke(Job $job, int $batchLimit = -1, bool $reset = false): int
+    {
+        if ($reset || Job::STATUS_COMPLETED === $job->getStatus()) {
+            $this->eventDispatcher->dispatch(new ResetJobRunEvent($job));
+            $job->reset();
+        }
+
+        if (Job::STATUS_PAUSED !== $job->getStatus() || Job::STATUS_PENDING !== $job->getStatus()) {
+            return $this->run($job, $batchLimit);
+        }
+
+        return $job->getStatus();
+    }
+
+    abstract protected function run(Job $job, int $batchLimit = -1): int;
 }

@@ -1,3 +1,4 @@
+{# @var job \AlmaviaCX\Bundle\IbexaImportExport\Job\Job #}
 {% extends '@ibexadesign/ui/layout.html.twig' %}
 
 {% trans_default_domain 'import_export' %}
@@ -29,11 +30,12 @@
         'job.status.pending'|trans()|desc('Pending'),
         'job.status.running'|trans()|desc('Running'),
         'job.status.completed'|trans()|desc('Completed'),
-        'job.status.queued'|trans()|desc('Queued')
+        'job.status.queued'|trans()|desc('Queued'),
+        'job.status.paused'|trans()|desc('Paused')
 
     ] %}
-    {% set progress_bar %}
-        {% include '@ibexadesign/import_export/components/progress_bar.html.twig' with {progress: job.progress * 100} only %}
+    {% set progress_bar %}</div>
+        {% include '@ibexadesign/import_export/components/progress_bar.html.twig' with {processedCount: job.processedItemsCount, totalCount: job.totalItemsCount} only %}
     {% endset %}
     {% set information_items = [
         {
@@ -61,7 +63,7 @@
             content: job.endTime ? job.endTime|ibexa_full_datetime : '',
         },
         {
-            label: 'job.property.progress'|trans|desc('Progress'),
+            label: 'job.property.progress'|trans()|desc('Progress'),
             content_raw: progress_bar,
         },
     ] %}

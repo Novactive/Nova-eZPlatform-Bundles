@@ -4,28 +4,31 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Job;
 
-use AlmaviaCX\Bundle\IbexaImportExport\Message\JobRunMessage;
-use Symfony\Component\Messenger\MessageBusInterface;
+use AlmaviaCX\Bundle\IbexaImportExport\MessageHandler\JobRunMessageHandler;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class AsyncJobRunner extends AbstractJobRunner
 {
-    protected MessageBusInterface $messageBus;
+    protected JobRunMessageHandler $jobRunMessageHandler;
     protected JobRepository $jobRepository;
 
-    /**
-     * @param \AlmaviaCX\Bundle\IbexaImportExport\Job\JobRepository $jobRepository
-     */
-    public function __construct(MessageBusInterface $messageBus, JobRepository $jobRepository)
-    {
-        $this->messageBus = $messageBus;
+    public function __construct(
+        JobRunMessageHandler $jobRunMessageHandler,
+        JobRepository $jobRepository,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->jobRepository = $jobRepository;
+        $this->jobRunMessageHandler = $jobRunMessageHandler;
+        parent::__construct($eventDispatcher);
     }
 
-    protected function run(Job $job): void
+    protected function run(Job $job, int $batchLimit = -1): int
     {
         $job->setStatus(Job::STATUS_QUEUED);
         $this->jobRepository->save($job);
 
-        $this->messageBus->dispatch(new JobRunMessage($job->getId()));
+        $this->jobRunMessageHandler->triggerRun($job, $batchLimit);
+
+        return $job->getStatus();
     }
 }

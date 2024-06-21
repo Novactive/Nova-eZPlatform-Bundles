@@ -17,8 +17,12 @@ class JobService
      * @param \AlmaviaCX\Bundle\IbexaImportExport\Job\JobRepository      $jobRepository
      * @param \AlmaviaCX\Bundle\IbexaImportExport\Job\JobRunnerInterface $jobRunner
      */
-    public function __construct(JobRepository $jobRepository, JobRunnerInterface $jobRunner)
-    {
+    public function __construct(
+        JobRepository $jobRepository,
+        JobRunnerInterface $jobRunner,
+        ConfigResolverInterface $configResolver
+    ) {
+        $this->configResolver = $configResolver;
         $this->jobRepository = $jobRepository;
         $this->jobRunner = $jobRunner;
     }
@@ -33,9 +37,12 @@ class JobService
         $this->runJob($job);
     }
 
-    public function runJob(Job $job, bool $force = false): void
+    public function runJob(Job $job, int $batchLimit = null, bool $reset = false): void
     {
-        ($this->jobRunner)($job, $force);
+        if (!$batchLimit) {
+            $batchLimit = $this->configResolver->getParameter('default_batch_limit', 'import_export');
+        }
+        ($this->jobRunner)($job, $batchLimit, $reset);
     }
 
     public function loadJobById(int $id): ?Job

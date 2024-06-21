@@ -22,7 +22,7 @@ class ItemIterator extends AbstractReaderIterator
         parent::__construct($totalCount);
     }
 
-    public function current(): mixed
+    public function current()
     {
         return ($this->itemTransformer)($this->innerIterator->current());
     }

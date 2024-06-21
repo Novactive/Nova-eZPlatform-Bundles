@@ -15,9 +15,24 @@ import_export.job.run:
     path:     /import-export/job/{id}/run
     defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::run }
 
-import_export.job.force_run:
-    path:     /import-export/job/{id}/run/{force}
+import_export.job.run_w_limit:
+    path:     /import-export/job/{id}/run/{batchLimit}
     defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::run }
+    requirements:
+        batchLimit: '\d+'
+
+import_export.job.reset_run:
+    path:     /import-export/job/{id}/run/{reset}
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::run }
+    requirements:
+        reset: true|false
+
+import_export.job.reset_run_w_limit:
+    path:     /import-export/job/{id}/run/{batchLimit}/{reset}
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::run }
+    requirements:
+        reset: true|false
+        batchLimit: '\d+'
 
 import_export.job.delete:
     path:     /import-export/job/{id}/delete

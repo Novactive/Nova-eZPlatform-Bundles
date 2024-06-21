@@ -9,7 +9,6 @@ use AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorInterface;
 use AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorOptions;
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderInterface;
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderOptions;
-use AlmaviaCX\Bundle\IbexaImportExport\Result\Result;
 use Exception;
 
 class WorkflowExecutor
@@ -27,8 +26,9 @@ class WorkflowExecutor
      */
     public function __invoke(
         WorkflowInterface $workflow,
-        array $runtimeProcessConfiguration
-    ): Result {
+        array $runtimeProcessConfiguration,
+        int $batchLimit = -1
+    ): void {
         $workflow->setConfiguration(
             $this->buildRunConfiguration(
                 $workflow,
@@ -36,7 +36,7 @@ class WorkflowExecutor
             )
         );
 
-        return ($workflow)();
+        ($workflow)($batchLimit);
     }
 
     /**

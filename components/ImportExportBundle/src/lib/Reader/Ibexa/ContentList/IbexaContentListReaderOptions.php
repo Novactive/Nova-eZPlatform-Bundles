@@ -7,9 +7,11 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Reader\Ibexa\ContentList;
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderOptions;
 
 /**
- * @property int $parentLocationId
+ * @property int               $parentLocationId
+ * @property array<int|string> $contentTypes
  */
 class IbexaContentListReaderOptions extends ReaderOptions
 {
-    protected int $parentLocationId;
+    protected ?int $parentLocationId = null;
+    protected array $contentTypes = [];
 }

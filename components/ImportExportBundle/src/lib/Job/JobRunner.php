@@ -17,7 +17,6 @@ class JobRunner extends AbstractJobRunner
 {
     protected WorkflowExecutor $workflowExecutor;
     protected WorkflowRegistry $workflowRegistry;
-    protected EventDispatcherInterface $eventDispatcher;
     protected JobRepository $jobRepository;
 
     /**
@@ -31,46 +30,68 @@ class JobRunner extends AbstractJobRunner
     ) {
         $this->workflowExecutor = $workflowExecutor;
         $this->workflowRegistry = $workflowRegistry;
-        $this->eventDispatcher = $eventDispatcher;
         $this->jobRepository = $jobRepository;
+        parent::__construct($eventDispatcher);
     }
 
-    protected function run(Job $job): void
+    protected function run(Job $job, int $batchLimit = -1): int
     {
         $logger = new WorkflowLogger();
 
         $workflow = $this->workflowRegistry->getWorkflow($job->getWorkflowIdentifier());
         $workflow->setLogger($logger);
+
         $workflow->addEventListener(WorkflowEvent::PROGRESS, function (WorkflowEvent $event) use ($logger, $job) {
             $workflow = $event->getWorkflow();
 
             // Ibexa content creation trigger an entity manager clear, which mean we need to reload the entity
             $job = $this->jobRepository->findById($job->getId());
             $job->addRecords($logger->getRecords());
-            $job->setProgress($workflow->getProgress());
+            $job->setProcessedItemsCount($workflow->getOffset());
+            $this->jobRepository->save($job);
+        });
+
+        $workflow->addEventListener(WorkflowEvent::START, function (WorkflowEvent $event) use ($job) {
+            $workflow = $event->getWorkflow();
+
+            // Ibexa content creation trigger an entity manager clear, which mean we need to reload the entity
+            $job = $this->jobRepository->findById($job->getId());
+            $job->setTotalItemsCount($workflow->getTotalItemsCount());
             $this->jobRepository->save($job);
         });
 
         $this->eventDispatcher->dispatch(new PreJobRunEvent($job, $workflow));
 
+        if (Job::STATUS_PAUSED === $job->getStatus()) {
+            $workflow->setOffset($job->getProcessedItemsCount());
+            $workflow->setWriterResults($job->getWriterResults());
+        } else {
+            $job->setStartTime(new DateTimeImmutable());
+        }
         $job->setStatus(Job::STATUS_RUNNING);
-        $job->setStartTime(new DateTimeImmutable());
         $this->jobRepository->save($job);
 
-        $results = ($this->workflowExecutor)(
+        ($this->workflowExecutor)(
             $workflow,
-            $job->getOptions()
+            $job->getOptions(),
+            $batchLimit
         );
 
         // Ibexa content creation trigger an entity manager clear, which mean we need to reload the entity
         $job = $this->jobRepository->findById($job->getId());
-        $job->setStatus(Job::STATUS_COMPLETED);
-        $job->setEndTime($results->getEndTime());
         $job->addRecords($logger->getRecords());
-        $job->setWriterResults($results->getWriterResults());
+        $job->setWriterResults($workflow->getWriterResults());
+        if (1 == $job->getProgress() || 0 === $job->getTotalItemsCount()) {
+            $job->setStatus(Job::STATUS_COMPLETED);
+            $job->setEndTime($workflow->getEndTime());
+        } else {
+            $job->setStatus(Job::STATUS_PAUSED);
+        }
 
-        $this->eventDispatcher->dispatch(new PostJobRunEvent($job, $workflow, $results));
+        $this->eventDispatcher->dispatch(new PostJobRunEvent($job, $workflow));
 
         $this->jobRepository->save($job);
+
+        return $job->getStatus();
     }
 }

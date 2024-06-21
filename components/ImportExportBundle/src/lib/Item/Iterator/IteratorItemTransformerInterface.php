@@ -6,5 +6,8 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Item\Iterator;
 
 interface IteratorItemTransformerInterface
 {
-    public function __invoke($item): mixed;
+    /**
+     * @param $item
+     */
+    public function __invoke($item);
 }

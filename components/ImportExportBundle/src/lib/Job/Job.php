@@ -21,6 +21,7 @@ class Job
     public const STATUS_RUNNING = 1;
     public const STATUS_COMPLETED = 2;
     public const STATUS_QUEUED = 3;
+    public const STATUS_PAUSED = 4;
 
     /**
      * @ORM\Id
@@ -47,7 +48,12 @@ class Job
     /**
      * @ORM\Column
      */
-    protected float $progress = 0;
+    protected int $processedItemsCount = 0;
+
+    /**
+     * @ORM\Column
+     */
+    protected int $totalItemsCount = 0;
 
     /**
      * @ORM\Column(type="datetime_immutable")
@@ -246,14 +252,29 @@ class Job
         $this->writerResults = serialize($writerResults);
     }
 
-    public function getProgress(): float
+    public function getProcessedItemsCount(): int
     {
-        return $this->progress;
+        return $this->processedItemsCount;
     }
 
-    public function setProgress(float $progress): void
+    public function setProcessedItemsCount(int $processedItemsCount): void
     {
-        $this->progress = $progress;
+        $this->processedItemsCount = $processedItemsCount;
+    }
+
+    public function getTotalItemsCount(): int
+    {
+        return $this->totalItemsCount;
+    }
+
+    public function setTotalItemsCount(int $totalItemsCount): void
+    {
+        $this->totalItemsCount = $totalItemsCount;
+    }
+
+    public function getProgress(): float
+    {
+        return $this->totalItemsCount > 0 ? $this->processedItemsCount / $this->totalItemsCount : 0;
     }
 
     public function reset(): void
@@ -263,6 +284,7 @@ class Job
         $this->records = new ArrayCollection();
         $this->writerResults = null;
         $this->status = self::STATUS_PENDING;
-        $this->progress = 0;
+        $this->totalItemsCount = 0;
+        $this->processedItemsCount = 0;
     }
 }

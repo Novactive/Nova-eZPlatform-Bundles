@@ -9,7 +9,6 @@ use AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\ItemTransformer;
 use AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\SourceResolver;
 use AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag;
 use AlmaviaCX\Bundle\IbexaImportExport\Writer\AbstractWriter;
-use AlmaviaCX\Bundle\IbexaImportExport\Writer\WriterResults;
 use Exception;
 use Ibexa\Contracts\Core\Repository\Exceptions\BadStateException;
 use Ibexa\Contracts\Core\Repository\Exceptions\ContentFieldValidationException;
@@ -29,7 +28,6 @@ use Symfony\Component\Translation\TranslatableMessage;
 
 class IbexaContentWriter extends AbstractWriter implements TranslationContainerInterface
 {
-    protected array $importedContentIds = [];
     protected Repository $repository;
     protected ObjectAccessorBuilder $objectAccessorBuilder;
 
@@ -126,18 +124,11 @@ class IbexaContentWriter extends AbstractWriter implements TranslationContainerI
             }
         });
 
-        $this->importedContentIds[] = $content->id;
+        $imported_content_ids = $this->results->getResult('imported_content_ids');
+        $imported_content_ids[] = $content->id;
+        $this->results->setResult('imported_content_ids', $imported_content_ids);
 
         return $this->objectAccessorBuilder->buildFromContent($content);
-    }
-
-    public function finish(): WriterResults
-    {
-        $results = parent::finish();
-
-        $results->addResult('imported_content_ids', $this->importedContentIds);
-
-        return $results;
     }
 
     /**

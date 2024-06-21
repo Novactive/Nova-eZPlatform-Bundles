@@ -15,6 +15,7 @@ abstract class AbstractWriter extends AbstractProcessor implements WriterInterfa
     protected ItemTransformer $itemTransformer;
     protected ReferenceBag $referenceBag;
     protected SourceResolver $sourceResolver;
+    protected WriterResults $results;
 
     public function __construct(
         SourceResolver $sourceResolver,
@@ -24,6 +25,7 @@ abstract class AbstractWriter extends AbstractProcessor implements WriterInterfa
         $this->sourceResolver = $sourceResolver;
         $this->referenceBag = $references;
         $this->itemTransformer = $itemTransformer;
+        $this->results = new WriterResults(static::class, []);
     }
 
     public static function getOptionsType(): ?string
@@ -35,9 +37,21 @@ abstract class AbstractWriter extends AbstractProcessor implements WriterInterfa
     {
     }
 
-    public function finish(): WriterResults
+    public function setResults(WriterResults $results): void
     {
-        return new WriterResults(static::class, []);
+        $this->results = $results;
+    }
+
+    /**
+     * @return \AlmaviaCX\Bundle\IbexaImportExport\Writer\WriterResults
+     */
+    public function getResults(): WriterResults
+    {
+        return $this->results;
+    }
+
+    public function finish(): void
+    {
     }
 
     /**

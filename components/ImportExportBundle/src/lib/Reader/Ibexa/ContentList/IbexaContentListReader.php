@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Reader\Ibexa\ContentList;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\ObjectAccessorBuilder;
-use AlmaviaCX\Bundle\IbexaImportExport\Item\ItemIterator;
+use AlmaviaCX\Bundle\IbexaImportExport\Item\Iterator\ItemIterator;
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\AbstractReader;
-use AlmaviaCX\Bundle\IbexaImportExport\Reader\Ibexa\Iterator\ItemTransformer\ContentSearchHitTransformerIterator;
+use AlmaviaCX\Bundle\IbexaImportExport\Reader\Ibexa\IteratorItemTransformer\ContentSearchHitTransformerIterator;
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderIteratorInterface;
 use Ibexa\Contracts\Core\Repository\Iterator\BatchIterator;
 use Ibexa\Contracts\Core\Repository\Iterator\BatchIteratorAdapter\ContentSearchAdapter;
@@ -33,14 +33,35 @@ class IbexaContentListReader extends AbstractReader implements TranslationContai
         /** @var IbexaContentListReaderOptions $options */
         $options = $this->getOptions();
 
+        $criterions = [];
+        if ($options->parentLocationId) {
+            $criterions[] = new Query\Criterion\ParentLocationId(
+                $options->parentLocationId
+            );
+        }
+        if ($options->contentTypes) {
+            $ids = [];
+            $identifiers = [];
+            foreach ($options->contentTypes as $contentType) {
+                if (is_string($contentType)) {
+                    $identifiers[] = $contentType;
+                } else {
+                    $ids[] = $contentType;
+                }
+            }
+
+            if (!empty($ids)) {
+                $criterions[] = new Query\Criterion\ContentTypeId($ids);
+            }
+
+            if (!empty($identifiers)) {
+                $criterions[] = new Query\Criterion\ContentTypeIdentifier($identifiers);
+            }
+        }
         $query = new Query();
-        $query->filter = new Query\Criterion\LogicalAnd(
-            [
-                new Query\Criterion\ParentLocationId(
-                    $options->parentLocationId
-                ),
-            ]
-        );
+        if ($criterions) {
+            $query->filter = new Query\Criterion\LogicalAnd($criterions);
+        }
 
         $countQuery = clone $query;
         $countQuery->limit = 0;

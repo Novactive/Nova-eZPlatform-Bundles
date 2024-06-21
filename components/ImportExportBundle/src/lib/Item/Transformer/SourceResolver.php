@@ -93,7 +93,11 @@ class SourceResolver
             $this->defaultPropertyAccessor;
     }
 
-    protected function getSourceValue($source, object|array $objectOrArray): mixed
+    /**
+     * @param              $source
+     * @param object|array $objectOrArray
+     */
+    protected function getSourceValue($source, $objectOrArray)
     {
         if ($source instanceof Reference) {
             return $this->referenceBag->getReference($source->getName(), null, $source->getScope());
@@ -126,7 +130,10 @@ class SourceResolver
         return $this->getPropertyValue($objectOrArray, $source);
     }
 
-    public function __invoke(mixed $source, object|array $objectOrArray): mixed
+    /**
+     * @param object|array $objectOrArray
+     */
+    public function __invoke($source, $objectOrArray)
     {
         if (is_array($source)) {
             $value = [];

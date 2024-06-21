@@ -17,7 +17,7 @@ class CallbackIteratorItemTransformer implements IteratorItemTransformerInterfac
     /**
      * {@inheritDoc}
      */
-    public function __invoke($item): mixed
+    public function __invoke($item)
     {
         return call_user_func($this->callback, $item);
     }

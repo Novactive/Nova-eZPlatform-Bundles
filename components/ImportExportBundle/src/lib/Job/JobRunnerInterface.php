@@ -6,5 +6,5 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Job;
 
 interface JobRunnerInterface
 {
-    public function __invoke(Job $job, bool $force = false): void;
+    public function __invoke(Job $job, int $batchLimit = -1, bool $reset = false): int;
 }

@@ -12,6 +12,7 @@ use AlmaviaCX\Bundle\IbexaImportExport\Writer\Stream\AbstractStreamWriter;
 use Ibexa\Contracts\AdminUi\Controller\Controller;
 use Ibexa\Core\Base\Exceptions\NotFoundException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -75,6 +76,12 @@ class WriterController extends Controller
             throw new NotFoundHttpException();
         }
 
-        return new DownloadFileResponse($writerResults->getResults()['filepath'], $this->fileHandler);
+        $response = new DownloadFileResponse($writerResults->getResults()['filepath'], $this->fileHandler);
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $job->getLabel(),
+        );
+
+        return $response;
     }
 }

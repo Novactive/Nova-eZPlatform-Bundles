@@ -50,7 +50,8 @@
             'job.status.pending'|trans()|desc('Pending'),
             'job.status.running'|trans()|desc('Running'),
             'job.status.completed'|trans()|desc('Completed'),
-            'job.status.queued'|trans()|desc('Queued')
+            'job.status.queued'|trans()|desc('Queued'),
+            'job.status.paused'|trans()|desc('Paused')
 
         ] %}
         {% set show_table_notice = false %}
@@ -75,7 +76,7 @@
             }]) %}
 
             {% set progress_bar %}
-                {% include '@ibexadesign/import_export/components/progress_bar.html.twig' with {progress: job.progress * 100} only %}
+                {% include '@ibexadesign/import_export/components/progress_bar.html.twig' with {processedCount: job.processedItemsCount, totalCount: job.totalItemsCount} only %}
             {% endset %}
             {% set body_row_cols = body_row_cols|merge([{
                 content: progress_bar,
@@ -95,7 +96,7 @@
             head_cols: [
                 { content: 'job.property.id'|trans|desc('Id') },
                 { content: 'job.property.label'|trans|desc('Label') },
-                { content: 'job.property.progress'|trans|desc('Progress') },
+                { content: 'job.property.progress'|trans()|desc('Progress') },
                 { content: 'job.property.status'|trans|desc('Status') },
                 { content: 'job.property.requested_date'|trans|desc('Requested date') },
             ],

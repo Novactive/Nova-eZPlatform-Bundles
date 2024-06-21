@@ -13,7 +13,7 @@ class ItemTransformer
     protected SourceResolver $sourceResolver;
 
     public function __construct(
-        SourceResolver $sourceResolver,
+        SourceResolver $sourceResolver
     ) {
         $this->sourceResolver = $sourceResolver;
     }

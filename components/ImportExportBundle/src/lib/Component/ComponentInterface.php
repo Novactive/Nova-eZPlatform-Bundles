@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Component;
 
-use Psr\Log\LoggerAwareInterface;
+use AlmaviaCX\Bundle\IbexaImportExport\Monolog\WorkflowLoggerInterface;
 use Symfony\Component\Translation\TranslatableMessage;
 
-interface ComponentInterface extends LoggerAwareInterface
+interface ComponentInterface
 {
     /**
      * Component name.
@@ -25,4 +25,6 @@ interface ComponentInterface extends LoggerAwareInterface
     public function getOptions(): ComponentOptions;
 
     public function clean(): void;
+
+    public function setLogger(WorkflowLoggerInterface $logger): void;
 }

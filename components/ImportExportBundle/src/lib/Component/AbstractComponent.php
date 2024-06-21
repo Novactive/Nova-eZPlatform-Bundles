@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Component;
 
+use AlmaviaCX\Bundle\IbexaImportExport\Monolog\WorkflowLoggerInterface;
 use InvalidArgumentException;
-use Psr\Log\LoggerAwareTrait;
 
 abstract class AbstractComponent implements ComponentInterface
 {
-    use LoggerAwareTrait;
+    protected WorkflowLoggerInterface $logger;
 
     protected ComponentOptions $options;
 
@@ -47,5 +47,10 @@ abstract class AbstractComponent implements ComponentInterface
 
     public function clean(): void
     {
+    }
+
+    public function setLogger(WorkflowLoggerInterface $logger): void
+    {
+        $this->logger = $logger;
     }
 }

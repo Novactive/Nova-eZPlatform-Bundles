@@ -7,9 +7,9 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Workflow;
 use AlmaviaCX\Bundle\IbexaImportExport\Monolog\WorkflowLoggerInterface;
 use AlmaviaCX\Bundle\IbexaImportExport\Reference\Reference;
 use AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag;
-use AlmaviaCX\Bundle\IbexaImportExport\Result\Result;
 use AlmaviaCX\Bundle\IbexaImportExport\Workflow\Form\Type\WorkflowProcessConfigurationFormType;
 use DateTimeImmutable;
+use LimitIterator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Throwable;
 
@@ -24,8 +24,9 @@ abstract class AbstractWorkflow implements WorkflowInterface
     protected DateTimeImmutable $endTime;
     protected array $writerResults = [];
     protected int $totalItemsCount = 0;
+    protected int $offset = 0;
     protected float $progress = 0;
-    protected bool $debug = false;
+    protected bool $debug = true;
 
     public function __construct(ReferenceBag $references, EventDispatcherInterface $dispatcher)
     {
@@ -58,7 +59,7 @@ abstract class AbstractWorkflow implements WorkflowInterface
         $this->dispatcher->dispatch(new WorkflowEvent($this), WorkflowEvent::FINISH);
     }
 
-    public function __invoke(): Result
+    public function __invoke(int $batchLimit = -1): void
     {
         $this->prepare();
 
@@ -71,16 +72,20 @@ abstract class AbstractWorkflow implements WorkflowInterface
             }
             $writers = $this->configuration->getWriters();
             foreach ($writers as $index => $writer) {
+                if (isset($this->writerResults[$index])) {
+                    $writer->setResults($this->writerResults[$index]);
+                }
                 $writer->prepare();
             }
 
             $reader = $this->configuration->getReader();
             $itemsIterator = ($reader)();
             $this->totalItemsCount = $itemsIterator->getTotalCount();
-            $loopIndex = 0;
 
             $this->dispatcher->dispatch(new WorkflowEvent($this), WorkflowEvent::START);
-            foreach ($itemsIterator as $index => $item) {
+
+            $limitIterator = new LimitIterator($itemsIterator, $this->offset, $batchLimit);
+            foreach ($limitIterator as $index => $item) {
                 $this->logger->setItemIndex($index);
                 $this->referenceBag->resetScope(Reference::SCOPE_ITEM);
                 try {
@@ -99,13 +104,13 @@ abstract class AbstractWorkflow implements WorkflowInterface
                     }
                     $this->logger->logException($e);
                 }
-                ++$loopIndex;
-                $this->progress = $loopIndex / $this->totalItemsCount;
+                ++$this->offset;
                 $this->dispatcher->dispatch(new WorkflowEvent($this), WorkflowEvent::PROGRESS);
             }
 
             foreach ($writers as $index => $writer) {
-                $this->writerResults[$index] = $writer->finish();
+                $writer->finish();
+                $this->writerResults[$index] = $writer->getResults();
             }
         } catch (Throwable $e) {
             if ($this->debug) {
@@ -117,8 +122,6 @@ abstract class AbstractWorkflow implements WorkflowInterface
 
         $this->endTime = new DateTimeImmutable();
         $this->finish();
-
-        return $this->getResults();
     }
 
     public function clean(): void
@@ -127,15 +130,6 @@ abstract class AbstractWorkflow implements WorkflowInterface
         foreach ($this->configuration->getProcessors() as $processor) {
             $processor->clean();
         }
-    }
-
-    protected function getResults(): Result
-    {
-        return new Result(
-            $this->startTime,
-            $this->endTime,
-            $this->writerResults
-        );
     }
 
     public function setLogger(WorkflowLoggerInterface $logger): void
@@ -165,9 +159,19 @@ abstract class AbstractWorkflow implements WorkflowInterface
         return $this->writerResults;
     }
 
-    public function getProgress(): float
+    public function setWriterResults(array $writerResults): void
     {
-        return $this->progress;
+        $this->writerResults = $writerResults;
+    }
+
+    public function getOffset(): int
+    {
+        return $this->offset;
+    }
+
+    public function setOffset(int $offset): void
+    {
+        $this->offset = $offset;
     }
 
     public function getTotalItemsCount(): int

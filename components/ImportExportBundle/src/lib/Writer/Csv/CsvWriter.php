@@ -12,12 +12,11 @@ use Symfony\Component\Translation\TranslatableMessage;
 
 class CsvWriter extends AbstractStreamWriter implements TranslationContainerInterface
 {
-    private int $row = 1;
+    private int $row = 0;
 
     public function prepare(): void
     {
         parent::prepare();
-        $this->row = 1;
     }
 
     /**
@@ -27,7 +26,7 @@ class CsvWriter extends AbstractStreamWriter implements TranslationContainerInte
     {
         /** @var CsvWriterOptions $options */
         $options = $this->getOptions();
-        if ($options->prependHeaderRow && 1 == $this->row++) {
+        if (self::MODE_NEW_FILE === $this->mode && $options->prependHeaderRow && 0 == $this->row++) {
             $headers = array_keys($mappedItem);
             fputcsv($this->stream, $headers, $options->delimiter, $options->enclosure);
         }

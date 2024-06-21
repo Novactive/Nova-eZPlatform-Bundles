@@ -10,7 +10,11 @@ interface WriterInterface extends ProcessorInterface
 {
     public function prepare(): void;
 
-    public function finish(): WriterResults;
+    public function finish(): void;
+
+    public function setResults(WriterResults $results): void;
+
+    public function getResults(): WriterResults;
 
     public static function getResultTemplate(): ?string;
 }

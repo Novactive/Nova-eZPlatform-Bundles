@@ -141,9 +141,9 @@ class JobController extends Controller implements TranslationContainerInterface
         ]);
     }
 
-    public function run(Job $job, bool $force = false): Response
+    public function run(Job $job, int $batchLimit = null, bool $reset = false): Response
     {
-        $this->jobService->runJob($job, $force);
+        $this->jobService->runJob($job, $batchLimit, $reset);
 
         return new RedirectResponse($this->generateUrl('import_export.job.view', [
             'id' => $job->getId(),

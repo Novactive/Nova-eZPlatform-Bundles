@@ -32,8 +32,13 @@ class WriterResults
         return $this->results;
     }
 
-    public function addResult(string $key, $value): void
+    public function setResult(string $key, $value): void
     {
         $this->results[$key] = $value;
+    }
+
+    public function getResult(string $key, $default = null)
+    {
+        return $this->results[$key] ?? $default;
     }
 }

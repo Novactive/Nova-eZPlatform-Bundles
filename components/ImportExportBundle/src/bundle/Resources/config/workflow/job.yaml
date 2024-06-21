@@ -10,6 +10,7 @@ services:
         arguments:
             $jobRepository: '@AlmaviaCX\Bundle\IbexaImportExport\Job\JobRepository'
             $jobRunner: '@AlmaviaCX\Bundle\IbexaImportExport\Job\JobRunnerInterface'
+            $configResolver: '@Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface'
 
     AlmaviaCX\Bundle\IbexaImportExport\Job\JobRunnerInterface: '@AlmaviaCX\Bundle\IbexaImportExport\Job\JobRunner'
     AlmaviaCX\Bundle\IbexaImportExport\Job\JobRunner:
