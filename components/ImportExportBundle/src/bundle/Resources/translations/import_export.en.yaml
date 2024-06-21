@@ -14,6 +14,7 @@ job.property.startTime: 'Start time'
 job.property.status: Status
 job.run: Run
 job.status.completed: Completed
+job.status.paused: Paused
 job.status.pending: Pending
 job.status.queued: Queued
 job.status.running: Running
@@ -26,9 +27,13 @@ notification.job.done: 'Job %job_label% (%job_id%) is done running.'
 reader.csv.name: 'CSV Reader'
 reader.ibexa.content_list.name: 'Content list'
 reader.xls.name: 'Excel reader'
+reader.xml.name: 'XML Reader'
 step.callback.name: Callback
+step.filter.not_empty.name: 'Not empty filter'
+step.filter.unique.name: 'Unique filter'
 tab.details.technical_details: 'Technical details'
 writer.csv.generated_file.download: 'download file'
 writer.csv.generated_file.title: 'Generated file'
 writer.csv.name: 'CSV Writer'
+writer.dump.name: 'Dump Writer'
 writer.ibexa.content.name: 'Ibexa content writer'

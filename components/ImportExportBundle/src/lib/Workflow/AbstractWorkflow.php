@@ -26,7 +26,7 @@ abstract class AbstractWorkflow implements WorkflowInterface
     protected int $totalItemsCount = 0;
     protected int $offset = 0;
     protected float $progress = 0;
-    protected bool $debug = true;
+    protected bool $debug = false;
 
     public function __construct(ReferenceBag $references, EventDispatcherInterface $dispatcher)
     {
