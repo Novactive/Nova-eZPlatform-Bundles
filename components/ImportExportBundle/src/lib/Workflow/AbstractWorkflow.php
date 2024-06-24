@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Workflow;
 
+use AlmaviaCX\Bundle\IbexaImportExport\Event\BasicEventDispatcherTrait;
 use AlmaviaCX\Bundle\IbexaImportExport\Monolog\WorkflowLoggerInterface;
 use AlmaviaCX\Bundle\IbexaImportExport\Reference\Reference;
 use AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag;
@@ -15,6 +16,8 @@ use Throwable;
 
 abstract class AbstractWorkflow implements WorkflowInterface
 {
+    use BasicEventDispatcherTrait;
+
     protected WorkflowLoggerInterface $logger;
     protected WorkflowExecutionConfiguration $configuration;
     protected EventDispatcherInterface $dispatcher;
@@ -28,17 +31,9 @@ abstract class AbstractWorkflow implements WorkflowInterface
     protected float $progress = 0;
     protected bool $debug = false;
 
-    public function __construct(ReferenceBag $references, EventDispatcherInterface $dispatcher)
+    public function __construct(ReferenceBag $references)
     {
         $this->referenceBag = $references;
-        $this->dispatcher = $dispatcher;
-    }
-
-    public function addEventListener(string $eventName, callable $listener, int $priority = 0): AbstractWorkflow
-    {
-        $this->dispatcher->addListener($eventName, $listener, $priority);
-
-        return $this;
     }
 
     /**
@@ -51,12 +46,12 @@ abstract class AbstractWorkflow implements WorkflowInterface
 
     protected function prepare(): void
     {
-        $this->dispatcher->dispatch(new WorkflowEvent($this), WorkflowEvent::PREPARE);
+        $this->dispatchEvent(new WorkflowEvent($this), WorkflowEvent::PREPARE);
     }
 
     protected function finish(): void
     {
-        $this->dispatcher->dispatch(new WorkflowEvent($this), WorkflowEvent::FINISH);
+        $this->dispatchEvent(new WorkflowEvent($this), WorkflowEvent::FINISH);
     }
 
     public function __invoke(int $batchLimit = -1): void
@@ -82,7 +77,7 @@ abstract class AbstractWorkflow implements WorkflowInterface
             $itemsIterator = ($reader)();
             $this->totalItemsCount = $itemsIterator->getTotalCount();
 
-            $this->dispatcher->dispatch(new WorkflowEvent($this), WorkflowEvent::START);
+            $this->dispatchEvent(new WorkflowEvent($this), WorkflowEvent::START);
 
             $limitIterator = new LimitIterator($itemsIterator, $this->offset, $batchLimit);
             foreach ($limitIterator as $index => $item) {
@@ -105,7 +100,7 @@ abstract class AbstractWorkflow implements WorkflowInterface
                     $this->logger->logException($e);
                 }
                 ++$this->offset;
-                $this->dispatcher->dispatch(new WorkflowEvent($this), WorkflowEvent::PROGRESS);
+                $this->dispatchEvent(new WorkflowEvent($this), WorkflowEvent::PROGRESS);
             }
 
             foreach ($writers as $index => $writer) {

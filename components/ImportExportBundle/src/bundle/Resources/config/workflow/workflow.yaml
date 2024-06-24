@@ -16,7 +16,6 @@ services:
         lazy: true
         abstract: true
         arguments:
-            $dispatcher: '@event_dispatcher'
             $references: '@AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag'
 
     AlmaviaCX\Bundle\IbexaImportExport\Workflow\ConfigurableWorkflowFactory:

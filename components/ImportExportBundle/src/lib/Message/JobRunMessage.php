@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Message;
 
-class JobRunMessage
+abstract class JobRunMessage
 {
     protected int $jobId;
     protected int $batchLimit;

@@ -6,7 +6,8 @@ services:
             $notificationSender: '@AlmaviaCX\Bundle\IbexaImportExport\Notification\NotificationSender'
             $messageBus: '@messenger.default_bus'
         tags:
-            - {name: 'messenger.message_handler', handles: AlmaviaCX\Bundle\IbexaImportExport\Message\JobRunMessage}
+            - {name: 'messenger.message_handler', handles: AlmaviaCX\Bundle\IbexaImportExport\Message\JobStartMessage}
+            - {name: 'messenger.message_handler', handles: AlmaviaCX\Bundle\IbexaImportExport\Message\JobResumeMessage}
 
     AlmaviaCX\Bundle\IbexaImportExport\Job\AsyncJobRunner:
         decorates: AlmaviaCX\Bundle\IbexaImportExport\Job\JobRunner

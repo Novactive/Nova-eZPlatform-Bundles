@@ -7,7 +7,9 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\MessageHandler;
 use AlmaviaCX\Bundle\IbexaImportExport\Job\Job;
 use AlmaviaCX\Bundle\IbexaImportExport\Job\JobRepository;
 use AlmaviaCX\Bundle\IbexaImportExport\Job\JobRunnerInterface;
+use AlmaviaCX\Bundle\IbexaImportExport\Message\JobResumeMessage;
 use AlmaviaCX\Bundle\IbexaImportExport\Message\JobRunMessage;
+use AlmaviaCX\Bundle\IbexaImportExport\Message\JobStartMessage;
 use AlmaviaCX\Bundle\IbexaImportExport\Notification\NotificationSender;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -54,12 +56,17 @@ class JobRunMessageHandler
             );
         }
         if (Job::STATUS_PAUSED === $status) {
-            $this->triggerRun($job, $message->getBatchLimit());
+            $this->triggerResume($job, $message->getBatchLimit());
         }
     }
 
-    public function triggerRun(Job $job, int $batchLimit = -1): void
+    public function triggerStart(Job $job, int $batchLimit = -1): void
     {
-        $this->messageBus->dispatch(new JobRunMessage($job->getId(), $batchLimit));
+        $this->messageBus->dispatch(new JobStartMessage($job->getId(), $batchLimit));
+    }
+
+    public function triggerResume(Job $job, int $batchLimit = -1): void
+    {
+        $this->messageBus->dispatch(new JobResumeMessage($job->getId(), $batchLimit));
     }
 }

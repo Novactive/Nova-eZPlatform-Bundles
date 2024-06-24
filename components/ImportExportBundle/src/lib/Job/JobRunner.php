@@ -41,24 +41,22 @@ class JobRunner extends AbstractJobRunner
         $workflow = $this->workflowRegistry->getWorkflow($job->getWorkflowIdentifier());
         $workflow->setLogger($logger);
 
-        $workflow->addEventListener(WorkflowEvent::PROGRESS, function (WorkflowEvent $event) use ($logger, $job) {
-            $workflow = $event->getWorkflow();
-
+        $onWorkflowProgress = function (WorkflowEvent $event) use ($logger, $job, $workflow) {
             // Ibexa content creation trigger an entity manager clear, which mean we need to reload the entity
             $job = $this->jobRepository->findById($job->getId());
             $job->addRecords($logger->getRecords());
             $job->setProcessedItemsCount($workflow->getOffset());
             $this->jobRepository->save($job);
-        });
+        };
+        $workflow->addEventListener(WorkflowEvent::PROGRESS, $onWorkflowProgress);
 
-        $workflow->addEventListener(WorkflowEvent::START, function (WorkflowEvent $event) use ($job) {
-            $workflow = $event->getWorkflow();
-
+        $onWorkflowStart = function (WorkflowEvent $event) use ($job, $workflow) {
             // Ibexa content creation trigger an entity manager clear, which mean we need to reload the entity
             $job = $this->jobRepository->findById($job->getId());
             $job->setTotalItemsCount($workflow->getTotalItemsCount());
             $this->jobRepository->save($job);
-        });
+        };
+        $workflow->addEventListener(WorkflowEvent::START, $onWorkflowStart);
 
         $this->eventDispatcher->dispatch(new PreJobRunEvent($job, $workflow));
 

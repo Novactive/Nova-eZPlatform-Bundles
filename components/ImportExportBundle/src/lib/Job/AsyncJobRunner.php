@@ -27,7 +27,7 @@ class AsyncJobRunner extends AbstractJobRunner
         $job->setStatus(Job::STATUS_QUEUED);
         $this->jobRepository->save($job);
 
-        $this->jobRunMessageHandler->triggerRun($job, $batchLimit);
+        $this->jobRunMessageHandler->triggerStart($job, $batchLimit);
 
         return $job->getStatus();
     }
