@@ -20,12 +20,19 @@ class TextToRichtextTransformer extends AbstractItemValueTransformer
     {
         $rawText = null;
         if ($value) {
-            $rawText = sprintf(
-                '<p>%s</p>',
-                $value
-            );
+            if (is_scalar($value)) {
+                $value = [$value];
+            }
 
-            $rawText = str_replace(['&nbsp;'], [' '], $rawText);
+            $rawText = [];
+            foreach ($value as $text) {
+                $rawText[] = sprintf(
+                    '<p>%s</p>',
+                    htmlentities(trim((string) $text))
+                );
+            }
+
+            $rawText = str_replace(['&nbsp;'], [' '], implode(PHP_EOL, $rawText));
             $rawText = preg_replace(['/\\n/'], [''], $rawText);
         }
 

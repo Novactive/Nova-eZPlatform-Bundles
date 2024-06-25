@@ -32,4 +32,11 @@ services:
         tags:
             - console.command
 
+    AlmaviaCX\Bundle\IbexaImportExportBundle\Command\CreateJobCommand:
+        arguments:
+            $eventDispatcher: '@event_dispatcher'
+            $jobService: '@AlmaviaCX\Bundle\IbexaImportExport\Job\JobService'
+        tags:
+            - console.command
+
     AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag:

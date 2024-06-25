@@ -27,14 +27,16 @@ class JobService
         $this->jobRunner = $jobRunner;
     }
 
-    public function createJob(Job $job)
+    public function createJob(Job $job, bool $autoStart = true)
     {
         $job->setRequestedDate(new DateTimeImmutable());
         $job->setStatus(Job::STATUS_PENDING);
 
         $this->jobRepository->save($job);
 
-        $this->runJob($job);
+        if ($autoStart) {
+            $this->runJob($job);
+        }
     }
 
     public function runJob(Job $job, int $batchLimit = null, bool $reset = false): void

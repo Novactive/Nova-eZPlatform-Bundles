@@ -7,7 +7,7 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Workflow;
 class WorkflowEvent
 {
     public const PREPARE = 'workflow_prepare';
-    public const START = 'workflow_START';
+    public const START = 'workflow_start';
     public const PROGRESS = 'pre_item_process';
     public const FINISH = 'workflow_finish';
 

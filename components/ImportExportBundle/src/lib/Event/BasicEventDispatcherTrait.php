@@ -25,7 +25,6 @@ trait BasicEventDispatcherTrait
                      (empty($this->listeners[$eventName]) ? [] :
                          $this->optimizeListeners($eventName));
         $stoppable = $event instanceof StoppableEventInterface;
-
         foreach ($listeners as $listener) {
             if ($stoppable && $event->isPropagationStopped()) {
                 break;
@@ -44,11 +43,11 @@ trait BasicEventDispatcherTrait
 
         foreach ($this->listeners[$eventName] as &$listeners) {
             foreach ($listeners as &$listener) {
+                $closure = &$this->optimizedListeners[$eventName][];
                 if (
                     \is_array($listener) &&
                     isset($listener[0]) && $listener[0] instanceof Closure && 2 >= \count($listener)
                 ) {
-                    $closure = &$this->optimizedListeners[$eventName][];
                     $closure = static function (...$args) use (&$listener, &$closure) {
                         if ($listener[0] instanceof Closure) {
                             $listener[0] = $listener[0]();

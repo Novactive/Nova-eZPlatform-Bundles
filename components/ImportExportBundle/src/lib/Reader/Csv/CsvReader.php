@@ -66,9 +66,16 @@ class CsvReader extends AbstractFileReader implements TranslationContainerInterf
             $totalLines,
             $iterator,
             new CallbackIteratorItemTransformer(function ($item) use ($headers) {
-                return new ArrayAccessor(!empty($headers) ? array_combine($headers, $item) : $item);
+                return $this->transformItem(
+                    new ArrayAccessor(!empty($headers) ? array_combine($headers, $item) : $item)
+                );
             })
         );
+    }
+
+    protected function transformItem($item)
+    {
+        return $item;
     }
 
     protected function cleanHeader(string $value): string

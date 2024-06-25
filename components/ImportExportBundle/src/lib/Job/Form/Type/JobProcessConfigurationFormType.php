@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Job\Form\Type;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentRegistry;
+use AlmaviaCX\Bundle\IbexaImportExport\Job\Job;
 use AlmaviaCX\Bundle\IbexaImportExport\Workflow\Form\Type\WorkflowProcessConfigurationFormType;
 use AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowRegistry;
 use Symfony\Component\Form\AbstractType;
@@ -28,27 +29,31 @@ class JobProcessConfigurationFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /* @var \AlmaviaCX\Bundle\IbexaImportExport\Job\Job $job */
-        $job = $builder->getData();
-        if (!$job) {
-            return;
-        }
-        $workflowIdentifier = $job->getWorkflowIdentifier();
-        $workflowDefaultConfiguration = $this->workflowRegistry::getWorkflowDefaultConfiguration(
-            $this->workflowRegistry->getWorkflowClassName($workflowIdentifier)
-        );
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($options) {
+            $form = $event->getForm();
+            /* @var \AlmaviaCX\Bundle\IbexaImportExport\Job\Job $job */
+            $job = $event->getData();
+            if (!$job) {
+                return;
+            }
+            $workflowIdentifier = $job->getWorkflowIdentifier();
+            $workflowDefaultConfiguration = $this->workflowRegistry::getWorkflowDefaultConfiguration(
+                $this->workflowRegistry->getWorkflowClassName($workflowIdentifier)
+            );
 
-        $optionsForm = $builder->create('options', WorkflowProcessConfigurationFormType::class, [
-            'label' => /* @Desc("Workflow options") */ 'workflow.options',
-            'required' => false,
-            'show_initialized' => $options['show_initialized'],
-            'default_configuration' => $workflowDefaultConfiguration->getProcessConfiguration(),
-        ]);
+            $optionsForm = $form->add('options', WorkflowProcessConfigurationFormType::class, [
+                'label' => /* @Desc("Workflow options") */ 'workflow.options',
+                'required' => false,
+                'show_initialized' => $options['show_initialized'],
+                'default_configuration' => $workflowDefaultConfiguration->getProcessConfiguration(),
+            ]);
+        });
 
-        $builder->add($optionsForm);
         $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
-            $optionsForm = $event->getForm()->get('options');
-            $this->removeEmptyChildren($optionsForm);
+            if ($event->getForm()->has('options')) {
+                $optionsForm = $event->getForm()->get('options');
+                $this->removeEmptyChildren($optionsForm);
+            }
         });
     }
 
@@ -86,6 +91,7 @@ class JobProcessConfigurationFormType extends AbstractType
     {
         parent::configureOptions($resolver);
         $resolver->setDefaults([
+            'data_class' => Job::class,
                                    'show_initialized' => false,
                                    'translation_domain' => 'forms',
                                    'workflow_configuration' => null,

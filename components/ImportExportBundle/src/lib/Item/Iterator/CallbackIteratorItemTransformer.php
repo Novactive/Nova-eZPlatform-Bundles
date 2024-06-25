@@ -9,7 +9,7 @@ class CallbackIteratorItemTransformer implements IteratorItemTransformerInterfac
     /** @var callable(mixed): mixed */
     protected $callback;
 
-    public function __construct(callable $callback)
+    public function __construct(callable|array $callback)
     {
         $this->callback = $callback;
     }

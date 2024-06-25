@@ -233,6 +233,9 @@ class Job
 
     public function addRecord(JobRecord $record): void
     {
+        if (!$this->records) {
+            $this->records = new ArrayCollection();
+        }
         if (!$this->records->containsKey($record->getIdentifier())) {
             $record->setJob($this);
             $this->records->set($record->getIdentifier(), $record);

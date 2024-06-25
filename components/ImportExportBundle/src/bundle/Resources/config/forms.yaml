@@ -19,6 +19,10 @@ services:
         tags:
             - { name: form.type, alias: FileReaderOptionsFormType }
 
+    AlmaviaCX\Bundle\IbexaImportExport\Reader\Xml\XmlReaderOptionsFormType:
+        tags:
+            - { name: form.type, alias: XmlReaderOptionsFormType }
+
     AlmaviaCX\Bundle\IbexaImportExport\Reader\Csv\CsvReaderOptionsFormType:
         parent: AlmaviaCX\Bundle\IbexaImportExport\Reader\File\FileReaderOptionsFormType
         tags:

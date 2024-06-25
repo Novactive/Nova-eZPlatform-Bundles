@@ -9,6 +9,7 @@ use AlmaviaCX\Bundle\IbexaImportExport\File\FileHandler;
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\File\FileReaderOptions;
 use League\Flysystem\Config;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Uid\Uuid;
 
@@ -34,13 +35,15 @@ class PostJobCreateFormSubmitEventSubscriber implements EventSubscriberInterface
         $job = $event->getJob();
 
         $options = $job->getOptions()['reader'] ?? null;
-        if ($options instanceof FileReaderOptions && $options->file instanceof UploadedFile) {
+        if ($options instanceof FileReaderOptions && $options->file instanceof File) {
             $file = $options->file;
             $fileHandler = fopen($file->getPathname(), 'rb');
             $newFilename = sprintf(
                 'job/file_reader_%s.%s',
                 Uuid::v4(),
-                $file->getClientOriginalExtension()
+                $file instanceof UploadedFile ?
+                    $file->getClientOriginalExtension() :
+                    pathinfo($file->getFilename(), PATHINFO_EXTENSION)
             );
             $this->fileHandler->writeStream($newFilename, $fileHandler, new Config());
             $options->file = $newFilename;

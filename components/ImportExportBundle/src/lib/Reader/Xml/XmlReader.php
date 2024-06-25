@@ -31,10 +31,13 @@ class XmlReader extends AbstractFileReader implements TranslationContainerInterf
         return new ItemIterator(
             $nodesList->count(),
             $nodesList->getIterator(),
-            new CallbackIteratorItemTransformer(function ($item) {
-                return $item;
-            })
+            new CallbackIteratorItemTransformer([$this, 'transformItem'])
         );
+    }
+
+    public function transformItem($item)
+    {
+        return $item;
     }
 
     public static function getOptionsFormType(): ?string
