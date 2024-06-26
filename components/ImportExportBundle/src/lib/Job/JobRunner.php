@@ -51,22 +51,22 @@ class JobRunner extends AbstractJobRunner
         };
         $workflow->addEventListener(WorkflowEvent::PROGRESS, $onWorkflowProgress);
 
-        $onWorkflowStart = function (WorkflowEvent $event) use ($job) {
-            $workflow = $event->getWorkflow();
-            // Ibexa content creation trigger an entity manager clear, which mean we need to reload the entity
-            $job = $this->jobRepository->findById($job->getId());
-            $job->setTotalItemsCount($workflow->getTotalItemsCount());
-            $this->jobRepository->save($job);
-        };
-        $workflow->addEventListener(WorkflowEvent::START, $onWorkflowStart);
-
         $this->eventDispatcher->dispatch(new PreJobRunEvent($job, $workflow));
 
         if (Job::STATUS_PAUSED === $job->getStatus()) {
             $workflow->setOffset($job->getProcessedItemsCount());
             $workflow->setWriterResults($job->getWriterResults());
+            $workflow->setTotalItemsCount($job->getTotalItemsCount());
         } else {
             $job->setStartTime(new DateTimeImmutable());
+            $onWorkflowStart = function (WorkflowEvent $event) use ($job) {
+                $workflow = $event->getWorkflow();
+                // Ibexa content creation trigger an entity manager clear, which mean we need to reload the entity
+                $job = $this->jobRepository->findById($job->getId());
+                $job->setTotalItemsCount($workflow->getTotalItemsCount());
+                $this->jobRepository->save($job);
+            };
+            $workflow->addEventListener(WorkflowEvent::START, $onWorkflowStart);
         }
         $job->setStatus(Job::STATUS_RUNNING);
         $this->jobRepository->save($job);

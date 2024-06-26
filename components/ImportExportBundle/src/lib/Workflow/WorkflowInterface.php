@@ -33,6 +33,8 @@ interface WorkflowInterface
 
     public function getTotalItemsCount(): int;
 
+    public function setTotalItemsCount(?int $totalItemsCount): void;
+
     public function setLogger(WorkflowLoggerInterface $logger): void;
 
     public function clean(): void;

@@ -25,6 +25,9 @@ class CsvFileReadIterator extends FileReadIterator
         parent::__construct($stream, $firstLineNumber);
     }
 
+    /**
+     * @return array|false|null
+     */
     protected function getLine()
     {
         return fgetcsv(

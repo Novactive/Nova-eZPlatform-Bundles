@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\File;
 
-use Iterator;
+use Countable;
+use SeekableIterator;
 
-class FileReadIterator implements Iterator
+class FileReadIterator implements SeekableIterator, Countable
 {
     /** @var resource */
     protected $stream;
+    /** @var string|false */
     protected $line;
     protected int $lineNumber = 0;
     protected int $firstLineNumber = 0;
@@ -24,26 +26,29 @@ class FileReadIterator implements Iterator
         $this->lineNumber = $firstLineNumber;
     }
 
+    /**
+     * @return string|false
+     */
     protected function getLine()
     {
         return fgets($this->stream);
     }
 
-    public function setLineNumber(int $lineNumber)
+    public function seek($offset)
     {
         fseek($this->stream, 0);
-        if ($lineNumber > 0) {
-            for ($i = 0; $i < $lineNumber; ++$i) {
+        if ($offset > 0) {
+            for ($i = 0; $i < $offset; ++$i) {
                 fgets($this->stream);
             }
         }
-        $this->lineNumber = $lineNumber;
+        $this->lineNumber = $offset;
         $this->line = $this->getLine();
     }
 
     public function rewind()
     {
-        $this->setLineNumber($this->firstLineNumber);
+        $this->seek($this->firstLineNumber);
     }
 
     public function valid(): bool
@@ -51,6 +56,9 @@ class FileReadIterator implements Iterator
         return false !== $this->line;
     }
 
+    /**
+     * @return false|string
+     */
     public function current()
     {
         return $this->line;
@@ -74,7 +82,7 @@ class FileReadIterator implements Iterator
         fclose($this->stream);
     }
 
-    public function getTotalLines(): int
+    public function count(): int
     {
         $lines = 0;
         fseek($this->stream, 0);

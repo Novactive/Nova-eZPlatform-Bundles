@@ -7,9 +7,9 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Reader\Xml;
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\File\FileReaderOptions;
 
 /**
- * @property string $itemsPath;
+ * @property string $nodeNameSelector;
  */
 class XmlReaderOptions extends FileReaderOptions
 {
-    protected string $itemsPath;
+    protected string $nodeNameSelector;
 }

@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Reader\Xml;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Item\Iterator\CallbackIteratorItemTransformer;
-use AlmaviaCX\Bundle\IbexaImportExport\Item\Iterator\ItemIterator;
+use AlmaviaCX\Bundle\IbexaImportExport\Item\Iterator\SeekableItemIterator;
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\File\AbstractFileReader;
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderIteratorInterface;
-use DOMDocument;
-use DOMXPath;
 use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Translation\TranslationContainerInterface;
 use Symfony\Component\Translation\TranslatableMessage;
@@ -20,17 +18,12 @@ class XmlReader extends AbstractFileReader implements TranslationContainerInterf
     {
         /** @var \AlmaviaCX\Bundle\IbexaImportExport\Reader\Xml\XmlReaderOptions $options */
         $options = $this->getOptions();
-        $tmpFileName = $this->getFileTmpCopy();
 
-        $doc = new DOMDocument();
-        $doc->load($tmpFileName);
+        $iterator = new XmlReaderIterator($this->getFileStream(), $options->nodeNameSelector);
 
-        $xpath = new DOMXPath($doc);
-        $nodesList = $xpath->query($options->itemsPath);
-
-        return new ItemIterator(
-            $nodesList->count(),
-            $nodesList->getIterator(),
+        return new SeekableItemIterator(
+            $iterator->count(),
+            $iterator,
             new CallbackIteratorItemTransformer([$this, 'transformItem'])
         );
     }

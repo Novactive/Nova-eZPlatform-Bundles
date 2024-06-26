@@ -7,7 +7,7 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Reader\Csv;
 use AlmaviaCX\Bundle\IbexaImportExport\Accessor\ArrayAccessor;
 use AlmaviaCX\Bundle\IbexaImportExport\File\FileHandler;
 use AlmaviaCX\Bundle\IbexaImportExport\Item\Iterator\CallbackIteratorItemTransformer;
-use AlmaviaCX\Bundle\IbexaImportExport\Item\Iterator\ItemIterator;
+use AlmaviaCX\Bundle\IbexaImportExport\Item\Iterator\SeekableItemIterator;
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\File\AbstractFileReader;
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderIteratorInterface;
 use Ibexa\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter;
@@ -52,9 +52,9 @@ class CsvReader extends AbstractFileReader implements TranslationContainerInterf
             $options->escape,
         );
 
-        $totalLines = $iterator->getTotalLines();
+        $totalLines = $iterator->count();
         if (null !== $headerRowNumber) {
-            $iterator->setLineNumber($headerRowNumber);
+            $iterator->seek($headerRowNumber);
             $headers = array_map(function ($header) {
                 return $this->cleanHeader($header);
             }, $iterator->current());
@@ -62,7 +62,7 @@ class CsvReader extends AbstractFileReader implements TranslationContainerInterf
             $totalLines -= $headerRowNumber;
         }
 
-        return new ItemIterator(
+        return new SeekableItemIterator(
             $totalLines,
             $iterator,
             new CallbackIteratorItemTransformer(function ($item) use ($headers) {

@@ -13,7 +13,7 @@ abstract class AbstractReaderIterator implements ReaderIteratorInterface
         $this->totalCount = $totalCount;
     }
 
-    public function getTotalCount(): int
+    public function count(): int
     {
         return $this->totalCount;
     }

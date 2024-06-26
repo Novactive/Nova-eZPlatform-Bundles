@@ -26,7 +26,7 @@ abstract class AbstractWorkflow implements WorkflowInterface
     protected DateTimeImmutable $startTime;
     protected DateTimeImmutable $endTime;
     protected array $writerResults = [];
-    protected int $totalItemsCount = 0;
+    protected ?int $totalItemsCount = null;
     protected int $offset = 0;
     protected float $progress = 0;
     protected bool $debug = false;
@@ -75,11 +75,14 @@ abstract class AbstractWorkflow implements WorkflowInterface
 
             $reader = $this->configuration->getReader();
             $itemsIterator = ($reader)();
-            $this->totalItemsCount = $itemsIterator->getTotalCount();
+            if (!$this->totalItemsCount) {
+                $this->totalItemsCount = $itemsIterator->count();
+            }
 
             $this->dispatchEvent(new WorkflowEvent($this), WorkflowEvent::START);
 
             $limitIterator = new LimitIterator($itemsIterator, $this->offset, $batchLimit);
+            dump('Start memory Usage: '.memory_get_usage() / 1024 / 1024 .'Mo');
             foreach ($limitIterator as $index => $item) {
                 $this->logger->setItemIndex($index);
                 $this->referenceBag->resetScope(Reference::SCOPE_ITEM);
@@ -102,6 +105,8 @@ abstract class AbstractWorkflow implements WorkflowInterface
                 ++$this->offset;
                 $this->dispatchEvent(new WorkflowEvent($this), WorkflowEvent::PROGRESS);
             }
+            dump('End Usage: '.memory_get_usage() / 1024 / 1024 .'Mo');
+            dump('Peak Usage: '.memory_get_usage() / 1024 / 1024 .'Mo');
 
             foreach ($writers as $index => $writer) {
                 $writer->finish();
@@ -172,6 +177,11 @@ abstract class AbstractWorkflow implements WorkflowInterface
     public function getTotalItemsCount(): int
     {
         return $this->totalItemsCount;
+    }
+
+    public function setTotalItemsCount(?int $totalItemsCount): void
+    {
+        $this->totalItemsCount = $totalItemsCount;
     }
 
     public function setDebug(bool $debug): void
