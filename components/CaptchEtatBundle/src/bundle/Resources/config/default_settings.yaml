@@ -1,0 +1,14 @@
+parameters:
+    #env(CAPTCHETAT_OAUTH_URL): "https://oauth.piste.gouv.fr"
+    env(CAPTCHETAT_OAUTH_URL): "https://sandbox-oauth.piste.gouv.fr"
+    env(CAPTCHETAT_OAUTH_CLIENT_ID): ~
+    env(CAPTCHETAT_OAUTH_CLIENT_SECRET): ~
+    #env(CAPTCHETAT_API_URL): "https://api.piste.gouv.fr"
+    env(CAPTCHETAT_API_URL): "https://sandbox-api.piste.gouv.fr"
+    env(CAPTCHETAT_TIMEOUT): "2.5"
+
+    captchetat_oauth_url: '%env(string:CAPTCHETAT_OAUTH_URL)%'
+    captchetat_oauth_client_id: '%env(string:CAPTCHETAT_OAUTH_CLIENT_ID)%'
+    captchetat_oauth_client_secret: '%env(string:CAPTCHETAT_OAUTH_CLIENT_SECRET)%'
+    captchetat_api_url: '%env(string:CAPTCHETAT_API_URL)%'
+    captchetat_timeout: '%env(float:CAPTCHETAT_TIMEOUT)%'
