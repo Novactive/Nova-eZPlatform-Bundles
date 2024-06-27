@@ -1,0 +1,20 @@
+services:
+    AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController:
+        autowire: true
+        arguments:
+            $formFactory: '@form.factory'
+            $notificationHandler: '@Ibexa\AdminUi\Notification\TranslatableNotificationHandler'
+            $jobCreateFlow: '@AlmaviaCX\Bundle\IbexaImportExport\Job\Form\JobCreateFlow'
+            $jobService: '@AlmaviaCX\Bundle\IbexaImportExport\Job\JobService'
+            $eventDispatcher: '@event_dispatcher'
+        tags:
+            - controller.service_arguments
+
+    AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\WriterController:
+        autowire: true
+        arguments:
+            $twig: '@twig'
+            $componentRegistry: '@AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentRegistry'
+            $fileHandler: '@AlmaviaCX\Bundle\IbexaImportExport\File\FileHandler'
+        tags:
+            - controller.service_arguments

@@ -1,0 +1,18 @@
+imports:
+    - { resource: 'component/reader.yaml' }
+    - { resource: 'component/step.yaml' }
+    - { resource: 'component/writer.yaml' }
+
+services:
+    AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentRegistry:
+        arguments:
+            $typeContainer: !abstract defined in AlmaviaCX\Bundle\IbexaImportExportBundle\DependencyInjection\CompilerPass\ComponentPass
+
+    AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentBuilder:
+        arguments:
+            $componentRegistry: '@AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentRegistry'
+
+    AlmaviaCX\Bundle\IbexaImportExport\Processor\Aggregator\ProcessorAggregator:
+        tags:
+            - { name: almaviacx.import_export.component, alias: processor.aggregator}
+

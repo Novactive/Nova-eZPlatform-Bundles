@@ -1,0 +1,59 @@
+services:
+    AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\ItemValueTransformerRegistry:
+        arguments:
+            $typeContainer: !abstract defined in AlmaviaCX\Bundle\IbexaImportExportBundle\DependencyInjection\CompilerPass\ItemValueTransformerPass
+
+    AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\SourceResolver:
+        arguments:
+            $itemValueTransformerRegistry: '@AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\ItemValueTransformerRegistry'
+            $referenceBag: '@AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag'
+
+    AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\ItemTransformer:
+        arguments:
+            $sourceResolver: '@AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\SourceResolver'
+
+    AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Utils\SlugTransformer:
+        arguments:
+            $slugConverter: '@Ibexa\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter'
+        tags:
+            - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.slug}
+
+    AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Utils\JoinTransformer:
+        tags:
+            - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.join}
+
+    AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Utils\ToDateTimeTransformer:
+        tags:
+            - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.to_datetime}
+
+    AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Utils\SprintfTransformer:
+        tags:
+            - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.sprintf}
+
+    AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Utils\ToStringTransformer:
+        tags:
+            - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.to_string}
+
+    AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Utils\ToIntegerTransformer:
+        tags:
+            - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.to_int}
+
+    AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Utils\Md5Transformer:
+        tags:
+            - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.md5}
+
+    AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Utils\CallbackTransformer:
+        tags:
+            - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.callback}
+
+    AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Ibexa\HtmlToRichtextTransformer:
+        arguments:
+            $richtextInputHandler: '@Ibexa\FieldTypeRichText\RichText\InputHandler'
+        tags:
+            - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.html_to_richtext}
+
+    AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Ibexa\TextToRichtextTransformer:
+        arguments:
+            $htmlToRichtextTransformer: '@AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Ibexa\HtmlToRichtextTransformer'
+        tags:
+            - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.text_to_richtext}
