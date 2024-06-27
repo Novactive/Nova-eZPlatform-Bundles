@@ -1,0 +1,32 @@
+{
+    "name": "almaviacx/captchetatbundle",
+    "description": "Add CaptchEtat to forms",
+    "keywords": [
+        "ibexa",
+        "bundle"
+    ],
+    "homepage": "https://github.com/Novactive/AlmaviaCXCaptchEtatBundle",
+    "type": "ibexa-bundle",
+    "authors": [
+        {
+            "name": "AlmaviaCX",
+            "homepage": "https://almaviacx.com/expertises/web-mobile/",
+            "email": "dirtech.web@almaviacx.com"
+        }
+    ],
+    "license": [
+        "MIT"
+    ],
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "symfony/css-selector": "5.4.*",
+        "symfony/dom-crawler": "5.4.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "AlmaviaCX\\Bundle\\CaptchEtatBundle\\": "src/bundle",
+            "AlmaviaCX\\Bundle\\CaptchEtat\\": "src/lib"
+        }
+    },
+    "extra": {}
+}
