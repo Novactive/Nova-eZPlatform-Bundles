@@ -82,9 +82,8 @@ abstract class AbstractWorkflow implements WorkflowInterface
             $this->dispatchEvent(new WorkflowEvent($this), WorkflowEvent::START);
 
             $limitIterator = new LimitIterator($itemsIterator, $this->offset, $batchLimit);
-            dump('Start memory Usage: '.memory_get_usage() / 1024 / 1024 .'Mo');
             foreach ($limitIterator as $index => $item) {
-                $this->logger->setItemIndex($index);
+                $this->logger->setItemIndex($index + 1);
                 $this->referenceBag->resetScope(Reference::SCOPE_ITEM);
                 try {
                     foreach ($this->configuration->getProcessors() as $processor) {
@@ -105,8 +104,6 @@ abstract class AbstractWorkflow implements WorkflowInterface
                 ++$this->offset;
                 $this->dispatchEvent(new WorkflowEvent($this), WorkflowEvent::PROGRESS);
             }
-            dump('End Usage: '.memory_get_usage() / 1024 / 1024 .'Mo');
-            dump('Peak Usage: '.memory_get_usage() / 1024 / 1024 .'Mo');
 
             foreach ($writers as $index => $writer) {
                 $writer->finish();

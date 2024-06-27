@@ -41,13 +41,15 @@ class JobRunner extends AbstractJobRunner
         $workflow = $this->workflowRegistry->getWorkflow($job->getWorkflowIdentifier());
         $workflow->setLogger($logger);
 
-        $onWorkflowProgress = function (WorkflowEvent $event) use ($logger, $job) {
+        $proccessed = 0;
+        $onWorkflowProgress = function (WorkflowEvent $event) use (&$proccessed, $logger, $job) {
             $workflow = $event->getWorkflow();
             // Ibexa content creation trigger an entity manager clear, which mean we need to reload the entity
             $job = $this->jobRepository->findById($job->getId());
             $job->addRecords($logger->getRecords());
             $job->setProcessedItemsCount($workflow->getOffset());
             $this->jobRepository->save($job);
+            ++$proccessed;
         };
         $workflow->addEventListener(WorkflowEvent::PROGRESS, $onWorkflowProgress);
 
@@ -81,7 +83,7 @@ class JobRunner extends AbstractJobRunner
         $job = $this->jobRepository->findById($job->getId());
         $job->addRecords($logger->getRecords());
         $job->setWriterResults($workflow->getWriterResults());
-        if (1 == $job->getProgress() || 0 === $job->getTotalItemsCount()) {
+        if (1 == $job->getProgress() || 0 === $job->getTotalItemsCount() || 0 === $proccessed) {
             $job->setStatus(Job::STATUS_COMPLETED);
             $job->setEndTime($workflow->getEndTime());
         } else {

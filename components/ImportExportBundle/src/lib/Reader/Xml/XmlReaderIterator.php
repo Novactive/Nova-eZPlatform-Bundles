@@ -73,8 +73,8 @@ class XmlReaderIterator implements SeekableIterator, Countable
 
     public function seek($offset): void
     {
-        if ($offset > 0) {
-            for ($i = 0; $i < $offset; ++$i) {
+        if ($offset > 1) {
+            for ($i = 1; $i < $offset; ++$i) {
                 $this->xmlParser->parse();
             }
         }
