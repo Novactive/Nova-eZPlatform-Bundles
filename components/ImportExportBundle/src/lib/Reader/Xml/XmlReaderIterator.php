@@ -61,10 +61,12 @@ class XmlReaderIterator implements SeekableIterator, Countable
         $document = new DOMDocument();
 
         $xml = $this->xmlParser->parse();
+        if (null === $xml) {
+            return false;
+        }
         $fragment = $document->createDocumentFragment();
         $fragment->appendXML(trim($xml));
         $document->append($fragment);
-        dump('Usage: '.memory_get_usage() / 1024 / 1024 .'Mo');
 
         return $document->firstChild;
     }
@@ -83,10 +85,12 @@ class XmlReaderIterator implements SeekableIterator, Countable
     public function count(): int
     {
         $totalCount = 0;
-        while ($this->xmlParser->parse()) {
+        $this->xmlParser->setDebug(true);
+        while (null !== $this->xmlParser->parse()) {
             ++$totalCount;
         }
-        $this->xmlParser->rewind();
+        $this->xmlParser->setDebug(false);
+        $this->rewind();
 
         return $totalCount;
     }

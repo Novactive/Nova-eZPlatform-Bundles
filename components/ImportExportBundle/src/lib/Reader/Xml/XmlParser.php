@@ -20,6 +20,12 @@ class XmlParser
     /** @var resource */
     protected $stream;
     protected string $nodeNameSelector;
+    protected bool $debug = false;
+
+    public function setDebug(bool $debug): void
+    {
+        $this->debug = $debug;
+    }
 
     /**
      * @param resource $stream
@@ -28,6 +34,20 @@ class XmlParser
     {
         $this->nodeNameSelector = $nodeNameSelector;
         $this->stream = $stream;
+        $this->createNativeParser();
+    }
+
+    protected function resetNativeParser(): void
+    {
+        if ($this->nativeXmlParser) {
+            xml_parser_free($this->nativeXmlParser);
+            $this->nativeXmlParser = null;
+        }
+    }
+
+    protected function createNativeParser()
+    {
+        $this->resetNativeParser();
         $this->nativeXmlParser = xml_parser_create('UTF-8');
         xml_set_object($this->nativeXmlParser, $this);
         xml_set_element_handler($this->nativeXmlParser, 'startElement', 'endElement');
@@ -56,7 +76,11 @@ class XmlParser
 
     public function rewind()
     {
-        fseek($this->stream, 0);
+        rewind($this->stream);
+        $this->state = self::STATE_SEARCHING_ELEMENT;
+        $this->currentXml = null;
+        $this->openedTags = 0;
+        $this->createNativeParser();
     }
 
     public function parse(): ?string
@@ -68,11 +92,21 @@ class XmlParser
                 $this->currentXml .= $this->currentLineData;
             }
             xml_parse($this->nativeXmlParser, $this->currentLineData, feof($this->stream));
-            if (self::STATE_SEARCHING_ELEMENT === $this->state && $this->currentXml) {
-                return $this->currentXml;
+            if (self::STATE_SEARCHING_ELEMENT === $this->state && null !== $this->currentXml) {
+                $xml = $this->currentXml;
+                $this->currentXml = null;
+
+                return $xml;
             }
         }
 
+        $this->resetNativeParser();
+
         return null;
+    }
+
+    public function __destruct()
+    {
+        $this->resetNativeParser();
     }
 }
