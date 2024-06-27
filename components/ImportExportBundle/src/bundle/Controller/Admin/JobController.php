@@ -17,11 +17,13 @@ use JMS\TranslationBundle\Annotation\Ignore;
 use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Translation\TranslationContainerInterface;
 use Pagerfanta\Adapter\CallbackAdapter;
+use Pagerfanta\Doctrine\Collections\CollectionAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\VarExporter\Instantiator;
 
@@ -123,20 +125,25 @@ class JobController extends Controller implements TranslationContainerInterface
         ]);
     }
 
-    public function displayLogs(Job $job): Response
+    public function displayLogs(Job $job, RequestStack $requestStack): Response
     {
         $summary = [];
-        foreach ($job->getRecords() as $record) {
-            $recordInfos = $record->getRecord();
-            if (!isset($summary[$recordInfos['level_name']])) {
-                $summary[$recordInfos['level_name']] = 0;
-            }
-            ++$summary[$recordInfos['level_name']];
-        }
+//        foreach ($job->getRecords() as $record) {
+//            $recordInfos = $record->getRecord();
+//            if (!isset($summary[$recordInfos['level_name']])) {
+//                $summary[$recordInfos['level_name']] = 0;
+//            }
+//            ++$summary[$recordInfos['level_name']];
+//        }
+
+        $logsQuery = $requestStack->getMainRequest()->get('logs', ['page' => 1, 'type' => 'all']);
+        $pager = new Pagerfanta(new CollectionAdapter($job->getRecords()));
+        $pager->setMaxPerPage(50);
+        $pager->setCurrentPage($logsQuery['page']);
 
         return $this->render('@ibexadesign/import_export/job/logs.html.twig', [
             'job' => $job,
-            'logs' => $job->getRecords(),
+            'logs' => $pager,
             'summary' => $summary,
         ]);
     }

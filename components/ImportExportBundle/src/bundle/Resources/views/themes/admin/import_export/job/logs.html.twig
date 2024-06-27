@@ -50,4 +50,5 @@
         body_rows,
     } %}
     {% endembed %}
+    {{ pagerfanta(logs, 'ibexa', {'routeName': 'import_export.job.view', 'routeParams': {'id': job.id}, 'pageParameter': '[logs][page]'}) }}
 </section>
