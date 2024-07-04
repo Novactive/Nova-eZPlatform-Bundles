@@ -16,7 +16,7 @@ namespace Novactive\Bundle\eZ2FABundle\Core;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry as Registry;
-use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
+use Ibexa\Bundle\Core\ApiLoader\RepositoryConfigurationProvider;
 
 final class SiteAccessAwareQueryExecutor
 {

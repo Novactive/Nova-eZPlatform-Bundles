@@ -14,9 +14,9 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZ2FABundle\Security;
 
-use eZ\Publish\API\Repository\Values\User\User as APIUser;
-use eZ\Publish\Core\MVC\Symfony\Security\User;
-use eZ\Publish\Core\MVC\Symfony\Security\User\APIUserProviderInterface;
+use Ibexa\Contracts\Core\Repository\Values\User\User as APIUser;
+use Ibexa\Core\MVC\Symfony\Security\User;
+use Ibexa\Core\MVC\Symfony\Security\User\APIUserProviderInterface;
 use Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareAuthenticatorResolver;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;

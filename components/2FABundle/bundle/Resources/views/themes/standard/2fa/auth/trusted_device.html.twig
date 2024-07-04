@@ -1,0 +1,8 @@
+{% if display_trusted_option %}
+    <div class="form-group">
+        <input id="_trusted" type="checkbox" name="{{ trusted_parameter_name }}"/>
+        <div class="ez-login__input-label-wrapper">
+            <label for="_trusted">{{ "trusted"|trans({}, 'SchebTwoFactorBundle') }}</label>
+        </div>
+    </div>
+{% endif %}

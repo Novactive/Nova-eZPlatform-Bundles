@@ -12,7 +12,7 @@
 {% if isSetup %}
     <hr/>
     <div class="ez-data-source__message--main">
-        <a href="{{ ez_path(ez_route('2fa_reset'), {userId: user.apiUser.id}) }}" onclick="return confirm('{{ 'user_tab.are_you_sure'|trans }}')" class="btn btn-secondary">
+        <a href="{{ ibexa_path(ibexa_route('2fa_reset'), {userId: user.apiUser.id}) }}" onclick="return confirm('{{ 'user_tab.are_you_sure'|trans }}')" class="btn btn-secondary">
             <strong>{{ 'user_tab.reset'|trans }}</strong>
         </a>
     </div>

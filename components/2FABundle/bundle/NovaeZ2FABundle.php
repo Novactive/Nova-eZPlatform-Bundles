@@ -26,11 +26,11 @@ final class NovaeZ2FABundle extends Bundle
     public function build(ContainerBuilder $container): void
     {
         parent::build($container);
-        $eZExtension = $container->getExtension('ezpublish');
+        $eZExtension = $container->getExtension('ibexa');
         $eZExtension->addPolicyProvider(new PolicyProvider());
     }
 
-    public function getContainerExtension(): ?ExtensionInterface
+    public function getContainerExtension()
     {
         if (null === $this->extension) {
             $extension = new NovaeZ2FAExtension();
