@@ -26,16 +26,15 @@ class PasswordProvided
     /**
      * @var FormFactoryInterface
      */
-    private $formFactory;
-
-    public function __construct(FormFactoryInterface $formFactory)
-    {
-        $this->formFactory = $formFactory;
-    }
+    public function __construct(private readonly FormFactoryInterface $formFactory)
+    { }
 
     public function onKernelRequest(RequestEvent $event): void
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
+            return;
+        }
+        if (!$event->getRequest()->isMethod('POST')) {
             return;
         }
         $form = $this->formFactory->create(RequestProtectedAccessType::class);
