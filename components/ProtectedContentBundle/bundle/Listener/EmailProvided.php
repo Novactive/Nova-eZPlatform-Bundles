@@ -77,7 +77,10 @@ class EmailProvided
 
     public function onKernelRequest(RequestEvent $event): void
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
+            return;
+        }
+        if (!$event->getRequest()->isMethod('POST')) {
             return;
         }
         $form = $this->formFactory->create(RequestEmailProtectedAccessType::class);
