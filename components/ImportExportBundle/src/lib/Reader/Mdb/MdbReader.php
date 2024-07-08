@@ -22,8 +22,10 @@ class MdbReader extends AbstractFileReader
     protected $dbFile;
     protected Connection $connection;
 
-    public function __construct(string $converterPath, FileHandler $fileHandler)
-    {
+    public function __construct(
+        FileHandler $fileHandler,
+        string $converterPath = __DIR__.'/../../../../bin/mdb-to-sqlite.bash'
+    ) {
         $this->converterPath = $converterPath;
         parent::__construct($fileHandler);
     }

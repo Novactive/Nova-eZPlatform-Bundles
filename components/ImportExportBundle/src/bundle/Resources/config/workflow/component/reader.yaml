@@ -31,7 +31,5 @@ services:
 
     AlmaviaCX\Bundle\IbexaImportExport\Reader\Mdb\MdbReader:
         parent: AlmaviaCX\Bundle\IbexaImportExport\Reader\File\AbstractFileReader
-        arguments:
-            $converterPath: '%kernel.project_dir%/bin/mdb-to-sqlite.bash'
         tags:
             - { name: almaviacx.import_export.component, alias: reader.mdb}

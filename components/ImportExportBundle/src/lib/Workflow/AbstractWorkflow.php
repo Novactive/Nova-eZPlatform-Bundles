@@ -84,9 +84,8 @@ abstract class AbstractWorkflow implements WorkflowInterface
 
     public function __invoke(int $batchLimit = -1): void
     {
-        $this->prepare();
-
         try {
+            $this->prepare();
             $this->dispatchEvent(new WorkflowEvent($this), WorkflowEvent::START);
 
             $limitIterator = new LimitIterator($this->itemsIterator, $this->offset, $batchLimit);
@@ -119,7 +118,6 @@ abstract class AbstractWorkflow implements WorkflowInterface
             $this->logger->setItemIndex(null);
             $this->logger->logException($e);
         }
-
         $this->finish();
     }
 
