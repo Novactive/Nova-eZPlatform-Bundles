@@ -31,16 +31,17 @@ class TaxonomyEntryTransformer extends AbstractItemValueTransformer
             return null;
         }
         $taxonomy = $options['taxonomy'] ?? null;
-        if (is_array($value)) {
-            $entries = [];
-            foreach ($value as $id) {
-                $entries[] = $this->loadTaxonomyEntry($id, $taxonomy);
-            }
 
-            return array_filter($entries);
+        if (is_scalar($value)) {
+            return $this->loadTaxonomyEntry($value, $taxonomy);
         }
 
-        return $this->loadTaxonomyEntry($value, $taxonomy);
+        $entries = [];
+        foreach ($value as $id) {
+            $entries[] = $this->loadTaxonomyEntry($id, $taxonomy);
+        }
+
+        return array_filter($entries);
     }
 
     /**

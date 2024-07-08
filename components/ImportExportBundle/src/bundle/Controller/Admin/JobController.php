@@ -133,13 +133,16 @@ class JobController extends Controller implements TranslationContainerInterface
         $request = $requestStack->getMainRequest();
 
         $countsByLevel = $this->jobService->getJobLogsCountByLevel($job);
-
         $formBuilder = $this->formFactory->createNamedBuilder('logs', FormType::class, null, ['method' => 'GET']);
         $formBuilder->add('level', ChoiceType::class, [
             'label' => 'job.logs.level',
-            'choices' => array_flip($countsByLevel),
-            'choice_label' => function ($choice, int $count, int $level) {
-                return sprintf('%s (%d)', Logger::getLevelName($level), $count);
+            'choices' => array_flip([null => array_sum($countsByLevel)] + $countsByLevel),
+            'choice_label' => function ($choice, int $count, $level) {
+                return sprintf(
+                    '%s (%d)',
+                    $level ? Logger::getLevelName((int) $level) : 'ALL',
+                    $count
+                );
             },
             'attr' => [
                 'class' => 'ibexa-form-autosubmit',
