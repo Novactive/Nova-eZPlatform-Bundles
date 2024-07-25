@@ -46,6 +46,10 @@ services:
         tags:
             - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.callback}
 
+    AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Utils\DownloadToTmpTransformer:
+        tags:
+            - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.download_to_tmp_transformer}
+
     AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Ibexa\HtmlToRichtextTransformer:
         arguments:
             $richtextInputHandler: '@Ibexa\FieldTypeRichText\RichText\InputHandler'

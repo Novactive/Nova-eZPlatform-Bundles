@@ -38,6 +38,9 @@ class TaxonomyEntryTransformer extends AbstractItemValueTransformer
 
         $entries = [];
         foreach ($value as $id) {
+            if (empty($id)) {
+                continue;
+            }
             $entries[] = $this->loadTaxonomyEntry($id, $taxonomy);
         }
 
@@ -56,7 +59,7 @@ class TaxonomyEntryTransformer extends AbstractItemValueTransformer
 
             return $this->taxonomyService->loadEntryById($id, $taxonomyName);
         } catch (TaxonomyEntryNotFoundException $exception) {
-            throw new Exception(sprintf('No taxonomy entry found for id/identifier "%s"', $id));
+            throw new Exception(sprintf('No taxonomy entry found for id/identifier "%s" in "%s"', $id, $taxonomyName));
         }
     }
 

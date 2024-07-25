@@ -44,4 +44,9 @@ class Source
     {
         return $this->transformers;
     }
+
+    public function __toString(): string
+    {
+        return (string) $this->path;
+    }
 }

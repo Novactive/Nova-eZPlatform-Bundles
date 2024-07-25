@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Accessor\XpathPropertyAccessor;
+use AlmaviaCX\Bundle\IbexaImportExport\Exception\SourceResolutionException;
 use AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\ItemValueTransformerRegistry;
 use AlmaviaCX\Bundle\IbexaImportExport\Reference\Reference;
 use AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag;
@@ -14,6 +15,7 @@ use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\PropertyAccess\PropertyPath;
+use Throwable;
 
 class SourceResolver
 {
@@ -99,35 +101,39 @@ class SourceResolver
      */
     protected function getSourceValue($source, $objectOrArray)
     {
-        if ($source instanceof Reference) {
-            return $this->referenceBag->getReference($source->getName(), null, $source->getScope());
-        }
-
-        if ($source instanceof Source) {
-            $sourcePath = $source->getPath();
-            if (is_array($sourcePath)) {
-                $value = array_map(function (PropertyPath $path) use ($objectOrArray) {
-                    return $this->getPropertyValue($objectOrArray, $path);
-                }, $sourcePath);
-            } else {
-                $value = $this->getPropertyValue($objectOrArray, $sourcePath);
+        try {
+            if ($source instanceof Reference) {
+                return $this->referenceBag->getReference($source->getName(), null, $source->getScope());
             }
 
-            foreach ($source->getTransformers() as $transformerInfos) {
-                if (is_array($transformerInfos)) {
-                    [ $transformerType, $transformerOptions ] = $transformerInfos;
+            if ($source instanceof Source) {
+                $sourcePath = $source->getPath();
+                if (is_array($sourcePath)) {
+                    $value = array_map(function (PropertyPath $path) use ($objectOrArray) {
+                        return $this->getPropertyValue($objectOrArray, $path);
+                    }, $sourcePath);
                 } else {
-                    $transformerType = $transformerInfos;
-                    $transformerOptions = [];
+                    $value = $this->getPropertyValue($objectOrArray, $sourcePath);
                 }
-                $transformer = $this->itemValueTransformerRegistry->get($transformerType);
-                $value = $transformer($value, $transformerOptions);
+
+                foreach ($source->getTransformers() as $transformerInfos) {
+                    if (is_array($transformerInfos)) {
+                        [ $transformerType, $transformerOptions ] = $transformerInfos;
+                    } else {
+                        $transformerType = $transformerInfos;
+                        $transformerOptions = [];
+                    }
+                    $transformer = $this->itemValueTransformerRegistry->get($transformerType);
+                    $value = $transformer($value, $transformerOptions);
+                }
+
+                return $value;
             }
 
-            return $value;
+            return $this->getPropertyValue($objectOrArray, $source);
+        } catch (Throwable $exception) {
+            throw new SourceResolutionException($source, $exception);
         }
-
-        return $this->getPropertyValue($objectOrArray, $source);
     }
 
     /**

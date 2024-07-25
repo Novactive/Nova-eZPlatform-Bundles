@@ -9,6 +9,7 @@ use AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\ItemTransformer;
 use AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\SourceResolver;
 use AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag;
 use AlmaviaCX\Bundle\IbexaImportExport\Writer\AbstractWriter;
+use DateTime;
 use Exception;
 use Ibexa\Contracts\Core\Repository\Exceptions\BadStateException;
 use Ibexa\Contracts\Core\Repository\Exceptions\ContentFieldValidationException;
@@ -58,7 +59,7 @@ class IbexaContentWriter extends AbstractWriter implements TranslationContainerI
         /** @var \AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentWriterOptions $options */
         $options = $this->getOptions();
 
-        $content = $this->repository->sudo(function (Repository $repository) use ($options, $mappedItem) {
+        $content = $this->repository->sudo(function (Repository $repository) use ($item, $options, $mappedItem) {
             $remoteId = $mappedItem->getContentRemoteId();
             $ownerId = $mappedItem->getOwnerId();
             if (null === $ownerId) {
@@ -80,6 +81,8 @@ class IbexaContentWriter extends AbstractWriter implements TranslationContainerI
                     $ownerId,
                     $mappedItem->getMainLanguageCode()
                 );
+            } catch (InvalidArgumentType $exception) {
+                dd($item, $mappedItem, $exception->getMessage());
             } catch (BadStateException $exception) {
                 $this->logger->info('Removing content with remote id "'.$remoteId.'"');
                 $repository->getContentService()->deleteContent($content->contentInfo);
@@ -95,7 +98,9 @@ class IbexaContentWriter extends AbstractWriter implements TranslationContainerI
                         $mappedItem->getFields(),
                         $remoteId,
                         $ownerId,
-                        $mappedItem->getMainLanguageCode()
+                        $mappedItem->getMainLanguageCode(),
+                        $mappedItem->getSectionId(),
+                        $mappedItem->getModificationDate()
                     );
                 } catch (InvalidArgumentType $exception) {
                     $this->logger->info('----> '.get_class($exception));
@@ -104,6 +109,7 @@ class IbexaContentWriter extends AbstractWriter implements TranslationContainerI
 
                     throw $exception;
                 } catch (ContentFieldValidationException $exception) {
+                    dd($item, $mappedItem, $exception->getFieldErrors());
                     $newException = \Ibexa\Core\Base\Exceptions\ContentFieldValidationException::createNewWithMultiline(
                         $exception->getFieldErrors(),
                         $remoteId
@@ -199,6 +205,7 @@ class IbexaContentWriter extends AbstractWriter implements TranslationContainerI
         int $ownerId = null,
         string $languageCode = 'eng-GB',
         int $sectionId = null,
+        $modificationDate = null,
         bool $hidden = false
     ): Content {
         $contentType = $this->repository->getContentTypeService()->loadContentTypeByIdentifier(
@@ -212,6 +219,11 @@ class IbexaContentWriter extends AbstractWriter implements TranslationContainerI
         );
         $contentCreateStruct->remoteId = $remoteId;
         $contentCreateStruct->ownerId = $ownerId;
+        if (null !== $modificationDate) {
+            $contentCreateStruct->modificationDate = $modificationDate instanceof DateTime ?
+                $modificationDate :
+                DateTime::createFromFormat('U', (string) $modificationDate);
+        }
 
         if ($sectionId) {
             $contentCreateStruct->sectionId = $sectionId;

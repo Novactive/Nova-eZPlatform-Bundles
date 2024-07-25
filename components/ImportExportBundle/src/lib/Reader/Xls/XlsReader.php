@@ -13,12 +13,16 @@ use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Translation\TranslationContainerInterface;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\CellIterator;
 use PhpOffice\PhpSpreadsheet\Worksheet\Row;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Symfony\Component\Translation\TranslatableMessage;
 
 class XlsReader extends AbstractFileReader implements TranslationContainerInterface
 {
+    protected Spreadsheet $spreadsheet;
+
     /**
      * @throws \League\Flysystem\FilesystemException
      * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
@@ -35,12 +39,28 @@ class XlsReader extends AbstractFileReader implements TranslationContainerInterf
             $reader->setLoadSheetsOnly([$options->tabName]);
         }
 
-        $doc = $reader->load($tmpFileName);
-        $worksheet = $doc->getActiveSheet();
+        $this->spreadsheet = $reader->load($tmpFileName);
+        $worksheet = $this->spreadsheet->getActiveSheet();
 
-        $startRow = $options->headerRowNumber ? $options->headerRowNumber + 1 : 1;
-        $endRow = $options->headerRowNumber ?? 0;
+        return $this->getIterator(
+            $worksheet,
+            $options->headerRowNumber ? $options->headerRowNumber + 1 : 1,
+            $options->colsRange
+        );
+    }
+
+    public function getSpreadsheet(): Spreadsheet
+    {
+        return $this->spreadsheet;
+    }
+
+    /**
+     * @param array{'start': string, 'end': string}|null $colsRange
+     */
+    public function getIterator(Worksheet $worksheet, int $startRow = 1, ?array $colsRange = null): ItemIterator
+    {
         $maxDataRow = 0;
+        $endRow = $startRow - 1;
         $rowIterator = $worksheet->getRowIterator($startRow);
         foreach ($rowIterator as $row) {
             if (
@@ -57,8 +77,11 @@ class XlsReader extends AbstractFileReader implements TranslationContainerInterf
         return new ItemIterator(
             $maxDataRow,
             $worksheet->getRowIterator($startRow, $endRow),
-            new CallbackIteratorItemTransformer(function (Row $row) use ($options) {
-                $cellsIterator = $row->getCellIterator($options->colsRange['start'], $options->colsRange['end']);
+            new CallbackIteratorItemTransformer(function (Row $row) use ($colsRange) {
+                $cellsIterator = $row->getCellIterator(
+                    $colsRange ? $colsRange['start'] : 'A',
+                    $colsRange ? $colsRange['end'] : null
+                );
 
                 return new ArrayAccessor(
                     array_map(
