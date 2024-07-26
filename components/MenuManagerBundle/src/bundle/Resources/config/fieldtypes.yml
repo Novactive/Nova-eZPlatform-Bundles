@@ -4,21 +4,21 @@ services:
 
     Novactive\EzMenuManager\FieldType\MenuItem\Type:
         autowire: true
-        parent: ezpublish.fieldType
+        parent: Ibexa\Core\FieldType\FieldType
         tags:
-            - {name: ezpublish.fieldType, alias: menuitem}
+            - {name: ibexa.field_type, alias: menuitem}
 
     Novactive\EzMenuManager\FieldType\Mapper\MenuItemFormMapper:
         autowire: true
         tags:
-            - { name: ez.fieldFormMapper.definition, fieldType: menuitem }
-            - { name: ez.fieldFormMapper.value, fieldType: menuitem }
+            - { name: ibexa.admin_ui.field_type.form.mapper.definition, fieldType: menuitem }
+            - { name: ibexa.admin_ui.field_type.form.mapper.value, fieldType: menuitem }
 
     Novactive\EzMenuManager\FieldType\MenuItem\MenuItemStorage:
         arguments:
             - '@Novactive\EzMenuManager\FieldType\MenuItem\MenuItemStorage\Gateway\DoctrineStorage'
         tags:
-            - {name: ezpublish.fieldType.externalStorageHandler, alias: menuitem}
+            - {name: ibexa.field_type.storage.external.handler, alias: menuitem}
 
     Novactive\EzMenuManager\FieldType\MenuItem\MenuItemStorage\Gateway\DoctrineStorage:
         autowire: true

@@ -12,7 +12,7 @@
 
 namespace Novactive\EzMenuManager\FieldType\MenuItem;
 
-use eZ\Publish\Core\FieldType\Value as BaseValue;
+use Ibexa\Core\FieldType\Value as BaseValue;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 
 class Value extends BaseValue
@@ -22,23 +22,28 @@ class Value extends BaseValue
      *
      * @var MenuItem\ContentMenuItem[]
      */
-    public $menuItems;
+    public array $menuItems;
 
     /**
      * Construct a new Value object and initialize it $text.
-     *
-     * @param array $menuItems
      */
-    public function __construct($menuItems = [])
+    public function __construct(array $menuItems = [])
     {
         $this->menuItems = $menuItems;
+        parent::__construct();
     }
 
     /**
-     * @see \eZ\Publish\Core\FieldType\Value
+     * @see \Ibexa\Core\FieldType\Value
+     * @see MenuItem
      */
     public function __toString()
     {
-        return (string) $this->menuItems;
+        $string = '';
+        foreach ($this->menuItems as $menuItem) {
+            $string .= ', '.$menuItem->__toString();
+        }
+
+        return $string;
     }
 }

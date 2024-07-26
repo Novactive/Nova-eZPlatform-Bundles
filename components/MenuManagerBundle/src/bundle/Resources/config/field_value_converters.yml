@@ -4,11 +4,11 @@ services:
         autoconfigure: true
         public: false
         bind:
-            $translationHelper: "@ezpublish.translation_helper"
+            $translationHelper: '@Ibexa\Core\Helper\TranslationHelper'
 
     Novactive\EzMenuManager\Form\Type\FieldType\MenuItemFieldType: ~
     Novactive\EzMenuManager\Form\Type\FieldType\FieldValueTransformer: ~
 
     Novactive\EzMenuManager\Persistence\Legacy\Content\FieldValue\Converter\MenuItemConverter:
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: menuitem}
+            - {name: ibexa.field_type.storage.legacy.converter, alias: menuitem}

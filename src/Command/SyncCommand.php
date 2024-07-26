@@ -48,7 +48,7 @@ final class SyncCommand extends Command
         );
 
         $answer = $io->ask(
-            "Synchronize <fg=yellow>{$branch}</> accross the specified component. Continue?"
+            "Synchronize <fg=yellow>origin/{$branch}</> accross the specified component. Continue?"
         );
 
         if ('yes' !== $answer) {

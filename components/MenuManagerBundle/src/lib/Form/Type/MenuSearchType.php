@@ -12,7 +12,7 @@
 
 namespace Novactive\EzMenuManager\Form\Type;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Novactive\EzMenuManagerBundle\Entity\MenuSearch;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -67,6 +67,7 @@ class MenuSearchType extends AbstractType
                         'choices' => array_combine(array_values($menuTypes), array_keys($menuTypes)),
                         'choice_translation_domain' => 'menu_manager',
                         'required' => false,
+                        'placeholder' => 'menu.type.placeholder',
                     ]
                 );
         }

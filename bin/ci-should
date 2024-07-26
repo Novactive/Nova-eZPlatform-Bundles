@@ -9,20 +9,41 @@
  * @license   MIT
  */
 
-declare(strict_types=1);
+declare( strict_types=1 );
 
+use Composer\Semver\Semver;
 use Symfony\Component\Yaml\Yaml;
 
-set_time_limit(0);
+set_time_limit( 0 );
 
-require dirname(__DIR__).'/vendor/autoload.php';
+require dirname( __DIR__ ) . '/vendor/autoload.php';
 
 $action = $_SERVER['argv'][1] ?? '';
 $configFile = "components/{$_SERVER['COMPONENT']}/ci-config.yaml";
-if ($action === '' || !file_exists($configFile)) {
-    exit(1);
+if ( $action === '' || !file_exists( $configFile ) )
+{
+    exit( 1 );
 }
 
-$config = Yaml::parse(file_get_contents($configFile));
+$config = Yaml::parse( file_get_contents( $configFile ) );
+$composerRequirements = json_decode( file_get_contents( './ibexa/composer.lock' ) );
+$findPackageVersion = function ( $packageName ) use ( $composerRequirements ) {
+    foreach ( $composerRequirements->packages as $package )
+    {
+        if ( $package->name === $packageName )
+        {
+            return $package->version;
+        }
+    }
+};
 
-exit(($config[$action] ?? false) === true ? 0 : 1);
+
+$ibexaVersion = $findPackageVersion('ibexa/core');
+$requiredIbexaVersion = $config['required_ibexa_version'] ?? null;
+if ( $requiredIbexaVersion && $ibexaVersion )
+{
+    if(!Semver::satisfies( $ibexaVersion, $requiredIbexaVersion )) {
+        exit( 0 );
+    }
+}
+exit( ( $config[$action] ?? false ) === true ? 0 : 1 );
