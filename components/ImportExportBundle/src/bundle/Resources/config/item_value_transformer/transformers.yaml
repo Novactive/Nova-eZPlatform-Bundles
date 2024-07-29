@@ -61,3 +61,7 @@ services:
             $htmlToRichtextTransformer: '@AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Ibexa\HtmlToRichtextTransformer'
         tags:
             - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.text_to_richtext}
+
+    AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Ibexa\HtmlToTextBlockTransformer:
+        tags:
+            - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.html_to_textblock}
