@@ -59,7 +59,7 @@ class IbexaContentWriter extends AbstractWriter implements TranslationContainerI
         /** @var \AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentWriterOptions $options */
         $options = $this->getOptions();
 
-        $content = $this->repository->sudo(function (Repository $repository) use ($item, $options, $mappedItem) {
+        $content = $this->repository->sudo(function (Repository $repository) use ($options, $mappedItem) {
             $remoteId = $mappedItem->getContentRemoteId();
             $ownerId = $mappedItem->getOwnerId();
             if (null === $ownerId) {
@@ -82,7 +82,8 @@ class IbexaContentWriter extends AbstractWriter implements TranslationContainerI
                     $mappedItem->getMainLanguageCode()
                 );
             } catch (InvalidArgumentType $exception) {
-                dd($item, $mappedItem, $exception->getMessage());
+//                dd($item, $mappedItem, $exception->getMessage());
+                $this->logger->info($exception->getMessage());
             } catch (BadStateException $exception) {
                 $this->logger->info('Removing content with remote id "'.$remoteId.'"');
                 $repository->getContentService()->deleteContent($content->contentInfo);
@@ -109,7 +110,7 @@ class IbexaContentWriter extends AbstractWriter implements TranslationContainerI
 
                     throw $exception;
                 } catch (ContentFieldValidationException $exception) {
-                    dd($item, $mappedItem, $exception->getFieldErrors());
+//                    dd($item, $mappedItem, $exception->getFieldErrors());
                     $newException = \Ibexa\Core\Base\Exceptions\ContentFieldValidationException::createNewWithMultiline(
                         $exception->getFieldErrors(),
                         $remoteId
