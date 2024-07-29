@@ -9,7 +9,6 @@ use Ibexa\Core\FieldType\TextBlock\Value;
 
 class HtmlToTextBlockTransformer extends AbstractItemValueTransformer
 {
-
     public function transform($value, array $options = [])
     {
         if (null === $value) {
@@ -21,7 +20,7 @@ class HtmlToTextBlockTransformer extends AbstractItemValueTransformer
 
         // Add line breaks after block-level closing tags
         foreach ($blockTags as $tag) {
-            $value = preg_replace('/<\/' . $tag . '>/', "</$tag>\n", $value);
+            $value = preg_replace('/<\/'.$tag.'>/', "</$tag>\n", $value);
         }
 
         // Replace <br> tags with newlines
