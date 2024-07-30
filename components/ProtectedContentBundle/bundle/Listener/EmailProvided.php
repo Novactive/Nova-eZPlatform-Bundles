@@ -17,9 +17,12 @@ namespace Novactive\Bundle\eZProtectedContentBundle\Listener;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Ibexa\Contracts\Core\Repository\ContentService;
+use Monolog\Logger;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedTokenStorage;
 use Novactive\Bundle\eZProtectedContentBundle\Form\RequestEmailProtectedAccessType;
+use Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedAccessRepository;
 use Ramsey\Uuid\Uuid;
 use Swift_Mailer;
 use Swift_Message;
@@ -32,60 +35,61 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class EmailProvided
 {
     protected const SENDMAIL_ERROR = 'Impossible d\'envoyer le lien formaté à l\'adresse mail %s';
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
-    /**
-     * @var Swift_Mailer
-     */
-    private $mailer;
+
     /**
      * @var Swift_Message
      */
     protected $messageInstance;
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var ParameterBagInterface
-     */
-    private $parameterBag;
-
     public function __construct(
-        FormFactoryInterface $formFactory,
-        Swift_Mailer $mailer,
-        EntityManagerInterface $entityManager,
-        TranslatorInterface $translator,
-        ParameterBagInterface $parameterBag
+        protected readonly FormFactoryInterface $formFactory,
+        protected readonly Swift_Mailer $mailer,
+        protected readonly EntityManagerInterface $entityManager,
+        protected readonly TranslatorInterface $translator,
+        protected readonly ParameterBagInterface $parameterBag,
+        protected readonly ProtectedAccessRepository $protectedAccessRepository,
+        protected readonly ContentService $contentService,
+        protected readonly Logger $logger,
     ) {
-        $this->formFactory = $formFactory;
-        $this->mailer = $mailer;
-        $this->entityManager = $entityManager;
-        $this->translator = $translator;
-        $this->parameterBag = $parameterBag;
         $this->messageInstance = new Swift_Message();
     }
 
     public function onKernelRequest(RequestEvent $event): void
     {
+        $request = $event->getRequest();
+
         if (!$event->isMainRequest()) {
             return;
         }
-        if (!$event->getRequest()->isMethod('POST')) {
+
+        if (!$request->isMethod('POST')) {
             return;
         }
+
+        $contentId = $request->attributes->get('contentId');
+
+        if (!$contentId) {
+            return;
+        }
+
+        try {
+            $content = $this->contentService->loadContent($contentId);
+        } catch (\Exception $exception) {
+            $this->logger->error($exception->getMessage(), [
+                'here' => __METHOD__ . ' ' . __LINE__,
+                '$contentId' => $contentId,
+            ]);
+            return;
+        }
+
+        $protections = $this->protectedAccessRepository->findByContent($content);
+
+        if (0 === count($protections)) {
+            return;
+        }
+
         $form = $this->formFactory->create(RequestEmailProtectedAccessType::class);
 
-        $request = $event->getRequest();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -124,7 +128,7 @@ class EmailProvided
     {
         /** @var ProtectedAccess $protectedAccess */
         $protectedAccess = $this->entityManager->getRepository(ProtectedAccess::class)
-                                               ->findOneBy(['contentId' => $contentId]);
+            ->findOneBy(['contentId' => $contentId]);
 
         $mailLink = "<a href='$link'>".$this->translator->trans('mail.link', [], 'ezprotectedcontent').'</a>';
         $bodyMessage = str_replace('{{ url }}', $mailLink, $protectedAccess->getEmailMessage());
