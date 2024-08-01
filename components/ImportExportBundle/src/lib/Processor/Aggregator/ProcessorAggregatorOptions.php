@@ -11,10 +11,13 @@ use AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorReferenceAggregationTr
 
 /**
  * @property array<ComponentReference> $processors
+ * @property bool                      $errorBubbling
  */
 class ProcessorAggregatorOptions extends ProcessorOptions
 {
     use ProcessorReferenceAggregationTrait;
+
+    protected bool $errorBubbling = true;
 
     public function merge(ComponentOptions $overrideOptions): ComponentOptions
     {

@@ -25,10 +25,15 @@ class DownloadToTmpTransformer extends AbstractItemValueTransformer
             $tmpFilePath .= '.'.$originalPathInfos['extension'];
         }
 
+        register_shutdown_function(function () use ($tmpFilePath) {
+            if (file_exists($tmpFilePath)) {
+                unlink($tmpFilePath);
+            }
+        });
         file_put_contents(
             $tmpFilePath,
             file_get_contents(
-                $value,
+                str_replace(' ', '+', $value),
                 false,
                 stream_context_create(
                     [
@@ -40,10 +45,6 @@ class DownloadToTmpTransformer extends AbstractItemValueTransformer
                 )
             )
         );
-
-        register_shutdown_function(function () use ($tmpFilePath) {
-            unlink($tmpFilePath);
-        });
 
         return $tmpFilePath;
     }

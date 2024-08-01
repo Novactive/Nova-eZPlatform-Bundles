@@ -40,3 +40,17 @@ services:
             - console.command
 
     AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag:
+
+    AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentCreator:
+        arguments:
+            $repository: '@Ibexa\Contracts\Core\Repository\Repository'
+
+    AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentUpdater:
+        arguments:
+            $repository: '@Ibexa\Contracts\Core\Repository\Repository'
+
+    AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentImporter:
+        arguments:
+            $repository: '@Ibexa\Contracts\Core\Repository\Repository'
+            $contentCreator: '@AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentCreator'
+            $contentUpdater: '@AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentUpdater'

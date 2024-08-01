@@ -16,7 +16,7 @@ class ToDateTimeTransformer extends AbstractItemValueTransformer
             return null;
         }
 
-        return DateTime::createFromFormat($options['input_format'], $value);
+        return DateTime::createFromFormat($options['input_format'], (string) $value);
     }
 
     protected function configureOptions(OptionsResolver $optionsResolver)

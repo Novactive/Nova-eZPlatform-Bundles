@@ -18,6 +18,7 @@ services:
         arguments:
             $repository: '@Ibexa\Contracts\Core\Repository\Repository'
             $objectAccessorBuilder: '@AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\ObjectAccessorBuilder'
+            $contentImporter: '@AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentImporter'
         tags:
             - { name: almaviacx.import_export.component, alias: writer.ibexa.content }
 

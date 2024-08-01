@@ -9,6 +9,7 @@ use AlmaviaCX\Bundle\IbexaImportExport\Processor\AbstractProcessor;
 use AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorInterface;
 use JMS\TranslationBundle\Annotation\Desc;
 use Symfony\Component\Translation\TranslatableMessage;
+use Throwable;
 
 class ProcessorAggregator extends AbstractProcessor implements ProcessorInterface
 {
@@ -18,11 +19,20 @@ class ProcessorAggregator extends AbstractProcessor implements ProcessorInterfac
     public function processItem($item)
     {
         $processors = $this->getProcessors();
-        foreach ($processors as $processor) {
-            $item = ($processor)($item);
-            if (false === $item) {
-                return;
+        try {
+            foreach ($processors as $processor) {
+                $item = ($processor)($item);
+                if (false === $item) {
+                    return;
+                }
             }
+        } catch (Throwable $e) {
+            if ($this->getOption('errorBubbling', true)) {
+                throw $e;
+            }
+            $this->logger->logException($e);
+
+            return null;
         }
     }
 
