@@ -18,11 +18,11 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Ibexa\Contracts\Core\Repository\ContentService;
-use Monolog\Logger;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedTokenStorage;
 use Novactive\Bundle\eZProtectedContentBundle\Form\RequestEmailProtectedAccessType;
 use Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedAccessRepository;
+use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 use Swift_Mailer;
 use Swift_Message;
@@ -49,7 +49,7 @@ class EmailProvided
         protected readonly ParameterBagInterface $parameterBag,
         protected readonly ProtectedAccessRepository $protectedAccessRepository,
         protected readonly ContentService $contentService,
-        protected readonly Logger $logger,
+        protected readonly LoggerInterface $logger,
     ) {
         $this->messageInstance = new Swift_Message();
     }
