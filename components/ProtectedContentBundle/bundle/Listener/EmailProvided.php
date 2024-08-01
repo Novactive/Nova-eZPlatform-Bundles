@@ -66,7 +66,7 @@ class EmailProvided
             return;
         }
 
-        $contentId = $request->attributes->get('contentId');
+        $contentId = (int) $request->attributes->get('contentId');
 
         if (!$contentId) {
             return;
