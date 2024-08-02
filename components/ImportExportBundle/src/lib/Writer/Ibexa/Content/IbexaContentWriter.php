@@ -53,8 +53,6 @@ class IbexaContentWriter extends AbstractWriter implements TranslationContainerI
         $content = $this->repository->sudo(function (Repository $repository) use ($options, $mappedItem) {
             try {
                 return ($this->contentImporter)($mappedItem, $options->allowUpdate);
-//            } catch ( Throwable $exception) {
-//                dd($item, $mappedItem, $exception);
             } catch (ContentFieldValidationException $exception) {
                 $newException = \Ibexa\Core\Base\Exceptions\ContentFieldValidationException::createNewWithMultiline(
                     $exception->getFieldErrors(),

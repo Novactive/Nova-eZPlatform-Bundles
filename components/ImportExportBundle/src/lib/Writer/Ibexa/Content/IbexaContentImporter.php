@@ -58,6 +58,7 @@ class IbexaContentImporter
                 return ($this->contentUpdater)(
                     $content,
                     $contentData->getFields(),
+                    $contentData->getParentLocationIdList(),
                     $ownerId,
                     $contentData->getMainLanguageCode()
                 );
