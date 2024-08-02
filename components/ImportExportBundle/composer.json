@@ -1,0 +1,41 @@
+{
+  "name": "almaviacx/ibexaimportexportbundle",
+  "description": "Bundle to handle import/export",
+  "keywords": [
+    "ibexa",
+    "bundle"
+  ],
+  "homepage": "https://github.com/Novactive/AlmaviaCXIbexaImportExportBundle",
+  "type": "ibexa-bundle",
+  "authors": [
+    {
+      "name": "AlmaviaCX",
+      "homepage": "https://almaviacx.com/expertises/web-mobile/",
+      "email": "dirtech.web@almaviacx.com"
+    }
+  ],
+  "license": [
+    "MIT"
+  ],
+  "require": {
+    "php": "^7.3 || ^8.0",
+    "craue/formflow-bundle": "^3.0",
+    "symfony/uid": "^5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "AlmaviaCX\\Bundle\\IbexaImportExportBundle\\": "src/bundle",
+      "AlmaviaCX\\Bundle\\IbexaImportExport\\": "src/lib"
+    }
+  },
+  "suggest": {
+    "matthiasnoback/symfony-console-form": "Used to execute workflow from CLI",
+    "phpoffice/phpspreadsheet": "Used for the XlsReader",
+    "symfony/messenger": "Used to run job asynchronously"
+  },
+  "extra": {
+  },
+  "bin": [
+    "bin/mdb-to-sqlite.bash"
+  ]
+}

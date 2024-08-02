@@ -1,0 +1,28 @@
+services:
+    AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowConfigurationRepository:
+        arguments:
+            $entityManager: '@ibexa.doctrine.orm.entity_manager'
+
+    AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowExecutor:
+        arguments:
+            $componentBuilder: '@AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentBuilder'
+
+    AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowRegistry:
+        arguments:
+            $typeContainer: !abstract defined in AlmaviaCX\Bundle\IbexaImportExportBundle\DependencyInjection\CompilerPass\WorkflowPass
+            $availableWorkflowServices: !abstract defined in AlmaviaCX\Bundle\IbexaImportExportBundle\DependencyInjection\CompilerPass\WorkflowPass
+
+    AlmaviaCX\Bundle\IbexaImportExport\Workflow\AbstractWorkflow:
+        lazy: true
+        abstract: true
+        arguments:
+            $references: '@AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag'
+
+    AlmaviaCX\Bundle\IbexaImportExport\Workflow\ConfigurableWorkflowFactory:
+
+    AlmaviaCX\Bundle\IbexaImportExport\Workflow\Form\Type\WorkflowProcessConfigurationFormType:
+        arguments:
+            $workflowRegistry: '@AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowRegistry'
+            $componentRegistry: '@AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentRegistry'
+        tags:
+            - { name: form.type, alias: WorkflowProcessConfigurationFormType }

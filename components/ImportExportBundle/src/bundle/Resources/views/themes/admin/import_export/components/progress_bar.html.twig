@@ -1,0 +1,14 @@
+{% set progress = totalCount > 0 ? processedCount / totalCount * 100 : 0 %}
+{% set bg_color = progress == 100 ? 'bg-success' : 'bg-info' %}
+<div class="d-flex flex-row">
+<div>{{ processedCount }} / {{ totalCount }}</div>
+<div class="flex-fill ms-2 p-1">
+    <div class="progress">
+    <div class="progress-bar {{ bg_color }}" role="progressbar"
+         style="width: {{ progress }}%;"
+         aria-valuenow="{{ progress }}"
+         aria-valuemin="0" aria-valuemax="100">{{ progress|round }}%
+    </div>
+</div>
+</div>
+</div>

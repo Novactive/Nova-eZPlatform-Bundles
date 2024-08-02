@@ -1,0 +1,7 @@
+orm:
+    entity_mappings:
+        AlmaviaCXIbexaImportExport:
+            type: annotation
+            dir:
+            prefix: AlmaviaCX\Bundle\IbexaImportExport
+            is_bundle: false

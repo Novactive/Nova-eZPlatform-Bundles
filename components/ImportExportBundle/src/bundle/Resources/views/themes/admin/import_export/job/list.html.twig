@@ -1,0 +1,117 @@
+{% extends "@ibexadesign/ui/layout.html.twig" %}
+
+{% from '@ibexadesign/ui/component/macros.html.twig' import results_headline %}
+
+{% trans_default_domain 'import_export' %}
+
+{% block body_class %}import_export-job-list-view{% endblock %}
+
+{% block breadcrumbs %}
+    {% include '@ibexadesign/ui/breadcrumbs.html.twig' with { items: [
+        { value: 'breadcrumb.admin'|trans(domain='messages')|desc('Admin') },
+        { value: 'job.breadcrumb.list'|trans|desc('Jobs') }
+    ]} %}
+{% endblock %}
+
+{% block header %}
+    {% include '@ibexadesign/ui/page_title.html.twig' with {
+        title: 'job.list.title'|trans|desc('Jobs'),
+    } %}
+{% endblock %}
+
+{% block context_menu %}
+    {% set menu_items %}
+        {% if can_create %}
+            <li class="ibexa-context-menu__item ibexa-adaptive-items__item">
+                <a
+                    href="{{ path('import_export.job.create') }}"
+                    class="btn ibexa-btn ibexa-btn--primary"
+                >
+                    <svg class="ibexa-icon ibexa-icon--small ibexa-icon--create">
+                        <use xlink:href="{{ ibexa_icon_path('create') }}"></use>
+                    </svg>
+                    <span class="ibexa-btn__label">
+                        {{ 'job.list.action.create'|trans|desc('Create') }}
+                    </span>
+                </a>
+            </li>
+        {% endif %}
+    {% endset %}
+
+    {{ include('@ibexadesign/ui/component/context_menu/context_menu.html.twig', {
+        menu_items: menu_items,
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <section class="container ibexa-container">
+        {% set body_rows = [] %}
+        {% set status = [
+            'job.status.pending'|trans()|desc('Pending'),
+            'job.status.running'|trans()|desc('Running'),
+            'job.status.completed'|trans()|desc('Completed'),
+            'job.status.queued'|trans()|desc('Queued'),
+            'job.status.paused'|trans()|desc('Paused')
+
+        ] %}
+        {% set show_table_notice = false %}
+
+        {% for job in pager.currentPageResults %}
+            {% set body_row_cols = [] %}
+
+            {% set body_row_cols = body_row_cols|merge([
+                { content: job.id },
+            ]) %}
+
+            {% set col_raw %}
+                {% set view_url = path('import_export.job.view', {
+                    id: job.id
+                }) %}
+
+                <a href="{{ view_url }}">{{ job.label }}</a>
+            {% endset %}
+            {% set body_row_cols = body_row_cols|merge([{
+                content: col_raw,
+                raw: true,
+            }]) %}
+
+            {% set progress_bar %}
+                {% include '@ibexadesign/import_export/components/progress_bar.html.twig' with {processedCount: job.processedItemsCount, totalCount: job.totalItemsCount} only %}
+            {% endset %}
+            {% set body_row_cols = body_row_cols|merge([{
+                content: progress_bar,
+                raw: true,
+            }]) %}
+
+            {% set body_row_cols = body_row_cols|merge([
+                { content: status[job.status]  },
+                { content: job.requestedDate|ibexa_full_datetime  },
+            ]) %}
+
+            {% set body_rows = body_rows|merge([{ cols: body_row_cols }]) %}
+        {% endfor %}
+
+        {% embed '@ibexadesign/ui/component/table/table.html.twig' with {
+            headline: custom_results_headline ?? results_headline(pager.getNbResults()),
+            head_cols: [
+                { content: 'job.property.id'|trans|desc('Id') },
+                { content: 'job.property.label'|trans|desc('Label') },
+                { content: 'job.property.progress'|trans()|desc('Progress') },
+                { content: 'job.property.status'|trans|desc('Status') },
+                { content: 'job.property.requested_date'|trans|desc('Requested date') },
+            ],
+            body_rows,
+            show_notice: show_table_notice,
+        } %}
+        {% endembed %}
+
+        {% if pager.haveToPaginate %}
+            {% include '@ibexadesign/ui/pagination.html.twig' with {
+                'pager': pager
+            } %}
+        {% endif %}
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

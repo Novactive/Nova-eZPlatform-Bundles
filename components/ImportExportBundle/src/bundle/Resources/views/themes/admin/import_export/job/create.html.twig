@@ -1,0 +1,37 @@
+{% extends '@ibexadesign/ui/edit_base.html.twig' %}
+
+{% form_theme form_job_create '@ibexadesign/import_export/form/fields.html.twig'  %}
+
+{% trans_default_domain 'import_export' %}
+
+{% set anchor_params = {
+    close_href: path('import_export.job.list'),
+} %}
+
+{% block header %}
+    {% set job_create_sidebar_right = knp_menu_get('almaviacx.import_export.menu.job_create.sidebar_right', [], {'flow': form_job_create_flow}) %}
+
+    {% include '@ibexadesign/ui/edit_header.html.twig' with {
+        action_name: 'job.creating'|trans|desc('Creating'),
+        title: 'job.new.title'|trans|desc('Creating a new Job') ~ ' - ' ~ form_job_create_flow.getCurrentStepLabel(),
+        context_actions: knp_menu_render(job_create_sidebar_right, {'template': '@ibexadesign/ui/menu/context_menu.html.twig'})
+    } %}
+{% endblock %}
+
+{% block content %}
+    <div class="ibexa-edit-content__container">
+        {{ form_start(form_job_create) }}
+        <div class="card ibexa-card ibexa-card--light">
+            <div class="card-body ibexa-card__body ibexa-form-block">
+                {{ form_rest(form_job_create) }}
+            </div>
+        </div>
+        {% include '@ibexadesign/import_export/form_flow_buttons.html.twig' with { flow: form_job_create_flow } only %}
+        {{ form_end(form_job_create) }}
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link type="text/css" rel="stylesheet" href="{{ asset('bundles/craueformflow/css/buttons.css') }}" />
+{% endblock %}
