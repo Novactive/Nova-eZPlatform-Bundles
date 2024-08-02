@@ -30,7 +30,7 @@ abstract class AbstractWorkflow implements WorkflowInterface
     protected ?int $totalItemsCount = null;
     protected int $offset = 0;
     protected float $progress = 0;
-    protected bool $debug = true;
+    protected bool $debug = false;
 
     public function __construct(ReferenceBag $references)
     {
@@ -92,22 +92,7 @@ abstract class AbstractWorkflow implements WorkflowInterface
             foreach ($limitIterator as $index => $item) {
                 $this->logger->setItemIndex($index + 1);
                 $this->referenceBag->resetScope(Reference::SCOPE_ITEM);
-                try {
-                    foreach ($this->configuration->getProcessors() as $processor) {
-                        $processResult = ($processor)($item);
-                        if (false === $processResult) {
-                            continue 2;
-                        }
-                        if (null !== $processResult) {
-                            $item = $processResult;
-                        }
-                    }
-                } catch (Throwable $e) {
-                    if ($this->debug) {
-                        throw $e;
-                    }
-                    $this->logger->logException($e);
-                }
+                $this->processItem($item);
                 ++$this->offset;
                 $this->dispatchEvent(new WorkflowEvent($this), WorkflowEvent::PROGRESS);
             }
@@ -179,5 +164,28 @@ abstract class AbstractWorkflow implements WorkflowInterface
     public function setDebug(bool $debug): void
     {
         $this->debug = $debug;
+    }
+
+    /**
+     * @throws \Throwable
+     */
+    protected function processItem($item): void
+    {
+        try {
+            foreach ($this->configuration->getProcessors() as $processor) {
+                $processResult = ($processor)($item);
+                if (false === $processResult) {
+                    return;
+                }
+                if (null !== $processResult) {
+                    $item = $processResult;
+                }
+            }
+        } catch (Throwable $procesItemException) {
+            if ($this->debug) {
+                throw $procesItemException;
+            }
+            $this->logger->logException($procesItemException);
+        }
     }
 }
