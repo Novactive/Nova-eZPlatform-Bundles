@@ -82,6 +82,10 @@ class EmailProvided
             return;
         }
 
+        if (!$content->contentInfo->isPublished()) {
+            return;
+        }
+
         $protections = $this->protectedAccessRepository->findByContent($content);
 
         if (0 === count($protections)) {
