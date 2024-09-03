@@ -14,9 +14,9 @@ namespace Novactive\EzRssFeedBundle\Form;
 
 use Ibexa\Contracts\Core\Repository\ContentTypeService;
 use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
-use Ibexa\Contracts\Core\Repository\Values\Content\Content;
 use Ibexa\Contracts\Core\Repository\Values\ContentType\ContentType;
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
+use Ibexa\Contracts\Taxonomy\Service\TaxonomyEntryAssignmentServiceInterface;
 use Novactive\EzRssFeedBundle\Entity\RssFeedItems;
 use Novactive\EzRssFeedBundle\Form\Type\TreeDiscoveryType;
 use Symfony\Component\Form\AbstractType;
@@ -27,23 +27,14 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Ibexa\Contracts\Taxonomy\Service\TaxonomyEntryAssignmentServiceInterface;
-
 
 class RssFeedItemsType extends AbstractType
 {
-    /** @var ContentTypeService */
-    protected $contentTypeService;
-
-    /** @var ConfigResolverInterface */
-    protected $configResolver;
-
-    /** @var array */
-    protected $fieldTypeMap;
-
-    protected $taxonomyByField;
-
-    protected $taxonomyEntryAssignmentService;
+    protected ContentTypeService $contentTypeService;
+    protected ConfigResolverInterface $configResolver;
+    protected TaxonomyEntryAssignmentServiceInterface $taxonomyEntryAssignmentService;
+    protected array $fieldTypeMap = [];
+    protected array $taxonomyByField = [];
 
     public function __construct(
         ContentTypeService $contentTypeService,
@@ -156,16 +147,26 @@ class RssFeedItemsType extends AbstractType
             );
 
         $formModifier = function (FormInterface $form, ContentType $contentType) {
+            // Choices pour les champs title, description, category et média
             $fieldTypeMap = $this->getFieldTypeByContentType($contentType);
-            $fieldTypeMapTax = $this->getFieldTypeByTaxonomy($contentType);
-            $taxonomyByField = $this->getTaxonomyByFieldType($fieldTypeMapTax,$contentType);
+            // Choices pour le filtre par taxonomy. (Permet de choisir quelle taxonomy)
+            $fieldTypeMapTaxonomy = $this->getFieldTypeByTaxonomy($contentType);
+            // Choices pour la valeur du filtre par taxonomy. (Permet de choisir la valeur de la taxonomy)
+            $taxonomyByField = $this->getTaxonomyByFieldType($fieldTypeMapTaxonomy, $contentType);
+
+            dump([
+                '$fieldTypeMap' => $fieldTypeMap,
+                '$fieldTypeMapTaxonomy' => $fieldTypeMapTaxonomy,
+                '$taxonomyByField' => $taxonomyByField,
+            ]);
+
             $form->add(
                 'chTaxonomy',
                 ChoiceType::class,
                 [
                     'label' => 'ez_rss_feed.form.chtaxonomy',
                     'required' => false,
-                    'choices' =>  $fieldTypeMapTax,
+                    'choices' =>  $fieldTypeMapTaxonomy,
                     'empty_data' => null,
                 ]
             );
@@ -189,7 +190,7 @@ class RssFeedItemsType extends AbstractType
             );
 
             $fieldTypeMap = array_merge(['[Passer]' => ''], $fieldTypeMap);
-            $fieldTypeMapTax = array_merge(['[Passer]' => ''], $fieldTypeMapTax);
+            // $fieldTypeMapTax = array_merge(['[Passer]' => ''], $fieldTypeMapTax);
             $form->add(
                 'description',
                 ChoiceType::class,
@@ -288,6 +289,11 @@ class RssFeedItemsType extends AbstractType
         return $contentTypesMap;
     }
 
+    /**
+     * Liste des fields du contentType
+     * @param ContentType $contentType
+     * @return array Label => identifier
+     */
     public function getFieldTypeByContentType(ContentType $contentType): array
     {
         $fieldsMap = [];
@@ -299,16 +305,35 @@ class RssFeedItemsType extends AbstractType
 
         return $fieldsMap;
     }
+
+    /**
+     * Liste des fields du contentType de type Taxonomy (`ibexa_taxonomy_entry_assignment`)
+     * @param ContentType $contentType
+     * @return array Label => identifier
+     */
     public function getFieldTypeByTaxonomy(ContentType $contentType): array
     {
-        $fieldsMapTax = [];
+        $fieldsMapTaxonomy = [];
 
         foreach ($contentType->getFieldDefinitions()->filterByType('ibexa_taxonomy_entry_assignment') as $fieldDefinition) {
-            $fieldsMapTax[ucfirst($fieldDefinition->getName())] = $fieldDefinition->identifier;
+            $fieldsMapTaxonomy[ucfirst($fieldDefinition->getName())] = $fieldDefinition->identifier;
         }
-        ksort($fieldsMapTax);
+        ksort($fieldsMapTaxonomy);
 
-        return $fieldsMapTax;
+        return $fieldsMapTaxonomy;
+    }
+
+    /**
+     * Liste/Arbo ? des tag
+     * @param array $fieldTypeMapTax
+     * @param ContentType $contentType
+     * @return array
+     */
+    public function getTaxonomyByFieldType(array $fieldTypeMapTax, ContentType $contentType): array
+    {
+        dump('TODO', $fieldTypeMapTax, $contentType);
+        // TODO
+        return [];
     }
 
     public function configureOptions(OptionsResolver $resolver): void
