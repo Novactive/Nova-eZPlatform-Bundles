@@ -74,12 +74,13 @@
     }
     function setCTEvent(index) {
         const itemContainer = doc.querySelector(`#rss_feeds_feed_items_${index}`)
+        console.log('itemContainer: ', itemContainer)
         itemContainer.querySelector(`#rss_feeds_feed_items_${index}_contenttype_id`)
             .addEventListener('change', function (e) {
                 const val = e.currentTarget.value;
                 const prefixItem = "#rss_feeds_feed_items";
                 const selectFields = ["title", "description", "category", "media"];
-                const selectFieldsTaxonomy = ["chTaxonomy"];
+                const selectTaxonomyFields = ["chosenTaxonomy"];
                 const loader = htmlToElement('<div class="loading-image">' +
                     '<img src="' + templateValues.dataset.loaderPath + '" class="img-responsive"  alt=""/>' +
                     '</div>');
@@ -87,54 +88,79 @@
                 const xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function () {
                     if (this.readyState !== 4) return;
+
                     if (this.status === 200) {
-                        console.log(this.response.field)
+                        // Mise à jour des champs ["title", "description", "category", "media"]
                         for (const fieldName of selectFields) {
                             const mainSelector = document.querySelector(prefixItem + "_" + index + "_" + fieldName);
                             mainSelector.innerHTML = '';
                             mainSelector.append(htmlToElement("<option value='' selected>[Passer]</option>"));
+                            console.log('this.responseText1: ', this.responseText)
                             const response = JSON.parse(this.responseText);
-                            for (const responseElement in response.field) {
+                            for (const responseElement in response) {
+                                if (responseElement === '_taxonomies') {continue;}
                                 const option = htmlToElement('<option value="">' + responseElement + '</option>');
                                 option.setAttribute("value", response[responseElement]);
                                 mainSelector.append(option);
                             }
                         }
-                        for (const fieldName of selectFieldsTaxonomy) {
-                            const mainSelector = document.querySelector(prefixItem + "_" + index + "_" + fieldName);
-                            console.log(prefixItem + "_" + index + "_" + fieldName)
+                        loader.remove();
+
+                        // Mise à jour du champ choix de la Taxonomy
+                        for (const fieldName of selectTaxonomyFields) {
+                            const selector = prefixItem + "_" + index + "_" + fieldName;
+                            console.log('mainSelector: ', selector)
+                            const mainSelector = document.querySelector(selector);
+                            console.log('mainSelector: ', mainSelector)
+
                             mainSelector.innerHTML = '';
                             mainSelector.append(htmlToElement("<option value='' selected>[Passer]</option>"));
+                            console.log('this.responseText2: ', this.responseText)
                             const response = JSON.parse(this.responseText);
-                            for (const responseElement in response.taxonomy) {
+                            for (const responseElement in response['_taxonomies']) {
                                 const option = htmlToElement('<option value="">' + responseElement + '</option>');
-                                option.setAttribute("value", response.taxonomy[responseElement]);
+                                option.setAttribute("value", response[responseElement]);
                                 mainSelector.append(option);
                             }
                         }
-                        loader.remove();
                     }
+
                 };
-                console.log(templateValues.dataset.rssFieldsPath)
+                console.log('rssFieldsPath: ', templateValues.dataset.rssFieldsPath)
                 xhr.open('POST', templateValues.dataset.rssFieldsPath + '?contenttype_id=' + val, true);
                 xhr.send();
             });
-        itemContainer.querySelector(`#rss_feeds_feed_items_${index}_chTaxonomy`)
+
+        itemContainer.querySelector(`#rss_feeds_feed_items_${index}_chosenTaxonomy`)
             .addEventListener('change', function (e) {
+                console.log('============================= _chosenTaxonomy change')
                 const val = e.currentTarget.value;
+                console.log(val);
+                if (!val) {
+                    return
+                }
                 const prefixItem = "#rss_feeds_feed_items";
+
+                let contentTypeSelector = itemContainer.querySelector(`#rss_feeds_feed_items_${index}_contenttype_id`)
+                // console.log ('contentTypeSelector: ', contentTypeSelector);
+                let contentTypeId = contentTypeSelector.value;
+
                 const loader = htmlToElement('<div class="loading-image">' +
                     '<img src="' + templateValues.dataset.loaderPath + '" class="img-responsive"  alt=""/>' +
                     '</div>');
                 e.currentTarget.after(loader);
                 const xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function () {
+                    console.log(this)
+                    if (this.readyState !== 4) return;
                     if (this.status === 200) {
                         const mainSelector = document.querySelector(prefixItem + "_" + index + "_taxonomy");
+                        // console.log(mainSelector)
                         mainSelector.innerHTML = '';
                         mainSelector.append(htmlToElement("<option value='' selected>[Passer]</option>"));
+                        console.log('this.responseText3: ', this.responseText)
                         const response = JSON.parse(this.responseText);
-                        for (const responseElement in response.Alltaxonomy) {
+                        for (const responseElement in response) {
                             console.log(responseElement)
                             const option = htmlToElement('<option value="">' + responseElement + '</option>');
                             option.setAttribute("value", response[responseElement]);
@@ -142,8 +168,8 @@
                         }
                     }
                 }
-                console.log(templateValues.dataset.rssFieldsPath + '?chTaxonomy=' + val)
-                xhr.open('POST', templateValues.dataset.rssFieldsPath + '?chTaxonomy=' + val, true);
+                let tagsListUrl = templateValues.dataset.rssFieldsPath + '?chosenTaxonomy=' + val + '&contenttype_id=' + contentTypeId;
+                xhr.open('POST', tagsListUrl, true);
                 xhr.send();
             });
 

@@ -98,7 +98,7 @@
         </div>
     </div>
 {% endblock _rss_feeds_feed_items_entry_media_row %}
-{% block _rss_feeds_feed_items_entry_chtaxonomy_row %}
+{% block _rss_feeds_feed_items_entry_chosentaxonomy_row %}
     <div class="form-group col-md-6 col-sm-12 col-xs-12">
         <label class="form-label">
             {{- form_label(form) -}}
@@ -108,7 +108,7 @@
             {{- form_widget(form) -}}
         </div>
     </div>
-{% endblock _rss_feeds_feed_items_entry_chtaxonomy_row %}
+{% endblock _rss_feeds_feed_items_entry_chosentaxonomy_row %}
 {% block _rss_feeds_feed_items_entry_row %}
     {%- if compound is defined and compound -%}
         {%- set element = 'fieldset' -%}

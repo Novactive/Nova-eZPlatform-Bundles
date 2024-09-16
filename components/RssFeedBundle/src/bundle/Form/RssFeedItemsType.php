@@ -90,19 +90,19 @@ class RssFeedItemsType extends AbstractType
                     'choices' => $contentTypeList,
                 ]
             )->add(
-                'chTaxonomy',
+                'chosenTaxonomy',
                 ChoiceType::class,
                 [
-                    'label' => 'ez_rss_feed.form.chtaxonomy',
+                    'label' => 'ez_rss_feed.form.chosen_taxonomy',
                     'required' => false,
                     'choices' =>  $taxonomyByField,
                     'empty_data' => null,
                 ]
             )->add(
-                'taxonomy',
+                'tag',
                 ChoiceType::class,
                 [
-                    'label' => 'ez_rss_feed.form.taxonomy',
+                    'label' => 'ez_rss_feed.form.taxonomy_value', // Tag
                     'required' => false,
                     'choices' => $taxonomyByField,
                     'empty_data' => null,
@@ -161,10 +161,10 @@ class RssFeedItemsType extends AbstractType
             ]);
 
             $form->add(
-                'chTaxonomy',
+                'chosenTaxonomy',
                 ChoiceType::class,
                 [
-                    'label' => 'ez_rss_feed.form.chtaxonomy',
+                    'label' => 'ez_rss_feed.form.chosen_taxonomy',
                     'required' => false,
                     'choices' =>  $fieldTypeMapTaxonomy,
                     'empty_data' => null,
@@ -174,7 +174,7 @@ class RssFeedItemsType extends AbstractType
                 'taxonomy',
                 ChoiceType::class,
                 [
-                    'label' => 'ez_rss_feed.form.taxonomy',
+                    'label' => 'ez_rss_feed.form.taxonomy_value', // tag
                     'required' => false,
                     'choices' => $taxonomyByField,
                     'empty_data' => null,
