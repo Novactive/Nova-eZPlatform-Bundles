@@ -30,12 +30,12 @@ class MaintenanceController extends Controller
     /**
      * @var FlashBagInterface
      */
-    private FlashBagInterface $flashBag;
+    private $flashBag;
 
     /**
      * @var FileHelper
      */
-    private FileHelper $fileHelper;
+    private $fileHelper;
 
     public function __construct(FlashBagInterface $flashBag, FileHelper $fileHelper)
     {

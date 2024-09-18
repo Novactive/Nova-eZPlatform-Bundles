@@ -19,11 +19,11 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 class Configuration extends SAConfiguration
 {
-    public function getConfigTreeBuilder(): TreeBuilder
+    public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder('nova_ezmaintenance');
-        $rootNode = $treeBuilder->getRootNode();
-        $systemNode = $this->generateScopeBaseNode($rootNode);
+        $treeBuilder = new TreeBuilder();
+        $rootNode    = $treeBuilder->root('nova_ezmaintenance');
+        $systemNode  = $this->generateScopeBaseNode($rootNode);
         $systemNode
             ->scalarNode('enable')->end()
             ->scalarNode('template')->end()
