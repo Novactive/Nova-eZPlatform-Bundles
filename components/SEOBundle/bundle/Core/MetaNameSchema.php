@@ -36,6 +36,7 @@ use Ibexa\Core\Repository\Helper\NameSchemaService;
 use Ibexa\Core\Repository\Mapper\ContentTypeDomainMapper;
 use Ibexa\Core\Repository\Values\Content\VersionInfo;
 use Ibexa\FieldTypeRichText\FieldType\RichText\Value as RichTextValue;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class MetaNameSchema extends NameSchemaService
 {
@@ -77,20 +78,22 @@ class MetaNameSchema extends NameSchemaService
     public function __construct(
         ContentTypeHandler $contentTypeHandler,
         FieldTypeRegistry $fieldTypeRegistry,
+        EventDispatcherInterface $eventDispatcher,
         ContentLanguageHandler $languageHandler,
         RepositoryInterface $repository,
         TranslationHelper $translationHelper,
         ConfigResolverInterface $configurationResolver,
         array $settings = []
     ) {
+        $this->fieldTypeRegistry = $fieldTypeRegistry;
         $settings['limit'] = $this->fieldContentMaxLength;
         $handler = new ContentTypeDomainMapper(
             $contentTypeHandler,
             $languageHandler,
-            $this->fieldTypeRegistry
+            $fieldTypeRegistry
         );
 
-        parent::__construct($contentTypeHandler, $handler, $fieldTypeRegistry, $settings);
+        parent::__construct($contentTypeHandler, $handler, $fieldTypeRegistry, $eventDispatcher, $settings);
 
         $this->repository = $repository;
         $this->translationHelper = $translationHelper;
@@ -113,7 +116,7 @@ class MetaNameSchema extends NameSchemaService
     {
         $languages = $this->configurationResolver->getParameter('languages');
 
-        $resolveMultilingue = $this->resolve(
+        $resolveMultilingue = $this->resolveNameSchema(
             $meta->getContent(),
             $content->getContentType(),
             $content->fields,
@@ -328,5 +331,16 @@ class MetaNameSchema extends NameSchemaService
         }
 
         return '';
+    }
+
+    /**
+     * Override native function as this prevent usage of `()` inside metas in Ibexa 4.6
+     * {@inheritDoc}
+     */
+    protected function filterNameSchema(string $nameSchema): array
+    {
+        $groupLookupTable = [];
+
+        return [$nameSchema, $groupLookupTable];
     }
 }

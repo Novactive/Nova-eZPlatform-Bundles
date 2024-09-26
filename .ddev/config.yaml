@@ -40,7 +40,7 @@ web_environment:
     - PANTHER_CHROME_ARGUMENTS='--disable-dev-shm-usage --ignore-certificate-errors'
     - PANTHER_NO_SANDBOX=1
     - PANTHER_NO_HEADLESS=0
-nodejs_version: "16"
+nodejs_version: "18"
 webimage_extra_packages:
     - pngquant
     - jpegoptim

@@ -1,5 +1,4 @@
 services:
-
     AlmaviaCX\Bundle\IbexaSaml\Security\Saml\SamlExceptionLogger:
         arguments:
             - '@monolog.logger.saml'
@@ -31,7 +30,7 @@ services:
             $userService: '@ibexa.api.service.user'
             $configResolver: '@ibexa.config.resolver'
 
-    # override to make it lazy
-    OneLogin\Saml2\Auth:
-        arguments: [ '%hslavich_onelogin_saml.settings%' ]
-        lazy: true
+    AlmaviaCX\Bundle\IbexaSaml\Security\Saml\SamlAuthFactory:
+        arguments:
+            $configResolver: '@Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface'
+            $defaultSettings: '%hslavich_onelogin_saml.settings%'

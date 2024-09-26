@@ -26,7 +26,8 @@ class FilterTag extends BaseVisitor
      */
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null): string
     {
-        $stringQuery = strtr($subVisitor->visit($criterion->criterion), ['(' => '', ')' => '']);
+        $stringQuery = $subVisitor->visit($criterion->criterion);
+        $stringQuery = trim($stringQuery, '()');
 
         return '{!tag='.$criterion->tag.'}('.$stringQuery.')';
     }
