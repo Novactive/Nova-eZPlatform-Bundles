@@ -118,9 +118,18 @@ class MultipleFieldsFullText extends CriterionVisitor
                 reset($boostFunction) :
                 sprintf('sum(%s)', implode(',', $boostFunction));
         }
+        if (!empty($criterion->boostQueries)) {
+            $queryParams['bq'] = $criterion->boostQueries;
+        }
 
         $queryParamsString = implode(' ', array_map(function ($key, $value) {
-            return "{$key}='{$value}'";
+            if (is_array($value)) {
+                return implode(' ', array_map(function ($value) use ($key) {
+                    return "{$key}='{$value}'";
+                }, $value));
+            } else {
+                return "{$key}='{$value}'";
+            }
         }, array_keys($queryParams), $queryParams));
 
         return "{!edismax {$queryParamsString}}";
