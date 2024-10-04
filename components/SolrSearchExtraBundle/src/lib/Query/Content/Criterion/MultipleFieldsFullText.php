@@ -126,6 +126,13 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
     public $boostFunctions = [];
 
     /**
+     * Array of boost queries.
+     *
+     * @var array
+     */
+    public $boostQueries = [];
+
+    /**
      * @param $value
      */
     public function __construct($value, array $properties = [])
