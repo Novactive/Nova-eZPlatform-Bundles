@@ -20,7 +20,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 class Configuration extends SAConfiguration
 {
-    public const string NAMESPACE = 'nova_ez2fa';
+    public const NAMESPACE = 'nova_ez2fa';
 
     public function getConfigTreeBuilder(): TreeBuilder
     {

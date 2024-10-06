@@ -25,8 +25,8 @@ final class TwoFactorUserProviderDecorator implements UserProviderInterface, API
 {
 
     public function __construct(
-        private UserProviderInterface $provider,
-        private SiteAccessAwareAuthenticatorResolver $saAuthenticatorResolver
+        protected UserProviderInterface $provider,
+        protected SiteAccessAwareAuthenticatorResolver $saAuthenticatorResolver
     ) {
     }
 

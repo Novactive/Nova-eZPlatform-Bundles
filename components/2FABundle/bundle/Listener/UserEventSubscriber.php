@@ -21,7 +21,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 final class UserEventSubscriber implements EventSubscriberInterface
 {
 
-    public function __construct(private UserRepository $userRepository)
+    public function __construct(protected UserRepository $userRepository)
     {
     }
 

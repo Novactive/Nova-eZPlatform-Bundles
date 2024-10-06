@@ -22,8 +22,8 @@ final class SiteAccessAwareQueryExecutor
 {
 
     public function __construct(
-        private Registry $registry, 
-        private RepositoryConfigurationProvider $repositoryConfigurationProvider
+        protected Registry $registry,
+        protected RepositoryConfigurationProvider $repositoryConfigurationProvider
     ) {
     }
 

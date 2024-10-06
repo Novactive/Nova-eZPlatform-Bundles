@@ -25,9 +25,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 final class OnHttpRequestListener
 {
     public function __construct(
-        private TokenStorageInterface $tokenStorage,
-        private SiteAccessAwareAuthenticatorResolver $saAuthenticatorResolver,
-        private RouterInterface $router
+        protected TokenStorageInterface $tokenStorage,
+        protected SiteAccessAwareAuthenticatorResolver $saAuthenticatorResolver,
+        protected RouterInterface $router
     ) {
     }
 

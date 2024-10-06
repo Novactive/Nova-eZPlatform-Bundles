@@ -25,8 +25,8 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticator;
 final class QRCodeGenerator
 {
     public function __construct(
-        private GoogleAuthenticator $googleAuthenticator,
-        private TotpAuthenticator $totpAuthenticator
+        protected GoogleAuthenticator $googleAuthenticator,
+        protected TotpAuthenticator $totpAuthenticator
     ) {
     }
 

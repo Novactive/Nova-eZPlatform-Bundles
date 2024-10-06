@@ -30,10 +30,10 @@ final class AuthCodeMailer implements AuthCodeMailerInterface
     private $senderAddress;
 
     public function __construct(
-        private MailerInterface $mailer,
+        protected MailerInterface $mailer,
         string $senderEmail,
         ?string $senderName,
-        private TranslatorInterface $translator
+        protected TranslatorInterface $translator
     ) {
         $this->senderAddress = new Address($senderEmail, $senderName ?? '');
     }

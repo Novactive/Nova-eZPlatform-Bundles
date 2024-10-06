@@ -19,7 +19,7 @@ trait BackupCodeAware
     /**
      * @var array
      */
-    private $backupCodes = [];
+    private array $backupCodes = [];
 
     public function isBackupCode(string $code): bool
     {

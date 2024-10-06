@@ -28,7 +28,7 @@
         "MIT"
     ],
     "require": {
-        "php": ">=8.3",
+        "php": ">=8.1",
         "scheb/2fa-bundle": "v5.13.2",
         "scheb/2fa-google-authenticator": "v5.13.2",
         "scheb/2fa-totp": "v5.13.2",

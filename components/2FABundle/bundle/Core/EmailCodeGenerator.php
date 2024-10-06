@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZ2FABundle\Core;
 
+use Exception;
 use Novactive\Bundle\eZ2FABundle\Entity\UserEmailAuth;
 use Scheb\TwoFactorBundle\Mailer\AuthCodeMailerInterface;
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
@@ -23,9 +24,9 @@ final class EmailCodeGenerator implements CodeGeneratorInterface
 {
 
     public function __construct(
-        private UserRepository $userRepository,
-        private AuthCodeMailerInterface $mailer,
-        private int $digits
+        protected UserRepository $userRepository,
+        protected AuthCodeMailerInterface $mailer,
+        protected int $digits
     ){
     }
 
@@ -45,6 +46,9 @@ final class EmailCodeGenerator implements CodeGeneratorInterface
         $this->mailer->sendAuthCode($user);
     }
 
+    /**
+     * @throws Exception
+     */
     private function generateCode(int $min, int $max): int
     {
         return random_int($min, $max);

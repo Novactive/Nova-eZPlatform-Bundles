@@ -21,7 +21,7 @@ use PDO;
  */
 final class UserRepository
 {
-    public function __construct(private SiteAccessAwareQueryExecutor $queryExecutor)
+    public function __construct(protected SiteAccessAwareQueryExecutor $queryExecutor)
     {
     }
 

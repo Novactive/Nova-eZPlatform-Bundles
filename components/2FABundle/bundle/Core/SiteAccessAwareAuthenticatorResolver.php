@@ -33,22 +33,22 @@ class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
     /**
      * @var SiteAccess|null
      */
-    private $siteAccess;
+    private ?SiteAccess $siteAccess;
 
     /**
      * @var string
      */
-    private $method;
+    private string $method;
 
     /**
      * @var array
      */
-    private $config;
+    private array $config;
 
     /**
      * @var bool
      */
-    private $emailMethodEnabled;
+    private bool $emailMethodEnabled;
 
     /**
      * @var bool
@@ -56,11 +56,11 @@ class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
     private $forceSetup;
 
     public function __construct(
-        private ConfigResolverInterface $configResolver,
-        private GoogleAuthenticator $googleAuthenticator,
-        private TotpAuthenticator $totpAuthenticator,
-        private UserRepository $userRepository,
-        private bool $backupCodesEnabled
+        protected ConfigResolverInterface $configResolver,
+        protected GoogleAuthenticator $googleAuthenticator,
+        protected TotpAuthenticator $totpAuthenticator,
+        protected UserRepository $userRepository,
+        protected bool $backupCodesEnabled
     ) {
     }
 
@@ -139,10 +139,7 @@ class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
             $this->method = 'email';
         }
 
-        if (
-            false === $userAuthData ||
-            ('email' !== $this->method && empty($userAuthData["{$this->method}_authentication_secret"]))
-        ) {
+        if ('email' !== $this->method && empty($userAuthData["{$this->method}_authentication_secret"])) {
             return $user;
         }
 
@@ -158,7 +155,7 @@ class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
         return $authenticatorEntity;
     }
 
-    public function getAuthenticator()
+    public function getAuthenticator(): TotpAuthenticator|GoogleAuthenticator
     {
         if ('google' === $this->method) {
             return $this->googleAuthenticator;
