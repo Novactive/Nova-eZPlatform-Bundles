@@ -26,12 +26,12 @@ final class Remove2FAForUserCommand extends Command
     /**
      * @var UserProviderInterface
      */
-    private $userProvider;
+    private UserProviderInterface $userProvider;
 
     /**
      * @var UserRepository
      */
-    private $userRepository;
+    private UserRepository $userRepository;
 
     /**
      * @required

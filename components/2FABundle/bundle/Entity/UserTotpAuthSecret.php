@@ -27,13 +27,13 @@ final class UserTotpAuthSecret extends User implements TwoFactorInterface, Backu
     /**
      * @var string|null
      */
-    private $secret;
+    private ?string $secret;
     
-    private const string DEFAULT_ALGORITHM = TotpConfiguration::ALGORITHM_SHA1;
-    private const  int DEFAULT_PERIOD = 30;
-    private const  int DEFAULT_DIGITS = 6;
+    private const  DEFAULT_ALGORITHM = TotpConfiguration::ALGORITHM_SHA1;
+    private const  DEFAULT_PERIOD = 30;
+    private const  DEFAULT_DIGITS = 6;
 
-    public function __construct(APIUser $user, array $roles = [], private array $config = [])
+    public function __construct(APIUser $user, array $roles = [], protected array $config = [])
     {
         parent::__construct($user, $roles);
     }

@@ -21,7 +21,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class TwoFactorAuthenticationEventSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private SiteAccessAwareAuthenticatorResolver $saAwareAuthenticatorResolver)
+    public function __construct(protected SiteAccessAwareAuthenticatorResolver $saAwareAuthenticatorResolver)
     {
     }
 

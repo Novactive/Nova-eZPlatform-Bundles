@@ -21,7 +21,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class MenuEventSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private MenuManipulator $menuManipulator, private TranslatorInterface $translator)
+    public function __construct(protected MenuManipulator $menuManipulator, protected TranslatorInterface $translator)
     {
     }
 
