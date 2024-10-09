@@ -1,0 +1,26 @@
+{% block captchetat_row -%}
+    {{ block('form_row') }}
+{%- endblock captchetat_row %}
+
+{% block captchetat_label %}
+    {{- block('form_label') }}
+{% endblock captchetat_label %}
+
+{% block captchetat_widget %}
+    {# @var captcha_challenge \AlmaviaCX\Bundle\CaptchEtat\Value\CaptchEtatChallenge #}
+    {% apply spaceless %}
+        {%- set attr = attr|merge({
+            'class': 'widget-container row align-items-center js-captcha-widget'
+        }) -%}
+        <div {{ block('widget_container_attributes') }}>
+            <div class="captcha col-lg-4 col-md-6 d-flex align-items-center">
+                {{ captcha_challenge.captchaHtml|raw }}
+                <div class="clearfix"></div>
+            </div>
+            <div class="captcha-input">
+                {{- form_widget(form.answer,  { 'id': 'captchaFormulaireExtInput' } ) -}}
+                {{- form_widget(form.captcha_id , {'attr': {'value': captcha_challenge.captchaId}}) -}}
+            </div>
+        </div>
+    {% endapply %}
+{% endblock captchetat_widget %}
