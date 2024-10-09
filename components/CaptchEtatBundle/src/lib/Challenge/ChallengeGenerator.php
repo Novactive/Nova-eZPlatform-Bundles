@@ -36,24 +36,25 @@ class ChallengeGenerator
         $this->configResolver = $configResolver;
     }
 
-    public function __invoke(): ?CaptchEtatChallenge
+    public function __invoke(): CaptchEtatChallenge
     {
         $lang = $this->getShortLanguage();
-        try {
-            $captchaHtml = $this->getCaptchaHtml($lang);
-            $crawler = new Crawler($captchaHtml);
-            $type = 'numerique6_7CaptchaFR';
-            if ('fr' !== $lang) {
-                $type = 'numerique6_7CaptchaEN';
+
+        return CaptchEtatChallenge::createLazyGhost(function (CaptchEtatChallenge $instance) use ($lang) {
+            try {
+                $captchaHtml = $this->getCaptchaHtml($lang);
+                $crawler = new Crawler($captchaHtml);
+                $type = 'numerique6_7CaptchaFR';
+                if ('fr' !== $lang) {
+                    $type = 'numerique6_7CaptchaEN';
+                }
+                $captchaId = $crawler->filter('#BDC_VCID_'.$type)->attr('value');
+                $instance->__construct($captchaHtml, $captchaId);
+            } catch (Exception $exception) {
+                $this->logger->logException($exception);
+                $instance->__construct(null, null);
             }
-            $captchaId = $crawler->filter('#BDC_VCID_'.$type)->attr('value');
-
-            return new CaptchEtatChallenge($captchaHtml, $captchaId);
-        } catch (Exception $exception) {
-            $this->logger->logException($exception);
-
-            return null;
-        }
+        });
     }
 
     protected function getCaptchaHtml(string $lang): string

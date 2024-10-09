@@ -6,7 +6,6 @@ namespace AlmaviaCX\Bundle\CaptchEtat\Form\Type;
 
 use AlmaviaCX\Bundle\CaptchEtat\Challenge\ChallengeGenerator;
 use AlmaviaCX\Bundle\CaptchEtat\Validator\Constraint\CaptchEtatValidChallenge;
-use AlmaviaCX\Bundle\CaptchEtat\Value\CaptchEtatChallenge;
 use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Translation\TranslationContainerInterface;
 use Symfony\Component\Form\AbstractType;
@@ -19,44 +18,37 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CaptchEtatType extends AbstractType implements TranslationContainerInterface
 {
-    protected ?CaptchEtatChallenge $challenge;
+    protected ChallengeGenerator $challengeGenerator;
 
     public function __construct(ChallengeGenerator $challengeGenerator)
     {
-        $this->challenge = ($challengeGenerator)();
+        $this->challengeGenerator = $challengeGenerator;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        if ($this->challenge instanceof CaptchEtatChallenge) {
-            $builder->add(
-                'answer',
-                TextType::class,
-                [
-                    'label' => 'form.captcha.input_answer',
-                    'help' => 'form.captcha.help',
-                    'required' => true,
-                    'attr' => ['value' => ''],
-                ]
-            );
-            $builder->add(
-                'captcha_id',
-                HiddenType::class,
-                [
-                    'attr' => ['value' => $this->challenge->getCaptchaId()],
-                ]
-            );
-        }
+        $builder->add(
+            'answer',
+            TextType::class,
+            [
+                'label' => 'form.captcha.input_answer',
+                'help' => 'form.captcha.help',
+                'required' => true,
+                'attr' => ['value' => ''],
+            ]
+        );
+        $builder->add(
+            'captcha_id',
+            HiddenType::class,
+            [
+                'attr' => ['value' => null],
+            ]
+        );
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        if ($this->challenge instanceof CaptchEtatChallenge) {
-            $view->vars['display_captcha'] = true;
-            $view->vars['captcha_html'] = $this->challenge->getCaptchaHtml();
-        } else {
-            $view->vars['display_captcha'] = false;
-        }
+        $view->vars['captcha_challenge'] = ($this->challengeGenerator)();
     }
 
     public function configureOptions(OptionsResolver $resolver): void

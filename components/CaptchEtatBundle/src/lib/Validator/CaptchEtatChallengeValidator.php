@@ -31,12 +31,12 @@ class CaptchEtatChallengeValidator extends ConstraintValidator
         }
 
         if (!isset($value['captcha_id']) && !isset($value['answer'])) {
-            throw new UnexpectedValueException($value);
+            throw new UnexpectedValueException($value, 'array');
         }
 
         $captchaId = $value['captcha_id'];
         $answer = $value['answer'];
-        if (null === $answer) {
+        if (null === $answer || null === $captchaId) {
             $this->context
                 ->buildViolation($constraint->message)
                 ->addViolation();
