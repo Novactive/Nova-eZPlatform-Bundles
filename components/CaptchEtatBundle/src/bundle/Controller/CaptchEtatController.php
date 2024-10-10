@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\CaptchEtatBundle\Controller;
 
 use AlmaviaCX\Bundle\CaptchEtat\Api\Gateway;
+use AlmaviaCX\Bundle\CaptchEtat\Challenge\ChallengeGenerator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -12,11 +13,14 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 class CaptchEtatController
 {
     protected Gateway $gateway;
+    protected ChallengeGenerator $challengeGenerator;
 
     public function __construct(
-        Gateway $gateway
+        Gateway $gateway,
+        ChallengeGenerator $challengeGenerator
     ) {
         $this->gateway = $gateway;
+        $this->challengeGenerator = $challengeGenerator;
     }
 
     /**
@@ -44,6 +48,15 @@ class CaptchEtatController
             ));
             $response->headers->set('Content-Type', 'audio/wave');
         }
+        $response->setPrivate();
+
+        return $response;
+    }
+
+    public function getCaptcha(): Response
+    {
+        $challenge = ($this->challengeGenerator)();
+        $response = new Response($challenge->captchaHtml);
         $response->setPrivate();
 
         return $response;
