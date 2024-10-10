@@ -41,14 +41,13 @@ services:
 
     AlmaviaCX\Bundle\CaptchEtat\Form\Type\CaptchEtatType:
         lazy: true
-        arguments:
-            $challengeGenerator: '@AlmaviaCX\Bundle\CaptchEtat\Challenge\ChallengeGenerator'
         tags:
             - {name: 'form.type', alias: captchetat}
 
     AlmaviaCX\Bundle\CaptchEtatBundle\Controller\CaptchEtatController:
         arguments:
             $gateway: '@AlmaviaCX\Bundle\CaptchEtat\Api\Gateway'
+            $challengeGenerator: '@AlmaviaCX\Bundle\CaptchEtat\Challenge\ChallengeGenerator'
         tags:
             - controller.service_arguments
 

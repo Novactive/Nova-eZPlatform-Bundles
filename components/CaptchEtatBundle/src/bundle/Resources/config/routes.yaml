@@ -2,3 +2,8 @@ captchetat.endpoint:
     path: /api/simple-captcha-endpoint
     defaults:
         _controller: 'AlmaviaCX\Bundle\CaptchEtatBundle\Controller\CaptchEtatController::apiSimpleCaptchaEndpointAction'
+
+captchetat.html:
+    path: /api/simple-captcha
+    defaults:
+        _controller: 'AlmaviaCX\Bundle\CaptchEtatBundle\Controller\CaptchEtatController::getCaptcha'

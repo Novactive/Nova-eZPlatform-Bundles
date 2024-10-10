@@ -44,12 +44,10 @@ class ChallengeGenerator
             try {
                 $captchaHtml = $this->getCaptchaHtml($lang);
                 $crawler = new Crawler($captchaHtml);
-                $type = 'numerique6_7CaptchaFR';
-                if ('fr' !== $lang) {
-                    $type = 'numerique6_7CaptchaEN';
-                }
+
+                $type = $this->getType($lang);
                 $captchaId = $crawler->filter('#BDC_VCID_'.$type)->attr('value');
-                $instance->__construct($captchaHtml, $captchaId);
+                $instance->__construct($crawler->filter('#frontal')->outerHtml(), $captchaId);
             } catch (Exception $exception) {
                 $this->logger->logException($exception);
                 $instance->__construct(null, null);
@@ -59,11 +57,7 @@ class ChallengeGenerator
 
     protected function getCaptchaHtml(string $lang): string
     {
-        $type = 'numerique6_7CaptchaFR';
-        if ('fr' !== $lang) {
-            $type = 'numerique6_7CaptchaEN';
-        }
-
+        $type = $this->getType($lang);
         $html = $this->gateway->getSimpleCaptchaEndpoint(
             'html',
             'frontal',
@@ -101,5 +95,15 @@ class ChallengeGenerator
         $posixLocale = $this->localeConverter->convertToPOSIX($languageCode);
 
         return substr($posixLocale, 0, 2);
+    }
+
+    public function getType(string $lang): string
+    {
+        $type = 'numerique6_7CaptchaFR';
+        if ('fr' !== $lang) {
+            $type = 'numerique6_7CaptchaEN';
+        }
+
+        return $type;
     }
 }
