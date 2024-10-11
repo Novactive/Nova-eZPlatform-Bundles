@@ -14,8 +14,8 @@ export const addScriptsToHead = container => {
             el.type = scriptEl.type;
             el.src = scriptEl.src;
             document.head.appendChild(el);
-            scriptEl.remove()
         }
+        scriptEl.remove()
     }
 };
 
@@ -33,8 +33,8 @@ export const addLinksToHead = container => {
             el.rel = linkEl.rel;
             el.href = linkEl.href;
             document.head.appendChild(el);
-            linkEl.remove()
         }
+        linkEl.remove()
     }
 };
 
@@ -44,6 +44,11 @@ const captchaEtat = (function () {
 
         for (const widget of widgets) {
             const htmlContainer = widget.querySelector('.captcha-html-container');
+            const idInput = widget.querySelector('.captcha-input [name*="[captcha_id]"]')
+            if(htmlContainer.querySelector('.captcha-html')) {
+                return
+            }
+
             fetch('/api/simple-captcha').then((response) => {
                 return response.text();
             }).then((html) => {
@@ -52,11 +57,13 @@ const captchaEtat = (function () {
                 addLinksToHead(tmp);
                 addScriptsToHead(tmp);
                 const originalIdInput = tmp.querySelector('[name^="BDC_VCID"]')
-                const idInput = widget.querySelector('.captcha-input [name*="[captcha_id]"]')
                 idInput.value = originalIdInput.value;
-                htmlContainer.prepend(tmp.children.item(0));
 
+                const tmpRoot = tmp.children.item(0);
+                tmpRoot.removeAttribute('id')
+                tmpRoot.classList.add('captcha-html');
 
+                htmlContainer.prepend(tmpRoot);
 
                 const soundLink = widget.querySelector('.BDC_SoundLink');
                 const answerInput = widget.querySelector('.captcha-input input[type="text"]');
