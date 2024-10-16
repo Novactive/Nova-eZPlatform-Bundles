@@ -10,6 +10,7 @@ use Ibexa\Contracts\FormBuilder\FieldType\Field\FieldMapperInterface;
 use Ibexa\Contracts\FormBuilder\FieldType\Model\Field;
 use Ibexa\FormBuilder\FieldType\Field\Mapper\ButtonFieldMapper;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ButtonFieldMapperDecorator implements FieldMapperInterface
 {
@@ -18,7 +19,8 @@ class ButtonFieldMapperDecorator implements FieldMapperInterface
 
     public function __construct(
         ButtonFieldMapper $buttonFieldMapper,
-        ChallengeGenerator $challengeGenerator
+        ChallengeGenerator $challengeGenerator,
+        protected readonly TranslatorInterface $translator
     ) {
         $this->buttonFieldMapper = $buttonFieldMapper;
         $this->challengeGenerator = $challengeGenerator;
@@ -28,7 +30,7 @@ class ButtonFieldMapperDecorator implements FieldMapperInterface
     {
         if (!$builder->has('captcha')) {
             $builder->add('captcha', CaptchEtatType::class, [
-                'label' => 'customform.show.captcha',
+                'label' => $this->translator->trans('customform.show.captcha')
             ]);
         }
         $this->buttonFieldMapper->mapField($builder, $field, $constraints);
