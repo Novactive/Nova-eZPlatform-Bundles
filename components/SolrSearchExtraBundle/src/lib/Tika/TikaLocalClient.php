@@ -37,7 +37,7 @@ class TikaLocalClient implements TikaClientInterface
             '-jar',
             $this->jar,
         ];
-        $shellCommand = array_merge($shellCommand, explode(" ", $command));
+        $shellCommand = array_merge($shellCommand, explode(' ', $command));
 
         $process = new Process($shellCommand);
         $process->setWorkingDirectory(__DIR__.'/../../../');
