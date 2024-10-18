@@ -101,3 +101,10 @@ Inside your locale file (example novarss_sites.fr.yaml) put your translation as 
 site_access_identifier: My site
 ```
 Note : This translation is enabled using the default SiteListService
+
+### HTTP caching
+
+The `NOVAEZRSSFEED_CACHE_TTL` ENV var control the HTTP cache behavior:
+- `null` => public + expire at 0h00
+- `0` => private
+- `<int>` => public + s-maxage of `<int>`
