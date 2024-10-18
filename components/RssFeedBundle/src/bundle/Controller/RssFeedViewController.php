@@ -12,6 +12,8 @@
 
 namespace Novactive\EzRssFeedBundle\Controller;
 
+use DateTime;
+use FOS\HttpCacheBundle\Http\SymfonyResponseTagger;
 use Ibexa\Bundle\Core\Controller;
 use Ibexa\Contracts\Core\Repository\PermissionResolver;
 use Ibexa\Core\Base\Exceptions\UnauthorizedException;
@@ -31,6 +33,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class RssFeedViewController extends Controller
 {
     use EntityManagerTrait;
+
+    protected SymfonyResponseTagger $responseTagger;
+    protected ?int $cacheTtl = null;
+
+    public function __construct(SymfonyResponseTagger $responseTagger, ?int $cacheTtl)
+    {
+        $this->responseTagger = $responseTagger;
+        $this->cacheTtl = $cacheTtl;
+    }
 
     /**
      * @Route("/{urlSlug}/{site?}", name="rss_feed_view_index")
@@ -76,6 +87,19 @@ class RssFeedViewController extends Controller
 
             $response->headers->set('Content-Type', 'application/rss+xml; charset=utf-8');
 
+            $response->setPublic();
+            if (null === $this->cacheTtl) {
+                $expire = (new DateTime())->modify('+1 day')->setTime(0, 0);
+                $response->setExpires($expire);
+                $response->setSharedMaxAge($expire->getTimestamp() - time());
+            } elseif (0 === $this->cacheTtl) {
+                $response->setPrivate();
+            } else {
+                $response->setSharedMaxAge($this->cacheTtl);
+            }
+            $this->responseTagger->addTags(['rssfeed-'.$rssFeed->getId()]);
+            $this->responseTagger->tagSymfonyResponse($response);
+
             return $response;
         }
 
@@ -105,11 +129,20 @@ class RssFeedViewController extends Controller
             }
         }
 
-        return $this->render(
+        $response = new Response();
+        $response = $this->render(
             '@ibexadesign/rssfeed/meta_links.html.twig',
             [
                 'links' => $links,
-            ]
+            ],
+            $response
         );
+
+        $response->setPublic();
+        $response->setSharedMaxAge(60 * 60 * 24 * 365);
+        $this->responseTagger->addTags(['rssfeeds']);
+        $this->responseTagger->tagSymfonyResponse($response);
+
+        return $response;
     }
 }

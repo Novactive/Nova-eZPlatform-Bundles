@@ -8,6 +8,9 @@ services:
 
   Novactive\EzRssFeedBundle\Controller\RssFeedViewController:
     autowire: true
+    arguments:
+      $cacheTtl: '%novaezrssfeed.cache.ttl%'
+      $responseTagger: '@fos_http_cache.http.symfony_response_tagger'
     tags:
     - { name: controller.service_arguments }
 
@@ -43,3 +46,10 @@ services:
 
   Novactive\EzRssFeedBundle\Services\SiteListServiceInterface: '@Novactive\EzRssFeedBundle\Services\SiteListService'
 
+  Novactive\EzRssFeedBundle\EventListener\DoctrineEventListener:
+    arguments:
+      $httpCachePurgeClient: '@ibexa.http_cache.purge_client'
+    tags:
+      - { name: doctrine.event_listener, event: postPersist, lazy: true }
+      - { name: doctrine.event_listener, event: postUpdate, lazy: true }
+      - { name: doctrine.event_listener, event: postRemove, lazy: true }

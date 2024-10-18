@@ -1,0 +1,5 @@
+parameters:
+    # if null, will expire every day at 0h00
+    env(NOVAEZRSSFEED_CACHE_TTL): ~
+
+    novaezrssfeed.cache.ttl: '%env(NOVAEZRSSFEED_CACHE_TTL)%'

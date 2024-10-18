@@ -33,6 +33,7 @@ class EzRssFeedExtension extends Extension implements PrependExtensionInterface
     public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('default_settings.yaml');
         $loader->load('services.yml');
         $loader->load('PlatformAdminUI/services.yml');
     }
