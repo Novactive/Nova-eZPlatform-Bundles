@@ -1,0 +1,7 @@
+parameters:
+    # ~ => public + expire at 0h00
+    # 0 => private
+    # <int> => public + s-maxage of `<int>`
+    env(NOVAEZRSSFEED_CACHE_TTL): "3600"
+
+    novaezrssfeed.cache.ttl: '%env(NOVAEZRSSFEED_CACHE_TTL)%'
