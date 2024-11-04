@@ -8,18 +8,20 @@ class XmlParser
 {
     public const STATE_SEARCHING_ELEMENT = 0;
     public const STATE_PARSING_ELEMENT = 1;
-    protected int $state = self::STATE_SEARCHING_ELEMENT;
-    protected int $openedTags = 0;
 
-    protected ?string $currentLineData = null;
-    protected ?string $currentXml = null;
+    protected int $state = self::STATE_SEARCHING_ELEMENT;
+    protected int $depth = 0;
+    protected ?string $currentLineXml = null;
+    protected ?int $foundElementStartColumn = 1;
+    protected string $tmpElement = '';
+    protected array $foundElementStack = [];
 
     /** @var resource */
     protected $nativeXmlParser;
 
     /** @var resource */
     protected $stream;
-    protected string $nodeNameSelector;
+    protected string $elementNameSelector;
     protected bool $debug = false;
 
     public function setDebug(bool $debug): void
@@ -30,9 +32,9 @@ class XmlParser
     /**
      * @param resource $stream
      */
-    public function __construct($stream, string $nodeNameSelector)
+    public function __construct($stream, string $searchedElementName)
     {
-        $this->nodeNameSelector = $nodeNameSelector;
+        $this->searchedElementName = $searchedElementName;
         $this->stream = $stream;
         $this->createNativeParser();
     }
@@ -45,7 +47,7 @@ class XmlParser
         }
     }
 
-    protected function createNativeParser()
+    protected function createNativeParser(): void
     {
         $this->resetNativeParser();
         $this->nativeXmlParser = xml_parser_create('UTF-8');
@@ -53,50 +55,71 @@ class XmlParser
         xml_set_element_handler($this->nativeXmlParser, 'startElement', 'endElement');
     }
 
-    public function startElement($parser, $name, $attribs)
+    public function startElement($parser, $name, $attribs): void
     {
-        if (strtolower($name) == $this->nodeNameSelector) {
-            if (0 === $this->openedTags) {
-                $this->currentXml = $this->currentLineData;
+        if (self::STATE_SEARCHING_ELEMENT !== $this->state) {
+            return;
+        }
+        if (strtolower($name) == $this->searchedElementName) {
+            if (0 === $this->depth) {
+                $this->foundElementStartColumn = xml_get_current_column_number($parser) - strlen(
+                    $this->searchedElementName
+                ) - 1;
                 $this->state = self::STATE_PARSING_ELEMENT;
             }
-            ++$this->openedTags;
+            ++$this->depth;
         }
     }
 
-    public function endElement($parser, $name)
+    public function endElement($parser, $name): void
     {
-        if (strtolower($name) == $this->nodeNameSelector) {
-            --$this->openedTags;
-            if (0 === $this->openedTags) {
+        if (self::STATE_PARSING_ELEMENT !== $this->state) {
+            return;
+        }
+        if (strtolower($name) == $this->searchedElementName) {
+            --$this->depth;
+            if (0 === $this->depth) {
                 $this->state = self::STATE_SEARCHING_ELEMENT;
+                $columnNumber = xml_get_current_column_number($parser);
+                $this->foundElementStack[] = $this->tmpElement.mb_substr(
+                    $this->currentLineXml,
+                    $this->foundElementStartColumn - 1,
+                    $columnNumber - $this->foundElementStartColumn
+                )
+                ;
+                $this->foundElementStartColumn = $columnNumber;
+                $this->tmpElement = '';
             }
         }
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         rewind($this->stream);
         $this->state = self::STATE_SEARCHING_ELEMENT;
-        $this->currentXml = null;
-        $this->openedTags = 0;
+        $this->tmpElement = '';
+        $this->foundElementStack = [];
+        $this->foundElementStartColumn = 1;
+        $this->depth = 0;
         $this->createNativeParser();
     }
 
     public function parse(): ?string
     {
-        while (!feof($this->stream)) {
-            $data = fgets($this->stream);
-            $this->currentLineData = $data ? $data : '';
-            if (self::STATE_PARSING_ELEMENT === $this->state) {
-                $this->currentXml .= $this->currentLineData;
+        while (!feof($this->stream) || !empty($this->foundElementStack)) {
+            if (!empty($this->foundElementStack)) {
+                return array_shift($this->foundElementStack);
             }
-            xml_parse($this->nativeXmlParser, $this->currentLineData, feof($this->stream));
-            if (self::STATE_SEARCHING_ELEMENT === $this->state && null !== $this->currentXml) {
-                $xml = $this->currentXml;
-                $this->currentXml = null;
 
-                return $xml;
+            if (!feof($this->stream)) {
+                $xml = fgets($this->stream);
+                $this->currentLineXml = $xml ? $xml : '';
+                xml_parse($this->nativeXmlParser, $this->currentLineXml, feof($this->stream));
+
+                if (self::STATE_PARSING_ELEMENT === $this->state) {
+                    $this->tmpElement .= mb_substr($this->currentLineXml, $this->foundElementStartColumn - 1);
+                    $this->foundElementStartColumn = 1;
+                }
             }
         }
 
