@@ -21,12 +21,15 @@ class MdbReader extends AbstractFileReader
     /** @var resource */
     protected $dbFile;
     protected Connection $connection;
+    protected int $converterTimeout;
 
     public function __construct(
         FileHandler $fileHandler,
-        string $converterPath = __DIR__.'/../../../../bin/mdb-to-sqlite.bash'
+        string $converterPath = __DIR__.'/../../../../bin/mdb-to-sqlite.bash',
+        int $converterTimeout = 120
     ) {
         $this->converterPath = $converterPath;
+        $this->converterTimeout = $converterTimeout;
         parent::__construct($fileHandler);
     }
 
@@ -46,6 +49,7 @@ class MdbReader extends AbstractFileReader
                 $tmpFileMetadata['uri'],
             ]
         );
+        $process->setTimeout($this->converterTimeout);
         $process->run();
         if (!$process->isSuccessful()) {
             throw new RuntimeException(
