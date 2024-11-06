@@ -1,0 +1,17 @@
+services:
+    AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\ObjectAccessorBuilder:
+        arguments:
+            $locationService: '@Ibexa\Contracts\Core\Repository\LocationService'
+            $contentService: '@Ibexa\Contracts\Core\Repository\ContentService'
+            $contentAccessorBuilder: '@AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\Content\ContentAccessorBuilder'
+
+    AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\Content\ContentAccessorBuilder:
+        arguments:
+            $contentFieldAccessorBuilder: '@AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\Content\Field\ContentFieldAccessorBuilder'
+            $contentService: '@Ibexa\Contracts\Core\Repository\ContentService'
+
+    AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\Content\Field\ContentFieldAccessorBuilder:
+        arguments:
+            $transformers: !tagged_iterator { tag: 'almaviacx.import_export.content.field.value.transformer', index_by: 'type' }
+
+    AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\Taxonomy\TaxonomyAccessorBuilder:

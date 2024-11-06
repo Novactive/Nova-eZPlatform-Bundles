@@ -1,0 +1,3 @@
+parameters:
+    import_export.default.default_batch_limit: 50
+    import_export.reader.mdb.converter_timeout: 120
