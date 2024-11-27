@@ -1,0 +1,7 @@
+parameters:
+  acx_field_types.default.acx_selection:
+      default:
+        'Document': 'docs'
+        'Logiciel': 'log'
+        'Outil': 'tool'
+        'Youtube': 'youtube'
