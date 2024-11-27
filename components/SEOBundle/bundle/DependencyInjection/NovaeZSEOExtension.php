@@ -37,7 +37,9 @@ class NovaeZSEOExtension extends Extension implements PrependExtensionInterface
             'wildcard_routing.yml' => 'ibexa',
             'ez_field_templates.yml' => 'ibexa',
             'variations.yml' => 'ibexa',
+            'ibexa.yaml' => 'ibexa',
             'admin_ui/ez_field_templates.yml' => 'ibexa',
+            'ibexa_locale_conversion.yml' => 'ibexa',
         ];
 
         foreach ($configs as $fileName => $extensionName) {
@@ -68,6 +70,8 @@ class NovaeZSEOExtension extends Extension implements PrependExtensionInterface
         $processor->mapSetting('bing_verification', $config);
         $processor->mapSetting('limit_to_rootlocation', $config);
         $processor->mapSetting('display_images_in_sitemap', $config);
+        $processor->mapSetting('multi_siteaccess_sitemap', $config);
+        $processor->mapSetting('multi_languages_sitemap', $config);
         $processor->mapSetting('robots', $config);
         $processor->mapConfigArray('fieldtype_metas', $config, ContextualizerInterface::MERGE_FROM_SECOND_LEVEL);
         $processor->mapConfigArray('default_metas', $config);

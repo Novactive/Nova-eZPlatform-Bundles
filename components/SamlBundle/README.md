@@ -47,6 +47,32 @@ env(SAML_IDENTITY_PROVIDER_EMAIL_ATTRIBUTE): ~
 env(SAML_IDENTITY_PROVIDER_LOGIN_ATTRIBUTE): ~
 ```
 
+These variables are used to define the following global configuration :
+```
+idp:
+    entityId: '%env(resolve:SAML_IDENTITY_PROVIDER_ENTITYID)%'
+    singleSignOnService:
+        url: '%env(resolve:SAML_IDENTITY_PROVIDER_LOGIN_URL)%'
+        binding: '%env(resolve:SAML_IDENTITY_PROVIDER_LOGIN_BINDING)%'
+    singleLogoutService:
+        url:  '%env(resolve:SAML_IDENTITY_PROVIDER_LOGOUT_URL)%'
+        binding: '%env(resolve:SAML_IDENTITY_PROVIDER_LOGOUT_BINDING)%'
+    x509cert: '%env(resolve:SAML_IDENTITY_PROVIDER_X509_CERT)%'
+sp:
+    entityId: '%env(resolve:SAML_SERVICE_PROVIDER_URL)%/saml/metadata'
+    assertionConsumerService:
+        url: '%env(resolve:SAML_SERVICE_PROVIDER_URL)%/saml/acs'
+        binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST'
+    singleLogoutService:
+        url: '%env(resolve:SAML_SERVICE_PROVIDER_URL)%/saml/logout'
+        binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect'
+    NameIDFormat: '%env(resolve:SAML_SERVICE_PROVIDER_NAMEID_FORMAT)%'
+baseurl: '%env(resolve:SAML_SERVICE_PROVIDER_URL)%/saml'
+debug: '%kernel.debug%'
+```
+
+To change the configuration based on siteaccess, it's possible to defined it under the folowing siteaccess aware parameter : `almaviacx.saml.<siteaccess|siteaccess_group>.auth_settings`
+
 The following parameters are also available to tweak the behavior
 ```yaml
 # Attribute used to get the email address from
@@ -78,6 +104,4 @@ almaviacx.saml.identity.provider.login.attribute:
     
 # Change the user load method
 almaviacx.saml.config.default.user_load_method: !php/const AlmaviaCX\Bundle\IbexaSaml\Security\Saml\SamlUserProvider::LOAD_METHOD_EMAIL
-
-
 ```
