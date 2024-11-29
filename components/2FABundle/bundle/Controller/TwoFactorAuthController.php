@@ -12,11 +12,11 @@
 
 namespace Novactive\Bundle\eZ2FABundle\Controller;
 
+use Ibexa\Contracts\AdminUi\Controller\Controller;
 use Ibexa\Contracts\Core\Repository\PermissionResolver;
 use Ibexa\Contracts\Core\Repository\UserService;
 use Ibexa\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use Ibexa\Core\MVC\Symfony\Security\User;
-use Ibexa\Contracts\AdminUi\Controller\Controller;
 use Novactive\Bundle\eZ2FABundle\Core\QRCodeGenerator;
 use Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareAuthenticatorResolver;
 use Novactive\Bundle\eZ2FABundle\Form\Type\TwoFactorAuthType;
@@ -181,7 +181,10 @@ class TwoFactorAuthController extends Controller
 
         if (isset($contentId, $locationId)) {
             return new RedirectResponse(
-                $router->generate(UrlAliasGenerator::INTERNAL_CONTENT_VIEW_ROUTE, ['contentId' => $contentId, 'locationId' => $locationId]).
+                $router->generate(
+                    UrlAliasGenerator::INTERNAL_CONTENT_VIEW_ROUTE,
+                    ['contentId' => $contentId, 'locationId' => $locationId]
+                ).
                 '#ez-tab-location-view-reset-for-user#tab'
             );
         }
