@@ -12,10 +12,11 @@
 
 namespace Novactive\Bundle\eZ2FABundle\Controller;
 
-use eZ\Publish\API\Repository\PermissionResolver;
-use eZ\Publish\API\Repository\UserService;
-use eZ\Publish\Core\MVC\Symfony\Security\User;
-use EzSystems\EzPlatformAdminUiBundle\Controller\Controller;
+use Ibexa\Contracts\AdminUi\Controller\Controller;
+use Ibexa\Contracts\Core\Repository\PermissionResolver;
+use Ibexa\Contracts\Core\Repository\UserService;
+use Ibexa\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
+use Ibexa\Core\MVC\Symfony\Security\User;
 use Novactive\Bundle\eZ2FABundle\Core\QRCodeGenerator;
 use Novactive\Bundle\eZ2FABundle\Core\SiteAccessAwareAuthenticatorResolver;
 use Novactive\Bundle\eZ2FABundle\Form\Type\TwoFactorAuthType;
@@ -49,7 +50,7 @@ class TwoFactorAuthController extends Controller
 
         if ($saAuthenticatorResolver->checkIfUserSecretOrEmailExists($user)) {
             return $this->render(
-                '@ezdesign/2fa/setup.html.twig',
+                '@ibexadesign/2fa/setup.html.twig',
                 [
                     'reset' => true,
                     'method' => $saAuthenticatorResolver->getMethod(),
@@ -78,7 +79,7 @@ class TwoFactorAuthController extends Controller
 
         if (!isset($methodForm) && null === $saAuthenticatorResolver->getMethod()) {
             return $this->render(
-                '@ezdesign/2fa/setup.html.twig',
+                '@ibexadesign/2fa/setup.html.twig',
                 [
                     'form' => null,
                     'forced' => $saAuthenticatorResolver->isForceSetup(),
@@ -96,7 +97,7 @@ class TwoFactorAuthController extends Controller
             !($methodForm->isSubmitted() && $methodForm->isValid())
         ) {
             return $this->render(
-                '@ezdesign/2fa/setup.html.twig',
+                '@ibexadesign/2fa/setup.html.twig',
                 [
                     'form' => $methodForm->createView(),
                     'forced' => $saAuthenticatorResolver->isForceSetup(),
@@ -109,7 +110,7 @@ class TwoFactorAuthController extends Controller
             $saAuthenticatorResolver->setEmailAuthentication($user);
 
             return $this->render(
-                '@ezdesign/2fa/setup.html.twig',
+                '@ibexadesign/2fa/setup.html.twig',
                 [
                     'success' => true,
                     'method' => 'email',
@@ -124,7 +125,7 @@ class TwoFactorAuthController extends Controller
             $result = $saAuthenticatorResolver->validateCodeAndUpdateUser($user, $qrCodeForm->getData());
             if ($result['valid']) {
                 return $this->render(
-                    '@ezdesign/2fa/setup.html.twig',
+                    '@ibexadesign/2fa/setup.html.twig',
                     [
                         'success' => true,
                         'method' => $saAuthenticatorResolver->getMethod(),
@@ -145,7 +146,7 @@ class TwoFactorAuthController extends Controller
         }
 
         return $this->render(
-            '@ezdesign/2fa/setup.html.twig',
+            '@ibexadesign/2fa/setup.html.twig',
             [
                 'qrCode' => $QRCodeGenerator->createFromUser($user),
                 'form' => $qrCodeForm->createView(),
@@ -180,7 +181,10 @@ class TwoFactorAuthController extends Controller
 
         if (isset($contentId, $locationId)) {
             return new RedirectResponse(
-                $router->generate('_ez_content_view', ['contentId' => $contentId, 'locationId' => $locationId]).
+                $router->generate(
+                    UrlAliasGenerator::INTERNAL_CONTENT_VIEW_ROUTE,
+                    ['contentId' => $contentId, 'locationId' => $locationId]
+                ).
                 '#ez-tab-location-view-reset-for-user#tab'
             );
         }
