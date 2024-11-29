@@ -1,4 +1,4 @@
-{% extends '@ezdesign/account/base.html.twig' %}
+{% extends '@ibexadesign/account/base.html.twig' %}
 
 {%- block content -%}
 
@@ -36,15 +36,10 @@
                                 autofocus
                         />
                     </div>
-
-                    {% if displayTrustedOption %}
-                        <div class="form-group">
-                            <input id="_trusted" type="checkbox" name="{{ trustedParameterName }}"/>
-                            <div class="ez-login__input-label-wrapper">
-                                <label for="_trusted">{{ "trusted"|trans({}, 'SchebTwoFactorBundle') }}</label>
-                            </div>
-                        </div>
-                    {% endif %}
+                    {% include '@ibexadesign/2fa/auth/trusted_device.html.twig' with {
+                        'display_trusted_option': displayTrustedOption,
+                        'trusted_parameter_name': trustedParameterName
+                    } %}
 
                     {% if isCsrfProtectionEnabled %}
                         <input type="hidden" name="{{ csrfParameterName }}" value="{{ csrf_token(csrfTokenId) }}">
@@ -63,7 +58,7 @@
                 {# The logout link gives the user a way out if they can't complete two-factor authentication #}
                 <div class="form-group">
                     <div class="ez-login__input-label-wrapper">
-                        <a href="{{ ez_path(ez_route('logout')) }}">{{ "cancel"|trans({}, 'SchebTwoFactorBundle') }}</a>
+                        <a href="{{ ibexa_path(ibexa_route('logout')) }}">{{ "cancel"|trans({}, 'SchebTwoFactorBundle') }}</a>
                     </div>
                 </div>
             </fieldset>

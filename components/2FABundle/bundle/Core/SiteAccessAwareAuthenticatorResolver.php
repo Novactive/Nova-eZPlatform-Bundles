@@ -14,10 +14,10 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZ2FABundle\Core;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use eZ\Publish\Core\MVC\Symfony\Security\User;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
+use Ibexa\Core\MVC\Symfony\Security\User;
+use Ibexa\Core\MVC\Symfony\SiteAccess;
+use Ibexa\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use Novactive\Bundle\eZ2FABundle\DependencyInjection\Configuration;
 use Novactive\Bundle\eZ2FABundle\Entity\AuthenticatorInterface;
 use Novactive\Bundle\eZ2FABundle\Entity\BackupCodeInterface;
@@ -28,7 +28,7 @@ use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticator;
 
-final class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
+class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
 {
     /**
      * @var SiteAccess|null

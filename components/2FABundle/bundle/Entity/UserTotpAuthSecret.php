@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZ2FABundle\Entity;
 
-use eZ\Publish\API\Repository\Values\User\User as APIUser;
-use eZ\Publish\Core\MVC\Symfony\Security\User;
+use Ibexa\Contracts\Core\Repository\Values\User\User as APIUser;
+use Ibexa\Core\MVC\Symfony\Security\User;
 use Scheb\TwoFactorBundle\Model\Totp\TotpConfiguration;
 use Scheb\TwoFactorBundle\Model\Totp\TotpConfigurationInterface;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;

@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZ2FABundle\Listener;
 
-use eZ\Publish\API\Repository\Events\User\DeleteUserEvent;
+use Ibexa\Contracts\Core\Repository\Events\User\DeleteUserEvent;
 use Novactive\Bundle\eZ2FABundle\Core\UserRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

@@ -57,11 +57,11 @@ security:
     ...
     firewalls:
         ...
-        ezpublish_front:
+        ibexa_front:
             pattern: ^/
             user_checker: eZ\Publish\Core\MVC\Symfony\Security\UserChecker
             anonymous: ~
-            ezpublish_rest_session: ~
+            ibexa_rest_session: ~
             form_login:
                 require_previous_session: false
                 csrf_token_generator: security.csrf.token_manager
@@ -104,7 +104,7 @@ scheb_two_factor:
         issuer: EzIssuer                            # Issuer name used in QR code
         digits: 6                                   # Number of digits in authentication code
         window: 1                                   # How many codes before/after the current one would be accepted as valid
-        template: "@ezdesign/2fa/auth.html.twig"    # Template for the 2FA login page
+        template: "@ibexadesign/2fa/auth.html.twig"    # Template for the 2FA login page
 
     # TOTP Authenticator config
     totp:
@@ -112,7 +112,7 @@ scheb_two_factor:
         server_name: Server Name                    # Server name used in QR code
         issuer: TOTP Issuer                         # Issuer name used in QR code
         window: 1                                   # How many codes before/after the current one would be accepted as valid
-        template: "@ezdesign/2fa/auth.html.twig"    # Template used to render the authentication form
+        template: "@ibexadesign/2fa/auth.html.twig"    # Template used to render the authentication form
 
     # Trusted device feature
     trusted_device:
@@ -133,7 +133,7 @@ scheb_two_factor:
         sender_email: me@example.com             # Sender email address
         sender_name: John Doe                    # Sender name
         digits: 6                                # Number of digits in authentication code
-        template: "@ezdesign/2fa/auth.html.twig" # Template used to render the authentication form
+        template: "@ibexadesign/2fa/auth.html.twig" # Template used to render the authentication form
 
     # The security token classes, which trigger two-factor authentication.
     # By default the bundle only reacts to Symfony's username+password authentication. If you want to enable
