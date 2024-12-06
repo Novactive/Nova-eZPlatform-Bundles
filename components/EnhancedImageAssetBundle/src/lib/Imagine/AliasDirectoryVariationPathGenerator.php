@@ -34,7 +34,7 @@ class AliasDirectoryVariationPathGenerator implements VariationPathGenerator
         $filterConfig = $this->filterConfiguration->get($filter);
         $info = pathinfo($originalPath);
 
-        $variationExtension = $filterConfig['format'] ?? $info['extension'];
+        $variationExtension = $filterConfig['format'] ?? $info['extension'] ?? '';
 
         return sprintf(
             '_aliases/%s/%s/%s%s',
