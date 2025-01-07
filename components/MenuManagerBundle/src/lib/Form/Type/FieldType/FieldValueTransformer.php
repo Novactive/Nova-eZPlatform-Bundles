@@ -78,7 +78,7 @@ class FieldValueTransformer implements DataTransformerInterface
             }
             $parent = $menuItemRepo->find($hashItem['parentId']);
             if ($hashItem['parentId'] && $parent) {
-                $menuItem->setParent($parent);
+                $parent->addChildren($menuItem);
             }
             $menuItem->setMenu($menuRepo->find($hashItem['menuId']));
             $menuItem->setPosition($hashItem['position'] ?? 0);

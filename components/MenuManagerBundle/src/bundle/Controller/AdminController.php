@@ -162,6 +162,7 @@ class AdminController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Menu $menu */
             $menu = $form->getData();
+            $menu->assignPositions();
             $this->em->persist($menu);
             $this->em->flush();
 

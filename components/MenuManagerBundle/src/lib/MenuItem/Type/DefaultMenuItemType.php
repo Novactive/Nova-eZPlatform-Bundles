@@ -76,7 +76,7 @@ class DefaultMenuItemType extends AbstractMenuItemType
             'name' => $hash['name'] ?? false,
             'url' => $hash['url'] ?? false,
             'target' => $hash['target'] ?? false,
-            'position' => $hash['position'] ?? 0,
+            'position' => (int) $hash['position'] ?? 0,
         ];
         $menuItem->update(array_filter($updateData));
 
@@ -85,11 +85,12 @@ class DefaultMenuItemType extends AbstractMenuItemType
             $menuItem->setOption($option, $value);
         }
 
-        if (isset($hash['parentId']) && $hash['parentId']) {
+        $currentParent = $menuItem->getParent();
+        if ($currentParent && (!isset($hash['parentId']) || null === $hash['parentId'])) {
+            $currentParent->removeChildren($menuItem);
+        } elseif ($hash['parentId'] && (!$currentParent || $currentParent->getId() !== $hash['parentId'])) {
             $parent = $menuItemRepo->find($hash['parentId']);
-            $menuItem->setParent($parent);
-        } else {
-            $menuItem->setParent(null);
+            $parent->addChildren($menuItem);
         }
 
         if (isset($hash['menuId'])) {

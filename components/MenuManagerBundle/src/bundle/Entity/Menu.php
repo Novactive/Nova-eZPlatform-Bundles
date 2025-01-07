@@ -178,4 +178,15 @@ class Menu
     {
         return (string) $this->id;
     }
+
+    public function assignPositions(): void
+    {
+        $rootItems = $this->getItemsByParent();
+        $position = 0;
+        foreach ($rootItems as $item) {
+            $item->setPosition($position);
+            $item->assignPositions();
+            ++$position;
+        }
+    }
 }

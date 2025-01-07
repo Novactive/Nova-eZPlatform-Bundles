@@ -13,6 +13,7 @@
 namespace Novactive\EzMenuManagerBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Novactive\EzMenuManager\Traits\IdentityTrait;
 
@@ -203,7 +204,10 @@ class MenuItem
      */
     public function getChildrens()
     {
-        return $this->childrens;
+        $criteria = new Criteria();
+        $criteria->orderBy(['position' => Criteria::ASC]);
+
+        return $this->childrens->matching($criteria);
     }
 
     /**
@@ -303,7 +307,20 @@ class MenuItem
     public function update(array $properties): void
     {
         foreach ($properties as $property => $value) {
-            $this->$property = $value;
+            if ($this->$property !== $value) {
+                $this->$property = $value;
+            }
+        }
+    }
+
+    public function assignPositions(): void
+    {
+        $childrens = $this->getChildrens();
+        $position = 0;
+        foreach ($childrens as $child) {
+            $child->setPosition($position);
+            $child->assignPositions();
+            ++$position;
         }
     }
 }
