@@ -42,30 +42,18 @@ class ProtectedAccessRepository
         if (null === $content) {
             return [];
         }
-        $contentIds = $this->repository->sudo(
-            function (Repository $repository) use ($content) {
-                $ids = [$content->id];
-                $locations = $repository->getLocationService()->loadLocations($content->contentInfo);
-                foreach ($locations as $location) {
-                    /** @var Location $location */
-                    $parent = $repository->getLocationService()->loadLocation($location->parentLocationId);
-                    $ids[] = $parent->contentInfo->id;
-                }
-
-                return $ids;
-            }
-        );
+        $contentIds = $this->getContentIds($content);
 
         $entityRepository = $this->entityManager->getRepository($this->getEntityClass());
 
         $qb = $entityRepository->createQueryBuilder($this->getAlias());
-
         $qb->where($qb->expr()->eq($this->getAlias().'.enabled', true));
         $qb->andWhere(
             $qb->expr()->in($this->getAlias().'.contentId', ':contentIds')
         );
         $qb->setParameter('contentIds', $contentIds);
         $results = $qb->getQuery()->getResult();
+
         $filteredResults = [];
         foreach ($results as $protection) {
             /** @var ProtectedAccess $protection */
@@ -81,5 +69,38 @@ class ProtectedAccessRepository
         }
 
         return $filteredResults;
+    }
+
+    /**
+     * Retourne les ContentID du contenu et de tous ces descendants en prenant en compte ses multiples emplacements.
+     * @param Content $content
+     * @return array
+     */
+    protected function getContentIds(Content $content): array
+    {
+        return $this->repository->sudo(
+            function (Repository $repository) use ($content) {
+                $ids = [$content->id];
+                $locations = $repository->getLocationService()->loadLocations($content->contentInfo);
+                $ct = 0;
+                foreach ($locations as $location) {
+                    /** @var Location $loc */
+                    $loc = $location;
+                    while ($loc->parentLocationId
+                        && ($loc = $repository->getLocationService()->loadLocation($loc->parentLocationId))
+                        && $loc instanceof Location
+                        && $loc->parentLocationId
+                        && $loc->parentLocationId !== 1
+                    ) {
+                        $ct++;
+                        $ids[] = $loc->getContentInfo()->id;
+                        if ($ct >= 15) {
+                            break(2);
+                        }
+                    }
+                }
+                return $ids;
+            }
+        );
     }
 }
