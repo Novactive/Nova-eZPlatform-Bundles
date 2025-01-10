@@ -169,6 +169,7 @@ class ContentMenuItemType extends DefaultMenuItemType
                 UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
                 [
                     'location' => $location,
+                    'siteaccess' => $this->siteAccess->name,
                 ],
                 UrlGeneratorInterface::ABSOLUTE_URL
             ),
