@@ -19,16 +19,10 @@ services:
   Novactive\EzSolrSearchExtra\Api\:
     resource: "../../../lib/Api/*"
 
-  Novactive\EzSolrSearchExtra\ApiLoader\GatewayFactory:
-    arguments:
-      $defaultConnection: "%ibexa.solr.default_connection%"
-    calls:
-      - [setContainer, ["@service_container"]]
-
   Novactive\EzSolrSearchExtra\Api\Gateway:
-    factory: ['@Novactive\EzSolrSearchExtra\ApiLoader\GatewayFactory', buildGateway]
+    parent: ibexa.solr.gateway
     arguments:
-      $client: '@Ibexa\Solr\Gateway\HttpClient\Stream'
+      $queryConverter: '@Novactive\EzSolrSearchExtra\Query\DocumentQueryConverter'
 
   Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper\CustomFulltextFieldMapper:
     calls:
@@ -149,3 +143,34 @@ services:
   Novactive\EzSolrSearchExtra\Search\Common\FieldValueMapper\MultipleDateRangeMapper:
     tags:
       - { name: ibexa.search.common.field_value.mapper, maps: Novactive\EzSolrSearchExtra\Search\FieldType\MultipleDateRangeField }
+
+  Novactive\EzSolrSearchExtra\ResultExtractor\DocumentResultExtractor:
+    arguments:
+      - '@ibexa.solr.query.content.facet_builder_visitor.aggregate'
+      - '@ibexa.solr.query.content.aggregation_result_extractor.dispatcher'
+      - '@Ibexa\Solr\Gateway\EndpointRegistry'
+
+  nova_solr_extra.search.solr.query.document.query_converter:
+    class: Novactive\EzSolrSearchExtra\Query\Common\QueryConverter
+    decorates: Novactive\EzSolrSearchExtra\Query\DocumentQueryConverter
+    decoration_priority: -10
+    arguments:
+      - '@nova_solr_extra.search.solr.query.document.query_converter.inner'
+      - '@ibexa.solr.query.location.criterion_visitor.aggregate'
+
+  Novactive\EzSolrSearchExtra\Query\DocumentQueryConverter:
+    arguments:
+      - '@ibexa.solr.query.content.criterion_visitor.aggregate'
+      - '@ibexa.solr.query.content.sort_clause_visitor.aggregate'
+      - '@ibexa.solr.query.content.facet_builder_visitor.aggregate'
+      - '@ibexa.solr.query.content.aggregation_visitor.dispatcher'
+
+  Novactive\EzSolrSearchExtra\Search\DocumentSearchHandler:
+    arguments:
+      $resultExtractor: '@Novactive\EzSolrSearchExtra\ResultExtractor\DocumentResultExtractor'
+      $gateway: '@nova.solr.connection.default.gateway_id'
+      $coreFilter: '@ibexa.solr.core_filter'
+
+  Novactive\EzSolrSearchExtra\Repository\DocumentSearchService:
+    arguments:
+      $searchHandler: '@Novactive\EzSolrSearchExtra\Search\DocumentSearchHandler'
