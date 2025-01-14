@@ -31,7 +31,8 @@
     ],
     "require": {
         "php": "^7.3 || ^8.0",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ramsey/uuid": "^3.0"
     },
     "autoload": {
         "psr-4": {
