@@ -12,6 +12,7 @@ class WorkflowEvent
     public const FINISH = 'workflow_finish';
 
     protected WorkflowInterface $workflow;
+    protected bool $continue = true;
 
     /**
      * @param \AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowInterface $workflow
@@ -27,5 +28,15 @@ class WorkflowEvent
     public function getWorkflow(): WorkflowInterface
     {
         return $this->workflow;
+    }
+
+    public function canContinue(): bool
+    {
+        return $this->continue;
+    }
+
+    public function setContinue(bool $continue): void
+    {
+        $this->continue = $continue;
     }
 }

@@ -175,6 +175,15 @@ class JobController extends Controller implements TranslationContainerInterface
         ]));
     }
 
+    public function cancel(Job $job): Response
+    {
+        $this->jobService->cancelJob($job);
+
+        return new RedirectResponse($this->generateUrl('import_export.job.view', [
+            'id' => $job->getId(),
+        ]));
+    }
+
     public function debug(Job $job, int $index)
     {
         $this->jobService->debug($job, $index);

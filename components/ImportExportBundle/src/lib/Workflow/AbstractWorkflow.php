@@ -86,7 +86,8 @@ abstract class AbstractWorkflow implements WorkflowInterface
     {
         try {
             $this->prepare();
-            $this->dispatchEvent(new WorkflowEvent($this), WorkflowEvent::START);
+            $workflowEvent = new WorkflowEvent($this);
+            $this->dispatchEvent($workflowEvent, WorkflowEvent::START);
 
             $limitIterator = new LimitIterator($this->itemsIterator, $this->offset, $batchLimit);
             foreach ($limitIterator as $index => $item) {
@@ -94,7 +95,10 @@ abstract class AbstractWorkflow implements WorkflowInterface
                 $this->referenceBag->resetScope(Reference::SCOPE_ITEM);
                 $this->processItem($item);
                 ++$this->offset;
-                $this->dispatchEvent(new WorkflowEvent($this), WorkflowEvent::PROGRESS);
+                $this->dispatchEvent($workflowEvent, WorkflowEvent::PROGRESS);
+                if (!$workflowEvent->canContinue()) {
+                    break;
+                }
             }
         } catch (Throwable $e) {
             if ($this->debug) {

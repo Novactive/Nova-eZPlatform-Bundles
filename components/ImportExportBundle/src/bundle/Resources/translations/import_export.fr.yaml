@@ -1,5 +1,6 @@
 Notice: Notice
 job.breadcrumb.list: Tâches
+job.cancel: Annuler
 job.create.success: 'Tâche ''%label%'' créée.'
 job.creating: Création
 job.list.action.create: Créer
@@ -13,8 +14,9 @@ job.property.requested_date: 'Date de création'
 job.property.startTime: 'Heure de début'
 job.property.status: Status
 job.run: Lancer
+job.status.canceled: Annulé
 job.status.completed: Complété
-job.status.paused: En pause
+job.status.paused: 'En pause'
 job.status.pending: 'En attente'
 job.status.queued: 'Dans la file'
 job.status.running: 'En cours'
@@ -37,3 +39,4 @@ writer.csv.generated_file.title: 'Fichier généré'
 writer.csv.name: 'Générateur de fichier CSV'
 writer.dump.name: 'Dump Writer'
 writer.ibexa.content.name: 'Générateur de contenu Ibexa'
+writer.ibexa.taxonomy.name: 'Générateur de taxonomie Ibexa'

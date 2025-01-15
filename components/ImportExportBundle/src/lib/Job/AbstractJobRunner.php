@@ -18,7 +18,7 @@ abstract class AbstractJobRunner implements JobRunnerInterface
 
     public function __invoke(Job $job, int $batchLimit = -1, bool $reset = false): int
     {
-        if ($reset || Job::STATUS_COMPLETED === $job->getStatus()) {
+        if ($reset || in_array($job->getStatus(), [Job::STATUS_COMPLETED, Job::STATUS_CANCELED])) {
             $this->eventDispatcher->dispatch(new ResetJobRunEvent($job));
             $job->reset();
         }
