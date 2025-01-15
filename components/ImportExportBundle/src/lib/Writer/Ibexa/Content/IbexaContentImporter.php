@@ -75,7 +75,7 @@ class IbexaContentImporter
                 );
             }
         } catch (\Throwable $exception) {
-            dump($exception);
+            dump($exception, $contentData);
             throw $exception;
         }
     }

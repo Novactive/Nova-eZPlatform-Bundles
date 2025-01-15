@@ -1,0 +1,29 @@
+services:
+
+    AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Taxonomy\IbexaTaxonomyWriter:
+        parent: AlmaviaCX\Bundle\IbexaImportExport\Writer\AbstractWriter
+        arguments:
+            $repository: '@Ibexa\Contracts\Core\Repository\Repository'
+            $taxonomyAccessorBuilder: '@AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\Taxonomy\TaxonomyAccessorBuilder'
+            $taxonomyImporter: '@AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Taxonomy\IbexaTaxonomyImporter'
+        tags:
+            - { name: almaviacx.import_export.component, alias: writer.ibexa.content }
+
+    AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Taxonomy\IbexaTaxonomyCreator:
+        arguments:
+            $contentCreator: '@AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentCreator'
+            $taxonomyService: '@Ibexa\Contracts\Taxonomy\Service\TaxonomyServiceInterface'
+            $taxonomyConfiguration: '@Ibexa\Taxonomy\Service\TaxonomyConfiguration'
+
+    AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Taxonomy\IbexaTaxonomyUpdater:
+        arguments:
+            $contentUpdater: '@AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentUpdater'
+            $taxonomyService: '@Ibexa\Contracts\Taxonomy\Service\TaxonomyServiceInterface'
+            $taxonomyConfiguration: '@Ibexa\Taxonomy\Service\TaxonomyConfiguration'
+
+    AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Taxonomy\IbexaTaxonomyImporter:
+        arguments:
+            $repository: '@Ibexa\Contracts\Core\Repository\Repository'
+            $taxonomyService: '@Ibexa\Contracts\Taxonomy\Service\TaxonomyServiceInterface'
+            $taxonomyCreator: '@AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Taxonomy\IbexaTaxonomyCreator'
+            $taxonomyUpdater: '@AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Taxonomy\IbexaTaxonomyUpdater'

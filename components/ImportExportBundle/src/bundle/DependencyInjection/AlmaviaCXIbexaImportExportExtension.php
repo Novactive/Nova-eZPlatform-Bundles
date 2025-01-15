@@ -37,6 +37,7 @@ class AlmaviaCXIbexaImportExportExtension extends Extension implements PrependEx
         }
         if (in_array('IbexaTaxonomyBundle', $activatedBundles, true)) {
             $loader->load('item_value_transformer/taxonomy.yaml');
+            $loader->load('taxonomy_services.yaml');
         }
 //        if (in_array('IbexaFormBuilderBundle', $activatedBundles, true)) {
 //        }
