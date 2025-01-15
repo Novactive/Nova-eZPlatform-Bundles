@@ -9,6 +9,11 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 
 class IbexaContentData
 {
+    public const IMPORT_MODE_CREATE_ONLY = 0;
+    public const IMPORT_MODE_ONLY_UPDATE = 1;
+    public const IMPORT_MODE_UPDATE_AND_CREATE_IF_NOT_EXISTS = 2;
+    public const IMPORT_MODE_FETCH_ONLY = 3;
+
     protected string $contentRemoteId;
     /** @var array<string, mixed> */
     protected array $fields = [];
@@ -19,6 +24,8 @@ class IbexaContentData
     protected array $parentLocationIdList = [2];
     protected ?int $sectionId = null;
     protected int|null|DateTime $modificationDate = null;
+    protected bool $hidden = false;
+    protected int $importMode = self::IMPORT_MODE_UPDATE_AND_CREATE_IF_NOT_EXISTS;
 
     public function getContentRemoteId(): string
     {
@@ -110,5 +117,25 @@ class IbexaContentData
     public function setModificationDate(DateTime|int|null $modificationDate): void
     {
         $this->modificationDate = $modificationDate;
+    }
+
+    public function isHidden(): bool
+    {
+        return $this->hidden;
+    }
+
+    public function setHidden(bool $hidden): void
+    {
+        $this->hidden = $hidden;
+    }
+
+    public function getImportMode(): int
+    {
+        return $this->importMode;
+    }
+
+    public function setImportMode(int $importMode): void
+    {
+        $this->importMode = $importMode;
     }
 }

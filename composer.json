@@ -45,7 +45,7 @@
         "symfony/console": "^5.2",
         "symfony/process": "^5.2",
         "squizlabs/php_codesniffer": "^3.5",
-        "phpmd/phpmd": "^2.8",
+        "phpmd/phpmd": "dev-master",
         "friendsofphp/php-cs-fixer": "^3",
         "symfony/var-dumper": "^5.2",
         "symfony/finder": "^5.2",
@@ -64,5 +64,29 @@
         "behat/behat": "^3.8",
         "friends-of-behat/mink-extension": "^2.5",
         "ext-pdo": "*"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^2.1",
+        "craue/formflow-bundle": "^3.0",
+        "matthiasnoback/symfony-console-form": "^6.0",
+        "ibexa/oss": "^4.6",
+        "http-interop/http-factory-guzzle": "^1.2",
+        "symfony/uid": "^6.4",
+        "ibexa/taxonomy": "^4.6",
+        "phpoffice/phpspreadsheet": "^4.2",
+        "symfony/messenger": "^6.3"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "symfony/flex": true,
+            "ibexa/post-install": true
+        }
+    },
+    "repositories": {
+        "ibexa": {
+            "type": "composer",
+            "url": "https://updates.ibexa.co"
+        }
     }
 }

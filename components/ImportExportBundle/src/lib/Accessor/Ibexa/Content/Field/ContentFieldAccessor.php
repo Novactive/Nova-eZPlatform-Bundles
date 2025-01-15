@@ -10,5 +10,5 @@ class ContentFieldAccessor
 {
     use LazyGhostTrait;
 
-    public $value;
+    public mixed $value;
 }

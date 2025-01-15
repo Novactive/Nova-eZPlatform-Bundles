@@ -11,7 +11,8 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 class IbexaContentUpdater extends AbstractIbexaContentHandler
 {
     /**
-     * @param array<string, mixed> $fieldsByLanguages
+     * @param array<string, mixed>                   $fieldsByLanguages
+     * @param array<int|string, Location|string|int> $parentLocationIdList
      *
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\BadStateException
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\ContentFieldValidationException
@@ -61,6 +62,12 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
         return $publishedContent;
     }
 
+    /**
+     * @param array<int|string, Location|string|int> $parentLocationIdList
+     *
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\BadStateException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException
+     */
     protected function handleLocations(Content $content, array $parentLocationIdList, bool $hidden): void
     {
         $existingLocations = $this->repository->getLocationService()->loadLocations($content->contentInfo);
@@ -85,10 +92,17 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
         }
     }
 
+    /**
+     * @param Location[] $existingLocations
+     *
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException
+     */
     protected function handleLocation(
         Content $content,
-        $parentLocationId,
-        $locationRemoteId,
+        Location|int|string $parentLocationId,
+        int|string $locationRemoteId,
         array $existingLocations,
         bool $hidden
     ): Location {
@@ -103,6 +117,14 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
 
         foreach ($existingLocations as $existingLocation) {
             if ($existingLocation->parentLocationId === $parentLocationId) {
+                if ($existingLocation->hidden !== $hidden) {
+                    if ($hidden) {
+                        $this->repository->getLocationService()->hideLocation($existingLocation);
+                    } else {
+                        $this->repository->getLocationService()->unhideLocation($existingLocation);
+                    }
+                }
+
                 return $existingLocation;
             }
         }

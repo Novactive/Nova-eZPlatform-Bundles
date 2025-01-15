@@ -1,3 +1,6 @@
+{# @var job \AlmaviaCX\Bundle\IbexaImportExport\Job\Job #}
+{# @var workflow \AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowInterface #}
+{# @var execution \AlmaviaCX\Bundle\IbexaImportExport\Execution\Execution #}
 {% extends "@ibexadesign/ui/layout.html.twig" %}
 
 {% from '@ibexadesign/ui/component/macros.html.twig' import results_headline %}
@@ -77,7 +80,9 @@
             }]) %}
 
             {% set progress_bar %}
-                {% include '@ibexadesign/import_export/components/progress_bar.html.twig' with {processedCount: job.processedItemsCount, totalCount: job.totalItemsCount} only %}
+                {% if job.lastExecution %}
+                    {% include '@ibexadesign/import_export/components/progress_bar.html.twig' with {processedCount: job.lastExecution.workflowState.offset, totalCount: job.lastExecution.workflowState.totalItemsCount} only %}
+                {% endif %}
             {% endset %}
             {% set body_row_cols = body_row_cols|merge([{
                 content: progress_bar,
@@ -85,7 +90,7 @@
             }]) %}
 
             {% set body_row_cols = body_row_cols|merge([
-                { content: status[job.status]  },
+                { content: job.lastExecution ? status[job.lastExecution.status] : null  },
                 { content: job.requestedDate|ibexa_full_datetime  },
             ]) %}
 

@@ -54,3 +54,8 @@ services:
             $repository: '@Ibexa\Contracts\Core\Repository\Repository'
             $contentCreator: '@AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentCreator'
             $contentUpdater: '@AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentUpdater'
+
+    AlmaviaCX\Bundle\IbexaImportExport\Salesforce\SalesforceApiClient:
+        arguments:
+            $httpClient: '@http_client'
+            $cache: '@ibexa.cache_pool'

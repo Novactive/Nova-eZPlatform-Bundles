@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Job\Form\Type;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentRegistry;
+use AlmaviaCX\Bundle\IbexaImportExport\Execution\ExecutionOptionsFormType;
 use AlmaviaCX\Bundle\IbexaImportExport\Job\Job;
-use AlmaviaCX\Bundle\IbexaImportExport\Workflow\Form\Type\WorkflowProcessConfigurationFormType;
 use AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowRegistry;
+use InvalidArgumentException;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,13 +19,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class JobProcessConfigurationFormType extends AbstractType
 {
-    protected WorkflowRegistry $workflowRegistry;
-    protected ComponentRegistry $componentRegistry;
-
-    public function __construct(WorkflowRegistry $workflowRegistry, ComponentRegistry $componentRegistry)
-    {
-        $this->workflowRegistry = $workflowRegistry;
-        $this->componentRegistry = $componentRegistry;
+    public function __construct(
+        protected WorkflowRegistry $workflowRegistry,
+        protected ComponentRegistry $componentRegistry
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -37,11 +35,14 @@ class JobProcessConfigurationFormType extends AbstractType
                 return;
             }
             $workflowIdentifier = $job->getWorkflowIdentifier();
-            $workflowDefaultConfiguration = $this->workflowRegistry::getWorkflowDefaultConfiguration(
-                $this->workflowRegistry->getWorkflowClassName($workflowIdentifier)
-            );
+            if (null === $workflowIdentifier) {
+                throw new InvalidArgumentException('Workflow identifier is not set.');
+            }
 
-            $optionsForm = $form->add('options', WorkflowProcessConfigurationFormType::class, [
+            $workflow = $this->workflowRegistry->getWorkflow($workflowIdentifier);
+            $workflowDefaultConfiguration = $workflow->getDefaultConfig();
+
+            $form->add('options', ExecutionOptionsFormType::class, [
                 'label' => /* @Desc("Workflow options") */ 'workflow.options',
                 'required' => false,
                 'show_initialized' => $options['show_initialized'],
@@ -57,7 +58,7 @@ class JobProcessConfigurationFormType extends AbstractType
         });
     }
 
-    protected function removeEmptyChildren(FormInterface $form)
+    protected function removeEmptyChildren(FormInterface $form): void
     {
         foreach ($form->all() as $child) {
             if ($child->getConfig()->getType()->getInnerType() instanceof FormType) {

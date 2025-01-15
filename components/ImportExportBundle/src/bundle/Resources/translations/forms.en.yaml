@@ -15,3 +15,13 @@ xls_reader.form.options.colsRange.label: 'Columns range'
 xls_reader.form.options.colsRange.start.label: Start
 xls_reader.form.options.headerRowNumber.label: 'Header row number'
 xls_reader.form.options.tabName.label: 'Tab name'
+salesforce_soql_reader.form.options.query_string.label: Query string
+salesforce_soql_reader.form.options.count_query_string.label: Count query string
+salesforce_soql_reader.form.options.batch_size.labe: Batch size
+salesforce_soql_reader.form.options.domain.label: Domain
+salesforce_soql_reader.form.options.version.label: Version
+salesforce_soql_reader.form.options.credentials.label: Credentials
+salesforce_api_credentials.form.client_id.label: Client ID
+salesforce_api_credentials.form.client_secret.label: Client secret
+salesforce_api_credentials.form.username.label: Username
+salesforce_api_credentials.form.password.label: Password

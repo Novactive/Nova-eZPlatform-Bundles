@@ -7,19 +7,22 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Utils;
 use AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\AbstractItemValueTransformer;
 use Ibexa\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter;
 
+/**
+ * Transforms a string to its slug representation.
+ */
 class SlugTransformer extends AbstractItemValueTransformer
 {
-    protected SlugConverter $slugConverter;
-
-    public function __construct(SlugConverter $slugConverter)
-    {
-        $this->slugConverter = $slugConverter;
+    public function __construct(
+        protected SlugConverter $slugConverter
+    ) {
     }
 
     /**
-     * @param string $value
+     * @param string|string[] $value
+     *
+     * @return string|string[]
      */
-    public function transform($value, array $options = [])
+    protected function transform(mixed $value, array $options = []): mixed
     {
         if (is_array($value)) {
             $values = [];

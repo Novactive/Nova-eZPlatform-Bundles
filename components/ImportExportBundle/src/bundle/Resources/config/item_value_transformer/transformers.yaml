@@ -6,7 +6,6 @@ services:
     AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\SourceResolver:
         arguments:
             $itemValueTransformerRegistry: '@AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\ItemValueTransformerRegistry'
-            $referenceBag: '@AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag'
 
     AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\ItemTransformer:
         arguments:
@@ -65,3 +64,7 @@ services:
     AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Ibexa\HtmlToTextBlockTransformer:
         tags:
             - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.html_to_textblock}
+
+    AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Utils\DefaultTransformer:
+        tags:
+            - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.default}

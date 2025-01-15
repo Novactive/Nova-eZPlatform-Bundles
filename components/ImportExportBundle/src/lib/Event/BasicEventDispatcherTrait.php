@@ -10,7 +10,13 @@ use Symfony\Component\EventDispatcher\Debug\WrappedListener;
 
 trait BasicEventDispatcherTrait
 {
+    /**
+     * @var array<string, array<int, array<int, callable>>>
+     */
     protected array $listeners = [];
+    /**
+     * @var array<string, array<int, callable>>
+     */
     protected array $optimizedListeners = [];
 
     public function addEventListener(string $eventName, callable $listener, int $priority = 0): void
@@ -34,7 +40,9 @@ trait BasicEventDispatcherTrait
     }
 
     /**
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings("PHPMD.UnusedLocalVariable")
+     *
+     * @return array<int, callable>
      */
     private function optimizeListeners(string $eventName): array
     {

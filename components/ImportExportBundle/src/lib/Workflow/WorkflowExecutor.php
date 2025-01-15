@@ -5,58 +5,43 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Workflow;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentBuilder;
+use AlmaviaCX\Bundle\IbexaImportExport\Execution\ExecutionOptions;
 use AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorInterface;
-use AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorOptions;
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderInterface;
-use AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderOptions;
 use Exception;
 
 class WorkflowExecutor
 {
-    protected ComponentBuilder $componentBuilder;
-
-    public function __construct(ComponentBuilder $componentBuilder)
-    {
-        $this->componentBuilder = $componentBuilder;
+    public function __construct(
+        protected ComponentBuilder $componentBuilder
+    ) {
     }
 
-    /**
-     * @param \AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowInterface             $workflow
-     * @param array{reader?: ReaderOptions, processors?: array<mixed, ProcessorOptions>} $runtimeProcessConfiguration
-     */
     public function __invoke(
         WorkflowInterface $workflow,
-        array $runtimeProcessConfiguration,
+        ExecutionOptions $executionOptions,
         int $batchLimit = -1
     ): void {
         $workflow->setConfiguration(
             $this->buildRunConfiguration(
                 $workflow,
-                $runtimeProcessConfiguration
+                $executionOptions
             )
         );
 
         ($workflow)($batchLimit);
     }
 
-    /**
-     * @param \AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowInterface             $workflow
-     * @param array{reader?: ReaderOptions, processors?: array<mixed, ProcessorOptions>} $runtimeProcessConfiguration
-     *
-     * @throws \Exception
-     *
-     * @return \AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowExecutionConfiguration
-     */
     protected function buildRunConfiguration(
         WorkflowInterface $workflow,
-        array $runtimeProcessConfiguration
+        ExecutionOptions $executionOptions
     ): WorkflowExecutionConfiguration {
         $baseConfiguration = $workflow->getDefaultConfig();
 
         $processConfiguration = $baseConfiguration->getProcessConfiguration();
         $reader = ($this->componentBuilder)(
             $processConfiguration->getReader(),
-            $runtimeProcessConfiguration['reader'] ?? null
+            $executionOptions->getReaderOptions()
         );
         if (!$reader instanceof ReaderInterface) {
             throw new Exception('Reader not instance of '.ReaderInterface::class);
@@ -64,13 +49,13 @@ class WorkflowExecutor
         $executionConfiguration = new WorkflowExecutionConfiguration($reader);
 
         $processorsConfiguration = $processConfiguration->getProcessors();
-        foreach ($processorsConfiguration as $index => $processorConfiguration) {
+        foreach ($processorsConfiguration as $id => $processorConfiguration) {
             $processor = ($this->componentBuilder)(
                 $processorConfiguration,
-                $runtimeProcessConfiguration['processors'][$index] ?? null
+                $executionOptions->getProcessorOptions($id)
             );
             if ($processor instanceof ProcessorInterface) {
-                $executionConfiguration->addProcessor($processor);
+                $executionConfiguration->addProcessor($id, $processor);
             }
         }
 

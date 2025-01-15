@@ -37,7 +37,7 @@ class ContentFieldAccessorBuilder
         return ContentFieldAccessor::createLazyGhost($initializers);
     }
 
-    protected function getValue(Field $field, FieldDefinition $fieldDefinition)
+    protected function getValue(Field $field, FieldDefinition $fieldDefinition): mixed
     {
         $transformer = $this->contentFieldValueTransformers[$field->fieldTypeIdentifier] ?? null;
         if ($transformer) {

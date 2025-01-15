@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Taxonomy;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentCreator;
+use DateTime;
 use Ibexa\Contracts\Taxonomy\Service\TaxonomyServiceInterface;
 use Ibexa\Contracts\Taxonomy\Value\TaxonomyEntry;
 use Ibexa\Core\FieldType\TextLine\Value as TextLineValue;
@@ -13,22 +14,15 @@ use Ibexa\Taxonomy\Service\TaxonomyConfiguration;
 
 class IbexaTaxonomyCreator
 {
-    protected TaxonomyServiceInterface $taxonomyService;
-    protected TaxonomyConfiguration $taxonomyConfiguration;
-    protected IbexaContentCreator $contentCreator;
-
     public function __construct(
-        TaxonomyServiceInterface $taxonomyService,
-        TaxonomyConfiguration $taxonomyConfiguration,
-        IbexaContentCreator $contentCreator,
+        protected TaxonomyServiceInterface $taxonomyService,
+        protected TaxonomyConfiguration $taxonomyConfiguration,
+        protected IbexaContentCreator $contentCreator,
     ) {
-        $this->contentCreator = $contentCreator;
-        $this->taxonomyConfiguration = $taxonomyConfiguration;
-        $this->taxonomyService = $taxonomyService;
     }
 
     /**
-     * @param null $modificationDate
+     * @param array<string, string> $names
      *
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\BadStateException
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\ContentFieldValidationException
@@ -48,7 +42,7 @@ class IbexaTaxonomyCreator
         int $ownerId = null,
         string $mainLanguageCode = 'eng-GB',
         int $sectionId = null,
-        $modificationDate = null,
+        int|DateTime $modificationDate = null,
         bool $hidden = false
     ): TaxonomyEntry {
         $contentTypeIdentifier = $this->taxonomyConfiguration->getConfigForTaxonomy(

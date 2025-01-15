@@ -30,7 +30,7 @@ class IbexaContentCreator extends AbstractIbexaContentHandler
         int $ownerId = null,
         string $languageCode = 'eng-GB',
         int $sectionId = null,
-        $modificationDate = null,
+        int|DateTime $modificationDate = null,
         bool $hidden = false
     ): Content {
         $contentType = $this->repository->getContentTypeService()->loadContentTypeByIdentifier(

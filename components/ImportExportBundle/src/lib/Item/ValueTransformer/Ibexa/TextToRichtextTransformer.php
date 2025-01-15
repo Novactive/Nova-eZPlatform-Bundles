@@ -5,18 +5,19 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Ibexa;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\AbstractItemValueTransformer;
+use Ibexa\FieldTypeRichText\FieldType\RichText\Value;
 
+/**
+ * Transforms a text value to its richtext representation.
+ */
 class TextToRichtextTransformer extends AbstractItemValueTransformer
 {
-    protected HtmlToRichtextTransformer $htmlToRichtextTransformer;
-
     public function __construct(
-        HtmlToRichtextTransformer $htmlToRichtextTransformer
+        protected HtmlToRichtextTransformer $htmlToRichtextTransformer
     ) {
-        $this->htmlToRichtextTransformer = $htmlToRichtextTransformer;
     }
 
-    public function transform($value, array $options = [])
+    protected function transform(mixed $value, array $options = []): Value
     {
         $rawText = null;
         if ($value) {
