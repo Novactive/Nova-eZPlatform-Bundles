@@ -31,7 +31,8 @@
         'job.status.running'|trans()|desc('Running'),
         'job.status.completed'|trans()|desc('Completed'),
         'job.status.queued'|trans()|desc('Queued'),
-        'job.status.paused'|trans()|desc('Paused')
+        'job.status.paused'|trans()|desc('Paused'),
+        'job.status.canceled'|trans()|desc('Canceled')
 
     ] %}
     {% set progress_bar %}</div>
@@ -69,6 +70,19 @@
     ] %}
 
     {% set information_headline_items %}
+        {% if job.status != 3 %}
+            <a
+                    href="{{ path('import_export.job.cancel', {'id': job.id}) }}"
+                    class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
+            >
+                <svg class="ibexa-icon ibexa-icon--small ibexa-icon--edit">
+                    <use xlink:href="{{ ibexa_icon_path('discard') }}"></use>
+                </svg>
+                <span class="ibexa-btn__label">
+                    {{ 'job.cancel'|trans|desc('Cancel') }}
+                </span>
+            </a>
+        {% endif %}
             <a
                     href="{{ path('import_export.job.run', {'id': job.id}) }}"
                     class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"

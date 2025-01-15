@@ -1,5 +1,6 @@
 Notice: Notice
 job.breadcrumb.list: Jobs
+job.cancel: Cancel
 job.create.success: 'Job ''%label%'' created.'
 job.creating: Creating
 job.list.action.create: Create
@@ -13,6 +14,7 @@ job.property.requested_date: 'Requested date'
 job.property.startTime: 'Start time'
 job.property.status: Status
 job.run: Run
+job.status.canceled: Canceled
 job.status.completed: Completed
 job.status.paused: Paused
 job.status.pending: Pending
@@ -37,3 +39,4 @@ writer.csv.generated_file.title: 'Generated file'
 writer.csv.name: 'CSV Writer'
 writer.dump.name: 'Dump Writer'
 writer.ibexa.content.name: 'Ibexa content writer'
+writer.ibexa.taxonomy.name: 'Ibexa taxonomy writer'

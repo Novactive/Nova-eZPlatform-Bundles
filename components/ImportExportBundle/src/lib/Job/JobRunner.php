@@ -46,6 +46,7 @@ class JobRunner extends AbstractJobRunner
             $workflow = $event->getWorkflow();
             // Ibexa content creation trigger an entity manager clear, which mean we need to reload the entity
             $job = $this->jobRepository->findById($job->getId());
+            $event->setContinue(Job::STATUS_RUNNING === $job->getStatus());
             $job->addRecords($logger->getRecords());
             $job->setProcessedItemsCount($workflow->getOffset());
             $this->jobRepository->save($job);
@@ -86,7 +87,7 @@ class JobRunner extends AbstractJobRunner
         if (1 == $job->getProgress() || 0 === $job->getTotalItemsCount() || 0 === $proccessed) {
             $job->setStatus(Job::STATUS_COMPLETED);
             $job->setEndTime($workflow->getEndTime());
-        } else {
+        } elseif (Job::STATUS_RUNNING === $job->getStatus()) {
             $job->setStatus(Job::STATUS_PAUSED);
         }
 

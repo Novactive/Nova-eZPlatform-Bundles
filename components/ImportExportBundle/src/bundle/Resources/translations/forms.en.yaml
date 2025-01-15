@@ -5,6 +5,7 @@ csv_reader.form.options.headerRowNumber.label: 'Header row number'
 file_reader.form.options.file.label: File
 job.label: Label
 job.workflowIdentifier: Workflow
+mdb_reader.form.options.query_string.label: Query string
 reader.ibexa.content_list.options.parentLocationId.label: 'Parent location id'
 workflow.options: 'Workflow options'
 writer.stream.options.filepath.label: 'File path'

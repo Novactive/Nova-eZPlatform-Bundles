@@ -24,6 +24,7 @@ class Job
     public const STATUS_COMPLETED = 2;
     public const STATUS_QUEUED = 3;
     public const STATUS_PAUSED = 4;
+    public const STATUS_CANCELED = 5;
 
     /**
      * @ORM\Id

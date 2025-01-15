@@ -2,4 +2,5 @@
 'Job configuration': 'Job configuration'
 breadcrumb.admin: Admin
 job.list.title: Jobs
+job.logs.level: Log level
 job.options.empty: 'There is no options to configure'

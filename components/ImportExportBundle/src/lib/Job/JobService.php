@@ -51,6 +51,12 @@ class JobService
         ($this->jobRunner)($job, $batchLimit, $reset);
     }
 
+    public function cancelJob(Job $job)
+    {
+        $job->setStatus(Job::STATUS_CANCELED);
+        $this->jobRepository->save($job);
+    }
+
     public function debug(Job $job, int $index)
     {
         ($this->jobDebugger)($job, $index);
