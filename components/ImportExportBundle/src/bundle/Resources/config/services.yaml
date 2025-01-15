@@ -1,0 +1,56 @@
+services:
+    AlmaviaCX\Bundle\IbexaImportExport\Resolver\FilepathResolver:
+        arguments:
+            $parameterBag: '@parameter_bag'
+
+    almaviacx.import_export.file_prefixer:
+        class: League\Flysystem\PathPrefixer
+        arguments:
+            $prefix: 'import_export'
+
+    AlmaviaCX\Bundle\IbexaImportExport\File\FileHandler:
+        arguments:
+            $innerAdapter: '@ibexa.core.io.flysystem.adapter.site_access_aware'
+            $prefixer: '@almaviacx.import_export.file_prefixer'
+            $filepathResolver: '@AlmaviaCX\Bundle\IbexaImportExport\Resolver\FilepathResolver'
+
+    AlmaviaCX\Bundle\IbexaImportExport\Notification\NotificationSender:
+        arguments:
+            $notificationService: '@Ibexa\Contracts\Core\Repository\NotificationService'
+
+    AlmaviaCX\Bundle\IbexaImportExport\Notification\NotificationRenderer:
+        arguments:
+            $twig: '@twig'
+            $router: '@router'
+        tags:
+            - { name: ibexa.notification.renderer, alias: import_export:notification:default }
+
+    AlmaviaCX\Bundle\IbexaImportExportBundle\Command\ExecuteWorkflowCommand:
+        arguments:
+            $workflowExecutor: '@AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowExecutor'
+            $workflowRegistry: '@AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowRegistry'
+        tags:
+            - console.command
+
+    AlmaviaCX\Bundle\IbexaImportExportBundle\Command\CreateJobCommand:
+        arguments:
+            $eventDispatcher: '@event_dispatcher'
+            $jobService: '@AlmaviaCX\Bundle\IbexaImportExport\Job\JobService'
+        tags:
+            - console.command
+
+    AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag:
+
+    AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentCreator:
+        arguments:
+            $repository: '@Ibexa\Contracts\Core\Repository\Repository'
+
+    AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentUpdater:
+        arguments:
+            $repository: '@Ibexa\Contracts\Core\Repository\Repository'
+
+    AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentImporter:
+        arguments:
+            $repository: '@Ibexa\Contracts\Core\Repository\Repository'
+            $contentCreator: '@AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentCreator'
+            $contentUpdater: '@AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentUpdater'

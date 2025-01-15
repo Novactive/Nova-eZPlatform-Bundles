@@ -1,0 +1,9 @@
+{% extends '@ibexadesign/ui/form_fields.html.twig' %}
+
+{% block _job_process_configuration_form_options_row %}
+    {% if form.children is empty %}
+        {{ 'job.options.empty'|trans()|desc('There is no options to configure') }}
+    {% else %}
+        {{ block('form_row') }}
+    {% endif %}
+{% endblock %}

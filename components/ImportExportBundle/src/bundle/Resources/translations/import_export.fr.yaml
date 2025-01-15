@@ -1,0 +1,39 @@
+Notice: Notice
+job.breadcrumb.list: Tâches
+job.create.success: 'Tâche ''%label%'' créée.'
+job.creating: Création
+job.list.action.create: Créer
+job.list.title: Tâches
+job.new.title: 'Créer une nouvelle Tâche'
+job.property.endTime: 'Heure de fin'
+job.property.id: Id
+job.property.label: Libellé
+job.property.progress: Progression
+job.property.requested_date: 'Date de création'
+job.property.startTime: 'Heure de début'
+job.property.status: Status
+job.run: Lancer
+job.status.completed: Complété
+job.status.paused: En pause
+job.status.pending: 'En attente'
+job.status.queued: 'Dans la file'
+job.status.running: 'En cours'
+job.view.log.item_index: Élement
+job.view.log.message: Message
+job.view.log.type: Type
+job.view.logs.title: Logs
+job.view.title: 'Tâche: %label%'
+notification.job.done: 'Job %job_label% (%job_id%) is done running.'
+reader.csv.name: 'Lecteur de fichier CSV'
+reader.ibexa.content_list.name: 'Liste de contenu'
+reader.xls.name: 'Lecteur de fichier Excel'
+reader.xml.name: 'Lecteur de fichier XML'
+step.callback.name: Callback
+step.filter.not_empty.name: 'Filtre non vide'
+step.filter.unique.name: 'Filtre Unique'
+tab.details.technical_details: 'Information techniques'
+writer.csv.generated_file.download: 'Télécharger le fichier'
+writer.csv.generated_file.title: 'Fichier généré'
+writer.csv.name: 'Générateur de fichier CSV'
+writer.dump.name: 'Dump Writer'
+writer.ibexa.content.name: 'Générateur de contenu Ibexa'
