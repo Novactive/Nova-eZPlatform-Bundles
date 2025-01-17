@@ -86,8 +86,11 @@ class ComponentOptions
 
     /**
      * @param callable(ComponentReference $componentReference): ComponentInterface $buildComponentCallback
+     * @param ?ComponentOptions $runtimeProcessConfiguration
      */
-    public function replaceComponentReferences($buildComponentCallback): void
-    {
+    public function replaceComponentReferences(
+        $buildComponentCallback,
+        ?ComponentOptions $runtimeProcessConfiguration = null
+    ): void {
     }
 }

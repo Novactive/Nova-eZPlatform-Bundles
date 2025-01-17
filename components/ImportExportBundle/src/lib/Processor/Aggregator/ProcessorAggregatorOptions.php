@@ -27,8 +27,10 @@ class ProcessorAggregatorOptions extends ProcessorOptions
     /**
      * {@inheritDoc}
      */
-    public function replaceComponentReferences($buildComponentCallback): void
-    {
+    public function replaceComponentReferences(
+        $buildComponentCallback,
+        ?ComponentOptions $runtimeProcessConfiguration = null
+    ): void {
         foreach ($this->processors as $key => $processor) {
             $this->processors[$key] = call_user_func(
                 $buildComponentCallback,
