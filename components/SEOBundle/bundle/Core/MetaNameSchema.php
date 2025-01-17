@@ -85,6 +85,7 @@ class MetaNameSchema extends NameSchemaService
         ConfigResolverInterface $configurationResolver,
         array $settings = []
     ) {
+        $this->fieldTypeRegistry = $fieldTypeRegistry;
         $settings['limit'] = $this->fieldContentMaxLength;
         $handler = new ContentTypeDomainMapper(
             $contentTypeHandler,
