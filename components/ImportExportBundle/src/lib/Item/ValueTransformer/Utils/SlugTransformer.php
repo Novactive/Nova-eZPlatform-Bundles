@@ -18,11 +18,18 @@ class SlugTransformer extends AbstractItemValueTransformer
 
     /**
      * @param string $value
-     *
-     * @return string
      */
     public function transform($value, array $options = [])
     {
+        if (is_array($value)) {
+            $values = [];
+            foreach ($value as $string) {
+                $values[] = $this->slugConverter->convert($string);
+            }
+
+            return $values;
+        }
+
         return $this->slugConverter->convert($value);
     }
 }

@@ -27,7 +27,7 @@ class ComponentBuilder
             if ($runtimeProcessConfiguration) {
                 $options->merge($runtimeProcessConfiguration);
             }
-            $options->replaceComponentReferences($this);
+            $options->replaceComponentReferences($this, $runtimeProcessConfiguration);
             $component->setOptions(
                 $options
             );

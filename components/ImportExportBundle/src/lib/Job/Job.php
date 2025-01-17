@@ -301,4 +301,9 @@ class Job
         $this->totalItemsCount = 0;
         $this->processedItemsCount = 0;
     }
+
+    public function isRunning(): bool
+    {
+        return self::STATUS_RUNNING === $this->status;
+    }
 }

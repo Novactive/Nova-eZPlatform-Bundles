@@ -16,3 +16,9 @@ services:
         tags:
             - { name: almaviacx.import_export.component, alias: processor.aggregator}
 
+    AlmaviaCX\Bundle\IbexaImportExport\Processor\Iterator\IteratorProcessor:
+        arguments:
+            $sourceResolver: '@AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\SourceResolver'
+        tags:
+            - { name: almaviacx.import_export.component, alias: processor.iterator}
+

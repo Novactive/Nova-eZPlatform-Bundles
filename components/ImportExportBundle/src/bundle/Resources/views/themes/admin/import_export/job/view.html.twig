@@ -70,7 +70,7 @@
     ] %}
 
     {% set information_headline_items %}
-        {% if job.status != 3 %}
+        {% if job.isRunning() %}
             <a
                     href="{{ path('import_export.job.cancel', {'id': job.id}) }}"
                     class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
