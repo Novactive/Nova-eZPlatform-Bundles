@@ -29,6 +29,8 @@ class CaptchEtatChallengeValidator extends ConstraintValidator
         if (!$constraint instanceof CaptchEtatValidChallenge) {
             throw new UnexpectedTypeException($constraint, CaptchEtatValidChallenge::class);
         }
+        dump($value);
+        die('222');
 
         if (!isset($value['captcha_id']) && !isset($value['answer'])) {
             throw new UnexpectedValueException($value, 'array');

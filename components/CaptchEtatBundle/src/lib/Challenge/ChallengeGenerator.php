@@ -36,9 +36,18 @@ class ChallengeGenerator
         $this->configResolver = $configResolver;
     }
 
-    public function __invoke(): CaptchEtatChallenge
+    public function __invoke()
     {
         $lang = $this->getShortLanguage();
+        $type = $this->getType($lang);
+        $image = $this->gateway->getSimpleCaptchaEndpoint(
+            'image',
+            'frontal',
+            null,
+            $type
+        );
+
+        return $image;
 
         return CaptchEtatChallenge::createLazyGhost(function (CaptchEtatChallenge $instance) use ($lang) {
             try {
@@ -59,10 +68,10 @@ class ChallengeGenerator
     {
         $type = $this->getType($lang);
         $html = $this->gateway->getSimpleCaptchaEndpoint(
-            'html',
+            'image',
             'frontal',
             null,
-            $type
+            "alphanumerique4to6LightCaptchaFR"
         );
         $hidden = 'style="visibility: hidden !important"';
         $html = str_replace($hidden, '', $html);

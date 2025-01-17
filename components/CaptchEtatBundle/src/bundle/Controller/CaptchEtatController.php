@@ -56,7 +56,7 @@ class CaptchEtatController
     public function getCaptcha(): Response
     {
         $challenge = ($this->challengeGenerator)();
-        $response = new Response($challenge->captchaHtml);
+        $response = new Response($challenge);
         $response->setPrivate();
 
         return $response;

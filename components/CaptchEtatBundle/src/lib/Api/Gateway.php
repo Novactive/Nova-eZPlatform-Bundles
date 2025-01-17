@@ -37,7 +37,7 @@ class Gateway
         string $captchaType = 'html',
         ?string $mode = null,
         ?string $tech = null,
-        string $type = 'numerique6_7CaptchaFR'
+        string $type = 'alphanumerique4to6LightCaptchaFR'
     ): string {
         $token = $this->oauthGateway->getOauth20Token();
         $available = [
@@ -64,11 +64,12 @@ class Gateway
         }
 
         $service = '/piste/captcha/simple-captcha-endpoint';
+        $service = '/piste/captchetat/v2/simple-captcha-endpoint';
         $method = 'GET';
 
         $queryParams = [
             'get' => $captchaType,
-            'c' => $type,
+            'c' => 'alphanumerique4to6LightCaptchaFR',
         ];
         if ($mode) {
             $queryParams['mode'] = $mode;
@@ -79,6 +80,7 @@ class Gateway
 
         $url = $this->url.$service.'?'.http_build_query($queryParams);
 
+        //dd($url);
         $option = [
             'headers' => [
                 'Authorization' => 'Bearer '.$token,
@@ -101,9 +103,11 @@ class Gateway
             return $response->getContent();
         } catch (ClientException|ServerException $httpException) {
             $this->logger->logHttpException($httpException, $requestLog);
+            dd($httpException, $requestLog);
             throw $httpException;
         } catch (TransportException $transportException) {
             $this->logger->logTransportException($transportException, $requestLog);
+            dd($transportException, $requestLog);
             throw $transportException;
         }
     }
@@ -114,6 +118,7 @@ class Gateway
     ): bool {
         $token = $this->oauthGateway->getOauth20Token();
         $service = '/piste/captcha/valider-captcha';
+        $service = '/piste/captchetat/v2/valider-captcha';
         $method = 'POST';
 
         $url = $this->url.$service;
@@ -142,12 +147,16 @@ class Gateway
             $response = $this->client->request($method, $url, $option);
             $content = $response->getContent();
 
+            dump($content);die;
+
             return 'true' === $content;
         } catch (ClientException|ServerException $httpException) {
             $this->logger->logHttpException($httpException, $requestLog);
+            dd($httpException, $requestLog);
             throw $httpException;
         } catch (TransportException $transportException) {
             $this->logger->logTransportException($transportException, $requestLog);
+            dd($transportException, $requestLog);
             throw $transportException;
         }
     }
