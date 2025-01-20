@@ -1,3 +1,4 @@
+console.log('captchetat-widget.js')
 
 /**
  * @param {HTMLElement} container
@@ -40,12 +41,17 @@ export const addLinksToHead = container => {
 
 // Define captchaEtat object
 export const captchaEtat = (function () {
+    console.log('captchetat-widget.js captchaEtat')
     function _init(container = document) {
+        console.log('captchetat-widget.js init()')
         const widgets = container.querySelectorAll('.js-captcha-widget');
 
         for (const widget of widgets) {
             const htmlContainer = widget.querySelector('.captcha-html-container');
+            console.log('htmlContainer ::', htmlContainer);
             const idInput = widget.querySelector('.captcha-input [name*="[captcha_id]"]');
+            console.log('idInput ::', idInput);
+
             if (htmlContainer.querySelector('.captcha-html')) {
                 return;
             }
@@ -53,8 +59,8 @@ export const captchaEtat = (function () {
             fetch('/api/simple-captcha').then((response) => {
                 console.log('response ::', response);
                 return response.text();
-            }).then((html) => {
-
+            }).then((data) => {
+                console.log('data ::', data);
                 //__________________  add img tag
                 const parsedData = JSON.parse(html);
                 const imageBase64 = parsedData.imageb64;
@@ -65,7 +71,9 @@ export const captchaEtat = (function () {
                 img.classList = "captch-etat-v2";
                 console.log('imageBase64', imageBase64);
                 console.log('img', img);
-                document.getElementById('form-fre-FR-438825-1795842_fields_captcha').appendChild(img);
+
+                let parent = htmlContainer
+                htmlContainer.appendChild(img);
                 console.log('okkk ::');
                 //__________________  add img tag
 
