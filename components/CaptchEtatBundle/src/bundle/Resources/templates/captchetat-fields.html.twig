@@ -16,12 +16,12 @@
                 <div class="clearfix"></div>
             </div>
             <div>
-                {{- form_help(form.answer) -}}
+                {{- form_help(form.captcha_code) -}}
             </div>
             <div class="captcha-input">
-                {{- form_label(form.answer) -}}
-                {{- form_widget(form.answer,  { 'id': 'captchaFormulaireExtInput' } ) -}}
-                {{- form_widget(form.captcha_id) -}}
+                {{- form_label(form.captcha_code) -}}
+                {{- form_widget(form.captcha_code,  { 'id': 'captchaCode' } ) -}}
+                {{- form_widget(form.uuid) -}}
             </div>
         </div>
     {% endapply %}

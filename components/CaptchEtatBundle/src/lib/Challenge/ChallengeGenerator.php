@@ -68,10 +68,10 @@ class ChallengeGenerator
     {
         $type = $this->getType($lang);
         $html = $this->gateway->getSimpleCaptchaEndpoint(
-            'image',
+            'html',
             'frontal',
             null,
-            "alphanumerique4to6LightCaptchaFR"
+            $type
         );
         $hidden = 'style="visibility: hidden !important"';
         $html = str_replace($hidden, '', $html);

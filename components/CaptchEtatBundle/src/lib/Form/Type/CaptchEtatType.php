@@ -18,17 +18,17 @@ class CaptchEtatType extends AbstractType implements TranslationContainerInterfa
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add(
-            'answer',
+            'captcha_code',
             TextType::class,
             [
-                'label' => 'form.captcha.input_answer',
+                'label' => 'form.captcha.input_captcha_code',
                 'help' => 'form.captcha.help',
                 'required' => true,
-                'attr' => ['value' => ''],
+                'attr' => [ 'placeholder' => 'form.captcha.input_captcha_code.placeholder'],
             ]
         );
         $builder->add(
-            'captcha_id',
+            'uuid',
             HiddenType::class,
             [
                 'attr' => ['value' => null],
@@ -65,7 +65,7 @@ class CaptchEtatType extends AbstractType implements TranslationContainerInterfa
     public static function getTranslationMessages()
     {
         return [
-            ( new Message('form.captcha.input_answer', 'messages') )->setDesc('Captcha answer'),
+            ( new Message('form.captcha.input_captcha_code', 'messages') )->setDesc('Captcha answer'),
             ( new Message('form.captcha.help', 'messages') )
                 ->setDesc('To view a new code or listen to the code, use the buttons next to the image.'),
         ];
