@@ -63,12 +63,12 @@ class Gateway
             );
         }
 
-        $service = '/piste/captcha/simple-captcha-endpoint';
+        $service = '/piste/captchetat/v2/simple-captcha-endpoint';
         $method = 'GET';
 
         $queryParams = [
             'get' => $captchaType,
-            'c' => $type,
+            'c' => $type
         ];
         if ($mode) {
             $queryParams['mode'] = $mode;
@@ -113,7 +113,7 @@ class Gateway
         string $answer
     ): bool {
         $token = $this->oauthGateway->getOauth20Token();
-        $service = '/piste/captcha/valider-captcha';
+        $service = '/piste/captchetat/v2/valider-captcha';
         $method = 'POST';
 
         $url = $this->url.$service;

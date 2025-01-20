@@ -38,29 +38,46 @@ export const addLinksToHead = container => {
     }
 };
 
-const captchaEtat = (function () {
+// Define captchaEtat object
+export const captchaEtat = (function () {
     function _init(container = document) {
         const widgets = container.querySelectorAll('.js-captcha-widget');
 
         for (const widget of widgets) {
             const htmlContainer = widget.querySelector('.captcha-html-container');
-            const idInput = widget.querySelector('.captcha-input [name*="[captcha_id]"]')
-            if(htmlContainer.querySelector('.captcha-html')) {
-                return
+            const idInput = widget.querySelector('.captcha-input [name*="[captcha_id]"]');
+            if (htmlContainer.querySelector('.captcha-html')) {
+                return;
             }
 
             fetch('/api/simple-captcha').then((response) => {
+                console.log('response ::', response);
                 return response.text();
-            }).then((html) => {
+            }).then((data) => {
+                console.log('data ::', data);
+                //__________________  add img tag
+                const parsedData = JSON.parse(html);
+                const imageBase64 = parsedData.imageb64;
+                const imageId = parsedData.uuid;
+                const img = document.createElement('img');
+                img.src = imageBase64;
+                img.id = imageId;
+                img.classList = "captch-etat-v2";
+                let parent = htmlContainer
+                htmlContainer.appendChild(img);
+                console.log('okkk ::');
+                //__________________  add img tag
+
+
                 const tmp = document.createElement('div');
                 tmp.innerHTML = html;
                 addLinksToHead(tmp);
                 addScriptsToHead(tmp);
-                const originalIdInput = tmp.querySelector('[name^="BDC_VCID"]')
+                const originalIdInput = tmp.querySelector('[name^="BDC_VCID"]');
                 idInput.value = originalIdInput.value;
 
                 const tmpRoot = tmp.children.item(0);
-                tmpRoot.removeAttribute('id')
+                tmpRoot.removeAttribute('id');
                 tmpRoot.classList.add('captcha-html');
 
                 htmlContainer.prepend(tmpRoot);
@@ -68,12 +85,12 @@ const captchaEtat = (function () {
                 const soundLink = widget.querySelector('.BDC_SoundLink');
                 const answerInput = widget.querySelector('.captcha-input input[type="text"]');
                 soundLink.addEventListener('click', function (e) {
-                    if(answerInput) {
+                    if (answerInput) {
                         answer.removeAttribute('disabled');
-                        answerInput.focus()
+                        answerInput.focus();
                     }
-                })
-            })
+                });
+            });
         }
     }
 

@@ -21,24 +21,36 @@ class ChallengeGenerator
     protected TranslatorInterface $translator;
     protected CaptchEtatLogger $logger;
     protected Gateway $gateway;
+    protected string $captchetatType;
 
     public function __construct(
         LocaleConverterInterface $localeConverter,
         ConfigResolverInterface $configResolver,
         Gateway $gateway,
         TranslatorInterface $translator,
-        CaptchEtatLogger $logger
+        CaptchEtatLogger $logger,
+        string $captchetatType
     ) {
         $this->gateway = $gateway;
         $this->logger = $logger;
         $this->translator = $translator;
         $this->localeConverter = $localeConverter;
         $this->configResolver = $configResolver;
+        $this->captchetatType = $captchetatType;
     }
 
-    public function __invoke(): CaptchEtatChallenge
+    public function __invoke()
     {
         $lang = $this->getShortLanguage();
+        $type = $this->getType($lang);
+        $image = $this->gateway->getSimpleCaptchaEndpoint(
+            'image',
+            'frontal',
+            null,
+            $type
+        );
+
+        return $image;
 
         return CaptchEtatChallenge::createLazyGhost(function (CaptchEtatChallenge $instance) use ($lang) {
             try {
@@ -103,6 +115,8 @@ class ChallengeGenerator
         if ('fr' !== $lang) {
             $type = 'numerique6_7CaptchaEN';
         }
+
+        $type = empty($this->captchetatType) ? $type : $this->captchetatType;
 
         return $type;
     }

@@ -1,2 +1,3 @@
 customform.show.captcha: 'Captcha'
-form.captcha.input_answer: 'Captcha answer'
+form.captcha.input_captcha_code: 'Captcha answer'
+form.captcha.input_captcha_code.placeholder: 'ENTER CAPTCHA'
