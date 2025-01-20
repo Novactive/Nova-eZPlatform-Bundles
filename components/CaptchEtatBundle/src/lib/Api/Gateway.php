@@ -68,7 +68,7 @@ class Gateway
 
         $queryParams = [
             'get' => $captchaType,
-            'c' => 'alphanumerique4to6LightCaptchaFR', // for test purpose TODO change to $type
+            'c' => $type
         ];
         if ($mode) {
             $queryParams['mode'] = $mode;

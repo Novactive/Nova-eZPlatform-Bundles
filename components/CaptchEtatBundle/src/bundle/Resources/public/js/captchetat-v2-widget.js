@@ -1,3 +1,4 @@
+// Unminified version js https://static.piste.gouv.fr/captchEtat/libraries/captchetat-js-1.0.0.tgz
 !(function () {
     "use strict";
     let e, t, n, a, c;

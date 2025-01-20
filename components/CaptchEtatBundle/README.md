@@ -65,6 +65,7 @@ CAPTCHETAT_OAUTH_URL="https://sandbox-oauth.piste.gouv.fr"
 CAPTCHETAT_OAUTH_CLIENT_ID=~
 CAPTCHETAT_OAUTH_CLIENT_SECRET=~
 CAPTCHETAT_TIMEOUT="2.5"
+CAPTCHETAT_TYPE=""
 ```
 
 Depending on if you use "sandbox" (default) or "production" environment, you might want to change the urls to :

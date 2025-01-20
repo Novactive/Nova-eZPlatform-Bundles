@@ -27,6 +27,7 @@ services:
             $gateway: '@AlmaviaCX\Bundle\CaptchEtat\Api\Gateway'
             $translator: '@Symfony\Contracts\Translation\TranslatorInterface'
             $logger: '@AlmaviaCX\Bundle\CaptchEtat\Logger\CaptchEtatLogger'
+            $captchetatType: '%captchetat_type%'
 
     AlmaviaCX\Bundle\CaptchEtat\Challenge\ChallengeValidator:
         arguments:

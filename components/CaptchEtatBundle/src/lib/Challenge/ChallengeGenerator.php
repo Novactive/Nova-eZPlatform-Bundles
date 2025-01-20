@@ -21,19 +21,22 @@ class ChallengeGenerator
     protected TranslatorInterface $translator;
     protected CaptchEtatLogger $logger;
     protected Gateway $gateway;
+    protected string $captchetatType;
 
     public function __construct(
         LocaleConverterInterface $localeConverter,
         ConfigResolverInterface $configResolver,
         Gateway $gateway,
         TranslatorInterface $translator,
-        CaptchEtatLogger $logger
+        CaptchEtatLogger $logger,
+        string $captchetatType
     ) {
         $this->gateway = $gateway;
         $this->logger = $logger;
         $this->translator = $translator;
         $this->localeConverter = $localeConverter;
         $this->configResolver = $configResolver;
+        $this->captchetatType = $captchetatType;
     }
 
     public function __invoke()
@@ -112,6 +115,8 @@ class ChallengeGenerator
         if ('fr' !== $lang) {
             $type = 'numerique6_7CaptchaEN';
         }
+
+        $type = empty($this->captchetatType) ? $type : $this->captchetatType;
 
         return $type;
     }
