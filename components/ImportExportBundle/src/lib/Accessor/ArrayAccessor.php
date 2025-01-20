@@ -26,7 +26,7 @@ class ArrayAccessor extends AbstractItemAccessor implements ItemAccessorInterfac
      */
     public function offsetExists($offset): bool
     {
-        return isset($this->array[$offset]);
+        return array_key_exists($offset, $this->array);
     }
 
     /**

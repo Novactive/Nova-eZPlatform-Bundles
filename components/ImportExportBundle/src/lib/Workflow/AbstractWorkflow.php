@@ -49,15 +49,18 @@ abstract class AbstractWorkflow implements WorkflowInterface
     {
         $this->startTime = new DateTimeImmutable();
         $this->referenceBag->resetScope(Reference::SCOPE_WORKFLOW);
-        foreach ($this->configuration->getProcessors() as $processor) {
-            $processor->setLogger($this->logger);
-            $processor->prepare();
-        }
+
         foreach ($this->configuration->getWriters() as $index => $writer) {
             if (isset($this->writerResults[$index])) {
                 $writer->setResults($this->writerResults[$index]);
             }
         }
+
+        foreach ($this->configuration->getProcessors() as $processor) {
+            $processor->setLogger($this->logger);
+            $processor->prepare();
+        }
+
         $reader = $this->configuration->getReader();
         $reader->prepare();
         $this->itemsIterator = ($reader)();
