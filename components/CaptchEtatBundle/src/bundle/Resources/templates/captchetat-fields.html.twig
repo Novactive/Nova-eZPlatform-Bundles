@@ -7,6 +7,7 @@
 {% endblock captchetat_label %}
 
 {% block captchetat_widget %}
+    {{ dump('vendor/almaviacx/captchetatbundle/src/bundle/Resources/templates/captchetat-fields.html.twig captchetat_widget') }}
     {% apply spaceless %}
         {%- set attr = attr|merge({
             'class': 'widget-container row align-items-center js-captcha-widget'
