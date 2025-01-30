@@ -9,19 +9,20 @@
 {% block captchetat_widget %}
     {% apply spaceless %}
         {%- set attr = attr|merge({
-            'class': 'widget-container row align-items-center js-captcha-widget'
+            'class': 'widget-container row align-items-center js-captcha-widget',
+            'data-type': captchetat_type()
         }) -%}
         <div {{ block('widget_container_attributes') }}>
             <div class="captcha captcha-html-container col-lg-4 col-md-6 d-flex align-items-center">
                 <div class="clearfix"></div>
             </div>
             <div>
-                {{- form_help(form.captcha_code) -}}
+                {{- form_help(form.answer) -}}
             </div>
             <div class="captcha-input">
-                {{- form_label(form.captcha_code) -}}
-                {{- form_widget(form.captcha_code,  { 'id': 'captchaCode' } ) -}}
-                {{- form_widget(form.uuid) -}}
+                {{- form_label(form.answer) -}}
+                {{- form_widget(form.answer,  { 'id': 'captchaFormulaireExtInput' } ) -}}
+                {{- form_widget(form.captcha_id) -}}
             </div>
         </div>
     {% endapply %}

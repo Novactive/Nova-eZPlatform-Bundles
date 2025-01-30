@@ -12,4 +12,3 @@ parameters:
     captchetat_oauth_client_secret: '%env(string:CAPTCHETAT_OAUTH_CLIENT_SECRET)%'
     captchetat_api_url: '%env(string:CAPTCHETAT_API_URL)%'
     captchetat_timeout: '%env(float:CAPTCHETAT_TIMEOUT)%'
-    captchetat_type: '%env(string:CAPTCHETAT_TYPE)%'
