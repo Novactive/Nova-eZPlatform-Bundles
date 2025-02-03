@@ -28,12 +28,12 @@ class TextToRichtextTransformer extends AbstractItemValueTransformer
             foreach ($value as $text) {
                 $rawText[] = sprintf(
                     '<p>%s</p>',
-                    htmlentities(trim((string) $text))
+                    nl2br(htmlentities(trim((string) $text)))
                 );
             }
 
             $rawText = str_replace(['&nbsp;'], [' '], implode(PHP_EOL, $rawText));
-            $rawText = preg_replace(['/\\n/'], [''], $rawText);
+            $rawText = preg_replace('/[\n\r]/', '', $rawText);
         }
 
         return ($this->htmlToRichtextTransformer)($rawText);
