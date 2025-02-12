@@ -14,7 +14,6 @@ namespace Novactive\EzMenuManagerBundle\Controller;
 
 use Ibexa\Contracts\AdminUi\Controller\Controller;
 use Ibexa\Contracts\Core\Repository\PermissionResolver;
-use Ibexa\Contracts\ProductCatalog\PermissionResolverInterface;
 use Ibexa\Core\Base\Exceptions\UnauthorizedException;
 use Novactive\EzMenuManager\Service\MenuBuilder;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
@@ -30,8 +29,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ViewController extends Controller
 {
-    public function __construct(protected PermissionResolver $permissionResolver)
+    protected PermissionResolver $permissionResolver;
+
+    public function __construct(PermissionResolver $permissionResolver)
     {
+        $this->permissionResolver = $permissionResolver;
     }
 
     /**
@@ -42,6 +44,7 @@ class ViewController extends Controller
         if (!$this->permissionResolver->hasAccess('menu_manager', 'view')) {
             throw new UnauthorizedException('menu_manager', 'view', []);
         }
+
         return $this->render(
             '@ibexadesign/menu_manager/view.html.twig',
             [
