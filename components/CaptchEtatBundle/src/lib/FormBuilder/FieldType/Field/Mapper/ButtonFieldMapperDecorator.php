@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\CaptchEtat\FormBuilder\FieldType\Field\Mapper;
 
-use AlmaviaCX\Bundle\CaptchEtat\Challenge\ChallengeGenerator;
 use AlmaviaCX\Bundle\CaptchEtat\Form\Type\CaptchEtatType;
 use Ibexa\Contracts\FormBuilder\FieldType\Field\FieldMapperInterface;
 use Ibexa\Contracts\FormBuilder\FieldType\Model\Field;
@@ -14,14 +13,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 class ButtonFieldMapperDecorator implements FieldMapperInterface
 {
     protected ButtonFieldMapper $buttonFieldMapper;
-    protected ChallengeGenerator $challengeGenerator;
 
     public function __construct(
         ButtonFieldMapper $buttonFieldMapper,
-        ChallengeGenerator $challengeGenerator
     ) {
         $this->buttonFieldMapper = $buttonFieldMapper;
-        $this->challengeGenerator = $challengeGenerator;
     }
 
     public function mapField(FormBuilderInterface $builder, Field $field, array $constraints = []): void

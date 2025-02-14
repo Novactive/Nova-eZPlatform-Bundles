@@ -20,14 +20,6 @@ services:
             $url: '%captchetat_api_url%'
             $timeout: '%captchetat_timeout%'
 
-    AlmaviaCX\Bundle\CaptchEtat\Challenge\ChallengeGenerator:
-        arguments:
-            $configResolver: '@Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface'
-            $localeConverter: '@Ibexa\Core\MVC\Symfony\Locale\LocaleConverterInterface'
-            $gateway: '@AlmaviaCX\Bundle\CaptchEtat\Api\Gateway'
-            $translator: '@Symfony\Contracts\Translation\TranslatorInterface'
-            $logger: '@AlmaviaCX\Bundle\CaptchEtat\Logger\CaptchEtatLogger'
-
     AlmaviaCX\Bundle\CaptchEtat\Challenge\ChallengeValidator:
         arguments:
             $gateway: '@AlmaviaCX\Bundle\CaptchEtat\Api\Gateway'
@@ -47,9 +39,15 @@ services:
     AlmaviaCX\Bundle\CaptchEtatBundle\Controller\CaptchEtatController:
         arguments:
             $gateway: '@AlmaviaCX\Bundle\CaptchEtat\Api\Gateway'
-            $challengeGenerator: '@AlmaviaCX\Bundle\CaptchEtat\Challenge\ChallengeGenerator'
         tags:
             - controller.service_arguments
+
+    AlmaviaCX\Bundle\CaptchEtat\Twig\CaptchEtatExtension:
+        arguments:
+            $configResolver: '@Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface'
+            $localeConverter: '@Ibexa\Core\MVC\Symfony\Locale\LocaleConverterInterface'
+        tags:
+            - { name: twig.extension }
 
 #    AlmaviaCX\Bundle\CaptchEtat\FormBuilder\FieldType\Field\Mapper\ButtonFieldMapperDecorator:
 #        decorates: Ibexa\FormBuilder\FieldType\Field\Mapper\ButtonFieldMapper
