@@ -6,12 +6,18 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\AdminUi\Menu\Event;
 
 use Ibexa\AdminUi\Menu\Event\ConfigureMenuEvent;
 use Ibexa\AdminUi\Menu\MainMenuBuilder;
+use Ibexa\Contracts\Core\Repository\PermissionResolver;
+use Ibexa\Core\Base\Exceptions\UnauthorizedException;
 use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Translation\TranslationContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class MenuListener implements EventSubscriberInterface, TranslationContainerInterface
 {
+    public function __construct(protected PermissionResolver $permissionResolver)
+    {
+    }
+
     public static function getSubscribedEvents(): array
     {
         return [
@@ -21,6 +27,10 @@ class MenuListener implements EventSubscriberInterface, TranslationContainerInte
 
     public function onMenuConfigure(ConfigureMenuEvent $event): void
     {
+        if (!$this->permissionResolver->hasAccess('import_export', 'workflow.list')) {
+            return;
+        }
+
         $menu = $event->getMenu();
 
         $contentMenu = $menu->getChild(MainMenuBuilder::ITEM_CONTENT);

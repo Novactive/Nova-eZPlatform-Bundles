@@ -1,4 +1,5 @@
 import_export:
+    workflow.list: ~
     workflow.create: ~
     workflow.edit: ~
     workflow.delete: ~

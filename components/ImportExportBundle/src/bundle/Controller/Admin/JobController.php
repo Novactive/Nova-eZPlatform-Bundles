@@ -12,6 +12,7 @@ use Exception;
 use Ibexa\Contracts\AdminUi\Controller\Controller;
 use Ibexa\Contracts\AdminUi\Notification\TranslatableNotificationHandlerInterface;
 use Ibexa\Contracts\Core\Repository\PermissionResolver;
+use Ibexa\Core\Base\Exceptions\UnauthorizedException;
 use Ibexa\Core\MVC\Symfony\Security\Authorization\Attribute;
 use JMS\TranslationBundle\Annotation\Ignore;
 use JMS\TranslationBundle\Model\Message;
@@ -57,6 +58,10 @@ class JobController extends Controller implements TranslationContainerInterface
 
     public function list(Request $request): Response
     {
+        if (!$this->permissionResolver->hasAccess('import_export', 'workflow.list')) {
+            throw new UnauthorizedException('import_export', 'workflow.list', []);
+        }
+
         $page = $request->query->get('page') ?? 1;
 
         $pagerfanta = new Pagerfanta(
@@ -81,6 +86,10 @@ class JobController extends Controller implements TranslationContainerInterface
 
     public function create(Request $request): Response
     {
+        if (!$this->permissionResolver->hasAccess('import_export', 'workflow.create')) {
+            throw new UnauthorizedException('import_export', 'workflow.create', []);
+        }
+
         $job = Instantiator::instantiate(Job::class);
         $this->jobCreateFlow->bind($job);
 
@@ -123,6 +132,10 @@ class JobController extends Controller implements TranslationContainerInterface
 
     public function view(Job $job): Response
     {
+        if (!$this->permissionResolver->hasAccess('import_export', 'job.views')) {
+            throw new UnauthorizedException('import_export', 'job.views', []);
+        }
+
         return $this->render('@ibexadesign/import_export/job/view.html.twig', [
             'job' => $job,
         ]);
