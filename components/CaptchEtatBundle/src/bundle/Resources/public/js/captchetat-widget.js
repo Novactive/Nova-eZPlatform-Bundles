@@ -7,6 +7,10 @@ const captchaEtat = (function () {
         const widgets = container.querySelectorAll('.js-captcha-widget');
 
         for (const widget of widgets) {
+            if(widget.dataset.initialized === "true") {
+                continue;
+            }
+            widget.dataset.initialized = "true"
             const htmlContainer = widget.querySelector('.captcha-html-container');
             const idInput = widget.querySelector('.captcha-input [name*="[captcha_id]"]')
             const captchaType = widget.dataset.type
