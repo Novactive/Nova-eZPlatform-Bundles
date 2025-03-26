@@ -1,0 +1,5 @@
+{% block acxselection_field %}
+    {% set option_template = fieldSettings.template|default('default')|trim %}
+    {% set option_template = option_template == '' ? 'default':option_template %}
+    {% include '@ibexadesign/fields/acxselection/'~option_template~'.html.twig' %}
+{% endblock %}
