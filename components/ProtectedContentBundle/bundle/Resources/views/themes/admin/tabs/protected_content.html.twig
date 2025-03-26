@@ -31,6 +31,9 @@
                         {{ form_row(form.password) }}
                         {{ form_row(form.protectChildren) }}
                         {{ form_row(form.enabled) }}
+                        {{ form_row(form.asEmail) }}
+                        {{ form_row(form.emailMessage) }}
+                        <span class="small">{{ form.emailMessage.vars['help']|trans }}</span>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary btn--no" data-dismiss="modal" data-bs-dismiss="modal">
@@ -54,6 +57,8 @@
             <th>{{ 'tab.table.th.password'|trans }}</th>
             <th>{{ "tab.table.th.children_protection"|trans }}</th>
             <th>{{ "tab.table.th.enabled"|trans }}</th>
+            <th>{{ "tab.table.th.as_email"|trans }}</th>
+            <th>{{ "tab.table.th.as_email_message"|trans }}</th>
             <th>{{ "tab.table.th.remove"|trans }}</th>
         </tr>
         </thead>
@@ -69,6 +74,9 @@
                     {% endif %}
                 </td>
                 <td class="ibexa-table__cell">{{ item.enabled ? 'tab.yes'|trans:'tab.no'|trans }}</td>
+
+                <td class="ez-table__cell">{{ item.asEmail ? 'tab.yes'|trans:'tab.no'|trans }}</td>
+                <td class="ez-table__cell">{{ item.emailMessage ? 'tab.yes'|trans:'tab.no'|trans }}</td>
                 <td class="ibexa-table__cell">
                     {% if item.contentId == location.contentInfo.id %}
                         <a href="{{ path("novaezprotectedcontent_bundle_admin_remove_protection", {locationId: location.id, access: item.id }) }}" class="button">
