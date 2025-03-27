@@ -7,6 +7,6 @@ services:
     Novactive\Bundle\eZFastlyImageOptimizerBundle\Twig\Extension: ~
     Novactive\Bundle\eZFastlyImageOptimizerBundle\Core\AliasGenerator:
         arguments:
-            - "@ezpublish.fieldType.ezimage.variation_service"
-            - "@ezpublish.config.resolver"
+            - "@ibexa.field_type.ezimage.variation_service"
+            - "@ibexa.config.resolver"
             - "@logger"
