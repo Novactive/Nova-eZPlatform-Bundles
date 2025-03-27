@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Novactive\Bundle\AlmaviaCXIbexaRecaptchaFieldBundle\FormBuilder\Field\Mapper;
+namespace Novactive\Bundle\RecaptchaFieldBundle\FormBuilder\Field\Mapper;
 
 use Ibexa\FormBuilder\FieldType\Field\Mapper\GenericFieldMapper;
 use Ibexa\Contracts\FormBuilder\FieldType\ModelField;
