@@ -17,5 +17,4 @@ Bundle providing reCAPTCHA field for the Form Builder in eZ Platform EE (2.X and
 Special Mentions and Credits
 ----------------------------
 
-- This bundle features are inspired by https://github.com/adamwojs/ezplatform-form-builder-recaptcha-field fusionned with eZ Mailing
-  (and old Novactive bundle never released in Open Source)
+- This bundle features are inspired by https://github.com/adamwojs/ezplatform-form-builder-recaptcha-field
