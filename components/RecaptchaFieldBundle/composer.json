@@ -1,5 +1,5 @@
 {
-  "name": "novactive/almaviacxibexarecaptchafieldbundle",
+  "name": "almaviacx/ibexarecaptchafieldbundle",
   "license": "MIT",
   "type": "ibexa-bundle",
   "description": "Bundle providing reCAPTCHA field for the IBEXA Form Builder",
