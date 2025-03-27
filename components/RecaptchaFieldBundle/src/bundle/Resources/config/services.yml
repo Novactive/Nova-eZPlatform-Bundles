@@ -1,0 +1,12 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Novactive\AlmaviaCXIbexaRecaptchaFieldBundle\FormBuilder\Field\Mapper\ReCaptchaMapper:
+        arguments:
+            $fieldIdentifier: 'recaptcha'
+            $formType: 'Novactive\AlmaviaCXIbexaRecaptchaFieldBundle\Form\Type\ReCaptchaFieldType'
+        tags:
+            - { name: ibexa.form_builder.field.mapper }
