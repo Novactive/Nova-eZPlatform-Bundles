@@ -16,8 +16,8 @@
   ],
   "autoload": {
     "psr-4": {
-      "Novactive\\Bundle\\AlmaviaCXIbexaRecaptchaFieldBundle\\": "src/bundle",
-      "Novactive\\Bundle\\AlmaviaCXIbexaRecaptchaField\\": "src/lib"
+      "Novactive\\Bundle\\IbexaRecaptchaFieldBundle\\": "src/bundle",
+      "Novactive\\Bundle\\IbexaRecaptchaField\\": "src/lib"
     }
   },
   "require": {

@@ -4,9 +4,9 @@ services:
         autoconfigure: true
         public: false
 
-    Novactive\Bundle\RecaptchaFieldBundle\FormBuilder\Field\Mapper\ReCaptchaMapper:
+    Novactive\Bundle\IbexaRecaptchaField\FormBuilder\Field\Mapper\ReCaptchaMapper:
         arguments:
             $fieldIdentifier: 'recaptcha'
-            $formType: 'Novactive\Bundle\RecaptchaFieldBundle\Form\Type\ReCaptchaFieldType'
+            $formType: 'Novactive\Bundle\IbexaRecaptchaField\Form\Type\ReCaptchaFieldType'
         tags:
             - { name: ibexa.form_builder.field.mapper }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Novactive\Bundle\RecaptchaFieldBundle\Form\Type;
+namespace Novactive\Bundle\IbexaRecaptchaField\Form\Type;
 
 use EWZ\Bundle\RecaptchaBundle\Form\Type\EWZRecaptchaType;
 use EWZ\Bundle\RecaptchaBundle\Form\Type\EWZRecaptchaV3Type;

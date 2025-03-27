@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Novactive\Bundle\RecaptchaFieldBundle;
+namespace Novactive\Bundle\IbexaRecaptchaFieldBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

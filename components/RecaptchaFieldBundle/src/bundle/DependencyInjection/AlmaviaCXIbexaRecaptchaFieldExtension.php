@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Novactive\Bundle\RecaptchaFieldBundle\DependencyInjection;
+namespace Novactive\Bundle\IbexaRecaptchaFieldBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
