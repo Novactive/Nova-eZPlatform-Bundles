@@ -1,3 +1,4 @@
+
 services:
     AlmaviaCX\Bundle\CaptchEtat\Logger\CaptchEtatLogger:
         arguments:
@@ -46,6 +47,7 @@ services:
         arguments:
             $configResolver: '@Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface'
             $localeConverter: '@Ibexa\Core\MVC\Symfony\Locale\LocaleConverterInterface'
+            $typesByLanguage: '%captchetat_types_by_language%'
         tags:
             - { name: twig.extension }
 

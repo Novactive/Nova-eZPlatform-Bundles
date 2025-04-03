@@ -13,13 +13,16 @@ class CaptchEtatExtension extends AbstractExtension
 {
     protected ConfigResolverInterface $configResolver;
     protected LocaleConverterInterface $localeConverter;
+    protected array $typesByLanguage = [];
 
     public function __construct(
         ConfigResolverInterface $configResolver,
         LocaleConverterInterface $localeConverter,
+        array $typesByLanguage = []
     ) {
         $this->localeConverter = $localeConverter;
         $this->configResolver = $configResolver;
+        $this->typesByLanguage = $typesByLanguage;
     }
 
     public function getFunctions()
@@ -49,8 +52,6 @@ class CaptchEtatExtension extends AbstractExtension
             $type = 'numerique6_7CaptchaEN';
         }
 
-        $type = empty($this->captchetatType) ? $type : $this->captchetatType;
-
-        return $type;
+        return $this->typesByLanguage[$lang] ?? $type;
     }
 }
