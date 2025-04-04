@@ -1,0 +1,41 @@
+{
+  "name": "almaviacx/ibexarecaptchafieldbundle",
+  "license": "MIT",
+  "type": "ibexa-bundle",
+  "description": "Bundle providing reCAPTCHA field for the IBEXA Form Builder",
+  "homepage": "https://github.com/Novactive/AlmaviaCXIbexaRecaptchaFieldBundle",
+  "keywords": [
+    "ibexa",
+    "bundle"
+  ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://updates.ibexa.co"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Novactive\\Bundle\\IbexaRecaptchaFieldBundle\\": "src/bundle",
+      "Novactive\\Bundle\\IbexaRecaptchaField\\": "src/lib"
+    }
+  },
+  "require": {
+    "php": ">=7.4",
+    "ibexa/experience": "^4.6",
+    "ibexa/form-builder": "^4.6",
+    "excelwebzone/recaptcha-bundle": "^1.5",
+    "symfony/http-kernel": "5.4.*",
+    "symfony/config": "5.4.*",
+    "symfony/dependency-injection": "5.4.*",
+    "symfony/yaml": "5.4.*",
+    "symfony/form": "5.4.*",
+    "symfony/options-resolver": "5.4.*"
+  },
+  "extra": {
+    "thanks": {
+      "name": "adamwojs/ezplatform-form-builder-recaptcha-field",
+      "url": "https://github.com/adamwojs/ezplatform-form-builder-recaptcha-field"
+    }
+  }
+}
