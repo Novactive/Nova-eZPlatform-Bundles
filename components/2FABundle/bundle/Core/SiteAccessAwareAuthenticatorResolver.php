@@ -269,6 +269,23 @@ class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
 
     public function deleteUserAuthSecretAndEmail(User $user): void
     {
-        $this->userRepository->deleteUserAuthSecretAndEmail($user->getAPIUser()->getUserId(), $this->method);
+        $method = $this->method;
+        $userAuthData = $this->getUserAuthData($user);
+
+        $authenticationMethods = [
+            'email_authentication' => 'email',
+            'google_authentication_secret' => 'google',
+            'totp_authentication_secret' => 'totp',
+            'microsoft_authentication_secret' => 'microsoft',
+        ];
+
+        foreach ($authenticationMethods as $key => $methodName) {
+            if (!empty($userAuthData[$key]) && $userAuthData[$key] !== 0) {
+                $method = $methodName;
+                break;
+            }
+        }
+
+        $this->userRepository->deleteUserAuthSecretAndEmail($user->getAPIUser()->getUserId(), $method);
     }
 }
