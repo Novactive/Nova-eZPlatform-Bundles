@@ -277,7 +277,10 @@ class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
         ];
 
         foreach ($authenticationMethods as $methodName) {
-            $this->userRepository->deleteUserAuthSecretAndEmail($user->getAPIUser()->getUserId(), $methodName);
+            $this->userRepository->deleteUserAuthSecretAndEmail(
+                $user->getAPIUser()->getUserId(),
+                $methodName
+            );
         }
     }
 }
