@@ -23,7 +23,6 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 final class TwoFactorUserProviderDecorator implements UserProviderInterface, APIUserProviderInterface
 {
-
     public function __construct(
         protected UserProviderInterface $provider,
         protected SiteAccessAwareAuthenticatorResolver $saAuthenticatorResolver

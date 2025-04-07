@@ -28,7 +28,6 @@ final class UserTotpAuthSecret extends User implements TwoFactorInterface, Backu
      * @var string|null
      */
     private ?string $secret;
-    
     private const  DEFAULT_ALGORITHM = TotpConfiguration::ALGORITHM_SHA1;
     private const  DEFAULT_PERIOD = 30;
     private const  DEFAULT_DIGITS = 6;

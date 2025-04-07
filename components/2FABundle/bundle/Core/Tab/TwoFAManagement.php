@@ -28,7 +28,6 @@ use Twig\Environment;
 
 final class TwoFAManagement extends AbstractTab implements OrderedTabInterface, ConditionalTabInterface
 {
-
     public function getIdentifier(): string
     {
         return 'reset-for-user';
