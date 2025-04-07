@@ -23,7 +23,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class AuthCodeMailer implements AuthCodeMailerInterface
 {
-
     /**
      * @var Address
      */

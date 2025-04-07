@@ -181,7 +181,10 @@ class TwoFactorAuthController extends Controller
 
         if (isset($contentId, $locationId)) {
             return new RedirectResponse(
-                $router->generate(UrlAliasGenerator::INTERNAL_CONTENT_VIEW_ROUTE, ['contentId' => $contentId, 'locationId' => $locationId]).
+                $router->generate(
+                    UrlAliasGenerator::INTERNAL_CONTENT_VIEW_ROUTE,
+                    ['contentId' => $contentId, 'locationId' => $locationId]
+                ).
                 '#ez-tab-location-view-reset-for-user#tab'
             );
         }

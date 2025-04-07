@@ -20,7 +20,6 @@ use Ibexa\Bundle\Core\ApiLoader\RepositoryConfigurationProvider;
 
 final class SiteAccessAwareQueryExecutor
 {
-
     public function __construct(
         protected Registry $registry,
         protected RepositoryConfigurationProvider $repositoryConfigurationProvider

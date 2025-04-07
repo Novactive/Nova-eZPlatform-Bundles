@@ -20,7 +20,6 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
 
 final class BackupCodeManager implements BackupCodeManagerInterface
 {
-
     public function __construct(protected UserRepository $userRepository)
     {
     }
