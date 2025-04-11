@@ -23,7 +23,7 @@ abstract class AbstractJobRunner implements JobRunnerInterface
             $job->reset();
         }
 
-        if (!$job->isPending()) {
+        if (!$job->canRun()) {
             return $job->getStatus();
         }
 

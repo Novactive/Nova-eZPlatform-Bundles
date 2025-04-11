@@ -313,8 +313,8 @@ class Job
         return in_array($this->status, [self::STATUS_PAUSED, self::STATUS_FORCE_PAUSED]);
     }
 
-    public function isPending(): bool
+    public function canRun(): bool
     {
-        return self::STATUS_PENDING === $this->status || $this->isPaused();
+        return in_array($this->status, [self::STATUS_PENDING, self::STATUS_QUEUED]) || $this->isPaused();
     }
 }

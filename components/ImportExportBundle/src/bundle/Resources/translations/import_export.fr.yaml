@@ -1,6 +1,7 @@
 Notice: Notice
 job.breadcrumb.list: Tâches
 job.cancel: Annuler
+job.pause: Mettre en pause
 job.create.success: 'Tâche ''%label%'' créée.'
 job.creating: Création
 job.list.action.create: Créer
