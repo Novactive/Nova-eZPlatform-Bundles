@@ -1,6 +1,7 @@
 Notice: Notice
 job.breadcrumb.list: Jobs
 job.cancel: Cancel
+job.pause: Pause
 job.create.success: 'Job ''%label%'' created.'
 job.creating: Creating
 job.list.action.create: Create
