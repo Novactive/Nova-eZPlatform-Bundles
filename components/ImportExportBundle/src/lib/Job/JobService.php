@@ -51,13 +51,19 @@ class JobService
         ($this->jobRunner)($job, $batchLimit, $reset);
     }
 
-    public function cancelJob(Job $job)
+    public function pause(Job $job): void
+    {
+        $job->setStatus(Job::STATUS_FORCE_PAUSED);
+        $this->jobRepository->save($job);
+    }
+
+    public function cancelJob(Job $job): void
     {
         $job->setStatus(Job::STATUS_CANCELED);
         $this->jobRepository->save($job);
     }
 
-    public function debug(Job $job, int $index)
+    public function debug(Job $job, int $index): void
     {
         ($this->jobDebugger)($job, $index);
     }

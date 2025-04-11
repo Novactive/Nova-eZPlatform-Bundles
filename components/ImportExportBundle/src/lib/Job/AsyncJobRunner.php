@@ -24,10 +24,13 @@ class AsyncJobRunner extends AbstractJobRunner
 
     protected function run(Job $job, int $batchLimit = -1): int
     {
-        $job->setStatus(Job::STATUS_QUEUED);
-        $this->jobRepository->save($job);
-
-        $this->jobRunMessageHandler->triggerStart($job, $batchLimit);
+        if ($job->isPaused()) {
+            $this->jobRunMessageHandler->triggerResume($job, $batchLimit);
+        } else {
+            $job->setStatus(Job::STATUS_QUEUED);
+            $this->jobRepository->save($job);
+            $this->jobRunMessageHandler->triggerStart($job, $batchLimit);
+        }
 
         return $job->getStatus();
     }

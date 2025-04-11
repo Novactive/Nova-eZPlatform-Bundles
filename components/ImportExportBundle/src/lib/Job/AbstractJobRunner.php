@@ -23,11 +23,11 @@ abstract class AbstractJobRunner implements JobRunnerInterface
             $job->reset();
         }
 
-        if (Job::STATUS_PAUSED !== $job->getStatus() || Job::STATUS_PENDING !== $job->getStatus()) {
-            return $this->run($job, $batchLimit);
+        if (!$job->isPending()) {
+            return $job->getStatus();
         }
 
-        return $job->getStatus();
+        return $this->run($job, $batchLimit);
     }
 
     abstract protected function run(Job $job, int $batchLimit = -1): int;
