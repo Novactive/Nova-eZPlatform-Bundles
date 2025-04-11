@@ -32,8 +32,8 @@
         'job.status.completed'|trans()|desc('Completed'),
         'job.status.queued'|trans()|desc('Queued'),
         'job.status.paused'|trans()|desc('Paused'),
-        'job.status.canceled'|trans()|desc('Canceled')
-
+        'job.status.canceled'|trans()|desc('Canceled'),
+        'job.status.force_paused'|trans()|desc('Paused')
     ] %}
     {% set progress_bar %}</div>
         {% include '@ibexadesign/import_export/components/progress_bar.html.twig' with {processedCount: job.processedItemsCount, totalCount: job.totalItemsCount} only %}
@@ -82,7 +82,18 @@
                     {{ 'job.cancel'|trans|desc('Cancel') }}
                 </span>
             </a>
-        {% endif %}
+            <a
+                    href="{{ path('import_export.job.pause', {'id': job.id}) }}"
+                    class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
+            >
+                <svg class="ibexa-icon ibexa-icon--small ibexa-icon--edit">
+                    <use xlink:href="{{ ibexa_icon_path('interface-block') }}"></use>
+                </svg>
+                <span class="ibexa-btn__label">
+                    {{ 'job.pause'|trans|desc('pause') }}
+                </span>
+            </a>
+        {% else %}
             <a
                     href="{{ path('import_export.job.run', {'id': job.id}) }}"
                     class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
@@ -94,6 +105,7 @@
                     {{ 'job.run'|trans|desc('Run') }}
                 </span>
             </a>
+        {% endif %}
     {% endset %}
 
     <section class="container ibexa-container">

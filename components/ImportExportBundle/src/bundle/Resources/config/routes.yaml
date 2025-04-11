@@ -15,6 +15,10 @@ import_export.job.run:
     path:     /import-export/job/{id}/run
     defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::run }
 
+import_export.job.pause:
+    path:     /import-export/job/{id}/pause
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::pause }
+
 import_export.job.cancel:
     path:     /import-export/job/{id}/cancel
     defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::cancel }

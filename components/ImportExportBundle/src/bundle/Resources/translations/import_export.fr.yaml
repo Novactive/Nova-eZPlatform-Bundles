@@ -17,6 +17,7 @@ job.run: Lancer
 job.status.canceled: Annulé
 job.status.completed: Complété
 job.status.paused: 'En pause'
+job.status.force_paused: 'En pause'
 job.status.pending: 'En attente'
 job.status.queued: 'Dans la file'
 job.status.running: 'En cours'

@@ -7,7 +7,6 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\AdminUi\Menu\Event;
 use Ibexa\AdminUi\Menu\Event\ConfigureMenuEvent;
 use Ibexa\AdminUi\Menu\MainMenuBuilder;
 use Ibexa\Contracts\Core\Repository\PermissionResolver;
-use Ibexa\Core\Base\Exceptions\UnauthorizedException;
 use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Translation\TranslationContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

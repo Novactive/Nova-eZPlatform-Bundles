@@ -56,7 +56,7 @@ class JobRunner extends AbstractJobRunner
 
         $this->eventDispatcher->dispatch(new PreJobRunEvent($job, $workflow));
 
-        if (Job::STATUS_PAUSED === $job->getStatus()) {
+        if ($job->isPaused()) {
             $workflow->setOffset($job->getProcessedItemsCount());
             $workflow->setWriterResults($job->getWriterResults());
             $workflow->setTotalItemsCount($job->getTotalItemsCount());

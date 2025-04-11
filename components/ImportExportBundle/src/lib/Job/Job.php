@@ -24,6 +24,7 @@ class Job
     public const STATUS_COMPLETED = 2;
     public const STATUS_QUEUED = 3;
     public const STATUS_PAUSED = 4;
+    public const STATUS_FORCE_PAUSED = 6;
     public const STATUS_CANCELED = 5;
 
     /**
@@ -305,5 +306,15 @@ class Job
     public function isRunning(): bool
     {
         return self::STATUS_RUNNING === $this->status;
+    }
+
+    public function isPaused(): bool
+    {
+        return in_array($this->status, [self::STATUS_PAUSED, self::STATUS_FORCE_PAUSED]);
+    }
+
+    public function isPending(): bool
+    {
+        return self::STATUS_PENDING === $this->status || $this->isPaused();
     }
 }
