@@ -318,8 +318,8 @@ class MenuItem
         /** @var MenuItem[] $childrens */
         $childrens = $this->getChildrens()->getValues();
 
-        usort($childrens, function (MenuItem $a, MenuItem $b) {
-            return $a->getPosition() <=> $b->getPosition();
+        usort($childrens, function (MenuItem $itemA, MenuItem $itemB) {
+            return $itemA->getPosition() <=> $itemB->getPosition();
         });
 
         $position = 0;
