@@ -88,7 +88,7 @@ class DefaultMenuItemType extends AbstractMenuItemType
         $currentParent = $menuItem->getParent();
         if ($currentParent && (!isset($hash['parentId']) || null === $hash['parentId'])) {
             $currentParent->removeChildren($menuItem);
-        } elseif ($hash['parentId'] && (!$currentParent || $currentParent->getId() !== $hash['parentId'])) {
+        } elseif ($hash['parentId'] && (!$currentParent || $currentParent->getId() !== (int) $hash['parentId'])) {
             $parent = $menuItemRepo->find($hash['parentId']);
             if ($parent) {
                 $parent->addChildren($menuItem);
