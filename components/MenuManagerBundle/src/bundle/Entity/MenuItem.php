@@ -315,7 +315,13 @@ class MenuItem
 
     public function assignPositions(): void
     {
-        $childrens = $this->getChildrens();
+        /** @var MenuItem[] $childrens */
+        $childrens = $this->getChildrens()->getValues();
+
+        usort($childrens, function (MenuItem $a, MenuItem $b) {
+            return $a->getPosition() <=> $b->getPosition();
+        });
+
         $position = 0;
         foreach ($childrens as $child) {
             $child->setPosition($position);
