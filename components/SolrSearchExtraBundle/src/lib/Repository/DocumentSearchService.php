@@ -65,6 +65,11 @@ class DocumentSearchService
         return $this->searchHandler->findDocument($query, $languageFilter);
     }
 
+    public function purgeDocumentsFromIndex(): void
+    {
+        $this->searchHandler->purgeDocumentsFromIndex();
+    }
+
     /**
      * Checks that $criteria does not contain Location criterions.
      *

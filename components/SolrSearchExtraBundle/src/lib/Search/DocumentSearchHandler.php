@@ -48,6 +48,11 @@ class DocumentSearchHandler
         );
     }
 
+    public function purgeDocumentsFromIndex(): void
+    {
+        $this->gateway->purgeDocumentsFromIndex();
+    }
+
     public function indexDocument(Document $document): void
     {
         $this->gateway->bulkIndexDocuments([[$document]]);

@@ -21,8 +21,14 @@ class GatewayCompilerPass implements CompilerPassInterface
             $nativeGatewayDefiniton = $container->getDefinition($serviceId);
 
             $gatewayDefinition = new ChildDefinition(Gateway::class);
-            $gatewayDefinition->setArgument('$endpointResolver', $nativeGatewayDefiniton->getArgument('$endpointResolver'));
-            $gatewayDefinition->setArgument('$distributionStrategy', $nativeGatewayDefiniton->getArgument('$distributionStrategy'));
+            $gatewayDefinition->setArgument(
+                '$endpointResolver',
+                $nativeGatewayDefiniton->getArgument('$endpointResolver')
+            );
+            $gatewayDefinition->setArgument(
+                '$distributionStrategy',
+                $nativeGatewayDefiniton->getArgument('$distributionStrategy')
+            );
 
             $gatewayId = "$alias.connection.$connectionName.gateway_id";
             $container->setDefinition($gatewayId, $gatewayDefinition);
