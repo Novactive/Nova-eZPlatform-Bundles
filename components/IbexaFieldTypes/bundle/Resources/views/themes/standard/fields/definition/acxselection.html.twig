@@ -1,0 +1,12 @@
+{% block acxselection_definition_edit %}
+    <div class="{% if group_class is not empty %}{{ group_class }}{% endif %}">
+        {{- form_label(form.fieldSettings.choices_entry) -}}
+        {{- form_errors(form.fieldSettings.choices_entry) -}}
+        {{- form_widget(form.fieldSettings.choices_entry) -}}
+    </div>
+    <div class="{% if group_class is not empty %}{{ group_class }}{% endif %}">
+        {{- form_label(form.fieldSettings.template) -}}
+        {{- form_errors(form.fieldSettings.template) -}}
+        {{- form_widget(form.fieldSettings.template) -}}
+    </div>
+{% endblock %}
