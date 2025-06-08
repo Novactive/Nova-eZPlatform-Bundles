@@ -14,11 +14,11 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\NovaeZEditHelpBundle\Command;
 
-use eZ\Publish\API\Repository\Exceptions\ForbiddenException;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
+use Ibexa\Contracts\Core\Repository\Exceptions\ForbiddenException;
+use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
+use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException;
+use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 use Novactive\Bundle\NovaeZEditHelpBundle\Services\FetchDocumentation;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -26,10 +26,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class CreateContentTypeCommand extends Command
 {
-    /**
-     * @var Repository
-     */
-    private $repository;
+    private Repository $repository;
 
     /**
      * @required
@@ -140,9 +137,7 @@ final class CreateContentTypeCommand extends Command
                         $contentTypeDraft->id
                     )
                 );
-            } catch (UnauthorizedException $e) {
-                $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
-            } catch (ForbiddenException $e) {
+            } catch (UnauthorizedException|ForbiddenException $e) {
                 $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             }
         }

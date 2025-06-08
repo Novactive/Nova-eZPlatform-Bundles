@@ -14,19 +14,16 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\NovaeZEditHelpBundle\Listener;
 
-use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;
-use EzSystems\EzPlatformContentForms\Content\View\ContentCreateView;
-use EzSystems\EzPlatformContentForms\Content\View\ContentEditView;
+use Ibexa\Core\MVC\Symfony\Event\PreContentViewEvent;
+use Ibexa\ContentForms\Content\View\ContentCreateView;
+use Ibexa\ContentForms\Content\View\ContentEditView;
 use Novactive\Bundle\NovaeZEditHelpBundle\Services\FetchDocumentation;
 
 class PreContentView
 {
-    protected $fetchDocumentation;
-
-    public function __construct(FetchDocumentation $fetchDocumentation)
-    {
-        $this->fetchDocumentation = $fetchDocumentation;
-    }
+    public function __construct(
+        protected FetchDocumentation $fetchDocumentation
+    ) { }
 
     public function onPreContentView(PreContentViewEvent $event): void
     {
