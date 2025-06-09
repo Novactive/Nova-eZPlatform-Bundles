@@ -165,12 +165,27 @@ services:
       - '@ibexa.solr.query.content.facet_builder_visitor.aggregate'
       - '@ibexa.solr.query.content.aggregation_visitor.dispatcher'
 
-  Novactive\EzSolrSearchExtra\Search\DocumentSearchHandler:
+  Novactive\EzSolrSearchExtra\Api\GatewayRegistry:
+
+  Novactive\EzSolrSearchExtra\Search\DocumentSearchHandlerFactory:
     arguments:
+      $repositoryConfigurationProvider: '@Ibexa\Bundle\Core\ApiLoader\RepositoryConfigurationProvider'
+      $defaultConnection: "%ibexa.solr.default_connection%"
+      $gatewayRegistry: '@Novactive\EzSolrSearchExtra\Api\GatewayRegistry'
+      $coreFilterRegistry: '@Ibexa\Solr\CoreFilter\CoreFilterRegistry'
       $resultExtractor: '@Novactive\EzSolrSearchExtra\ResultExtractor\DocumentResultExtractor'
-      $gateway: '@nova.solr.connection.default.gateway_id'
-      $coreFilter: '@ibexa.solr.core_filter'
+
+  Novactive\EzSolrSearchExtra\Search\DocumentSearchHandler:
+    lazy: true
+    factory: ['@Novactive\EzSolrSearchExtra\Search\DocumentSearchHandlerFactory', build]
 
   Novactive\EzSolrSearchExtra\Repository\DocumentSearchService:
     arguments:
       $searchHandler: '@Novactive\EzSolrSearchExtra\Search\DocumentSearchHandler'
+
+  Novactive\EzSolrSearchExtra\Repository\SiteAccessAware\DocumentSearchService:
+    arguments:
+      - '@Novactive\EzSolrSearchExtra\Repository\DocumentSearchService'
+      - '@ibexa.helper.language_resolver'
+
+  Novactive\EzSolrSearchExtra\Repository\DocumentSearchServiceInterface: '@Novactive\EzSolrSearchExtra\Repository\SiteAccessAware\DocumentSearchService'

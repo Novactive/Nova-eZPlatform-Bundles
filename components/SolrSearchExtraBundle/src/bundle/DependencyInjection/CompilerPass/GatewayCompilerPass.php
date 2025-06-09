@@ -6,15 +6,19 @@ namespace Novactive\EzSolrSearchExtraBundle\DependencyInjection\CompilerPass;
 
 use Ibexa\Solr\Container\Compiler\GatewayRegistryPass;
 use Novactive\EzSolrSearchExtra\Api\Gateway;
+use Novactive\EzSolrSearchExtra\Api\GatewayRegistry;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
 class GatewayCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
         $alias = $this->getServicePrefix();
+
+        $gatewayRegistryDefinition = $container->getDefinition(GatewayRegistry::class);
         $gateways = $container->findTaggedServiceIds(GatewayRegistryPass::GATEWAY_SERVICE_TAG);
         foreach ($gateways as $serviceId => $tags) {
             $connectionName = $tags[0]['connection'];
@@ -32,6 +36,14 @@ class GatewayCompilerPass implements CompilerPassInterface
 
             $gatewayId = "$alias.connection.$connectionName.gateway_id";
             $container->setDefinition($gatewayId, $gatewayDefinition);
+
+            $gatewayRegistryDefinition->addMethodCall(
+                'addGateway',
+                [
+                    $connectionName,
+                    new Reference($gatewayId),
+                ]
+            );
         }
     }
 

@@ -17,14 +17,14 @@ use Ibexa\Core\Base\Exceptions\InvalidArgumentType;
 use Novactive\EzSolrSearchExtra\Query\DocumentQuery;
 use Novactive\EzSolrSearchExtra\Search\DocumentSearchHandler;
 
-class DocumentSearchService
+class DocumentSearchService implements DocumentSearchServiceInterface
 {
     protected PermissionCriterionResolver $permissionCriterionResolver;
     protected DocumentSearchHandler $searchHandler;
 
     public function __construct(
         PermissionCriterionResolver $permissionCriterionResolver,
-        DocumentSearchHandler $searchHandler
+        DocumentSearchHandler $searchHandler,
     ) {
         $this->searchHandler = $searchHandler;
         $this->permissionCriterionResolver = $permissionCriterionResolver;
@@ -33,7 +33,7 @@ class DocumentSearchService
     public function findDocument(
         DocumentQuery $query,
         array $languageFilter = [],
-        bool $filterOnUserPermissions = true
+        bool $filterOnUserPermissions = true,
     ): SearchResult {
         if (!is_int($query->offset)) {
             throw new InvalidArgumentType(
@@ -73,8 +73,8 @@ class DocumentSearchService
     /**
      * Checks that $criteria does not contain Location criterions.
      *
-     * @param \Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion[] $criteria
-     * @param string                                                            $argumentName
+     * @param Criterion[] $criteria
+     * @param string      $argumentName
      *
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
      */
