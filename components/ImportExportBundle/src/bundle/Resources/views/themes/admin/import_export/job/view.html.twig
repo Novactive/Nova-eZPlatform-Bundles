@@ -111,6 +111,7 @@
                 { content: status[execution.status]  },
                 { content: execution.workflowState.startTime ? execution.workflowState.startTime|ibexa_full_datetime : ''  },
                 { content: execution.workflowState.endTime ? execution.workflowState.endTime|ibexa_full_datetime : ''  },
+                { content: execution.workflowState.endTime ? execution.workflowState.startTime.diff(execution.workflowState.endTime).format('%H:%I:%S')  : '',},
             ]) %}
 
             {% set col_raw %}
@@ -165,6 +166,7 @@
                 { content: 'job.execution.property.status'|trans|desc('Status') },
                 { content: 'job.execution.property.start_time'|trans|desc('Start time') },
                 { content: 'job.execution.property.end_time'|trans|desc('End time') },
+                { content: 'job.execution.property.executionTime'|trans|desc('Execution time') },
                 { },
             ],
             body_rows,
@@ -195,6 +197,10 @@
                 {
                     label: 'job.execution.property.endTime'|trans|desc('End time'),
                     content: current_execution.workflowState.endTime ? current_execution.workflowState.endTime|ibexa_full_datetime : '',
+                },
+                {
+                    label: 'job.execution.property.executionTime'|trans|desc('Execution time'),
+                    content: current_execution.workflowState.endTime ? current_execution.workflowState.startTime.diff(current_execution.workflowState.endTime).format('%H:%I:%S')  : '',
                 },
                 {
                     label: 'job.execution.property.progress'|trans()|desc('Progress'),

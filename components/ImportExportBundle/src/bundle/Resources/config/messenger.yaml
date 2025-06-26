@@ -15,3 +15,4 @@ services:
             $jobRepository: '@AlmaviaCX\Bundle\IbexaImportExport\Job\JobRepository'
             $executionRepository: '@AlmaviaCX\Bundle\IbexaImportExport\Execution\ExecutionRepository'
             $jobRunMessageHandler: '@AlmaviaCX\Bundle\IbexaImportExport\MessageHandler\JobRunMessageHandler'
+            $originalRunner: '@AlmaviaCX\Bundle\IbexaImportExport\Job\AsyncJobRunner.inner'

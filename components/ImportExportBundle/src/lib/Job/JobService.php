@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\Selectable;
 use Ibexa\Contracts\Core\Repository\PermissionResolver;
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Ibexa\Core\Base\Exceptions\UnauthorizedException;
+use InvalidArgumentException;
 
 /**
  * @SuppressWarnings("PHPMD.TooManyPublicMethods")
@@ -59,7 +60,9 @@ class JobService
     public function executeJob(
         Job $job,
         ExecutionOptions $options = new ExecutionOptions(),
-        ?int $batchLimit = null
+        ?int $batchLimit = null,
+        ?int $executionId = null,
+        bool $async = true
     ): Execution {
         if (!$this->permissionResolver->hasAccess('import_export', 'job.execute')) {
             throw new UnauthorizedException('import_export', 'job.execute');
@@ -68,11 +71,22 @@ class JobService
             $batchLimit = $this->configResolver->getParameter('default_batch_limit', 'import_export');
         }
 
-        $execution = new Execution($options);
-        $job->addExecution($execution);
-        $this->jobRepository->save($job);
+        if ($executionId) {
+            $execution = $this->executionRepository->findById($executionId);
+            if (!$execution->canRun()) {
+                throw new InvalidArgumentException('Execution already running');
+            }
+        } else {
+            $execution = new Execution($options);
+            $job->addExecution($execution);
+            $this->jobRepository->save($job);
+        }
 
-        $this->jobRunner->runExecution($execution, $batchLimit);
+        if ($this->jobRunner instanceof AsyncJobRunner) {
+            $this->jobRunner->runExecution($execution, $batchLimit, $async);
+        } else {
+            $this->jobRunner->runExecution($execution, $batchLimit);
+        }
 
         return $execution;
     }

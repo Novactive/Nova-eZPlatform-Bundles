@@ -39,6 +39,13 @@ services:
         tags:
             - console.command
 
+    AlmaviaCX\Bundle\IbexaImportExportBundle\Command\RunJobCommand:
+        arguments:
+            $jobService: '@AlmaviaCX\Bundle\IbexaImportExport\Job\JobService'
+            $repository: '@Ibexa\Contracts\Core\Repository\Repository'
+        tags:
+            - console.command
+
     AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag:
 
     AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentCreator:
