@@ -35,7 +35,8 @@ class ExecutionRunner
 
         $onWorkflowProgress = function (WorkflowEvent $event) use ($execution) {
             $workflow = $event->getWorkflow();
-            $execution = $this->updateExecution($execution, $workflow);
+            $execution = $this->refreshExecution($execution);
+            $this->updateExecutionState($execution, $workflow);
             $event->setContinue($execution->isRunning());
         };
         $workflow->addEventListener(WorkflowEvent::PROGRESS, $onWorkflowProgress);
@@ -47,13 +48,14 @@ class ExecutionRunner
         $execution->setStatus(Execution::STATUS_RUNNING);
         $this->executionRepository->save($execution);
 
-        ($this->workflowExecutor)(
+        ( $this->workflowExecutor )(
             $workflow,
             $this->buildExecutionOptions($execution),
             $batchLimit
         );
 
-        $execution = $this->updateExecution($execution, $workflow);
+        $execution = $this->refreshExecution($execution);
+        $this->updateExecutionState($execution, $workflow);
         if ($workflow->getState()->isCompleted()) {
             $execution->setStatus(Execution::STATUS_COMPLETED);
         } elseif ($execution->isRunning()) {
@@ -75,48 +77,71 @@ class ExecutionRunner
         return $jobOptions->merge($executionOptions);
     }
 
-    protected function updateExecution(Execution $execution, WorkflowInterface $workflow): Execution
+    protected function refreshExecution(Execution $execution): Execution
     {
         /**
          * We refresh the execution because it might have been paused or canceled during the workflow execution.
          */
-        $state = $workflow->getState();
+
         try {
             $this->executionRepository->refresh($execution);
+            return $execution;
         } catch (ORMInvalidArgumentException $exception) {
-            $execution = $this->executionRepository->findById($execution->getId());
+            return $this->executionRepository->findById($execution->getId());
         }
-        $existingState = $execution->getWorkflowState();
+    }
+
+    protected function updateExecutionState(Execution $execution, WorkflowInterface $workflow): void
+    {
+        $workflowState = $workflow->getState();
+        $executionState = $execution->getWorkflowState();
 
         /*
          * Ibexa content creations sometimes trigger an entity manager clear
          * This means that the state from workflow and the state from the execution are the same entity but different php object.
          */
-        if ($state !== $existingState) {
-            $existingState->setStartTime($state->getStartTime());
-            $existingState->setEndTime($state->getEndTime());
-            $existingState->setTotalItemsCount($state->getTotalItemsCount());
-            $existingState->setOffset($state->getOffset());
-            $existingState->setWritersResults($state->getWritersResults());
-            $existingState->setReferenceBag($state->getReferenceBag());
-            $existingState->setCache($state->getCache());
-            $this->em->persist($existingState);
+        if ($workflowState !== $executionState) {
+            $executionState->setStartTime($workflowState->getStartTime());
+            $executionState->setEndTime($workflowState->getEndTime());
+            $executionState->setTotalItemsCount($workflowState->getTotalItemsCount());
+            $executionState->setOffset($workflowState->getOffset());
+            $executionState->setWritersResults($workflowState->getWritersResults());
+            $executionState->setReferenceBag($workflowState->getReferenceBag());
+            $executionState->setCache($workflowState->getCache());
+            $this->em->persist($executionState);
         } else {
             $classMetadata = $this->em->getClassMetadata(WorkflowState::class);
-            $this->em->getUnitOfWork()->computeChangeSet($classMetadata, $state);
-            $this->em->getUnitOfWork()->propertyChanged($state, 'writersResults', null, $state->getWritersResults());
-
-            $this->em->getUnitOfWork()->propertyChanged($state, 'referenceBag', null, $state->getReferenceBag());
-
-            $this->em->getUnitOfWork()->propertyChanged($state, 'cache', null, $state->getCache());
+            $this->em->getUnitOfWork()->computeChangeSet($classMetadata, $workflowState);
+            $this->em->getUnitOfWork()->propertyChanged(
+                $workflowState,
+                'writersResults',
+                null,
+                $workflowState->getWritersResults()
+            );
+            $this->em->getUnitOfWork()->propertyChanged(
+                $workflowState,
+                'referenceBag',
+                null,
+                $workflowState->getReferenceBag()
+            );
+            $this->em->getUnitOfWork()->propertyChanged(
+                $workflowState,
+                'cache',
+                null,
+                $workflowState->getCache()
+            );
         }
 
-        if ($workflow->getLogger()) {
-            $execution->addLoggerRecords($workflow->getLogger()->getRecords());
+        $logger = $workflow->getLogger();
+        if ($logger) {
+            $records = $logger->getRecords();
+            foreach ($records as $record) {
+                $record->setExecution($execution);
+                $this->em->persist($record);
+            }
+            $logger->clearRecords();
         }
 
         $this->executionRepository->save($execution);
-
-        return $execution;
     }
 }

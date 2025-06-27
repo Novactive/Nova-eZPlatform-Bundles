@@ -150,7 +150,7 @@ class Execution
 
     public function addLoggerRecord(ExecutionRecord $record): void
     {
-        if (!$this->loggerRecords->containsKey($record->getIdentifier())) {
+        if ($record->getExecution() === null) {
             $record->setExecution($this);
             $this->loggerRecords->set($record->getIdentifier(), $record);
         }

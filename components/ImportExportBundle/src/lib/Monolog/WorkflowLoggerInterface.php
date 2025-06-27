@@ -18,4 +18,5 @@ interface WorkflowLoggerInterface extends LoggerInterface
      * @return array<ExecutionRecord>
      */
     public function getRecords(): array;
+    public function clearRecords(): void;
 }

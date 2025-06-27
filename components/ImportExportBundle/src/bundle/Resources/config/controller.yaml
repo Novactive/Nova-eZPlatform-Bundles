@@ -11,6 +11,14 @@ services:
         tags:
             - controller.service_arguments
 
+    AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\ExecutionController:
+        autowire: true
+        arguments:
+            $formFactory: '@form.factory'
+            $jobService: '@AlmaviaCX\Bundle\IbexaImportExport\Job\JobService'
+        tags:
+            - controller.service_arguments
+
     AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\WriterController:
         autowire: true
         arguments:

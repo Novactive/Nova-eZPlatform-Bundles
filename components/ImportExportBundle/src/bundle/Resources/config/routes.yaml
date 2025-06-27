@@ -40,28 +40,32 @@ import_export.job.reset_run_w_limit:
 
 import_export.execution.run:
     path:     /import-export/execution/{id}/run
-    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::runExecution }
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\ExecutionController::runExecution }
 
 import_export.execution.run_w_limit:
     path:     /import-export/execution/{id}/run/{batchLimit}
-    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::runExecution }
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\ExecutionController::runExecution }
     requirements:
         batchLimit: '\d+'
 
 import_export.execution.pause:
     path:     /import-export/execution/{id}/pause
-    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::pauseExecution }
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\ExecutionController::pauseExecution }
 
 import_export.execution.cancel:
     path:     /import-export/execution/{id}/cancel
-    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::cancelExecution }
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\ExecutionController::cancelExecution }
 
 import_export.execution.debug:
     path:     /import-export/execution/{id}/debug/{index}
-    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::debugExecution }
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\ExecutionController::debugExecution }
+
+import_export.execution.delete:
+    path:     /import-export/execution/{id}/delete
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\ExecutionController::delete }
 
 import_export.job.delete:
-    path:     /import-export/execution/{id}/delete
+    path:     /import-export/job/{id}/delete
     defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::delete }
 
 import_export.writer.download_file:

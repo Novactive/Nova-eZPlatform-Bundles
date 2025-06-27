@@ -41,7 +41,7 @@ class ExecutionRecord
      * @ORM\ManyToOne(targetEntity=Execution::class, inversedBy="records")
      * @ORM\JoinColumn(name="execution_id", referencedColumnName="id")
      */
-    protected Execution $execution;
+    protected ?Execution $execution = null;
 
     /**
      * @param Record $record
@@ -92,7 +92,7 @@ class ExecutionRecord
         $this->record = $record;
     }
 
-    public function getExecution(): Execution
+    public function getExecution(): ?Execution
     {
         return $this->execution;
     }

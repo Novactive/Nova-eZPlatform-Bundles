@@ -256,7 +256,7 @@
                 items: information_items,
             } only %}
             {{ render(controller('AlmaviaCX\\Bundle\\IbexaImportExportBundle\\Controller\\Admin\\WriterController::displayResults', {execution: current_execution})) }}
-            {{ render(controller('AlmaviaCX\\Bundle\\IbexaImportExportBundle\\Controller\\Admin\\JobController::displayLogs', {execution: current_execution})) }}
+            {{ render(controller('AlmaviaCX\\Bundle\\IbexaImportExportBundle\\Controller\\Admin\\ExecutionController::displayLogs', {execution: current_execution})) }}
         </section>
     {% endif %}
 {% endblock %}

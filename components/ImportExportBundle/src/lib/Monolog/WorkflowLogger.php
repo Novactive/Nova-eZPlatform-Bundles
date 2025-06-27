@@ -43,4 +43,9 @@ class WorkflowLogger extends Logger implements WorkflowLoggerInterface
     {
         return $this->logHandler->getRecords();
     }
+
+    public function clearRecords(): void
+    {
+        $this->logHandler->clear();
+    }
 }
