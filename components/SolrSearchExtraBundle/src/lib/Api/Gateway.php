@@ -50,24 +50,22 @@ class Gateway extends Native
         return $this->internalFind($parameters, $languageSettings);
     }
 
+    /**
+     * @param string[] $ids
+     */
+    public function deleteDocuments( array $ids ): void
+    {
+        $ids = array_map(function ($value) {
+            return preg_replace('([^A-Za-z0-9/*]+)', '', $value);
+        }, $ids);
+
+        $query = 'id:(' . implode(' OR ', $ids) . ')';
+        $this->deleteByQuery($query);
+    }
+
     public function purgeDocumentsFromIndex(): void
     {
-        $endpoints = $this->endpointResolver->getEndpoints();
-
-        foreach ($endpoints as $endpointName) {
-            $endpoint = $this->endpointRegistry->getEndpoint($endpointName);
-            $this->client->request(
-                'POST',
-                $endpoint,
-                '/update?wt=json',
-                new Message(
-                    [
-                        'Content-Type' => 'text/xml',
-                    ],
-                    '<delete><query>document_type_id:"document"</query></delete>'
-                )
-            );
-        }
+        $this->deleteByQuery('document_type_id:"document"');
     }
 
     /**

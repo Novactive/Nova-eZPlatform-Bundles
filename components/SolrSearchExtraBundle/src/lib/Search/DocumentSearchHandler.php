@@ -48,6 +48,14 @@ class DocumentSearchHandler
         );
     }
 
+    /**
+     * @param string[] $ids
+     */
+    public function deleteDocuments(array $ids): void
+    {
+        $this->gateway->deleteDocuments($ids);
+    }
+
     public function purgeDocumentsFromIndex(): void
     {
         $this->gateway->purgeDocumentsFromIndex();
