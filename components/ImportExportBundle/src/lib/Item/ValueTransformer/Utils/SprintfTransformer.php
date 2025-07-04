@@ -15,8 +15,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class SprintfTransformer extends AbstractItemValueTransformer
 {
-    protected function transform(mixed $value, array $options = []): string
+    protected function transform(mixed $value, array $options = []): ?string
     {
+        if($value == null) {
+            return null;
+        }
+
         if (!is_array($value)) {
             $value = [$value];
         }

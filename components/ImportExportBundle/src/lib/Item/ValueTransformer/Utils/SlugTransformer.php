@@ -24,6 +24,10 @@ class SlugTransformer extends AbstractItemValueTransformer
      */
     protected function transform(mixed $value, array $options = []): mixed
     {
+        if($value == null) {
+            return null;
+        }
+
         if (is_array($value)) {
             $values = [];
             foreach ($value as $string) {
