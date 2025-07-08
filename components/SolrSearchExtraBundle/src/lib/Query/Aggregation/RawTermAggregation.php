@@ -21,6 +21,8 @@ class RawTermAggregation extends AbstractTermAggregation implements RawAggregati
      */
     public array $excludeTags;
 
+    public array $domain;
+
     /**
      * @var \Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation[]
      */
@@ -30,12 +32,14 @@ class RawTermAggregation extends AbstractTermAggregation implements RawAggregati
         string $name,
         string $fieldName,
         ?array $excludeTags = [],
+        ?array $domain = [],
         ?array $nestedAggregations = []
     ) {
         parent::__construct($name);
 
         $this->fieldName = $fieldName;
         $this->excludeTags = $excludeTags;
+        $this->domain = $domain;
         $this->nestedAggregations = $nestedAggregations;
     }
 
@@ -47,5 +51,13 @@ class RawTermAggregation extends AbstractTermAggregation implements RawAggregati
     public function setNestedAggregations(array $nestedAggregations): void
     {
         $this->nestedAggregations = $nestedAggregations;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDomain(): array
+    {
+        return $this->domain;
     }
 }

@@ -7,13 +7,14 @@ namespace Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion\Operator;
 use Ibexa\Contracts\Solr\Query\CriterionVisitor;
+use Novactive\EzSolrSearchExtra\Query\Content\Criterion\LocationDistance;
 
 class LocationDistanceIn extends CriterionVisitor
 {
     public function canVisit(Criterion $criterion)
     {
         return
-            $criterion instanceof Criterion\MapLocationDistance
+            $criterion instanceof LocationDistance
             && (($criterion->operator ?: Operator::IN) === Operator::IN
                  || Operator::EQ === $criterion->operator);
     }
