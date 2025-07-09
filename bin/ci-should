@@ -43,7 +43,7 @@ $requiredIbexaVersion = $config['required_ibexa_version'] ?? null;
 if ( $requiredIbexaVersion && $ibexaVersion )
 {
     if(!Semver::satisfies( $ibexaVersion, $requiredIbexaVersion )) {
-        exit( 0 );
+        exit( 1 );
     }
 }
 exit( ( $config[$action] ?? false ) === true ? 0 : 1 );
