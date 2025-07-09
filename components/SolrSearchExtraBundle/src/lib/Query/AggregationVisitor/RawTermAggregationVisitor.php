@@ -45,6 +45,9 @@ class RawTermAggregationVisitor implements AggregationVisitor
             'mincount' => $aggregation->getMinCount(),
             'domain' => $aggregation->getDomain(),
         ];
+        if($aggregation->sort) {
+            $facetInfos['sort'] = $aggregation->sort;
+        }
         if (!empty($aggregation->excludeTags)) {
             $facetInfos['domain']['excludeTags'] = implode(',', $aggregation->excludeTags);
         }

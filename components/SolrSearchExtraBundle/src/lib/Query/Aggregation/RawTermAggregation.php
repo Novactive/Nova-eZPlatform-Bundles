@@ -21,6 +21,8 @@ class RawTermAggregation extends AbstractTermAggregation implements RawAggregati
      */
     public array $excludeTags;
 
+    public ?string $sort;
+
     public array $domain;
 
     /**
@@ -32,6 +34,7 @@ class RawTermAggregation extends AbstractTermAggregation implements RawAggregati
         string $name,
         string $fieldName,
         ?array $excludeTags = [],
+        ?string $sort = null,
         ?array $domain = [],
         ?array $nestedAggregations = []
     ) {
@@ -39,6 +42,7 @@ class RawTermAggregation extends AbstractTermAggregation implements RawAggregati
 
         $this->fieldName = $fieldName;
         $this->excludeTags = $excludeTags;
+        $this->sort = $sort;
         $this->domain = $domain;
         $this->nestedAggregations = $nestedAggregations;
     }
