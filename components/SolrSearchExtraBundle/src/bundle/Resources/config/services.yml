@@ -210,3 +210,5 @@ services:
 
   Novactive\EzSolrSearchExtra\Repository\DocumentSearchServiceInterface: '@Novactive\EzSolrSearchExtra\Repository\SiteAccessAware\DocumentSearchService'
 
+  Novactive\EzSolrSearchExtra\Query\Translator\Generator\WordVisitor:
+    decorates: Ibexa\Solr\Query\Common\QueryTranslator\Generator\WordVisitor
