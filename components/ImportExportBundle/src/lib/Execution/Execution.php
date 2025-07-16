@@ -26,6 +26,7 @@ class Execution
     public const STATUS_PAUSED = 4;
     public const STATUS_FORCE_PAUSED = 6;
     public const STATUS_CANCELED = 5;
+    public const STATUS_ERROR = 7;
 
     /**
      * @ORM\Id
@@ -193,7 +194,7 @@ class Execution
 
     public function isCancelable(): bool
     {
-        return !in_array($this->status, [self::STATUS_COMPLETED, self::STATUS_CANCELED]);
+        return !in_array($this->status, [self::STATUS_COMPLETED, self::STATUS_CANCELED, self::STATUS_ERROR]);
     }
 
     public function canRun(): bool
@@ -203,7 +204,7 @@ class Execution
 
     public function isDone(): bool
     {
-        return in_array($this->getStatus(), [Execution::STATUS_COMPLETED, Execution::STATUS_CANCELED]);
+        return in_array($this->getStatus(), [self::STATUS_COMPLETED, self::STATUS_CANCELED, self::STATUS_ERROR]);
     }
 
     public function getCreatorId(): int

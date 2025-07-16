@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Workflow;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Event\BasicEventDispatcherTrait;
+use AlmaviaCX\Bundle\IbexaImportExport\Exception\BaseException;
 use AlmaviaCX\Bundle\IbexaImportExport\Item\ItemAccessorInterface;
 use AlmaviaCX\Bundle\IbexaImportExport\Monolog\WorkflowLogger;
 use AlmaviaCX\Bundle\IbexaImportExport\Monolog\WorkflowLoggerInterface;
@@ -118,11 +119,9 @@ abstract class AbstractWorkflow implements WorkflowInterface
                 }
             }
         } catch (Throwable $e) {
-            if ($this->debug) {
-                throw $e;
-            }
             $this->logger->setItemIndex(null);
             $this->logger->logException($e);
+            throw $e;
         }
         $this->finish();
     }
@@ -160,7 +159,7 @@ abstract class AbstractWorkflow implements WorkflowInterface
     protected function processItem($item): void
     {
         try {
-            foreach ($this->configuration->getProcessors() as $processor) {
+            foreach ($this->configuration->getProcessors() as $processorId => $processor) {
                 $processResult = ($processor)($item);
                 if (false === $processResult) {
                     return;
@@ -170,10 +169,16 @@ abstract class AbstractWorkflow implements WorkflowInterface
                 }
             }
         } catch (Throwable $procesItemException) {
+            $exception = new BaseException(
+                sprintf('[%s] %s', $processorId, $procesItemException->getMessage()),
+                $procesItemException->getCode(),
+                $procesItemException
+            );
+
             if ($this->debug) {
-                throw $procesItemException;
+                throw $exception;
             }
-            $this->logger->logException($procesItemException);
+            $this->logger->logException($exception);
         }
     }
 }

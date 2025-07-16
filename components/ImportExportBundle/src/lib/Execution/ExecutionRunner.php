@@ -14,6 +14,7 @@ use AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowState;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMInvalidArgumentException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Throwable;
 
 class ExecutionRunner
 {
@@ -48,21 +49,29 @@ class ExecutionRunner
         $execution->setStatus(Execution::STATUS_RUNNING);
         $this->executionRepository->save($execution);
 
-        ( $this->workflowExecutor )(
-            $workflow,
-            $this->buildExecutionOptions($execution),
-            $batchLimit
-        );
+        try {
+            ( $this->workflowExecutor )(
+                $workflow,
+                $this->buildExecutionOptions($execution),
+                $batchLimit
+            );
 
-        $execution = $this->refreshExecution($execution);
-        $this->updateExecutionState($execution, $workflow);
-        if ($workflow->getState()->isCompleted()) {
-            $execution->setStatus(Execution::STATUS_COMPLETED);
-        } elseif ($execution->isRunning()) {
-            $execution->setStatus(Execution::STATUS_PAUSED);
+            $execution = $this->refreshExecution($execution);
+            $this->updateExecutionState($execution, $workflow);
+            if ($workflow->getState()->isCompleted()) {
+                $execution->setStatus(Execution::STATUS_COMPLETED);
+            } elseif ($execution->isRunning()) {
+                $execution->setStatus(Execution::STATUS_PAUSED);
+            }
+
+            $this->eventDispatcher->dispatch(new PostJobRunEvent($execution, $workflow));
+        } catch (Throwable $e) {
+            if ($workflow->debug) {
+                throw $e;
+            }
+            $execution = $this->refreshExecution($execution);
+            $execution->setStatus(Execution::STATUS_ERROR);
         }
-
-        $this->eventDispatcher->dispatch(new PostJobRunEvent($execution, $workflow));
 
         $this->executionRepository->save($execution);
 

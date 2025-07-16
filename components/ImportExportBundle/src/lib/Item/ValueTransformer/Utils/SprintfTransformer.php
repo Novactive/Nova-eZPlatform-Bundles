@@ -17,7 +17,7 @@ class SprintfTransformer extends AbstractItemValueTransformer
 {
     protected function transform(mixed $value, array $options = []): ?string
     {
-        if($value == null) {
+        if ($value == null) {
             return null;
         }
 

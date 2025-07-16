@@ -34,13 +34,14 @@ class IteratorProcessor extends AbstractProcessor
             $values = [$values];
         }
 
+
         foreach ($values as $value) {
-            $item = ($options->processor)(
-                [
-                    'iteration_value' => $value,
-                    'item' => $item,
-                ]
-            );
+            $iterationItem = [
+                'iteration_value' => $value,
+                'item' => $item,
+            ];
+
+            ($options->processor)($iterationItem);
         }
 
         return $item;
