@@ -50,6 +50,11 @@ class Gateway extends Native
         return $this->internalFind($parameters, $languageSettings);
     }
 
+    public function rawSearch(array $parameters, array $languageSettings = [])
+    {
+        return $this->internalFind($parameters, $languageSettings);
+    }
+
     /**
      * @param string[] $ids
      */

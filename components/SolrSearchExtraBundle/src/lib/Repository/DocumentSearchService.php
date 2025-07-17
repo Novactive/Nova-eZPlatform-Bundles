@@ -15,16 +15,16 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchResult;
 use Ibexa\Core\Base\Exceptions\InvalidArgumentException;
 use Ibexa\Core\Base\Exceptions\InvalidArgumentType;
 use Novactive\EzSolrSearchExtra\Query\DocumentQuery;
-use Novactive\EzSolrSearchExtra\Search\DocumentSearchHandler;
+use Novactive\EzSolrSearchExtra\Search\ExtendedSearchHandler;
 
 class DocumentSearchService implements DocumentSearchServiceInterface
 {
     protected PermissionCriterionResolver $permissionCriterionResolver;
-    protected DocumentSearchHandler $searchHandler;
+    protected ExtendedSearchHandler $searchHandler;
 
     public function __construct(
         PermissionCriterionResolver $permissionCriterionResolver,
-        DocumentSearchHandler $searchHandler,
+        ExtendedSearchHandler $searchHandler
     ) {
         $this->searchHandler = $searchHandler;
         $this->permissionCriterionResolver = $permissionCriterionResolver;

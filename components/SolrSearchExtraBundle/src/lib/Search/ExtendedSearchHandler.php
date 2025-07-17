@@ -11,7 +11,7 @@ use Novactive\EzSolrSearchExtra\Api\Gateway;
 use Novactive\EzSolrSearchExtra\Query\DocumentQuery;
 use Novactive\EzSolrSearchExtra\ResultExtractor\DocumentResultExtractor;
 
-class DocumentSearchHandler
+class ExtendedSearchHandler
 {
     protected CoreFilter $coreFilter;
     protected Gateway $gateway;
@@ -27,7 +27,7 @@ class DocumentSearchHandler
         $this->coreFilter = $coreFilter;
     }
 
-    public function findDocument(DocumentQuery $query, array $languageFilter = [])
+    public function findDocument(DocumentQuery $query, array $languageFilter = [], string $documentType = 'document')
     {
         $query = clone $query;
         $query->filter = $query->filter ?: new Criterion\MatchAll();
@@ -36,7 +36,7 @@ class DocumentSearchHandler
         $this->coreFilter->apply(
             $query,
             $languageFilter,
-            'document'
+            $documentType
         );
 
         return $this->resultExtractor->extract(
@@ -46,6 +46,11 @@ class DocumentSearchHandler
             $languageFilter,
             $query->spellcheck
         );
+    }
+
+    public function rawSearch(array $parameters, array $languageSettings = [])
+    {
+        return $this->gateway->rawSearch($parameters, $languageSettings);
     }
 
     /**

@@ -8,9 +8,12 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
 
 class RawQueryString extends Criterion
 {
+    public string $queryString;
+
     public function __construct(
-        public string $queryString
+        string $queryString
     ) {
+        $this->queryString = $queryString;
     }
 
     public function getSpecifications(): array

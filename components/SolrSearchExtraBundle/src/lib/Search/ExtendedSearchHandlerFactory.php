@@ -11,7 +11,7 @@ use Novactive\EzSolrSearchExtra\Api\Gateway;
 use Novactive\EzSolrSearchExtra\Api\GatewayRegistry;
 use Novactive\EzSolrSearchExtra\ResultExtractor\DocumentResultExtractor;
 
-class DocumentSearchHandlerFactory
+class ExtendedSearchHandlerFactory
 {
     protected CoreFilter $coreFilter;
     protected Gateway $gateway;
@@ -26,7 +26,7 @@ class DocumentSearchHandlerFactory
         $defaultConnection,
         GatewayRegistry $gatewayRegistry,
         CoreFilterRegistry $coreFilterRegistry,
-        DocumentResultExtractor $resultExtractor,
+        DocumentResultExtractor $resultExtractor
     ) {
         $this->defaultConnection = $defaultConnection;
         $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
@@ -35,7 +35,7 @@ class DocumentSearchHandlerFactory
         $this->resultExtractor = $resultExtractor;
     }
 
-    public function build(): DocumentSearchHandler
+    public function build(): ExtendedSearchHandler
     {
         $repositoryConfig = $this->repositoryConfigurationProvider->getRepositoryConfig();
 
@@ -44,7 +44,7 @@ class DocumentSearchHandlerFactory
         $gateway = $this->gatewayRegistry->getGateway($connection);
         $coreFilter = $this->coreFilterRegistry->getCoreFilter($connection);
 
-        return new DocumentSearchHandler(
+        return new ExtendedSearchHandler(
             $coreFilter,
             $gateway,
             $this->resultExtractor,

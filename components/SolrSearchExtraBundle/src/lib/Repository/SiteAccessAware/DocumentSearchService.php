@@ -12,10 +12,15 @@ use Novactive\EzSolrSearchExtra\Repository\DocumentSearchServiceInterface;
 
 class DocumentSearchService implements DocumentSearchServiceInterface
 {
+    protected NativeDocumentSearchService $documentSearchService;
+    protected LanguageResolver $languageResolver;
+
     public function __construct(
-        protected NativeDocumentSearchService $documentSearchService,
-        protected LanguageResolver $languageResolver,
+        NativeDocumentSearchService $documentSearchService,
+        LanguageResolver $languageResolver
     ) {
+        $this->languageResolver = $languageResolver;
+        $this->documentSearchService = $documentSearchService;
     }
 
     public function findDocument(
