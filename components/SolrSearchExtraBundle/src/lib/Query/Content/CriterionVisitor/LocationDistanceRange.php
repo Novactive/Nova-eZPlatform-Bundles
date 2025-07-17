@@ -45,7 +45,6 @@ class LocationDistanceRange extends CriterionVisitor
         /** @var Criterion\Value\MapLocationValue $location */
         $location = $criterion->valueData;
 
-        $queries = [];
         $query = sprintf(
             '{!geofilt sfield=%s pt=%F,%F d=%s}',
             $criterion->target,

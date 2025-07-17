@@ -1,5 +1,6 @@
 <?php
-declare( strict_types=1 );
+
+declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor;
 
@@ -9,19 +10,17 @@ use Novactive\EzSolrSearchExtra\Query\Content\Criterion\RawQueryString as RawQue
 
 class RawQueryString extends CriterionVisitor
 {
-
-    public function canVisit( Criterion $criterion )
+    public function canVisit(Criterion $criterion)
     {
         return $criterion instanceof RawQueryStringCriterion;
     }
 
     /**
      * @param RawQueryStringCriterion $criterion
-     * @param \Ibexa\Contracts\Solr\Query\CriterionVisitor|null               $subVisitor
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
         return $criterion->queryString;
     }

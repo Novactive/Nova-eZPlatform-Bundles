@@ -57,9 +57,10 @@ class RawTermAggregationResultExtractor implements AggregationResultExtractor
                     $nestedAggregationtsResults = [];
                     if (!empty($aggregation->nestedAggregations)) {
                         foreach ($aggregation->nestedAggregations as $nestedAggregationName => $nestedAggregation) {
-                            if(is_string($nestedAggregation)) {
-                                $nestedAggregationtsResults[$nestedAggregationName] = $bucket->{$nestedAggregationName} ?? null;
-                            }else{
+                            if (is_string($nestedAggregation)) {
+                                $results = $bucket->{$nestedAggregationName} ?? null;
+                                $nestedAggregationtsResults[$nestedAggregationName] = $results;
+                            } else {
                                 $name = $nestedAggregation->getName();
                                 if (isset($bucket->{$name})) {
                                     $nestedAggregationtsResults[$name] = $this->aggregationResultExtractor->extract(

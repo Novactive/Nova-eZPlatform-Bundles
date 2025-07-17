@@ -1,5 +1,6 @@
 <?php
-declare( strict_types=1 );
+
+declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor;
 
@@ -10,7 +11,7 @@ use Novactive\EzSolrSearchExtra\Query\Content\Criterion\ParentTag as ParentTagCr
 
 class ParentTag extends BaseVisitor
 {
-    public function canVisit( Criterion $criterion )
+    public function canVisit(Criterion $criterion)
     {
         return $criterion instanceof ParentTagCriterion;
     }
@@ -18,7 +19,7 @@ class ParentTag extends BaseVisitor
     /**
      * @param ParentTagCriterion $criterion
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
         $stringQuery = $subVisitor->visit($criterion->criterion);
 

@@ -42,22 +42,21 @@ class QueryConverter extends NativeQueryConverter
         if ($query instanceof AdvancedContentQuery && $query->groupConfig) {
             $params = array_merge($params, $query->groupConfig);
         }
-        $params['fl'] .= ",[child]";
+        $params['fl'] .= ',[child]';
+
         return $params;
     }
 
     /**
      * @param Query\Criterion[] $criterions
-     *
-     * @return void
      */
-    public function flattenFilterQueries( array $criterions, array &$fq ): void
+    public function flattenFilterQueries(array $criterions, array &$filterQuery): void
     {
         foreach ($criterions as $criterion) {
             if ($criterion instanceof Query\Criterion\LogicalAnd) {
-                $this->flattenFilterQueries($criterion->criteria, $fq);
+                $this->flattenFilterQueries($criterion->criteria, $filterQuery);
             } else {
-                $fq[] = $this->criterionVisitor->visit($criterion);
+                $filterQuery[] = $this->criterionVisitor->visit($criterion);
             }
         }
     }

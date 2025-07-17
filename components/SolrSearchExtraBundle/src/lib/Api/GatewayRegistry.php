@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Api;
 
+use OutOfBoundsException;
+
 class GatewayRegistry
 {
     /** @var Gateway[] */
@@ -36,7 +38,7 @@ class GatewayRegistry
     public function getGateway(string $connectionName): Gateway
     {
         if (!isset($this->gateways[$connectionName])) {
-            throw new \OutOfBoundsException(sprintf('No Gateway registered for connection \'%s\'', $connectionName));
+            throw new OutOfBoundsException(sprintf('No Gateway registered for connection \'%s\'', $connectionName));
         }
 
         return $this->gateways[$connectionName];

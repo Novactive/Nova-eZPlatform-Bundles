@@ -14,7 +14,6 @@ class RawTermAggregationVisitor implements AggregationVisitor
     private AggregationVisitor $aggregationVisitor;
     private CriterionVisitor $criterionVisitor;
 
-
     public function __construct(
         AggregationVisitor $aggregationVisitor,
         CriterionVisitor $criterionVisitor
@@ -45,19 +44,19 @@ class RawTermAggregationVisitor implements AggregationVisitor
             'mincount' => $aggregation->getMinCount(),
             'domain' => $aggregation->getDomain(),
         ];
-        if($aggregation->sort) {
+        if ($aggregation->sort) {
             $facetInfos['sort'] = $aggregation->sort;
         }
         if (!empty($aggregation->excludeTags)) {
             $facetInfos['domain']['excludeTags'] = implode(',', $aggregation->excludeTags);
         }
 
-        if(isset($facetInfos['domain']['filter'])) {
+        if (isset($facetInfos['domain']['filter'])) {
             $facetDomainFilters = [];
-            foreach($facetInfos['domain']['filter'] as $facetDomainFilter) {
-                if(is_string($facetDomainFilter)) {
+            foreach ($facetInfos['domain']['filter'] as $facetDomainFilter) {
+                if (is_string($facetDomainFilter)) {
                     $facetDomainFilters[] = $facetDomainFilter;
-                }else{
+                } else {
                     $facetDomainFilters[] = $this->criterionVisitor->visit($facetDomainFilter);
                 }
             }
@@ -66,9 +65,9 @@ class RawTermAggregationVisitor implements AggregationVisitor
 
         if (!empty($aggregation->nestedAggregations)) {
             foreach ($aggregation->nestedAggregations as $nestedAggregationName => $aggregation) {
-                if(is_string($aggregation)) {
-                    $facetInfos['facet'][$nestedAggregationName] =  $aggregation;
-                }else if ($this->aggregationVisitor->canVisit($aggregation, $languageFilter)) {
+                if (is_string($aggregation)) {
+                    $facetInfos['facet'][$nestedAggregationName] = $aggregation;
+                } elseif ($this->aggregationVisitor->canVisit($aggregation, $languageFilter)) {
                     $facetInfos['facet'][$aggregation->getName()] = $this->aggregationVisitor->visit(
                         $this->aggregationVisitor,
                         $aggregation,

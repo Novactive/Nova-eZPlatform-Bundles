@@ -100,7 +100,7 @@ class MultipleFieldsFullText extends CriterionVisitor
 
         $queryString = $this->generator->generate($syntaxTree, $options);
 
-        if($criterion->wildcards === true) {
+        if (true === $criterion->wildcards) {
             $wildcardQueryString = $this->generator->generate($syntaxTree, ['wildcard' => true]);
             $queryString .= sprintf(' OR %s', $wildcardQueryString);
         }

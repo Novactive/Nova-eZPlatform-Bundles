@@ -57,9 +57,6 @@ class RawTermAggregation extends AbstractTermAggregation implements RawAggregati
         $this->nestedAggregations = $nestedAggregations;
     }
 
-    /**
-     * @return array
-     */
     public function getDomain(): array
     {
         return $this->domain;

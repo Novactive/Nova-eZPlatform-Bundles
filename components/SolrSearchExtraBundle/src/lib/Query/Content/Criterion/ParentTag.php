@@ -1,5 +1,6 @@
 <?php
-declare( strict_types=1 );
+
+declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Query\Content\Criterion;
 
@@ -10,8 +11,7 @@ class ParentTag extends Criterion
     public function __construct(
         public string $which,
         public Criterion $criterion
-    )
-    {
+    ) {
     }
 
     /**
