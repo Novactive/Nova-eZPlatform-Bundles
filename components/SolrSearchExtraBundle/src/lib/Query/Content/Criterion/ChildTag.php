@@ -6,10 +6,10 @@ namespace Novactive\EzSolrSearchExtra\Query\Content\Criterion;
 
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
 
-class ParentTag extends Criterion
+class ChildTag extends Criterion
 {
     public function __construct(
-        public string $whichParameter,
+        public string $ofParameter,
         public Criterion $criterion
     ) {
     }

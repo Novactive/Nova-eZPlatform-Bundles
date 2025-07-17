@@ -7,22 +7,22 @@ namespace Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
 use Ibexa\Contracts\Solr\Query\CriterionVisitor;
 use Ibexa\Solr\Query\Common\CriterionVisitor\CustomField\CustomFieldIn as BaseVisitor;
-use Novactive\EzSolrSearchExtra\Query\Content\Criterion\ParentTag as ParentTagCriterion;
+use Novactive\EzSolrSearchExtra\Query\Content\Criterion\ChildTag as ChildTagCriterion;
 
-class ParentTag extends BaseVisitor
+class ChildTag extends BaseVisitor
 {
     public function canVisit(Criterion $criterion)
     {
-        return $criterion instanceof ParentTagCriterion;
+        return $criterion instanceof ChildTagCriterion;
     }
 
     /**
-     * @param ParentTagCriterion $criterion
+     * @param ChildTagCriterion $criterion
      */
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
         $stringQuery = $subVisitor->visit($criterion->criterion);
 
-        return '{!parent which="'.$criterion->whichParameter.'"}'.$stringQuery;
+        return '{!child of="'.$criterion->ofParameter.'"}'.$stringQuery;
     }
 }
