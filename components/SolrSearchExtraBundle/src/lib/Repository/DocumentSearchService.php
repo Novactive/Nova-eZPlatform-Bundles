@@ -33,7 +33,7 @@ class DocumentSearchService implements DocumentSearchServiceInterface
     public function findDocument(
         DocumentQuery $query,
         array $languageFilter = [],
-        bool $filterOnUserPermissions = true,
+        bool $filterOnUserPermissions = true
     ): SearchResult {
         if (!is_int($query->offset)) {
             throw new InvalidArgumentType(

@@ -12,7 +12,7 @@ interface DocumentSearchServiceInterface
     public function findDocument(
         DocumentQuery $query,
         array $languageFilter = [],
-        bool $filterOnUserPermissions = true,
+        bool $filterOnUserPermissions = true
     ): SearchResult;
 
     public function purgeDocumentsFromIndex(): void;

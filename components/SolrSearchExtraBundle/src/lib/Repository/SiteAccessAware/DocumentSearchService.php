@@ -26,7 +26,7 @@ class DocumentSearchService implements DocumentSearchServiceInterface
     public function findDocument(
         DocumentQuery $query,
         array $languageFilter = [],
-        bool $filterOnUserPermissions = true,
+        bool $filterOnUserPermissions = true
     ): SearchResult {
         $languageFilter['languages'] = $this->languageResolver->getPrioritizedLanguages(
             $languageFilter['languages'] ?? null
