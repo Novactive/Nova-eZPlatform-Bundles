@@ -27,7 +27,7 @@ class ExtendedSearchHandler
         $this->coreFilter = $coreFilter;
     }
 
-    public function findDocument(DocumentQuery $query, array $languageFilter = [], string $documentType = 'document')
+    public function findDocument(DocumentQuery $query, array $languageFilter = [])
     {
         $query = clone $query;
         $query->filter = $query->filter ?: new Criterion\MatchAll();
@@ -36,7 +36,7 @@ class ExtendedSearchHandler
         $this->coreFilter->apply(
             $query,
             $languageFilter,
-            $documentType
+            $query->documentType
         );
 
         return $this->resultExtractor->extract(

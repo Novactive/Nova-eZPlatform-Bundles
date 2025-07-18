@@ -8,4 +8,5 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 
 class DocumentQuery extends Query
 {
+    public string $documentType = 'document';
 }
