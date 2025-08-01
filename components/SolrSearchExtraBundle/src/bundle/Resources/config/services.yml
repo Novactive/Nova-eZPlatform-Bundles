@@ -181,7 +181,7 @@ services:
     decoration_priority: -10
     arguments:
       - '@nova_solr_extra.search.solr.query.document.query_converter.inner'
-      - '@ibexa.solr.query.location.criterion_visitor.aggregate'
+      - '@ibexa.solr.query.content.criterion_visitor.aggregate'
 
   Novactive\EzSolrSearchExtra\Query\DocumentQueryConverter:
     arguments:
