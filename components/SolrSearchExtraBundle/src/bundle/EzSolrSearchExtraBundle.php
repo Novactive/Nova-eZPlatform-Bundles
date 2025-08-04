@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtraBundle;
 
-use Novactive\EzSolrSearchExtra\Container\Compiler\EndpointResolverPass;
+use Novactive\EzSolrSearchExtraBundle\DependencyInjection\CompilerPass\GatewayCompilerPass;
 use Novactive\EzSolrSearchExtraBundle\DependencyInjection\Security\PolicyProvider\EZSolrSearchPolicyProvider;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -24,6 +24,6 @@ class EzSolrSearchExtraBundle extends Bundle
         $ibexaCoreExtension = $container->getExtension('ibexa');
         $ibexaCoreExtension->addPolicyProvider(new EZSolrSearchPolicyProvider($this->getPath()));
 
-        $container->addCompilerPass(new EndpointResolverPass());
+        $container->addCompilerPass(new GatewayCompilerPass());
     }
 }

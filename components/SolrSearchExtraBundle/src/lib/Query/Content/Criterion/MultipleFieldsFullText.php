@@ -109,7 +109,7 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
      *
      * @TODO: Define how this could look like
      */
-    public $wildcards;
+    public $wildcards = false;
 
     /**
      * Custom field definitions to query instead of default field.
