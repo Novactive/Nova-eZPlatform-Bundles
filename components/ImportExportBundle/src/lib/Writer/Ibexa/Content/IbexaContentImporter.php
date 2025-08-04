@@ -46,6 +46,15 @@ class IbexaContentImporter
                     $contentData->getContentRemoteId()
                 );
 
+                if($contentData->getImportMode() === IbexaContentData::IMPORT_MODE_DELETE) {
+                    $this->repository->getContentService()->deleteContent($content->contentInfo);
+
+                    return [
+                        'action' => 'delete',
+                        'content' => $content,
+                    ];
+                }
+
                 if (
                     !in_array($contentData->getImportMode(), [
                     IbexaContentData::IMPORT_MODE_ONLY_UPDATE,
@@ -64,7 +73,8 @@ class IbexaContentImporter
                     $contentData->getParentLocationIdList(),
                     $ownerId,
                     $contentData->getMainLanguageCode(),
-                    $contentData->isHidden()
+                    $contentData->isHidden(),
+                    $contentData->isAllowMoveOnUpdate()
                 );
 
                 return [

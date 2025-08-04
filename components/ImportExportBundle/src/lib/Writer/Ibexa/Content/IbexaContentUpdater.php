@@ -27,7 +27,8 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
         array $parentLocationIdList,
         int $ownerId = null,
         string $mainLanguageCode = 'eng-GB',
-        bool $hidden = false
+        bool $hidden = false,
+        bool $allowMove = false
     ): Content {
         $contentType = $this->repository->getContentTypeService()->loadContentType(
             $content->contentInfo->contentTypeId
@@ -57,7 +58,9 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
         /* Publish the new content draft */
         $publishedContent = $this->repository->getContentService()->publishVersion($contentDraft->versionInfo);
 
-        $this->handleLocations($content, $parentLocationIdList, $hidden);
+        if($allowMove) {
+            $this->handleLocations($content, $parentLocationIdList, $hidden);
+        }
 
         return $publishedContent;
     }

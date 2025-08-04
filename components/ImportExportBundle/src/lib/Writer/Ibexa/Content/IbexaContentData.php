@@ -13,6 +13,7 @@ class IbexaContentData
     public const IMPORT_MODE_ONLY_UPDATE = 1;
     public const IMPORT_MODE_UPDATE_AND_CREATE_IF_NOT_EXISTS = 2;
     public const IMPORT_MODE_FETCH_ONLY = 3;
+    public const IMPORT_MODE_DELETE = 4;
 
     protected string $contentRemoteId;
     /** @var array<string, mixed> */
@@ -26,6 +27,7 @@ class IbexaContentData
     protected int|null|DateTime $modificationDate = null;
     protected bool $hidden = false;
     protected int $importMode = self::IMPORT_MODE_UPDATE_AND_CREATE_IF_NOT_EXISTS;
+    protected bool $allowMoveOnUpdate = false;
 
     public function getContentRemoteId(): string
     {
@@ -137,5 +139,15 @@ class IbexaContentData
     public function setImportMode(int $importMode): void
     {
         $this->importMode = $importMode;
+    }
+
+    public function isAllowMoveOnUpdate(): bool
+    {
+        return $this->allowMoveOnUpdate;
+    }
+
+    public function setAllowMoveOnUpdate( bool $allowMoveOnUpdate ): void
+    {
+        $this->allowMoveOnUpdate = $allowMoveOnUpdate;
     }
 }
