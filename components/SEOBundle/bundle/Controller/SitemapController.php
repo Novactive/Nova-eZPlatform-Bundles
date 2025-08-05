@@ -22,30 +22,39 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchResult;
 use Ibexa\Contracts\Core\Variation\VariationHandler;
 use Ibexa\Core\Helper\FieldHelper;
 use Ibexa\Core\MVC\Symfony\Routing\UrlAliasRouter;
+use Ibexa\Taxonomy\Event\Subscriber\ValidateTaxonomyEntryAssignmentSubscriber;
 use Novactive\Bundle\eZSEOBundle\Core\Sitemap\QueryFactory;
+use Novactive\Bundle\eZSEOBundle\Event\FillLocationInSiteMapEvent;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SitemapController extends Controller
 {
-    /** @var FieldHelper */
-    private $fieldHelper;
-
-    /** @var VariationHandler */
-    protected $imageVariationService;
-
     /**
      * How many in a Sitemap.
      *
      * @var int
      */
     public const PACKET_MAX = 1000;
+//    protected ?EventDispatcherInterface $eventDispatcher = null;
 
-    public function __construct(FieldHelper $fieldHelper, VariationHandler $imageVariationService)
+    public function __construct(
+        protected readonly FieldHelper $fieldHelper,
+        protected readonly VariationHandler $imageVariationService,
+        protected readonly EventDispatcherInterface $eventDispatcher,
+    ) { }
+
+    /**
+     * Get the event dispatcher used by the cache invalidator.
+     *
+     * @return EventDispatcherInterface
+     */
+    public function getEventDispatcher(): EventDispatcherInterface
     {
-        $this->fieldHelper = $fieldHelper;
-        $this->imageVariationService = $imageVariationService;
+        return $this->eventDispatcher;
     }
 
     /**
@@ -119,11 +128,15 @@ class SitemapController extends Controller
     protected function fillSitemap(DOMDocument $sitemap, DOMElement $root, SearchResult $results): void
     {
         foreach ($results->searchHits as $searchHit) {
-            /**
-             * @var SearchHit
-             * @var Location  $location
-             */
+            /** @var Location  $location */
             $location = $searchHit->valueObject;
+
+            $event = new FillLocationInSiteMapEvent($location);
+            $this->getEventDispatcher()->dispatch($event);
+            if (!$event->isValid()) {
+                continue;
+            }
+
             try {
                 $url = $this->generateUrl(
                     UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
