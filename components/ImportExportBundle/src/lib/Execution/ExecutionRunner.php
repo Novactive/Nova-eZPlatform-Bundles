@@ -66,10 +66,11 @@ class ExecutionRunner
 
             $this->eventDispatcher->dispatch(new PostJobRunEvent($execution, $workflow));
         } catch (Throwable $e) {
-            if ($workflow->debug) {
+            if ($workflow->isDebug()) {
                 throw $e;
             }
             $execution = $this->refreshExecution($execution);
+            $this->updateExecutionState($execution, $workflow);
             $execution->setStatus(Execution::STATUS_ERROR);
         }
 

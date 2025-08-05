@@ -48,6 +48,16 @@ import_export.execution.run_w_limit:
     requirements:
         batchLimit: '\d+'
 
+import_export.execution.retry:
+    path:     /import-export/execution/{id}/retry
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\ExecutionController::retryExecution }
+
+import_export.execution.retry_w_limit:
+    path:     /import-export/execution/{id}/retry/{batchLimit}
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\ExecutionController::retryExecution }
+    requirements:
+        batchLimit: '\d+'
+
 import_export.execution.pause:
     path:     /import-export/execution/{id}/pause
     defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\ExecutionController::pauseExecution }

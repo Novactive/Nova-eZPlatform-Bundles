@@ -146,7 +146,7 @@ class IbexaContentData
         return $this->allowMoveOnUpdate;
     }
 
-    public function setAllowMoveOnUpdate( bool $allowMoveOnUpdate ): void
+    public function setAllowMoveOnUpdate(bool $allowMoveOnUpdate): void
     {
         $this->allowMoveOnUpdate = $allowMoveOnUpdate;
     }

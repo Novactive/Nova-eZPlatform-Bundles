@@ -58,7 +58,7 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
         /* Publish the new content draft */
         $publishedContent = $this->repository->getContentService()->publishVersion($contentDraft->versionInfo);
 
-        if($allowMove) {
+        if ($allowMove) {
             $this->handleLocations($content, $parentLocationIdList, $hidden);
         }
 

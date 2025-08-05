@@ -17,4 +17,9 @@ abstract class AbstractReader extends AbstractComponent implements ReaderInterfa
     {
         return ReaderOptions::class;
     }
+
+    public static function getDetailsTemplate(): ?string
+    {
+        return null;
+    }
 }

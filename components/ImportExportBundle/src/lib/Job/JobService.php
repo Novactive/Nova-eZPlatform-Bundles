@@ -91,6 +91,17 @@ class JobService
         return $execution;
     }
 
+    public function retryExecution(Execution $execution, ?int $batchLimit = null): Execution
+    {
+        $newExecution = new Execution($execution->getOptions());
+        $job = $execution->getJob();
+        $job->addExecution($newExecution);
+        $this->jobRepository->save($job);
+
+        $this->runExecution($newExecution, $batchLimit);
+        return $newExecution;
+    }
+
     public function runExecution(Execution $execution, ?int $batchLimit = null): void
     {
         if (!$this->permissionResolver->hasAccess('import_export', 'job.execute')) {

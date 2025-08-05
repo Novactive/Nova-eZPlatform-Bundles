@@ -47,4 +47,9 @@ class JsonReader extends AbstractReader implements TranslationContainerInterface
     {
         return [( new Message('reader.json.name', 'import_export') )->setDesc('Json input')];
     }
+
+    public static function getDetailsTemplate(): ?string
+    {
+        return '@ibexadesign/import_export/reader/details/json.html.twig';
+    }
 }

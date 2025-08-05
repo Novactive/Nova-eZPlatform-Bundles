@@ -37,6 +37,19 @@ class ExecutionController extends Controller
         ]));
     }
 
+    public function retryExecution(Request $request, Execution $execution, ?int $batchLimit = null): RedirectResponse
+    {
+        $newExecution = $this->jobService->retryExecution($execution, $batchLimit);
+
+        return new RedirectResponse($this->generateUrl('import_export.job.execution.view', array_merge(
+            [
+                'id' => $newExecution->getJob()->getId(),
+                'executionId' => $newExecution->getId(),
+            ],
+            $request->query->all(),
+        )));
+    }
+
     public function runExecution(Request $request, Execution $execution, ?int $batchLimit = null): RedirectResponse
     {
         $this->jobService->runExecution($execution, $batchLimit);

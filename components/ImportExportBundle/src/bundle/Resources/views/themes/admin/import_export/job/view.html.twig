@@ -256,6 +256,7 @@
                 headline_items: information_headline_items,
                 items: information_items,
             } only %}
+            {{ render(controller('AlmaviaCX\\Bundle\\IbexaImportExportBundle\\Controller\\Admin\\ReaderController::displayDetails', {execution: current_execution})) }}
             {{ render(controller('AlmaviaCX\\Bundle\\IbexaImportExportBundle\\Controller\\Admin\\WriterController::displayResults', {execution: current_execution})) }}
             {{ render(controller('AlmaviaCX\\Bundle\\IbexaImportExportBundle\\Controller\\Admin\\ExecutionController::displayLogs', {execution: current_execution})) }}
         </section>
@@ -263,4 +264,6 @@
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('ibexa-admin-ui-import-export-js', null, 'ibexa') }}
 {% endblock %}

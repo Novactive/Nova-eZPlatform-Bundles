@@ -1,16 +1,26 @@
 {% trans_default_domain 'import_export' %}
 
+{% set action_badges = {
+    'update'     : 'bg-info',
+    'create'      : 'bg-success text-white',
+    'delete'     : 'bg-danger text-white',
+} %}
+
 {% if results is not empty %}
     <section id="{{ writerIndex }}" class="container ibexa-container">
         {% set body_rows = [] %}
         {% for contentId, infos in results %}
             {% set action %}
-                <span class="badge bg-success">{{ infos['action'] }}</span>
+                <span class="badge {{ action_badges[infos['action']]|default() }}">{{ infos['action'] }}</span>
             {% endset %}
             {% set name %}
-                <a target="_blank" href="{{ infos['contentId']|default() ? url('ibexa.url.alias', {contentId: infos['contentId']}) : '#' }}">
+                {% if infos['action'] != 'delete' %}
+                    <a target="_blank" href="{{ infos['contentId']|default() ? url('ibexa.url.alias', {contentId: infos['contentId']}) : '#' }}">
+                        {{ infos['name'] }}
+                    </a>
+                {% else %}
                     {{ infos['name'] }}
-                </a>
+                {% endif %}
             {% endset %}
             {% set body_row_cols = [
                 { content: action, raw: true, has_icon: true },

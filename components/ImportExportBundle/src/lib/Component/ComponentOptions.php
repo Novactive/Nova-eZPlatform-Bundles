@@ -69,7 +69,7 @@ class ComponentOptions
     {
         $properties = (new ReflectionClass(static::class))->getProperties();
         foreach ($properties as $property) {
-            if ('initializedOptions' === $property->getName()) {
+            if ('initializationState' === $property->getName()) {
                 continue;
             }
             yield $property->getName();

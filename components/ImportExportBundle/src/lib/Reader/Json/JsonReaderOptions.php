@@ -13,4 +13,12 @@ use AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderOptions;
 class JsonReaderOptions extends ReaderOptions
 {
     protected mixed $json;
+
+    /**
+     * @return mixed
+     */
+    public function getJson(): mixed
+    {
+        return $this->json;
+    }
 }

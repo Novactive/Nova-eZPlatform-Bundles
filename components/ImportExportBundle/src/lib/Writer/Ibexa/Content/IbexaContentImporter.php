@@ -46,7 +46,7 @@ class IbexaContentImporter
                     $contentData->getContentRemoteId()
                 );
 
-                if($contentData->getImportMode() === IbexaContentData::IMPORT_MODE_DELETE) {
+                if ($contentData->getImportMode() === IbexaContentData::IMPORT_MODE_DELETE) {
                     $this->repository->getContentService()->deleteContent($content->contentInfo);
 
                     return [

@@ -181,4 +181,12 @@ abstract class AbstractWorkflow implements WorkflowInterface
             $this->logger->logException($exception);
         }
     }
+
+    /**
+     * @return bool
+     */
+    public function isDebug(): bool
+    {
+        return $this->debug;
+    }
 }

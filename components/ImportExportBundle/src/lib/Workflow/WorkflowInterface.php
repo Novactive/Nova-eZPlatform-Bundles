@@ -27,4 +27,6 @@ interface WorkflowInterface
     public function clean(): void;
 
     public function setDebug(bool $debug): void;
+
+    public function isDebug(): bool;
 }

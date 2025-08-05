@@ -28,6 +28,13 @@ services:
         tags:
             - controller.service_arguments
 
+    AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\ReaderController:
+        autowire: true
+        arguments:
+            $workflowRegistry: '@AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowRegistry'
+            $runConfigurationBuilder: '@AlmaviaCX\Bundle\IbexaImportExport\Workflow\RunConfigurationBuilder'
+        tags:
+            - controller.service_arguments
 
     AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Rest\:
         resource: '../../Controller/Rest'

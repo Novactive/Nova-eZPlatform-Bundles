@@ -17,4 +17,6 @@ interface ReaderInterface extends ComponentInterface
      * @return ReaderIteratorInterface<mixed, ItemAccessorInterface>
      */
     public function __invoke();
+
+    public static function getDetailsTemplate(): ?string;
 }
