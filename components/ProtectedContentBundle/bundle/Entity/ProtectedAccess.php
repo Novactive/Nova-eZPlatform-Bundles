@@ -145,4 +145,9 @@ class ProtectedAccess implements ContentInterface
     {
         $this->emailMessage = $emailMessage;
     }
+
+    public function getContentId(): int
+    {
+        return $this->contentId;
+    }
 }
