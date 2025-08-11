@@ -18,9 +18,7 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Ibexa\Bundle\Core\Controller;
 use Ibexa\Contracts\Core\Persistence\Handler as PersistenceHandler;
-use Ibexa\Contracts\Core\Repository\Values\Content\Content;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location;
-use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 use Ibexa\Contracts\Core\Search\Handler as SearchHandler;
 use Ibexa\Contracts\HttpCache\Handler\ContentTagInterface;
 use Ibexa\Core\Repository\SiteAccessAware\Repository;
@@ -111,8 +109,9 @@ class ProtectedAccessController extends Controller
                 $access->setUpdated($now);
                 $entityManager->persist($access);
                 $entityManager->flush();
-                $responseTagger->addLocationTags([$location->id]);
-                $responseTagger->addParentLocationTags([$location->parentLocationId]);
+                $this->responseTagger->addLocationTags([$location->id]);
+                $this->responseTagger->addParentLocationTags([$location->parentLocationId]);
+                $this->responseTagger->addContentTags([$location->contentId]);
 
                 $content = $location->getContent();
                 $this->objectStateHelper->setStatesForContentAndDescendants($content);
@@ -142,11 +141,12 @@ class ProtectedAccessController extends Controller
         $access = $entityManager->find(ProtectedAccess::class, $access);
         $entityManager->remove($access);
         $entityManager->flush();
-        $responseTagger->addLocationTags([$location->id]);
-        $responseTagger->addParentLocationTags([$location->parentLocationId]);
+        $this->responseTagger->addLocationTags([$location->id]);
+        $this->responseTagger->addParentLocationTags([$location->parentLocationId]);
+        $this->responseTagger->addContentTags([$location->contentId]);
 
         $content = $location->getContent();
-        $this->objectStateHelper->setStatesForContentAndDescendants($content);
+        $this->objectStateHelper->setStatesForContentAndDescendants($content, $access->isProtectChildren());
         $this->reindexHelper->reindexContent($content);
         if ($access->isProtectChildren()) {
             $this->reindexHelper->reindexChildren($content);
@@ -164,7 +164,6 @@ class ProtectedAccessController extends Controller
     public function delete(
         EntityManagerInterface $entityManager,
         int $accessId,
-        ContentTagInterface $responseTagger
     ): RedirectResponse {
         $access = $this->entityManager->find(ProtectedAccess::class, $accessId);
         $entityManager->remove($access);

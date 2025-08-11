@@ -52,18 +52,22 @@ class CheckObjectStatusCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->execute1($input, $output);
-        $this->execute2($input, $output);
-
+        $this->io->title('Check Object Status');
+        $this->repository->sudo(function () use ($input, $output) {
+            $this->algo1($input, $output);
+            $this->algo2($input, $output);
+            $this->io->success($this->getName());
+        });
         return Command::SUCCESS;
     }
 
-    protected function execute1(InputInterface $input, OutputInterface $output)
+    protected function algo1(InputInterface $input, OutputInterface $output): void
     {
+        $this->io->section('Check Object Status -- Algo 1 -- On parcours la table ProtectedAccess.');
 
         $list = $this->protectedAccessRepository->findAll(0, 1000);
 
-        $this->io->comment(sprintf('%d entities to check', count($list)));
+        $this->io->comment(sprintf('%d ProtectedAccess to check', count($list)));
         $this->io->newLine();
         $progressBar = $this->io->createProgressBar(count($list));
 
@@ -78,15 +82,17 @@ class CheckObjectStatusCommand extends Command
             $content = $this->protectedAccessHelper->getContent($protectedAccess);
 
             if (!$content) {
-                $this->io->write(' No content; => DELETE ');
+                if ($this->io->isVerbose()) {
+                    $this->io->write(' No content; => DELETE ');
+                }
                 $this->entityManager->remove($protectedAccess);
                 $this->entityManager->flush();
             } else {
-                $count = $this->protectedAccessHelper->count($protectedAccess);
                 if ($this->io->isVerbose()) {
-                    $this->io->write(sprintf(' - %d ProtectedAccess for ContentAndDescendants [%d] "%s" ', $count, $content->id, $content->getName()));
+                    $this->io->write(sprintf(' - Content [%d] "%s" - ', $content->id, $content->getName() ));
+                    $count = $this->protectedAccessHelper->count($protectedAccess);
+                    $this->io->write(sprintf(' - %d Contenus impactés ', $count));
                 }
-
                 $this->objectStateHelper->setStatesForContentAndDescendants($content);
                 $this->reindexHelper->reindexContent($content);
                 if ($protectedAccess->isProtectChildren()) {
@@ -103,29 +109,35 @@ class CheckObjectStatusCommand extends Command
         $this->io->newLine();
     }
 
-
-    protected function execute2(InputInterface $input, OutputInterface $output)
+    protected function algo2(InputInterface $input, OutputInterface $output): void
     {
+        $this->io->section('Check Object Status -- Algo 2 -- On cherche tous les Content qui ont une protection dans leur ObjectStatus.');
+
         $objectStateGroupIdentifier = $this->objectStateHelper->objectStateGroupIdentifier; // 'protected_content'
         $objectStateIdentifier = $this->objectStateHelper->protectedObjectStateIdentifier; // 'protected'
 
         $group = $this->repository->getObjectStateService()->loadObjectStateGroupByIdentifier($objectStateGroupIdentifier);
         $state = $this->repository->getObjectStateService()->loadObjectStateByIdentifier($group, $objectStateIdentifier);
 
+        $objectStateGroupEmailIdentifier = $this->objectStateHelper->objectStateEmailGroupIdentifier; // 'protected_content_email'
+        $emailGroup = $this->repository->getObjectStateService()->loadObjectStateGroupByIdentifier($objectStateGroupEmailIdentifier);
 
-        $query = new LocationQuery();
-        $filters = [];
-        $filters[] = new Query\Criterion\ObjectStateIdentifier($state->identifier, $group->identifier);
-        $query->limit = 1000;
+        $query = new Query();
+        $filtersOr = new Query\Criterion\LogicalOr([
+            new Query\Criterion\ObjectStateIdentifier($state->identifier, $group->identifier),
+            new Query\Criterion\ObjectStateIdentifier($state->identifier, $emailGroup->identifier),
+        ]);
 
-        $query->filter = new Query\Criterion\LogicalAnd($filters);
+        $query->filter = $filtersOr;
+
         $query->sortClauses = [
             new Query\SortClause\ContentId(),
         ];
+        $query->limit = 1000;
 
         $searchResult = $this->repository->getSearchService()->findContent($query);
 
-        $this->io->comment(sprintf('%d Content to check', $searchResult->totalCount));
+        $this->io->comment(sprintf('%d Content(s) to check', $searchResult->totalCount));
 
         $progressBar = $this->io->createProgressBar($searchResult->totalCount);
         $progressBar->start();
@@ -137,7 +149,6 @@ class CheckObjectStatusCommand extends Command
             /** @var Content $content */
             $content = $hit->valueObject;
 
-
             if ($this->io->isVerbose()) {
                 $progressBar->display();
                 $this->io->write(sprintf(' - Checking Content [%d] "%s" - ', $content->id, $content->getName()));
@@ -145,18 +156,17 @@ class CheckObjectStatusCommand extends Command
                 $protectedAccessList = $this->protectedAccessRepository->findByContent($content);
                 $hasProtectedAccess = $this->protectedAccessHelper->hasProtectedAccess($content);
                 $hasEmailProtectedAccess = $this->protectedAccessHelper->hasEmailProtectedAccess($content);
-                $hasPasswordProtectedAccess = $this->protectedAccessHelper->hasPasswordProtectedAccess($content);
 
                 $this->io->write(sprintf(
                     ' - %d protections trouvées. Mot de passe: %s, Email: %s',
                     count($protectedAccessList),
-                    $hasPasswordProtectedAccess ? 'Oui' : 'Non',
+                    $hasProtectedAccess ? 'Oui' : 'Non',
                     $hasEmailProtectedAccess ? 'Oui' : 'Non',
                 ));
-
-                $this->objectStateHelper->setStatesForContent($content);
-                $this->reindexHelper->reindexContent($content);
             }
+
+            $this->objectStateHelper->setStatesForContent($content);
+            $this->reindexHelper->reindexContent($content);
 
             if ($this->io->isVerbose()) {
                 $this->io->newLine();

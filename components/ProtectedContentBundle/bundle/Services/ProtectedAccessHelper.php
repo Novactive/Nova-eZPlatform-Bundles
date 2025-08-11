@@ -44,14 +44,13 @@ class ProtectedAccessHelper
         });
     }
 
-
-    public function hasPasswordProtectedAccess(Content $content): bool
-    {
-        $protectedAccessList = $this->getProtectedAccessList($content);
-        return !!array_filter($protectedAccessList, function (ProtectedAccess $protectedAccess) {
-            return $protectedAccess->isEnabled() && $protectedAccess->getPassword();
-        });
-    }
+//    public function hasPasswordProtectedAccess(Content $content): bool
+//    {
+//        $protectedAccessList = $this->getProtectedAccessList($content);
+//        return !!array_filter($protectedAccessList, function (ProtectedAccess $protectedAccess) {
+//            return $protectedAccess->isEnabled() && $protectedAccess->getPassword();
+//        });
+//    }
 
     public function hasEmailProtectedAccess(Content $content): bool
     {
@@ -73,7 +72,7 @@ class ProtectedAccessHelper
             return 0;
         }
 
-        if ($protectedAccess->isProtectChildren()) {
+        if (!$protectedAccess->isProtectChildren()) {
             return 1;
         }
 

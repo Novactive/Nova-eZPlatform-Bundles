@@ -11,7 +11,6 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 use Ibexa\Contracts\Core\Repository\Values\ObjectState\ObjectState;
 use Ibexa\Contracts\Core\Repository\Values\ObjectState\ObjectStateGroup;
 use Ibexa\Core\Repository\SiteAccessAware\Repository;
-use Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedTokenStorageRepository;
 use Psr\Log\LoggerInterface;
 
 class ObjectStateHelper
@@ -25,7 +24,7 @@ class ObjectStateHelper
 
     public string $objectStateGroupIdentifier = 'protected_content';
     public string $objectStateEmailGroupIdentifier = 'protected_content_email';
-    public string $objectStatePasswordGroupIdentifier = 'protected_content_password';
+//    public string $objectStatePasswordGroupIdentifier = 'protected_content_password';
 
     public string $protectedObjectStateIdentifier = 'protected';
     public string $unprotectedObjectStateIdentifier = 'unprotected';
@@ -55,16 +54,15 @@ class ObjectStateHelper
         return null;
     }
 
-    public function setStatesForContentAndDescendants(Content $content): void
+    public function setStatesForContentAndDescendants(Content $content, bool $forceSubtreeProcessing = false): void
     {
         // On met tout de suite à jour les state pour $content.
         $this->setStatesForContent($content);
 
-//        if (!$this->protectedAccessHelper->hasInheritableProtectedAccess($content)) {
-//            dump('Le contenu n\'a aucune protection "héritable". On laisse ses descendant tranquil.');
-//            // Le contenu n'a aucune protection "héritable". On laisse ses descendant tranquil.
-//            return;
-//        }
+        if (!$forceSubtreeProcessing && !$this->protectedAccessHelper->hasInheritableProtectedAccess($content)) {
+            // Le contenu n'a aucune protection "héritable". On laisse ses descendant tranquil.
+            return;
+        }
 
         $locations = $this->repository->getLocationService()->loadLocations($content->contentInfo);
         $subtrees = array_map(function (Location $location) {
@@ -75,17 +73,18 @@ class ObjectStateHelper
         $query->filter = new Query\Criterion\LogicalAnd([
             new Query\Criterion\Subtree($subtrees),
         ]);
-        $query->limit = 5000;
+        $query->limit = 25;
 
         $searchResult = $this->repository->getSearchService()->findLocations($query);
-//        dump($searchResult->totalCount);
-        if ($searchResult->totalCount > 10) {
+        if ($searchResult->totalCount > $query->limit) {
             $this->logger->error('Too many locations found for content', [
                 'contentId' => $content->id,
                 'totalCount' => $searchResult->totalCount,
             ]);
         }
-        foreach ($locations as $location) {
+        foreach ($searchResult->searchHits as $hit) {
+            /** @var Location $location */
+            $location = $hit->valueObject;
             $this->setStatesForContent($location->getContent());
         }
     }
@@ -95,7 +94,6 @@ class ObjectStateHelper
         $data = [
             $this->objectStateGroupIdentifier => $this->protectedAccessHelper->hasProtectedAccess($content),
             $this->objectStateEmailGroupIdentifier => $this->protectedAccessHelper->hasEmailProtectedAccess($content),
-            $this->objectStatePasswordGroupIdentifier => $this->protectedAccessHelper->hasPasswordProtectedAccess($content),
         ];
 
         foreach ($data as $objectStateGroupIdentifier => $isProtected) {
@@ -108,7 +106,7 @@ class ObjectStateHelper
                     $objectState = $this->getObjectState($objectStateGroup, $this->unprotectedObjectStateIdentifier);
                 }
                 if ($objectState) {
-                    if ($this->objectStateService->getContentState($content->contentInfo, $objectStateGroup) !== $objectState) {
+                    if ($this->objectStateService->getContentState($content->contentInfo, $objectStateGroup)->identifier !== $objectState->identifier) {
                         $this->repository->sudo(function () use ($content, $objectStateGroup, $objectState) {
                             $this->objectStateService->setContentState($content->contentInfo, $objectStateGroup, $objectState);
                         });
