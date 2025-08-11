@@ -7,7 +7,6 @@ use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 
 trait ConfigResolverTrait
 {
-
     protected ConfigResolverInterface $configResolver;
 
     /**

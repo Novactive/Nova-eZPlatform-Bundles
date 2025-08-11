@@ -81,4 +81,9 @@ abstract class NameCartHandler implements HandlerInterface
             $offset
         );
     }
+    public function countBy(array $criteria): int
+    {
+        $criteria['name'] = $this->namedCartService->getNamedCartName();
+        return $this->innerHandler->countBy($criteria);
+    }
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace AlmaviaCX\Ibexa\Commerce\Extra\Service\SiteAccessAware\Cart\Handler;
@@ -9,14 +10,11 @@ use Ibexa\Cart\Persistence\Legacy\Cart\Handler\SessionHandler as BaseSessionHand
 use Ibexa\Contracts\Cart\Value\CartQuery;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-/**
- * @phpstan-import-type T from \Ibexa\Cart\Persistence\Legacy\Cart\GatewayInterface as TCart
- */
 final class SessionHandler extends NameCartHandler implements HandlerInterface
 {
     public function __construct(
         private readonly SessionInterface $session,
-        NamedCartService    $namedCartService,
+        NamedCartService $namedCartService,
         BaseSessionHandler $innerHandler,
     ) {
         parent::__construct($namedCartService, $innerHandler);

@@ -11,6 +11,7 @@ use Ibexa\Contracts\Checkout\Workflow\WorkflowStrategyInterface;
 final class ProWorkflow implements WorkflowStrategyInterface
 {
     use ConfigResolverTrait;
+
     public const CUSTOM_WORKFLOW_NAME = 'named_workflow_name';
     public function getWorkflow(CartInterface $cart): WorkflowInterface
     {

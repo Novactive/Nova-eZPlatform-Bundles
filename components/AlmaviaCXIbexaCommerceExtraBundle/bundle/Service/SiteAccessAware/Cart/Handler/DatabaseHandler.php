@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace AlmaviaCX\Ibexa\Commerce\Extra\Service\SiteAccessAware\Cart\Handler;

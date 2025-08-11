@@ -33,19 +33,39 @@ class AlmaviaCXIbexaCommerceExtraExtension extends Extension implements PrependE
             $config,
             static function ($scopeSettings, $currentScope, ContextualizerInterface $contextualizer) {
                 if (array_key_exists('named_cart_enabled', $scopeSettings)) {
-                    $contextualizer->setContextualParameter('named_cart_enabled', $currentScope, $scopeSettings['named_cart_enabled']);
+                    $contextualizer->setContextualParameter(
+                        'named_cart_enabled',
+                        $currentScope,
+                        $scopeSettings['named_cart_enabled']
+                    );
                 }
                 if (array_key_exists('named_cart_name', $scopeSettings)) {
-                    $contextualizer->setContextualParameter('named_cart_name', $currentScope, $scopeSettings['named_cart_name']);
+                    $contextualizer->setContextualParameter(
+                        'named_cart_name',
+                        $currentScope,
+                        $scopeSettings['named_cart_name']
+                    );
                 }
                 if (array_key_exists('named_cart_enabled', $scopeSettings)) {
-                    $contextualizer->setContextualParameter('named_cart_enabled', $currentScope, $scopeSettings['named_cart_enabled']);
+                    $contextualizer->setContextualParameter(
+                        'named_cart_enabled',
+                        $currentScope,
+                        $scopeSettings['named_cart_enabled']
+                    );
                 }
                 if (array_key_exists('named_cart_context', $scopeSettings)) {
-                    $contextualizer->setContextualParameter('named_cart_context', $currentScope, $scopeSettings['named_cart_context']);
+                    $contextualizer->setContextualParameter(
+                        'named_cart_context',
+                        $currentScope,
+                        $scopeSettings['named_cart_context']
+                    );
                 }
                 if (array_key_exists('named_workflow_name', $scopeSettings)) {
-                    $contextualizer->setContextualParameter('named_workflow_name', $currentScope, $scopeSettings['named_workflow_name']);
+                    $contextualizer->setContextualParameter(
+                        'named_workflow_name',
+                        $currentScope,
+                        $scopeSettings['named_workflow_name']
+                    );
                 }
             }
         );
