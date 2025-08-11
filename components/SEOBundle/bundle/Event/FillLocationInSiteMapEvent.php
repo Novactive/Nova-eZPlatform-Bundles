@@ -14,7 +14,10 @@ class FillLocationInSiteMapEvent extends Event
 {
     protected bool $isValid = true;
 
-    public function __construct(protected readonly Location  $location) { }
+    public function __construct(protected readonly Location $location)
+    {
+
+    }
 
     public function isValid(): bool
     {

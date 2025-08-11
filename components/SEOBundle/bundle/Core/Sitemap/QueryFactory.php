@@ -17,7 +17,9 @@ class QueryFactory
     public function __construct(
         protected ConfigResolverInterface $configResolver,
         protected Repository $repository
-    ) { }
+    ) {
+
+    }
 
     protected function getLocation(int $locationId): ?Location
     {
@@ -102,8 +104,7 @@ class QueryFactory
         array $subtreeLocationsId,
         array $objectStates,
         bool $isLogicalNot = false
-    ): array
-    {
+    ): array {
         $contentTypeService = $this->repository->getContentTypeService();
         $criteria = [];
 
@@ -135,9 +136,10 @@ class QueryFactory
         foreach ($objectStates as $objectStateData) {
             foreach ($objectStateData as $objectStateGroupIdentifier => $objectStateIdentifiers) {
                 try {
-                    $group = $this->repository->getObjectStateService()->loadObjectStateGroupByIdentifier($objectStateGroupIdentifier);
+                    $service = $this->repository->getObjectStateService();
+                    $group = $service->loadObjectStateGroupByIdentifier($objectStateGroupIdentifier);
                     foreach ($objectStateIdentifiers as $objectStateIdentifier) {
-                        $state = $this->repository->getObjectStateService()->loadObjectStateByIdentifier($group, $objectStateIdentifier);
+                        $state = $service->loadObjectStateByIdentifier($group, $objectStateIdentifier);
                         $criteria[] = new Criterion\ObjectStateIdentifier($state->identifier, $group->identifier);
                     }
                 } catch (NotFoundException $notFoundException) {
@@ -166,8 +168,7 @@ class QueryFactory
         array $locationIds,
         array $subtreeLocationsId,
         array $objectStates,
-    ): array
-    {
+    ): array {
         $contentTypeService = $this->repository->getContentTypeService();
         $criteria = [];
 
@@ -213,16 +214,20 @@ class QueryFactory
             foreach ($objectStateData as $objectStateGroupIdentifier => $objectStateIdentifiers) {
                 $validStateIdentifiers = [];
                 try {
-                    $group = $this->repository->getObjectStateService()->loadObjectStateGroupByIdentifier($objectStateGroupIdentifier);
+                    $service = $this->repository->getObjectStateService();
+                    $group = $service->loadObjectStateGroupByIdentifier($objectStateGroupIdentifier);
                     foreach ($objectStateIdentifiers as $objectStateIdentifier) {
-                        $state = $this->repository->getObjectStateService()->loadObjectStateByIdentifier($group, $objectStateIdentifier);
+                        $state = $service->loadObjectStateByIdentifier($group, $objectStateIdentifier);
                         $validStateIdentifiers[] = $state->identifier;
                     }
                 } catch (NotFoundException $notFoundException) {
                     continue;
                 }
                 if (count($validStateIdentifiers) > 0) {
-                    $criteria[] = new Criterion\ObjectStateIdentifier($validStateIdentifiers, $objectStateGroupIdentifier);
+                    $criteria[] = new Criterion\ObjectStateIdentifier(
+                        $validStateIdentifiers,
+                        $objectStateGroupIdentifier
+                    );
                 }
             }
         }

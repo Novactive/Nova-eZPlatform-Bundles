@@ -45,7 +45,9 @@ class SitemapController extends Controller
         protected readonly FieldHelper $fieldHelper,
         protected readonly VariationHandler $imageVariationService,
         protected readonly EventDispatcherInterface $eventDispatcher,
-    ) { }
+    ) {
+
+    }
 
     /**
      * Get the event dispatcher used by the cache invalidator.
