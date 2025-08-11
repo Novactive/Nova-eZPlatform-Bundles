@@ -10,6 +10,7 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 use Ibexa\Contracts\Core\Repository\Values\Content\LocationQuery as Query;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\SortClause;
+use Ibexa\Contracts\Core\Repository\Values\ContentType\ContentType;
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 
 class QueryFactory
@@ -162,31 +163,15 @@ class QueryFactory
         array $subtreeLocationsId,
         array $objectStates,
     ): array {
-        $contentTypeService = $this->repository->getContentTypeService();
         $criteria = [];
 
-        $validContentTypeIdentifiers = [];
-        foreach ($contentTypeIdentifiers as $contentTypeIdentifier) {
-            try {
-                $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
-            } catch (NotFoundException $exception) {
-                continue;
-            }
-            $validContentTypeIdentifiers[] = $contentTypeIdentifier;
-        }
-        if (count($validContentTypeIdentifiers) > 0) {
+        $validContentTypeIdentifiers = $this->getValidContentTypeIdentifiers($contentTypeIdentifiers);
+        if (count($validContentTypeIdentifiers)) {
             $criteria[] = new Criterion\ContentTypeIdentifier($validContentTypeIdentifiers);
         }
 
-        $subtreePaths = [];
-        foreach ($subtreeLocationsId as $locationId) {
-            $includedLocation = $this->getLocation($locationId);
-            if (null === $includedLocation) {
-                continue;
-            }
-            $subtreePaths[] = $includedLocation->pathString;
-        }
-        if (count($subtreePaths) > 0) {
+        $subtreePaths = $this->getSubtreePathList($subtreeLocationsId);
+        if (count($subtreePaths)) {
             $criteria[] = new Criterion\Subtree($subtreePaths);
         }
 
@@ -226,5 +211,39 @@ class QueryFactory
         }
 
         return $criteria;
+    }
+
+    protected function getValidContentTypeIdentifiers(array $contentTypeIdentifiers): array
+    {
+        $validContentTypeIdentifiers = [];
+        foreach ($contentTypeIdentifiers as $contentTypeIdentifier) {
+            $contentType = $this->getContentType($contentTypeIdentifier);
+            if ($contentType) {
+                $validContentTypeIdentifiers[] = $contentType->identifier;
+            }
+        }
+        return $validContentTypeIdentifiers;
+    }
+
+    protected function getContentType(string $contentTypeIdentifier): ?ContentType
+    {
+        try {
+            return $this->repository->getContentTypeService()->loadContentTypeByIdentifier($contentTypeIdentifier);
+        } catch (NotFoundException $exception) {
+            return null;
+        }
+    }
+
+    protected function getSubtreePathList(array $subtreeLocationsId): array
+    {
+        $subtreePaths = [];
+        foreach ($subtreeLocationsId as $locationId) {
+            $includedLocation = $this->getLocation($locationId);
+            if (!$includedLocation) {
+                continue;
+            }
+            $subtreePaths[] = $includedLocation->pathString;
+        }
+        return $subtreePaths;
     }
 }
