@@ -18,7 +18,6 @@ class QueryFactory
         protected ConfigResolverInterface $configResolver,
         protected Repository $repository
     ) {
-
     }
 
     protected function getLocation(int $locationId): ?Location

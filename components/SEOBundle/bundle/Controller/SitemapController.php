@@ -46,7 +46,6 @@ class SitemapController extends Controller
         protected readonly VariationHandler $imageVariationService,
         protected readonly EventDispatcherInterface $eventDispatcher,
     ) {
-
     }
 
     /**

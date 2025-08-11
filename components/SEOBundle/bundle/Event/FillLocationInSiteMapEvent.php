@@ -16,7 +16,6 @@ class FillLocationInSiteMapEvent extends Event
 
     public function __construct(protected readonly Location $location)
     {
-
     }
 
     public function isValid(): bool
