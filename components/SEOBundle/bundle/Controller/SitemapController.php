@@ -17,15 +17,12 @@ use DOMDocument;
 use DOMElement;
 use Ibexa\Bundle\Core\Controller;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location;
-use Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchHit;
 use Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchResult;
 use Ibexa\Contracts\Core\Variation\VariationHandler;
 use Ibexa\Core\Helper\FieldHelper;
 use Ibexa\Core\MVC\Symfony\Routing\UrlAliasRouter;
-use Ibexa\Taxonomy\Event\Subscriber\ValidateTaxonomyEntryAssignmentSubscriber;
 use Novactive\Bundle\eZSEOBundle\Core\Sitemap\QueryFactory;
 use Novactive\Bundle\eZSEOBundle\Event\FillLocationInSiteMapEvent;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,7 +36,6 @@ class SitemapController extends Controller
      * @var int
      */
     public const PACKET_MAX = 1000;
-//    protected ?EventDispatcherInterface $eventDispatcher = null;
 
     public function __construct(
         protected readonly FieldHelper $fieldHelper,

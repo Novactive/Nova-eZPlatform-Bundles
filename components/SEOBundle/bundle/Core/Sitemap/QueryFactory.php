@@ -73,7 +73,7 @@ class QueryFactory
                 $config['contentTypeIdentifiers'],
                 $config['locations'],
                 $config['subtrees'],
-                $config['objectStates'],
+                $config['object_states'],
             )
         );
 
@@ -81,12 +81,11 @@ class QueryFactory
         $config = $this->configResolver->getParameter('sitemap_excludes', 'nova_ezseo');
         $criteria = array_merge(
             $criteria,
-            $this->getCriteriaForConfig(
+            $this->getCriteriaForExcludeConfig(
                 $config['contentTypeIdentifiers'],
                 $config['locations'],
                 $config['subtrees'],
-                $config['objectStates'],
-                true
+                $config['object_states'],
             )
         );
 
@@ -97,12 +96,11 @@ class QueryFactory
     /**
      * @return Criterion[]
      */
-    protected function getCriteriaForConfig(
+    protected function getCriteriaForExcludeConfig(
         array $contentTypeIdentifiers,
         array $locationIds,
         array $subtreeLocationsId,
         array $objectStates,
-        bool $isLogicalNot = false
     ): array {
         $contentTypeService = $this->repository->getContentTypeService();
         $criteria = [];
@@ -147,16 +145,12 @@ class QueryFactory
             }
         }
 
-        if ($isLogicalNot) {
-            return array_map(
-                function ($criterion) {
-                    return new Criterion\LogicalNot($criterion);
-                },
-                $criteria
-            );
-        }
-
-        return $criteria;
+        return array_map(
+            function ($criterion) {
+                return new Criterion\LogicalNot($criterion);
+            },
+            $criteria
+        );
     }
 
     /**
