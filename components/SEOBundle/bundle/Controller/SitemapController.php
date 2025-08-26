@@ -128,12 +128,6 @@ class SitemapController extends Controller
             /** @var Location  $location */
             $location = $searchHit->valueObject;
 
-            $event = new FillLocationInSiteMapEvent($location);
-            $this->getEventDispatcher()->dispatch($event);
-            if (!$event->isValid()) {
-                continue;
-            }
-
             try {
                 $url = $this->generateUrl(
                     UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
