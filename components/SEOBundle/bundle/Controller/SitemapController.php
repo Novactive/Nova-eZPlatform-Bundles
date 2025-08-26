@@ -22,7 +22,6 @@ use Ibexa\Contracts\Core\Variation\VariationHandler;
 use Ibexa\Core\Helper\FieldHelper;
 use Ibexa\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use Novactive\Bundle\eZSEOBundle\Core\Sitemap\QueryFactory;
-use Novactive\Bundle\eZSEOBundle\Event\FillLocationInSiteMapEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
