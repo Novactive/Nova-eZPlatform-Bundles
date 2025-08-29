@@ -69,6 +69,7 @@ class ExecutionRunner
             if ($workflow->isDebug()) {
                 throw $e;
             }
+            $workflow->getLogger()->error($e->getMessage());
             $execution = $this->refreshExecution($execution);
             $this->updateExecutionState($execution, $workflow);
             $execution->setStatus(Execution::STATUS_ERROR);

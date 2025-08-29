@@ -104,7 +104,7 @@ class RunJobCommand extends Command
         $execution = $this->jobService->executeJob(
             $job,
             new ExecutionOptions(),
-            $input->getOption('batch_limit'),
+            (int) $input->getOption('batch_limit'),
             (int) $executionId,
             $async
         );
