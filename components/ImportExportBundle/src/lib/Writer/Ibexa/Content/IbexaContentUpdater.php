@@ -60,6 +60,8 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
 
         if ($allowMove) {
             $this->handleLocations($content, $parentLocationIdList, $hidden);
+        }else {
+            $this->handleLocationsVisibility( $content, $hidden );
         }
 
         return $publishedContent;
@@ -146,5 +148,28 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
             $content->contentInfo,
             $locationCreateStruct
         );
+    }
+
+    /**
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\BadStateException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException
+     */
+    protected function handleLocationsVisibility( Content $content, bool $hidden ): void
+    {
+        $existingLocations = $this->repository->getLocationService()->loadLocations( $content->contentInfo );
+        foreach ( $existingLocations as $existingLocation )
+        {
+            if ( $existingLocation->hidden !== $hidden )
+            {
+                if ( $hidden )
+                {
+                    $this->repository->getLocationService()->hideLocation( $existingLocation );
+                }
+                else
+                {
+                    $this->repository->getLocationService()->unhideLocation( $existingLocation );
+                }
+            }
+        }
     }
 }
