@@ -39,6 +39,13 @@ services:
         tags:
             - console.command
 
+    AlmaviaCX\Bundle\IbexaImportExportBundle\Command\RunJobCommand:
+        arguments:
+            $jobService: '@AlmaviaCX\Bundle\IbexaImportExport\Job\JobService'
+            $repository: '@Ibexa\Contracts\Core\Repository\Repository'
+        tags:
+            - console.command
+
     AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag:
 
     AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentCreator:
@@ -54,3 +61,8 @@ services:
             $repository: '@Ibexa\Contracts\Core\Repository\Repository'
             $contentCreator: '@AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentCreator'
             $contentUpdater: '@AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentUpdater'
+
+    AlmaviaCX\Bundle\IbexaImportExport\Salesforce\SalesforceApiClient:
+        arguments:
+            $httpClient: '@http_client'
+            $cache: '@ibexa.cache_pool'

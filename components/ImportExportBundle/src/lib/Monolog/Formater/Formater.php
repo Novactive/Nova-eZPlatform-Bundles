@@ -41,7 +41,7 @@ class Formater extends HtmlFormatter
         );
         $output .= '<table cellspacing="1" width="100%" class="monolog-output">';
 
-        if ($record['context'] && !empty($record['context'])) {
+        if ($record['context']) {
             $embeddedTable = '<table cellspacing="1" width="100%">';
             foreach ($record['context'] as $key => $value) {
                 $embeddedTable .= $this->addRow((string) $key, $this->convertToString($value));

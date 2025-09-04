@@ -11,12 +11,9 @@ use Ibexa\Contracts\Core\Repository\Values\ContentType\FieldDefinition;
 
 class AbstractIbexaContentHandler
 {
-    protected Repository $repository;
-
     public function __construct(
-        Repository $repository
+        protected Repository $repository
     ) {
-        $this->repository = $repository;
     }
 
     /**

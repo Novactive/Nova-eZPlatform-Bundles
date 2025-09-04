@@ -6,18 +6,15 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Message;
 
 abstract class JobRunMessage
 {
-    protected int $jobId;
-    protected int $batchLimit;
-
-    public function __construct(int $jobId, int $batchLimit = -1)
-    {
-        $this->jobId = $jobId;
-        $this->batchLimit = $batchLimit;
+    public function __construct(
+        protected int $executionId,
+        protected int $batchLimit = -1
+    ) {
     }
 
-    public function getJobId(): int
+    public function getExecutionId(): int
     {
-        return $this->jobId;
+        return $this->executionId;
     }
 
     public function getBatchLimit(): int

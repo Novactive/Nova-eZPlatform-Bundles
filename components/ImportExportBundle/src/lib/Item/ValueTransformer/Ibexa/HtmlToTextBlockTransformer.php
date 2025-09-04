@@ -7,9 +7,12 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Ibexa;
 use AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\AbstractItemValueTransformer;
 use Ibexa\Core\FieldType\TextBlock\Value;
 
+/**
+ * Transforms HTML content to plain text, preserving block-level elements.
+ */
 class HtmlToTextBlockTransformer extends AbstractItemValueTransformer
 {
-    public function transform($value, array $options = [])
+    protected function transform(mixed $value, array $options = []): Value
     {
         if (null === $value) {
             return new Value();

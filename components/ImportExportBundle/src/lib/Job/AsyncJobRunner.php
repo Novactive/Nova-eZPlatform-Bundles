@@ -4,34 +4,36 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Job;
 
+use AlmaviaCX\Bundle\IbexaImportExport\Execution\Execution;
+use AlmaviaCX\Bundle\IbexaImportExport\Execution\ExecutionRepository;
 use AlmaviaCX\Bundle\IbexaImportExport\MessageHandler\JobRunMessageHandler;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class AsyncJobRunner extends AbstractJobRunner
 {
-    protected JobRunMessageHandler $jobRunMessageHandler;
-    protected JobRepository $jobRepository;
-
     public function __construct(
-        JobRunMessageHandler $jobRunMessageHandler,
+        protected JobRunMessageHandler $jobRunMessageHandler,
+        protected JobRunnerInterface $originalRunner,
         JobRepository $jobRepository,
-        EventDispatcherInterface $eventDispatcher
+        ExecutionRepository $executionRepository,
     ) {
-        $this->jobRepository = $jobRepository;
-        $this->jobRunMessageHandler = $jobRunMessageHandler;
-        parent::__construct($eventDispatcher);
+        parent::__construct($jobRepository, $executionRepository);
     }
 
-    protected function run(Job $job, int $batchLimit = -1): int
+    public function runExecution(Execution $execution, int $batchLimit = -1, bool $async = true): int
     {
-        if ($job->isPaused()) {
-            $this->jobRunMessageHandler->triggerResume($job, $batchLimit);
-        } else {
-            $job->setStatus(Job::STATUS_QUEUED);
-            $this->jobRepository->save($job);
-            $this->jobRunMessageHandler->triggerStart($job, $batchLimit);
+        if (!$async) {
+            return $this->originalRunner->runExecution($execution, $batchLimit);
         }
 
-        return $job->getStatus();
+        if (Execution::STATUS_PAUSED === $execution->getStatus()) {
+            $this->jobRunMessageHandler->triggerResume($execution, $batchLimit);
+        } elseif ($execution->canRun()) {
+            $execution->setStatus(Execution::STATUS_QUEUED);
+            $this->executionRepository->save($execution);
+
+            $this->jobRunMessageHandler->triggerStart($execution, $batchLimit);
+        }
+
+        return $execution->getStatus();
     }
 }

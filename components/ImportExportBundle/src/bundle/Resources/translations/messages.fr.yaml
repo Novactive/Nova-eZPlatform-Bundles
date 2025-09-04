@@ -3,3 +3,4 @@
 breadcrumb.admin: Admin
 job.list.title: Tâches
 job.options.empty: 'Il n''y a pas d''options à configurer'
+processor.csv_iterator.name: 'CSV Iterator'

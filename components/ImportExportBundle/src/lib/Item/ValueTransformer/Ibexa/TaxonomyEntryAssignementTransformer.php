@@ -9,23 +9,25 @@ use Ibexa\Contracts\Taxonomy\Value\TaxonomyEntry;
 use Ibexa\Taxonomy\FieldType\TaxonomyEntryAssignment\Value;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Transform a TaxonomyEntry or and array of TaxonomyEntry to a TaxonomyEntryAssignment Value.
+ */
 class TaxonomyEntryAssignementTransformer extends AbstractItemValueTransformer
 {
-    /**
-     * @param TaxonomyEntry|TaxonomyEntry[] $value
-     *
-     * @return \Ibexa\Taxonomy\FieldType\TaxonomyEntryAssignment\Value
-     */
-    public function transform($value, array $options = [])
+    protected function transform(mixed $value, array $options = []): Value
     {
         if (!is_array($value)) {
             $value = [$value];
         }
 
-        return new Value(array_filter($value), $options['taxonomy']);
+        $entries = array_filter($value, function ($entry) {
+            return $entry instanceof TaxonomyEntry;
+        });
+
+        return new Value($entries, $options['taxonomy']);
     }
 
-    protected function configureOptions(OptionsResolver $optionsResolver)
+    protected function configureOptions(OptionsResolver $optionsResolver): void
     {
         parent::configureOptions($optionsResolver);
         $optionsResolver->define('taxonomy')

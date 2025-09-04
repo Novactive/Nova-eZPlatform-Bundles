@@ -30,8 +30,8 @@ class IbexaContentCreator extends AbstractIbexaContentHandler
         int $ownerId = null,
         string $languageCode = 'eng-GB',
         int $sectionId = null,
-        $modificationDate = null,
-        bool $hidden = false
+        int|DateTime $modificationDate = null,
+        bool|null $hidden = null
     ): Content {
         $contentType = $this->repository->getContentTypeService()->loadContentTypeByIdentifier(
             $contentTypeIdentifier
@@ -77,7 +77,7 @@ class IbexaContentCreator extends AbstractIbexaContentHandler
             if (is_string($locationRemoteId)) {
                 $locationCreateStruct->remoteId = $locationRemoteId;
             }
-            if ($hidden) {
+            if ($hidden === true) {
                 $locationCreateStruct->hidden = true;
             }
             $locationCreateStructs[] = $locationCreateStruct;

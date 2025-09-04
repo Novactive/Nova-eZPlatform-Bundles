@@ -4,35 +4,40 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer;
 
+use AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag;
 use Ibexa\Contracts\Core\Repository\Exceptions\PropertyNotFoundException;
 use ReflectionClass;
 use ReflectionProperty;
 
+/**
+ * @phpstan-type SourceObjectOrArray array<int|string, mixed>|object
+ * @phpstan-type MappedItem array<int|string, mixed>|object
+ */
 class ItemTransformer
 {
-    protected SourceResolver $sourceResolver;
-
     public function __construct(
-        SourceResolver $sourceResolver
+        protected SourceResolver $sourceResolver
     ) {
-        $this->sourceResolver = $sourceResolver;
     }
 
     /**
-     * @param object|array                                                           $objectOrArray
+     * @param SourceObjectOrArray                                                    $objectOrArray
      * @param \AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\TransformationMap $map
-     * @param array<int|string, mixed>|object                                        $destinationObjectOrArray
+     * @param MappedItem                                                             $destinationObjectOrArray
      *
-     * @return array<int|string, mixed>|object
+     * @throws \AlmaviaCX\Bundle\IbexaImportExport\Exception\SourceResolutionException
+     *
+     * @return MappedItem
      */
     public function __invoke(
         $objectOrArray,
         TransformationMap $map,
-        $destinationObjectOrArray = []
+        $destinationObjectOrArray,
+        ReferenceBag $referenceBag
     ) {
         $elements = $map->getElements();
         foreach ($elements as $destination => $source) {
-            $value = ($this->sourceResolver)($source, $objectOrArray);
+            $value = ($this->sourceResolver)($source, $objectOrArray, $referenceBag);
             $this->sourceResolver->getDefaultPropertyAccessor()->setValue(
                 $destinationObjectOrArray,
                 $destination,
@@ -45,6 +50,10 @@ class ItemTransformer
 
     /**
      * @param object|string $objectOrClass
+     *
+     * @throws \ReflectionException
+     *
+     * @return string[]
      */
     public function getAvailableProperties($objectOrClass): array
     {
@@ -55,6 +64,8 @@ class ItemTransformer
      * @param object|string $objectOrClass
      *
      * @throws \ReflectionException
+     *
+     * @return string[]
      */
     protected function getPropertiesPaths($objectOrClass, string $prefix = ''): array
     {
@@ -79,6 +90,13 @@ class ItemTransformer
         return $properties;
     }
 
+    /**
+     * @param mixed $value
+     *
+     * @throws \ReflectionException
+     *
+     * @return string[]
+     */
     protected function getPropertyPaths($value, string $propertyName): array
     {
         $paths = [];

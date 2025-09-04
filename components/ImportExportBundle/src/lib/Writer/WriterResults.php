@@ -6,17 +6,13 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Writer;
 
 class WriterResults
 {
-    protected string $writerType;
-    /** @var mixed[] */
-    protected array $results;
-
     /**
-     * @param mixed[] $results
+     * @param array<string, mixed> $results
      */
-    public function __construct(string $writerType, array $results)
-    {
-        $this->writerType = $writerType;
-        $this->results = $results;
+    public function __construct(
+        protected string $writerType,
+        protected array $results
+    ) {
     }
 
     public function getWriterType(): string
@@ -25,19 +21,24 @@ class WriterResults
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, mixed>
      */
     public function getResults(): array
     {
         return $this->results;
     }
 
-    public function setResult(string $key, $value): void
+    public function setResult(string $key, mixed $value): void
     {
         $this->results[$key] = $value;
     }
 
-    public function getResult(string $key, $default = null)
+    /**
+     * @param mixed $default
+     *
+     * @return mixed|null
+     */
+    public function getResult(string $key, mixed $default = null): mixed
     {
         return $this->results[$key] ?? $default;
     }

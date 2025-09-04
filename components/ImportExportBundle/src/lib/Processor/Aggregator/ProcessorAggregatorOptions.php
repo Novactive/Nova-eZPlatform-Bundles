@@ -6,12 +6,13 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Processor\Aggregator;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentOptions;
 use AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentReference;
+use AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorInterface;
 use AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorOptions;
 use AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorReferenceAggregationTrait;
 
 /**
- * @property array<ComponentReference> $processors
- * @property bool                      $errorBubbling
+ * @property array<ComponentReference|ProcessorInterface<ProcessorOptions>> $processors
+ * @property bool                                                           $errorBubbling
  */
 class ProcessorAggregatorOptions extends ProcessorOptions
 {
@@ -19,23 +20,25 @@ class ProcessorAggregatorOptions extends ProcessorOptions
 
     protected bool $errorBubbling = true;
 
-    public function merge(ComponentOptions $overrideOptions): ComponentOptions
+    public function merge($overrideOptions): static
     {
         dd($overrideOptions);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function replaceComponentReferences(
-        $buildComponentCallback,
+        callable $componentBuilder,
         ?ComponentOptions $runtimeProcessConfiguration = null
     ): void {
         foreach ($this->processors as $key => $processor) {
-            $this->processors[$key] = call_user_func(
-                $buildComponentCallback,
-                $processor
-            );
+            if ($processor instanceof ComponentReference) {
+                /** @var ComponentReference|null $processorOptions */
+                $processorOptions = $runtimeProcessConfiguration->processors[$key] ?? null;
+                $this->processors[$key] = call_user_func(
+                    $componentBuilder,
+                    $processor,
+                    $processorOptions?->getOptions()
+                );
+            }
         }
     }
 }

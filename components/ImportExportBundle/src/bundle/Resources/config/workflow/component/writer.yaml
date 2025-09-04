@@ -3,7 +3,6 @@ services:
         abstract: true
         arguments:
             $itemTransformer: '@AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\ItemTransformer'
-            $references: '@AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag'
             $sourceResolver: '@AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\SourceResolver'
 
     AlmaviaCX\Bundle\IbexaImportExport\Writer\Csv\CsvWriter:
