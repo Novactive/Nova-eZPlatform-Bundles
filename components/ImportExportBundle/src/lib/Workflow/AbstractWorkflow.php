@@ -159,6 +159,7 @@ abstract class AbstractWorkflow implements WorkflowInterface
     protected function processItem($item): void
     {
         try {
+            $processorId = null;
             foreach ($this->configuration->getProcessors() as $processorId => $processor) {
                 $processResult = ($processor)($item);
                 if (false === $processResult) {

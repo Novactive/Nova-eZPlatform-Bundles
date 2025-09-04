@@ -9,9 +9,6 @@ use AlmaviaCX\Bundle\IbexaImportExport\Workflow\RunConfigurationBuilder;
 use AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowRegistry;
 use Ibexa\Contracts\AdminUi\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-
-use function Symfony\Component\DependencyInjection\Loader\Configurator\iterator;
-
 class ReaderController extends Controller
 {
     public function __construct(

@@ -18,9 +18,9 @@ class SlugTransformer extends AbstractItemValueTransformer
     }
 
     /**
-     * @param string|string[] $value
+     * @param string|string[]|null $value
      *
-     * @return string|string[]
+     * @return string|string[]|null
      */
     protected function transform(mixed $value, array $options = []): mixed
     {

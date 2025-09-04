@@ -27,7 +27,7 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
         array $parentLocationIdList,
         int $ownerId = null,
         string $mainLanguageCode = 'eng-GB',
-        bool $hidden = false,
+        bool|null $hidden = null,
         bool $allowMove = false
     ): Content {
         $contentType = $this->repository->getContentTypeService()->loadContentType(
@@ -60,7 +60,7 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
 
         if ($allowMove) {
             $this->handleLocations($content, $parentLocationIdList, $hidden);
-        }else {
+        }elseif($hidden !== null) {
             $this->handleLocationsVisibility( $content, $hidden );
         }
 
@@ -73,7 +73,7 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\BadStateException
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException
      */
-    protected function handleLocations(Content $content, array $parentLocationIdList, bool $hidden): void
+    protected function handleLocations(Content $content, array $parentLocationIdList, bool|null $hidden): void
     {
         $existingLocations = $this->repository->getLocationService()->loadLocations($content->contentInfo);
         $locationsToKeep = [];
@@ -109,7 +109,7 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
         Location|int|string $parentLocationId,
         int|string $locationRemoteId,
         array $existingLocations,
-        bool $hidden
+        bool|null $hidden
     ): Location {
         if ($parentLocationId instanceof Location) {
             $parentLocationId = $parentLocationId->id;
@@ -122,7 +122,7 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
 
         foreach ($existingLocations as $existingLocation) {
             if ($existingLocation->parentLocationId === $parentLocationId) {
-                if ($existingLocation->hidden !== $hidden) {
+                if ($hidden !== null && $existingLocation->hidden !== $hidden) {
                     if ($hidden) {
                         $this->repository->getLocationService()->hideLocation($existingLocation);
                     } else {
@@ -140,7 +140,7 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
         if (is_string($locationRemoteId)) {
             $locationCreateStruct->remoteId = $locationRemoteId;
         }
-        if ($hidden) {
+        if ($hidden === true) {
             $locationCreateStruct->hidden = true;
         }
 

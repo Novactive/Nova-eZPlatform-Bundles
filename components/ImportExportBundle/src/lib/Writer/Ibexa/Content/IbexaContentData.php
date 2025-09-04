@@ -25,7 +25,7 @@ class IbexaContentData
     protected array $parentLocationIdList = [2];
     protected ?int $sectionId = null;
     protected int|null|DateTime $modificationDate = null;
-    protected bool $hidden = false;
+    protected bool|null $hidden = null;
     protected int $importMode = self::IMPORT_MODE_UPDATE_AND_CREATE_IF_NOT_EXISTS;
     protected bool $allowMoveOnUpdate = false;
 
@@ -121,12 +121,12 @@ class IbexaContentData
         $this->modificationDate = $modificationDate;
     }
 
-    public function isHidden(): bool
+    public function isHidden(): bool|null
     {
         return $this->hidden;
     }
 
-    public function setHidden(bool $hidden): void
+    public function setHidden(bool|null $hidden): void
     {
         $this->hidden = $hidden;
     }
