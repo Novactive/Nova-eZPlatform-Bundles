@@ -27,7 +27,8 @@ class PasswordProvided
      * @var FormFactoryInterface
      */
     public function __construct(private readonly FormFactoryInterface $formFactory)
-    { }
+    {
+    }
 
     public function onKernelRequest(RequestEvent $event): void
     {

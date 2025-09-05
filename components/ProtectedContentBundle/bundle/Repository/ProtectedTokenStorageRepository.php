@@ -11,7 +11,8 @@ class ProtectedTokenStorageRepository
 {
     public function __construct(
         protected readonly EntityManagerInterface $entityManager,
-    ) { }
+    ) {
+    }
 
     protected function getAlias(): string
     {

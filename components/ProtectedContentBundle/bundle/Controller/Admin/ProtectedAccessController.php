@@ -48,7 +48,8 @@ class ProtectedAccessController extends Controller
         protected readonly EntityManagerInterface $entityManager,
         protected readonly ContentTagInterface $responseTagger,
         protected readonly RouterInterface $router,
-    ) { }
+    ) {
+    }
 
     #[Route(path: '/list', name: 'novaezprotectedcontent_bundle_admin_list_protection')]
     public function list(Request $request): ?Response
@@ -172,5 +173,4 @@ class ProtectedAccessController extends Controller
             $this->router->generate('novaezprotectedcontent_bundle_admin_list_protection')
         );
     }
-
 }

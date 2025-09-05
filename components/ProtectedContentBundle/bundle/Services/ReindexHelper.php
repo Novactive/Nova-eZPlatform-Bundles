@@ -17,7 +17,8 @@ class ReindexHelper
         protected readonly Repository $repository,
         protected readonly SearchHandler $searchHandler,
         protected readonly PersistenceHandler $persistenceHandler,
-    ) { }
+    ) {
+    }
 
     /**
      * @param Content $content

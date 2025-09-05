@@ -20,7 +20,8 @@ class ObjectStateHelper
         protected readonly ObjectStateService $objectStateService,
         protected readonly ProtectedAccessHelper $protectedAccessHelper,
         protected readonly LoggerInterface $logger,
-    ) { }
+    ) {
+    }
 
     public string $objectStateGroupIdentifier = 'protected_content';
     public string $objectStateEmailGroupIdentifier = 'protected_content_email';

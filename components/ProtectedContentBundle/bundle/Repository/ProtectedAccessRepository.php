@@ -25,7 +25,8 @@ class ProtectedAccessRepository
     public function __construct(
         protected readonly Repository $repository,
         protected readonly EntityManagerInterface $entityManager,
-    ) { }
+    ) {
+    }
 
     protected function getAlias(): string
     {
@@ -101,7 +102,8 @@ class ProtectedAccessRepository
                 foreach ($locations as $location) {
                     /** @var Location $loc */
                     $loc = $location;
-                    while ($loc->parentLocationId
+                    while (
+                        $loc->parentLocationId
                         && ($loc = $repository->getLocationService()->loadLocation($loc->parentLocationId))
                         && $loc instanceof Location
                         && $loc->parentLocationId

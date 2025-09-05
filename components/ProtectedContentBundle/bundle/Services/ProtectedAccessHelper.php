@@ -18,7 +18,8 @@ class ProtectedAccessHelper
         protected readonly ProtectedAccessRepository $protectedAccessRepository,
         protected readonly Repository $repository,
         protected readonly LoggerInterface $logger,
-    ) { }
+    ) {
+    }
 
     /**
      * Retourne toutes les protections qui s'appliquent au contenu. En prenant en compte ses ancêtres et ses multiples emplacements.
