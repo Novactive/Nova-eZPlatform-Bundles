@@ -22,7 +22,6 @@ use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action\Action
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action\ActionProviderInterface;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\AliasTrait;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
-use RuntimeException;
 
 /**
  * Class AttachmentProvider.
@@ -43,8 +42,6 @@ abstract class AttachmentProvider implements AttachmentProviderInterface
 
     /**
      * @required
-     *
-     * @return AttachmentProvider
      */
     public function setAttachmentDecorator(AttachmentDecorator $attachmentDecorator): self
     {
@@ -99,6 +96,6 @@ abstract class AttachmentProvider implements AttachmentProviderInterface
             }
         }
 
-        throw new RuntimeException("No Action Provider supports '{$action->getName()}'.");
+        throw new \RuntimeException("No Action Provider supports '{$action->getName()}'.");
     }
 }

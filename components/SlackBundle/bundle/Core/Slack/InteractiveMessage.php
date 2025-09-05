@@ -27,6 +27,7 @@ class InteractiveMessage
      * per incoming invocation.
      *
      * @var Action[]
+     *
      * @Serializer\Type("array<Novactive\Bundle\eZSlackBundle\Core\Slack\Action>")
      */
     private $actions;
@@ -37,7 +38,9 @@ class InteractiveMessage
      * specific question that was asked. No more than 200 or so characters please.
      *
      * @var string
+     *
      * @Serializer\SerializedName("callback_id")
+     *
      * @Serializer\Type("string")
      */
     private $callbackId;
@@ -46,6 +49,7 @@ class InteractiveMessage
      * A small set of string attributes about the workspace/team where this action occurred.
      *
      * @var Team
+     *
      * @Serializer\Type("Novactive\Bundle\eZSlackBundle\Core\Slack\Team")
      */
     private $team;
@@ -55,6 +59,7 @@ class InteractiveMessage
      * and this hash presents attributed about that channel.
      *
      * @var Channel
+     *
      * @Serializer\Type("Novactive\Bundle\eZSlackBundle\Core\Slack\Channel")
      */
     private $channel;
@@ -64,6 +69,7 @@ class InteractiveMessage
      * interact your message.
      *
      * @var User
+     *
      * @Serializer\Type("Novactive\Bundle\eZSlackBundle\Core\Slack\User")
      */
     private $user;
@@ -73,7 +79,9 @@ class InteractiveMessage
      * Like "1458170917.164398".
      *
      * @var string
+     *
      * @Serializer\SerializedName("message_ts")
+     *
      * @Serializer\Type("string")
      */
     private $messageTimestamp;
@@ -83,7 +91,9 @@ class InteractiveMessage
      * Like "1458170917.164398".
      *
      * @var string
+     *
      * @Serializer\SerializedName("action_ts")
+     *
      * @Serializer\Type("string")
      */
     private $actionTimestamp;
@@ -93,7 +103,9 @@ class InteractiveMessage
      * curious or building messages containing buttons within many attachments.
      *
      * @var string
+     *
      * @Serializer\SerializedName("attachment_id")
+     *
      * @Serializer\Type("string")
      */
     private $attachmentIndex;
@@ -103,6 +115,7 @@ class InteractiveMessage
      * presented to you on an app details page. Validate this to ensure the request is coming to you from Slack.
      *
      * @var string
+     *
      * @Serializer\Type("string")
      */
     private $token;
@@ -113,7 +126,9 @@ class InteractiveMessage
      * not provided for ephemeral messages.
      *
      * @var Message
+     *
      * @Serializer\SerializedName("original_message")
+     *
      * @Serializer\Type("Novactive\Bundle\eZSlackBundle\Core\Slack\Message")
      */
     private $originalMessage;
@@ -123,7 +138,9 @@ class InteractiveMessage
      * URL.
      *
      * @var string
+     *
      * @Serializer\SerializedName("response_url")
+     *
      * @Serializer\Type("string")
      */
     private $responseURL;
@@ -138,8 +155,6 @@ class InteractiveMessage
 
     /**
      * @param Action[] $actions
-     *
-     * @return InteractiveMessage
      */
     public function setActions(array $actions): self
     {
@@ -158,9 +173,6 @@ class InteractiveMessage
         return $this->callbackId;
     }
 
-    /**
-     * @return InteractiveMessage
-     */
     public function setCallbackId(string $callbackId): self
     {
         $this->callbackId = $callbackId;
@@ -173,9 +185,6 @@ class InteractiveMessage
         return $this->team;
     }
 
-    /**
-     * @return InteractiveMessage
-     */
     public function setTeam(Team $team): self
     {
         $this->team = $team;
@@ -188,9 +197,6 @@ class InteractiveMessage
         return $this->channel;
     }
 
-    /**
-     * @return InteractiveMessage
-     */
     public function setChannel(Channel $channel): self
     {
         $this->channel = $channel;
@@ -203,9 +209,6 @@ class InteractiveMessage
         return $this->user;
     }
 
-    /**
-     * @return InteractiveMessage
-     */
     public function setUser(User $user): self
     {
         $this->user = $user;
@@ -218,9 +221,6 @@ class InteractiveMessage
         return $this->messageTimestamp;
     }
 
-    /**
-     * @return InteractiveMessage
-     */
     public function setMessageTimestamp(string $messageTimestamp): self
     {
         $this->messageTimestamp = $messageTimestamp;
@@ -233,9 +233,6 @@ class InteractiveMessage
         return $this->actionTimestamp;
     }
 
-    /**
-     * @return InteractiveMessage
-     */
     public function setActionTimestamp(string $actionTimestamp): self
     {
         $this->actionTimestamp = $actionTimestamp;
@@ -248,9 +245,6 @@ class InteractiveMessage
         return $this->attachmentIndex;
     }
 
-    /**
-     * @return InteractiveMessage
-     */
     public function setAttachmentIndex(string $attachmentIndex): self
     {
         $this->attachmentIndex = $attachmentIndex;
@@ -263,9 +257,6 @@ class InteractiveMessage
         return $this->token;
     }
 
-    /**
-     * @return InteractiveMessage
-     */
     public function setToken(string $token): self
     {
         $this->token = $token;
@@ -278,9 +269,6 @@ class InteractiveMessage
         return $this->originalMessage;
     }
 
-    /**
-     * @return InteractiveMessage
-     */
     public function setOriginalMessage(Message $originalMessage): self
     {
         $this->originalMessage = $originalMessage;
@@ -293,9 +281,6 @@ class InteractiveMessage
         return $this->responseURL;
     }
 
-    /**
-     * @return InteractiveMessage
-     */
     public function setResponseURL(string $responseURL): self
     {
         $this->responseURL = $responseURL;

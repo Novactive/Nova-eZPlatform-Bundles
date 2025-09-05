@@ -38,9 +38,6 @@ abstract class AbstractWriter extends AbstractProcessor implements WriterInterfa
         $this->results = $results;
     }
 
-    /**
-     * @return \AlmaviaCX\Bundle\IbexaImportExport\Writer\WriterResults
-     */
     public function getResults(): WriterResults
     {
         return $this->results;
@@ -49,7 +46,7 @@ abstract class AbstractWriter extends AbstractProcessor implements WriterInterfa
     /**
      * @param object|array $item
      *
-     * @return \AlmaviaCX\Bundle\IbexaImportExport\Item\ItemAccessorInterface|false|null
+     * @return ItemAccessorInterface|false|null
      */
     public function processItem($item)
     {
@@ -59,7 +56,7 @@ abstract class AbstractWriter extends AbstractProcessor implements WriterInterfa
 
     protected function setReferences($objectOrArray): void
     {
-        /** @var \AlmaviaCX\Bundle\IbexaImportExport\Writer\WriterOptions $options */
+        /** @var WriterOptions $options */
         $options = $this->getOptions();
         if (null === $options->referencesMap) {
             return;
@@ -85,7 +82,7 @@ abstract class AbstractWriter extends AbstractProcessor implements WriterInterfa
      */
     protected function mapItem($item)
     {
-        /** @var \AlmaviaCX\Bundle\IbexaImportExport\Writer\WriterOptions $options */
+        /** @var WriterOptions $options */
         $options = $this->getOptions();
 
         return ($this->itemTransformer)($item, $options->map, $this->getMappedItemInstance());

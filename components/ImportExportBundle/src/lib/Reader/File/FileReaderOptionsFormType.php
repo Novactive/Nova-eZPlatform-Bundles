@@ -25,8 +25,8 @@ class FileReaderOptionsFormType extends ReaderOptionsFormType
     {
         parent::configureOptions($resolver);
         $resolver->setDefaults([
-                                    'data_class' => AbstractFileReader::getOptionsType(),
-                                    'translation_domain' => 'forms',
-                                ]);
+            'data_class' => AbstractFileReader::getOptionsType(),
+            'translation_domain' => 'forms',
+        ]);
     }
 }

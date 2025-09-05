@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack;
 
 use JMS\Serializer\Annotation as Serializer;
-use RuntimeException;
 
 /**
  * Class Attachment.
@@ -27,6 +26,7 @@ class Attachment
      * formatted text (eg. IRC, mobile notifications) and should not contain any markup.
      *
      * @var string
+     *
      * @Serializer\Type("string<translatable>")
      */
     private $fallback;
@@ -37,6 +37,7 @@ class Attachment
      * the attachment contains message buttons. It is key to identifying the interaction you're working with.
      *
      * @Serializer\SerializedName("callback_id")
+     *
      * @Serializer\Type("string")
      *
      * @var string
@@ -51,6 +52,7 @@ class Attachment
      * This value is used to color the border along the left side of the message attachment.
      *
      * @var string
+     *
      * @Serializer\Type("string")
      */
     private $color;
@@ -59,6 +61,7 @@ class Attachment
      * This is optional text that appears above the message attachment block.
      *
      * @var string
+     *
      * @Serializer\Type("string<translatable>")
      */
     private $pretext;
@@ -67,7 +70,9 @@ class Attachment
      * The author parameters will display a small section at the top of a message attachment.
      *
      * @var Author
+     *
      * @Serializer\Inline
+     *
      * @Serializer\Type("Novactive\Bundle\eZSlackBundle\Core\Slack\Author")
      */
     private $author;
@@ -76,6 +81,7 @@ class Attachment
      * The title is displayed as larger, bold text near the top of a message attachment.
      *
      * @var string
+     *
      * @Serializer\Type("string<translatable>")
      */
     private $title;
@@ -84,7 +90,9 @@ class Attachment
      * By passing a valid URL in the title_link parameter (optional), the title text will be hyperlinked.
      *
      * @var string
+     *
      * @Serializer\SerializedName("title_link")
+     *
      * @Serializer\Type("string")
      */
     private $titleLink;
@@ -95,6 +103,7 @@ class Attachment
      * link to expand the content. Links posted in the text field will not unfurl.
      *
      * @var string
+     *
      * @Serializer\Type("string<translatable>")
      */
     private $text;
@@ -104,6 +113,7 @@ class Attachment
      * inside the message attachment.
      *
      * @var Field[]
+     *
      * @Serializer\Type("array<Novactive\Bundle\eZSlackBundle\Core\Slack\Field>")
      */
     private $fields;
@@ -115,7 +125,9 @@ class Attachment
      * the original aspect ratio.
      *
      * @var string
+     *
      * @Serializer\SerializedName("image_url")
+     *
      * @Serializer\Type("string")
      */
     private $imageURL;
@@ -129,7 +141,9 @@ class Attachment
      * For best results, please use images that are already 75px by 75px.
      *
      * @var string
+     *
      * @Serializer\SerializedName("thumb_url")
+     *
      * @Serializer\Type("string")
      */
     private $thumbURL;
@@ -139,6 +153,7 @@ class Attachment
      * truncated further when displayed to users in environments with limited screen real estate.
      *
      * @var string
+     *
      * @Serializer\Type("string<translatable>")
      */
     private $footer;
@@ -149,7 +164,9 @@ class Attachment
      * We'll render what you provide at 16px by 16px. It's best to use an image that is similarly sized.
      *
      * @var string
+     *
      * @Serializer\SerializedName("footer_icon")
+     *
      * @Serializer\Type("string")
      */
     private $footerIcon;
@@ -162,7 +179,9 @@ class Attachment
      * Use ts when referencing articles or happenings. Your message will have its own timestamp when published.
      *
      * @var int
+     *
      * @Serializer\SerializedName("ts")
+     *
      * @Serializer\Type("integer")
      */
     private $timestamp;
@@ -172,6 +191,7 @@ class Attachment
      * or message menus. A maximum of 5 actions per attachment may be provided.
      *
      * @var Action[]
+     *
      * @Serializer\Type("array<Novactive\Bundle\eZSlackBundle\Core\Slack\Action>")
      */
     private $actions;
@@ -185,19 +205,11 @@ class Attachment
         $this->actions = [];
     }
 
-    /**
-     * @return string
-     */
     public function getFallback(): ?string
     {
         return $this->fallback;
     }
 
-    /**
-     * @param string $fallback
-     *
-     * @return Attachment
-     */
     public function setFallback(?string $fallback = null): self
     {
         $this->fallback = $fallback;
@@ -205,19 +217,11 @@ class Attachment
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getColor(): ?string
     {
         return $this->color;
     }
 
-    /**
-     * @param string $color
-     *
-     * @return Attachment
-     */
     public function setColor(?string $color): self
     {
         $this->color = $color;
@@ -225,17 +229,11 @@ class Attachment
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPretext(): ?string
     {
         return $this->pretext;
     }
 
-    /**
-     * @return Attachment
-     */
     public function setPretext(string $pretext): self
     {
         $this->pretext = $pretext;
@@ -243,19 +241,11 @@ class Attachment
         return $this;
     }
 
-    /**
-     * @return Author
-     */
     public function getAuthor(): ?Author
     {
         return $this->author;
     }
 
-    /**
-     * @param Author $author
-     *
-     * @return Attachment
-     */
     public function setAuthor(?Author $author): self
     {
         $this->author = $author;
@@ -263,19 +253,11 @@ class Attachment
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $title
-     *
-     * @return Attachment
-     */
     public function setTitle(?string $title = null): self
     {
         $this->title = $title;
@@ -283,17 +265,11 @@ class Attachment
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getTitleLink(): ?string
     {
         return $this->titleLink;
     }
 
-    /**
-     * @return Attachment
-     */
     public function setTitleLink(string $titleLink): self
     {
         $this->titleLink = $titleLink;
@@ -301,19 +277,11 @@ class Attachment
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getText(): ?string
     {
         return $this->text;
     }
 
-    /**
-     * @param string $text
-     *
-     * @return Attachment
-     */
     public function setText(?string $text = null): self
     {
         $this->text = $text;
@@ -331,14 +299,12 @@ class Attachment
 
     /**
      * @param Field[] $fields
-     *
-     * @return Attachment
      */
     public function setFields(array $fields): self
     {
         foreach ($fields as $field) {
             if (!$field instanceof Field) {
-                throw new RuntimeException(sprintf('Provided Field is not an %s', Field::class));
+                throw new \RuntimeException(sprintf('Provided Field is not an %s', Field::class));
             }
         }
         $this->fields = $fields;
@@ -356,19 +322,11 @@ class Attachment
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getImageURL(): ?string
     {
         return $this->imageURL;
     }
 
-    /**
-     * @param string $imageURL
-     *
-     * @return Attachment
-     */
     public function setImageURL(?string $imageURL): self
     {
         $this->imageURL = $imageURL;
@@ -376,19 +334,11 @@ class Attachment
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getThumbURL(): ?string
     {
         return $this->thumbURL;
     }
 
-    /**
-     * @param string $thumbURL
-     *
-     * @return Attachment
-     */
     public function setThumbURL(?string $thumbURL): self
     {
         $this->thumbURL = $thumbURL;
@@ -396,19 +346,11 @@ class Attachment
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getFooter(): ?string
     {
         return $this->footer;
     }
 
-    /**
-     * @param string $footer
-     *
-     * @return Attachment
-     */
     public function setFooter(?string $footer): self
     {
         $this->footer = $footer;
@@ -416,19 +358,11 @@ class Attachment
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getFooterIcon(): ?string
     {
         return $this->footerIcon;
     }
 
-    /**
-     * @param string $footerIcon
-     *
-     * @return Attachment
-     */
     public function setFooterIcon(?string $footerIcon): self
     {
         $this->footerIcon = $footerIcon;
@@ -436,17 +370,11 @@ class Attachment
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getTimestamp(): ?int
     {
         return $this->timestamp;
     }
 
-    /**
-     * @return Attachment
-     */
     public function setTimestamp(int $timestamp): self
     {
         $this->timestamp = $timestamp;
@@ -454,17 +382,11 @@ class Attachment
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getCallbackId(): ?string
     {
         return $this->callbackId;
     }
 
-    /**
-     * @return Attachment
-     */
     public function setCallbackId(string $callbackId): self
     {
         $this->callbackId = $callbackId;
@@ -482,14 +404,12 @@ class Attachment
 
     /**
      * @param Action[] $actions
-     *
-     * @return Attachment
      */
     public function setActions(array $actions): self
     {
         foreach ($actions as $action) {
             if (!$action instanceof Action) {
-                throw new RuntimeException(sprintf('Provided Attachment is not an %s', Action::class));
+                throw new \RuntimeException(sprintf('Provided Attachment is not an %s', Action::class));
             }
         }
         $this->actions = $actions;
@@ -497,9 +417,6 @@ class Attachment
         return $this;
     }
 
-    /**
-     * @return Attachment
-     */
     public function addAction(Action $action): self
     {
         $this->actions[] = $action;

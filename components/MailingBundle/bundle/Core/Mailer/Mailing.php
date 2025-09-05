@@ -20,7 +20,6 @@ use Novactive\Bundle\eZMailingBundle\Core\Provider\MailingContent;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing as MailingEntity;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
 use Psr\Log\LoggerInterface;
-use Swift_Message;
 
 /**
  * Class Mailing.
@@ -69,7 +68,7 @@ class Mailing extends Mailer
         $this->entityManager = $entityManager;
     }
 
-    public function sendMailing(MailingEntity $mailing, string $forceRecipient = null): void
+    public function sendMailing(MailingEntity $mailing, ?string $forceRecipient = null): void
     {
         $nativeHtml = $this->contentProvider->preFetchContent($mailing);
         $broadcast = $this->broadcastProvider->start($mailing, $nativeHtml);
@@ -107,7 +106,7 @@ class Mailing extends Mailer
         $this->broadcastProvider->end($broadcast);
     }
 
-    private function sendMessage(Swift_Message $message): int
+    private function sendMessage(\Swift_Message $message): int
     {
         return $this->mailer->send($message);
     }

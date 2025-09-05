@@ -21,8 +21,11 @@ use Novactive\EzMenuManager\Traits\IdentityTrait;
  * Class MenuItem.
  *
  * @ORM\Entity()
+ *
  * @ORM\InheritanceType("SINGLE_TABLE")
+ *
  * @ORM\DiscriminatorColumn(name="type", type="string")
+ *
  * @ORM\Table(name="menu_manager_menu_item")
  *
  * @package Novactive\EzMenuManagerBundle\Entity
@@ -68,6 +71,7 @@ class MenuItem
      *     cascade={"persist","remove"},
      *     orphanRemoval=true
      *     )
+     *
      * @ORM\OrderBy({"position" = "ASC"})
      */
     protected $childrens;
@@ -79,6 +83,7 @@ class MenuItem
      *     targetEntity="Novactive\EzMenuManagerBundle\Entity\MenuItem",
      *     inversedBy="childrens"
      *     )
+     *
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     protected $parent;
@@ -114,25 +119,16 @@ class MenuItem
         $this->remoteId = $remoteId ?? md5(uniqid(get_class($this), true));
     }
 
-    /**
-     * @return string
-     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
     public function getRemoteId(): ?string
     {
         return $this->remoteId;
     }
 
-    /**
-     * @param $language
-     */
     public function getTranslatedName($language): ?string
     {
         $name = json_decode($this->getName(), true);
@@ -145,17 +141,11 @@ class MenuItem
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
     public function getUrl(): ?string
     {
         return $this->url;
     }
 
-    /**
-     * @param $language
-     */
     public function getTranslatedUrl($language): ?string
     {
         $url = json_decode($this->getUrl(), true);
@@ -171,9 +161,6 @@ class MenuItem
         $this->url = $url;
     }
 
-    /**
-     * @return string
-     */
     public function getTarget(): ?string
     {
         return $this->target;
@@ -275,9 +262,6 @@ class MenuItem
         $this->options = json_encode($options);
     }
 
-    /**
-     * @param $name
-     */
     public function getOption($name, $default = false)
     {
         $options = $this->getOptions();
@@ -285,10 +269,6 @@ class MenuItem
         return $options[$name] ?? $default;
     }
 
-    /**
-     * @param $name
-     * @param $value
-     */
     public function setOption($name, $value): void
     {
         $options = $this->getOptions();

@@ -5,6 +5,7 @@
  *
  * @author    Novactive
  * @copyright 2020 Novactive
+ *
  * @licence   "SEE FULL LICENSE OPTIONS IN LICENSE.md"
  *            Nova eZ Algolia Search Engine is tri-licensed, meaning you must choose one of three licenses to use:
  *                - Commercial License: a paid license, meant for commercial use. The default option for most users.
@@ -53,15 +54,15 @@ final class ParametersResolver
         $excludeContentTypes = $this->configResolver->getParameter('exclude_content_types', Configuration::NAMESPACE);
         $includeContentTypes = $this->configResolver->getParameter('include_content_types', Configuration::NAMESPACE);
         if (
-            \count($includeContentTypes) > 0 &&
-            !\in_array($contentTypeIdentifier, $includeContentTypes, true)
+            \count($includeContentTypes) > 0
+            && !\in_array($contentTypeIdentifier, $includeContentTypes, true)
         ) {
             return false;
         }
 
         if (
-            \count($excludeContentTypes) > 0 &&
-            \in_array($contentTypeIdentifier, $excludeContentTypes, true)
+            \count($excludeContentTypes) > 0
+            && \in_array($contentTypeIdentifier, $excludeContentTypes, true)
         ) {
             return false;
         }

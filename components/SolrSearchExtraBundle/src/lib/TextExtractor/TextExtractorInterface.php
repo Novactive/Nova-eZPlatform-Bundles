@@ -13,8 +13,6 @@ interface TextExtractorInterface
 {
     /**
      * Extract text from a file.
-     *
-     * @param $fileName
      */
     public function extract($fileName): ?string;
 }

@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZCloudinaryBundle;
 
-use LogicException;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -27,7 +26,7 @@ class NovaeZCloudinaryBundle extends Bundle
 
             if (null !== $extension) {
                 if (!$extension instanceof ExtensionInterface) {
-                    throw new LogicException(
+                    throw new \LogicException(
                         sprintf(
                             'Extension %s must implement '.ExtensionInterface::class,
                             \get_class($extension)

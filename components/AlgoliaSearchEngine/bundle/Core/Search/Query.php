@@ -5,6 +5,7 @@
  *
  * @author    Novactive
  * @copyright 2020 Novactive
+ *
  * @licence   "SEE FULL LICENSE OPTIONS IN LICENSE.md"
  *            Nova eZ Algolia Search Engine is tri-licensed, meaning you must choose one of three licenses to use:
  *                - Commercial License: a paid license, meant for commercial use. The default option for most users.
@@ -22,18 +23,21 @@ class Query
 {
     /**
      * @var string
+     *
      * @Serialization\Groups({"Default"})
      */
     private $language;
 
     /**
      * @var string|null
+     *
      * @Serialization\Groups({"Default"})
      */
     private $replica;
 
     /**
      * @var string
+     *
      * @Serialization\Groups({"Default"})
      */
     private $term;
@@ -45,12 +49,14 @@ class Query
 
     /**
      * @var int
+     *
      * @Serialization\Groups({"Default"})
      */
     private $page;
 
     /**
      * @var int
+     *
      * @Serialization\Groups({"Default"})
      */
     private $hitsPerPage;

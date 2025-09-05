@@ -22,6 +22,7 @@ trait Content
 {
     /**
      * @var int
+     *
      * @ORM\Column(name="EZ_locationId", type="integer", nullable=true)
      */
     private $locationId;

@@ -39,6 +39,7 @@ class CallbackController
 {
     /**
      * @Route("/command", name="novactive_ezslack_callback_command")
+     *
      * @Method({"POST"})
      */
     public function commandAction(
@@ -53,6 +54,7 @@ class CallbackController
 
     /**
      * @Route("/message", name="novactive_ezslack_callback_message")
+     *
      * @Method({"POST"})
      */
     public function messageAction(
@@ -79,6 +81,7 @@ class CallbackController
 
     /**
      * @Route("/share/{locationId}", name="novactive_ezslack_callback_shareonslack")
+     *
      * @Method({"GET"})
      *
      * @return JsonResponse|RedirectResponse
@@ -103,6 +106,7 @@ class CallbackController
 
     /**
      * @Route("/kcode")
+     *
      * @Method({"GET"})
      */
     public function kcodeAction(Slack $client, Request $request): JsonResponse

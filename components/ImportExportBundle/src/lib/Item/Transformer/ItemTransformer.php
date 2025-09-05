@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer;
 
 use Ibexa\Contracts\Core\Repository\Exceptions\PropertyNotFoundException;
-use ReflectionClass;
-use ReflectionProperty;
 
 class ItemTransformer
 {
@@ -19,9 +17,8 @@ class ItemTransformer
     }
 
     /**
-     * @param object|array                                                           $objectOrArray
-     * @param \AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\TransformationMap $map
-     * @param array<int|string, mixed>|object                                        $destinationObjectOrArray
+     * @param object|array                    $objectOrArray
+     * @param array<int|string, mixed>|object $destinationObjectOrArray
      *
      * @return array<int|string, mixed>|object
      */
@@ -58,9 +55,9 @@ class ItemTransformer
      */
     protected function getPropertiesPaths($objectOrClass, string $prefix = ''): array
     {
-        $reflectionClass = new ReflectionClass($objectOrClass);
+        $reflectionClass = new \ReflectionClass($objectOrClass);
         $properties = [];
-        foreach ($reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
+        foreach ($reflectionClass->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
             try {
                 $propertyName = $property->getName();
 

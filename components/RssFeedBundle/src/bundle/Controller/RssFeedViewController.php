@@ -12,7 +12,6 @@
 
 namespace Novactive\EzRssFeedBundle\Controller;
 
-use DateTime;
 use FOS\HttpCacheBundle\Http\SymfonyResponseTagger;
 use Ibexa\Bundle\Core\Controller;
 use Ibexa\Contracts\Core\Repository\PermissionResolver;
@@ -89,7 +88,7 @@ class RssFeedViewController extends Controller
 
             $response->setPublic();
             if (null === $this->cacheTtl) {
-                $expire = (new DateTime())->modify('+1 day')->setTime(0, 0);
+                $expire = (new \DateTime())->modify('+1 day')->setTime(0, 0);
                 $response->setExpires($expire);
                 $response->setSharedMaxAge($expire->getTimestamp() - time());
             } elseif (0 === $this->cacheTtl) {

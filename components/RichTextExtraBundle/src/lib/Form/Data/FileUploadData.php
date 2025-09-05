@@ -9,9 +9,10 @@ class FileUploadData
 {
     /**
      * @Assert\NotBlank()
+     *
      * @Assert\File()
      *
-     * @var \Symfony\Component\HttpFoundation\File\UploadedFile
+     * @var UploadedFile
      */
     private $file;
 
@@ -22,7 +23,7 @@ class FileUploadData
      */
     private $languageCode;
 
-    public function __construct(?UploadedFile $file = null, string $languageCode = null)
+    public function __construct(?UploadedFile $file = null, ?string $languageCode = null)
     {
         $this->file = $file;
         $this->languageCode = $languageCode;
@@ -33,9 +34,6 @@ class FileUploadData
         return $this->file;
     }
 
-    /**
-     * @return \AlmaviaCX\Bundle\IbexaRichTextExtra\Form\Data\FileUploadData
-     */
     public function setFile(?UploadedFile $file): self
     {
         $this->file = $file;
@@ -48,9 +46,6 @@ class FileUploadData
         return $this->languageCode;
     }
 
-    /**
-     * @return \AlmaviaCX\Bundle\IbexaRichTextExtra\Form\Data\FileUploadData
-     */
     public function setLanguageCode(?string $languageCode): self
     {
         $this->languageCode = $languageCode;

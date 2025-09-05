@@ -5,6 +5,7 @@
  *
  * @author    Novactive
  * @copyright 2020 Novactive
+ *
  * @licence   "SEE FULL LICENSE OPTIONS IN LICENSE.md"
  *            Nova eZ Algolia Search Engine is tri-licensed, meaning you must choose one of three licenses to use:
  *                - Commercial License: a paid license, meant for commercial use. The default option for most users.
@@ -29,8 +30,8 @@ final class FieldVisitor implements CriterionVisitor, FieldInterface
 
     public function supports(Criterion $criterion): bool
     {
-        return $criterion instanceof Criterion\Field &&
-               \in_array($criterion->operator, [Criterion\Operator::EQ, Criterion\Operator::IN], true);
+        return $criterion instanceof Criterion\Field
+               && \in_array($criterion->operator, [Criterion\Operator::EQ, Criterion\Operator::IN], true);
     }
 
     public function visit(CriterionVisitor $dispatcher, Criterion $criterion, string $additionalOperators = ''): string

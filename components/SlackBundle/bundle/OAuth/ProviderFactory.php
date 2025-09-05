@@ -32,8 +32,6 @@ class ProviderFactory extends BaseProviderFactory
 
     /**
      * @required
-     *
-     * @return ProviderFactory
      */
     public function setConfigResolver(ConfigResolverInterface $configResolver): self
     {

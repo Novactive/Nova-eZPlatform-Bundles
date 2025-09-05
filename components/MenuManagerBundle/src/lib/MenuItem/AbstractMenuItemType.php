@@ -15,7 +15,6 @@ namespace Novactive\EzMenuManager\MenuItem;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Menu\FactoryInterface;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
-use ReflectionClass;
 
 abstract class AbstractMenuItemType implements MenuItemTypeInterface
 {
@@ -39,7 +38,7 @@ abstract class AbstractMenuItemType implements MenuItemTypeInterface
      */
     public function createEntity(): MenuItem
     {
-        $class = new ReflectionClass($this->getEntityClassName());
+        $class = new \ReflectionClass($this->getEntityClassName());
 
         return $class->newInstance();
     }

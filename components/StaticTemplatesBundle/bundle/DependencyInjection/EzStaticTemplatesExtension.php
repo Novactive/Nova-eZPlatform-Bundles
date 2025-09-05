@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\EzStaticTemplatesBundle\DependencyInjection;
 
-use ReflectionClass;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -79,7 +78,7 @@ class EzStaticTemplatesExtension extends Extension implements PrependExtensionIn
 
         // Look for themes in bundles.
         foreach ($container->getParameter('kernel.bundles') as $bundleClass) {
-            $bundleReflection = new ReflectionClass($bundleClass);
+            $bundleReflection = new \ReflectionClass($bundleClass);
             $bundleViewsDir = \dirname($bundleReflection->getFileName()).'/Resources/views';
             $themeDir = $bundleViewsDir.'/themes';
             if (!$fs->exists($themeDir)) {

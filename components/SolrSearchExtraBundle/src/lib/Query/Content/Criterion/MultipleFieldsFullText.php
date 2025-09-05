@@ -7,7 +7,6 @@ namespace Novactive\EzSolrSearchExtra\Query\Content\Criterion;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\CustomFieldInterface;
-use InvalidArgumentException;
 
 /**
  * Full text search criterion.
@@ -132,9 +131,6 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
      */
     public $boostQueries = [];
 
-    /**
-     * @param $value
-     */
     public function __construct($value, array $properties = [])
     {
         parent::__construct(null, Criterion\Operator::LIKE, $value);
@@ -143,7 +139,7 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
         // API the only sensible way, I guess.
         foreach ($properties as $name => $value) {
             if (!isset($this->$name)) {
-                throw new InvalidArgumentException("Unknown property $name.");
+                throw new \InvalidArgumentException("Unknown property $name.");
             }
 
             $this->$name = $value;

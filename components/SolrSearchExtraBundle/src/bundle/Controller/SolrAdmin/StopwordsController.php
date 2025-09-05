@@ -44,9 +44,6 @@ class StopwordsController extends BaseController
         $this->formFactory = $formFactory;
     }
 
-    /**
-     * @param $words
-     */
     public function getWordsData($words): array
     {
         $ids = [];
@@ -59,6 +56,7 @@ class StopwordsController extends BaseController
 
     /**
      * @Route("/{setId}/{page}/{noLayout}", name="solr_admin.stopwords.index", requirements={"page" = "\d+"})
+     *
      * @Template("@ibexadesign/solr/admin/stopwords/list.html.Twig")
      *
      * @throws \Ibexa\Core\Base\Exceptions\NotFoundException

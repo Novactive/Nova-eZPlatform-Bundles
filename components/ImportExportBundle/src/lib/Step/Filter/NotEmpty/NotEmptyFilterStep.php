@@ -41,7 +41,7 @@ class NotEmptyFilterStep extends AbstractStep implements TranslationContainerInt
 
     public static function getTranslationMessages(): array
     {
-        return [( new Message('step.filter.not_empty.name', 'import_export') )->setDesc('Not empty filter')];
+        return [(new Message('step.filter.not_empty.name', 'import_export'))->setDesc('Not empty filter')];
     }
 
     public static function getOptionsType(): ?string

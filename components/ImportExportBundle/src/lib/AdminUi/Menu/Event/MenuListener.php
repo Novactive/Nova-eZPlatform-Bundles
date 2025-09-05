@@ -56,8 +56,8 @@ class MenuListener implements EventSubscriberInterface, TranslationContainerInte
     public static function getTranslationMessages(): array
     {
         return [
-            ( new Message('export_import', 'ibexa_menu') )->setDesc('Import / Export'),
-            ( new Message('export_import_job_list', 'ibexa_menu') )->setDesc('Jobs'),
+            (new Message('export_import', 'ibexa_menu'))->setDesc('Import / Export'),
+            (new Message('export_import_job_list', 'ibexa_menu'))->setDesc('Jobs'),
         ];
     }
 }

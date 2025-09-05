@@ -16,7 +16,7 @@ class CallbackStep extends AbstractStep implements TranslationContainerInterface
      */
     public function processItem($item)
     {
-        /** @var \AlmaviaCX\Bundle\IbexaImportExport\Step\Callback\CallbackStepOptions $options */
+        /** @var CallbackStepOptions $options */
         $options = $this->getOptions();
 
         return call_user_func($options->callback, $item);
@@ -29,6 +29,6 @@ class CallbackStep extends AbstractStep implements TranslationContainerInterface
 
     public static function getTranslationMessages(): array
     {
-        return [( new Message('step.callback.name', 'import_export') )->setDesc('Callback')];
+        return [(new Message('step.callback.name', 'import_export'))->setDesc('Callback')];
     }
 }

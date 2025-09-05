@@ -14,7 +14,6 @@ use Ibexa\Core\MVC\Symfony\Security\User;
 use Ibexa\Core\Repository\SiteAccessAware\Repository;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Throwable;
 
 class SamlUserFactory implements SamlUserFactoryInterface
 {
@@ -25,9 +24,6 @@ class SamlUserFactory implements SamlUserFactoryInterface
     protected string $emailAttribute;
     protected string $loginAttribute;
 
-    /**
-     * @param \AlmaviaCX\Bundle\IbexaSaml\Security\Saml\SamlExceptionLogger $logger
-     */
     public function __construct(
         ConfigResolverInterface $configResolver,
         Repository $repository,
@@ -123,7 +119,7 @@ class SamlUserFactory implements SamlUserFactoryInterface
                     );
                     $this->logger->logException($newException);
                     $this->notificationHandler->error($newException->getMessage());
-                } catch (Throwable $exception) {
+                } catch (\Throwable $exception) {
                     $this->logger->logException($exception);
                     $this->notificationHandler->error($exception->getMessage());
                 }

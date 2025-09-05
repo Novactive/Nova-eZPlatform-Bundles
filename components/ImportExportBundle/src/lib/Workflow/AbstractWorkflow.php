@@ -8,24 +8,20 @@ use AlmaviaCX\Bundle\IbexaImportExport\Event\BasicEventDispatcherTrait;
 use AlmaviaCX\Bundle\IbexaImportExport\Monolog\WorkflowLoggerInterface;
 use AlmaviaCX\Bundle\IbexaImportExport\Reference\Reference;
 use AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag;
-use DateTimeImmutable;
-use Iterator;
-use LimitIterator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Throwable;
 
 abstract class AbstractWorkflow implements WorkflowInterface
 {
     use BasicEventDispatcherTrait;
 
-    protected Iterator $itemsIterator;
+    protected \Iterator $itemsIterator;
     protected WorkflowLoggerInterface $logger;
     protected WorkflowExecutionConfiguration $configuration;
     protected EventDispatcherInterface $dispatcher;
 
     protected ReferenceBag $referenceBag;
-    protected DateTimeImmutable $startTime;
-    protected DateTimeImmutable $endTime;
+    protected \DateTimeImmutable $startTime;
+    protected \DateTimeImmutable $endTime;
     protected array $writerResults = [];
     protected ?int $totalItemsCount = null;
     protected int $offset = 0;
@@ -37,9 +33,6 @@ abstract class AbstractWorkflow implements WorkflowInterface
         $this->referenceBag = $references;
     }
 
-    /**
-     * @param \AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowExecutionConfiguration $configuration
-     */
     public function setConfiguration(WorkflowExecutionConfiguration $configuration): void
     {
         $this->configuration = $configuration;
@@ -47,7 +40,7 @@ abstract class AbstractWorkflow implements WorkflowInterface
 
     protected function prepare(): void
     {
-        $this->startTime = new DateTimeImmutable();
+        $this->startTime = new \DateTimeImmutable();
         $this->referenceBag->resetScope(Reference::SCOPE_WORKFLOW);
 
         foreach ($this->configuration->getWriters() as $index => $writer) {
@@ -73,7 +66,7 @@ abstract class AbstractWorkflow implements WorkflowInterface
 
     protected function finish(): void
     {
-        $this->endTime = new DateTimeImmutable();
+        $this->endTime = new \DateTimeImmutable();
         foreach ($this->configuration->getProcessors() as $processor) {
             $processor->finish();
         }
@@ -92,7 +85,7 @@ abstract class AbstractWorkflow implements WorkflowInterface
             $workflowEvent = new WorkflowEvent($this);
             $this->dispatchEvent($workflowEvent, WorkflowEvent::START);
 
-            $limitIterator = new LimitIterator($this->itemsIterator, $this->offset, $batchLimit);
+            $limitIterator = new \LimitIterator($this->itemsIterator, $this->offset, $batchLimit);
             foreach ($limitIterator as $index => $item) {
                 $this->logger->setItemIndex($index + 1);
                 $this->referenceBag->resetScope(Reference::SCOPE_ITEM);
@@ -103,7 +96,7 @@ abstract class AbstractWorkflow implements WorkflowInterface
                     break;
                 }
             }
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             if ($this->debug) {
                 throw $e;
             }
@@ -128,12 +121,12 @@ abstract class AbstractWorkflow implements WorkflowInterface
 
     abstract public function getDefaultConfig(): WorkflowConfiguration;
 
-    public function getStartTime(): DateTimeImmutable
+    public function getStartTime(): \DateTimeImmutable
     {
         return $this->startTime;
     }
 
-    public function getEndTime(): DateTimeImmutable
+    public function getEndTime(): \DateTimeImmutable
     {
         return $this->endTime;
     }
@@ -188,7 +181,7 @@ abstract class AbstractWorkflow implements WorkflowInterface
                     $item = $processResult;
                 }
             }
-        } catch (Throwable $procesItemException) {
+        } catch (\Throwable $procesItemException) {
             if ($this->debug) {
                 throw $procesItemException;
             }

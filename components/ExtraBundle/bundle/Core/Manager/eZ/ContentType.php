@@ -271,8 +271,8 @@ class ContentType
         }
         if ('ezobjectrelation' === $fieldTypeIdentifier) {
             if (
-                isset($settings['BrowseMode']) &&
-                (false !== strpos(strtolower(implode('', $settings['BrowseMode'])), 'dropdownlist'))
+                isset($settings['BrowseMode'])
+                && (false !== strpos(strtolower(implode('', $settings['BrowseMode'])), 'dropdownlist'))
             ) {
                 $struct->fieldSettings['selectionMethod'] = 1;
             } else {
@@ -312,7 +312,7 @@ class ContentType
 
         try {
             $contentType = $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
-            if ((\array_key_exists('do_no_update', $options)) && (true === $options['do_no_update'])) {
+            if (\array_key_exists('do_no_update', $options) && (true === $options['do_no_update'])) {
                 return;
             }
             $this->updateContentType(
@@ -322,7 +322,7 @@ class ContentType
                 $options,
                 $lang
             );
-            if ((\array_key_exists('callback_update', $options)) && (\is_callable($options['callback_update']))) {
+            if (\array_key_exists('callback_update', $options) && \is_callable($options['callback_update'])) {
                 $options['callback_update']($contentType);
             }
         } catch (NotFoundException $e) {
@@ -334,7 +334,7 @@ class ContentType
                 $options,
                 $lang
             );
-            if ((\array_key_exists('callback_create', $options)) && (\is_callable($options['callback_create']))) {
+            if (\array_key_exists('callback_create', $options) && \is_callable($options['callback_create'])) {
                 $options['callback_create'](
                     $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier)
                 );

@@ -12,7 +12,6 @@
 
 namespace Novactive\Bundle\eZSEOBundle;
 
-use LogicException;
 use Novactive\Bundle\eZSEOBundle\Core\FieldType\MetaFieldConverter\SeoMetadataFieldTypeInterface;
 use Novactive\Bundle\eZSEOBundle\DependencyInjection\Compiler\CustomFallbackPass;
 use Novactive\Bundle\eZSEOBundle\DependencyInjection\Security\PolicyProvider\PolicyProvider;
@@ -42,7 +41,7 @@ class NovaeZSEOBundle extends Bundle
                 if (!$extension instanceof ExtensionInterface) {
                     $fqdn = \get_class($extension);
                     $message = 'Extension %s must implement %s.';
-                    throw new LogicException(sprintf($message, $fqdn, ExtensionInterface::class));
+                    throw new \LogicException(sprintf($message, $fqdn, ExtensionInterface::class));
                 }
                 $this->extension = $extension;
             } else {

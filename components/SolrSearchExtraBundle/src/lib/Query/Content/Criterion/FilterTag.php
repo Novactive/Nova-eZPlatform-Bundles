@@ -14,7 +14,7 @@ class FilterTag extends Criterion
     public $tag;
 
     /**
-     * @var \Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion
+     * @var Criterion
      */
     public $criterion;
 

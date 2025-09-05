@@ -39,7 +39,7 @@ class StreamWriterOptionsFormType extends WriterOptionsFormType implements Trans
     public static function getTranslationMessages(): array
     {
         return [
-            ( new Message('writer.stream.options.filepath.tokens', 'forms') )
+            (new Message('writer.stream.options.filepath.tokens', 'forms'))
                 ->setDesc('Tokens: %tokens%'),
         ];
     }
@@ -48,8 +48,8 @@ class StreamWriterOptionsFormType extends WriterOptionsFormType implements Trans
     {
         parent::configureOptions($resolver);
         $resolver->setDefaults([
-                                    'data_class' => AbstractStreamWriter::getOptionsType(),
-                                    'translation_domain' => 'forms',
-                                ]);
+            'data_class' => AbstractStreamWriter::getOptionsType(),
+            'translation_domain' => 'forms',
+        ]);
     }
 }

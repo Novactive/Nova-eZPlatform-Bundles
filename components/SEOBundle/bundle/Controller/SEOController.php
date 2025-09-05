@@ -12,7 +12,6 @@
 
 namespace Novactive\Bundle\eZSEOBundle\Controller;
 
-use DOMDocument;
 use Ibexa\Bundle\Core\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -23,6 +22,7 @@ class SEOController extends Controller
 {
     /**
      * @Route("/robots.txt", methods={"GET"})
+     *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function robotsAction(): Response
@@ -100,7 +100,7 @@ class SEOController extends Controller
 
         $key = $this->getConfigResolver()->getParameter('bing_verification', 'nova_ezseo');
 
-        $xml = new DOMDocument('1.0', 'UTF-8');
+        $xml = new \DOMDocument('1.0', 'UTF-8');
         $xml->formatOutput = true;
 
         $root = $xml->createElement('users');

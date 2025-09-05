@@ -25,7 +25,6 @@ use Novactive\EzMenuManagerBundle\Entity\Menu;
 use Novactive\EzMenuManagerBundle\Entity\MenuSearch;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
-use PDO;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -93,11 +92,11 @@ class AdminController extends Controller
             $search = $searchForm->getData();
             if ($type = $search->getType()) {
                 $queryBuilder->andWhere($queryBuilder->expr()->eq('m.type', ':type'));
-                $queryBuilder->setParameter(':type', $type, PDO::PARAM_STR);
+                $queryBuilder->setParameter(':type', $type, \PDO::PARAM_STR);
             }
             if ($name = $search->getName()) {
                 $queryBuilder->andWhere($queryBuilder->expr()->like('m.name', ':name'));
-                $queryBuilder->setParameter(':name', "%{$name}%", PDO::PARAM_STR);
+                $queryBuilder->setParameter(':name', "%{$name}%", \PDO::PARAM_STR);
             }
         }
 

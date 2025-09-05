@@ -10,7 +10,6 @@ use AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowConfiguration;
 use AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowEvent;
 use AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowExecutor;
 use AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowRegistry;
-use InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
@@ -45,7 +44,7 @@ class ExecuteWorkflowCommand extends Command
         $workflow = $this->workflowRegistry->getWorkflow($workflowIdentifier);
         $baseConfiguration = $workflow->getDefaultConfig();
         if (!$baseConfiguration->isAvailable(WorkflowConfiguration::AVAILABILITY_CLI)) {
-            throw new InvalidArgumentException(sprintf('Workflow %s is not available', $workflowIdentifier));
+            throw new \InvalidArgumentException(sprintf('Workflow %s is not available', $workflowIdentifier));
         }
 
         /** @var \Matthias\SymfonyConsoleForm\Console\Helper\FormHelper $formHelper */

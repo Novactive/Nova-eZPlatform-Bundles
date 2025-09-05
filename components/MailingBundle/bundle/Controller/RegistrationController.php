@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller;
 
-use DateTime;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Novactive\Bundle\eZMailingBundle\Core\DataHandler\Registration;
@@ -130,7 +129,7 @@ class RegistrationController
      *
      * @Template()
      */
-    public function unregisterAction(string $email = null, Request $request, FormFactoryInterface $formFactory): array
+    public function unregisterAction(?string $email = null, Request $request, FormFactoryInterface $formFactory): array
     {
         $params = [
             'pagelayout' => $this->getPagelayout(),
@@ -143,7 +142,7 @@ class RegistrationController
             $user = new User();
             $user
                 ->setEmail($email)
-                ->setUpdated(new DateTime());
+                ->setUpdated(new \DateTime());
             $unregistration->setUser($user);
         }
 

@@ -13,8 +13,8 @@ abstract class StepOptionsFormFormType extends ComponentOptionsFormType
     {
         parent::configureOptions($resolver);
         $resolver->setDefaults([
-                                    'data_class' => AbstractStep::getOptionsType(),
-                                    'translation_domain' => 'forms',
-                                ]);
+            'data_class' => AbstractStep::getOptionsType(),
+            'translation_domain' => 'forms',
+        ]);
     }
 }

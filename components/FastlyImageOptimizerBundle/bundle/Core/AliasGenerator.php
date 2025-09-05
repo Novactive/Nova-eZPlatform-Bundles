@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZFastlyImageOptimizerBundle\Core;
 
-use Exception;
 use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -20,7 +19,6 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException;
 use eZ\Publish\SPI\Variation\Values\ImageVariation;
 use eZ\Publish\SPI\Variation\VariationHandler as VariationService;
-use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 
 class AliasGenerator implements VariationService
@@ -101,12 +99,12 @@ class AliasGenerator implements VariationService
                 "Couldn't create variation '{$variationName}'".
                 " for image with id {$field->value->id} because source image can't be found"
             );
-        } catch (InvalidArgumentException $exception) {
+        } catch (\InvalidArgumentException $exception) {
             $this->logger->error(
                 "Couldn't create variation '{$variationName}'".
                 " for image with id {$field->value->id} because an image could not be created from the given input"
             );
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             $this->logger->error(
                 "Couldn't create variation '{$variationName}'".
                 " for image with id {$field->value->id}: {$exception->getMessage()}"

@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Client;
 
-use Exception;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
@@ -36,9 +35,6 @@ class Slack
      */
     private $serializer;
 
-    /**
-     * @var
-     */
     private $channelsURI;
 
     /**
@@ -61,7 +57,7 @@ class Slack
             $request = new Request('POST', trim($uri, '/'), $headers, $payload);
             try {
                 $this->http->send($request, ['timeout' => 0.25]);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 // it is common slack would timeout, then we don't care
                 continue;
             }

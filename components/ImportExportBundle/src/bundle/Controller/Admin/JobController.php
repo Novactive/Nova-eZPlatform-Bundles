@@ -8,7 +8,6 @@ use AlmaviaCX\Bundle\IbexaImportExport\Event\PostJobCreateFormSubmitEvent;
 use AlmaviaCX\Bundle\IbexaImportExport\Job\Form\JobCreateFlow;
 use AlmaviaCX\Bundle\IbexaImportExport\Job\Job;
 use AlmaviaCX\Bundle\IbexaImportExport\Job\JobService;
-use Exception;
 use Ibexa\Contracts\AdminUi\Controller\Controller;
 use Ibexa\Contracts\AdminUi\Notification\TranslatableNotificationHandlerInterface;
 use Ibexa\Contracts\Core\Repository\PermissionResolver;
@@ -115,9 +114,9 @@ class JobController extends Controller implements TranslationContainerInterface
                     return new RedirectResponse($this->generateUrl('import_export.job.view', [
                         'id' => $job->getId(),
                     ]));
-                } catch (Exception $exception) {
+                } catch (\Exception $exception) {
                     $this->notificationHandler->error(
-                    /* @Ignore */
+                        /* @Ignore */
                         $exception->getMessage()
                     );
                 }
@@ -179,7 +178,7 @@ class JobController extends Controller implements TranslationContainerInterface
         ]);
     }
 
-    public function run(Job $job, int $batchLimit = null, bool $reset = false): Response
+    public function run(Job $job, ?int $batchLimit = null, bool $reset = false): Response
     {
         $this->jobService->runJob($job, $batchLimit, $reset);
 

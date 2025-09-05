@@ -128,7 +128,7 @@ final class CreateContentTypesCommand extends Command
             foreach ($oWorksheet->getRowIterator() as $row) {
                 $rowIndex = $row->getRowIndex();
                 $fieldIdentifier = $oWorksheet->getCell("B{$rowIndex}")->getValue();
-                if (($rowIndex) >= 11 && ('' != $fieldIdentifier)) {
+                if ($rowIndex >= 11 && ('' != $fieldIdentifier)) {
                     $cellIterator = $row->getCellIterator();
                     $cellIterator->setIterateOnlyExistingCells(false); // Loop all cells, even if it is not set
                     $contentTypeFieldsData = [];
@@ -181,8 +181,8 @@ final class CreateContentTypesCommand extends Command
             $contentTypeGroupIdentifier = null;
             foreach ($contentTypeGroups as $contentTypeGroup) {
                 if (
-                    !\is_null($contentTypeGroupIdentifierParam) &&
-                    $contentTypeGroup->identifier === $contentTypeGroupIdentifierParam
+                    !\is_null($contentTypeGroupIdentifierParam)
+                    && $contentTypeGroup->identifier === $contentTypeGroupIdentifierParam
                 ) {
                     $contentTypeGroupIdentifier = $contentTypeGroupIdentifierParam;
                     break;

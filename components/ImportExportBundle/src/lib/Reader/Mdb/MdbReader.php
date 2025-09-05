@@ -11,7 +11,6 @@ use AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderIteratorInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use JMS\TranslationBundle\Model\Message;
-use RuntimeException;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Translation\TranslatableMessage;
 
@@ -52,7 +51,7 @@ class MdbReader extends AbstractFileReader
         $process->setTimeout($this->converterTimeout);
         $process->run();
         if (!$process->isSuccessful()) {
-            throw new RuntimeException(
+            throw new \RuntimeException(
                 sprintf('An error occurred while converting the mdb file: %s', $process->getErrorOutput())
             );
         }
@@ -85,7 +84,7 @@ class MdbReader extends AbstractFileReader
 
     public static function getTranslationMessages(): array
     {
-        return [( new Message('reader.mdb.name', 'import_export') )->setDesc('Microsoft Access Database reader')];
+        return [(new Message('reader.mdb.name', 'import_export'))->setDesc('Microsoft Access Database reader')];
     }
 
     public static function getOptionsType(): ?string

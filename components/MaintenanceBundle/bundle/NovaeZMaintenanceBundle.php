@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\NovaeZMaintenanceBundle;
 
-use LogicException;
 use Novactive\NovaeZMaintenanceBundle\DependencyInjection\Security\MaintenancePolicyProvider;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
@@ -43,7 +42,7 @@ class NovaeZMaintenanceBundle extends Bundle
                 if (!$extension instanceof ExtensionInterface) {
                     $fqdn = \get_class($extension);
                     $message = 'Extension %s must implement %s.';
-                    throw new LogicException(sprintf($message, $fqdn, ExtensionInterface::class));
+                    throw new \LogicException(sprintf($message, $fqdn, ExtensionInterface::class));
                 }
                 $this->extension = $extension;
             } else {

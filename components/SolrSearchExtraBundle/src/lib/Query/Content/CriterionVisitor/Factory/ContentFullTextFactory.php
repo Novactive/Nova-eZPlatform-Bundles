@@ -17,27 +17,27 @@ class ContentFullTextFactory
     /**
      * Field map.
      *
-     * @var \Ibexa\Core\Search\Common\FieldNameResolver
+     * @var FieldNameResolver
      */
     protected $fieldNameResolver;
 
     /**
-     * @var \QueryTranslator\Languages\Galach\Tokenizer
+     * @var Tokenizer
      */
     protected $tokenizer;
 
     /**
-     * @var \QueryTranslator\Languages\Galach\Parser
+     * @var Parser
      */
     protected $parser;
 
     /**
-     * @var \QueryTranslator\Languages\Galach\Generators\ExtendedDisMax
+     * @var ExtendedDisMax
      */
     protected $generator;
 
     /**
-     * @var \Ibexa\Solr\FieldMapper\IndexingDepthProvider
+     * @var IndexingDepthProvider
      */
     protected $indexingDepthProvider;
 
@@ -61,7 +61,7 @@ class ContentFullTextFactory
     /**
      * Create FullText Criterion Visitor.
      *
-     * @return \Ibexa\Contracts\Solr\Query\CriterionVisitor|\Ibexa\Solr\Query\Content\CriterionVisitor\FullText
+     * @return CriterionVisitor|\Ibexa\Solr\Query\Content\CriterionVisitor\FullText
      */
     public function createCriterionVisitor(): CriterionVisitor
     {

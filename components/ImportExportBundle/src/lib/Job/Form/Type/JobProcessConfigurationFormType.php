@@ -92,9 +92,9 @@ class JobProcessConfigurationFormType extends AbstractType
         parent::configureOptions($resolver);
         $resolver->setDefaults([
             'data_class' => Job::class,
-                                   'show_initialized' => false,
-                                   'translation_domain' => 'forms',
-                                   'workflow_configuration' => null,
-                               ]);
+            'show_initialized' => false,
+            'translation_domain' => 'forms',
+            'workflow_configuration' => null,
+        ]);
     }
 }

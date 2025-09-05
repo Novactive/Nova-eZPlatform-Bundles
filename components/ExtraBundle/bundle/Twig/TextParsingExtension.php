@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\Twig;
 
-use Exception;
 use Novactive\Bundle\eZExtraBundle\Contracts\RouterAware;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\WrapperFactory;
 use Twig\Extension\AbstractExtension;
@@ -74,7 +73,7 @@ final class TextParsingExtension extends AbstractExtension
             try {
                 $wrapper = $this->wrapperFactory->createByLocationId($contentId);
                 $replacements[$matchFound] = $this->generateRouteWrapper($wrapper);
-            } catch (Exception $exception) {
+            } catch (\Exception $exception) {
                 $replacements[$matchFound] = '/';
             }
         }
@@ -103,7 +102,7 @@ final class TextParsingExtension extends AbstractExtension
 
                 return $this->generateRouteWrapper($wrapper);
             }
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             return '/';
         }
 

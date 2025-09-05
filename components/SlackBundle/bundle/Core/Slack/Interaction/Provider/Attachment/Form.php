@@ -44,8 +44,8 @@ class Form extends AttachmentProvider
     public function getAttachment(Signal $signal): ?Attachment
     {
         if (
-            class_exists(\EzSystems\FormBuilder\Core\SignalSlot\Signal\FormSubmit::class) &&
-            !$signal instanceof \EzSystems\FormBuilder\Core\SignalSlot\Signal\FormSubmit
+            class_exists(\EzSystems\FormBuilder\Core\SignalSlot\Signal\FormSubmit::class)
+            && !$signal instanceof \EzSystems\FormBuilder\Core\SignalSlot\Signal\FormSubmit
         ) {
             return null;
         }

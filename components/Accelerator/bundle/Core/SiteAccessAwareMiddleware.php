@@ -29,9 +29,9 @@ class SiteAccessAwareMiddleware implements MiddlewareInterface, SiteAccessAwareI
     {
         $message = $envelope->getMessage();
         if (
-            $message instanceof SiteAccessAwareInterface &&
-            null !== $this->siteAccess &&
-            null === $message->getSiteAccess()
+            $message instanceof SiteAccessAwareInterface
+            && null !== $this->siteAccess
+            && null === $message->getSiteAccess()
         ) {
             $message->setSiteAccess($this->siteAccess);
         }

@@ -43,7 +43,7 @@ final class MaintenanceCommand extends Command implements SiteAccessAware
     /**
      * @required
      */
-    public function setSiteAccess(SiteAccess $siteAccess = null): void
+    public function setSiteAccess(?SiteAccess $siteAccess = null): void
     {
         $this->siteAccess = $siteAccess;
     }

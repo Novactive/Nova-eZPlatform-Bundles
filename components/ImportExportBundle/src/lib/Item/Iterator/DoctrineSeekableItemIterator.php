@@ -5,19 +5,16 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Item\Iterator;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderIteratorInterface;
-use ArrayIterator;
 use Doctrine\DBAL\Connection;
-use Iterator;
-use SeekableIterator;
 
-class DoctrineSeekableItemIterator implements ReaderIteratorInterface, SeekableIterator
+class DoctrineSeekableItemIterator implements ReaderIteratorInterface, \SeekableIterator
 {
     public const DEFAULT_BATCH_SIZE = 25;
     protected Connection $connection;
     protected string $queryString;
     protected string $countQueryString;
     protected int $batchSize = self::DEFAULT_BATCH_SIZE;
-    private ?Iterator $innerIterator;
+    private ?\Iterator $innerIterator;
     private int $position = 0;
 
     public function __construct(
@@ -32,11 +29,11 @@ class DoctrineSeekableItemIterator implements ReaderIteratorInterface, SeekableI
         $this->connection = $connection;
     }
 
-    private function fetch(): Iterator
+    private function fetch(): \Iterator
     {
         $queryString = sprintf('%s LIMIT %d OFFSET %d', $this->queryString, $this->batchSize, $this->position);
 
-        return new ArrayIterator($this->connection->executeQuery($queryString)->fetchAllAssociative());
+        return new \ArrayIterator($this->connection->executeQuery($queryString)->fetchAllAssociative());
     }
 
     private function initialize(): void

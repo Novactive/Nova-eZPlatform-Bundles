@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Job;
 
-use DateTimeImmutable;
 use Doctrine\Common\Collections\Collection;
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 
@@ -15,10 +14,6 @@ class JobService
     protected ConfigResolverInterface $configResolver;
     protected JobDebugger $jobDebugger;
 
-    /**
-     * @param \AlmaviaCX\Bundle\IbexaImportExport\Job\JobRepository      $jobRepository
-     * @param \AlmaviaCX\Bundle\IbexaImportExport\Job\JobRunnerInterface $jobRunner
-     */
     public function __construct(
         JobRepository $jobRepository,
         JobRunnerInterface $jobRunner,
@@ -33,7 +28,7 @@ class JobService
 
     public function createJob(Job $job, bool $autoStart = true)
     {
-        $job->setRequestedDate(new DateTimeImmutable());
+        $job->setRequestedDate(new \DateTimeImmutable());
         $job->setStatus(Job::STATUS_PENDING);
 
         $this->jobRepository->save($job);
@@ -43,7 +38,7 @@ class JobService
         }
     }
 
-    public function runJob(Job $job, int $batchLimit = null, bool $reset = false): void
+    public function runJob(Job $job, ?int $batchLimit = null, bool $reset = false): void
     {
         if (!$batchLimit) {
             $batchLimit = $this->configResolver->getParameter('default_batch_limit', 'import_export');

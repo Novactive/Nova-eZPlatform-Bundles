@@ -5,6 +5,7 @@
  *
  * @author    Novactive
  * @copyright 2020 Novactive
+ *
  * @licence   "SEE FULL LICENSE OPTIONS IN LICENSE.md"
  *            Nova eZ Algolia Search Engine is tri-licensed, meaning you must choose one of three licenses to use:
  *                - Commercial License: a paid license, meant for commercial use. The default option for most users.
@@ -16,12 +17,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZAlgoliaSearchEngine\Core\Search;
 
-use ArrayAccess;
-use ArrayIterator;
-use IteratorAggregate;
-use LogicException;
-
-class Result implements ArrayAccess, IteratorAggregate
+class Result implements \ArrayAccess, \IteratorAggregate
 {
     /**
      * @var int
@@ -101,21 +97,21 @@ class Result implements ArrayAccess, IteratorAggregate
 
     public function offsetSet($offset, $value): void
     {
-        throw new LogicException('You can not overwrite the value for offset "'.$offset.'"');
+        throw new \LogicException('You can not overwrite the value for offset "'.$offset.'"');
     }
 
     public function offsetUnset($offset): void
     {
-        throw new LogicException('You can not overwrite the value for offset "'.$offset.'"');
+        throw new \LogicException('You can not overwrite the value for offset "'.$offset.'"');
     }
 
     public function getIterator()
     {
-        return new ArrayIterator($this->hits);
+        return new \ArrayIterator($this->hits);
     }
 
     public function __set($name, $value): void
     {
-        throw new LogicException('You can not overwrite the value for property "'.$name.'"');
+        throw new \LogicException('You can not overwrite the value for property "'.$name.'"');
     }
 }

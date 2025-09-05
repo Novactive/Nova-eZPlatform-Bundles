@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Converter;
 
-use DateTime;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Content as ValueContent;
@@ -80,9 +79,6 @@ class Attachment
         $this->configResolver = $configResolver;
     }
 
-    /**
-     * @param $name
-     */
     private function getParameter($name)
     {
         return $this->configResolver->getParameter($name, 'nova_ezslack');
@@ -242,8 +238,8 @@ class Attachment
         return null;
     }
 
-    private function formatDate(DateTime $dateTime): string
+    private function formatDate(\DateTime $dateTime): string
     {
-        return $dateTime->format(DateTime::RFC850);
+        return $dateTime->format(\DateTime::RFC850);
     }
 }

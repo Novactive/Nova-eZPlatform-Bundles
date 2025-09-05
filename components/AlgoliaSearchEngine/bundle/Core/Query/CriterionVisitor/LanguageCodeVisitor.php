@@ -5,6 +5,7 @@
  *
  * @author    Novactive
  * @copyright 2020 Novactive
+ *
  * @licence   "SEE FULL LICENSE OPTIONS IN LICENSE.md"
  *            Nova eZ Algolia Search Engine is tri-licensed, meaning you must choose one of three licenses to use:
  *                - Commercial License: a paid license, meant for commercial use. The default option for most users.
@@ -22,8 +23,8 @@ final class LanguageCodeVisitor implements CriterionVisitor
 {
     public function supports(Criterion $criterion): bool
     {
-        return $criterion instanceof Criterion\LanguageCode &&
-               \in_array(
+        return $criterion instanceof Criterion\LanguageCode
+               && \in_array(
                    $criterion->operator,
                    [
                        Criterion\Operator::EQ,

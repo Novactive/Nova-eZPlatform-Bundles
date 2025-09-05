@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\CaptchEtat\Api;
 
 use AlmaviaCX\Bundle\CaptchEtat\Logger\CaptchEtatLogger;
-use RuntimeException;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpClient\Exception\ServerException;
 use Symfony\Component\HttpClient\Exception\TransportException;
@@ -45,7 +44,7 @@ class Gateway
         ];
 
         if (!in_array($captchaType, $availableTypes)) {
-            throw new RuntimeException(
+            throw new \RuntimeException(
                 sprintf(
                     'c value "%s" not alloweb. One of %s waiting',
                     $captchaType,
@@ -113,9 +112,9 @@ class Gateway
             ],
             'timeout' => $this->timeout,
             'body' => json_encode([
-                                      'uuid' => $captchaId,
-                                      'code' => $answer,
-                                  ]),
+                'uuid' => $captchaId,
+                'code' => $answer,
+            ]),
         ];
 
         $requestLog = [

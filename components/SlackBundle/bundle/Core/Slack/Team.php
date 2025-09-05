@@ -25,6 +25,7 @@ class Team
      * A unique identifier for the Slack workspace where the originating message appeared.
      *
      * @var string
+     *
      * @Serializer\Type("string")
      */
     private $id;
@@ -33,6 +34,7 @@ class Team
      * The slack.com subdomain of that same Slack workspace, like watermelonsugar.
      *
      * @var string
+     *
      * @Serializer\Type("string")
      */
     private $domain;
@@ -42,9 +44,6 @@ class Team
         return $this->id;
     }
 
-    /**
-     * @return Team
-     */
     public function setId(string $id): self
     {
         $this->id = $id;
@@ -57,9 +56,6 @@ class Team
         return $this->domain;
     }
 
-    /**
-     * @return Team
-     */
     public function setDomain(string $domain): self
     {
         $this->domain = $domain;

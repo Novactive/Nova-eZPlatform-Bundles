@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Item\Iterator;
 
-use SeekableIterator;
-
-class SeekableItemIterator extends ItemIterator implements SeekableIterator
+class SeekableItemIterator extends ItemIterator implements \SeekableIterator
 {
     public function __construct(
         int $totalCount,
-        SeekableIterator $innerIterator,
+        \SeekableIterator $innerIterator,
         IteratorItemTransformerInterface $itemTransformer
     ) {
         parent::__construct($totalCount, $innerIterator, $itemTransformer);

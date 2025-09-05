@@ -16,7 +16,7 @@ class Source
     protected array $transformers = [];
 
     /**
-     * @param string[]|string $path
+     * @param string[]|string                            $path
      * @param array<string>|array<array{string, string}> $transformers
      */
     public function __construct($path, array $transformers = [])

@@ -30,6 +30,7 @@ class UserController
 {
     /**
      * @Route("/show/{user}", name="novaezmailing_user_show")
+     *
      * @Template()
      */
     public function showAction(User $user): array
@@ -60,6 +61,7 @@ class UserController
     /**
      * @Route("/{status}/{page}/{limit}", name="novaezmailing_user_index",
      *                                              defaults={"page":1, "limit":10, "status":"all"})
+     *
      * @Template()
      */
     public function indexAction(UserProvider $provider, string $status = 'all', int $page = 1, int $limit = 10): array

@@ -13,9 +13,8 @@ declare(strict_types=1);
 namespace Novactive\eZPlatform\Bundles\Core\Markdown;
 
 use Knp\Menu\ItemInterface;
-use Parsedown;
 
-final class Parser extends Parsedown
+final class Parser extends \Parsedown
 {
     private ItemInterface $menuPointer;
 

@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZ2FABundle;
 
-use LogicException;
 use Novactive\Bundle\eZ2FABundle\DependencyInjection\NovaeZ2FAExtension;
 use Novactive\Bundle\eZ2FABundle\DependencyInjection\Security\PolicyProvider;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -37,7 +36,7 @@ final class NovaeZ2FABundle extends Bundle
             if (!$extension instanceof ExtensionInterface) {
                 $fqdn = \get_class($extension);
                 $message = 'Extension %s must implement %s.';
-                throw new LogicException(sprintf($message, $fqdn, ExtensionInterface::class));
+                throw new \LogicException(sprintf($message, $fqdn, ExtensionInterface::class));
             }
             $this->extension = $extension;
         }

@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Accessor;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Item\ItemAccessorInterface;
-use ArrayAccess;
-use Exception;
 
-class ArrayAccessor extends AbstractItemAccessor implements ItemAccessorInterface, ArrayAccess
+class ArrayAccessor extends AbstractItemAccessor implements ItemAccessorInterface, \ArrayAccess
 {
     /** @var array<string|int, mixed> */
     protected array $array;
@@ -29,13 +27,10 @@ class ArrayAccessor extends AbstractItemAccessor implements ItemAccessorInterfac
         return array_key_exists($offset, $this->array);
     }
 
-    /**
-     * @param $offset
-     */
     public function offsetGet($offset)
     {
         if (!$this->offsetExists($offset)) {
-            throw new Exception(
+            throw new \Exception(
                 sprintf(
                     'Undefined offset: %s. 
 Available offsets are %s',

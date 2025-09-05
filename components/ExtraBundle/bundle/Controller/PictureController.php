@@ -24,6 +24,7 @@ class PictureController extends Controller
      * Controller to handler image alias of an content id.
      *
      * @return array|Response
+     *
      * @Template
      */
     public function aliasAction(int $contentId, string $fieldIdentifier, string $alias, array $options = [])

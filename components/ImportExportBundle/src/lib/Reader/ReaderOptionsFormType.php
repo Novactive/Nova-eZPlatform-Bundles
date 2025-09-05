@@ -13,8 +13,8 @@ abstract class ReaderOptionsFormType extends ComponentOptionsFormType
     {
         parent::configureOptions($resolver);
         $resolver->setDefaults([
-           'data_class' => AbstractReader::getOptionsType(),
-           'translation_domain' => 'forms',
+            'data_class' => AbstractReader::getOptionsType(),
+            'translation_domain' => 'forms',
         ]);
     }
 }

@@ -8,7 +8,6 @@ use AlmaviaCX\Bundle\IbexaImportExport\Job\JobRecord;
 use AlmaviaCX\Bundle\IbexaImportExport\Monolog\Handler\WorkflowHandler;
 use Monolog\DateTimeImmutable;
 use Monolog\Logger;
-use Throwable;
 
 class WorkflowLogger extends Logger implements WorkflowLoggerInterface
 {
@@ -26,7 +25,7 @@ class WorkflowLogger extends Logger implements WorkflowLoggerInterface
         int $level,
         string $message,
         array $context = [],
-        DateTimeImmutable $datetime = null
+        ?DateTimeImmutable $datetime = null
     ): bool {
         if ($this->itemIndex) {
             $context['item_index'] = $this->itemIndex;
@@ -35,7 +34,7 @@ class WorkflowLogger extends Logger implements WorkflowLoggerInterface
         return parent::addRecord($level, $message, $context, $datetime);
     }
 
-    public function logException(Throwable $e): void
+    public function logException(\Throwable $e): void
     {
         $this->error($e->getMessage(), ['exception' => $e->getTraceAsString()]);
     }

@@ -12,7 +12,6 @@
 
 namespace Novactive\Bundle\eZSEOBundle\Core\Helper;
 
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Ibexa\Contracts\Core\Repository\URLWildcardService;
 use Ibexa\Core\IO\IOService;
@@ -216,7 +215,7 @@ class ImportUrlsHelper
         try {
             $redirectImportHistory = new RedirectImportHistory();
             $redirectImportHistory->setNameFile($originalFileName);
-            $redirectImportHistory->setDate(new DateTime());
+            $redirectImportHistory->setDate(new \DateTime());
             $redirectImportHistory->setPath($fileLog);
             $this->entityManager->persist($redirectImportHistory);
             $this->entityManager->flush();

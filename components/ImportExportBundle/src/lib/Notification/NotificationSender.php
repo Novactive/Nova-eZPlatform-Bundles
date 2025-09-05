@@ -40,7 +40,7 @@ class NotificationSender implements TranslationContainerInterface
     public static function getTranslationMessages(): array
     {
         return [
-            ( new Message(self::MESSAGES[self::JOB_DONE_TYPE], 'import_export') )
+            (new Message(self::MESSAGES[self::JOB_DONE_TYPE], 'import_export'))
                 ->setDesc('Job %job_label% (%job_id%) is done running.'),
         ];
     }

@@ -25,6 +25,7 @@ class Author
      * Small text used to display the author's name.
      *
      * @var string
+     *
      * @Serializer\SerializedName("author_name")
      */
     private $name;
@@ -33,6 +34,7 @@ class Author
      * A valid URL that will hyperlink the author_name text mentioned above. Will only work if author_name is present.
      *
      * @var string
+     *
      * @Serializer\SerializedName("author_link")
      */
     private $link;
@@ -42,6 +44,7 @@ class Author
      * if author_name is present.
      *
      * @var string
+     *
      * @Serializer\SerializedName("author_icon")
      */
     private $icon;
@@ -56,9 +59,6 @@ class Author
         $this->icon = $icon;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): ?string
     {
         return $this->name;
@@ -71,9 +71,6 @@ class Author
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLink(): ?string
     {
         return $this->link;
@@ -86,17 +83,11 @@ class Author
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getIcon(): ?string
     {
         return $this->icon;
     }
 
-    /**
-     * @param string $icon
-     */
     public function setIcon(?string $icon = null): self
     {
         $this->icon = $icon;

@@ -36,8 +36,6 @@ class MenuItemConverter
     }
 
     /**
-     * @param $hash
-     *
      * @throws MenuItemTypeNotFoundException
      */
     public function fromHash($hash, string $defaultClass = MenuItem::class): ?MenuItem
@@ -48,8 +46,6 @@ class MenuItemConverter
     }
 
     /**
-     * @param $menuItems
-     *
      * @throws UnexpectedTypeException
      */
     public function toHashArray($menuItems): array
@@ -69,6 +65,7 @@ class MenuItemConverter
      * @throws MenuItemTypeNotFoundException
      *
      * @return MenuItem[]
+     *
      * @SuppressWarnings(PHPMD.IfStatementAssignment)
      */
     public function fromHashArray(array $hashArray, string $defaultClass = MenuItem::class): array

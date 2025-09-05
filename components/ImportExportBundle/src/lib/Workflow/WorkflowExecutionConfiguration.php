@@ -8,7 +8,6 @@ use AlmaviaCX\Bundle\IbexaImportExport\Processor\Aggregator\ProcessorAggregator;
 use AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorInterface;
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderInterface;
 use AlmaviaCX\Bundle\IbexaImportExport\Writer\WriterInterface;
-use Generator;
 
 class WorkflowExecutionConfiguration
 {
@@ -42,7 +41,7 @@ class WorkflowExecutionConfiguration
     /**
      * @param \AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorInterface[] $processors
      */
-    protected function findWriters(array $processors): Generator
+    protected function findWriters(array $processors): \Generator
     {
         foreach ($processors as $processor) {
             if ($processor instanceof WriterInterface) {

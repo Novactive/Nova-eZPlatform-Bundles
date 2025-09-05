@@ -7,7 +7,6 @@ namespace AlmaviaCX\Bundle\IbexaSaml\Security\Saml;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Throwable;
 
 class SamlExceptionLogger
 {
@@ -24,9 +23,9 @@ class SamlExceptionLogger
     /**
      * Logs an exception.
      *
-     * @param Exception $exception The \Exception instance
+     * @param \Exception $exception The \Exception instance
      */
-    public function logException(Throwable $exception): void
+    public function logException(\Throwable $exception): void
     {
         if (null !== $this->logger) {
             $message = sprintf(

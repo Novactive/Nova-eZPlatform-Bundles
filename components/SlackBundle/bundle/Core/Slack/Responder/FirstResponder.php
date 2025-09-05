@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Responder;
 
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Message;
-use RuntimeException;
 
 class FirstResponder
 {
@@ -56,7 +55,7 @@ class FirstResponder
             return $this->responders[$name];
         }
 
-        throw new RuntimeException("No Responder with the name '{$name}''.");
+        throw new \RuntimeException("No Responder with the name '{$name}''.");
     }
 
     public function __invoke(string $args): ?Message

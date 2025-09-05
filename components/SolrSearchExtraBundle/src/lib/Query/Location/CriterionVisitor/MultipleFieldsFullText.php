@@ -15,7 +15,7 @@ class MultipleFieldsFullText extends ContentMultipleFieldsFullText
      *
      * @return string
      */
-    public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
+    public function visit(Criterion $criterion, ?CriterionVisitor $subVisitor = null)
     {
         $condition = $this->escapeQuote(parent::visit($criterion, $subVisitor));
 

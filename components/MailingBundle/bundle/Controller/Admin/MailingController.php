@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\Helper\TranslationHelper;
@@ -45,7 +44,9 @@ class MailingController
 {
     /**
      * @Route("/show/{mailing}", name="novaezmailing_mailing_show")
+     *
      * @Template()
+     *
      * @IsGranted("view", subject="mailing")
      */
     public function showAction(
@@ -72,6 +73,7 @@ class MailingController
 
     /**
      * @Template()
+     *
      * @IsGranted("view", subject="mailing")
      */
     public function mailingTabsAction(
@@ -103,9 +105,13 @@ class MailingController
 
     /**
      * @Route("/edit/{mailing}", name="novaezmailing_mailing_edit")
+     *
      * @ParamConverter("mailing", class="Novactive\Bundle\eZMailingBundle\Entity\Mailing", options={"id"="mailing"})
+     *
      * @Route("/create/{campaign}", name="novaezmailing_mailing_create")
+     *
      * @ParamConverter("campaign", class="Novactive\Bundle\eZMailingBundle\Entity\Campaign", options={"id"="campaign"})
+     *
      * @Template()
      *
      * @return array|RedirectResponse
@@ -140,7 +146,7 @@ class MailingController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $machine->apply($mailing, 'edit');
-            $mailing->setUpdated(new DateTime());
+            $mailing->setUpdated(new \DateTime());
             $entityManager->persist($mailing);
             $entityManager->flush();
 
@@ -166,6 +172,7 @@ class MailingController
      * @Route("/confirm/{mailing}", name="novaezmailing_mailing_confirm")
      * @Route("/archive/{mailing}", name="novaezmailing_mailing_archive")
      * @Route("/abort/{mailing}",   name="novaezmailing_mailing_cancel")
+     *
      * @IsGranted("view", subject="mailing")
      */
     public function statusAction(
@@ -185,6 +192,7 @@ class MailingController
 
     /**
      * @Route("/test/{mailing}", name="novaezmailing_mailing_test", methods={"POST"})
+     *
      * @IsGranted("view", subject="mailing")
      */
     public function testAction(

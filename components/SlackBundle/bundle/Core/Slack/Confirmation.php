@@ -25,6 +25,7 @@ class Confirmation
      * Title the pop up window. Please be brief.
      *
      * @var string
+     *
      * @Serializer\Type("string<translatable>")
      */
     private $title;
@@ -34,6 +35,7 @@ class Confirmation
      * Use a maximum of 30 characters or so for best results across form factors.
      *
      * @var string
+     *
      * @Serializer\Type("string<translatable>")
      */
     private $text;
@@ -42,7 +44,9 @@ class Confirmation
      * The text label for the button to continue with an action. Keep it short. Defaults to Okay.
      *
      * @var string
+     *
      * @Serializer\SerializedName("ok_text")
+     *
      * @Serializer\Type("string<translatable>")
      */
     private $okText;
@@ -51,7 +55,9 @@ class Confirmation
      * The text label for the button to cancel the action. Keep it short. Defaults to Cancel.
      *
      * @var string
+     *
      * @Serializer\SerializedName("dismiss_text")
+     *
      * @Serializer\Type("string<translatable>")
      */
     private $dismissText;
@@ -64,17 +70,11 @@ class Confirmation
         $this->text = $text;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    /**
-     * @return Confirmation
-     */
     public function setTitle(string $title): self
     {
         $this->title = $title;
@@ -87,9 +87,6 @@ class Confirmation
         return $this->text;
     }
 
-    /**
-     * @return Confirmation
-     */
     public function setText(string $text): self
     {
         $this->text = $text;
@@ -97,17 +94,11 @@ class Confirmation
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getOkText(): ?string
     {
         return $this->okText;
     }
 
-    /**
-     * @return Confirmation
-     */
     public function setOkText(string $okText): self
     {
         $this->okText = $okText;
@@ -115,17 +106,11 @@ class Confirmation
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getDismissText(): ?string
     {
         return $this->dismissText;
     }
 
-    /**
-     * @return Confirmation
-     */
     public function setDismissText(string $dismissText): self
     {
         $this->dismissText = $dismissText;

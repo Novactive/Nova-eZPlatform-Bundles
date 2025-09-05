@@ -25,6 +25,7 @@ class User
      * A string identifier for the user invoking the action. Users IDs are unique to the workspace they appear within.
      *
      * @var string
+     *
      * @Serializer\Type("string")
      */
     private $id;
@@ -33,6 +34,7 @@ class User
      * The name of that very same user.
      *
      * @var string
+     *
      * @Serializer\Type("string")
      */
     private $name;
@@ -42,9 +44,6 @@ class User
         return $this->id;
     }
 
-    /**
-     * @return User
-     */
     public function setId(string $id): self
     {
         $this->id = $id;
@@ -57,9 +56,6 @@ class User
         return $this->name;
     }
 
-    /**
-     * @return User
-     */
     public function setName(string $name): self
     {
         $this->name = $name;

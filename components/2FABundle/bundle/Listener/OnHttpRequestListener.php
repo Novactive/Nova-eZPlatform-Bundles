@@ -58,8 +58,8 @@ final class OnHttpRequestListener
         $isMainRequestMethod = method_exists($event, 'isMainRequest') ? 'isMainRequest' : 'isMasterRequest';
 
         if (
-            !$event->$isMainRequestMethod() || !$this->saAuthenticatorResolver->isForceSetup() ||
-            $request->getRequestUri() === $setupUri
+            !$event->$isMainRequestMethod() || !$this->saAuthenticatorResolver->isForceSetup()
+            || $request->getRequestUri() === $setupUri
         ) {
             return;
         }

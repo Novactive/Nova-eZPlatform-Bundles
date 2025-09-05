@@ -31,6 +31,7 @@ abstract class Action
      * If multiple actions share the same name, only one of them can be in a triggered state.
      *
      * @var string
+     *
      * @Serializer\Type("string")
      */
     private $name;
@@ -40,6 +41,7 @@ abstract class Action
      * Best to keep these short and decisive. Use a maximum of 30 characters or so for best results across form factors.
      *
      * @var string
+     *
      * @Serializer\Type("string<translatable>")
      */
     private $text;
@@ -48,6 +50,7 @@ abstract class Action
      * Provide button when this action is a message button or provide select when the action is a message menu.
      *
      * @var string
+     *
      * @Serializer\Type("string")
      */
     private $value;
@@ -56,14 +59,18 @@ abstract class Action
      * an array of option value hashes selected by the user from this message menu.
      *
      * @var string
+     *
      * @Serializer\Type("array<Novactive\Bundle\eZSlackBundle\Core\Slack\Option>")
+     *
      * @Serializer\SerializedName("selected_options")
      */
     private $selectedOptions;
 
     /**
      * @var Confirmation
+     *
      * @Serializer\SerializedName("confirm")
+     *
      * @Serializer\Type("Novactive\Bundle\eZSlackBundle\Core\Slack\Confirmation")
      */
     private $confirmation;
@@ -78,17 +85,11 @@ abstract class Action
         $this->value = $value;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * @return Action
-     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -96,17 +97,11 @@ abstract class Action
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getText(): ?string
     {
         return $this->text;
     }
 
-    /**
-     * @return Action
-     */
     public function setText(string $text): self
     {
         $this->text = $text;
@@ -114,17 +109,11 @@ abstract class Action
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getValue(): ?string
     {
         return $this->value;
     }
 
-    /**
-     * @return Action
-     */
     public function setValue(string $value): self
     {
         $this->value = $value;
@@ -132,17 +121,11 @@ abstract class Action
         return $this;
     }
 
-    /**
-     * @return Confirmation
-     */
     public function getConfirmation(): ?Confirmation
     {
         return $this->confirmation;
     }
 
-    /**
-     * @return Action
-     */
     public function setConfirmation(Confirmation $confirmation): self
     {
         if (null === $confirmation->getTitle()) {
@@ -163,9 +146,6 @@ abstract class Action
         return $this->selectedOptions[0];
     }
 
-    /**
-     * @return Action
-     */
     public function setSelectedOptions(string $selectedOptions): self
     {
         $this->selectedOptions = $selectedOptions;
@@ -175,6 +155,7 @@ abstract class Action
 
     /**
      * @Serializer\VirtualProperty
+     *
      * @Serializer\SerializedName("type")
      */
     abstract public function getObjectType(): string;

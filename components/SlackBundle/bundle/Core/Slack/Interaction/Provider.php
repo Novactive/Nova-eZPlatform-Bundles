@@ -18,7 +18,6 @@ use eZ\Publish\Core\SignalSlot\Signal;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Attachment\AttachmentProviderInterface;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
-use RuntimeException;
 
 /**
  * Class Provider.
@@ -44,7 +43,7 @@ class Provider
                 return $provider->execute($message);
             }
         }
-        throw new RuntimeException("No Attachment Provider supports '{$action->getName()}'.");
+        throw new \RuntimeException("No Attachment Provider supports '{$action->getName()}'.");
     }
 
     /**

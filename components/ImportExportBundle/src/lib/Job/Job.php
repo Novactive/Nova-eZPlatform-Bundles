@@ -6,7 +6,6 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Job;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorOptions;
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderOptions;
-use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -15,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="AlmaviaCX\Bundle\IbexaImportExport\Job\JobRepository")
+ *
  * @ORM\Table(name="import_export_job")
  */
 class Job
@@ -29,7 +29,9 @@ class Job
 
     /**
      * @ORM\Id
+     *
      * @ORM\GeneratedValue()
+     *
      * @ORM\Column
      */
     protected ?int $id = null;
@@ -62,17 +64,17 @@ class Job
     /**
      * @ORM\Column(type="datetime_immutable")
      */
-    protected DateTimeImmutable $requestedDate;
+    protected \DateTimeImmutable $requestedDate;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
-    protected ?DateTimeImmutable $startTime = null;
+    protected ?\DateTimeImmutable $startTime = null;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
-    protected ?DateTimeImmutable $endTime = null;
+    protected ?\DateTimeImmutable $endTime = null;
 
     /**
      * @ORM\Column
@@ -150,32 +152,32 @@ class Job
         $this->status = $status;
     }
 
-    public function getRequestedDate(): DateTimeImmutable
+    public function getRequestedDate(): \DateTimeImmutable
     {
         return $this->requestedDate;
     }
 
-    public function setRequestedDate(DateTimeImmutable $requestedDate): void
+    public function setRequestedDate(\DateTimeImmutable $requestedDate): void
     {
         $this->requestedDate = $requestedDate;
     }
 
-    public function getStartTime(): ?DateTimeImmutable
+    public function getStartTime(): ?\DateTimeImmutable
     {
         return $this->startTime;
     }
 
-    public function setStartTime(?DateTimeImmutable $startTime): void
+    public function setStartTime(?\DateTimeImmutable $startTime): void
     {
         $this->startTime = $startTime;
     }
 
-    public function getEndTime(): ?DateTimeImmutable
+    public function getEndTime(): ?\DateTimeImmutable
     {
         return $this->endTime;
     }
 
-    public function setEndTime(?DateTimeImmutable $endTime): void
+    public function setEndTime(?\DateTimeImmutable $endTime): void
     {
         $this->endTime = $endTime;
     }

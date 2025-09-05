@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Reader\Xml;
 
-use Countable;
-use DOMDocument;
-use SeekableIterator;
-
-class XmlReaderIterator implements SeekableIterator, Countable
+class XmlReaderIterator implements \SeekableIterator, \Countable
 {
     /** @var \DOMNode|bool */
     protected $current;
@@ -58,7 +54,7 @@ class XmlReaderIterator implements SeekableIterator, Countable
      */
     protected function findNextNode()
     {
-        $document = new DOMDocument();
+        $document = new \DOMDocument();
 
         $xml = $this->xmlParser->parse();
         if (null === $xml) {

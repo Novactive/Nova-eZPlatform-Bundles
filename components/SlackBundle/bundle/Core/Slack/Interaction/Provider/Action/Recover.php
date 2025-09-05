@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack\Interaction\Provider\Action;
 
-use Exception;
 use eZ\Publish\API\Repository\Values\Content\Query as eZQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
@@ -72,7 +71,7 @@ class Recover extends ActionProvider
             }
             $attachment->setColor('good');
             $attachment->setText('_t:action.items.recovered');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $attachment->setColor('danger');
             $attachment->setText($e->getMessage());
         }

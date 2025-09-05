@@ -5,6 +5,7 @@
  *
  * @author    Novactive
  * @copyright 2020 Novactive
+ *
  * @licence   "SEE FULL LICENSE OPTIONS IN LICENSE.md"
  *            Nova eZ Algolia Search Engine is tri-licensed, meaning you must choose one of three licenses to use:
  *                - Commercial License: a paid license, meant for commercial use. The default option for most users.
@@ -54,8 +55,8 @@ final class DocumentSerializer
             $body[$fieldName] = $fieldValue;
 
             if (
-                $field->type instanceof GeoLocationField &&
-                null !== $field->value['latitude'] && null !== $field->value['longitude']
+                $field->type instanceof GeoLocationField
+                && null !== $field->value['latitude'] && null !== $field->value['longitude']
             ) {
                 $geolocFields[] = [
                     'lat' => $field->value['latitude'],

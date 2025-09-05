@@ -137,8 +137,8 @@ class Content
     protected function publishVersion(ValueContent $draft, array $options = []): ValueContent
     {
         if (
-            (\array_key_exists('callback_before_publish', $options)) &&
-            (\is_callable($options['callback_before_publish']))
+            \array_key_exists('callback_before_publish', $options)
+            && \is_callable($options['callback_before_publish'])
         ) {
             $contentService = $this->getContentService();
             $contentUpdateStruct = $contentService->newContentUpdateStruct();
@@ -205,16 +205,16 @@ class Content
         $options['remoteId'] = $remoteId;
         try {
             $content = $this->getContentService()->loadContentByRemoteId($remoteId);
-            if ((\array_key_exists('do_no_update', $options)) && (true == $options['do_no_update'])) {
+            if (\array_key_exists('do_no_update', $options) && (true == $options['do_no_update'])) {
                 return $content;
             }
             $newContent = $this->updateContent($content, $data, $options, $lang);
-            if ((\array_key_exists('callback_update', $options)) && (\is_callable($options['callback_update']))) {
+            if (\array_key_exists('callback_update', $options) && \is_callable($options['callback_update'])) {
                 $options['callback_update']($newContent);
             }
         } catch (NotFoundException $e) {
             $newContent = $this->createContent($contentTypeIdentifier, $parentLocationId, $data, $options, $lang);
-            if ((\array_key_exists('callback_create', $options)) && (\is_callable($options['callback_create']))) {
+            if (\array_key_exists('callback_create', $options) && \is_callable($options['callback_create'])) {
                 $options['callback_create']($newContent);
             }
         }

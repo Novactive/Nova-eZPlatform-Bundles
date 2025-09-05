@@ -6,7 +6,6 @@ namespace AlmaviaCX\Bundle\CaptchEtat\Api;
 
 use AlmaviaCX\Bundle\CaptchEtat\Exceptions\MissingConfigurationException;
 use AlmaviaCX\Bundle\CaptchEtat\Logger\CaptchEtatLogger;
-use Exception;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpClient\Exception\ServerException;
 use Symfony\Component\HttpClient\Exception\TransportException;
@@ -82,17 +81,17 @@ class OauthGateway
         try {
             $response = $this->client->request($method, $url, $option);
             if (200 !== $response->getStatusCode()) {
-                throw new Exception($response->getContent(false));
+                throw new \Exception($response->getContent(false));
             }
             $jsonContent = $response->getContent();
             $content = json_decode($jsonContent, true, 512, JSON_THROW_ON_ERROR);
             $tokenType = $content['token_type'] ?? null;
             if ('Bearer' !== $tokenType) {
-                throw new Exception('Not Bearer');
+                throw new \Exception('Not Bearer');
             }
             $accessToken = $content['access_token'] ?? null;
             if (!$accessToken) {
-                throw new Exception('Not access_token');
+                throw new \Exception('Not access_token');
             }
 
             return $accessToken;

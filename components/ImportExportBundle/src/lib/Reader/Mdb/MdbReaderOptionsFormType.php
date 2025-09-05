@@ -23,8 +23,8 @@ class MdbReaderOptionsFormType extends FileReaderOptionsFormType
     {
         parent::configureOptions($resolver);
         $resolver->setDefaults([
-                                   'data_class' => MdbReader::getOptionsType(),
-                                   'translation_domain' => 'forms',
-                               ]);
+            'data_class' => MdbReader::getOptionsType(),
+            'translation_domain' => 'forms',
+        ]);
     }
 }

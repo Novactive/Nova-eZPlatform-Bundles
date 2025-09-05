@@ -67,9 +67,9 @@ class EnhancedImage extends FileFieldHandler implements FieldValueConverterInter
 
         $focusPoint = null;
         if (
-            isset($fieldValue['focuspoint']) &&
-            is_array($fieldValue['focuspoint']) &&
-            2 === count($fieldValue['focuspoint'])
+            isset($fieldValue['focuspoint'])
+            && is_array($fieldValue['focuspoint'])
+            && 2 === count($fieldValue['focuspoint'])
         ) {
             $focusPoint = new FocusPoint(
                 (float) $fieldValue['focuspoint'][0],
@@ -103,7 +103,7 @@ class EnhancedImage extends FileFieldHandler implements FieldValueConverterInter
             'path' => sprintf(
                 '%s/%s',
                 realpath($this->ioRootDir),
-                ($this->ioDecorator ? $this->ioDecorator->undecorate($fieldValue->uri) : $fieldValue->uri)
+                $this->ioDecorator ? $this->ioDecorator->undecorate($fieldValue->uri) : $fieldValue->uri
             ),
             'filename' => $fieldValue->fileName,
             'alternativeText' => $fieldValue->alternativeText,

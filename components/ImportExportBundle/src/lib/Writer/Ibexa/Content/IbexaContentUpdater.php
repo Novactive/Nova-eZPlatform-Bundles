@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content;
 
-use Exception;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 
@@ -24,7 +23,7 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
         Content $content,
         array $fieldsByLanguages,
         array $parentLocationIdList,
-        int $ownerId = null,
+        ?int $ownerId = null,
         string $mainLanguageCode = 'eng-GB',
         bool $hidden = false
     ): Content {
@@ -67,7 +66,7 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
         $locationsToKeep = [];
         foreach ($parentLocationIdList as $locationRemoteId => $parentLocationId) {
             if (empty($parentLocationId)) {
-                throw new Exception('Parent location id cannot be empty');
+                throw new \Exception('Parent location id cannot be empty');
             }
             $locationsToKeep[] = $this->handleLocation(
                 $content,

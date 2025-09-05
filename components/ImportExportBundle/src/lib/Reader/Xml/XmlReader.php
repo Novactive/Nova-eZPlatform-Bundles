@@ -16,7 +16,7 @@ class XmlReader extends AbstractFileReader implements TranslationContainerInterf
 {
     public function __invoke(): ReaderIteratorInterface
     {
-        /** @var \AlmaviaCX\Bundle\IbexaImportExport\Reader\Xml\XmlReaderOptions $options */
+        /** @var XmlReaderOptions $options */
         $options = $this->getOptions();
 
         $iterator = new XmlReaderIterator($this->getFileStream(), $options->nodeNameSelector);
@@ -50,6 +50,6 @@ class XmlReader extends AbstractFileReader implements TranslationContainerInterf
 
     public static function getTranslationMessages(): array
     {
-        return [( new Message('reader.xml.name', 'import_export') )->setDesc('XML Reader')];
+        return [(new Message('reader.xml.name', 'import_export'))->setDesc('XML Reader')];
     }
 }

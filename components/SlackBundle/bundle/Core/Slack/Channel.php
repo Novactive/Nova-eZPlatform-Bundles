@@ -26,6 +26,7 @@ class Channel
      * they appear within.
      *
      * @var string
+     *
      * @Serializer\Type("string")
      */
     private $id;
@@ -34,6 +35,7 @@ class Channel
      * The name of the channel the message appeared in, without the leading # character.
      *
      * @var string
+     *
      * @Serializer\Type("string")
      */
     private $name;
@@ -43,9 +45,6 @@ class Channel
         return $this->id;
     }
 
-    /**
-     * @return Channel
-     */
     public function setId(string $id): self
     {
         $this->id = $id;
@@ -58,9 +57,6 @@ class Channel
         return $this->name;
     }
 
-    /**
-     * @return Channel
-     */
     public function setName(string $name): self
     {
         $this->name = $name;

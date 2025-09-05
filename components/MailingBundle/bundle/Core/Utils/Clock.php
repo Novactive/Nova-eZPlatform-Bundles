@@ -15,8 +15,6 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Core\Utils;
 
 use Carbon\Carbon;
-use DateTime;
-use LogicException;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 
 class Clock
@@ -26,7 +24,7 @@ class Clock
      */
     private $time;
 
-    public function __construct(DateTime $time)
+    public function __construct(\DateTime $time)
     {
         $this->time = Carbon::instance($time);
     }
@@ -83,8 +81,8 @@ class Clock
             $possibilities = $mailing->$testMethodMailing();
             $countPossibilities = count($possibilities);
             if (
-                0 === $countPossibilities ||
-                (1 === $countPossibilities && '' === $possibilities[0])
+                0 === $countPossibilities
+                || (1 === $countPossibilities && '' === $possibilities[0])
             ) { // which means nothing then *
                 continue;
             }
@@ -96,7 +94,7 @@ class Clock
         return true;
     }
 
-    public function nextTick(Mailing $mailing): DateTime
+    public function nextTick(Mailing $mailing): \DateTime
     {
         // Not sure that is great but it is a loop of 365 max, then might be the simplest and the best perf
         $now = $this->time;
@@ -129,6 +127,6 @@ class Clock
             }
             $tick->addDay();
         }
-        throw new LogicException("There is not next tick for Mailing {$mailing->getName()}");
+        throw new \LogicException("There is not next tick for Mailing {$mailing->getName()}");
     }
 }

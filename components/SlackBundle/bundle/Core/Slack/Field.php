@@ -25,6 +25,7 @@ class Field
      * Shown as a bold heading above the value text. It cannot contain markup and will be escaped for you.
      *
      * @var string
+     *
      * @Serializer\Type("string<translatable>")
      */
     private $title;
@@ -34,6 +35,7 @@ class Field
      * May be multi-line.
      *
      * @var string
+     *
      * @Serializer\Type("string")
      */
     private $value;
@@ -42,6 +44,7 @@ class Field
      * An optional flag indicating whether the value is short enough to be displayed side-by-side with other values.
      *
      * @var bool
+     *
      * @Serializer\Type("bool")
      */
     private $short;
@@ -61,9 +64,6 @@ class Field
         return $this->title;
     }
 
-    /**
-     * @return Field
-     */
     public function setTitle(string $title): self
     {
         $this->title = $title;
@@ -76,9 +76,6 @@ class Field
         return $this->value;
     }
 
-    /**
-     * @return Field
-     */
     public function setValue(string $value): self
     {
         $this->value = $value;
@@ -91,9 +88,6 @@ class Field
         return $this->short;
     }
 
-    /**
-     * @return Field
-     */
     public function setShort(bool $short): self
     {
         $this->short = $short;

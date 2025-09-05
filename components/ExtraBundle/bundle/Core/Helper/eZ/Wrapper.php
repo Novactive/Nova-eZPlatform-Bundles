@@ -14,8 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\Core\Helper\eZ;
 
-use ArrayAccess;
-use Exception;
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
 use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
 use eZ\Publish\API\Repository\Repository;
@@ -26,7 +24,7 @@ use eZ\Publish\API\Repository\Values\Content\Location as ValueLocation;
  * @property ValueLocation $location
  * @property ValueContent  $content
  */
-final class Wrapper implements ArrayAccess
+final class Wrapper implements \ArrayAccess
 {
     /**
      * @var ValueContent
@@ -65,7 +63,7 @@ final class Wrapper implements ArrayAccess
     public function __construct($contentId = null, $locationId = null, array $extraData = [])
     {
         if (null === $contentId && null === $locationId) {
-            throw new Exception('NovaExtraWrapper: you must provide at least contentId or locationId');
+            throw new \Exception('NovaExtraWrapper: you must provide at least contentId or locationId');
         }
 
         $this->contentId = $contentId;

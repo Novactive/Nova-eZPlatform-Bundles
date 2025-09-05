@@ -14,17 +14,11 @@ class WorkflowEvent
     protected WorkflowInterface $workflow;
     protected bool $continue = true;
 
-    /**
-     * @param \AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowInterface $workflow
-     */
     public function __construct(WorkflowInterface $workflow)
     {
         $this->workflow = $workflow;
     }
 
-    /**
-     * @return \AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowInterface
-     */
     public function getWorkflow(): WorkflowInterface
     {
         return $this->workflow;

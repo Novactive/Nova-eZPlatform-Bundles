@@ -24,7 +24,6 @@ use Ibexa\Contracts\Core\Variation\VariationHandler;
 use Ibexa\Core\FieldType\Image\Value as ImageValue;
 use Ibexa\Core\MVC\Exception\SourceImageNotFoundException;
 use Imagine\Exception\RuntimeException;
-use InvalidArgumentException;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
@@ -34,7 +33,6 @@ use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use SplFileInfo;
 
 /**
  * Class AliasGenerator.
@@ -48,24 +46,24 @@ class ImageAliasGenerator implements VariationHandler
 {
     public const ALIAS_ORIGINAL = 'original';
 
-    /** @var \Psr\Log\LoggerInterface */
+    /** @var LoggerInterface */
     private $logger;
 
     /**
      * Loader used to retrieve the original image.
      * DataManager is not used to remain independent from ImagineBundle configuration.
      *
-     * @var \Liip\ImagineBundle\Binary\Loader\LoaderInterface
+     * @var LoaderInterface
      */
     private $dataLoader;
 
-    /** @var \Liip\ImagineBundle\Imagine\Filter\FilterManager */
+    /** @var FilterManager */
     private $filterManager;
 
-    /** @var \Novactive\EzEnhancedImageAsset\Imagine\Filter\FilterConfiguration */
+    /** @var Filter\FilterConfiguration */
     private $filterConfiguration;
 
-    /** @var \Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface */
+    /** @var ResolverInterface */
     private $ioResolver;
 
     /**
@@ -76,7 +74,7 @@ class ImageAliasGenerator implements VariationHandler
         FilterManager $filterManager,
         ResolverInterface $ioResolver,
         FilterConfiguration $filterConfiguration,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->dataLoader = $dataLoader;
         $this->filterManager = $filterManager;
@@ -90,14 +88,14 @@ class ImageAliasGenerator implements VariationHandler
      */
     public function getVariation(Field $field, VersionInfo $versionInfo, $variationName, array $parameters = [])
     {
-        /** @var \Ibexa\Core\FieldType\Image\Value $imageValue */
+        /** @var ImageValue $imageValue */
         $imageValue = $field->value;
         $fieldId = $field->id;
         $fieldDefIdentifier = $field->fieldDefIdentifier;
         if (!$this->supportsValue($imageValue)) {
             $message = "Value of Field with ID $fieldId ($fieldDefIdentifier) 
             cannot be used for generating an image variation.";
-            throw new InvalidArgumentException($message);
+            throw new \InvalidArgumentException($message);
         }
 
         $originalPath = $imageValue->id;
@@ -134,7 +132,7 @@ class ImageAliasGenerator implements VariationHandler
         }
 
         try {
-            $aliasInfo = new SplFileInfo(
+            $aliasInfo = new \SplFileInfo(
                 $this->ioResolver->resolve($originalPath, $variationName)
             );
         } catch (NotResolvableException $e) {
@@ -165,15 +163,15 @@ class ImageAliasGenerator implements VariationHandler
      * In that case, reference's filters are applied first, recursively (a reference may also have another reference).
      * Reference must be a valid variation name, configured in Ibexa or in LiipImagineBundle.
      *
-     * @return \Liip\ImagineBundle\Binary\BinaryInterface
+     * @return BinaryInterface
      */
     private function applyFilter(BinaryInterface $image, string $variationName, array $runtimeFiltersConfig = [])
     {
         $filterConfig = $this->filterConfiguration->get($variationName);
         // If the variation has a reference, we recursively call this method to apply reference's filters.
         if (
-            isset($filterConfig['reference']) &&
-            IORepositoryResolver::VARIATION_ORIGINAL !== $filterConfig['reference']
+            isset($filterConfig['reference'])
+            && IORepositoryResolver::VARIATION_ORIGINAL !== $filterConfig['reference']
         ) {
             $image = $this->applyFilter($image, $filterConfig['reference'], $runtimeFiltersConfig);
         }

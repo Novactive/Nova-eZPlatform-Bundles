@@ -23,11 +23,9 @@ use Novactive\EzMenuManager\MenuItem\MenuItemValue;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 use Psr\Cache\CacheException;
 use Psr\Cache\InvalidArgumentException;
-use RuntimeException;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Throwable;
 
 class ContentMenuItemType extends DefaultMenuItemType
 {
@@ -81,7 +79,7 @@ class ContentMenuItemType extends DefaultMenuItemType
     /**
      * @required
      */
-    public function setsiteAccess(siteAccess $siteAccess): void
+    public function setsiteAccess(SiteAccess $siteAccess): void
     {
         $this->siteAccess = $siteAccess;
     }
@@ -140,7 +138,7 @@ class ContentMenuItemType extends DefaultMenuItemType
             $link->setExtras($menuItemLinkInfos['extras']);
 
             return $link;
-        } catch (UnauthorizedException|Throwable $e) {
+        } catch (UnauthorizedException|\Throwable $e) {
             return null;
         }
     }
@@ -158,7 +156,7 @@ class ContentMenuItemType extends DefaultMenuItemType
         }
 
         if (!$menuItem instanceof MenuItem\ContentMenuItem) {
-            throw new RuntimeException(sprintf('%s only works with ContentMenuItem', __METHOD__));
+            throw new \RuntimeException(sprintf('%s only works with ContentMenuItem', __METHOD__));
         }
         $content = $this->contentService->loadContent($menuItem->getContentId());
         $location = $this->locationService->loadLocation($content->contentInfo->mainLocationId);

@@ -32,10 +32,10 @@ class Unhide extends ActionProvider
     {
         $content = $this->getContentForSignal($signal);
         if (
-            null === $content ||
-            !$content->contentInfo->published ||
-            null === $content->contentInfo->mainLocationId ||
-            $signal instanceof Signal\TrashService\TrashSignal
+            null === $content
+            || !$content->contentInfo->published
+            || null === $content->contentInfo->mainLocationId
+            || $signal instanceof Signal\TrashService\TrashSignal
         ) {
             return null;
         }

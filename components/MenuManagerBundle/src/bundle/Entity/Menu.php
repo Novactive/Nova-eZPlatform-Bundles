@@ -21,6 +21,7 @@ use Novactive\EzMenuManager\Traits\IdentityTrait;
  * Class Menu.
  *
  * @ORM\Entity()
+ *
  * @ORM\Table(name="menu_manager_menu")
  *
  * @package Novactive\EzMenuManagerBundle\Entity
@@ -50,6 +51,7 @@ class Menu
      *     cascade={"persist", "remove"},
      *     orphanRemoval=true
      *     )
+     *
      * @ORM\OrderBy({"position" = "ASC"})
      *
      * @var MenuItem[]|ArrayCollection
@@ -79,9 +81,6 @@ class Menu
         $this->remoteId = $remoteId ?? md5(uniqid(get_class($this), true));
     }
 
-    /**
-     * @return string
-     */
     public function getName(): ?string
     {
         return $this->name;
@@ -92,9 +91,6 @@ class Menu
         $this->name = $name;
     }
 
-    /**
-     * @return int
-     */
     public function getRootLocationId(): ?int
     {
         return $this->rootLocationId;
@@ -153,9 +149,6 @@ class Menu
         return $this->type;
     }
 
-    /**
-     * @param string $type
-     */
     public function setType(?string $type): void
     {
         $this->type = $type;

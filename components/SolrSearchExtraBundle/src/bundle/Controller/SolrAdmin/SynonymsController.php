@@ -47,6 +47,7 @@ class SynonymsController extends BaseController
 
     /**
      * @Route("/{setId}/{page}/{noLayout}", name="solr_admin.synonyms.index", requirements={"page" = "\d+"})
+     *
      * @Template("@ibexadesign/solr/admin/synonyms/list.html.Twig")
      *
      * @throws \Ibexa\Core\Base\Exceptions\NotFoundException

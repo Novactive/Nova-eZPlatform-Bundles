@@ -16,7 +16,6 @@ namespace Novactive\Bundle\eZMailingBundle\Security\Voter;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use LogicException;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList as MailingListEntity;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -72,7 +71,7 @@ class MailingList extends Voter
                 return $this->canEdit($subject, $user);
         }
 
-        throw new LogicException('This code should not be reached!');
+        throw new \LogicException('This code should not be reached!');
     }
 
     private function canView(MailingListEntity $subject, $user): bool

@@ -30,6 +30,7 @@ class DashboardController
 {
     /**
      * @Route("/", name="novaezmailing_dashboard_index")
+     *
      * @Template()
      *
      * @return Response

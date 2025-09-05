@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack;
 
 use JMS\Serializer\Annotation as Serializer;
-use RuntimeException;
 
 /**
  * Class Button.
@@ -32,6 +31,7 @@ class Button extends Action
      *              like a piece of data stored on your servers. Use even more sparingly than primary.
      *
      * @var string
+     *
      * @Serializer\Type("string")
      */
     private $style;
@@ -59,13 +59,10 @@ class Button extends Action
         return $this->style;
     }
 
-    /**
-     * @return Button
-     */
     public function setStyle(string $style): self
     {
         if (!\in_array($style, self::STYLES)) {
-            throw new RuntimeException("Style {$style} is not allowed.");
+            throw new \RuntimeException("Style {$style} is not allowed.");
         }
         $this->style = $style;
 

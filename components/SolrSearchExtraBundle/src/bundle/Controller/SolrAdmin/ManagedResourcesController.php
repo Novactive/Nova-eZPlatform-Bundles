@@ -32,6 +32,7 @@ class ManagedResourcesController extends BaseController
 
     /**
      * @Route("/", name="solr_admin.dashboard")
+     *
      * @Template("@ibexadesign/solr/admin/dashboard.html.Twig")
      *
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
@@ -47,9 +48,6 @@ class ManagedResourcesController extends BaseController
         ];
     }
 
-    /**
-     * @param $terms
-     */
     protected function getTermsData($terms): array
     {
         $ids = [];

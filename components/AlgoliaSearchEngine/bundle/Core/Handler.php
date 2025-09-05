@@ -5,6 +5,7 @@
  *
  * @author    Novactive
  * @copyright 2020 Novactive
+ *
  * @licence   "SEE FULL LICENSE OPTIONS IN LICENSE.md"
  *            Nova eZ Algolia Search Engine is tri-licensed, meaning you must choose one of three licenses to use:
  *                - Commercial License: a paid license, meant for commercial use. The default option for most users.
@@ -17,7 +18,6 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZAlgoliaSearchEngine\Core;
 
 use Algolia\AlgoliaSearch\SearchIndex;
-use Exception;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\LanguageService;
@@ -150,7 +150,7 @@ class Handler extends LegacyHandler
                         $this->reindex($language->languageCode, [$mainTranslation]);
                     }
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->logger->error($e->getMessage());
             }
         }
@@ -179,7 +179,7 @@ class Handler extends LegacyHandler
                         $this->reindex($language->languageCode, [$mainTranslation]);
                     }
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->logger->error($e->getMessage());
             }
         }
@@ -274,7 +274,7 @@ class Handler extends LegacyHandler
 
         try {
             $result = $this->contentSearchService->execute($query, 'content', $languageFilter);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
 
             return parent::findSingle($filter, $languageFilter);
@@ -298,7 +298,7 @@ class Handler extends LegacyHandler
     {
         try {
             return $this->contentSearchService->execute($query, 'content', $languageFilter);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
 
             return parent::findContent($query, $languageFilter);
@@ -313,7 +313,7 @@ class Handler extends LegacyHandler
 
         try {
             return $this->locationSearchService->execute($query, 'location', $languageFilter);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
 
             return parent::findLocations($query, $languageFilter);

@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle;
 
-use LogicException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -32,7 +31,7 @@ class NovaeZMailingBundle extends Bundle
             $extension = $this->createContainerExtension();
             if (null !== $extension) {
                 if (!$extension instanceof ExtensionInterface) {
-                    throw new LogicException(
+                    throw new \LogicException(
                         sprintf('Extension %s must implement '.ExtensionInterface::class.'.', \get_class($extension))
                     );
                 }

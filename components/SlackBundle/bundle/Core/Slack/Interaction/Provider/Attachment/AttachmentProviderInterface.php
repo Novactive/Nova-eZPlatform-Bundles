@@ -29,9 +29,6 @@ interface AttachmentProviderInterface
 
     public function getAttachment(Signal $signal): ?Attachment;
 
-    /**
-     * @param $alias
-     */
     public function supports($alias): bool;
 
     public function execute(InteractiveMessage $message): Attachment;

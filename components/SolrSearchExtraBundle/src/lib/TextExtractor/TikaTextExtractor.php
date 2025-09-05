@@ -6,7 +6,6 @@ namespace Novactive\EzSolrSearchExtra\TextExtractor;
 
 use Novactive\EzSolrSearchExtra\Tika\TikaClientInterface;
 use Psr\Log\LoggerInterface;
-use RuntimeException;
 
 /**
  * Class TikaTextExtractor.
@@ -39,7 +38,7 @@ class TikaTextExtractor implements TextExtractorInterface
             $plaintext = $this->tikaClient->getText($fileName);
 
             return preg_replace('([\x09]+)', ' ', (string) $plaintext);
-        } catch (RuntimeException $e) {
+        } catch (\RuntimeException $e) {
             $errorMsg = $e->getMessage();
             $this->logger->error("Error when converting file $fileName\n$errorMsg");
         }

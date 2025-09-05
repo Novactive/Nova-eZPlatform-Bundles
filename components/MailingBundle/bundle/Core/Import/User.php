@@ -15,10 +15,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Core\Import;
 
 use Carbon\Carbon;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
-use Generator;
 use Novactive\Bundle\eZMailingBundle\Core\DataHandler\UserImport;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
 use Novactive\Bundle\eZMailingBundle\Entity\Registration;
@@ -38,7 +35,7 @@ class User
         $this->entityManager = $entityManager;
     }
 
-    public function rowsIterator(UserImport $userImport): Generator
+    public function rowsIterator(UserImport $userImport): \Generator
     {
         $spreadsheet = IOFactory::load($userImport->getFile()->getPathname());
         $worksheet = $spreadsheet->getActiveSheet();
@@ -84,7 +81,7 @@ class User
         if (isset($cells[4])) {
             try {
                 $date = Carbon::createFromFormat('Y-m-d', (string) $cells[4]);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $date = Date::excelToDateTimeObject((string) $cells[4]);
             }
             $user->setBirthDate($date);
@@ -127,7 +124,7 @@ class User
             ->setUser($user)
             ->setMailingList($mailingList)
             ->setApproved(true)
-            ->setUpdated(new DateTime());
+            ->setUpdated(new \DateTime());
         $user->addRegistration($registration);
         $this->entityManager->persist($user);
         $this->entityManager->flush();

@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\eZLDAPAuthenticator\Authentication\Provider;
 
-use Exception;
 use Novactive\eZLDAPAuthenticator\Ldap\LdapConnection;
 use Novactive\eZLDAPAuthenticator\User\EzLdapUser;
 use Novactive\eZLDAPAuthenticator\User\Provider\EzLdapUserProvider;
@@ -60,7 +59,7 @@ class EzLdapAuthenticationProvider extends LdapBindAuthenticationProvider
         LdapInterface $ldap,
         string $dnString = '{username}',
         bool $hideUserNotFoundExceptions = true,
-        LdapConnection $ldapConnection = null
+        ?LdapConnection $ldapConnection = null
     ) {
         if ($ldapConnection) {
             $authConfig = $ldapConnection->getConfig('ldap_auth');
@@ -177,7 +176,7 @@ class EzLdapAuthenticationProvider extends LdapBindAuthenticationProvider
         if ($user instanceof EzLdapUser && $eZLdapUserProvider) {
             try {
                 $eZLdapUserProvider->checkEzUser($user);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->logger->critical($e->getMessage(), ['exception' => $e]);
                 throw new BadCredentialsException($e->getMessage());
             }

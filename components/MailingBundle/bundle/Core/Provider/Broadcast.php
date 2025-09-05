@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Core\Provider;
 
 use Carbon\Carbon;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZMailingBundle\Entity\Broadcast as BroadcastEntity;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
@@ -39,7 +38,7 @@ class Broadcast
             ->setMailing($mailing)
             ->setStarted(Carbon::now())
             ->setHtml($html)
-            ->setUpdated(new DateTime());
+            ->setUpdated(new \DateTime());
         $this->store($broadcast);
 
         return $broadcast;

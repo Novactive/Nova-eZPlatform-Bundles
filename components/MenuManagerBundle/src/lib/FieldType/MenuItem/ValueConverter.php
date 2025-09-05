@@ -39,9 +39,6 @@ class ValueConverter
         return $hash;
     }
 
-    /**
-     * @param $hash
-     */
     public function fromHash($hash): Value
     {
         if (!is_array($hash)) {

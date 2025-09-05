@@ -33,8 +33,6 @@ abstract class ActionProvider implements ActionProviderInterface
 
     /**
      * @required
-     *
-     * @return ActionProvider
      */
     public function setRepository(Repository $repository): self
     {

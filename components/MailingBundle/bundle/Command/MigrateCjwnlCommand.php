@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Command;
 
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
@@ -268,7 +267,7 @@ class MigrateCjwnlCommand extends Command
             if ($user_row['blacklisted']) {
                 $status = User::BLACKLISTED;
             }
-            $birthdate = empty($user_row['birthday']) ? null : new DateTime('2018-12-11');
+            $birthdate = empty($user_row['birthday']) ? null : new \DateTime('2018-12-11');
 
             // Registrations
             $sql = 'SELECT list_contentobject_id, approved FROM'.

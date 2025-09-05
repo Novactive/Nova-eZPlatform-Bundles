@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\DataFixtures;
 
 use Carbon\Carbon;
-use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -46,7 +45,7 @@ class CampaignFixtures extends Fixture implements DependentFixtureInterface
                 ->setSenderEmail($faker->email)
                 ->setReturnPathEmail($faker->email)
                 ->setSenderName($faker->name)
-                ->setUpdated(new DateTime())
+                ->setUpdated(new \DateTime())
                 ->setLocationId(2);
             // create MailingLists
             $nbDestinations = $faker->numberBetween(0, MailingListFixtures::FIXTURE_COUNT_MAILINGLIST);
@@ -92,7 +91,7 @@ class CampaignFixtures extends Fixture implements DependentFixtureInterface
                         ->setStarted($faker->dateTimeThisYear)
                         ->setEnded($endDate)
                         ->setHtml("Fixture {$i}{$k}{$l}")
-                        ->setUpdated(new DateTime());
+                        ->setUpdated(new \DateTime());
                     $mailing->addBroadcast($broadcast);
 
                     // create Stats Hit
@@ -103,7 +102,7 @@ class CampaignFixtures extends Fixture implements DependentFixtureInterface
                         $hit->setUserKey($key);
                         $hit->setUrl('-');
                         $hit->setCreated($faker->dateTimeThisYear)
-                            ->setUpdated(new DateTime());
+                            ->setUpdated(new \DateTime());
                         $hit->setBrowserName(
                             $faker->randomElement(['Chrome', 'Firefox', 'Safari', 'Internet Explorer'])
                         );
@@ -114,7 +113,7 @@ class CampaignFixtures extends Fixture implements DependentFixtureInterface
                         for ($n = 0; $n < $nbSubHits; ++$n) {
                             $hit = new StatHit();
                             $hit->setUserKey($key)
-                                ->setUpdated(new DateTime());
+                                ->setUpdated(new \DateTime());
                             $hit->setBrowserName(
                                 $faker->randomElement(['Chrome', 'Firefox', 'Safari', 'Internet Explorer'])
                             );

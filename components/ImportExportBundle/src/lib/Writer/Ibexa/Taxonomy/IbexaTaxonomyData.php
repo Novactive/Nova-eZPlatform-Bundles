@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Taxonomy;
 
-use DateTime;
-
 class IbexaTaxonomyData
 {
     protected string $identifier;
@@ -16,7 +14,7 @@ class IbexaTaxonomyData
     protected string $contentRemoteId;
     protected ?int $ownerId = null;
     protected ?int $sectionId = null;
-    protected int|null|DateTime $modificationDate = null;
+    protected int|\DateTime|null $modificationDate = null;
     protected string $mainLanguageCode = 'eng-GB';
 
     public function getIdentifier(): string
@@ -89,12 +87,12 @@ class IbexaTaxonomyData
         $this->sectionId = $sectionId;
     }
 
-    public function getModificationDate(): DateTime|int|null
+    public function getModificationDate(): \DateTime|int|null
     {
         return $this->modificationDate;
     }
 
-    public function setModificationDate(DateTime|int|null $modificationDate): void
+    public function setModificationDate(\DateTime|int|null $modificationDate): void
     {
         $this->modificationDate = $modificationDate;
     }

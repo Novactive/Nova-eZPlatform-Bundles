@@ -9,7 +9,6 @@ use AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorInterface;
 use AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorOptions;
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderInterface;
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderOptions;
-use Exception;
 
 class WorkflowExecutor
 {
@@ -21,7 +20,6 @@ class WorkflowExecutor
     }
 
     /**
-     * @param \AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowInterface             $workflow
      * @param array{reader?: ReaderOptions, processors?: array<mixed, ProcessorOptions>} $runtimeProcessConfiguration
      */
     public function __invoke(
@@ -40,12 +38,9 @@ class WorkflowExecutor
     }
 
     /**
-     * @param \AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowInterface             $workflow
      * @param array{reader?: ReaderOptions, processors?: array<mixed, ProcessorOptions>} $runtimeProcessConfiguration
      *
      * @throws \Exception
-     *
-     * @return \AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowExecutionConfiguration
      */
     protected function buildRunConfiguration(
         WorkflowInterface $workflow,
@@ -59,7 +54,7 @@ class WorkflowExecutor
             $runtimeProcessConfiguration['reader'] ?? null
         );
         if (!$reader instanceof ReaderInterface) {
-            throw new Exception('Reader not instance of '.ReaderInterface::class);
+            throw new \Exception('Reader not instance of '.ReaderInterface::class);
         }
         $executionConfiguration = new WorkflowExecutionConfiguration($reader);
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Monolog\Handler;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Job\JobRecord;
-use BadMethodCallException;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
 use Symfony\Component\Uid\Ulid;
@@ -130,6 +129,7 @@ class WorkflowHandler extends AbstractProcessingHandler
      * @return bool
      *
      * @psalm-param callable(Record, int): mixed $predicate
+     *
      * @phpstan-param Level|LevelName|LogLevel::* $level
      */
     public function hasRecordThatPasses(callable $predicate, $level)
@@ -180,6 +180,6 @@ class WorkflowHandler extends AbstractProcessingHandler
             }
         }
 
-        throw new BadMethodCallException('Call to undefined method '.get_class($this).'::'.$method.'()');
+        throw new \BadMethodCallException('Call to undefined method '.get_class($this).'::'.$method.'()');
     }
 }

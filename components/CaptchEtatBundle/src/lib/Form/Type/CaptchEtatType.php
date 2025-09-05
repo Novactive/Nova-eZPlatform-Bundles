@@ -39,17 +39,17 @@ class CaptchEtatType extends AbstractType implements TranslationContainerInterfa
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-                                    'constraints' => [
-                                        new CaptchEtatValidChallenge(),
-                                    ],
-                                    'mapped' => false,
-                                    'compound' => true,
-                                    'required' => true,
-                                    'error_bubbling' => false,
-                                    'attr' => [
-                                        'class' => 'captcha-widget-container',
-                                    ],
-                                ]);
+            'constraints' => [
+                new CaptchEtatValidChallenge(),
+            ],
+            'mapped' => false,
+            'compound' => true,
+            'required' => true,
+            'error_bubbling' => false,
+            'attr' => [
+                'class' => 'captcha-widget-container',
+            ],
+        ]);
     }
 
     public function getBlockPrefix()
@@ -65,8 +65,8 @@ class CaptchEtatType extends AbstractType implements TranslationContainerInterfa
     public static function getTranslationMessages()
     {
         return [
-            ( new Message('form.captcha.input_answer', 'messages') )->setDesc('Captcha answer'),
-            ( new Message('form.captcha.help', 'messages') )
+            (new Message('form.captcha.input_answer', 'messages'))->setDesc('Captcha answer'),
+            (new Message('form.captcha.help', 'messages'))
                 ->setDesc('To view a new code or listen to the code, use the buttons next to the image.'),
         ];
     }

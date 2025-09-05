@@ -33,8 +33,6 @@ class CustomFulltextFieldMapper extends CustomFieldMapper
 
     /**
      * Return index field type for the given $contentType.
-     *
-     * @return \Ibexa\Contracts\Core\Search\FieldType\TextField
      */
     private function getIndexFieldType(ContentType $contentType, string $fieldName = 'text'): FieldType\TextField
     {

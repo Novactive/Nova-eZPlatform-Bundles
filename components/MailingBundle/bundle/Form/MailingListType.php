@@ -57,7 +57,7 @@ class MailingListType extends AbstractType
             ->add('withApproval', CheckboxType::class, [
                 'required' => false,
                 'label' => 'mailinglisttype.buildform.withapproval',
-                ])
+            ])
             ->add(
                 'siteaccessLimit',
                 ChoiceType::class,

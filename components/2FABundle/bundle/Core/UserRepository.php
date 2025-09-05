@@ -14,8 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZ2FABundle\Core;
 
-use PDO;
-
 /**
  * @SuppressWarnings(PHPMD.UnusedLocalVariable)
  */
@@ -42,7 +40,7 @@ final class UserRepository
             ($this->queryExecutor)(
                 $query,
                 [$secret, $backupCodes, $userId],
-                [PDO::PARAM_STR, PDO::PARAM_STR, PDO::PARAM_INT]
+                [\PDO::PARAM_STR, \PDO::PARAM_STR, \PDO::PARAM_INT]
             );
         } else {
             $query = <<<QUERY
@@ -52,7 +50,7 @@ final class UserRepository
             ($this->queryExecutor)(
                 $query,
                 [$userId, $secret, $backupCodes],
-                [PDO::PARAM_INT, PDO::PARAM_STR, PDO::PARAM_STR]
+                [\PDO::PARAM_INT, \PDO::PARAM_STR, \PDO::PARAM_STR]
             );
         }
     }
@@ -63,7 +61,7 @@ final class UserRepository
                 DELETE FROM user_auth_secret
                 WHERE user_contentobject_id = ? 
             QUERY;
-        ($this->queryExecutor)($query, [$userId], [PDO::PARAM_INT]);
+        ($this->queryExecutor)($query, [$userId], [\PDO::PARAM_INT]);
     }
 
     public function deleteUserAuthSecretAndEmail(int $userId, ?string $prefix): void
@@ -75,7 +73,7 @@ final class UserRepository
                 SET {$emptySecret} backup_codes = '', email_authentication = 0, email_authentication_code = ''
                 WHERE user_contentobject_id = ? 
             QUERY;
-        ($this->queryExecutor)($query, [$userId], [PDO::PARAM_INT]);
+        ($this->queryExecutor)($query, [$userId], [\PDO::PARAM_INT]);
     }
 
     public function getUserAuthData(int $userId)
@@ -87,7 +85,7 @@ final class UserRepository
                 LIMIT 1
             QUERY;
 
-        return ($this->queryExecutor)($query, [$userId], [PDO::PARAM_INT])->fetchAssociative();
+        return ($this->queryExecutor)($query, [$userId], [\PDO::PARAM_INT])->fetchAssociative();
     }
 
     public function updateBackupCodes(int $userId, string $backupCodes): void
@@ -97,7 +95,7 @@ final class UserRepository
                 SET backup_codes = ?
                 WHERE user_contentobject_id = ? 
             QUERY;
-        ($this->queryExecutor)($query, [$backupCodes, $userId], [PDO::PARAM_STR, PDO::PARAM_INT]);
+        ($this->queryExecutor)($query, [$backupCodes, $userId], [\PDO::PARAM_STR, \PDO::PARAM_INT]);
     }
 
     public function insertUpdateEmailAuthentication(int $userId): void
@@ -108,7 +106,7 @@ final class UserRepository
                 SET email_authentication = 1
                 WHERE user_contentobject_id = ? 
             QUERY;
-            ($this->queryExecutor)($query, [$userId], [PDO::PARAM_INT]);
+            ($this->queryExecutor)($query, [$userId], [\PDO::PARAM_INT]);
         } else {
             $query = <<<QUERY
                 INSERT INTO user_auth_secret (user_contentobject_id, email_authentication) 
@@ -117,7 +115,7 @@ final class UserRepository
             ($this->queryExecutor)(
                 $query,
                 [$userId],
-                [PDO::PARAM_INT]
+                [\PDO::PARAM_INT]
             );
         }
     }
@@ -129,6 +127,6 @@ final class UserRepository
                 SET email_authentication_code = ?
                 WHERE user_contentobject_id = ? 
             QUERY;
-        ($this->queryExecutor)($query, [$authCode, $userId], [PDO::PARAM_STR, PDO::PARAM_INT]);
+        ($this->queryExecutor)($query, [$authCode, $userId], [\PDO::PARAM_STR, \PDO::PARAM_INT]);
     }
 }

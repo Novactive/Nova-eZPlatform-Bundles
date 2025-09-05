@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Component;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Monolog\WorkflowLoggerInterface;
-use InvalidArgumentException;
 
 abstract class AbstractComponent implements ComponentInterface
 {
@@ -23,14 +22,11 @@ abstract class AbstractComponent implements ComponentInterface
         return ComponentOptions::class;
     }
 
-    /**
-     * @param \AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentOptions $options
-     */
     public function setOptions(ComponentOptions $options): void
     {
         $requiredOptionType = static::getOptionsType();
         if (!$options instanceof $requiredOptionType) {
-            throw new InvalidArgumentException('Options must be an instance of '.$requiredOptionType);
+            throw new \InvalidArgumentException('Options must be an instance of '.$requiredOptionType);
         }
         $this->options = $options;
     }

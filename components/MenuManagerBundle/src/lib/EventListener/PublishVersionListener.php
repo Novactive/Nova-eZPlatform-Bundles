@@ -74,7 +74,7 @@ class PublishVersionListener implements EventSubscriberInterface
 
             $currentMenuItems = $this->em->getRepository(MenuItem::class)->findBy(
                 [
-                    'url' => MenuItem\ContentMenuItem::URL_PREFIX.$content->versionInfo->contentInfo->id,
+                    'url' => ContentMenuItem::URL_PREFIX.$content->versionInfo->contentInfo->id,
                 ]
             );
             if (!empty($currentMenuItems)) {

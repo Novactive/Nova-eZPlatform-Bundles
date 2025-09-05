@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\CaptchEtat\Logger;
 
-use Exception;
 use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
 use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException;
 use Psr\Log\LoggerInterface;
-use RuntimeException;
 use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
@@ -25,7 +23,7 @@ class CaptchEtatLogger implements LoggerInterface
         $this->innerLogger = $innerLogger;
     }
 
-    public function logException(Exception $exception): void
+    public function logException(\Exception $exception): void
     {
         $message = sprintf(
             'Uncaught PHP Exception %s: "%s" at %s line %s',
@@ -43,7 +41,7 @@ class CaptchEtatLogger implements LoggerInterface
         }
     }
 
-    public function logHttpException(RuntimeException $httpException, array $requestLog): void
+    public function logHttpException(\RuntimeException $httpException, array $requestLog): void
     {
         $response = $httpException->getResponse();
         $content = $response->getContent(false);

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content;
 
-use DateTime;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 
 class IbexaContentData
@@ -18,7 +17,7 @@ class IbexaContentData
     /** @var array<string|int, int|string|Location> */
     protected array $parentLocationIdList = [2];
     protected ?int $sectionId = null;
-    protected int|null|DateTime $modificationDate = null;
+    protected int|\DateTime|null $modificationDate = null;
 
     public function getContentRemoteId(): string
     {
@@ -102,12 +101,12 @@ class IbexaContentData
         $this->sectionId = $sectionId;
     }
 
-    public function getModificationDate(): DateTime|int|null
+    public function getModificationDate(): \DateTime|int|null
     {
         return $this->modificationDate;
     }
 
-    public function setModificationDate(DateTime|int|null $modificationDate): void
+    public function setModificationDate(\DateTime|int|null $modificationDate): void
     {
         $this->modificationDate = $modificationDate;
     }

@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\eZLDAPAuthenticator\User\Provider;
 
-use Exception;
 use eZ\Publish\API\Repository\Values\User\User as EzApiUser;
 use Novactive\eZLDAPAuthenticator\User\Converter\LdapEntryConverter;
 use Novactive\eZLDAPAuthenticator\User\EzLdapUser;
@@ -112,7 +111,7 @@ class EzLdapUserProvider extends LdapUserProvider
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function checkEzUser(EzLdapUser $ezLdapUser): EzApiUser
     {
@@ -134,7 +133,7 @@ class EzLdapUserProvider extends LdapUserProvider
     /**
      * @param string $username
      *
-     * @throws Exception
+     * @throws \Exception
      *
      * @return EzLdapUser|\Symfony\Component\Security\Core\User\User
      */

@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\File;
 
-use Countable;
-use SeekableIterator;
-
-class FileReadIterator implements SeekableIterator, Countable
+class FileReadIterator implements \SeekableIterator, \Countable
 {
     /** @var resource */
     protected $stream;

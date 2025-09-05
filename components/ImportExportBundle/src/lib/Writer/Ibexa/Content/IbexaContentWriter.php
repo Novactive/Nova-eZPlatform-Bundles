@@ -43,11 +43,11 @@ class IbexaContentWriter extends AbstractWriter implements TranslationContainerI
     /**
      * {@inheritDoc}
      *
-     * @param \AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentData $mappedItem
+     * @param IbexaContentData $mappedItem
      */
     protected function writeItem($item, $mappedItem)
     {
-        /** @var \AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentWriterOptions $options */
+        /** @var IbexaContentWriterOptions $options */
         $options = $this->getOptions();
 
         $content = $this->repository->sudo(function (Repository $repository) use ($options, $mappedItem) {
@@ -85,7 +85,7 @@ class IbexaContentWriter extends AbstractWriter implements TranslationContainerI
 
     public static function getTranslationMessages(): array
     {
-        return [( new Message('writer.ibexa.content.name', 'import_export') )->setDesc('Ibexa content writer')];
+        return [(new Message('writer.ibexa.content.name', 'import_export'))->setDesc('Ibexa content writer')];
     }
 
     public static function getResultTemplate(): ?string

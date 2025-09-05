@@ -32,9 +32,9 @@ class Publish extends ActionProvider
     {
         $content = $this->getContentForSignal($signal);
         if (
-            null === $content || $content->contentInfo->published ||
-            $signal instanceof Signal\TrashService\TrashSignal ||
-            $signal instanceof Signal\TrashService\RecoverSignal
+            null === $content || $content->contentInfo->published
+            || $signal instanceof Signal\TrashService\TrashSignal
+            || $signal instanceof Signal\TrashService\RecoverSignal
         ) {
             return null;
         }

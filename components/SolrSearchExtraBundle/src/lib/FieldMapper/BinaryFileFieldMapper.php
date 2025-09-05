@@ -101,8 +101,6 @@ class BinaryFileFieldMapper
 
     /**
      * Return index field type for the given $contentType.
-     *
-     * @return \Ibexa\Contracts\Core\Search\FieldType\TextField
      */
     private function getIndexFieldType(SPIContentType $contentType): SPISearchFieldType\TextField
     {

@@ -16,7 +16,6 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZAccelerator\Core;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use RuntimeException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
@@ -74,7 +73,7 @@ final class BusDispatcher
             $bus = $this->buses[$this->configResolver->getParameter('default_bus', 'nova_ezaccelerator')] ?? null;
             if (null === $bus) {
                 $exceptionMessage = '[eZ Accelerator] Default Bus %s does not exist.';
-                throw new RuntimeException(sprintf($exceptionMessage, $defaultBusName));
+                throw new \RuntimeException(sprintf($exceptionMessage, $defaultBusName));
             }
         }
 
@@ -82,7 +81,7 @@ final class BusDispatcher
             $bus = $this->buses[$config['bus']] ?? null;
             if (null === $bus) {
                 $exceptionMessage = '[eZ Accelerator] Bus %s for message type %s does not exist.';
-                throw new RuntimeException(sprintf($exceptionMessage, $config['bus'], $config['message']));
+                throw new \RuntimeException(sprintf($exceptionMessage, $config['bus'], $config['message']));
             }
         }
 

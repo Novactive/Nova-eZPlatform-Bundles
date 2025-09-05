@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAssetBundle\DependencyInjection;
 
-use Exception;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -33,12 +32,12 @@ class EzEnhancedImageAssetExtension extends Extension implements PrependExtensio
     /**
      * {@inheritDoc}
      *
-     * @throws Exception
-     * @throws Exception
-     * @throws Exception
-     * @throws Exception
-     * @throws Exception
-     * @throws Exception
+     * @throws \Exception
+     * @throws \Exception
+     * @throws \Exception
+     * @throws \Exception
+     * @throws \Exception
+     * @throws \Exception
      */
     public function load(array $configs, ContainerBuilder $container): void
     {

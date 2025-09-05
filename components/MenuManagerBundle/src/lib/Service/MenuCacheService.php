@@ -43,8 +43,6 @@ class MenuCacheService
     }
 
     /**
-     * @param $key
-     *
      * @throws \Psr\Cache\InvalidArgumentException
      *
      * @return CacheItem

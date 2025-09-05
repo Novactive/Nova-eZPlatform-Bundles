@@ -9,23 +9,22 @@ use Ibexa\Contracts\Solr\ResultExtractor\AggregationResultExtractor;
 use Novactive\EzSolrSearchExtra\ResultExtractor\AggregationKeyMapper\AbstractRawTermAggregationKeyMapper;
 use Novactive\EzSolrSearchExtra\ResultExtractor\AggregationKeyMapper\RawTermAggregationKeyMapper;
 use Novactive\EzSolrSearchExtra\Search\AggregationResult\RawTermAggregationResultEntry;
-use stdClass;
 
 class RawTermAggregationResultExtractor implements AggregationResultExtractor
 {
-    /** @var \Novactive\EzSolrSearchExtra\ResultExtractor\AggregationKeyMapper\AbstractRawTermAggregationKeyMapper */
+    /** @var AbstractRawTermAggregationKeyMapper */
     private $keyMapper;
 
     /** @var string */
     private $aggregationClass;
 
-    /** @var \Ibexa\Contracts\Solr\ResultExtractor\AggregationResultExtractor */
+    /** @var AggregationResultExtractor */
     protected $aggregationResultExtractor;
 
     public function __construct(
         string $aggregationClass,
         AggregationResultExtractor $aggregationResultExtractor,
-        AbstractRawTermAggregationKeyMapper $keyMapper = null
+        ?AbstractRawTermAggregationKeyMapper $keyMapper = null
     ) {
         if (null === $keyMapper) {
             $keyMapper = new RawTermAggregationKeyMapper();
@@ -41,7 +40,7 @@ class RawTermAggregationResultExtractor implements AggregationResultExtractor
         return $aggregation instanceof $this->aggregationClass;
     }
 
-    public function extract(Aggregation $aggregation, array $languageFilter, stdClass $data): AggregationResult
+    public function extract(Aggregation $aggregation, array $languageFilter, \stdClass $data): AggregationResult
     {
         $entries = [];
         if (isset($data->buckets)) {
@@ -82,7 +81,7 @@ class RawTermAggregationResultExtractor implements AggregationResultExtractor
         return new TermAggregationResult($aggregation->getName(), $entries);
     }
 
-    private function getKeys(stdClass $data): array
+    private function getKeys(\stdClass $data): array
     {
         $keys = [];
         foreach ($data->buckets as $bucket) {

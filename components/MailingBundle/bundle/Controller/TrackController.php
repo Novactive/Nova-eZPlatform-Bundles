@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller;
 
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZMailingBundle\Core\Utils\Browser;
 use Novactive\Bundle\eZMailingBundle\Entity\Broadcast;
@@ -52,7 +51,7 @@ class TrackController
             ->setUserKey($salt)
             ->setUrl($decodedUrl)
             ->setBroadcast($broadcast)
-            ->setUpdated(new DateTime());
+            ->setUpdated(new \DateTime());
         $entityManager->persist($stat);
         $entityManager->flush();
 
@@ -77,7 +76,7 @@ class TrackController
             ->setUserKey($salt)
             ->setUrl('-')
             ->setBroadcast($broadcast)
-            ->setUpdated(new DateTime());
+            ->setUpdated(new \DateTime());
         $entityManager->persist($stat);
         $entityManager->flush();
 

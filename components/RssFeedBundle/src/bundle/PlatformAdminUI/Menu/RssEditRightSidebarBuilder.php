@@ -30,8 +30,8 @@ class RssEditRightSidebarBuilder extends AbstractBuilder implements TranslationC
     public static function getTranslationMessages(): array
     {
         return [
-            ( new Message(self::ITEM__EDIT, 'menu') )->setDesc('Publish'),
-            ( new Message(self::ITEM__CANCEL, 'menu') )->setDesc('Discard changes'),
+            (new Message(self::ITEM__EDIT, 'menu'))->setDesc('Publish'),
+            (new Message(self::ITEM__CANCEL, 'menu'))->setDesc('Discard changes'),
         ];
     }
 

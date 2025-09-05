@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content;
 
-use DateTime;
-use Exception;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 
@@ -27,9 +25,9 @@ class IbexaContentCreator extends AbstractIbexaContentHandler
         array $parentLocationIdList,
         array $fieldsByLanguages,
         string $remoteId,
-        int $ownerId = null,
+        ?int $ownerId = null,
         string $languageCode = 'eng-GB',
-        int $sectionId = null,
+        ?int $sectionId = null,
         $modificationDate = null,
         bool $hidden = false
     ): Content {
@@ -45,9 +43,9 @@ class IbexaContentCreator extends AbstractIbexaContentHandler
         $contentCreateStruct->remoteId = $remoteId;
         $contentCreateStruct->ownerId = $ownerId;
         if (null !== $modificationDate) {
-            $contentCreateStruct->modificationDate = $modificationDate instanceof DateTime ?
+            $contentCreateStruct->modificationDate = $modificationDate instanceof \DateTime ?
                 $modificationDate :
-                DateTime::createFromFormat('U', (string) $modificationDate);
+                \DateTime::createFromFormat('U', (string) $modificationDate);
         }
 
         if ($sectionId) {
@@ -61,7 +59,7 @@ class IbexaContentCreator extends AbstractIbexaContentHandler
         $locationCreateStructs = [];
         foreach ($parentLocationIdList as $locationRemoteId => $parentLocationId) {
             if (empty($parentLocationId)) {
-                throw new Exception('Parent location id cannot be empty');
+                throw new \Exception('Parent location id cannot be empty');
             }
             if ($parentLocationId instanceof Location) {
                 $parentLocationId = $parentLocationId->id;

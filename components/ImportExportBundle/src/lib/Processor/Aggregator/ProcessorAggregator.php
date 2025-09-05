@@ -9,7 +9,6 @@ use AlmaviaCX\Bundle\IbexaImportExport\Processor\AbstractProcessor;
 use AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorInterface;
 use JMS\TranslationBundle\Annotation\Desc;
 use Symfony\Component\Translation\TranslatableMessage;
-use Throwable;
 
 class ProcessorAggregator extends AbstractProcessor implements ProcessorInterface
 {
@@ -26,7 +25,7 @@ class ProcessorAggregator extends AbstractProcessor implements ProcessorInterfac
                     return;
                 }
             }
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             if ($this->getOption('errorBubbling', true)) {
                 throw $e;
             }

@@ -16,7 +16,6 @@ namespace Novactive\EzEnhancedImageAsset\Imagine\PlaceholderProvider;
 
 use Ibexa\Bundle\Core\Imagine\PlaceholderProvider;
 use Ibexa\Core\FieldType\Image\Value as ImageValue;
-use RuntimeException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RemoteProvider implements PlaceholderProvider
@@ -46,7 +45,7 @@ class RemoteProvider implements PlaceholderProvider
 
             if (false === curl_exec($handler)) {
                 $msg = "Unable to download placeholder for {$value->id} ($placeholderUrl): ".curl_error($handler);
-                throw new RuntimeException($msg);
+                throw new \RuntimeException($msg);
             }
         } finally {
             curl_close($handler);

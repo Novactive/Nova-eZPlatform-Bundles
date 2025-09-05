@@ -8,9 +8,6 @@ class ComponentBuilder
 {
     protected ComponentRegistry $componentRegistry;
 
-    /**
-     * @param \AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentRegistry $componentRegistry
-     */
     public function __construct(ComponentRegistry $componentRegistry)
     {
         $this->componentRegistry = $componentRegistry;

@@ -12,20 +12,20 @@ use Ibexa\Core\FieldType\BinaryFile\Value as BinaryFileValue;
 
 class Mapper
 {
-    /** @var \Ibexa\Contracts\Core\Repository\ContentService */
+    /** @var ContentService */
     private $contentService;
 
-    /** @var \Ibexa\Contracts\Core\Repository\LocationService */
+    /** @var LocationService */
     private $locationService;
 
-    /** @var \Ibexa\Contracts\Core\Repository\ContentTypeService */
+    /** @var ContentTypeService */
     private $contentTypeService;
 
-    /** @var \Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface */
+    /** @var ConfigResolverInterface */
     private $configResolver;
 
     /** @var int */
-    private $contentTypeId = null;
+    private $contentTypeId;
 
     public function __construct(
         ContentService $contentService,

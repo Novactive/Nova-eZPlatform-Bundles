@@ -13,8 +13,8 @@ abstract class WriterOptionsFormType extends ComponentOptionsFormType
     {
         parent::configureOptions($resolver);
         $resolver->setDefaults([
-                                    'data_class' => AbstractWriter::getOptionsType(),
-                                    'translation_domain' => 'forms',
-                                ]);
+            'data_class' => AbstractWriter::getOptionsType(),
+            'translation_domain' => 'forms',
+        ]);
     }
 }

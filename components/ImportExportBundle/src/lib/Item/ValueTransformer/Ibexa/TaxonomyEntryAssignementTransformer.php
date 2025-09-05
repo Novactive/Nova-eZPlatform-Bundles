@@ -14,7 +14,7 @@ class TaxonomyEntryAssignementTransformer extends AbstractItemValueTransformer
     /**
      * @param TaxonomyEntry|TaxonomyEntry[] $value
      *
-     * @return \Ibexa\Taxonomy\FieldType\TaxonomyEntryAssignment\Value
+     * @return Value
      */
     public function transform($value, array $options = [])
     {

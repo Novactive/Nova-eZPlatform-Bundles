@@ -22,9 +22,6 @@ use Symfony\Component\Routing\RouterInterface;
 
 class Tracking implements ModifierInterface
 {
-    /**
-     * @var
-     */
     private $router;
 
     public function __construct(RouterInterface $router)

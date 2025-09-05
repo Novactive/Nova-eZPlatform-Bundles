@@ -43,11 +43,11 @@ class IbexaTaxonomyWriter extends AbstractWriter implements TranslationContainer
     /**
      * {@inheritDoc}
      *
-     * @param \AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Taxonomy\IbexaTaxonomyData $mappedItem
+     * @param IbexaTaxonomyData $mappedItem
      */
     protected function writeItem($item, $mappedItem)
     {
-        /** @var \AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Taxonomy\IbexaTaxonomyWriterOptions $options */
+        /** @var IbexaTaxonomyWriterOptions $options */
         $options = $this->getOptions();
 
         /** @var \Ibexa\Contracts\Taxonomy\Value\TaxonomyEntry $taxonomyEntry */
@@ -86,7 +86,7 @@ class IbexaTaxonomyWriter extends AbstractWriter implements TranslationContainer
 
     public static function getTranslationMessages(): array
     {
-        return [( new Message('writer.ibexa.taxonomy.name', 'import_export') )->setDesc('Ibexa taxonomy writer')];
+        return [(new Message('writer.ibexa.taxonomy.name', 'import_export'))->setDesc('Ibexa taxonomy writer')];
     }
 
     public static function getResultTemplate(): ?string

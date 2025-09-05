@@ -26,6 +26,7 @@ class Option
      * across, you guessed it, form factors.
      *
      * @var string
+     *
      * @Serializer\Type("string<translatable>")
      */
     private $text;
@@ -36,6 +37,7 @@ class Option
      * to only 2000 characters.
      *
      * @var string
+     *
      * @Serializer\Type("string")
      */
     private $value;
@@ -44,6 +46,7 @@ class Option
      * A user-facing string that provides more details about this option. Also should contain up to 30 characters.
      *
      * @var string
+     *
      * @Serializer\Type("string")
      */
     private $description;
@@ -62,9 +65,6 @@ class Option
         return $this->text;
     }
 
-    /**
-     * @return Option
-     */
     public function setText(string $text): self
     {
         $this->text = $text;
@@ -77,9 +77,6 @@ class Option
         return $this->value;
     }
 
-    /**
-     * @return Option
-     */
     public function setValue(string $value): self
     {
         $this->value = $value;
@@ -92,9 +89,6 @@ class Option
         return $this->description;
     }
 
-    /**
-     * @return Option
-     */
     public function setDescription(string $description): self
     {
         $this->description = $description;

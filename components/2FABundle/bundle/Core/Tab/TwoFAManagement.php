@@ -77,8 +77,8 @@ final class TwoFAManagement extends AbstractTab implements OrderedTabInterface, 
         /* @var ContentType $contentType */
         $contentType = $parameters['contentType'];
 
-        return 'user' === $contentType->identifier &&
-               $this->permissionResolver->hasAccess('2fa_management', 'all_functions');
+        return 'user' === $contentType->identifier
+               && $this->permissionResolver->hasAccess('2fa_management', 'all_functions');
     }
 
     public function renderView(array $parameters): string

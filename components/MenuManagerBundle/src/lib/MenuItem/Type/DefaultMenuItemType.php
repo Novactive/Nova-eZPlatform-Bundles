@@ -107,8 +107,6 @@ class DefaultMenuItemType extends AbstractMenuItemType
     }
 
     /**
-     * @param $id
-     *
      * @throws \ReflectionException
      *
      * @return MenuItem|object|null

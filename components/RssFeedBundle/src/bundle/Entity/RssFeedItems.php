@@ -19,6 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  * RssFeedsItems.
  *
  * @ORM\Table(name="rss_feed_items")
+ *
  * @ORM\Entity(repositoryClass="Novactive\EzRssFeedBundle\Repository\RssFeedsItemsRepository")
  */
 class RssFeedItems
@@ -27,7 +28,9 @@ class RssFeedItems
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
@@ -47,13 +50,15 @@ class RssFeedItems
     private $contentTypeId;
 
     /**
-     * @var DateTime
+     * @var \DateTime
+     *
      * @ORM\Column(name="modified_at", type="datetime", nullable=true)
      */
     private $modifiedAt;
 
     /**
-     * @var DateTime
+     * @var \DateTime
+     *
      * @ORM\Column(name="created_at", type="datetime", nullable=true)
      */
     private $createdAt;
@@ -97,6 +102,7 @@ class RssFeedItems
      * @ORM\ManyToOne(targetEntity="Novactive\EzRssFeedBundle\Entity\RssFeeds",
      *     inversedBy="feedItems",
      *     cascade={"persist"})
+     *
      * @ORM\JoinColumn(name="rss_feeds_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      */
     private $rssFeeds;
@@ -106,8 +112,8 @@ class RssFeedItems
      */
     public function __construct()
     {
-        $this->createdAt = new DateTime();
-        $this->modifiedAt = new DateTime();
+        $this->createdAt = new \DateTime();
+        $this->modifiedAt = new \DateTime();
     }
 
     public function getId(): int
@@ -115,17 +121,17 @@ class RssFeedItems
         return $this->id;
     }
 
-    public function getModifiedAt(): ?DateTime
+    public function getModifiedAt(): ?\DateTime
     {
         return $this->modifiedAt;
     }
 
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
-    public function setModifiedAt(DateTime $modifiedAt): self
+    public function setModifiedAt(\DateTime $modifiedAt): self
     {
         $this->modifiedAt = $modifiedAt;
 
@@ -137,7 +143,7 @@ class RssFeedItems
         return $this->rssFeeds;
     }
 
-    public function setRssFeeds(RssFeeds $rssFeeds = null): self
+    public function setRssFeeds(?RssFeeds $rssFeeds = null): self
     {
         $this->rssFeeds = $rssFeeds;
 

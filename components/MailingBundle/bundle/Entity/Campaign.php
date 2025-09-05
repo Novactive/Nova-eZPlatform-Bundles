@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Entity;
 
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -26,6 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="novaezmailing_campaign")
  *
  * @ORM\Entity(repositoryClass="Novactive\Bundle\eZMailingBundle\Repository\Campaign")
+ *
  * @ORM\EntityListeners({"Novactive\Bundle\eZMailingBundle\Listener\EntityContentLink"})
  */
 class Campaign implements eZ\ContentInterface
@@ -36,62 +36,81 @@ class Campaign implements eZ\ContentInterface
 
     /**
      * @var int
+     *
      * @ORM\Column(name="CAMP_id", type="bigint", nullable=false)
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
      * @var string
+     *
      * @Assert\NotBlank()
+     *
      * @ORM\Column(name="CAMP_sender_name", type="string", length=255, nullable=false)
      */
     private $senderName;
 
     /**
      * @var string
+     *
      * @Assert\NotBlank()
+     *
      * @Assert\Email()
+     *
      * @ORM\Column(name="CAMP_sender_email", type="string", length=255, nullable=false)
      */
     private $senderEmail;
 
     /**
      * @var string
+     *
      * @Assert\NotBlank()
+     *
      * @Assert\Email()
+     *
      * @ORM\Column(name="CAMP_report_email", type="string", length=255, nullable=false)
      */
     private $reportEmail;
 
     /**
      * @var string
+     *
      * @Assert\NotBlank()
+     *
      * @Assert\Email()
+     *
      * @ORM\Column(name="CAMP_return_path_email", type="string", length=255, nullable=false)
      */
     private $returnPathEmail;
 
     /**
      * @var array
+     *
      * @ORM\Column(name="CAMP_siteaccess_limit", type="array", nullable=true)
      */
     private $siteaccessLimit;
 
     /**
      * @var MailingList[]
+     *
      * @ORM\ManyToMany(targetEntity="Novactive\Bundle\eZMailingBundle\Entity\MailingList", inversedBy="campaigns")
+     *
      * @ORM\JoinTable(name="novaezmailing_campaign_mailinglists_destination",
      *      joinColumns={@ORM\JoinColumn(name="ML_id", referencedColumnName="CAMP_id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="CAMP_id", referencedColumnName="ML_id")}
      *      )
+     *
      * @ORM\OrderBy({"created" = "ASC"})
      */
     private $mailingLists;
 
     /**
      * @var Mailing[]
+     *
      * @ORM\OneToMany(targetEntity="Novactive\Bundle\eZMailingBundle\Entity\Mailing", mappedBy="campaign",
      *                                                                                cascade={"persist","remove"})
      */
@@ -101,7 +120,7 @@ class Campaign implements eZ\ContentInterface
     {
         $this->mailingLists = new ArrayCollection();
         $this->mailings = new ArrayCollection();
-        $this->created = new DateTime();
+        $this->created = new \DateTime();
         $this->siteaccessLimit = [];
     }
 

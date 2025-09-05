@@ -30,9 +30,6 @@ interface ActionProviderInterface
 
     public function getAction(Signal $signal, int $index): ?Action;
 
-    /**
-     * @param $alias
-     */
     public function supports($alias): bool;
 
     public function execute(InteractiveMessage $message): Attachment;

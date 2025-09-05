@@ -9,13 +9,11 @@ use AlmaviaCX\Bundle\IbexaImportExport\Exception\SourceResolutionException;
 use AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\ItemValueTransformerRegistry;
 use AlmaviaCX\Bundle\IbexaImportExport\Reference\Reference;
 use AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag;
-use DOMNode;
 use Symfony\Component\PropertyAccess\Exception\NoSuchIndexException;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\PropertyAccess\PropertyPath;
-use Throwable;
 
 class SourceResolver
 {
@@ -90,13 +88,12 @@ class SourceResolver
      */
     private function getPropertyAccessor($objectOrArray): PropertyAccessorInterface
     {
-        return $objectOrArray instanceof DOMNode ?
+        return $objectOrArray instanceof \DOMNode ?
             new XpathPropertyAccessor() :
             $this->defaultPropertyAccessor;
     }
 
     /**
-     * @param              $source
      * @param object|array $objectOrArray
      */
     protected function getSourceValue($source, $objectOrArray)
@@ -118,7 +115,7 @@ class SourceResolver
 
                 foreach ($source->getTransformers() as $transformerInfos) {
                     if (is_array($transformerInfos)) {
-                        [ $transformerType, $transformerOptions ] = $transformerInfos;
+                        [$transformerType, $transformerOptions] = $transformerInfos;
                     } else {
                         $transformerType = $transformerInfos;
                         $transformerOptions = [];
@@ -131,7 +128,7 @@ class SourceResolver
             }
 
             return $this->getPropertyValue($objectOrArray, $source);
-        } catch (Throwable $exception) {
+        } catch (\Throwable $exception) {
             throw new SourceResolutionException($source, $exception);
         }
     }

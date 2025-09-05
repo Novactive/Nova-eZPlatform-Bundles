@@ -12,8 +12,6 @@
 
 namespace Novactive\EzMenuManager\Exception;
 
-use Exception;
-
-class MenuItemTypeNotFoundException extends Exception
+class MenuItemTypeNotFoundException extends \Exception
 {
 }

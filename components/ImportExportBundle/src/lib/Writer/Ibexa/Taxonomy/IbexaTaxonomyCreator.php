@@ -45,9 +45,9 @@ class IbexaTaxonomyCreator
         TaxonomyEntry $parent,
         array $names,
         string $remoteId,
-        int $ownerId = null,
+        ?int $ownerId = null,
         string $mainLanguageCode = 'eng-GB',
-        int $sectionId = null,
+        ?int $sectionId = null,
         $modificationDate = null,
         bool $hidden = false
     ): TaxonomyEntry {

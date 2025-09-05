@@ -6,8 +6,5 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Item\Iterator;
 
 interface IteratorItemTransformerInterface
 {
-    /**
-     * @param $item
-     */
     public function __invoke($item);
 }

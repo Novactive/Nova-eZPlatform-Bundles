@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace Novactive\eZPlatform\Bundles\Command;
 
 use Novactive\eZPlatform\Bundles\Core\Collection\Branches;
-use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
@@ -33,7 +32,7 @@ trait AskValidLocaleBranch
         $question->setValidator(
             function ($answer) use ($availableBranches) {
                 if (!\is_string($answer) || !\in_array($answer, $availableBranches)) {
-                    throw new RuntimeException('This branch does not exist locally. Do you have it?');
+                    throw new \RuntimeException('This branch does not exist locally. Do you have it?');
                 }
 
                 return $answer;

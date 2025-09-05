@@ -25,7 +25,7 @@ class SynonymsService
 
     /**
      * @throws \Exception
-     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
+     * @throws NotFoundException
      *
      * @return SynonymsMap[]
      */
@@ -76,7 +76,7 @@ class SynonymsService
     }
 
     /**
-     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
+     * @throws NotFoundException
      * @throws \Exception
      * @throws \Exception
      */
@@ -107,7 +107,7 @@ class SynonymsService
     }
 
     /**
-     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
+     * @throws NotFoundException
      * @throws \Exception
      * @throws \Exception
      */

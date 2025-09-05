@@ -32,7 +32,7 @@ class CsvReader extends AbstractFileReader implements TranslationContainerInterf
      */
     public function __invoke(): ReaderIteratorInterface
     {
-        /** @var \AlmaviaCX\Bundle\IbexaImportExport\Reader\Csv\CsvReaderOptions $options */
+        /** @var CsvReaderOptions $options */
         $options = $this->getOptions();
 
         $headerRowNumber = $options->headerRowNumber;
@@ -90,7 +90,7 @@ class CsvReader extends AbstractFileReader implements TranslationContainerInterf
 
     public static function getTranslationMessages(): array
     {
-        return [( new Message('reader.csv.name', 'import_export') )->setDesc('CSV Reader')];
+        return [(new Message('reader.csv.name', 'import_export'))->setDesc('CSV Reader')];
     }
 
     public static function getOptionsFormType(): ?string

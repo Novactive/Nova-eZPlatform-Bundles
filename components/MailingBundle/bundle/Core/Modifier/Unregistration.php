@@ -21,9 +21,6 @@ use Symfony\Component\Routing\RouterInterface;
 
 class Unregistration
 {
-    /**
-     * @var
-     */
     private $router;
 
     public function __construct(RouterInterface $router)

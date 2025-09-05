@@ -24,13 +24,11 @@ class IbexaContentImporter
     }
 
     /**
-     * @param \AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentData $contentData
-     *
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\BadStateException
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\ContentFieldValidationException
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\ContentValidationException
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
-     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException
+     * @throws NotFoundException
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException
      *
      * @return \Ibexa\Contracts\Core\Repository\Values\Content\Content

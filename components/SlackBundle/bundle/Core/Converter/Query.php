@@ -23,7 +23,6 @@ use QueryTranslator\Languages\Galach\Tokenizer;
 use QueryTranslator\Languages\Galach\Values\Node as VNode;
 use QueryTranslator\Languages\Galach\Values\Token as VToken;
 use QueryTranslator\Values\Node;
-use RuntimeException;
 
 /**
  * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -47,7 +46,7 @@ class Query
 
     private function build(Node $node): ?Criterion
     {
-        if ($node instanceof Vnode\LogicalAnd) {
+        if ($node instanceof VNode\LogicalAnd) {
             $criterion = new Criterion\LogicalAnd(
                 [
                     $this->build($node->leftOperand),
@@ -58,7 +57,7 @@ class Query
             return $criterion;
         }
 
-        if ($node instanceof Vnode\LogicalOr) {
+        if ($node instanceof VNode\LogicalOr) {
             $criterion = new Criterion\LogicalOr(
                 [
                     $this->build($node->leftOperand),
@@ -69,17 +68,17 @@ class Query
             return $criterion;
         }
 
-        if ($node instanceof Vnode\LogicalNot) {
+        if ($node instanceof VNode\LogicalNot) {
             return new Criterion\LogicalNot($this->build($node->operand));
         }
-        if ($node instanceof Vnode\Mandatory) {
+        if ($node instanceof VNode\Mandatory) {
             return $this->build($node->operand);
         }
-        if ($node instanceof Vnode\Prohibited) {
+        if ($node instanceof VNode\Prohibited) {
             return new Criterion\LogicalNot($this->build($node->operand));
         }
 
-        if ($node instanceof Vnode\Group) {
+        if ($node instanceof VNode\Group) {
             if (\count($node->getNodes())) {
                 $criterions = [];
                 foreach ($node->getNodes() as $subNode) {
@@ -90,11 +89,11 @@ class Query
             }
         }
 
-        if ($node instanceof Vnode\Term) {
+        if ($node instanceof VNode\Term) {
             return $this->getTermCriterion($node);
         }
 
-        if ($node instanceof Vnode\Query) {
+        if ($node instanceof VNode\Query) {
             if (\count($node->getNodes())) {
                 $criterions = [];
                 foreach ($node->getNodes() as $subNode) {
@@ -119,7 +118,7 @@ class Query
         return new Criterion\DateMetadata($target, $operator, (new Carbon($date))->getTimestamp());
     }
 
-    private function getTermCriterion(Vnode\Term $term): Criterion
+    private function getTermCriterion(VNode\Term $term): Criterion
     {
         if ($term->token instanceof VToken\Word) {
             if ('' === $term->token->domain) {
@@ -153,6 +152,6 @@ class Query
             return new Criterion\FullText($term->token->tag);
         }
 
-        throw new RuntimeException('Term '.\get_class($term).' not yet managed, consider doing a PR ;-)');
+        throw new \RuntimeException('Term '.\get_class($term).' not yet managed, consider doing a PR ;-)');
     }
 }

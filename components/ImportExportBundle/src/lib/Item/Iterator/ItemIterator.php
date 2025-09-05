@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Item\Iterator;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\AbstractReaderIterator;
-use Iterator;
 
 class ItemIterator extends AbstractReaderIterator
 {
-    protected Iterator $innerIterator;
+    protected \Iterator $innerIterator;
     protected ?IteratorItemTransformerInterface $itemTransformer = null;
 
     public function __construct(
         int $totalCount,
-        Iterator $innerIterator,
+        \Iterator $innerIterator,
         ?IteratorItemTransformerInterface $itemTransformer = null
     ) {
         $this->itemTransformer = $itemTransformer;

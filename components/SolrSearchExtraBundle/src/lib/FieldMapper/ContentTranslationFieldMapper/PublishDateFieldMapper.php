@@ -27,12 +27,12 @@ class PublishDateFieldMapper extends ContentTranslationFieldMapper
     protected $fieldIdentifiers = [];
 
     /**
-     * @var \Ibexa\Contracts\Core\Persistence\Content\Type\Handler
+     * @var ContentTypeHandler
      */
     protected $contentTypeHandler;
 
     /**
-     * @var \Ibexa\Core\Search\Common\FieldRegistry
+     * @var FieldRegistry
      */
     protected $fieldRegistry;
 
@@ -68,8 +68,6 @@ class PublishDateFieldMapper extends ContentTranslationFieldMapper
     }
 
     /**
-     * @param $languageCode
-     *
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException
      *
      * @return \Ibexa\Contracts\Core\Search\Field[]

@@ -28,8 +28,8 @@ class Notification extends AttachmentProvider
     public function getAttachment(Signal $signal): ?Attachment
     {
         if (
-            class_exists(\EzSystems\Notification\Core\SignalSlot\Signal\NotificationSignal::class) &&
-            !$signal instanceof \EzSystems\Notification\Core\SignalSlot\Signal\NotificationSignal
+            class_exists(\EzSystems\Notification\Core\SignalSlot\Signal\NotificationSignal::class)
+            && !$signal instanceof \EzSystems\Notification\Core\SignalSlot\Signal\NotificationSignal
         ) {
             return null;
         }

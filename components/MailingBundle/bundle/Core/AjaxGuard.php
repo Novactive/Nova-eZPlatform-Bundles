@@ -54,10 +54,10 @@ class AjaxGuard
     {
         $token = $request->request->get('token');
         if (
-            !$request->isXmlHttpRequest() || null === $token ||
-            !$this->isEntity($subject) ||
-            !method_exists($subject, 'getId') ||
-            !$this->csrfTokenManager->isTokenValid(new CsrfToken((string) $subject->getId(), $token))
+            !$request->isXmlHttpRequest() || null === $token
+            || !$this->isEntity($subject)
+            || !method_exists($subject, 'getId')
+            || !$this->csrfTokenManager->isTokenValid(new CsrfToken((string) $subject->getId(), $token))
         ) {
             throw new AccessDeniedHttpException('Not Allowed');
         }

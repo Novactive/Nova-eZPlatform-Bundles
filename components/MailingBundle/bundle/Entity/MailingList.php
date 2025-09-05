@@ -14,10 +14,8 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Entity;
 
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use RuntimeException;
 
 /**
  * @ORM\Table(name="novaezmailing_mailing_list")
@@ -32,15 +30,20 @@ class MailingList
 
     /**
      * @var int
+     *
      * @ORM\Column(name="ML_id", type="bigint", nullable=false)
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
      * @var Registration[]
+     *
      * @ORM\OrderBy({"created" = "ASC"})
+     *
      * @ORM\OneToMany(targetEntity="\Novactive\Bundle\eZMailingBundle\Entity\Registration", mappedBy="mailingList",
      *                                                                                      cascade={"persist","remove"},
      *                                                                                      orphanRemoval=true,
@@ -51,18 +54,21 @@ class MailingList
 
     /**
      * @var array
+     *
      * @ORM\Column(name="ML_siteaccess_limit", type="array", nullable=true)
      */
     private $siteaccessLimit;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="ML_approbation", type="boolean", nullable=false)
      */
     private $withApproval;
 
     /**
      * @var Campaign[]
+     *
      * @ORM\ManyToMany(targetEntity="\Novactive\Bundle\eZMailingBundle\Entity\Campaign", mappedBy="mailingLists",
      *                                                                                  cascade={"persist"},
      *                                                                                  orphanRemoval=true,
@@ -73,7 +79,7 @@ class MailingList
     public function __construct()
     {
         $this->registrations = new ArrayCollection();
-        $this->created = new DateTime();
+        $this->created = new \DateTime();
         $this->withApproval = false;
     }
 
@@ -101,7 +107,7 @@ class MailingList
     {
         foreach ($registrations as $registration) {
             if (!$registration instanceof Registration) {
-                throw new RuntimeException(sprintf('Provided Registration is not a %s', Registration::class));
+                throw new \RuntimeException(sprintf('Provided Registration is not a %s', Registration::class));
             }
         }
         $this->registrations = $registrations;

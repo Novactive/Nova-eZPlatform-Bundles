@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Tika;
 
-use RuntimeException;
-use SplFileInfo;
 use Symfony\Component\Process\Process;
 
 /**
@@ -26,9 +24,6 @@ class TikaLocalClient implements TikaClientInterface
         $this->jar = $jar;
     }
 
-    /**
-     * @param $command
-     */
     protected function run($command): string
     {
         $shellCommand = [
@@ -44,7 +39,7 @@ class TikaLocalClient implements TikaClientInterface
         $process->run();
 
         if (!$process->isSuccessful()) {
-            throw new RuntimeException($process->getErrorOutput());
+            throw new \RuntimeException($process->getErrorOutput());
         }
 
         return $process->getOutput();
@@ -55,7 +50,7 @@ class TikaLocalClient implements TikaClientInterface
      */
     public function getText($fileName): ?string
     {
-        $file = new SplFileInfo($fileName);
+        $file = new \SplFileInfo($fileName);
         $command = sprintf('--text %s', $file->getRealPath());
 
         return $this->run($command);

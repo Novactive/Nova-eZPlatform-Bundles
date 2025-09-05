@@ -5,6 +5,7 @@
  *
  * @author    Novactive
  * @copyright 2020 Novactive
+ *
  * @licence   "SEE FULL LICENSE OPTIONS IN LICENSE.md"
  *            Nova eZ Algolia Search Engine is tri-licensed, meaning you must choose one of three licenses to use:
  *                - Commercial License: a paid license, meant for commercial use. The default option for most users.
@@ -16,7 +17,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZAlgoliaSearchEngine;
 
-use LogicException;
 use Novactive\Bundle\eZAlgoliaSearchEngine\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
@@ -36,7 +36,7 @@ final class NovaEzAlgoliaSearchEngine extends Bundle
             if (!$extension instanceof ExtensionInterface) {
                 $fqdn = \get_class($extension);
                 $message = 'Extension %s must implement %s.';
-                throw new LogicException(sprintf($message, $fqdn, ExtensionInterface::class));
+                throw new \LogicException(sprintf($message, $fqdn, ExtensionInterface::class));
             }
             $this->extension = $extension;
         }

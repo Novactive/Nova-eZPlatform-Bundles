@@ -9,13 +9,16 @@ use Symfony\Component\Uid\Ulid;
 
 /**
  * @ORM\Entity
+ *
  * @ORM\Table(name="import_export_job_record")
+ *
  * @phpstan-import-type Record from \Monolog\Logger
  */
 class JobRecord
 {
     /**
      * @ORM\Id
+     *
      * @ORM\Column(type="ulid")
      */
     protected Ulid $id;
@@ -39,6 +42,7 @@ class JobRecord
 
     /**
      * @ORM\ManyToOne(targetEntity=Job::class, inversedBy="records")
+     *
      * @ORM\JoinColumn(name="job_id", referencedColumnName="id")
      */
     protected Job $job;

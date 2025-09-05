@@ -66,7 +66,7 @@ class WriterController extends Controller
     /**
      * @param int|string $writerIndex
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function downloadFile(Job $job, $writerIndex): DownloadFileResponse
     {

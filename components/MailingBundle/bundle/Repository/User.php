@@ -79,8 +79,6 @@ class User extends EntityRepository
     }
 
     /**
-     * @param $mailingLists
-     *
      * @return array|\Doctrine\Common\Collections\ArrayCollection
      */
     public function findValidRecipients($mailingLists)

@@ -21,7 +21,9 @@ use Doctrine\ORM\Mapping as ORM;
  * RssFeeds.
  *
  * @ORM\Table(name="rss_feeds")
+ *
  * @ORM\Entity(repositoryClass="Novactive\EzRssFeedBundle\Repository\RssFeedsRepository")
+ *
  * @ORM\HasLifecycleCallbacks()
  */
 class RssFeeds
@@ -44,7 +46,9 @@ class RssFeeds
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
@@ -84,31 +88,36 @@ class RssFeeds
     private $status;
 
     /**
-     * @var DateTime
+     * @var \DateTime
+     *
      * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="number_of_object", type="integer")
      */
     private $numberOfObject;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="sort_type", type="integer")
      */
     private $sortType;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="sort_direction", type="string")
      */
     private $sortDirection;
 
     /**
-     * @var DateTime
+     * @var \DateTime
+     *
      * @ORM\Column(name="modified_at", type="datetime", nullable=true)
      */
     private $modifiedAt;
@@ -130,8 +139,8 @@ class RssFeeds
         $this->sortType = self::SORT_TYPE_PUBLICATION;
         $this->sortDirection = self::SORT_DIRECTION_DESC;
         $this->numberOfObject = 10;
-        $this->createdAt = new DateTime();
-        $this->modifiedAt = new DateTime();
+        $this->createdAt = new \DateTime();
+        $this->modifiedAt = new \DateTime();
     }
 
     public function getId(): ?int
@@ -187,17 +196,17 @@ class RssFeeds
         return $this;
     }
 
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
-    public function getModifiedAt(): ?DateTime
+    public function getModifiedAt(): ?\DateTime
     {
         return $this->modifiedAt;
     }
 
-    public function setModifiedAt(DateTime $modifiedAt): self
+    public function setModifiedAt(\DateTime $modifiedAt): self
     {
         $this->modifiedAt = $modifiedAt;
 

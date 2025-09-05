@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\Twig;
 
-use Exception;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Content;
@@ -111,7 +110,7 @@ class ContentExtension extends AbstractExtension
                     }
                     $list[] = $content;
                 }
-            } catch (Exception $exception) {
+            } catch (\Exception $exception) {
                 continue;
             }
         }

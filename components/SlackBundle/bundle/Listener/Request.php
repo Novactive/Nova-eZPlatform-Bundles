@@ -19,7 +19,6 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use JMS\Serializer\Serializer;
 use Novactive\Bundle\eZSlackBundle\Core\Slack\InteractiveMessage;
 use Novactive\Bundle\eZSlackBundle\Repository\User as UserRepository;
-use RuntimeException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
@@ -67,7 +66,7 @@ class Request
     {
         $user = $this->userRepository->findBySlackIds($slackId, $slackTeamId);
         if (null === $user) {
-            throw new RuntimeException('You need to Slack Connect First before to use interactions.');
+            throw new \RuntimeException('You need to Slack Connect First before to use interactions.');
         }
         $apiUser = $this->repository->getUserService()->loadUser($user->id);
         $this->repository->getPermissionResolver()->setCurrentUserReference($apiUser);

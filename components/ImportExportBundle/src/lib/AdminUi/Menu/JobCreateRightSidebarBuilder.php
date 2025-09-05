@@ -33,16 +33,16 @@ class JobCreateRightSidebarBuilder extends AbstractBuilder implements Translatio
      */
     public function createStructure(array $options): ItemInterface
     {
-        /** @var \Knp\Menu\ItemInterface|\Knp\Menu\ItemInterface[] $menu */
+        /** @var ItemInterface|\Knp\Menu\ItemInterface[] $menu */
         $menu = $this->factory->createItem('root');
 
         $childrens = [];
         /** @var FormFlow $flow */
         $flow = $options['flow'];
-        $renderBackButton = $flow->getFirstStepNumber() < $flow->getLastStepNumber() &&
-                            in_array(
+        $renderBackButton = $flow->getFirstStepNumber() < $flow->getLastStepNumber()
+                            && in_array(
                                 $flow->getCurrentStepNumber(),
-                                range(($flow->getFirstStepNumber() + 1), $flow->getLastStepNumber())
+                                range($flow->getFirstStepNumber() + 1, $flow->getLastStepNumber())
                             );
         $renderResetButton = $options['render_reset'] ?? true;
         $isLastStep = $flow->getCurrentStepNumber() == $flow->getLastStepNumber();
@@ -114,11 +114,11 @@ class JobCreateRightSidebarBuilder extends AbstractBuilder implements Translatio
     public static function getTranslationMessages(): array
     {
         return [
-            ( new Message(self::ITEM__FINISH, 'ibexa_menu') )->setDesc('Create'),
-            ( new Message(self::ITEM__NEXT, 'ibexa_menu') )->setDesc('Next'),
-            ( new Message(self::ITEM__BACK, 'ibexa_menu') )->setDesc('Back'),
-            ( new Message(self::ITEM__RESET, 'ibexa_menu') )->setDesc('Reset'),
-            ( new Message(self::ITEM__CANCEL, 'ibexa_menu') )->setDesc('Discard changes'),
+            (new Message(self::ITEM__FINISH, 'ibexa_menu'))->setDesc('Create'),
+            (new Message(self::ITEM__NEXT, 'ibexa_menu'))->setDesc('Next'),
+            (new Message(self::ITEM__BACK, 'ibexa_menu'))->setDesc('Back'),
+            (new Message(self::ITEM__RESET, 'ibexa_menu'))->setDesc('Reset'),
+            (new Message(self::ITEM__CANCEL, 'ibexa_menu'))->setDesc('Discard changes'),
         ];
     }
 }

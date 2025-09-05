@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZMailingBundle\Core\Processor;
 
 use Carbon\Carbon;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZMailingBundle\Core\Mailer\Mailing as MailingMailer;
 use Novactive\Bundle\eZMailingBundle\Core\Utils\Clock;
@@ -49,7 +48,7 @@ class SendMailing extends Processor implements SendMailingProcessorInterface
         $this->workflows = $workflows;
     }
 
-    public function execute(?DateTime $overrideDatetime = null): void
+    public function execute(?\DateTime $overrideDatetime = null): void
     {
         $mailingRepository = $this->entityManager->getRepository(Mailing::class);
         $pendingMailings = $mailingRepository->findByStatus(Mailing::PENDING);
@@ -62,8 +61,8 @@ class SendMailing extends Processor implements SendMailingProcessorInterface
                 ++$matched;
                 $this->logger->notice("{$mailing->getName()} has been matched pending and ready to be send.");
                 if (
-                    null !== $mailing->getLastSent() &&
-                    $mailing->getLastSent()->format('Y-m-d-H') === $clockDate->format('Y-m-d-H')
+                    null !== $mailing->getLastSent()
+                    && $mailing->getLastSent()->format('Y-m-d-H') === $clockDate->format('Y-m-d-H')
                 ) {
                     // Security here, if is has been sent during this current hour already, do nothing
                     $this->logger->debug(

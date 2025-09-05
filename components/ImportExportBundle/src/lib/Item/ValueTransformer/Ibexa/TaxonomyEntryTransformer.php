@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Ibexa;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\AbstractItemValueTransformer;
-use Exception;
 use Ibexa\Contracts\Taxonomy\Service\TaxonomyServiceInterface;
 use Ibexa\Contracts\Taxonomy\Value\TaxonomyEntry;
 use Ibexa\Taxonomy\Exception\TaxonomyEntryNotFoundException;
@@ -59,7 +58,7 @@ class TaxonomyEntryTransformer extends AbstractItemValueTransformer
 
             return $this->taxonomyService->loadEntryById($id, $taxonomyName);
         } catch (TaxonomyEntryNotFoundException $exception) {
-            throw new Exception(sprintf('No taxonomy entry found for id/identifier "%s" in "%s"', $id, $taxonomyName));
+            throw new \Exception(sprintf('No taxonomy entry found for id/identifier "%s" in "%s"', $id, $taxonomyName));
         }
     }
 

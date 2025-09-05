@@ -20,14 +20,13 @@ trait Names
 {
     /**
      * @var array
+     *
      * @Assert\NotBlank()
+     *
      * @ORM\Column(name="OBJ_names", type="array", nullable=false)
      */
     private $names;
 
-    /**
-     * @return array
-     */
     public function getNames(): ?array
     {
         return $this->names;

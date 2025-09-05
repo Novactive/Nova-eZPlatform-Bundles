@@ -21,7 +21,6 @@ use Novactive\Bundle\eZMailingBundle\Core\Provider\MailingContent;
 use Novactive\Bundle\eZMailingBundle\Core\Provider\MessageContent;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use RuntimeException;
 
 class Factory
 {
@@ -100,6 +99,6 @@ class Factory
             return $mailing->setMailer($mailer);
         }
 
-        throw new RuntimeException('Mailers are not correctly defined.');
+        throw new \RuntimeException('Mailers are not correctly defined.');
     }
 }

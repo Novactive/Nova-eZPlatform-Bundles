@@ -74,9 +74,6 @@ class Attachment
         }
     }
 
-    /**
-     * @param $name
-     */
     private function getParameter($name)
     {
         return $this->configResolver->getParameter($name, 'nova_ezslack');
@@ -96,9 +93,6 @@ class Attachment
         );
     }
 
-    /**
-     * @return string
-     */
     private function sanitize(?string $text): ?string
     {
         if (null === $text) {

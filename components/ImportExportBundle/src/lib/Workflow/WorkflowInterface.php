@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Workflow;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Monolog\WorkflowLoggerInterface;
-use DateTimeImmutable;
 
 interface WorkflowInterface
 {
@@ -17,9 +16,9 @@ interface WorkflowInterface
 
     public function getDefaultConfig(): WorkflowConfiguration;
 
-    public function getStartTime(): DateTimeImmutable;
+    public function getStartTime(): \DateTimeImmutable;
 
-    public function getEndTime(): DateTimeImmutable;
+    public function getEndTime(): \DateTimeImmutable;
 
     public function getWriterResults(): array;
 

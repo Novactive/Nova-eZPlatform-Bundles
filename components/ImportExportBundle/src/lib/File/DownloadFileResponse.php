@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\File;
 
-use DateTime;
-use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,9 +14,6 @@ class DownloadFileResponse extends Response
     protected int $offset;
     protected int $maxlen;
 
-    /**
-     * @param \AlmaviaCX\Bundle\IbexaImportExport\File\FileHandler $fileHandler
-     */
     public function __construct(
         string $filepath,
         FileHandler $fileHandler,
@@ -63,7 +58,7 @@ class DownloadFileResponse extends Response
 
     public function setAutoLastModified(): DownloadFileResponse
     {
-        $date = new DateTime();
+        $date = new \DateTime();
         $date->setTimestamp($this->fileHandler->lastModified($this->filepath)->lastModified());
         $this->setLastModified($date);
 
@@ -170,7 +165,7 @@ class DownloadFileResponse extends Response
     public function setContent($content)
     {
         if (null !== $content) {
-            throw new LogicException('The content cannot be set on a BinaryStreamResponse instance.');
+            throw new \LogicException('The content cannot be set on a BinaryStreamResponse instance.');
         }
     }
 

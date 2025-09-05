@@ -5,6 +5,7 @@
  *
  * @author    Novactive
  * @copyright 2020 Novactive
+ *
  * @licence   "SEE FULL LICENSE OPTIONS IN LICENSE.md"
  *            Nova eZ Algolia Search Engine is tri-licensed, meaning you must choose one of three licenses to use:
  *                - Commercial License: a paid license, meant for commercial use. The default option for most users.
@@ -38,7 +39,6 @@ use eZ\Publish\SPI\Search\FieldType\MultipleIdentifierField;
 use eZ\Publish\SPI\Search\FieldType\MultipleIntegerField;
 use eZ\Publish\SPI\Search\FieldType\MultipleStringField;
 use eZ\Publish\SPI\Search\FieldType\StringField;
-use Iterator;
 use Novactive\Bundle\eZAlgoliaSearchEngine\DependencyInjection\Configuration;
 use Novactive\Bundle\eZAlgoliaSearchEngine\Event\ContentIndexCreateEvent;
 use Novactive\Bundle\eZAlgoliaSearchEngine\Event\ContentTranslationDataFieldConvertEvent;
@@ -101,7 +101,7 @@ final class Converter
         $this->configResolver = $configResolver;
     }
 
-    public function convertContent(Content $content): Iterator
+    public function convertContent(Content $content): \Iterator
     {
         $versionInfo = $content->versionInfo;
         $contentInfo = $content->versionInfo->contentInfo;
@@ -142,7 +142,7 @@ final class Converter
         }
     }
 
-    public function convertLocation(Location $location, Content $content = null): Iterator
+    public function convertLocation(Location $location, ?Content $content = null): \Iterator
     {
         if (null === $content) {
             $content = $this->persistenceHandler->contentHandler()->load($location->contentId);

@@ -85,7 +85,7 @@ class IbexaContentListReader extends AbstractReader implements TranslationContai
 
     public static function getTranslationMessages(): array
     {
-        return [( new Message('reader.ibexa.content_list.name', 'import_export') )->setDesc('Content list')];
+        return [(new Message('reader.ibexa.content_list.name', 'import_export'))->setDesc('Content list')];
     }
 
     public static function getOptionsFormType(): ?string

@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Api;
 
-use Exception;
 use Ibexa\Solr\Gateway\Endpoint;
 use Ibexa\Solr\Gateway\EndpointRegistry;
 use Ibexa\Solr\Gateway\EndpointResolver;
 use Ibexa\Solr\Gateway\HttpClient;
 use Ibexa\Solr\Gateway\Message;
-use stdClass;
 
 class Gateway
 {
@@ -93,7 +91,7 @@ class Gateway
         string $path,
         ?Message $message = null,
         ?Endpoint $endpoint = null
-    ): ?stdClass {
+    ): ?\stdClass {
         if (null === $endpoint) {
             $endpoint = $this->getEndpoint();
         }
@@ -105,7 +103,7 @@ class Gateway
         );
         $result = json_decode($response->body);
         if ($result && 500 === $result->responseHeader->status) {
-            throw new Exception($result->error->msg);
+            throw new \Exception($result->error->msg);
         }
 
         return $result;

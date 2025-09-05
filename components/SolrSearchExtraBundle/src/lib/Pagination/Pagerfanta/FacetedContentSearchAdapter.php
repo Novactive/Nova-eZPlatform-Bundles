@@ -13,12 +13,12 @@ use Pagerfanta\Adapter\AdapterInterface;
 class FacetedContentSearchAdapter implements AdapterInterface
 {
     /**
-     * @var \Ibexa\Contracts\Core\Repository\Values\Content\Query
+     * @var Query
      */
     private $query;
 
     /**
-     * @var \Ibexa\Contracts\Core\Repository\SearchService
+     * @var SearchService
      */
     private $searchService;
 
@@ -28,7 +28,7 @@ class FacetedContentSearchAdapter implements AdapterInterface
     private $nbResults;
 
     /**
-     * @var \Ibexa\Contracts\Core\Repository\Values\Content\Search\AggregationResultCollection
+     * @var AggregationResultCollection
      */
     private $aggregations;
 
@@ -67,7 +67,7 @@ class FacetedContentSearchAdapter implements AdapterInterface
     /**
      * Return search facets.
      *
-     *@throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
      */
     public function getAggregations(): AggregationResultCollection
     {

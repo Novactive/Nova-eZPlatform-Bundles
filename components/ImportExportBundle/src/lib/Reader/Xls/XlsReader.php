@@ -29,7 +29,7 @@ class XlsReader extends AbstractFileReader implements TranslationContainerInterf
      */
     public function __invoke(): AbstractReaderIterator
     {
-        /** @var \AlmaviaCX\Bundle\IbexaImportExport\Reader\Xls\XlsReaderOptions $options */
+        /** @var XlsReaderOptions $options */
         $options = $this->getOptions();
 
         $tmpFileName = $this->getFileTmpCopy();
@@ -102,7 +102,7 @@ class XlsReader extends AbstractFileReader implements TranslationContainerInterf
 
     public static function getTranslationMessages(): array
     {
-        return [( new Message('reader.xls.name', 'import_export') )->setDesc('Excel reader')];
+        return [(new Message('reader.xls.name', 'import_export'))->setDesc('Excel reader')];
     }
 
     public static function getOptionsType(): ?string

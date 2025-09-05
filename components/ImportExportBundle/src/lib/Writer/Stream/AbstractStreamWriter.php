@@ -38,9 +38,9 @@ abstract class AbstractStreamWriter extends AbstractWriter
         $this->stream = fopen('php://temp', 'w+');
         $filepath = $this->results->getResult('filepath');
         if (!$filepath) {
-            /** @var \AlmaviaCX\Bundle\IbexaImportExport\Writer\Stream\StreamWriterOptions $options */
+            /** @var StreamWriterOptions $options */
             $options = $this->getOptions();
-            $filepath = ($this->fileHandler)->resolvePath($options->filepath);
+            $filepath = $this->fileHandler->resolvePath($options->filepath);
             $this->results->setResult('filepath', $filepath);
         } else {
             try {

@@ -69,14 +69,14 @@ class Message
             }
             // eZ Platform Enterprise
             if (
-                class_exists(\EzSystems\FormBuilder\Core\SignalSlot\Signal\FormSubmit::class) &&
-                $signal instanceof \EzSystems\FormBuilder\Core\SignalSlot\Signal\FormSubmit
+                class_exists(\EzSystems\FormBuilder\Core\SignalSlot\Signal\FormSubmit::class)
+                && $signal instanceof \EzSystems\FormBuilder\Core\SignalSlot\Signal\FormSubmit
             ) {
                 $message->setText('_t:message.text.formsubmit');
             }
             if (
-                class_exists(\EzSystems\Notification\Core\SignalSlot\Signal\NotificationSignal::class) &&
-                $signal instanceof \EzSystems\Notification\Core\SignalSlot\Signal\NotificationSignal
+                class_exists(\EzSystems\Notification\Core\SignalSlot\Signal\NotificationSignal::class)
+                && $signal instanceof \EzSystems\Notification\Core\SignalSlot\Signal\NotificationSignal
             ) {
                 $message->setText('_t:message.text.notification');
             }

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Component;
 
-use Exception;
-use ReflectionClass;
-
 class ComponentOptions
 {
     protected array $initializationState = [];
@@ -45,7 +42,7 @@ class ComponentOptions
 
     public function getAvailableOptions(): iterable
     {
-        $properties = (new ReflectionClass(static::class))->getProperties();
+        $properties = (new \ReflectionClass(static::class))->getProperties();
         foreach ($properties as $property) {
             if ('initializedOptions' === $property->getName()) {
                 continue;
@@ -63,7 +60,7 @@ class ComponentOptions
             return;
         }
         $className = static::class;
-        throw new Exception("Option '{$name}' not found on '{$className}'");
+        throw new \Exception("Option '{$name}' not found on '{$className}'");
     }
 
     public function __get($name)
@@ -86,7 +83,7 @@ class ComponentOptions
 
     /**
      * @param callable(ComponentReference $componentReference): ComponentInterface $buildComponentCallback
-     * @param ?ComponentOptions $runtimeProcessConfiguration
+     * @param ?ComponentOptions                                                    $runtimeProcessConfiguration
      */
     public function replaceComponentReferences(
         $buildComponentCallback,

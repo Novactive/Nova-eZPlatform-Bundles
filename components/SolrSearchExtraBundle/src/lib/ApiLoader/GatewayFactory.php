@@ -16,7 +16,7 @@ class GatewayFactory implements ContainerAwareInterface
     use ContainerAwareTrait;
 
     /**
-     * @var \Ibexa\Bundle\Core\ApiLoader\RepositoryConfigurationProvider
+     * @var RepositoryConfigurationProvider
      */
     private $repositoryConfigurationProvider;
 
@@ -25,9 +25,6 @@ class GatewayFactory implements ContainerAwareInterface
      */
     private $defaultConnection;
 
-    /**
-     * @param $defaultConnection
-     */
     public function __construct(
         RepositoryConfigurationProvider $repositoryConfigurationProvider,
         $defaultConnection

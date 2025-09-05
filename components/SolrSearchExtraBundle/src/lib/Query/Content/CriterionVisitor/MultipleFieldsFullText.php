@@ -17,22 +17,22 @@ class MultipleFieldsFullText extends CriterionVisitor
     /**
      * Field map.
      *
-     * @var \Ibexa\Core\Search\Common\FieldNameResolver
+     * @var FieldNameResolver
      */
     protected $fieldNameResolver;
 
     /**
-     * @var \QueryTranslator\Languages\Galach\Tokenizer
+     * @var Tokenizer
      */
     protected $tokenizer;
 
     /**
-     * @var \QueryTranslator\Languages\Galach\Parser
+     * @var Parser
      */
     protected $parser;
 
     /**
-     * @var \QueryTranslator\Languages\Galach\Generators\ExtendedDisMax
+     * @var ExtendedDisMax
      */
     protected $generator;
 
@@ -87,9 +87,9 @@ class MultipleFieldsFullText extends CriterionVisitor
      *
      * @return string
      */
-    public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
+    public function visit(Criterion $criterion, ?CriterionVisitor $subVisitor = null)
     {
-        /** @var \Novactive\EzSolrSearchExtra\Query\Content\Criterion\MultipleFieldsFullText $criterion */
+        /** @var MultipleFieldsFullTextCriterion $criterion */
         $tokenSequence = $this->tokenizer->tokenize($criterion->value);
         $syntaxTree = $this->parser->parse($tokenSequence);
 
@@ -137,7 +137,7 @@ class MultipleFieldsFullText extends CriterionVisitor
 
     private function getQueryFields(Criterion $criterion): string
     {
-        /** @var \Novactive\EzSolrSearchExtra\Query\Content\Criterion\MultipleFieldsFullText $criterion */
+        /** @var MultipleFieldsFullTextCriterion $criterion */
         $queryFields = ['meta_content__text_t', 'meta_content__text_t_raw'];
 
         for ($i = 1; $i <= $this->maxDepth; ++$i) {

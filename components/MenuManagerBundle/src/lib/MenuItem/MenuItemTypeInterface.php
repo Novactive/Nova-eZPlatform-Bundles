@@ -20,17 +20,9 @@ interface MenuItemTypeInterface
 
     public function toHash(MenuItem $menuItem): array;
 
-    /**
-     * @param $hash
-     *
-     * @return MenuItem
-     */
     public function fromHash($hash): ?MenuItem;
 
     public function createEntity(): MenuItem;
 
-    /**
-     * @return MenuItemValue
-     */
     public function toMenuItemLink(MenuItem $menuItem): ?MenuItemValue;
 }

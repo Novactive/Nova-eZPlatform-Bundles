@@ -12,9 +12,6 @@
 
 namespace Novactive\Bundle\eZSEOBundle\Controller;
 
-use DateTime;
-use DOMDocument;
-use DOMElement;
 use Ibexa\Bundle\Core\Controller;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 use Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchResult;
@@ -52,7 +49,7 @@ class SitemapController extends Controller
         $resultCount = $searchService->findLocations($query)->totalCount;
 
         // Dom Doc
-        $sitemap = new DOMDocument('1.0', 'UTF-8');
+        $sitemap = new \DOMDocument('1.0', 'UTF-8');
         $sitemap->formatOutput = true;
 
         // create an index if we are greater than th PACKET_MAX
@@ -86,7 +83,7 @@ class SitemapController extends Controller
      */
     public function pageAction(QueryFactory $queryFactory, int $page = 1): Response
     {
-        $sitemap = new DOMDocument('1.0', 'UTF-8');
+        $sitemap = new \DOMDocument('1.0', 'UTF-8');
         $root = $sitemap->createElement('urlset');
         $sitemap->formatOutput = true;
         $root->setAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
@@ -109,10 +106,10 @@ class SitemapController extends Controller
     /**
      * Fill a sitemap.
      */
-    protected function fillSitemap(DOMDocument $sitemap, DOMElement $root, SearchResult $results): void
+    protected function fillSitemap(\DOMDocument $sitemap, \DOMElement $root, SearchResult $results): void
     {
         foreach ($results->searchHits as $searchHit) {
-            /** @var Location  $location */
+            /** @var Location $location */
             $location = $searchHit->valueObject;
 
             try {
@@ -178,7 +175,7 @@ class SitemapController extends Controller
     /**
      * Fill the sitemap index.
      */
-    protected function fillSitemapIndex(DOMDocument $sitemap, int $numberOfResults, DOMElement $root): void
+    protected function fillSitemapIndex(\DOMDocument $sitemap, int $numberOfResults, \DOMElement $root): void
     {
         $numberOfPage = (int) ceil($numberOfResults / static::PACKET_MAX);
         for ($sitemapNumber = 1; $sitemapNumber <= $numberOfPage; ++$sitemapNumber) {
@@ -198,7 +195,7 @@ class SitemapController extends Controller
             }
 
             $loc = $sitemap->createElement('loc', $locUrl);
-            $date = new DateTime();
+            $date = new \DateTime();
             $modificationDate = $date->format('c');
             $mod = $sitemap->createElement('lastmod', $modificationDate);
             $sitemapElt->appendChild($loc);

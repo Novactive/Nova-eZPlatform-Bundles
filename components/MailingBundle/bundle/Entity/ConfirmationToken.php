@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Entity;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -34,21 +33,24 @@ class ConfirmationToken
      * @var string
      *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="UUID")
+     *
      * @ORM\Column(name="CT_id", type="guid", unique=true)
      */
     private $id;
 
     /**
      * @var array
+     *
      * @ORM\Column(name="CT_payload", type="array", nullable=false)
      */
     private $payload;
 
     public function __construct()
     {
-        $this->created = new DateTime();
-        $this->updated = new DateTime();
+        $this->created = new \DateTime();
+        $this->updated = new \DateTime();
     }
 
     public function getId(): ?string

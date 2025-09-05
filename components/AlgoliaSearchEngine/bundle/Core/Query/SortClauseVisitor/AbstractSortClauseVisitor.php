@@ -5,6 +5,7 @@
  *
  * @author    Novactive
  * @copyright 2020 Novactive
+ *
  * @licence   "SEE FULL LICENSE OPTIONS IN LICENSE.md"
  *            Nova eZ Algolia Search Engine is tri-licensed, meaning you must choose one of three licenses to use:
  *                - Commercial License: a paid license, meant for commercial use. The default option for most users.
@@ -18,7 +19,6 @@ namespace Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\SortClauseVisitor;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use RuntimeException;
 
 abstract class AbstractSortClauseVisitor implements SortClauseVisitor
 {
@@ -30,7 +30,7 @@ abstract class AbstractSortClauseVisitor implements SortClauseVisitor
             case Query::SORT_DESC:
                 return 'desc';
             default:
-                throw new RuntimeException('Invalid sort direction: '.$sortClause->direction);
+                throw new \RuntimeException('Invalid sort direction: '.$sortClause->direction);
         }
     }
 }

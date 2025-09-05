@@ -33,7 +33,7 @@ class FormMapper implements FieldValueFormMapperInterface, FieldDefinitionFormMa
     /** @var FieldTypeService */
     private $fieldTypeService;
 
-    /** @var \Ibexa\ContentForms\ConfigResolver\MaxUploadSize */
+    /** @var MaxUploadSize */
     private $maxUploadSize;
 
     public function __construct(FieldTypeService $fieldTypeService, MaxUploadSize $maxUploadSize)
@@ -52,9 +52,9 @@ class FormMapper implements FieldValueFormMapperInterface, FieldDefinitionFormMa
                 'label' => /* @Desc("Maximum file size (MB)") */ 'field_definition.ezimage.max_file_size',
                 'constraints' => [
                     new Range([
-                                  'min' => 0,
-                                  'max' => $this->maxUploadSize->get(MaxUploadSize::MEGABYTES),
-                              ]),
+                        'min' => 0,
+                        'max' => $this->maxUploadSize->get(MaxUploadSize::MEGABYTES),
+                    ]),
                 ],
                 'attr' => [
                     'min' => 0,
@@ -79,8 +79,8 @@ class FormMapper implements FieldValueFormMapperInterface, FieldDefinitionFormMa
     {
         $resolver
             ->setDefaults([
-                              'translation_domain' => 'content_type',
-                          ]);
+                'translation_domain' => 'content_type',
+            ]);
     }
 
     /**

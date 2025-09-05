@@ -38,7 +38,7 @@ class IbexaTaxonomyUpdater
         TaxonomyEntry $entry,
         TaxonomyEntry $parent,
         array $names,
-        int $ownerId = null,
+        ?int $ownerId = null,
         string $mainLanguageCode = 'eng-GB',
         bool $hidden = false
     ): TaxonomyEntry {

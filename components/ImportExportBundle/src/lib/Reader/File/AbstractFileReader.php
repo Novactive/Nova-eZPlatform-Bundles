@@ -12,7 +12,7 @@ abstract class AbstractFileReader extends AbstractReader
 {
     protected FileHandler $fileHandler;
     /** @var resource|null */
-    protected $tmpFile = null;
+    protected $tmpFile;
 
     public function __construct(FileHandler $fileHandler)
     {
@@ -61,7 +61,7 @@ abstract class AbstractFileReader extends AbstractReader
 
     public function clean(): void
     {
-        /** @var \AlmaviaCX\Bundle\IbexaImportExport\Reader\File\FileReaderOptions $options */
+        /** @var FileReaderOptions $options */
         $options = $this->getOptions();
 
         if (is_string($options->file)) {

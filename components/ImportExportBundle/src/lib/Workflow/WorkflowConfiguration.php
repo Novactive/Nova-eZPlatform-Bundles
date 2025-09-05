@@ -11,10 +11,10 @@ use AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderOptions;
 use AlmaviaCX\Bundle\IbexaImportExport\Step\Callback\CallbackStep;
 use AlmaviaCX\Bundle\IbexaImportExport\Step\Callback\CallbackStepOptions;
 use Doctrine\ORM\Mapping as ORM;
-use InvalidArgumentException;
 
 /**
  * @ORM\Entity()
+ *
  * @ORM\Table(name="import_export_workflow_configuration")
  */
 class WorkflowConfiguration
@@ -24,6 +24,7 @@ class WorkflowConfiguration
 
     /**
      * @ORM\Id
+     *
      * @ORM\Column(type="string")
      */
     protected string $identifier;
@@ -81,14 +82,14 @@ class WorkflowConfiguration
         $this->processConfiguration = $processConfiguration;
     }
 
-    public function setReader(string $class, ReaderOptions $options = null): void
+    public function setReader(string $class, ?ReaderOptions $options = null): void
     {
         $requiredOptionsType = call_user_func([$class, 'getOptionsType']);
         if (!$options) {
             $options = new $requiredOptionsType();
         }
         if (!$options instanceof $requiredOptionsType) {
-            throw new InvalidArgumentException('Options must be an instance of '.$requiredOptionsType);
+            throw new \InvalidArgumentException('Options must be an instance of '.$requiredOptionsType);
         }
         $this->processConfiguration->setReader(new ComponentReference($class, $options));
     }
@@ -103,14 +104,14 @@ class WorkflowConfiguration
         $this->addProcessor(CallbackStep::class, $option);
     }
 
-    public function addProcessor(string $class, ProcessorOptions $options = null): void
+    public function addProcessor(string $class, ?ProcessorOptions $options = null): void
     {
         $requiredOptionsType = call_user_func([$class, 'getOptionsType']);
         if (!$options) {
             $options = new $requiredOptionsType();
         }
         if (!$options instanceof $requiredOptionsType) {
-            throw new InvalidArgumentException('Options must be an instance of '.$requiredOptionsType);
+            throw new \InvalidArgumentException('Options must be an instance of '.$requiredOptionsType);
         }
         $this->processConfiguration->addProcessor(new ComponentReference($class, $options));
     }

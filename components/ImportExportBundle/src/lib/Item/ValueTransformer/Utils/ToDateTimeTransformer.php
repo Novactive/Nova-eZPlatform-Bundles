@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Utils;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\AbstractItemValueTransformer;
-use DateTime;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ToDateTimeTransformer extends AbstractItemValueTransformer
@@ -16,7 +15,7 @@ class ToDateTimeTransformer extends AbstractItemValueTransformer
             return null;
         }
 
-        return DateTime::createFromFormat($options['input_format'], (string) $value);
+        return \DateTime::createFromFormat($options['input_format'], (string) $value);
     }
 
     protected function configureOptions(OptionsResolver $optionsResolver)

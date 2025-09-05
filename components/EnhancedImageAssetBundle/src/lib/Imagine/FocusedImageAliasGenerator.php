@@ -23,14 +23,11 @@ use Ibexa\Contracts\Core\Variation\VariationHandler;
 use Ibexa\Core\FieldType\Image\Value as ImageValue;
 use Ibexa\Core\MVC\Exception\SourceImageNotFoundException;
 use Imagine\Image\Box;
-use InvalidArgumentException;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\FocusPoint;
 use Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\Value as EnhancedImageValue;
 use Novactive\EzEnhancedImageAsset\FocusPoint\FocusPointCalculator;
 use Novactive\EzEnhancedImageAsset\Values\FocusedVariation;
-use ReflectionClass;
-use ReflectionException;
 
 /**
  * Class FocusedImageAliasGenerator.
@@ -80,9 +77,9 @@ class FocusedImageAliasGenerator implements VariationHandler
             /* @var FocusPoint $focusPoint */
             return $fieldValue->focusPoint;
         } elseif (
-            $fieldValue instanceof ImageValue &&
-            isset($fieldValue->additionalData['focalPointX']) &&
-            isset($fieldValue->additionalData['focalPointY'])
+            $fieldValue instanceof ImageValue
+            && isset($fieldValue->additionalData['focalPointX'])
+            && isset($fieldValue->additionalData['focalPointY'])
         ) {
             return new FocusPoint(
                 ($fieldValue->additionalData['focalPointX'] / $fieldValue->width - 0.5) * 2,
@@ -113,14 +110,14 @@ class FocusedImageAliasGenerator implements VariationHandler
      *
      * if field value is not an instance of \Ibexa\Core\FieldType\Image\Value
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      *
      * if source image cannot be found
      * @throws SourceImageNotFoundException
      *
      * if a problem occurs with generated variation
      * @throws InvalidVariationException
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function getVariation(Field $field, VersionInfo $versionInfo, $variationName, array $parameters = [])
     {
@@ -164,7 +161,7 @@ class FocusedImageAliasGenerator implements VariationHandler
             $focusPoint
         );
 
-        $reflectionClass = new ReflectionClass(get_class($variation));
+        $reflectionClass = new \ReflectionClass(get_class($variation));
         $array = [];
         foreach ($reflectionClass->getProperties() as $property) {
             $property->setAccessible(true);

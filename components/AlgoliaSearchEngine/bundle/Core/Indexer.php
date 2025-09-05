@@ -5,6 +5,7 @@
  *
  * @author    Novactive
  * @copyright 2020 Novactive
+ *
  * @licence   "SEE FULL LICENSE OPTIONS IN LICENSE.md"
  *            Nova eZ Algolia Search Engine is tri-licensed, meaning you must choose one of three licenses to use:
  *                - Commercial License: a paid license, meant for commercial use. The default option for most users.
@@ -17,7 +18,6 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZAlgoliaSearchEngine\Core;
 
 use Doctrine\DBAL\Connection;
-use Exception;
 use eZ\Publish\API\Repository\LanguageService;
 use eZ\Publish\Core\Search\Common\IncrementalIndexer;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
@@ -106,7 +106,7 @@ class Indexer extends IncrementalIndexer
                 } else {
                     $this->handler->deleteContent($contentId);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->handler->deleteContent($contentId);
                 $this->logger->error(
                     'Unable to index the content',

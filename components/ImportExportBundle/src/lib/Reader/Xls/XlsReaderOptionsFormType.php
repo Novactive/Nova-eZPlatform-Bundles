@@ -40,8 +40,8 @@ class XlsReaderOptionsFormType extends FileReaderOptionsFormType
     {
         parent::configureOptions($resolver);
         $resolver->setDefaults([
-                                   'data_class' => XlsReader::getOptionsType(),
-                                   'translation_domain' => 'forms',
-                               ]);
+            'data_class' => XlsReader::getOptionsType(),
+            'translation_domain' => 'forms',
+        ]);
     }
 }

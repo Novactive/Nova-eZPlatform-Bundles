@@ -5,6 +5,7 @@
  *
  * @author    Novactive
  * @copyright 2020 Novactive
+ *
  * @licence   "SEE FULL LICENSE OPTIONS IN LICENSE.md"
  *            Nova eZ Algolia Search Engine is tri-licensed, meaning you must choose one of three licenses to use:
  *                - Commercial License: a paid license, meant for commercial use. The default option for most users.
@@ -24,7 +25,6 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\Repository\Permission\PermissionCriterionResolver;
 use Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\CriterionVisitor\CriterionVisitor;
 use Novactive\Bundle\eZAlgoliaSearchEngine\DependencyInjection\Configuration;
-use RuntimeException;
 
 final class AlgoliaClient
 {
@@ -112,19 +112,19 @@ final class AlgoliaClient
             )
         );
         if (
-            ('0c570e16c2396c4a518f086cc61b726a' !== md5_file("{$dir}/../Resources/license.key")) ||
-            1 !== openssl_verify(
+            ('0c570e16c2396c4a518f086cc61b726a' !== md5_file("{$dir}/../Resources/license.key"))
+            || 1 !== openssl_verify(
                 "{$header}.{$payload}",
                 base64_decode(strtr($signature, '-_', '+/')),
                 openssl_pkey_get_public($licenseKey),
                 OPENSSL_ALGO_SHA256
             )
         ) {
-            throw new RuntimeException('License Key is invalid! Please contact Novactive');
+            throw new \RuntimeException('License Key is invalid! Please contact Novactive');
         }
 
         if (json_decode(base64_decode(strtr($payload, '-_', '+/')))->exp < time()) {
-            throw new RuntimeException('License Key has expired! Please contact Novactive');
+            throw new \RuntimeException('License Key has expired! Please contact Novactive');
         }
 
         return $this->indexes[$indexName];

@@ -116,9 +116,9 @@ class Result extends Collection
     public function hasMore(): bool
     {
         return
-            ((0 === $this->getResultLimit()) && ($this->count() < $this->getResultTotalCount())) ||
-            (($this->getResultLimit() > 0) && ($this->count() === $this->getResultLimit()) &&
-             ($this->getResultLimit() < $this->getResultTotalCount()));
+            ((0 === $this->getResultLimit()) && ($this->count() < $this->getResultTotalCount()))
+            || (($this->getResultLimit() > 0) && ($this->count() === $this->getResultLimit())
+             && ($this->getResultLimit() < $this->getResultTotalCount()));
     }
 
     public function getResultOffsetPage(): int

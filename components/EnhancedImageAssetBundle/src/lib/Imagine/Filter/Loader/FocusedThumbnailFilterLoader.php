@@ -47,8 +47,8 @@ class FocusedThumbnailFilterLoader implements LoaderInterface
         $originalSize = $options['originalSize'] ?? $imageSize;
 
         if (
-            $originalSize->getWidth() !== $imageSize->getWidth() ||
-            $originalSize->getHeight() !== $imageSize->getHeight()
+            $originalSize->getWidth() !== $imageSize->getWidth()
+            || $originalSize->getHeight() !== $imageSize->getHeight()
         ) {
             $focusPoint = $this->focusPointCalculator->calculateCropFocusPoint(
                 $originalSize,

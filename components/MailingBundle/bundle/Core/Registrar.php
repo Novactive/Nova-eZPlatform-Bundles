@@ -28,7 +28,6 @@ use Novactive\Bundle\eZMailingBundle\Entity\ConfirmationToken;
 use Novactive\Bundle\eZMailingBundle\Entity\MailingList;
 use Novactive\Bundle\eZMailingBundle\Entity\Registration as RegistrationEntity;
 use Novactive\Bundle\eZMailingBundle\Entity\User;
-use RuntimeException;
 
 class Registrar
 {
@@ -73,7 +72,7 @@ class Registrar
     {
         $user = $registration->getUser();
         if (null === $user) {
-            throw new RuntimeException('User cannot be empty.');
+            throw new \RuntimeException('User cannot be empty.');
         }
         $userRepo = $this->entityManager->getRepository(User::class);
         $fetchUser = $userRepo->findOneByEmail($user->getEmail());
@@ -98,7 +97,7 @@ class Registrar
     {
         $user = $unregistration->getUser();
         if (null === $user) {
-            throw new RuntimeException('User cannot be empty.');
+            throw new \RuntimeException('User cannot be empty.');
         }
         $userRepo = $this->entityManager->getRepository(User::class);
         $fetchUser = $userRepo->findOneByEmail($user->getEmail());

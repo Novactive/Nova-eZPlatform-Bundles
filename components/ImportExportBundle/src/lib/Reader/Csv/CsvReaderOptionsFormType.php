@@ -38,8 +38,8 @@ class CsvReaderOptionsFormType extends FileReaderOptionsFormType
     {
         parent::configureOptions($resolver);
         $resolver->setDefaults([
-                                    'data_class' => CsvReader::getOptionsType(),
-                                    'translation_domain' => 'forms',
-                                ]);
+            'data_class' => CsvReader::getOptionsType(),
+            'translation_domain' => 'forms',
+        ]);
     }
 }

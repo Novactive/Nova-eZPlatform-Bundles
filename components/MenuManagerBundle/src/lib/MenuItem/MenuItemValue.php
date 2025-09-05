@@ -12,7 +12,6 @@
 
 namespace Novactive\EzMenuManager\MenuItem;
 
-use InvalidArgumentException;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\MenuItem as KnpMenuItem;
@@ -35,12 +34,12 @@ class MenuItemValue extends KnpMenuItem
     public function addChild($child, array $options = []): ItemInterface
     {
         if (!$child instanceof ItemInterface) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 'Cannot add menu item as child, if it doesn\'t implement ItemInterface.'
             );
         }
         if (null !== $child->getParent()) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 'Cannot add menu item as child, it already belongs to another menu (e.g. has a parent).'
             );
         }
@@ -52,9 +51,6 @@ class MenuItemValue extends KnpMenuItem
         return $child;
     }
 
-    /**
-     * @param $target
-     */
     public function setTarget($target)
     {
         $this->setLinkAttribute('target', $target);

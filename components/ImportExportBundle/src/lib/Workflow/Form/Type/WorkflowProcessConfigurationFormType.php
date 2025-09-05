@@ -73,9 +73,9 @@ class WorkflowProcessConfigurationFormType extends AbstractType
     {
         parent::configureOptions($resolver);
         $resolver->setDefaults([
-                                    'default_configuration' => null,
-                                    'show_initialized' => false,
-                                    'translation_domain' => 'forms',
-                                ]);
+            'default_configuration' => null,
+            'show_initialized' => false,
+            'translation_domain' => 'forms',
+        ]);
     }
 }

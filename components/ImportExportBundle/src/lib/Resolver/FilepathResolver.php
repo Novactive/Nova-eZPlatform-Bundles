@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Resolver;
 
-use DateTimeImmutable;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 class FilepathResolver
@@ -29,7 +28,7 @@ class FilepathResolver
 
     public function buildTokens(): array
     {
-        $datetime = new DateTimeImmutable();
+        $datetime = new \DateTimeImmutable();
 
         return [
             '{date}' => $datetime->format('Y-m-d'),

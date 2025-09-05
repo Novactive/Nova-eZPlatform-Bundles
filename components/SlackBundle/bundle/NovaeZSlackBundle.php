@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZSlackBundle;
 
-use LogicException;
 use Novactive\Bundle\eZSlackBundle\DependencyInjection\CompilerPass\InteractionsPass;
 use Novactive\Bundle\eZSlackBundle\DependencyInjection\CompilerPass\TranslatableJsonSerializationCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -42,7 +41,7 @@ class NovaeZSlackBundle extends Bundle
             $extension = $this->createContainerExtension();
             if (null !== $extension) {
                 if (!$extension instanceof ExtensionInterface) {
-                    throw new LogicException(
+                    throw new \LogicException(
                         sprintf('Extension %s must implement '.ExtensionInterface::class.'.', \get_class($extension))
                     );
                 }

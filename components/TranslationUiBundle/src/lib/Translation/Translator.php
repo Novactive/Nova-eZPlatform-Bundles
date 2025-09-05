@@ -29,7 +29,7 @@ class Translator extends LexikTranslator
         $this->defaultTranslator = $defaultTranslator;
     }
 
-    public function trans(?string $id, array $parameters = [], string $domain = null, string $locale = null)
+    public function trans(?string $id, array $parameters = [], ?string $domain = null, ?string $locale = null)
     {
         if (null === $id || '' === $id) {
             return '';

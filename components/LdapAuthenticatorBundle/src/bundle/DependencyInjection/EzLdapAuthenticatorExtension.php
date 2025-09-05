@@ -69,7 +69,7 @@ class EzLdapAuthenticatorExtension extends Extension implements PrependExtension
 
     protected function loadLdapConnection($name, array $connection, ContainerBuilder $container)
     {
-        [ 'ldap' => $ldapConfig, 'ezuser' => $ezuserConfig ] = $connection;
+        ['ldap' => $ldapConfig, 'ezuser' => $ezuserConfig] = $connection;
 
         $ldapEntryConverterId = sprintf('nova_ez.ldap.%s_connection.ldap_entry_converter', $name);
         $container->setDefinition($ldapEntryConverterId, new ChildDefinition(LdapEntryConverter::class))

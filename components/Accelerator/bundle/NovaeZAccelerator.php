@@ -15,7 +15,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZAccelerator;
 
-use LogicException;
 use Novactive\Bundle\eZAccelerator\DependencyInjection\Compiler\EventPass;
 use Novactive\Bundle\eZAccelerator\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -37,7 +36,7 @@ final class NovaeZAccelerator extends Bundle
             if (!$extension instanceof ExtensionInterface) {
                 $fqdn = \get_class($extension);
                 $message = 'Extension %s must implement %s.';
-                throw new LogicException(sprintf($message, $fqdn, ExtensionInterface::class));
+                throw new \LogicException(sprintf($message, $fqdn, ExtensionInterface::class));
             }
             $this->extension = $extension;
         }

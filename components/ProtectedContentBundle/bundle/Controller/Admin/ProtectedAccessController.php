@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Controller\Admin;
 
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use Ibexa\Contracts\HttpCache\Handler\ContentTagInterface;
@@ -42,7 +41,7 @@ class ProtectedAccessController
         ?ProtectedAccess $access = null
     ): RedirectResponse {
         if ($request->isMethod('post')) {
-            $now = new DateTime();
+            $now = new \DateTime();
             if (null === $access) {
                 $access = new ProtectedAccess();
                 $access->setCreated($now);
@@ -62,7 +61,7 @@ class ProtectedAccessController
         return new RedirectResponse(
             $router->generate('ibexa.content.view', ['contentId' => $location->contentId,
                 'locationId' => $location->id,
-                ]).
+            ]).
             '#ibexa-tab-location-view-protect-content#tab'
         );
     }
@@ -86,7 +85,7 @@ class ProtectedAccessController
         return new RedirectResponse(
             $router->generate('ibexa.content.view', ['contentId' => $location->contentId,
                 'locationId' => $location->id,
-                ]).
+            ]).
             '#ibexa-tab-location-view-protect-content#tab'
         );
     }

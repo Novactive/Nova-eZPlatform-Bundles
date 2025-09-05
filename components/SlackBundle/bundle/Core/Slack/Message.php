@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZSlackBundle\Core\Slack;
 
 use JMS\Serializer\Annotation as Serializer;
-use RuntimeException;
 
 /**
  * Class Message.
@@ -24,18 +23,21 @@ class Message
 {
     /**
      * @var string
+     *
      * @Serializer\Type("string<translatable>")
      */
     private $text;
 
     /**
      * @var bool
+     *
      * @Serializer\Type("boolean")
      */
     private $markdown;
 
     /**
      * @var Attachment[]
+     *
      * @Serializer\Type("array<Novactive\Bundle\eZSlackBundle\Core\Slack\Attachment>")
      */
     private $attachments;
@@ -49,17 +51,11 @@ class Message
         $this->setAttachments($attachements);
     }
 
-    /**
-     * @return string
-     */
     public function getText(): ?string
     {
         return $this->text;
     }
 
-    /**
-     * @return Message
-     */
     public function setText(string $text): self
     {
         $this->text = $text;
@@ -85,11 +81,6 @@ class Message
         return $this;
     }
 
-    /**
-     * @param $index
-     *
-     * @return Message
-     */
     public function removeAttachmentAtIndex($index): self
     {
         unset($this->attachments[$index]);
@@ -98,14 +89,11 @@ class Message
         return $this;
     }
 
-    /**
-     * @return Message
-     */
     public function setAttachments(array $attachments): self
     {
         foreach ($attachments as $attachment) {
             if (!$attachment instanceof Attachment) {
-                throw new RuntimeException(sprintf('Provided Attachment is not an %s', Attachment::class));
+                throw new \RuntimeException(sprintf('Provided Attachment is not an %s', Attachment::class));
             }
         }
         $this->attachments = $attachments;
@@ -118,9 +106,6 @@ class Message
         return $this->markdown;
     }
 
-    /**
-     * @return Message
-     */
     public function setMarkdown(bool $markdown): self
     {
         $this->markdown = $markdown;

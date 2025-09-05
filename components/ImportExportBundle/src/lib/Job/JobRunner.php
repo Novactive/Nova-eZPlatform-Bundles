@@ -10,7 +10,6 @@ use AlmaviaCX\Bundle\IbexaImportExport\Monolog\WorkflowLogger;
 use AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowEvent;
 use AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowExecutor;
 use AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowRegistry;
-use DateTimeImmutable;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class JobRunner extends AbstractJobRunner
@@ -19,9 +18,6 @@ class JobRunner extends AbstractJobRunner
     protected WorkflowRegistry $workflowRegistry;
     protected JobRepository $jobRepository;
 
-    /**
-     * @param \AlmaviaCX\Bundle\IbexaImportExport\Job\JobRepository $jobRepository
-     */
     public function __construct(
         WorkflowExecutor $workflowExecutor,
         WorkflowRegistry $workflowRegistry,
@@ -61,7 +57,7 @@ class JobRunner extends AbstractJobRunner
             $workflow->setWriterResults($job->getWriterResults());
             $workflow->setTotalItemsCount($job->getTotalItemsCount());
         } else {
-            $job->setStartTime(new DateTimeImmutable());
+            $job->setStartTime(new \DateTimeImmutable());
             $onWorkflowStart = function (WorkflowEvent $event) use ($job) {
                 $workflow = $event->getWorkflow();
                 // Ibexa content creation trigger an entity manager clear, which mean we need to reload the entity

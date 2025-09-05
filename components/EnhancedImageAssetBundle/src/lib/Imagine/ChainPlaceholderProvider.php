@@ -18,7 +18,6 @@ use Ibexa\Bundle\Core\Imagine\PlaceholderProvider;
 use Ibexa\Bundle\Core\Imagine\PlaceholderProviderRegistry;
 use Ibexa\Core\FieldType\Image\Value as ImageValue;
 use Psr\Log\LoggerInterface;
-use RuntimeException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ChainPlaceholderProvider implements PlaceholderProvider
@@ -49,12 +48,12 @@ class ChainPlaceholderProvider implements PlaceholderProvider
             $provider = $this->providerRegistry->getProvider($providersConfig['provider']);
             try {
                 return $provider->getPlaceholder($value, $providersConfig['options']);
-            } catch (RuntimeException $exception) {
+            } catch (\RuntimeException $exception) {
                 $this->logger->warning($exception->getMessage());
                 continue;
             }
         }
-        throw new RuntimeException('Unable to get placeholder');
+        throw new \RuntimeException('Unable to get placeholder');
     }
 
     private function resolveOptions(array $options): array

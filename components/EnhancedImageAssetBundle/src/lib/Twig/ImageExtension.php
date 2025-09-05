@@ -22,12 +22,10 @@ use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Ibexa\Contracts\Core\Variation\Values\ImageVariation;
 use Ibexa\Contracts\Core\Variation\Values\Variation;
 use Ibexa\Core\MVC\Exception\SourceImageNotFoundException;
-use InvalidArgumentException;
 use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Novactive\EzEnhancedImageAsset\Values\FocusedVariation;
 use Psr\Log\LoggerInterface;
-use ReflectionException;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
@@ -106,10 +104,9 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
     }
 
     /**
-     * @param       $variationName
      * @param array $parameters
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      *
      * @return array|mixed
      */
@@ -158,9 +155,7 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
     }
 
     /**
-     * @param $variationName
-     *
-     *@throws ReflectionException
+     * @throws \ReflectionException
      *
      * @return ImageVariation|FocusedVariation|null
      */
@@ -190,9 +185,7 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
     /**
      * Returns the image variation object for $field/$versionInfo.
      *
-     * @throws ReflectionException
-     *
-     * @return \Ibexa\Contracts\Core\Variation\Values\Variation
+     * @throws \ReflectionException
      */
     public function getImageVariation(Field $field, VersionInfo $versionInfo, string $variationName): ?Variation
     {
@@ -214,7 +207,7 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
                     for image with id {$field->value->id} because source image can't be found"
                 );
             }
-        } catch (InvalidArgumentException $e) {
+        } catch (\InvalidArgumentException $e) {
             if (isset($this->logger)) {
                 $this->logger->error(
                     "Couldn't create variation '{$variationName}' 
@@ -241,9 +234,7 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
     }
 
     /**
-     * @param $variationName
-     *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      *
      * @return ImageVariation|FocusedVariation|null
      */

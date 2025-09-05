@@ -26,6 +26,6 @@ class IbexaContentListReaderOptionsFormType extends ReaderOptionsFormType
         $resolver->setDefaults([
             'data_class' => IbexaContentListReader::getOptionsType(),
             'translation_domain' => 'forms',
-                               ]);
+        ]);
     }
 }

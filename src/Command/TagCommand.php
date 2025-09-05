@@ -14,7 +14,6 @@ namespace Novactive\eZPlatform\Bundles\Command;
 
 use Novactive\eZPlatform\Bundles\Core\Collection\RemoteTags;
 use Novactive\eZPlatform\Bundles\Core\Tagger;
-use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -57,7 +56,7 @@ final class TagCommand extends Command
             null,
             function ($answer) use ($existingTags) {
                 if (!\is_string($answer) || \in_array($answer, $existingTags)) {
-                    throw new RuntimeException('This tag already exists.');
+                    throw new \RuntimeException('This tag already exists.');
                 }
 
                 return $answer;

@@ -40,7 +40,7 @@ class Type extends ImageType
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *
-     *@throws InvalidArgumentType
+     * @throws InvalidArgumentType
      */
     public function getEmptyValue(): Value
     {
@@ -52,7 +52,7 @@ class Type extends ImageType
      *
      * @param string|array|Value $inputValue
      *
-     *@throws InvalidArgumentType
+     * @throws InvalidArgumentType
      */
     protected function createValueFromInput($inputValue): Value
     {
@@ -98,8 +98,6 @@ class Type extends ImageType
 
     /**
      * Converts an $hash to the Value defined by the field type.
-     *
-     * @param $hash
      *
      * @throws InvalidArgumentType
      *
@@ -163,6 +161,7 @@ class Type extends ImageType
         }
 
         $properties['focusPoint'] = ($fieldValue->data['focusPoint'] ?? new FocusPoint());
+
         // Restored data comes in $data, since it has already been processed
         // there might be more data in the persistence value than needed here
         return $this->fromHash($properties);

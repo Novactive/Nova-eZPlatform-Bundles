@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Controller\Admin;
 
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use Novactive\Bundle\eZMailingBundle\Core\DataHandler\UserImport;
@@ -40,7 +39,9 @@ class MailingListController
     /**
      * @Route("/show/{mailingList}/{status}/{page}/{limit}", name="novaezmailing_mailinglist_show",
      *                                              defaults={"page":1, "limit":10, "status":"all"})
+     *
      * @Security("is_granted('view', mailingList)")
+     *
      * @Template()
      */
     public function showAction(
@@ -65,6 +66,7 @@ class MailingListController
 
     /**
      * @Route("", name="novaezmailing_mailinglist_index")
+     *
      * @Template()
      */
     public function indexAction(EntityManagerInterface $entityManager): array
@@ -77,7 +79,9 @@ class MailingListController
     /**
      * @Route("/edit/{mailinglist}", name="novaezmailing_mailinglist_edit")
      * @Route("/create", name="novaezmailing_mailinglist_create")
+     *
      * @Security("is_granted('edit', mailinglist)")
+     *
      * @Template()
      *
      * @return array|RedirectResponse
@@ -101,7 +105,7 @@ class MailingListController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $mailinglist
-                ->setUpdated(new DateTime());
+                ->setUpdated(new \DateTime());
             $entityManager->persist($mailinglist);
             $entityManager->flush();
 
@@ -118,6 +122,7 @@ class MailingListController
 
     /**
      * @Route("/delete/{mailinglist}", name="novaezmailing_mailinglist_remove")
+     *
      * @Security("is_granted('edit', mailinglist)")
      */
     public function deleteAction(
@@ -133,7 +138,9 @@ class MailingListController
 
     /**
      * @Route("/import/{mailinglist}", name="novaezmailing_mailinglist_import")
+     *
      * @Security("is_granted('edit', mailinglist)")
+     *
      * @Template()
      */
     public function importAction(
@@ -154,7 +161,7 @@ class MailingListController
                 try {
                     $user = $importer->hydrateUser($row);
                     $user
-                        ->setUpdated(new DateTime());
+                        ->setUpdated(new \DateTime());
                     $errors = $validator->validate($user);
                     if (count($errors) > 0) {
                         $errorList["Line {$index}"] = $errors;

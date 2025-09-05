@@ -17,7 +17,6 @@ namespace Novactive\EzEnhancedImageAssetBundle\Command;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
-use Exception;
 use Ibexa\Contracts\Core\Repository\ContentService;
 use Ibexa\Contracts\Core\Repository\ContentTypeService;
 use Ibexa\Contracts\Core\Repository\Exceptions\BadStateException;
@@ -143,7 +142,7 @@ class ConvertToImageAsset extends Command
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {

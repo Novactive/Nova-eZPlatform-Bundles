@@ -14,7 +14,6 @@ namespace Novactive\eZPlatform\Bundles\Command;
 
 use Novactive\eZPlatform\Bundles\Core\Collection\Components;
 use Novactive\eZPlatform\Bundles\Core\Component;
-use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
@@ -40,7 +39,7 @@ trait AskValidComponents
 
                 $component = $components[$answer] ?? null;
                 if (!$component) {
-                    throw new RuntimeException('This component does not exist. Do you have it?');
+                    throw new \RuntimeException('This component does not exist. Do you have it?');
                 }
 
                 return [$component];
@@ -63,7 +62,7 @@ trait AskValidComponents
             function ($answer) use ($components) {
                 $component = $components[$answer] ?? null;
                 if (!$component) {
-                    throw new RuntimeException('This component does not exist. Do you have it?');
+                    throw new \RuntimeException('This component does not exist. Do you have it?');
                 }
 
                 return $component;

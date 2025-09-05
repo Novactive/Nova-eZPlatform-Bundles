@@ -23,7 +23,6 @@ use eZ\Publish\API\Repository\Values\User\User as ValueUser;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use Novactive\Bundle\eZSlackBundle\Repository\User as UserRepository;
-use RuntimeException;
 
 /**
  * Class User.
@@ -64,9 +63,6 @@ class User
         $this->languages = $configResolver->getParameter('languages');
     }
 
-    /**
-     * @param $paramName
-     */
     private function getParameter($paramName)
     {
         return $this->configResolver->getParameter($paramName, 'nova_ezslack');
@@ -86,8 +82,8 @@ class User
             $existingFields[] = $fieldDefinition->identifier;
         }
         if (
-            \in_array(UserRepository::SLACK_ID, $existingFields) &&
-            \in_array(UserRepository::SLACK_TEAM_ID, $existingFields)
+            \in_array(UserRepository::SLACK_ID, $existingFields)
+            && \in_array(UserRepository::SLACK_TEAM_ID, $existingFields)
         ) {
             return;
         }
@@ -131,8 +127,8 @@ class User
         $slackId = $resource->getId();
         $slackTeamId = $resource->getProfile()['team'];
         if (
-            $user->getFieldValue(UserRepository::SLACK_ID)->text === $slackId &&
-            $user->getFieldValue(UserRepository::SLACK_TEAM_ID)->text === $slackTeamId
+            $user->getFieldValue(UserRepository::SLACK_ID)->text === $slackId
+            && $user->getFieldValue(UserRepository::SLACK_TEAM_ID)->text === $slackTeamId
         ) {
             return $user;
         }
@@ -213,7 +209,7 @@ class User
     public function convert(ResourceOwnerInterface $resource): ValueUser
     {
         if (!$resource instanceof SlackResourceOwner) {
-            throw new RuntimeException('User Converter works only with SlackResourceOwner.');
+            throw new \RuntimeException('User Converter works only with SlackResourceOwner.');
         }
 
         return $this->repository->sudo(

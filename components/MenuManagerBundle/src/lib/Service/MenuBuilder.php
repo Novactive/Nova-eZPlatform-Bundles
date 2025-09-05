@@ -56,9 +56,7 @@ class MenuBuilder
     }
 
     /**
-     * @param $name
-     *
-     * @return \Knp\Menu\ItemInterface
+     * @return ItemInterface
      */
     public function createItem($name, array $options = [])
     {
@@ -72,7 +70,7 @@ class MenuBuilder
     /**
      * @throws \Novactive\EzMenuManager\Exception\MenuItemTypeNotFoundException
      *
-     * @return \Knp\Menu\ItemInterface
+     * @return ItemInterface
      */
     public function appendChild(MenuItem $menuItem, ItemInterface $knpMenu)
     {

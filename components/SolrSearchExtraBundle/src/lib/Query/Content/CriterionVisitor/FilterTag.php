@@ -22,9 +22,9 @@ class FilterTag extends BaseVisitor
     /**
      * Map field value to a proper Solr representation.
      *
-     * @param \Novactive\EzSolrSearchExtra\Query\Content\Criterion\FilterTag $criterion
+     * @param FiltertagCriterion $criterion
      */
-    public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null): string
+    public function visit(Criterion $criterion, ?CriterionVisitor $subVisitor = null): string
     {
         $stringQuery = $subVisitor->visit($criterion->criterion);
         $stringQuery = trim($stringQuery, '()');

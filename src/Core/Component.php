@@ -10,10 +10,6 @@ class Component
 
     protected string $repo;
 
-    /**
-     * @param $name
-     * @param $repo
-     */
     public function __construct($name, $repo = null)
     {
         $this->name = $name;

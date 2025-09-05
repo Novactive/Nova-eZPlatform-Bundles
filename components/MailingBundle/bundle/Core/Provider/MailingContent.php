@@ -19,7 +19,6 @@ use Novactive\Bundle\eZMailingBundle\Core\Modifier\ModifierInterface;
 use Novactive\Bundle\eZMailingBundle\Entity\Broadcast as BroadcastEntity;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
 use Novactive\Bundle\eZMailingBundle\Entity\User as UserEntity;
-use Swift_Message;
 use Symfony\Component\HttpKernel\HttpKernelBrowser;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -86,12 +85,12 @@ class MailingContent
         Mailing $mailing,
         UserEntity $recipient,
         BroadcastEntity $broadcast
-    ): Swift_Message {
+    ): \Swift_Message {
         $html = $this->getNativeContent($mailing);
         foreach ($this->modifiers as $modifier) {
             $html = $modifier->modify($mailing, $recipient, $html, ['broadcast' => $broadcast]);
         }
-        $message = new Swift_Message($mailing->getSubject());
+        $message = new \Swift_Message($mailing->getSubject());
         $message->setBody($html, 'text/html', 'utf8');
         $campaign = $mailing->getCampaign();
         $message->setFrom($campaign->getSenderEmail(), $campaign->getSenderName());

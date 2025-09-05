@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Workflow;
 
 use Psr\Container\ContainerInterface;
-use ReflectionClass;
 use Symfony\Component\VarExporter\Instantiator;
 
 class WorkflowRegistry
@@ -51,11 +50,11 @@ class WorkflowRegistry
     /**
      * @throws \ReflectionException
      *
-     * @return ReflectionClass<\AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowInterface>
+     * @return \ReflectionClass<\AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowInterface>
      */
-    protected static function getWorkflowService(string $workflowServiceClassName): ReflectionClass
+    protected static function getWorkflowService(string $workflowServiceClassName): \ReflectionClass
     {
-        return new ReflectionClass($workflowServiceClassName);
+        return new \ReflectionClass($workflowServiceClassName);
     }
 
     /**

@@ -43,7 +43,7 @@ class UniqueFilterStep extends AbstractStep implements TranslationContainerInter
 
     public static function getTranslationMessages(): array
     {
-        return [( new Message('step.filter.unique.name', 'import_export') )->setDesc('Unique filter')];
+        return [(new Message('step.filter.unique.name', 'import_export'))->setDesc('Unique filter')];
     }
 
     public static function getOptionsType(): ?string

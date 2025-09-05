@@ -15,7 +15,7 @@ class QueryConverter extends NativeQueryConverter
     /** @var BaseQueryConverter */
     protected $baseConverter;
 
-    /** @var \Ibexa\Contracts\Solr\Query\CriterionVisitor */
+    /** @var CriterionVisitor */
     protected $criterionVisitor;
 
     /**

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Writer\Csv;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Writer\Stream\AbstractStreamWriter;
-use InvalidArgumentException;
 use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Translation\TranslationContainerInterface;
 use Symfony\Component\Translation\TranslatableMessage;
@@ -32,11 +31,11 @@ class CsvWriter extends AbstractStreamWriter implements TranslationContainerInte
         }
 
         if (!is_array($mappedItem)) {
-            throw new InvalidArgumentException('[CsvWriter] provided item must be an array.');
+            throw new \InvalidArgumentException('[CsvWriter] provided item must be an array.');
         }
         foreach ($mappedItem as $valueIdentifier => $value) {
             if (!is_scalar($value) && !is_null($value)) {
-                throw new InvalidArgumentException(
+                throw new \InvalidArgumentException(
                     sprintf(
                         '[CsvWriter] provided value for "%s" must be scalar instead of %s.',
                         $valueIdentifier,

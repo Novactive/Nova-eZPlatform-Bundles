@@ -17,7 +17,7 @@ class ComponentOptionsFormType extends AbstractType
         parent::buildForm($builder, $options);
 
         $showInitialized = $options['show_initialized'];
-        /** @var \AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentOptions|null $defaultConfiguration */
+        /** @var ComponentOptions|null $defaultConfiguration */
         $defaultConfiguration = $options['default_configuration'];
 
         if (false === $showInitialized && $defaultConfiguration) {
@@ -42,10 +42,10 @@ class ComponentOptionsFormType extends AbstractType
         parent::configureOptions($resolver);
         $resolver->define('default_configuration')->required()->allowedTypes(AbstractComponent::getOptionsType());
         $resolver->setDefaults([
-                                    'default_configuration' => null,
-                                    'show_initialized' => false,
-                                    'data_class' => AbstractComponent::getOptionsType(),
-                                    'translation_domain' => 'forms',
-                                ]);
+            'default_configuration' => null,
+            'show_initialized' => false,
+            'data_class' => AbstractComponent::getOptionsType(),
+            'translation_domain' => 'forms',
+        ]);
     }
 }

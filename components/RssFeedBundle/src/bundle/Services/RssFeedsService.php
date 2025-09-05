@@ -82,21 +82,21 @@ class RssFeedsService
         switch ($rssFeed->getSortType()) {
             case RssFeeds::SORT_TYPE_PUBLICATION:
                 $query->sortClauses = [
-                new Query\SortClause\DatePublished($rssFeed->getSortDirection()),
+                    new Query\SortClause\DatePublished($rssFeed->getSortDirection()),
                 ];
 
                 break;
 
             case RssFeeds::SORT_TYPE_MODIFICATION:
                 $query->sortClauses = [
-                new Query\SortClause\DateModified($rssFeed->getSortDirection()),
+                    new Query\SortClause\DateModified($rssFeed->getSortDirection()),
                 ];
 
                 break;
 
             case RssFeeds::SORT_TYPE_NAME:
                 $query->sortClauses = [
-                new Query\SortClause\ContentName($rssFeed->getSortDirection()),
+                    new Query\SortClause\ContentName($rssFeed->getSortDirection()),
                 ];
 
                 break;

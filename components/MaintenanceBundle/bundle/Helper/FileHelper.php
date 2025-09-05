@@ -14,12 +14,10 @@ declare(strict_types=1);
 
 namespace Novactive\NovaeZMaintenanceBundle\Helper;
 
-use Exception;
 use Ibexa\Contracts\Core\Repository\PermissionResolver;
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Ibexa\Core\Base\Exceptions\UnauthorizedException;
 use Ibexa\Core\IO\IOServiceInterface;
-use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpFoundation\Response;
@@ -127,7 +125,7 @@ class FileHelper
     {
         try {
             $content = $this->twig->render($this->getParameter('template', $siteaccess));
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             $content = $this->translate('maintenance.response.unexpected_error');
         }
         $response = new Response();
@@ -169,7 +167,7 @@ class FileHelper
     public function assertMaintenanceEnabled(string $siteaccess): void
     {
         if (true !== $this->isMaintenanceEnabled($siteaccess)) {
-            throw new RuntimeException(
+            throw new \RuntimeException(
                 $this->translate('maintenance.disabled', ['%siteaccess%' => $siteaccess])
             );
         }
@@ -234,7 +232,7 @@ class FileHelper
     public function isClientIpAuthorized(string $client_ip, string $siteaccess): bool
     {
         $authorized_ips = (array) $this->getParameter('authorized_ips', $siteaccess);
-        if (IPUtils::checkIp($client_ip, $authorized_ips)) {
+        if (IpUtils::checkIp($client_ip, $authorized_ips)) {
             return true;
         }
 

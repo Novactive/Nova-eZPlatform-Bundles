@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Component;
 
 use Psr\Container\ContainerInterface;
-use ReflectionClass;
 
 class ComponentRegistry
 {
@@ -24,8 +23,8 @@ class ComponentRegistry
     public static function getComponentOptionsFormType(string $componentClassName): ?string
     {
         try {
-            /** @var ReflectionClass<\AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentInterface> $componentClass */
-            $componentClass = new ReflectionClass($componentClassName);
+            /** @var \ReflectionClass<\AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentInterface> $componentClass */
+            $componentClass = new \ReflectionClass($componentClassName);
 
             return $componentClass->getMethod('getOptionsFormType')->invoke(null);
         } catch (\ReflectionException $e) {
@@ -39,8 +38,8 @@ class ComponentRegistry
     public static function getComponentName(string $componentClassName)
     {
         try {
-            /** @var ReflectionClass<\AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentInterface> $componentClass */
-            $componentClass = new ReflectionClass($componentClassName);
+            /** @var \ReflectionClass<\AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentInterface> $componentClass */
+            $componentClass = new \ReflectionClass($componentClassName);
 
             return $componentClass->getMethod('getName')->invoke(null);
         } catch (\ReflectionException $e) {

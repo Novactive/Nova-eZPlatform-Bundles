@@ -63,8 +63,6 @@ class MenuItemTypeRegistry
     }
 
     /**
-     * @param $entityClassName
-     *
      * @throws MenuItemTypeNotFoundException
      *
      * @return MenuItemTypeInterface

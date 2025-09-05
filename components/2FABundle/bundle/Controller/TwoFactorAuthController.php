@@ -93,8 +93,8 @@ class TwoFactorAuthController extends Controller
 
         // If none of the forms is submitted show the first one with method selection
         if (
-            isset($methodForm) && !$qrCodeForm->isSubmitted() &&
-            !($methodForm->isSubmitted() && $methodForm->isValid())
+            isset($methodForm) && !$qrCodeForm->isSubmitted()
+            && !($methodForm->isSubmitted() && $methodForm->isValid())
         ) {
             return $this->render(
                 '@ibexadesign/2fa/setup.html.twig',

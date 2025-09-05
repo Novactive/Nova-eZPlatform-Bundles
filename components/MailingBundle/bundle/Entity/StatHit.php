@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Entity;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -30,7 +29,9 @@ class StatHit
      * @var int
      *
      * @ORM\Column(name="STHIT_id", type="bigint", nullable=false)
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
@@ -65,14 +66,16 @@ class StatHit
 
     /**
      * @var Broadcast
+     *
      * @ORM\ManyToOne(targetEntity="Novactive\Bundle\eZMailingBundle\Entity\Broadcast")
+     *
      * @ORM\JoinColumn(name="BDCST_id", referencedColumnName="BDCST_id")
      */
     private $broadcast;
 
     public function __construct()
     {
-        $this->created = new DateTime();
+        $this->created = new \DateTime();
     }
 
     public function getId(): int

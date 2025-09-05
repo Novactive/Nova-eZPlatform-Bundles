@@ -12,7 +12,6 @@
 
 namespace Novactive\EzRssFeedBundle\Controller\Admin;
 
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use eZ\Publish\API\Repository\PermissionResolver;
 use Ibexa\Bundle\Core\Controller;
@@ -131,7 +130,7 @@ class RssFeedController extends Controller
     /**
      * @Route("/edit/{id}", name="platform_admin_ui_rss_feeds_edit")
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function editAction(Request $request, int $id)
     {
@@ -169,9 +168,9 @@ class RssFeedController extends Controller
         $feedForm->handleRequest($request);
 
         if ($feedForm->isSubmitted() && $feedForm->isValid()) {
-            $rssFeed->setModifiedAt(new DateTime());
+            $rssFeed->setModifiedAt(new \DateTime());
             foreach ($rssFeed->getFeedItems() as $feedItem) {
-                $feedItem->setModifiedAt(new DateTime());
+                $feedItem->setModifiedAt(new \DateTime());
             }
             $this->entityManager->persist($rssFeed);
 

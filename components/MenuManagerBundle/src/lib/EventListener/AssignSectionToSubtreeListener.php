@@ -17,7 +17,6 @@ namespace Novactive\EzMenuManager\EventListener;
 use Doctrine\DBAL\Connection;
 use Ibexa\Contracts\Core\Persistence\Content\Location\Handler;
 use Ibexa\Contracts\Core\Repository\Events\Section\AssignSectionToSubtreeEvent;
-use PDO;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class AssignSectionToSubtreeListener implements EventSubscriberInterface
@@ -67,7 +66,7 @@ class AssignSectionToSubtreeListener implements EventSubscriberInterface
 
         $contentIds = array_map(
             'intval',
-            $selectContentIdsQuery->execute()->fetchAll(PDO::FETCH_COLUMN)
+            $selectContentIdsQuery->execute()->fetchAll(\PDO::FETCH_COLUMN)
         );
 
         foreach ($contentIds as $contentId) {

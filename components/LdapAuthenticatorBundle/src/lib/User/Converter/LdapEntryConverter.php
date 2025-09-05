@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\eZLDAPAuthenticator\User\Converter;
 
-use Exception;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\User\User as EzApiUser;
@@ -89,7 +88,7 @@ class LdapEntryConverter
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function convert(string $username, Entry $entry): EzLdapUser
     {
@@ -117,7 +116,7 @@ class LdapEntryConverter
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function convertToEzUser(string $username, string $email, array $attributes): EzApiUser
     {

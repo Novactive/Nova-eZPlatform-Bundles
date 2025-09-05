@@ -30,8 +30,8 @@ class MenuItemEditRightSidebarBuilder extends AbstractBuilder implements Transla
     public static function getTranslationMessages(): array
     {
         return [
-            ( new Message(self::ITEM__EDIT, 'menu_manager') )->setDesc('Publish'),
-            ( new Message(self::ITEM__CANCEL, 'menu_manager') )->setDesc('Discard changes'),
+            (new Message(self::ITEM__EDIT, 'menu_manager'))->setDesc('Publish'),
+            (new Message(self::ITEM__CANCEL, 'menu_manager'))->setDesc('Discard changes'),
         ];
     }
 

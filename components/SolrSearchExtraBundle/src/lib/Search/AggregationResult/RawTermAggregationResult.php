@@ -4,14 +4,10 @@ declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Search\AggregationResult;
 
-use ArrayIterator;
-use Countable;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation;
 use Ibexa\Contracts\Core\Repository\Values\Content\Search\AggregationResult;
-use Iterator;
-use IteratorAggregate;
 
-class RawTermAggregationResult extends AggregationResult implements IteratorAggregate, Countable
+class RawTermAggregationResult extends AggregationResult implements \IteratorAggregate, \Countable
 {
     /** @var RawTermAggregationResultEntry[] */
     private $entries;
@@ -58,10 +54,10 @@ class RawTermAggregationResult extends AggregationResult implements IteratorAggr
         return count($this->entries);
     }
 
-    public function getIterator(): Iterator
+    public function getIterator(): \Iterator
     {
         if (empty($this->entries)) {
-            return new ArrayIterator();
+            return new \ArrayIterator();
         }
 
         foreach ($this->entries as $entry) {

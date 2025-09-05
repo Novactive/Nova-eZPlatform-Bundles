@@ -21,8 +21,6 @@ use Novactive\Bundle\eZMailingBundle\Core\DataHandler\Unregistration;
 use Novactive\Bundle\eZMailingBundle\Entity\Campaign;
 use Novactive\Bundle\eZMailingBundle\Entity\ConfirmationToken;
 use Novactive\Bundle\eZMailingBundle\Entity\Mailing;
-use RuntimeException;
-use Swift_Message;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -53,10 +51,10 @@ class MessageContent
         $this->translator = $translator;
     }
 
-    private function createMessage(string $subject, ?Campaign $campaign = null): Swift_Message
+    private function createMessage(string $subject, ?Campaign $campaign = null): \Swift_Message
     {
         $prefix = $this->configResolver->getParameter('email_subject_prefix', 'nova_ezmailing');
-        $message = new Swift_Message("{$prefix} {$subject}");
+        $message = new \Swift_Message("{$prefix} {$subject}");
         if (null !== $campaign) {
             $message->setFrom($campaign->getSenderEmail(), $campaign->getSenderName());
             $message->setReturnPath($campaign->getReturnPathEmail());
@@ -72,7 +70,7 @@ class MessageContent
         return $message;
     }
 
-    public function getStartSendingMailing(Mailing $mailing): Swift_Message
+    public function getStartSendingMailing(Mailing $mailing): \Swift_Message
     {
         $translated = $this->translator->trans('messages.start_sending.being_sent3', [], 'ezmailing');
         $message = $this->createMessage($translated, $mailing->getCampaign());
@@ -87,7 +85,7 @@ class MessageContent
         return $message;
     }
 
-    public function getStopSendingMailing(Mailing $mailing): Swift_Message
+    public function getStopSendingMailing(Mailing $mailing): \Swift_Message
     {
         $translated = $this->translator->trans('messages.stop_sending.sent3', [], 'ezmailing');
         $message = $this->createMessage($translated, $mailing->getCampaign());
@@ -102,13 +100,13 @@ class MessageContent
         return $message;
     }
 
-    public function getRegistrationConfirmation(Registration $registration, ConfirmationToken $token): Swift_Message
+    public function getRegistrationConfirmation(Registration $registration, ConfirmationToken $token): \Swift_Message
     {
         $translated = $this->translator->trans('messages.confirm_registration.confirm', [], 'ezmailing');
         $message = $this->createMessage($translated);
         $user = $registration->getUser();
         if (null === $user) {
-            throw new RuntimeException('User cannot be empty.');
+            throw new \RuntimeException('User cannot be empty.');
         }
         $message->setTo($user->getEmail());
         $message->setBody(
@@ -129,12 +127,12 @@ class MessageContent
     public function getUnregistrationConfirmation(
         Unregistration $unregistration,
         ConfirmationToken $token
-    ): Swift_Message {
+    ): \Swift_Message {
         $translated = $this->translator->trans('messages.confirm_unregistration.confirmation', [], 'ezmailing');
         $message = $this->createMessage($translated);
         $user = $unregistration->getUser();
         if (null === $user) {
-            throw new RuntimeException('User cannot be empty.');
+            throw new \RuntimeException('User cannot be empty.');
         }
         $message->setTo($user->getEmail());
         $message->setBody(

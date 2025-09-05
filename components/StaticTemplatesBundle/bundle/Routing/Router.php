@@ -55,7 +55,7 @@ class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAcc
         $this->twig = $twig;
     }
 
-    public function setSiteAccess(SiteAccess $siteAccess = null): void
+    public function setSiteAccess(?SiteAccess $siteAccess = null): void
     {
         $this->siteAccess = $siteAccess;
     }
@@ -63,8 +63,8 @@ class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAcc
     public function matchRequest(Request $request): array
     {
         if (
-            !isset($this->siteAccessGroups['static_group']) ||
-            !\in_array($this->siteAccess->name, $this->siteAccessGroups['static_group'])
+            !isset($this->siteAccessGroups['static_group'])
+            || !\in_array($this->siteAccess->name, $this->siteAccessGroups['static_group'])
         ) {
             throw new ResourceNotFoundException();
         }

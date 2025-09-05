@@ -97,7 +97,7 @@ class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
     /**
      * @required
      */
-    public function setSiteAccess(SiteAccess $siteAccess = null): void
+    public function setSiteAccess(?SiteAccess $siteAccess = null): void
     {
         $this->siteAccess = $siteAccess;
         $this->setConfig();
@@ -170,8 +170,8 @@ class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
         }
 
         if (
-            false === $userAuthData ||
-            ('email' !== $this->method && empty($userAuthData["{$this->method}_authentication_secret"]))
+            false === $userAuthData
+            || ('email' !== $this->method && empty($userAuthData["{$this->method}_authentication_secret"]))
         ) {
             return $user;
         }
@@ -254,11 +254,11 @@ class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
             return true;
         }
 
-        return is_array($userAuthData) &&
-               (
-                   !empty($userAuthData['google_authentication_secret']) ||
-                   !empty($userAuthData['totp_authentication_secret']) ||
-                   !empty($userAuthData['microsoft_authentication_secret'])
+        return is_array($userAuthData)
+               && (
+                   !empty($userAuthData['google_authentication_secret'])
+                   || !empty($userAuthData['totp_authentication_secret'])
+                   || !empty($userAuthData['microsoft_authentication_secret'])
                );
     }
 

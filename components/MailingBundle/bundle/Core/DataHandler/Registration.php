@@ -35,9 +35,6 @@ class Registration
         $this->mailingLists = new ArrayCollection();
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): ?User
     {
         return $this->user;

@@ -5,6 +5,7 @@
  *
  * @author    Novactive
  * @copyright 2020 Novactive
+ *
  * @licence   "SEE FULL LICENSE OPTIONS IN LICENSE.md"
  *            Nova eZ Algolia Search Engine is tri-licensed, meaning you must choose one of three licenses to use:
  *                - Commercial License: a paid license, meant for commercial use. The default option for most users.
@@ -30,7 +31,6 @@ use Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\FacetBuilderVisitor\FacetB
 use Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\ResultExtractor\ResultExtractor;
 use Novactive\Bundle\eZAlgoliaSearchEngine\Core\Query\SortClauseVisitor\SortClauseVisitor;
 use Novactive\Bundle\eZAlgoliaSearchEngine\DependencyInjection\Configuration;
-use RuntimeException;
 
 final class Search
 {
@@ -209,7 +209,7 @@ final class Search
     private function visitSortClauses(array $sortClauses): ?string
     {
         if (\count($sortClauses) > 1) {
-            throw new RuntimeException('Only one Sort Clause cab be used to select the sorting replica.');
+            throw new \RuntimeException('Only one Sort Clause cab be used to select the sorting replica.');
         }
 
         if (0 === \count($sortClauses)) {

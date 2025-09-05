@@ -60,9 +60,10 @@ class SlackAuthenticator extends SocialAuthenticator
 
     public function supports(Request $request): bool
     {
-//        $routePattern = $this->router->generate('_novaezslack_slack_oauth_check');
+        //        $routePattern = $this->router->generate('_novaezslack_slack_oauth_check');
 
         $routePattern = '_novaezslack/auth/check';
+
         // need to manage Site Access here, then we check only the end
         return substr($request->getPathInfo(), -\strlen($routePattern)) === $routePattern;
     }
@@ -97,7 +98,7 @@ class SlackAuthenticator extends SocialAuthenticator
      * @param Request                 $request       The request that resulted in an AuthenticationException
      * @param AuthenticationException $authException The exception that started the authentication process
      */
-    public function start(Request $request, AuthenticationException $authException = null): Response
+    public function start(Request $request, ?AuthenticationException $authException = null): Response
     {
         return new RedirectResponse($this->router->generate('login'));
     }

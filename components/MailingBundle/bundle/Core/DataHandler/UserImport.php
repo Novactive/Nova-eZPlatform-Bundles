@@ -21,7 +21,9 @@ class UserImport
 {
     /**
      * @var File
+     *
      * @Assert\NotBlank()
+     *
      * @Assert\File(
      *     mimeTypes={"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
      *     mimeTypesMessage="Please upload a valid excel file (xls, xlsx)"

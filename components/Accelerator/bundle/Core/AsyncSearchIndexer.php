@@ -62,7 +62,7 @@ class AsyncSearchIndexer implements Handler
         return $this->syncHandler->findLocations($query, $languageFilter);
     }
 
-    public function suggest($prefix, $fieldPaths = [], $limit = 10, Criterion $filter = null)
+    public function suggest($prefix, $fieldPaths = [], $limit = 10, ?Criterion $filter = null)
     {
         return $this->syncHandler->suggest($prefix, $fieldPaths, $limit, $filter);
     }

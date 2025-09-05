@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZMailingBundle\Entity;
 
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,11 +24,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="novaezmailing_user",
  *            uniqueConstraints={ @ORM\UniqueConstraint(name="unique_email",columns={"USER_email"})},
  *            indexes={
+ *
  *                @ORM\Index(name="search_idx_restricted", columns={"USER_restricted"}),
  *                @ORM\Index(name="search_idx_status", columns={"USER_status"})
  *            }
  * )
+ *
  * @ORM\Entity(repositoryClass="Novactive\Bundle\eZMailingBundle\Repository\User")
+ *
  * @UniqueEntity(
  *     fields={"email"},
  *     errorPath="email",
@@ -96,113 +98,134 @@ class User
     public function __construct()
     {
         $this->registrations = new ArrayCollection();
-        $this->created = new DateTime();
+        $this->created = new \DateTime();
         $this->restricted = false;
-        $this->updated = new DateTime();
+        $this->updated = new \DateTime();
     }
 
     /**
      * @var int
+     *
      * @ORM\Column(name="USER_id", type="bigint", nullable=false)
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="USER_email", type="string", length=255, nullable=false)
+     *
      * @Assert\NotBlank(message="Email is mandatory")
      */
     private $email;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="USER_first_name", type="string", length=255, nullable=true)
      */
     private $firstName;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="USER_last_name", type="string", length=255, nullable=true)
      */
     private $lastName;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="USER_gender", type="string", length=255, nullable=true)
      */
     private $gender;
 
     /**
-     * @var DateTime
+     * @var \DateTime
+     *
      * @ORM\Column(name="USER_birth_date", type="date", nullable=true)
      */
     private $birthDate;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="USER_phone", type="string", length=255, nullable=true)
      */
     private $phone;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="USER_zipcode", type="string", length=255, nullable=true)
      */
     private $zipcode;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="USER_city", type="string", length=255, nullable=true)
      */
     private $city;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="USER_state", type="string", length=255, nullable=true)
      */
     private $state;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="USER_country", type="string", length=255, nullable=true)
      */
     private $country;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="USER_job_title", type="string", length=255, nullable=true)
      */
     private $jobTitle;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="USER_company", type="string", length=255, nullable=true)
      */
     private $company;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="USER_origin", type="string", length=255, nullable=false)
      */
     private $origin;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="USER_status", type="string", nullable=false)
      */
     private $status;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="USER_restricted", type="boolean", nullable=false)
      */
     private $restricted;
 
     /**
      * @var Registration[]
+     *
      * @ORM\OrderBy({"created" = "ASC"})
+     *
      * @ORM\OneToMany(targetEntity="Novactive\Bundle\eZMailingBundle\Entity\Registration", mappedBy="user",
      *                                                                                     cascade={"persist","remove"},
      *                                                                                     orphanRemoval=true
@@ -270,12 +293,12 @@ class User
         return $this;
     }
 
-    public function getBirthDate(): ?DateTime
+    public function getBirthDate(): ?\DateTime
     {
         return $this->birthDate;
     }
 
-    public function setBirthDate(?DateTime $birthDate): self
+    public function setBirthDate(?\DateTime $birthDate): self
     {
         $this->birthDate = $birthDate;
 

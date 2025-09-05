@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Accessor;
 
-use DOMNode;
-use DOMXPath;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class XpathPropertyAccessor implements PropertyAccessorInterface
@@ -17,11 +15,11 @@ class XpathPropertyAccessor implements PropertyAccessorInterface
 
     public function getValue($objectOrArray, $propertyPath)
     {
-        if (!$objectOrArray instanceof DOMNode) {
+        if (!$objectOrArray instanceof \DOMNode) {
             return;
         }
 
-        $xpath = new DOMXPath($objectOrArray->ownerDocument);
+        $xpath = new \DOMXPath($objectOrArray->ownerDocument);
 
         return $xpath->evaluate((string) $propertyPath, $objectOrArray);
     }
