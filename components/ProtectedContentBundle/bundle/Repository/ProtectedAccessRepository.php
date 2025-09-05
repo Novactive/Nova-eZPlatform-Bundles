@@ -14,24 +14,18 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Repository;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Ibexa\Contracts\Core\Repository\Repository;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
 
-class ProtectedAccessRepository extends EntityRepository
+class ProtectedAccessRepository
 {
-    /**
-     * @var Repository
-     */
-    private $repository;
-
-    /**
-     * @required
-     */
-    public function setRepository(Repository $repository): void
-    {
-        $this->repository = $repository;
+    public function __construct(
+        protected readonly Repository $repository,
+        protected readonly EntityManagerInterface $entityManager,
+    ) {
     }
 
     protected function getAlias(): string
@@ -49,27 +43,18 @@ class ProtectedAccessRepository extends EntityRepository
         if (null === $content) {
             return [];
         }
-        $contentIds = $this->repository->sudo(
-            function (Repository $repository) use ($content) {
-                $ids = [$content->id];
-                $locations = $repository->getLocationService()->loadLocations($content->contentInfo);
-                foreach ($locations as $location) {
-                    /** @var Location $location */
-                    $parent = $repository->getLocationService()->loadLocation($location->parentLocationId);
-                    $ids[] = $parent->contentInfo->id;
-                }
+        $contentIds = $this->getContentIds($content);
 
-                return $ids;
-            }
-        );
+        $entityRepository = $this->entityManager->getRepository($this->getEntityClass());
 
-        $qb = parent::createQueryBuilderForFilters();
+        $qb = $entityRepository->createQueryBuilder($this->getAlias());
         $qb->where($qb->expr()->eq($this->getAlias().'.enabled', true));
         $qb->andWhere(
             $qb->expr()->in($this->getAlias().'.contentId', ':contentIds')
         );
         $qb->setParameter('contentIds', $contentIds);
         $results = $qb->getQuery()->getResult();
+
         $filteredResults = [];
         foreach ($results as $protection) {
             /** @var ProtectedAccess $protection */
@@ -85,5 +70,38 @@ class ProtectedAccessRepository extends EntityRepository
         }
 
         return $filteredResults;
+    }
+
+    /**
+     * Retourne les ContentID du contenu et de tous ces descendants en prenant en compte ses multiples emplacements.
+     */
+    protected function getContentIds(Content $content): array
+    {
+        return $this->repository->sudo(
+            function (Repository $repository) use ($content) {
+                $ids = [$content->id];
+                $locations = $repository->getLocationService()->loadLocations($content->contentInfo);
+                $ct = 0;
+                foreach ($locations as $location) {
+                    /** @var Location $loc */
+                    $loc = $location;
+                    while (
+                        $loc->parentLocationId
+                        && ($loc = $repository->getLocationService()->loadLocation($loc->parentLocationId))
+                        && $loc instanceof Location
+                        && $loc->parentLocationId
+                        && 1 !== $loc->parentLocationId
+                    ) {
+                        ++$ct;
+                        $ids[] = $loc->getContentInfo()->id;
+                        if ($ct >= 15) {
+                            break 2;
+                        }
+                    }
+                }
+
+                return $ids;
+            }
+        );
     }
 }
