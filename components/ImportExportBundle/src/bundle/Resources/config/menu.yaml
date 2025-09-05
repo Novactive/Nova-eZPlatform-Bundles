@@ -1,0 +1,14 @@
+services:
+    AlmaviaCX\Bundle\IbexaImportExport\AdminUi\Menu\Event\MenuListener:
+        arguments:
+            $permissionResolver: '@Ibexa\Contracts\Core\Repository\PermissionResolver'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    AlmaviaCX\Bundle\IbexaImportExport\AdminUi\Menu\JobCreateRightSidebarBuilder:
+        public: true
+        arguments:
+            $eventDispatcher: '@event_dispatcher'
+            $factory: '@Ibexa\AdminUi\Menu\MenuItemFactory'
+        tags:
+            - { name: knp_menu.menu_builder, method: build, alias: almaviacx.import_export.menu.job_create.sidebar_right }

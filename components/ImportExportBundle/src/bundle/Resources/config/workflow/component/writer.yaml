@@ -1,0 +1,28 @@
+services:
+    AlmaviaCX\Bundle\IbexaImportExport\Writer\AbstractWriter:
+        abstract: true
+        arguments:
+            $itemTransformer: '@AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\ItemTransformer'
+            $references: '@AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag'
+            $sourceResolver: '@AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\SourceResolver'
+
+    AlmaviaCX\Bundle\IbexaImportExport\Writer\Csv\CsvWriter:
+        parent: AlmaviaCX\Bundle\IbexaImportExport\Writer\AbstractWriter
+        arguments:
+            $fileHandler: '@AlmaviaCX\Bundle\IbexaImportExport\File\FileHandler'
+        tags:
+            - { name: almaviacx.import_export.component, alias: writer.csv }
+
+    AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentWriter:
+        parent: AlmaviaCX\Bundle\IbexaImportExport\Writer\AbstractWriter
+        arguments:
+            $repository: '@Ibexa\Contracts\Core\Repository\Repository'
+            $objectAccessorBuilder: '@AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\ObjectAccessorBuilder'
+            $contentImporter: '@AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentImporter'
+        tags:
+            - { name: almaviacx.import_export.component, alias: writer.ibexa.content }
+
+    AlmaviaCX\Bundle\IbexaImportExport\Writer\Utils\DumpWriter:
+        parent: AlmaviaCX\Bundle\IbexaImportExport\Writer\AbstractWriter
+        tags:
+            - { name: almaviacx.import_export.component, alias: writer.utils.dump }

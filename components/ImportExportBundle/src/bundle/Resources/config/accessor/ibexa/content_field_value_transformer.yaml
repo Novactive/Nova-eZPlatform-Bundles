@@ -1,0 +1,66 @@
+services:
+    almaviacx.import_export.content.field.value.transformer.ezstring:
+        lazy: true
+        class: AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\Content\Field\ValueTransformer\GenericFieldValueTransformer
+        arguments:
+            $propertyName: 'value.text'
+        tags:
+            - { name: 'almaviacx.import_export.content.field.value.transformer', type: 'ezstring' }
+
+    almaviacx.import_export.content.field.value.transformer.eztext:
+        lazy: true
+        class: AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\Content\Field\ValueTransformer\GenericFieldValueTransformer
+        arguments:
+            $propertyName: 'value.text'
+        tags:
+            - { name: 'almaviacx.import_export.content.field.value.transformer', type: 'eztext' }
+
+    almaviacx.import_export.content.field.value.transformer.ezrichtext:
+        lazy: true
+        class: AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\Content\Field\ValueTransformer\RichtextFieldValueTransformer
+        arguments:
+            $richTextOutputConverter: '@ibexa.richtext.converter.output.xhtml5'
+        tags:
+            - { name: 'almaviacx.import_export.content.field.value.transformer', type: 'ezrichtext' }
+
+    almaviacx.import_export.content.field.value.transformer.ezdate:
+        lazy: true
+        class: AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\Content\Field\ValueTransformer\DateFieldValueTransformer
+        tags:
+            - { name: 'almaviacx.import_export.content.field.value.transformer', type: 'ezdate' }
+
+    almaviacx.import_export.content.field.value.transformer.ezdatetime:
+        lazy: true
+        class: AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\Content\Field\ValueTransformer\DateTimeFieldValueTransformer
+        tags:
+            - { name: 'almaviacx.import_export.content.field.value.transformer', type: 'ezdatetime' }
+
+    almaviacx.import_export.content.field.value.transformer.ibexa_taxonomy_entry_assignment:
+        lazy: true
+        class: AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\Content\Field\ValueTransformer\TaxonomyFieldValueTransformer
+        arguments:
+            $taxonomyAccessorBuilder: '@AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\Taxonomy\TaxonomyAccessorBuilder'
+        tags:
+            - { name: 'almaviacx.import_export.content.field.value.transformer', type: 'ibexa_taxonomy_entry_assignment' }
+
+    almaviacx.import_export.content.field.value.transformer.ezselection:
+        lazy: true
+        class: AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\Content\Field\ValueTransformer\SelectionFieldValueTransformer
+        tags:
+            - { name: 'almaviacx.import_export.content.field.value.transformer', type: 'ezselection' }
+
+    almaviacx.import_export.content.field.value.transformer.ezrelation:
+        lazy: true
+        class: AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\Content\Field\ValueTransformer\RelationFieldValueTransformer
+        arguments:
+            $contentAccessorBuilder: '@AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\Content\ContentAccessorBuilder'
+        tags:
+            - { name: 'almaviacx.import_export.content.field.value.transformer', type: 'ezobjectrelation' }
+
+    almaviacx.import_export.content.field.value.transformer.ezobjectrelationlist:
+        lazy: true
+        class: AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\Content\Field\ValueTransformer\RelationListFieldValueTransformer
+        arguments:
+            $contentAccessorBuilder: '@AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\Content\ContentAccessorBuilder'
+        tags:
+            - { name: 'almaviacx.import_export.content.field.value.transformer', type: 'ezobjectrelationlist' }

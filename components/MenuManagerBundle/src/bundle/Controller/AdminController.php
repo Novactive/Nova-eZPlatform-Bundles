@@ -15,7 +15,9 @@ namespace Novactive\EzMenuManagerBundle\Controller;
 use Doctrine\ORM\EntityManagerInterface;
 use Ibexa\Contracts\AdminUi\Controller\Controller;
 use Ibexa\Contracts\AdminUi\Notification\NotificationHandlerInterface;
+use Ibexa\Contracts\Core\Repository\PermissionResolver;
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
+use Ibexa\Core\Base\Exceptions\UnauthorizedException;
 use Novactive\EzMenuManager\Form\Type\MenuDeleteType;
 use Novactive\EzMenuManager\Form\Type\MenuSearchType;
 use Novactive\EzMenuManager\Form\Type\MenuType;
@@ -45,6 +47,7 @@ class AdminController extends Controller
     protected NotificationHandlerInterface $notificationHandler;
     protected EntityManagerInterface $em;
     protected ConfigResolverInterface $configResolver;
+    protected PermissionResolver $permissionResolver;
 
     /**
      * AdminController constructor.
@@ -53,12 +56,14 @@ class AdminController extends Controller
         TranslatorInterface $translator,
         NotificationHandlerInterface $notificationHandler,
         EntityManagerInterface $em,
-        ConfigResolverInterface $configResolver
+        ConfigResolverInterface $configResolver,
+        PermissionResolver $permissionResolver
     ) {
         $this->translator = $translator;
         $this->notificationHandler = $notificationHandler;
         $this->em = $em;
         $this->configResolver = $configResolver;
+        $this->permissionResolver = $permissionResolver;
     }
 
     /**
@@ -72,6 +77,9 @@ class AdminController extends Controller
      */
     public function listAction(Request $request, $page = 1)
     {
+        if (!$this->permissionResolver->hasAccess('menu_manager', 'list')) {
+            throw new UnauthorizedException('menu_manager', 'list', []);
+        }
         $queryBuilder = $this->em->createQueryBuilder()
                            ->select('m')
                            ->from(Menu::class, 'm')
@@ -142,6 +150,9 @@ class AdminController extends Controller
      */
     public function newAction(Request $request)
     {
+        if (!$this->permissionResolver->hasAccess('menu_manager', 'new')) {
+            throw new UnauthorizedException('menu_manager', 'new', []);
+        }
         $menu = new Menu();
         $menu->setRootLocationId(
             $this->configResolver->getParameter('content.tree_root.location_id')
@@ -157,6 +168,10 @@ class AdminController extends Controller
      */
     public function editAction(Request $request, Menu $menu)
     {
+        if (!$this->permissionResolver->hasAccess('menu_manager', 'edit')) {
+            throw new UnauthorizedException('menu_manager', 'edit', []);
+        }
+
         $form = $this->createForm(MenuType::class, $menu);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -187,6 +202,9 @@ class AdminController extends Controller
      */
     public function deleteAction(Request $request)
     {
+        if (!$this->permissionResolver->hasAccess('menu_manager', 'delete')) {
+            throw new UnauthorizedException('menu_manager', 'delete', []);
+        }
         $form = $this->createForm(MenuDeleteType::class);
         $form->handleRequest($request);
 

@@ -19,14 +19,21 @@ class RawTermAggregationResultExtractor implements AggregationResultExtractor
     /** @var string */
     private $aggregationClass;
 
-    public function __construct(string $aggregationClass, AbstractRawTermAggregationKeyMapper $keyMapper = null)
-    {
+    /** @var \Ibexa\Contracts\Solr\ResultExtractor\AggregationResultExtractor */
+    protected $aggregationResultExtractor;
+
+    public function __construct(
+        string $aggregationClass,
+        AggregationResultExtractor $aggregationResultExtractor,
+        AbstractRawTermAggregationKeyMapper $keyMapper = null
+    ) {
         if (null === $keyMapper) {
             $keyMapper = new RawTermAggregationKeyMapper();
         }
 
         $this->keyMapper = $keyMapper;
         $this->aggregationClass = $aggregationClass;
+        $this->aggregationResultExtractor = $aggregationResultExtractor;
     }
 
     public function canVisit(Aggregation $aggregation, array $languageFilter): bool
@@ -47,10 +54,26 @@ class RawTermAggregationResultExtractor implements AggregationResultExtractor
             foreach ($data->buckets as $bucket) {
                 $key = $bucket->val;
                 if (isset($mappedKeys[$key])) {
+                    $nestedAggregationtsResults = [];
+                    if (!empty($aggregation->nestedAggregations)) {
+                        foreach ($aggregation->nestedAggregations as $nestedAggregation) {
+                            $name = $nestedAggregation->getName();
+                            if (isset($bucket->{$name})) {
+                                $nestedAggregationtsResults[$name] = $this->aggregationResultExtractor->extract(
+                                    $nestedAggregation,
+                                    $languageFilter,
+                                    $bucket->{$name}
+                                );
+                            }
+                        }
+                    }
+
                     $entries[] = new RawTermAggregationResultEntry(
                         $key,
                         $bucket->count,
-                        ...$mappedKeys[$key]
+                        $mappedKeys[$key]['name'] ?? null,
+                        $mappedKeys[$key]['identifier'] ?? null,
+                        $nestedAggregationtsResults
                     );
                 }
             }

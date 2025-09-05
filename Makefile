@@ -95,7 +95,6 @@ tests: ## Run the tests
     	if COMPONENT=$${COMPONENT} bin/ci-should test; then \
     		echo " ..:: Testing $${COMPONENT} ::.."; \
     		ddev exec -d /var/www/html "PANTHER_NO_HEADLESS=${SHOW_CHROME} APP_ENV=test $(PHP_BIN) ./vendor/bin/phpunit -c 'components/$${COMPONENT}/tests' 'components/$${COMPONENT}/tests' --exclude-group behat"; \
-    		ddev exec -d /var/www/html "PANTHER_NO_HEADLESS=${SHOW_CHROME} APP_ENV=test php ./vendor/bin/phpunit -c 'components/RssFeedBundle/tests' 'components/RssFeedBundle/tests' --exclude-group behat"; \
 		fi \
 	done
 

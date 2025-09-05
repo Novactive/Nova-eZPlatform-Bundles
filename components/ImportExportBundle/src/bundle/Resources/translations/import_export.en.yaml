@@ -1,0 +1,44 @@
+Notice: Notice
+job.breadcrumb.list: Jobs
+job.cancel: Cancel
+job.pause: Pause
+job.create.success: 'Job ''%label%'' created.'
+job.creating: Creating
+job.list.action.create: Create
+job.list.title: Jobs
+job.new.title: 'Creating a new Job'
+job.property.endTime: 'End time'
+job.property.id: Id
+job.property.label: Label
+job.property.progress: Progress
+job.property.requested_date: 'Requested date'
+job.property.startTime: 'Start time'
+job.property.status: Status
+job.run: Run
+job.status.canceled: Canceled
+job.status.completed: Completed
+job.status.paused: Paused
+job.status.force_paused: Paused
+job.status.pending: Pending
+job.status.queued: Queued
+job.status.running: Running
+job.view.log.item_index: Item
+job.view.log.message: Message
+job.view.log.type: Type
+job.view.logs.title: Logs
+job.view.title: 'Job: %label%'
+notification.job.done: 'Job %job_label% (%job_id%) is done running.'
+reader.csv.name: 'CSV Reader'
+reader.ibexa.content_list.name: 'Content list'
+reader.xls.name: 'Excel reader'
+reader.xml.name: 'XML Reader'
+step.callback.name: Callback
+step.filter.not_empty.name: 'Not empty filter'
+step.filter.unique.name: 'Unique filter'
+tab.details.technical_details: 'Technical details'
+writer.csv.generated_file.download: 'download file'
+writer.csv.generated_file.title: 'Generated file'
+writer.csv.name: 'CSV Writer'
+writer.dump.name: 'Dump Writer'
+writer.ibexa.content.name: 'Ibexa content writer'
+writer.ibexa.taxonomy.name: 'Ibexa taxonomy writer'
