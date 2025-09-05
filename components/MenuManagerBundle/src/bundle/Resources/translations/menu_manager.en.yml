@@ -52,3 +52,9 @@ menu_item:
     save_container: Save folder
     cancel: Cancel
 actions.apply_btn: Apply
+role.policy.menu_manager: Menu Manager
+role.policy.menu_manager.all_functions: Menu Manager / All functions
+role.policy.menu_manager.list: Menu Manager / List
+role.policy.menu_manager.view: Menu Manager / View
+role.policy.menu_manager.edit: Menu Manager / Edit
+role.policy.menu_manager.new: Menu Manager / New

@@ -34,45 +34,33 @@ class Gateway
     }
 
     public function getSimpleCaptchaEndpoint(
-        string $captchaType = 'html',
-        ?string $mode = null,
+        string $captchaType,
         ?string $tech = null,
         string $type = 'numerique6_7CaptchaFR'
     ): string {
         $token = $this->oauthGateway->getOauth20Token();
-        $available = [
-            'html',
-            'layout-stylesheet',
-            'script-include',
+        $availableTypes = [
             'image',
-            'reload-icon',
-            'sound-icon',
-            'reload-disabled-icon',
-            'sound-disabled-icon',
             'sound',
-            'p',
         ];
 
-        if (!in_array($captchaType, $available)) {
+        if (!in_array($captchaType, $availableTypes)) {
             throw new RuntimeException(
                 sprintf(
                     'c value "%s" not alloweb. One of %s waiting',
                     $captchaType,
-                    implode(', ', $available)
+                    implode(', ', $availableTypes)
                 )
             );
         }
 
-        $service = '/piste/captcha/simple-captcha-endpoint';
+        $service = '/piste/captchetat/v2/simple-captcha-endpoint';
         $method = 'GET';
 
         $queryParams = [
             'get' => $captchaType,
             'c' => $type,
         ];
-        if ($mode) {
-            $queryParams['mode'] = $mode;
-        }
         if ($tech) {
             $queryParams['t'] = $tech;
         }
@@ -113,7 +101,7 @@ class Gateway
         string $answer
     ): bool {
         $token = $this->oauthGateway->getOauth20Token();
-        $service = '/piste/captcha/valider-captcha';
+        $service = '/piste/captchetat/v2/valider-captcha';
         $method = 'POST';
 
         $url = $this->url.$service;
@@ -125,7 +113,7 @@ class Gateway
             ],
             'timeout' => $this->timeout,
             'body' => json_encode([
-                                      'id' => $captchaId,
+                                      'uuid' => $captchaId,
                                       'code' => $answer,
                                   ]),
         ];

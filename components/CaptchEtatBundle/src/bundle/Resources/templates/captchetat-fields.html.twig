@@ -9,7 +9,8 @@
 {% block captchetat_widget %}
     {% apply spaceless %}
         {%- set attr = attr|merge({
-            'class': 'widget-container row align-items-center js-captcha-widget'
+            'class': 'widget-container row align-items-center js-captcha-widget',
+            'data-type': captchetat_type()
         }) -%}
         <div {{ block('widget_container_attributes') }}>
             <div class="captcha captcha-html-container col-lg-4 col-md-6 d-flex align-items-center">

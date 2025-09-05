@@ -28,7 +28,7 @@ class PantherTestCase extends BaseTestCase
     {
         return self::createPantherClient(
             [
-                'browser' => 'chrome',
+                'browser' => self::CHROME,
                 'external_base_uri' => getenv('PANTHER_EXTERNAL_BASE_URI') ? :
                     $_SERVER['PANTHER_EXTERNAL_BASE_URI'] ?? self::BASE_URI,
             ],

@@ -21,19 +21,31 @@ class RawTermAggregation extends AbstractTermAggregation implements RawAggregati
      */
     public array $excludeTags;
 
+    /**
+     * @var \Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation[]
+     */
+    public array $nestedAggregations;
+
     public function __construct(
         string $name,
         string $fieldName,
-        ?array $excludeTags = []
+        ?array $excludeTags = [],
+        ?array $nestedAggregations = []
     ) {
         parent::__construct($name);
 
         $this->fieldName = $fieldName;
         $this->excludeTags = $excludeTags;
+        $this->nestedAggregations = $nestedAggregations;
     }
 
     public function getFieldName(): string
     {
         return $this->fieldName;
+    }
+
+    public function setNestedAggregations(array $nestedAggregations): void
+    {
+        $this->nestedAggregations = $nestedAggregations;
     }
 }

@@ -52,7 +52,7 @@ class OauthGateway
             'grant_type' => 'client_credentials',
             'client_id' => $this->clientId,
             'client_secret' => $this->clientSecret,
-            'scope' => ['resource.READ', 'piste.captchetat'],
+            'scope' => ['aife.captchetatv2', 'piste.captchetat'],
         ];
 
         $url = $this->url.$service;

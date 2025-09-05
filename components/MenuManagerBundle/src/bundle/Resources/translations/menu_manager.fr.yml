@@ -52,3 +52,9 @@ menu_item:
     save_container: Enregistrer le dossier
     cancel: Annuler
 actions.apply_btn: Appliquer
+role.policy.menu_manager: Menu Manager
+role.policy.menu_manager.all_functions: Menu Manager / Toutes les fonctions
+role.policy.menu_manager.list: Menu Manager / Liste
+role.policy.menu_manager.view: Menu Manager / Voir
+role.policy.menu_manager.edit: Menu Manager / Modifier
+role.policy.menu_manager.new: Menu Manager / Nouveau
