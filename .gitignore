@@ -9,3 +9,4 @@
 ./node_modules
 ./drivers
 ./.php-cs-fixer.cache
+/auth.json
