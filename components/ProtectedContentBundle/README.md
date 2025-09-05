@@ -28,7 +28,7 @@ In this situation you can have 3 new variables in the view full
 
 Allowing you do:
 ```twig
-<h2>{{ ez_content_name(content) }}</h2>
+<h2>{{ ibexa_content_name(content) }}</h2>
 {% if not canReadProtectedContent %}
     {% if requestProtectedContentPasswordForm is defined %}
         <p>This content has been protected by a password</p>

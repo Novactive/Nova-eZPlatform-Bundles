@@ -76,9 +76,10 @@ class EmailProvided
             $content = $this->contentService->loadContent($contentId);
         } catch (\Exception $exception) {
             $this->logger->error($exception->getMessage(), [
-                'here' => __METHOD__ . ' ' . __LINE__,
+                'here' => __METHOD__.' '.__LINE__,
                 '$contentId' => $contentId,
             ]);
+
             return;
         }
 

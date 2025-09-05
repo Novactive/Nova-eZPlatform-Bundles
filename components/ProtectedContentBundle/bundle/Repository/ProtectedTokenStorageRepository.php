@@ -4,14 +4,14 @@ namespace Novactive\Bundle\eZProtectedContentBundle\Repository;
 
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Ibexa\Contracts\Core\Repository\Repository;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedTokenStorage;
 
 class ProtectedTokenStorageRepository
 {
     public function __construct(
         protected readonly EntityManagerInterface $entityManager,
-    ) { }
+    ) {
+    }
 
     protected function getAlias(): string
     {
@@ -24,7 +24,6 @@ class ProtectedTokenStorageRepository
     }
 
     /**
-     * @param array $criteria
      * @return ProtectedTokenStorage[]
      */
     public function findUnexpiredBy(array $criteria = []): array
@@ -32,7 +31,7 @@ class ProtectedTokenStorageRepository
         $entityRepository = $this->entityManager->getRepository($this->getEntityClass());
         $qb = $entityRepository->createQueryBuilder($this->getAlias());
 
-        $qb ->select('c')
+        $qb->select('c')
             ->from(ProtectedTokenStorage::class, 'c')
             ->where('c.created >= :nowMinusOneHour')
             ->setParameter('nowMinusOneHour', new DateTime('now - 1 hours'));
@@ -48,7 +47,7 @@ class ProtectedTokenStorageRepository
     {
         $entityRepository = $this->entityManager->getRepository($this->getEntityClass());
         $qb = $entityRepository->createQueryBuilder($this->getAlias());
-        $qb ->select('c')
+        $qb->select('c')
             ->from(ProtectedTokenStorage::class, 'c')
             ->where('c.created < :nowMinusOneHour')
             ->setParameter('nowMinusOneHour', new DateTime('now - 1 hours'));
@@ -57,8 +56,6 @@ class ProtectedTokenStorageRepository
     }
 
     /**
-     * @param ProtectedTokenStorage $entity
-     * @return void
      * @see EntityManagerInterface::remove()
      */
     public function remove(ProtectedTokenStorage $entity): void
@@ -67,7 +64,6 @@ class ProtectedTokenStorageRepository
     }
 
     /**
-     * @return void
      * @see EntityManagerInterface::flush()
      */
     public function flush(): void

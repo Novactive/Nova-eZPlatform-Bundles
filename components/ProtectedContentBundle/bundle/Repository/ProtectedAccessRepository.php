@@ -25,7 +25,8 @@ class ProtectedAccessRepository
     public function __construct(
         protected readonly Repository $repository,
         protected readonly EntityManagerInterface $entityManager,
-    ) { }
+    ) {
+    }
 
     protected function getAlias(): string
     {
@@ -73,8 +74,6 @@ class ProtectedAccessRepository
 
     /**
      * Retourne les ContentID du contenu et de tous ces descendants en prenant en compte ses multiples emplacements.
-     * @param Content $content
-     * @return array
      */
     protected function getContentIds(Content $content): array
     {
@@ -86,19 +85,21 @@ class ProtectedAccessRepository
                 foreach ($locations as $location) {
                     /** @var Location $loc */
                     $loc = $location;
-                    while ($loc->parentLocationId
+                    while (
+                        $loc->parentLocationId
                         && ($loc = $repository->getLocationService()->loadLocation($loc->parentLocationId))
                         && $loc instanceof Location
                         && $loc->parentLocationId
-                        && $loc->parentLocationId !== 1
+                        && 1 !== $loc->parentLocationId
                     ) {
-                        $ct++;
+                        ++$ct;
                         $ids[] = $loc->getContentInfo()->id;
                         if ($ct >= 15) {
-                            break(2);
+                            break 2;
                         }
                     }
                 }
+
                 return $ids;
             }
         );
