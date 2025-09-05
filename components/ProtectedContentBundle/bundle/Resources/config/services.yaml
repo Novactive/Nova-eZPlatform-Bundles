@@ -6,7 +6,12 @@ services:
         autoconfigure: true
         public: false
         bind:
-            $entityManager: "@novaezprotectedcontent.doctrine.entity_manager"
+            $entityManager: "@ibexa.doctrine.orm.entity_manager"
+            $searchHandler: '@ibexa.spi.search'
+            $persistenceHandler: '@ibexa.api.persistence_handler'
+
+    Novactive\Bundle\eZProtectedContentBundle\Services\:
+      resource: '../../Services'
 
     Novactive\Bundle\eZProtectedContentBundle\Command\:
         resource: '../../Command'
@@ -18,13 +23,14 @@ services:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
 
+    Novactive\Bundle\eZProtectedContentBundle\Command\CleanTokenCommand:
+        tags:
+            - { name: 'novaezprotectedcontent:cleantoken', command: 'novaezprotectedcontent:cleantoken' }
+            - { name: ibexa.cron.job, schedule: '0 1 * * *' }
+
     Novactive\Bundle\eZProtectedContentBundle\Core\Tab\ProtectContent:
         tags:
             - { name: ibexa.admin_ui.tab, group: location-view }
-
-    Novactive\Bundle\eZProtectedContentBundle\Listener\EntityContentLink:
-        tags:
-            - { name: doctrine.orm.entity_listener }
 
     Novactive\Bundle\eZProtectedContentBundle\Listener\PreContentView:
         tags:
@@ -34,12 +40,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: 'onKernelRequest', priority: -100}
 
-    novaezprotectedcontent.doctrine.entity_manager:
-        class: Doctrine\ORM\EntityManagerInterface
-        factory: ['@Novactive\Bundle\eZProtectedContentBundle\Core\SiteAccessAwareEntityManagerFactory', 'get']
-
-    Novactive\Bundle\eZProtectedContentBundle\Core\SiteAccessAwareEntityManagerFactory:
-        arguments:
-            $repositoryConfigurationProvider: "@Ibexa\\Bundle\\Core\\ApiLoader\\RepositoryConfigurationProvider"
-            $resolver: "@doctrine.orm.default_entity_listener_resolver"
-            $settings: { debug: "%kernel.debug%", cache_dir: "%kernel.cache_dir%" }
+    Novactive\Bundle\eZProtectedContentBundle\Listener\EmailProvided:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: 'onKernelRequest', priority: -100}
