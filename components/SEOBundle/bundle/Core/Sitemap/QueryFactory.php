@@ -91,6 +91,7 @@ class QueryFactory
         );
 
         $criteria[] = new Criterion\LanguageCode($this->configResolver->getParameter('languages'), true);
+
         return $criteria;
     }
 
@@ -222,6 +223,7 @@ class QueryFactory
                 $validContentTypeIdentifiers[] = $contentType->identifier;
             }
         }
+
         return $validContentTypeIdentifiers;
     }
 
@@ -244,6 +246,7 @@ class QueryFactory
             }
             $subtreePaths[] = $includedLocation->pathString;
         }
+
         return $subtreePaths;
     }
 }

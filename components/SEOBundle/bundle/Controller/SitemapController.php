@@ -14,7 +14,6 @@ namespace Novactive\Bundle\eZSEOBundle\Controller;
 
 use DateTime;
 use DOMDocument;
-use DOMElement;
 use Ibexa\Bundle\Core\Controller;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 use Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchResult;
@@ -109,10 +108,10 @@ class SitemapController extends Controller
     /**
      * Fill a sitemap.
      */
-    protected function fillSitemap(DOMDocument $sitemap, DOMElement $root, SearchResult $results): void
+    protected function fillSitemap(DOMDocument $sitemap, \DOMElement $root, SearchResult $results): void
     {
         foreach ($results->searchHits as $searchHit) {
-            /** @var Location  $location */
+            /** @var Location $location */
             $location = $searchHit->valueObject;
 
             try {
@@ -178,7 +177,7 @@ class SitemapController extends Controller
     /**
      * Fill the sitemap index.
      */
-    protected function fillSitemapIndex(DOMDocument $sitemap, int $numberOfResults, DOMElement $root): void
+    protected function fillSitemapIndex(DOMDocument $sitemap, int $numberOfResults, \DOMElement $root): void
     {
         $numberOfPage = (int) ceil($numberOfResults / static::PACKET_MAX);
         for ($sitemapNumber = 1; $sitemapNumber <= $numberOfPage; ++$sitemapNumber) {
