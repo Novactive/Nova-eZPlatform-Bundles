@@ -6,7 +6,6 @@ namespace Novactive\Bundle\eZProtectedContentBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
-use Ibexa\Contracts\Core\Repository\Values\Content\LocationQuery;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 use Ibexa\Core\Repository\SiteAccessAware\Repository;
 use Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedAccessRepository;
@@ -23,12 +22,12 @@ class CheckObjectStatusCommand extends Command
     private SymfonyStyle $io;
 
     public function __construct(
-        protected readonly ProtectedAccessHelper     $protectedAccessHelper,
+        protected readonly ProtectedAccessHelper $protectedAccessHelper,
         protected readonly ProtectedAccessRepository $protectedAccessRepository,
-        protected readonly ObjectStateHelper         $objectStateHelper,
-        protected readonly ReindexHelper             $reindexHelper,
-        protected readonly EntityManagerInterface    $entityManager,
-        protected readonly Repository                $repository,
+        protected readonly ObjectStateHelper $objectStateHelper,
+        protected readonly ReindexHelper $reindexHelper,
+        protected readonly EntityManagerInterface $entityManager,
+        protected readonly Repository $repository,
     ) {
         parent::__construct();
     }
@@ -58,6 +57,7 @@ class CheckObjectStatusCommand extends Command
             $this->algo2($input, $output);
             $this->io->success($this->getName());
         });
+
         return Command::SUCCESS;
     }
 
@@ -89,7 +89,7 @@ class CheckObjectStatusCommand extends Command
                 $this->entityManager->flush();
             } else {
                 if ($this->io->isVerbose()) {
-                    $this->io->write(sprintf(' - Content [%d] "%s" - ', $content->id, $content->getName() ));
+                    $this->io->write(sprintf(' - Content [%d] "%s" - ', $content->id, $content->getName()));
                     $count = $this->protectedAccessHelper->count($protectedAccess);
                     $this->io->write(sprintf(' - %d Contenus impactés ', $count));
                 }

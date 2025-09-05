@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle;
 
-use LogicException;
 use Novactive\Bundle\eZProtectedContentBundle\DependencyInjection\Security\PolicyProvider;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
@@ -44,7 +43,7 @@ class NovaeZProtectedContentBundle extends Bundle
                         'Extension %s must implement '.ExtensionInterface::class.'.',
                         \get_class($extension)
                     );
-                    throw new LogicException($message);
+                    throw new \LogicException($message);
                 }
                 $this->extension = $extension;
             } else {

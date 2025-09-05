@@ -17,12 +17,9 @@ class ReindexHelper
         protected readonly Repository $repository,
         protected readonly SearchHandler $searchHandler,
         protected readonly PersistenceHandler $persistenceHandler,
-    ) { }
+    ) {
+    }
 
-    /**
-     * @param Content $content
-     * @return void
-     */
     public function reindexContent(Content $content): void
     {
         $contentId = $content->id;
@@ -43,7 +40,7 @@ class ReindexHelper
         $locations = $this->repository->getLocationService()->loadLocations($content->contentInfo);
         $pathStringArray = [];
         foreach ($locations as $location) {
-            /** @var Location $location */
+            /* @var Location $location */
             $pathStringArray[] = $location->pathString;
         }
 
@@ -51,7 +48,7 @@ class ReindexHelper
             $query = new Query();
             $query->limit = $limit;
             $query->filter = new Query\Criterion\LogicalAnd([
-                new Query\Criterion\Subtree($pathStringArray)
+                new Query\Criterion\Subtree($pathStringArray),
             ]);
             $query->sortClauses = [
                 new Query\SortClause\ContentId(),
