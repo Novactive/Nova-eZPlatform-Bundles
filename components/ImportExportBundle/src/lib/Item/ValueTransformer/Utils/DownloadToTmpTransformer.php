@@ -22,9 +22,9 @@ class DownloadToTmpTransformer extends AbstractItemValueTransformer
         }
 
         $tmpFilePath = DIRECTORY_SEPARATOR.
-                trim(sys_get_temp_dir(), DIRECTORY_SEPARATOR).
-                DIRECTORY_SEPARATOR.
-                ltrim((string) Uuid::v4(), DIRECTORY_SEPARATOR);
+                       trim(sys_get_temp_dir(), DIRECTORY_SEPARATOR).
+                       DIRECTORY_SEPARATOR.
+                       ltrim((string) Uuid::v4(), DIRECTORY_SEPARATOR);
 
         $originalPathInfos = pathinfo($value);
         if (!empty($originalPathInfos['extension'])) {
@@ -36,21 +36,22 @@ class DownloadToTmpTransformer extends AbstractItemValueTransformer
                 unlink($tmpFilePath);
             }
         });
-        file_put_contents(
-            $tmpFilePath,
-            file_get_contents(
-                str_replace(' ', '+', $value),
-                false,
-                stream_context_create(
-                    [
-                        'ssl' => [
-                            'verify_peer' => false,
-                            'verify_peer_name' => false,
-                        ],
-                    ]
-                )
-            )
-        );
+
+        $context = stream_context_create([
+                                              'ssl' => [
+                                                  'verify_peer' => false,
+                                                  'verify_peer_name' => false,
+                                              ],
+                                          ]);
+
+        $source = fopen(str_replace(' ', '+', $value), 'rb', false, $context);
+        $dest = fopen($tmpFilePath, 'wb');
+
+        if ($source && $dest) {
+            stream_copy_to_stream($source, $dest);
+            fclose($source);
+            fclose($dest);
+        }
 
         return $tmpFilePath;
     }

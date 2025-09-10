@@ -60,8 +60,8 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
 
         if ($allowMove) {
             $this->handleLocations($content, $parentLocationIdList, $hidden);
-        }elseif($hidden !== null) {
-            $this->handleLocationsVisibility( $content, $hidden );
+        } elseif (null !== $hidden) {
+            $this->handleLocationsVisibility($content, $hidden);
         }
 
         return $publishedContent;
@@ -122,7 +122,7 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
 
         foreach ($existingLocations as $existingLocation) {
             if ($existingLocation->parentLocationId === $parentLocationId) {
-                if ($hidden !== null && $existingLocation->hidden !== $hidden) {
+                if (null !== $hidden && $existingLocation->hidden !== $hidden) {
                     if ($hidden) {
                         $this->repository->getLocationService()->hideLocation($existingLocation);
                     } else {
@@ -140,7 +140,7 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
         if (is_string($locationRemoteId)) {
             $locationCreateStruct->remoteId = $locationRemoteId;
         }
-        if ($hidden === true) {
+        if (true === $hidden) {
             $locationCreateStruct->hidden = true;
         }
 
@@ -154,20 +154,15 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\BadStateException
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException
      */
-    protected function handleLocationsVisibility( Content $content, bool $hidden ): void
+    protected function handleLocationsVisibility(Content $content, bool $hidden): void
     {
-        $existingLocations = $this->repository->getLocationService()->loadLocations( $content->contentInfo );
-        foreach ( $existingLocations as $existingLocation )
-        {
-            if ( $existingLocation->hidden !== $hidden )
-            {
-                if ( $hidden )
-                {
-                    $this->repository->getLocationService()->hideLocation( $existingLocation );
-                }
-                else
-                {
-                    $this->repository->getLocationService()->unhideLocation( $existingLocation );
+        $existingLocations = $this->repository->getLocationService()->loadLocations($content->contentInfo);
+        foreach ($existingLocations as $existingLocation) {
+            if ($existingLocation->hidden !== $hidden) {
+                if ($hidden) {
+                    $this->repository->getLocationService()->hideLocation($existingLocation);
+                } else {
+                    $this->repository->getLocationService()->unhideLocation($existingLocation);
                 }
             }
         }
