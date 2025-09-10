@@ -68,8 +68,7 @@ class QueryConverter extends NativeQueryConverter
         if ($query instanceof AdvancedContentQuery && $query->groupConfig) {
             $params = array_merge($params, $query->groupConfig);
         }
-
-        $params['fl'] .= ',[child parentFilter=*:*]';
+        $params['fl'] .= ',[child parentFilter=*:* limit=-1]';
 
         return $params;
     }
