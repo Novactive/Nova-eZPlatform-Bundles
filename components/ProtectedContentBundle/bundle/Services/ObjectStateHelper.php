@@ -108,9 +108,14 @@ class ObjectStateHelper
                     $objectState = $this->getObjectState($objectStateGroup, $this->unprotectedObjectStateIdentifier);
                 }
                 if ($objectState) {
-                    if ($this->objectStateService->getContentState($content->contentInfo, $objectStateGroup)->identifier !== $objectState->identifier) {
+                    $cs = $this->objectStateService->getContentState($content->contentInfo, $objectStateGroup);
+                    if ($cs->identifier !== $objectState->identifier) {
                         $this->repository->sudo(function () use ($content, $objectStateGroup, $objectState) {
-                            $this->objectStateService->setContentState($content->contentInfo, $objectStateGroup, $objectState);
+                            $this->objectStateService->setContentState(
+                                $content->contentInfo,
+                                $objectStateGroup,
+                                $objectState
+                            );
                         });
                     }
                 }

@@ -134,16 +134,19 @@ class CheckObjectStatusCommand extends Command
 
     protected function algo2(InputInterface $input, OutputInterface $output): void
     {
-        $this->io->section('Check Object Status -- Algo 2 -- On cherche tous les Content qui ont une protection dans leur ObjectStatus.');
+        $this->io->section('Check Object Status -- Algo 2 -- '.
+            'On cherche tous les Content qui ont une protection dans leur ObjectStatus.');
+
+        $objectStateService = $this->repository->getObjectStateService();
 
         $objectStateGroupIdentifier = $this->objectStateHelper->objectStateGroupIdentifier; // 'protected_content'
         $objectStateIdentifier = $this->objectStateHelper->protectedObjectStateIdentifier; // 'protected'
 
-        $group = $this->repository->getObjectStateService()->loadObjectStateGroupByIdentifier($objectStateGroupIdentifier);
-        $state = $this->repository->getObjectStateService()->loadObjectStateByIdentifier($group, $objectStateIdentifier);
+        $group = $objectStateService->loadObjectStateGroupByIdentifier($objectStateGroupIdentifier);
+        $state = $objectStateService->loadObjectStateByIdentifier($group, $objectStateIdentifier);
 
-        $objectStateGroupEmailIdentifier = $this->objectStateHelper->objectStateEmailGroupIdentifier; // 'protected_content_email'
-        $emailGroup = $this->repository->getObjectStateService()->loadObjectStateGroupByIdentifier($objectStateGroupEmailIdentifier);
+        $objectStateGroupEmailIdentifier = $this->objectStateHelper->objectStateEmailGroupIdentifier;
+        $emailGroup = $objectStateService->loadObjectStateGroupByIdentifier($objectStateGroupEmailIdentifier);
 
         $query = new Query();
         $filtersOr = new Query\Criterion\LogicalOr([

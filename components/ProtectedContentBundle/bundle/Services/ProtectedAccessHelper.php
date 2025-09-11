@@ -22,7 +22,9 @@ class ProtectedAccessHelper
     }
 
     /**
-     * Retourne toutes les protections qui s'appliquent au contenu. En prenant en compte ses ancêtres et ses multiples emplacements.
+     * Retourne toutes les protections qui affectent ce contenu.
+     * Que ce soit directement, ou via ses ancêtres.
+     * En prenant en compte ses multiples emplacements.
      *
      * @return ProtectedAccess[]
      */

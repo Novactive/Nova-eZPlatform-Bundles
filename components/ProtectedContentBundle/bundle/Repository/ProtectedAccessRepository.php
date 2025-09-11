@@ -50,7 +50,9 @@ class ProtectedAccessRepository
     }
 
     /**
-     * Retourne toutes les protections qui affectent ce contenu. Que ce soit directement, ou via ses ancêtres. En prenant en compte ses multiples emplacements.
+     * Retourne toutes les protections qui affectent ce contenu.
+     * Que ce soit directement, ou via ses ancêtres.
+     * En prenant en compte ses multiples emplacements.
      */
     public function findByContent(?Content $content): array
     {
