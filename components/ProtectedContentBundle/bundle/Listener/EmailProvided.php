@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Listener;
 
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Ibexa\Contracts\Core\Repository\ContentService;
@@ -23,6 +24,7 @@ use Novactive\Bundle\eZProtectedContentBundle\Form\RequestEmailProtectedAccessTy
 use Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedAccessRepository;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
+use Swift_Mailer;
 use Swift_Message;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -38,7 +40,7 @@ class EmailProvided
 
     public function __construct(
         protected readonly FormFactoryInterface $formFactory,
-        protected readonly \Swift_Mailer $mailer,
+        protected readonly Swift_Mailer $mailer,
         protected readonly EntityManagerInterface $entityManager,
         protected readonly TranslatorInterface $translator,
         protected readonly ParameterBagInterface $parameterBag,
@@ -100,7 +102,7 @@ class EmailProvided
 
             $access->setMail($data['email']);
             $access->setContentId($contentId);
-            $access->setCreated(new \DateTime());
+            $access->setCreated(new DateTime());
             $access->setToken($token);
 
             $this->entityManager->persist($access);

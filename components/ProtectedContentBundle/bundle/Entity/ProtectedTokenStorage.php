@@ -29,16 +29,13 @@ class ProtectedTokenStorage
      * @var int
      *
      * @ORM\Id
-     *
      * @ORM\Column(type="integer")
-     *
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
-     * @var \DateTime
-     *
+     * @var DateTime
      * @ORM\Column(name="created", type="datetime")
      */
     private $created;
@@ -47,7 +44,6 @@ class ProtectedTokenStorage
      * @var string
      *
      * @ORM\Column(type="string", length=255, nullable=false)
-     *
      * @Assert\Length(max=255)
      */
     protected $token;
@@ -78,12 +74,12 @@ class ProtectedTokenStorage
         $this->id = $id;
     }
 
-    public function getCreated(): \DateTime
+    public function getCreated(): DateTime
     {
         return $this->created;
     }
 
-    public function setCreated(\DateTime $created): void
+    public function setCreated(DateTime $created): void
     {
         $this->created = $created;
     }
