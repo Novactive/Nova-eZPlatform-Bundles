@@ -6,15 +6,16 @@ namespace Novactive\Bundle\eZProtectedContentBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
-use Ibexa\Contracts\Core\Repository\Values\Content\LocationQuery;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 use Ibexa\Core\Repository\SiteAccessAware\Repository;
+use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
 use Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedAccessRepository;
 use Novactive\Bundle\eZProtectedContentBundle\Services\ObjectStateHelper;
 use Novactive\Bundle\eZProtectedContentBundle\Services\ProtectedAccessHelper;
 use Novactive\Bundle\eZProtectedContentBundle\Services\ReindexHelper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -23,12 +24,12 @@ class CheckObjectStatusCommand extends Command
     private SymfonyStyle $io;
 
     public function __construct(
-        protected readonly ProtectedAccessHelper $protectedAccessHelper,
+        protected readonly ProtectedAccessHelper     $protectedAccessHelper,
         protected readonly ProtectedAccessRepository $protectedAccessRepository,
-        protected readonly ObjectStateHelper $objectStateHelper,
-        protected readonly ReindexHelper $reindexHelper,
-        protected readonly EntityManagerInterface $entityManager,
-        protected readonly Repository $repository,
+        protected readonly ObjectStateHelper         $objectStateHelper,
+        protected readonly ReindexHelper             $reindexHelper,
+        protected readonly EntityManagerInterface    $entityManager,
+        protected readonly Repository                $repository,
     ) {
         parent::__construct();
     }
@@ -38,6 +39,8 @@ class CheckObjectStatusCommand extends Command
         $this
             ->setName('novaezprotectedcontent:check_object_status')
             ->setDescription('Vérifie le staus des contenus protégés');
+        $this->addOption('algo1', null, InputOption::VALUE_NONE);
+        $this->addOption('algo2', null, InputOption::VALUE_NONE);
     }
 
     public function initialize(InputInterface $input, OutputInterface $output): void
@@ -52,10 +55,21 @@ class CheckObjectStatusCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $algo1 = $input->getOption('algo1');
+        $algo2 = $input->getOption('algo2');
+        if (!$algo1 && !$algo2) {
+            $algo1 = true;
+            $algo2 = true;
+        }
+
         $this->io->title('Check Object Status');
-        $this->repository->sudo(function () use ($input, $output) {
-            $this->algo1($input, $output);
-            $this->algo2($input, $output);
+        $this->repository->sudo(function () use ($input, $output, $algo1, $algo2) {
+            if ($algo1) {
+                $this->algo1($input, $output);
+            }
+            if ($algo2) {
+                $this->algo2($input, $output);
+            }
             $this->io->success($this->getName());
         });
         return Command::SUCCESS;
@@ -79,25 +93,10 @@ class CheckObjectStatusCommand extends Command
                 $this->io->write(sprintf(' - Checking ProtectedAccess %s - ', $protectedAccess->getId()));
             }
 
-            $content = $this->protectedAccessHelper->getContent($protectedAccess);
-
-            if (!$content) {
-                if ($this->io->isVerbose()) {
-                    $this->io->write(' No content; => DELETE ');
-                }
-                $this->entityManager->remove($protectedAccess);
-                $this->entityManager->flush();
-            } else {
-                if ($this->io->isVerbose()) {
-                    $this->io->write(sprintf(' - Content [%d] "%s" - ', $content->id, $content->getName()));
-                    $count = $this->protectedAccessHelper->count($protectedAccess);
-                    $this->io->write(sprintf(' - %d Contenus impactés ', $count));
-                }
-                $this->objectStateHelper->setStatesForContentAndDescendants($content);
-                $this->reindexHelper->reindexContent($content);
-                if ($protectedAccess->isProtectChildren()) {
-                    $this->reindexHelper->reindexChildren($content);
-                }
+            try {
+                $this->process1($protectedAccess);
+            } catch (\Exception $exception) {
+                $this->io->error($exception->getMessage());
             }
 
             if ($this->io->isVerbose()) {
@@ -107,6 +106,29 @@ class CheckObjectStatusCommand extends Command
 
         $progressBar->finish();
         $this->io->newLine();
+    }
+
+    protected function process1(ProtectedAccess $protectedAccess): void
+    {
+        $content = $this->protectedAccessHelper->getContent($protectedAccess);
+
+        if (!$content) {
+            if ($this->io->isVerbose()) {
+                $this->io->write(' No content; => DELETE ');
+            }
+            $this->protectedAccessRepository->delete($protectedAccess);
+        } else {
+            if ($this->io->isVerbose()) {
+                $this->io->write(sprintf(' - Content [%d] "%s" - ', $content->id, $content->getName() ));
+                $count = $this->protectedAccessHelper->count($protectedAccess);
+                $this->io->write(sprintf(' - %d Contenus impactés ', $count));
+            }
+            $this->objectStateHelper->setStatesForContentAndDescendants($content);
+            $this->reindexHelper->reindexContent($content);
+            if ($protectedAccess->isProtectChildren()) {
+                $this->reindexHelper->reindexChildren($content);
+            }
+        }
     }
 
     protected function algo2(InputInterface $input, OutputInterface $output): void

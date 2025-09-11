@@ -120,4 +120,10 @@ class ProtectedAccessRepository
             }
         );
     }
+
+    public function delete(ProtectedAccess $protectedAccess): void
+    {
+        $this->entityManager->remove($protectedAccess);
+        $this->entityManager->flush();
+    }
 }

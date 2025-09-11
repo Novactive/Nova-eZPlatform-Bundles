@@ -33,7 +33,7 @@
     identifier: 'protected'
     mainTranslation: fre-FR
     objectStateGroup: 'protected_content_email'
-    priority: 0
+    priority: 1
     translations:
       fre-FR:
         name: 'Contenu protégé'

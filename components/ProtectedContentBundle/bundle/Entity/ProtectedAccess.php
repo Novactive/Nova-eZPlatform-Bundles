@@ -54,21 +54,21 @@ class ProtectedAccess implements ContentInterface
     /**
      * @var bool
      *
-     * @ORM\Column(type="boolean", nullable=false)
+     * @ORM\Column(type="boolean", nullable=false, name="as_email")
      */
     protected $asEmail = false;
 
     /**
      * @var bool
      *
-     * @ORM\Column(type="boolean", nullable=false)
+     * @ORM\Column(type="boolean", nullable=false, name="protect_children")
      */
     protected $protectChildren;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", nullable=true, name="email_message")
      */
     protected $emailMessage;
 

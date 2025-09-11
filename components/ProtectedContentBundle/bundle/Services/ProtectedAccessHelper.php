@@ -3,10 +3,10 @@
 namespace Novactive\Bundle\eZProtectedContentBundle\Services;
 
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
-use Ibexa\Contracts\Core\Repository\Values\Content\ContentInfo;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 use Ibexa\Contracts\Core\Repository\Values\Content\LocationQuery;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query;
+use Ibexa\Core\Base\Exceptions\NotFoundException;
 use Ibexa\Core\Repository\Repository;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
 use Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedAccessRepository;
@@ -90,12 +90,14 @@ class ProtectedAccessHelper
      */
     public function getContent(ProtectedAccess $protectedAccess): ?Content
     {
+        $contentId = $protectedAccess->getContentId();
         try {
-            return $this->repository->getContentService()->loadContent($protectedAccess->getContentId());
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage(), [
+            return $this->repository->getContentService()->loadContent($contentId);
+        } catch (NotFoundException) {
+            $this->logger->debug("Could not find 'Content' with id $contentId", [
                 __METHOD__,
                 'ProtectedAccess ID' => $protectedAccess->getId(),
+                'ContentId' => $contentId,
             ]);
             return null;
         }
