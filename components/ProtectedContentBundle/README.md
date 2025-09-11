@@ -75,6 +75,13 @@ _novaezprotectedcontent_routes:
     resource: '@NovaeZProtectedContentBundle/Resources/config/routing/main.yml'
 ```
 
+### Copie migration files
+
+```shell
+cp vendor/novactive/ezprotectedcontentbundle/bundle/Resources/migrations/* src/Migrations/Ibexa/migrations/
+php bin/console ibexa:migrations:migrate --allow-no-migration --disable-locking -v
+```
+
 ### Install the database schema
 
 ```bash
