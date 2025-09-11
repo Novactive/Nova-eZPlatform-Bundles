@@ -77,6 +77,9 @@ class RawTermAggregationVisitor implements AggregationVisitor
             }
         }
 
-        return $facetInfos;
+        //To avoid solr error, domain must not be empty
+        return array_filter($facetInfos, function($v, $k) {
+            return !($k === 'domain' && empty($v));
+        }, ARRAY_FILTER_USE_BOTH);
     }
 }
