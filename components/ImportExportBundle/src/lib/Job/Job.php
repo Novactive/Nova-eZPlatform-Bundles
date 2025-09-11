@@ -9,6 +9,8 @@ use AlmaviaCX\Bundle\IbexaImportExport\Execution\ExecutionOptions;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Ulid;
 
@@ -169,6 +171,23 @@ class Job
 
     public function getLastExecution(): Execution|false
     {
-        return $this->executions->last();
+        $criteria = new Criteria();
+        $criteria->where(
+            new Comparison('status', Comparison::EQ, Execution::STATUS_COMPLETED)
+        );
+        $criteria->setMaxResults(1);
+
+        return $this->executions->matching($criteria)->first();
+    }
+
+    public function getPendingExecutionCount(): int
+    {
+        $criteria = new Criteria();
+        $criteria->where(
+            new Comparison('status', Comparison::IN, [Execution::STATUS_PENDING, Execution::STATUS_QUEUED])
+        );
+        $criteria->setMaxResults(1);
+
+        return $this->executions->matching($criteria)->count();
     }
 }

@@ -38,7 +38,9 @@
             "Novactive\\Bundle\\eZAlgoliaSearchEngine\\Tests\\": "components/AlgoliaSearchEngine/tests/Tests",
             "Novactive\\Bundle\\eZ2FABundle\\": "components/2FABundle/bundle",
             "AlmaviaCX\\Bundle\\IbexaRichTextExtraBundle\\": "components/RichTextExtraBundle/src/bundle",
-            "AlmaviaCX\\Bundle\\IbexaRichTextExtra\\": "components/RichTextExtraBundle/src/lib"
+            "AlmaviaCX\\Bundle\\IbexaRichTextExtra\\": "components/RichTextExtraBundle/src/lib",
+            "AlmaviaCX\\Bundle\\IbexaImportExportBundle\\": "components/ImportExportBundle/src/bundle",
+            "AlmaviaCX\\Bundle\\IbexaImportExport\\": "components/ImportExportBundle/src/lib"
         }
     },
     "require": {

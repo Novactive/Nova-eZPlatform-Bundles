@@ -160,7 +160,7 @@
         {% endfor %}
 
         {% embed '@ibexadesign/ui/component/table/table.html.twig' with {
-            headline: 'job.executions.headline'|trans({ '%count%': pager.getNbResults() })|desc('Executions (%count%)'),
+            headline: 'job.executions.headline'|trans({ '%count%': pager.getNbResults(), '%pending_count%': job.pendingExecutionCount })|desc('Executions (%count%) - %pending_count% pending'),
             head_cols: [
                 { content: 'job.execution.property.id'|trans|desc('Id') },
                 { content: 'job.execution.property.progress'|trans()|desc('Progress') },

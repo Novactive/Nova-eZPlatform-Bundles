@@ -6,17 +6,18 @@ job.breadcrumb.list: Tâches
 job.cancel: Annuler
 job.create.success: 'Tâche ''%label%'' créée.'
 job.creating: Création
-job.execution.cancel: Cancel
-job.execution.pause: pause
-job.execution.property.endTime: 'End time'
-job.execution.property.end_time: 'End time'
+job.execution.cancel: Annuler
+job.execution.pause: 'Mettre en pause'
+job.execution.property.endTime: 'Heure de fin'
+job.execution.property.end_time: 'Heure de fin'
+job.execution.property.executionTime: 'Temps d''éxécution'
 job.execution.property.id: Id
-job.execution.property.progress: Progress
-job.execution.property.startTime: 'Start time'
-job.execution.property.start_time: 'Start time'
+job.execution.property.progress: Progression
+job.execution.property.startTime: 'Heure de début'
+job.execution.property.start_time: 'Heure de début'
 job.execution.property.status: Status
-job.execution.run: Run
-job.executions.headline: 'Executions (%count%)'
+job.execution.run: Lancer
+job.executions.headline: 'Executions (%count%) - %pending_count% en attente'
 job.list.action.create: Créer
 job.list.title: Tâches
 job.new.title: 'Créer une nouvelle Tâche'
@@ -24,6 +25,10 @@ job.pause: 'Mettre en pause'
 job.property.endTime: 'Heure de fin'
 job.property.id: Id
 job.property.label: Libellé
+job.property.last_execution.end_time: 'Heure de fin'
+job.property.last_execution.progress: Progression
+job.property.last_execution.status: Status
+job.property.pending_execution_count: 'Nombre d''éxécutions en attente'
 job.property.progress: Progression
 job.property.requested_date: 'Date de création'
 job.property.startTime: 'Heure de début'
@@ -32,6 +37,7 @@ job.property.ulid: Ulid
 job.run: Lancer
 job.status.canceled: Annulé
 job.status.completed: Complété
+job.status.error: 'En erreur'
 job.status.force_paused: 'En pause'
 job.status.paused: 'En pause'
 job.status.pending: 'En attente'

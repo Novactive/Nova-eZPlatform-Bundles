@@ -1,24 +1,45 @@
 Notice: Notice
+execution.view.log.item_index: Item
+execution.view.log.message: Message
+execution.view.log.type: Type
 job.breadcrumb.list: Jobs
 job.cancel: Cancel
-job.pause: Pause
 job.create.success: 'Job ''%label%'' created.'
 job.creating: Creating
+job.execution.cancel: Cancel
+job.execution.pause: pause
+job.execution.property.endTime: 'End time'
+job.execution.property.end_time: 'End time'
+job.execution.property.executionTime: 'Execution time'
+job.execution.property.id: Id
+job.execution.property.progress: Progress
+job.execution.property.startTime: 'Start time'
+job.execution.property.start_time: 'Start time'
+job.execution.property.status: Status
+job.execution.run: Run
+job.executions.headline: 'Executions (%count%) - %pending_count% pending'
 job.list.action.create: Create
 job.list.title: Jobs
 job.new.title: 'Creating a new Job'
+job.pause: Pause
 job.property.endTime: 'End time'
 job.property.id: Id
 job.property.label: Label
+job.property.last_execution.end_time: 'End time'
+job.property.last_execution.progress: Progress
+job.property.last_execution.status: Status
+job.property.pending_execution_count: 'Pending executions count'
 job.property.progress: Progress
 job.property.requested_date: 'Requested date'
 job.property.startTime: 'Start time'
 job.property.status: Status
+job.property.ulid: Ulid
 job.run: Run
 job.status.canceled: Canceled
 job.status.completed: Completed
-job.status.paused: Paused
+job.status.error: Error
 job.status.force_paused: Paused
+job.status.paused: Paused
 job.status.pending: Pending
 job.status.queued: Queued
 job.status.running: Running
@@ -29,12 +50,17 @@ job.view.logs.title: Logs
 job.view.title: 'Job: %label%'
 notification.job.done: 'Job %job_label% (%job_id%) is done running.'
 reader.csv.name: 'CSV Reader'
+reader.file.name: 'File input'
 reader.ibexa.content_list.name: 'Content list'
+reader.json.name: 'Json input'
+reader.mdb.name: 'Microsoft Access Database reader'
+reader.salesforce.soql.name: 'Salesforce SOQL'
 reader.xls.name: 'Excel reader'
 reader.xml.name: 'XML Reader'
 step.callback.name: Callback
 step.filter.not_empty.name: 'Not empty filter'
 step.filter.unique.name: 'Unique filter'
+tab.details.execution_details: 'Execution details'
 tab.details.technical_details: 'Technical details'
 writer.csv.generated_file.download: 'download file'
 writer.csv.generated_file.title: 'Generated file'
