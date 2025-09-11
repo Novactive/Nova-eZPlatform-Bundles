@@ -28,7 +28,7 @@ In this situation you can have 3 new variables in the view full
 
 Allowing you do:
 ```twig
-<h2>{{ ez_content_name(content) }}</h2>
+<h2>{{ ibexa_content_name(content) }}</h2>
 {% if not canReadProtectedContent %}
     {% if requestProtectedContentPasswordForm is defined %}
         <p>This content has been protected by a password</p>
@@ -73,6 +73,13 @@ Then inject the bundle in the `bundles.php` of your application.
 ```yaml
 _novaezprotectedcontent_routes:
     resource: '@NovaeZProtectedContentBundle/Resources/config/routing/main.yml'
+```
+
+### Copie migration files
+
+```shell
+cp vendor/novactive/ezprotectedcontentbundle/bundle/Resources/migrations/* src/Migrations/Ibexa/migrations/
+php bin/console ibexa:migrations:migrate --allow-no-migration --disable-locking -v
 ```
 
 ### Install the database schema
