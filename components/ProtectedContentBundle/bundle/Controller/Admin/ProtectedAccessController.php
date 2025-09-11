@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Controller\Admin;
 
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Ibexa\Bundle\Core\Controller;
 use Ibexa\Contracts\Core\Persistence\Handler as PersistenceHandler;
@@ -96,7 +97,7 @@ class ProtectedAccessController extends Controller
     ): RedirectResponse {
         if ($request->isMethod('post')) {
             $location = $this->repository->getLocationService()->loadLocation($locationId);
-            $now = new \DateTime();
+            $now = new DateTime();
             if (null === $access) {
                 $access = new ProtectedAccess();
                 $access->setCreated($now);

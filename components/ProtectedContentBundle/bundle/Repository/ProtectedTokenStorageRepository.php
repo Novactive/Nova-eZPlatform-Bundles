@@ -2,6 +2,7 @@
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Repository;
 
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedTokenStorage;
 
@@ -33,7 +34,7 @@ class ProtectedTokenStorageRepository
         $qb->select('c')
             ->from(ProtectedTokenStorage::class, 'c')
             ->where('c.created >= :nowMinusOneHour')
-            ->setParameter('nowMinusOneHour', new \DateTime('now - 1 hours'));
+            ->setParameter('nowMinusOneHour', new DateTime('now - 1 hours'));
 
         foreach ($criteria as $key => $criterion) {
             $qb->andWhere("c.$key = '$criterion'");
@@ -49,7 +50,7 @@ class ProtectedTokenStorageRepository
         $qb->select('c')
             ->from(ProtectedTokenStorage::class, 'c')
             ->where('c.created < :nowMinusOneHour')
-            ->setParameter('nowMinusOneHour', new \DateTime('now - 1 hours'));
+            ->setParameter('nowMinusOneHour', new DateTime('now - 1 hours'));
 
         return $qb->getQuery()->getResult();
     }
