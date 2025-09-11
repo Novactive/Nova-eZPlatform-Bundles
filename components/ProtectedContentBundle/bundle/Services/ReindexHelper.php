@@ -4,7 +4,6 @@ namespace Novactive\Bundle\eZProtectedContentBundle\Services;
 
 use Ibexa\Contracts\Core\Persistence\Handler as PersistenceHandler;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
-use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 use Ibexa\Contracts\Core\Search\Handler as SearchHandler;
 use Ibexa\Core\Repository\Repository;
@@ -20,10 +19,6 @@ class ReindexHelper
     ) {
     }
 
-    /**
-     * @param Content $content
-     * @return void
-     */
     public function reindexContent(Content $content): void
     {
         $contentId = $content->id;
@@ -44,7 +39,6 @@ class ReindexHelper
         $locations = $this->repository->getLocationService()->loadLocations($content->contentInfo);
         $pathStringArray = [];
         foreach ($locations as $location) {
-            /** @var Location $location */
             $pathStringArray[] = $location->pathString;
         }
 
@@ -52,15 +46,18 @@ class ReindexHelper
             $query = new Query();
             $query->limit = $limit;
             $query->filter = new Query\Criterion\LogicalAnd([
-                new Query\Criterion\Subtree($pathStringArray)
+                new Query\Criterion\Subtree($pathStringArray),
             ]);
             $query->sortClauses = [
                 new Query\SortClause\ContentId(),
-                // new Query\SortClause\Visibility(), // domage..
+                // new Query\SortClause\Visibility(), // dommage..
             ];
             $searchResult = $this->repository->getSearchService()->findContent($query);
             foreach ($searchResult->searchHits as $hit) {
-                $this->reindexContent($hit->valueObject);
+                $valueObject = $hit->valueObject;
+                if ($valueObject instanceof Content) {
+                    $this->reindexContent($valueObject);
+                }
             }
         }
     }

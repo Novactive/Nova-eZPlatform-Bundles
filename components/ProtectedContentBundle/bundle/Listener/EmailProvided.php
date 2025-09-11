@@ -36,10 +36,7 @@ class EmailProvided
 {
     protected const SENDMAIL_ERROR = 'Impossible d\'envoyer le lien formaté à l\'adresse mail %s';
 
-    /**
-     * @var Swift_Message
-     */
-    protected $messageInstance;
+    protected Swift_Message $messageInstance;
 
     public function __construct(
         protected readonly FormFactoryInterface $formFactory,
@@ -74,11 +71,12 @@ class EmailProvided
 
         try {
             $content = $this->contentService->loadContent($contentId);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->logger->error($exception->getMessage(), [
-                'here' => __METHOD__ . ' ' . __LINE__,
+                'here' => __METHOD__.' '.__LINE__,
                 '$contentId' => $contentId,
             ]);
+
             return;
         }
 

@@ -45,13 +45,12 @@ class ProtectedAccessRepository
         $qb = $entityRepository->createQueryBuilder($this->getAlias());
         $qb->setFirstResult($offset);
         $qb->setMaxResults($limit);
+
         return $qb->getQuery()->getResult();
     }
 
     /**
      * Retourne toutes les protections qui affectent ce contenu. Que ce soit directement, ou via ses ancêtres. En prenant en compte ses multiples emplacements.
-     * @param Content|null $content
-     * @return array
      */
     public function findByContent(?Content $content): array
     {
@@ -89,8 +88,6 @@ class ProtectedAccessRepository
 
     /**
      * Retourne les ContentID du contenu et de tous ces ancêtres en prenant en compte ses multiples emplacements.
-     * @param Content $content
-     * @return array
      */
     protected function getContentIds(Content $content): array
     {
@@ -107,15 +104,16 @@ class ProtectedAccessRepository
                         && ($loc = $repository->getLocationService()->loadLocation($loc->parentLocationId))
                         && $loc instanceof Location
                         && $loc->parentLocationId
-                        && $loc->parentLocationId !== 1
+                        && 1 !== $loc->parentLocationId
                     ) {
-                        $ct++;
+                        ++$ct;
                         $ids[] = $loc->getContentInfo()->id;
                         if ($ct >= 15) {
-                            break(2);
+                            break 2;
                         }
                     }
                 }
+
                 return $ids;
             }
         );

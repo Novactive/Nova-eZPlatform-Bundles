@@ -23,7 +23,7 @@ class ProtectedAccessHelper
 
     /**
      * Retourne toutes les protections qui s'appliquent au contenu. En prenant en compte ses ancêtres et ses multiples emplacements.
-     * @param Content $content
+     *
      * @return ProtectedAccess[]
      */
     public function getProtectedAccessList(Content $content): array
@@ -33,38 +33,38 @@ class ProtectedAccessHelper
 
     public function hasProtectedAccess(Content $content): bool
     {
-        return !!$this->getProtectedAccessList($content);
+        return (bool) $this->getProtectedAccessList($content);
     }
 
     /** Est-ce que le contenu a des protections héritables ?  */
     public function hasInheritableProtectedAccess(Content $content): bool
     {
         $protectedAccessList = $this->getProtectedAccessList($content);
-        return !!array_filter($protectedAccessList, function (ProtectedAccess $protectedAccess) {
+
+        return (bool) array_filter($protectedAccessList, function (ProtectedAccess $protectedAccess) {
             return $protectedAccess->isEnabled() && $protectedAccess->isProtectChildren();
         });
     }
 
-//    public function hasPasswordProtectedAccess(Content $content): bool
-//    {
-//        $protectedAccessList = $this->getProtectedAccessList($content);
-//        return !!array_filter($protectedAccessList, function (ProtectedAccess $protectedAccess) {
-//            return $protectedAccess->isEnabled() && $protectedAccess->getPassword();
-//        });
-//    }
+    //    public function hasPasswordProtectedAccess(Content $content): bool
+    //    {
+    //        $protectedAccessList = $this->getProtectedAccessList($content);
+    //        return !!array_filter($protectedAccessList, function (ProtectedAccess $protectedAccess) {
+    //            return $protectedAccess->isEnabled() && $protectedAccess->getPassword();
+    //        });
+    //    }
 
     public function hasEmailProtectedAccess(Content $content): bool
     {
         $protectedAccessList = $this->getProtectedAccessList($content);
-        return !!array_filter($protectedAccessList, function (ProtectedAccess $protectedAccess) {
+
+        return (bool) array_filter($protectedAccessList, function (ProtectedAccess $protectedAccess) {
             return $protectedAccess->isEnabled() && $protectedAccess->getAsEmail();
         });
     }
 
     /**
      * Retourne le nombre de contenus impactés par la protection.
-     * @param ProtectedAccess $protectedAccess
-     * @return int
      */
     public function count(ProtectedAccess $protectedAccess): int
     {
@@ -80,13 +80,12 @@ class ProtectedAccessHelper
         $query = new LocationQuery();
         $query->filter = $this->getSubtreeCriterion($content);
         $query->limit = 0;
+
         return $this->repository->getSearchService()->findContent($query)->totalCount;
     }
 
     /**
      * Retourne le contenu sur le quel s'applique la protection.
-     * @param ProtectedAccess $protectedAccess
-     * @return Content|null
      */
     public function getContent(ProtectedAccess $protectedAccess): ?Content
     {
@@ -99,6 +98,7 @@ class ProtectedAccessHelper
                 'ProtectedAccess ID' => $protectedAccess->getId(),
                 'ContentId' => $contentId,
             ]);
+
             return null;
         }
     }
