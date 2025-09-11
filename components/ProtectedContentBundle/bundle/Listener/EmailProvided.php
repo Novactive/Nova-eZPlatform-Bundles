@@ -14,9 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Listener;
 
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Ibexa\Contracts\Core\Repository\ContentService;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedTokenStorage;
@@ -24,8 +22,6 @@ use Novactive\Bundle\eZProtectedContentBundle\Form\RequestEmailProtectedAccessTy
 use Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedAccessRepository;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
-use Swift_Mailer;
-use Swift_Message;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -36,11 +32,11 @@ class EmailProvided
 {
     protected const SENDMAIL_ERROR = 'Impossible d\'envoyer le lien formaté à l\'adresse mail %s';
 
-    protected Swift_Message $messageInstance;
+    protected \Swift_Message $messageInstance;
 
     public function __construct(
         protected readonly FormFactoryInterface $formFactory,
-        protected readonly Swift_Mailer $mailer,
+        protected readonly \Swift_Mailer $mailer,
         protected readonly EntityManagerInterface $entityManager,
         protected readonly TranslatorInterface $translator,
         protected readonly ParameterBagInterface $parameterBag,
@@ -48,7 +44,7 @@ class EmailProvided
         protected readonly ContentService $contentService,
         protected readonly LoggerInterface $logger,
     ) {
-        $this->messageInstance = new Swift_Message();
+        $this->messageInstance = new \Swift_Message();
     }
 
     public function onKernelRequest(RequestEvent $event): void
@@ -71,7 +67,7 @@ class EmailProvided
 
         try {
             $content = $this->contentService->loadContent($contentId);
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             $this->logger->error($exception->getMessage(), [
                 'here' => __METHOD__.' '.__LINE__,
                 '$contentId' => $contentId,
@@ -102,7 +98,7 @@ class EmailProvided
 
             $access->setMail($data['email']);
             $access->setContentId($contentId);
-            $access->setCreated(new DateTime());
+            $access->setCreated(new \DateTime());
             $access->setToken($token);
 
             $this->entityManager->persist($access);
@@ -124,7 +120,7 @@ class EmailProvided
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     private function sendMail(int $contentId, string $receiver, string $link): void
     {
@@ -146,8 +142,8 @@ class EmailProvided
 
         try {
             $this->mailer->send($message);
-        } catch (Exception $exception) {
-            throw new Exception(sprintf(self::SENDMAIL_ERROR, $receiver));
+        } catch (\Exception $exception) {
+            throw new \Exception(sprintf(self::SENDMAIL_ERROR, $receiver));
         }
     }
 }
