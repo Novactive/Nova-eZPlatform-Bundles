@@ -20,6 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
+ *
  * @ORM\Table(name="novaezprotectedcontentstorage")
  */
 class ProtectedTokenStorage
@@ -28,13 +29,16 @@ class ProtectedTokenStorage
      * @var int
      *
      * @ORM\Id
+     *
      * @ORM\Column(type="integer")
+     *
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
      * @var DateTime
+     *
      * @ORM\Column(name="created", type="datetime")
      */
     private $created;
@@ -43,6 +47,7 @@ class ProtectedTokenStorage
      * @var string
      *
      * @ORM\Column(type="string", length=255, nullable=false)
+     *
      * @Assert\Length(max=255)
      */
     protected $token;
@@ -51,6 +56,7 @@ class ProtectedTokenStorage
      * @var string
      *
      * @ORM\Column(type="string", length=255, nullable=false)
+     *
      * @Assert\Length(max=255)
      */
     protected $mail;

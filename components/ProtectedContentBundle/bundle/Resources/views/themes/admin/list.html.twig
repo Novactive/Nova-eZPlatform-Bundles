@@ -1,0 +1,88 @@
+{% extends '@ibexadesign/ui/layout.html.twig' %}
+
+{% trans_default_domain 'ezprotectedcontent' %}
+
+{% block title %}
+  {{ 'list.title'|trans }}
+{% endblock %}
+{% block content %}
+  <section class="container mt-4 px-5">
+    <div class="ez-table-header">
+      <div class="ez-table-header__headline">{{ 'list.header__headline'|trans }}</div>
+    </div>
+  </section>
+
+  {% if list|default %}
+    <section class="container mt-4 px-5">
+      <div class="ez-table-header">
+        <div class="ez-table-header__headline">
+          {{ 'list.total'|trans }}
+        </div>
+      </div>
+      <table class="table table-striped mb-3">
+        <thead>
+        <tr>
+          <th>{{ 'list.head.id'|trans }}</th>
+          <th>{{ 'list.head.password'|trans }}</th>
+          <th>{{ 'list.head.enabled'|trans }}</th>
+          <th>{{ 'list.head.email'|trans }}</th>
+          <th>{{ 'list.head.is-protect-children'|trans }}</th>
+          <th>{{ 'list.head.created'|trans }}</th>
+          <th>{{ 'list.head.updated'|trans }}</th>
+{#          <th>{{ 'list.head.email-message'|trans }}</th>#}
+          <th>{{ 'list.head.content_id'|trans }}</th>
+          <th>{{ 'list.head.content_name'|trans }}</th>
+          <th>{{ 'list.head.count'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for protectedAccess in list %}
+          {% set content = data[protectedAccess.id]['content'] %}
+          {% set count = data[protectedAccess.id]['count'] %}
+          <tr>
+              <th>
+                {{ protectedAccess.getId() }}
+              </th>
+              <td>{{ protectedAccess.getPassword() }}</td>
+              <td>{{ protectedAccess.isEnabled() }}</td>
+            <td>{{ protectedAccess.getAsEmail() }}</td>
+            <td>{{ protectedAccess.isProtectChildren() }}</td>
+              <td>{{ protectedAccess.created|ibexa_short_datetime }}</td>
+              <td>{{ protectedAccess.updated|ibexa_short_datetime }}</td>
+{#              <td>{{ protectedAccess.getEmailMessage() }}</td>#}
+              <td><pre>{{ protectedAccess.getContentId() }}</pre></td>
+              <td>
+                {% if content %}
+                  <a href="/view/content/{{ content.id }}">
+                    {{ ibexa_content_name(content) }}
+                  </a>
+                </td>
+                {% else %}
+                  <span style="color: red">{{ 'list.no-content'|trans }}</span>
+                {% endif %}
+              <td>{{ count }}</td>
+              <td>
+                {% if not content %}
+                  <a href="{{ path('novaezprotectedcontent_bundle_admin_delete_protection', {
+                    'accessId': protectedAccess.getId(),
+                  }) }}">
+                    X
+                  </a>
+                {% endif %}
+              </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+
+      {% if list|length == page_size %}
+        <a href="{{ path('novaezprotectedcontent_bundle_admin_list_protection', {
+            'page': page+1,
+            'pageSize': page_size,
+            }) }}">
+          Page suivante
+        </a>
+      {% endif %}
+    </section>
+  {% endif %}
+{% endblock %}
