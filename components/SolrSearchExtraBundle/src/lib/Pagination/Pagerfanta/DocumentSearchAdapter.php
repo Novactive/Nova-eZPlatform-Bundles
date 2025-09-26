@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Pagination\Pagerfanta;
 
-use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 use Ibexa\Contracts\Core\Repository\Values\Content\Search\AggregationResultCollection;
 use Ibexa\Contracts\Core\Repository\Values\Content\Search\SpellcheckResult;
 use Ibexa\Core\Pagination\Pagerfanta\SearchResultAdapter;
@@ -87,7 +86,7 @@ class DocumentSearchAdapter implements AdapterInterface, SearchResultAdapter
         return $searchResult->searchHits;
     }
 
-    protected function getSliceResults(Query $query): ExtendedSearchResult
+    protected function getSliceResults(DocumentQuery $query): ExtendedSearchResult
     {
         $searchResult = $this->executeQuery(
             $this->documentSearchService,
