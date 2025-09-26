@@ -100,6 +100,21 @@ services:
     - {name: ibexa.search.solr.query.content.criterion.visitor}
     - {name: ibexa.search.solr.query.location.criterion.visitor}
 
+  Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor\LocationDistanceRange:
+    tags:
+      - { name: ibexa.search.solr.query.content.criterion.visitor }
+      - { name: ibexa.search.solr.query.location.criterion.visitor }
+
+  Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor\LocationDistanceIn:
+    tags:
+      - { name: ibexa.search.solr.query.content.criterion.visitor }
+      - { name: ibexa.search.solr.query.location.criterion.visitor }
+
+  Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor\RawQueryString:
+    tags:
+      - { name: ibexa.search.solr.query.content.criterion.visitor }
+      - { name: ibexa.search.solr.query.location.criterion.visitor }
+
   Novactive\EzSolrSearchExtra\Query\CriterionHandler\MultipleFieldsFullText:
     parent: Ibexa\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FullText
 
