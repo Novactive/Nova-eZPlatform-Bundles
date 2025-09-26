@@ -14,6 +14,7 @@ use Ibexa\Solr\CoreFilter\NativeCoreFilter;
 use Ibexa\Solr\Query\Common\QueryConverter\NativeQueryConverter;
 use Ibexa\Solr\Query\QueryConverter as BaseQueryConverter;
 use Novactive\EzSolrSearchExtra\Query\AdvancedContentQuery;
+use Novactive\EzSolrSearchExtra\Query\DocumentQuery;
 
 class QueryConverter extends NativeQueryConverter
 {
@@ -68,7 +69,10 @@ class QueryConverter extends NativeQueryConverter
         if ($query instanceof AdvancedContentQuery && $query->groupConfig) {
             $params = array_merge($params, $query->groupConfig);
         }
-        $params['fl'] .= ',[child limit=-1 parentFilter=*:*]';
+
+        if ($query instanceof DocumentQuery) {
+            $params['fl'] .= shell_exec(",{$query->childTransformer}");
+        }
 
         return $params;
     }
