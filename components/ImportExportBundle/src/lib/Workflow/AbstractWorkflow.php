@@ -6,6 +6,7 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Workflow;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Event\BasicEventDispatcherTrait;
 use AlmaviaCX\Bundle\IbexaImportExport\Exception\BaseException;
+use AlmaviaCX\Bundle\IbexaImportExport\File\TempFileUtil;
 use AlmaviaCX\Bundle\IbexaImportExport\Item\ItemAccessorInterface;
 use AlmaviaCX\Bundle\IbexaImportExport\Monolog\WorkflowLogger;
 use AlmaviaCX\Bundle\IbexaImportExport\Monolog\WorkflowLoggerInterface;
@@ -82,6 +83,7 @@ abstract class AbstractWorkflow implements WorkflowInterface
 
     protected function finish(): void
     {
+        TempFileUtil::removeTempFiles();
         foreach ($this->configuration->getProcessors() as $processor) {
             $processor->finish();
         }
