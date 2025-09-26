@@ -13,6 +13,7 @@ services:
     class: Novactive\EzSolrSearchExtra\Query\AggregationVisitor\RawTermAggregationVisitor
     arguments:
       $aggregationVisitor: '@ibexa.solr.query.content.aggregation_visitor.dispatcher'
+      $criterionVisitor: '@ibexa.solr.query.content.criterion_visitor.aggregate'
     tags:
       - { name: ibexa.search.solr.query.content.aggregation.visitor }
       - { name: ibexa.search.solr.query.location.aggregation.visitor }

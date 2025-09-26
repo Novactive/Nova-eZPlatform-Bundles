@@ -36,15 +36,7 @@ class QueryConverter extends NativeQueryConverter
 
         if ($query->filter instanceof Query\Criterion\LogicalAnd) {
             $params['fq'] = [];
-            foreach ($query->filter->criteria as $criterion) {
-                if ($criterion instanceof Query\Criterion\LogicalAnd) {
-                    foreach ($criterion->criteria as $subcriterion) {
-                        $params['fq'][] = $this->criterionVisitor->visit($subcriterion);
-                    }
-                } else {
-                    $params['fq'][] = $this->criterionVisitor->visit($criterion);
-                }
-            }
+            $this->flattenFilterQueries($query->filter->criteria, $params['fq']);
         }
 
         if ($query instanceof AdvancedContentQuery && $query->groupConfig) {
@@ -53,5 +45,19 @@ class QueryConverter extends NativeQueryConverter
         $params['fl'] .= ',[child limit=-1 parentFilter=*:*]';
 
         return $params;
+    }
+
+    /**
+     * @param Query\Criterion[] $criterions
+     */
+    public function flattenFilterQueries(array $criterions, array &$filterQuery): void
+    {
+        foreach ($criterions as $criterion) {
+            if ($criterion instanceof Query\Criterion\LogicalAnd) {
+                $this->flattenFilterQueries($criterion->criteria, $filterQuery);
+            } else {
+                $filterQuery[] = $this->criterionVisitor->visit($criterion);
+            }
+        }
     }
 }
