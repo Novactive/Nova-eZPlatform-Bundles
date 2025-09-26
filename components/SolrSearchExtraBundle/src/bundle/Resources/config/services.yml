@@ -19,16 +19,10 @@ services:
   Novactive\EzSolrSearchExtra\Api\:
     resource: "../../../lib/Api/*"
 
-  Novactive\EzSolrSearchExtra\ApiLoader\GatewayFactory:
-    arguments:
-      $defaultConnection: "%ibexa.solr.default_connection%"
-    calls:
-      - [setContainer, ["@service_container"]]
-
   Novactive\EzSolrSearchExtra\Api\Gateway:
-    factory: ['@Novactive\EzSolrSearchExtra\ApiLoader\GatewayFactory', buildGateway]
+    parent: ibexa.solr.gateway
     arguments:
-      $client: '@Ibexa\Solr\Gateway\HttpClient\Stream'
+      $queryConverter: '@Novactive\EzSolrSearchExtra\Query\DocumentQueryConverter'
 
   Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper\CustomFulltextFieldMapper:
     calls:
@@ -177,3 +171,50 @@ services:
   Novactive\EzSolrSearchExtra\Search\Common\FieldValueMapper\MultipleDateRangeMapper:
     tags:
       - { name: ibexa.search.common.field_value.mapper, maps: Novactive\EzSolrSearchExtra\Search\FieldType\MultipleDateRangeField }
+
+  Novactive\EzSolrSearchExtra\ResultExtractor\DocumentResultExtractor:
+    arguments:
+      - '@ibexa.solr.query.content.facet_builder_visitor.aggregate'
+      - '@ibexa.solr.query.content.aggregation_result_extractor.dispatcher'
+      - '@Ibexa\Solr\Gateway\EndpointRegistry'
+
+  nova_solr_extra.search.solr.query.document.query_converter:
+    class: Novactive\EzSolrSearchExtra\Query\Common\QueryConverter
+    decorates: Novactive\EzSolrSearchExtra\Query\DocumentQueryConverter
+    decoration_priority: -10
+    arguments:
+      - '@nova_solr_extra.search.solr.query.document.query_converter.inner'
+      - '@ibexa.solr.query.content.criterion_visitor.aggregate'
+
+  Novactive\EzSolrSearchExtra\Query\DocumentQueryConverter:
+    arguments:
+      - '@ibexa.solr.query.content.criterion_visitor.aggregate'
+      - '@ibexa.solr.query.content.sort_clause_visitor.aggregate'
+      - '@ibexa.solr.query.content.facet_builder_visitor.aggregate'
+      - '@ibexa.solr.query.content.aggregation_visitor.dispatcher'
+
+  Novactive\EzSolrSearchExtra\Api\GatewayRegistry:
+
+  Novactive\EzSolrSearchExtra\Search\ExtendedSearchHandlerFactory:
+    arguments:
+      $repositoryConfigurationProvider: '@Ibexa\Bundle\Core\ApiLoader\RepositoryConfigurationProvider'
+      $defaultConnection: "%ibexa.solr.default_connection%"
+      $gatewayRegistry: '@Novactive\EzSolrSearchExtra\Api\GatewayRegistry'
+      $coreFilterRegistry: '@Ibexa\Solr\CoreFilter\CoreFilterRegistry'
+      $resultExtractor: '@Novactive\EzSolrSearchExtra\ResultExtractor\DocumentResultExtractor'
+
+  Novactive\EzSolrSearchExtra\Search\ExtendedSearchHandler:
+    lazy: true
+    factory: [ '@Novactive\EzSolrSearchExtra\Search\ExtendedSearchHandlerFactory', build]
+
+  Novactive\EzSolrSearchExtra\Repository\DocumentSearchService:
+    arguments:
+      $searchHandler: '@Novactive\EzSolrSearchExtra\Search\ExtendedSearchHandler'
+
+  Novactive\EzSolrSearchExtra\Repository\SiteAccessAware\DocumentSearchService:
+    arguments:
+      - '@Novactive\EzSolrSearchExtra\Repository\DocumentSearchService'
+      - '@ibexa.helper.language_resolver'
+
+  Novactive\EzSolrSearchExtra\Repository\DocumentSearchServiceInterface: '@Novactive\EzSolrSearchExtra\Repository\SiteAccessAware\DocumentSearchService'
+

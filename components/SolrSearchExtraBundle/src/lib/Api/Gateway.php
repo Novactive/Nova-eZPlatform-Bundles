@@ -5,51 +5,78 @@ declare(strict_types=1);
 namespace Novactive\EzSolrSearchExtra\Api;
 
 use Exception;
+use Ibexa\Solr\Gateway\DistributionStrategy;
 use Ibexa\Solr\Gateway\Endpoint;
 use Ibexa\Solr\Gateway\EndpointRegistry;
 use Ibexa\Solr\Gateway\EndpointResolver;
 use Ibexa\Solr\Gateway\HttpClient;
 use Ibexa\Solr\Gateway\Message;
+use Ibexa\Solr\Gateway\Native;
+use Ibexa\Solr\Gateway\UpdateSerializerInterface;
+use Ibexa\Solr\Query\QueryConverter;
+use Novactive\EzSolrSearchExtra\Query\DocumentQuery;
 use stdClass;
 
-class Gateway
+class Gateway extends Native
 {
-    /**
-     * HTTP client to communicate with Solr server.
-     *
-     * @var HttpClient
-     */
-    protected $client;
+    protected QueryConverter $queryConverter;
 
-    /**
-     * @var EndpointResolver
-     */
-    protected $endpointResolver;
-
-    /**
-     * Endpoint registry service.
-     *
-     * @var EndpointRegistry
-     */
-    protected $endpointRegistry;
-
-    /**
-     * Gateway constructor.
-     */
     public function __construct(
+        QueryConverter $queryConverter,
         HttpClient $client,
         EndpointResolver $endpointResolver,
-        EndpointRegistry $endpointRegistry
+        EndpointRegistry $endpointRegistry,
+        QueryConverter $contentQueryConverter,
+        QueryConverter $locationQueryConverter,
+        UpdateSerializerInterface $updateSerializer,
+        DistributionStrategy $distributionStrategy
     ) {
-        $this->client = $client;
-        $this->endpointResolver = $endpointResolver;
-        $this->endpointRegistry = $endpointRegistry;
+        $this->queryConverter = $queryConverter;
+        parent::__construct(
+            $client,
+            $endpointResolver,
+            $endpointRegistry,
+            $contentQueryConverter,
+            $locationQueryConverter,
+            $updateSerializer,
+            $distributionStrategy
+        );
+    }
+
+    public function findDocument(DocumentQuery $query, array $languageSettings = []): mixed
+    {
+        $parameters = $this->queryConverter->convert($query, $languageSettings);
+
+        return $this->internalFind($parameters, $languageSettings);
+    }
+
+    public function rawSearch(array $parameters, array $languageSettings = []): mixed
+    {
+        return $this->internalFind($parameters, $languageSettings);
+    }
+
+    /**
+     * @param string[] $ids
+     */
+    public function deleteDocuments(array $ids): void
+    {
+        $ids = array_map(function ($value) {
+            return preg_replace('([^A-Za-z0-9/*]+)', '', $value);
+        }, $ids);
+
+        $query = 'id:('.implode(' OR ', $ids).')';
+        $this->deleteByQuery($query);
+    }
+
+    public function purgeDocumentsFromIndex(): void
+    {
+        $this->deleteByQuery('document_type_id:"document"');
     }
 
     /**
      * @throws \Exception
      */
-    public function reload()
+    public function reload(): void
     {
         $endpoint = $this->getAdminEndpoint();
 
