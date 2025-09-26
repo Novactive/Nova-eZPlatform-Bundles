@@ -43,14 +43,14 @@ class Gateway extends Native
         );
     }
 
-    public function findDocument(DocumentQuery $query, array $languageSettings = []): mixed
+    public function findDocument(DocumentQuery $query, array $languageSettings = [])
     {
         $parameters = $this->queryConverter->convert($query, $languageSettings);
 
         return $this->internalFind($parameters, $languageSettings);
     }
 
-    public function rawSearch(array $parameters, array $languageSettings = []): mixed
+    public function rawSearch(array $parameters, array $languageSettings = [])
     {
         return $this->internalFind($parameters, $languageSettings);
     }

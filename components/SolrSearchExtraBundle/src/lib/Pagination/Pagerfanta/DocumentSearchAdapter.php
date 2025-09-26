@@ -15,6 +15,9 @@ use Pagerfanta\Adapter\AdapterInterface;
 
 class DocumentSearchAdapter implements AdapterInterface, SearchResultAdapter
 {
+    protected array $languageFilter = [];
+    protected DocumentSearchServiceInterface $documentSearchService;
+    protected DocumentQuery $query;
     private ?AggregationResultCollection $aggregations;
 
     private ?int $totalCount;
@@ -26,10 +29,13 @@ class DocumentSearchAdapter implements AdapterInterface, SearchResultAdapter
     private ?float $maxScore;
 
     public function __construct(
-        protected DocumentQuery $query,
-        protected DocumentSearchServiceInterface $documentSearchService,
-        protected array $languageFilter = []
+        DocumentQuery $query,
+        DocumentSearchServiceInterface $documentSearchService,
+        array $languageFilter = []
     ) {
+        $this->query = $query;
+        $this->documentSearchService = $documentSearchService;
+        $this->languageFilter = $languageFilter;
     }
 
     /**

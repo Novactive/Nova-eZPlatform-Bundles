@@ -8,10 +8,15 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation;
 
 class RawAggregation implements Aggregation
 {
+    protected array $value;
+    protected string $name;
+
     public function __construct(
-        protected string $name,
-        protected array $value
+        string $name,
+        array $value
     ) {
+        $this->name = $name;
+        $this->value = $value;
     }
 
     public function getName(): string

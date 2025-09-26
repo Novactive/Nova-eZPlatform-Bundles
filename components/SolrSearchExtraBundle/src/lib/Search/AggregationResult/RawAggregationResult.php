@@ -8,8 +8,11 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Search\AggregationResult;
 
 class RawAggregationResult extends AggregationResult
 {
-    public function __construct(string $name, protected $value)
+    protected $value;
+
+    public function __construct(string $name, $value)
     {
+        $this->value = $value;
         parent::__construct($name);
     }
 

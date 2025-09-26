@@ -8,10 +8,15 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
 
 class ChildTag extends Criterion
 {
+    public string $ofParameter;
+    public Criterion $criterion;
+
     public function __construct(
-        public string $ofParameter,
-        public Criterion $criterion
+        string $ofParameter,
+        Criterion $criterion
     ) {
+        $this->criterion = $criterion;
+        $this->ofParameter = $ofParameter;
     }
 
     /**
