@@ -163,6 +163,9 @@ services:
       - '@nova_solr_extra.search.solr.query.location.query_converter.inner'
       - '@ibexa.solr.query.location.criterion_visitor.aggregate'
 
+  Novactive\EzSolrSearchExtra\Query\Translator\Generator\WordVisitor:
+      decorates: Ibexa\Solr\Query\Common\QueryTranslator\Generator\WordVisitor
+
   Novactive\EzSolrSearchExtra\Search\Common\FieldValueMapper\DateRangeMapper:
     tags:
       - { name: ibexa.search.common.field_value.mapper, maps: Novactive\EzSolrSearchExtra\Search\FieldType\DateRangeField }

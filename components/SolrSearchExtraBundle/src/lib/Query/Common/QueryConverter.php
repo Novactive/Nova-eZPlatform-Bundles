@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Query\Common;
 
+use Ibexa\Contracts\Core\Repository\Values\Content\LocationQuery;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion\CustomField;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion\Operator;
+use Ibexa\Contracts\Solr\DocumentMapper;
 use Ibexa\Contracts\Solr\Query\CriterionVisitor;
+use Ibexa\Solr\CoreFilter\NativeCoreFilter;
 use Ibexa\Solr\Query\Common\QueryConverter\NativeQueryConverter;
 use Ibexa\Solr\Query\QueryConverter as BaseQueryConverter;
 use Novactive\EzSolrSearchExtra\Query\AdvancedContentQuery;
@@ -34,6 +39,27 @@ class QueryConverter extends NativeQueryConverter
     {
         $params = $this->baseConverter->convert($query, $languageSettings);
 
+        if (false === strpos($params['fq'], 'document_type_id:')) {
+            // If there is no filter on the document type, we add it based on the query type
+            $criteria = [];
+            if ($query instanceof LocationQuery) {
+                $criteria[] = new CustomField(
+                    NativeCoreFilter::FIELD_DOCUMENT_TYPE,
+                    Operator::EQ,
+                    DocumentMapper::DOCUMENT_TYPE_IDENTIFIER_LOCATION
+                );
+            } else {
+                $criteria[] = new CustomField(
+                    NativeCoreFilter::FIELD_DOCUMENT_TYPE,
+                    Operator::EQ,
+                    DocumentMapper::DOCUMENT_TYPE_IDENTIFIER_CONTENT
+                );
+            }
+            if (null !== $query->filter) {
+                $criteria[] = $query->filter;
+            }
+            $query->filter = new Query\Criterion\LogicalAnd($criteria);
+        }
         if ($query->filter instanceof Query\Criterion\LogicalAnd) {
             $params['fq'] = [];
             $this->flattenFilterQueries($query->filter->criteria, $params['fq']);
