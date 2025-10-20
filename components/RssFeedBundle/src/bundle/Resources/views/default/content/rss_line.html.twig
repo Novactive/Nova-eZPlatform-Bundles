@@ -3,6 +3,7 @@
     <item>
         <title>{{- ibexa_field_value(content, mapping.title ) -}}</title>
         <link>{{- ibexa_url(location) -}}</link>
+        <guid>{{ content.contentInfo.remoteId }}</guid>
         {% if feed_content.xml is defined and feed_content.xml.textContent is defined %}
             <description>{{- feed_content.xml.textContent|raw -}}</description>
         {% elseif feed_content is not empty %}
