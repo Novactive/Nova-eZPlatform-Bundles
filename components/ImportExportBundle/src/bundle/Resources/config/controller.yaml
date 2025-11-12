@@ -8,6 +8,7 @@ services:
             $jobService: '@AlmaviaCX\Bundle\IbexaImportExport\Job\JobService'
             $eventDispatcher: '@event_dispatcher'
             $workflowRegistry: '@AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowRegistry'
+            $executionRepository: '@AlmaviaCX\Bundle\IbexaImportExport\Execution\ExecutionRepository'
         tags:
             - controller.service_arguments
 

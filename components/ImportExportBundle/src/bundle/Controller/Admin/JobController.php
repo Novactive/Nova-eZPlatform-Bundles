@@ -6,12 +6,11 @@ namespace AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Event\PostJobCreateFormSubmitEvent;
 use AlmaviaCX\Bundle\IbexaImportExport\Execution\Execution;
+use AlmaviaCX\Bundle\IbexaImportExport\Execution\ExecutionRepository;
 use AlmaviaCX\Bundle\IbexaImportExport\Job\Form\JobCreateFlow;
 use AlmaviaCX\Bundle\IbexaImportExport\Job\Job;
 use AlmaviaCX\Bundle\IbexaImportExport\Job\JobService;
 use AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowRegistry;
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Collections\Selectable;
 use Ibexa\Contracts\AdminUi\Controller\Controller;
 use Ibexa\Contracts\AdminUi\Notification\TranslatableNotificationHandlerInterface;
 use Ibexa\Contracts\Core\Repository\PermissionResolver;
@@ -20,18 +19,14 @@ use Ibexa\Core\MVC\Symfony\Security\Authorization\Attribute;
 use JMS\TranslationBundle\Annotation\Ignore;
 use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Translation\TranslationContainerInterface;
-use Monolog\Logger;
 use Pagerfanta\Adapter\CallbackAdapter;
-use Pagerfanta\Doctrine\Collections\CollectionAdapter;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -47,6 +42,7 @@ class JobController extends Controller implements TranslationContainerInterface
         protected PermissionResolver $permissionResolver,
         protected EventDispatcherInterface $eventDispatcher,
         protected WorkflowRegistry $workflowRegistry,
+        protected ExecutionRepository $executionRepository
     ) {
     }
 
@@ -137,13 +133,11 @@ class JobController extends Controller implements TranslationContainerInterface
 
         $workflow = $this->workflowRegistry->getWorkflow($job->getWorkflowIdentifier());
 
-        $criteria = new Criteria();
-        $criteria->orderBy(['id' => 'DESC']);
-        $executions = $job->getExecutions();
-
         $page = $request->query->get('page') ?? 1;
         $pagerfanta = new Pagerfanta(
-            new CollectionAdapter($executions instanceof Selectable ? $executions->matching($criteria) : $executions)
+            new QueryAdapter(
+                $this->executionRepository->getJobExecutionQueryBuilder($job)
+            )
         );
 
         $pagerfanta->setMaxPerPage(5);

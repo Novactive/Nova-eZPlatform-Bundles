@@ -1,6 +1,6 @@
 <?php
 
-declare( strict_types=1 );
+declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\File;
 
@@ -21,7 +21,7 @@ abstract class TempFileUtil
     /**
      * @param string $tempFile Path to a file.
      */
-    public static function addTempFile( string $tempFile ): void
+    public static function addTempFile(string $tempFile): void
     {
         self::$tempFiles[] = $tempFile;
     }
@@ -29,16 +29,15 @@ abstract class TempFileUtil
     /**
      * @throw RuntimeException
      */
-    public static function download( string $sourceUrl ): string
+    public static function download(string $sourceUrl): string
     {
         $tmpFilePath = DIRECTORY_SEPARATOR .
-                       trim( sys_get_temp_dir(), DIRECTORY_SEPARATOR ) .
+                       trim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) .
                        DIRECTORY_SEPARATOR .
-                       ltrim( (string)Uuid::v4(), DIRECTORY_SEPARATOR );
+                       ltrim((string) Uuid::v4(), DIRECTORY_SEPARATOR);
 
-        $originalPathInfos = pathinfo( $sourceUrl );
-        if ( !empty( $originalPathInfos['extension'] ) )
-        {
+        $originalPathInfos = pathinfo($sourceUrl);
+        if (!empty($originalPathInfos['extension'])) {
             $tmpFilePath .= '.' . $originalPathInfos['extension'];
         }
 
@@ -52,7 +51,7 @@ abstract class TempFileUtil
         );
 
         $source = fopen(
-            str_replace( ' ', '+', $sourceUrl ),
+            str_replace(' ', '+', $sourceUrl),
             'rb',
             false,
             $context
@@ -63,21 +62,19 @@ abstract class TempFileUtil
             'wb'
         );
 
-        if ( !$source )
-        {
-            throw new RuntimeException( sprintf('Could not open source file : %s', $sourceUrl) );
+        if (!$source) {
+            throw new RuntimeException(sprintf('Could not open source file : %s', $sourceUrl));
         }
 
-        if ( !$dest )
-        {
-            throw new RuntimeException( sprintf('Could not open destination file : %s', $tmpFilePath) );
+        if (!$dest) {
+            throw new RuntimeException(sprintf('Could not open destination file : %s', $tmpFilePath));
         }
 
-        stream_copy_to_stream( $source, $dest );
-        fclose( $source );
-        fclose( $dest );
+        stream_copy_to_stream($source, $dest);
+        fclose($source);
+        fclose($dest);
 
-        self::addTempFile( $tmpFilePath );
+        self::addTempFile($tmpFilePath);
         return $tmpFilePath;
     }
 
@@ -86,11 +83,9 @@ abstract class TempFileUtil
      */
     public static function removeTempFiles(): void
     {
-        foreach ( self::$tempFiles as $tempFile )
-        {
-            if ( is_file( $tempFile ) )
-            {
-                @unlink( $tempFile );
+        foreach (self::$tempFiles as $tempFile) {
+            if (is_file($tempFile)) {
+                @unlink($tempFile);
             }
         }
 

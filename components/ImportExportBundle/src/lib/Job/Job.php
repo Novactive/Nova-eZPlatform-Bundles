@@ -180,6 +180,14 @@ class Job
         return $this->executions->matching($criteria)->first();
     }
 
+    public function getExecutionCount(): int
+    {
+        $criteria = new Criteria();
+        $criteria->setMaxResults(1);
+
+        return $this->executions->matching($criteria)->count();
+    }
+
     public function getPendingExecutionCount(): int
     {
         $criteria = new Criteria();

@@ -80,6 +80,9 @@
                 raw: true,
             }]) %}
             {% set body_row_cols = body_row_cols|merge([
+                { content: job.getExecutionCount },
+            ]) %}
+            {% set body_row_cols = body_row_cols|merge([
                 { content: job.pendingExecutionCount },
             ]) %}
 
@@ -106,6 +109,7 @@
             head_cols: [
                 { content: 'job.property.id'|trans|desc('Id') },
                 { content: 'job.property.label'|trans|desc('Label') },
+                { content: 'job.property.execution_count'|trans|desc('Executions count') },
                 { content: 'job.property.pending_execution_count'|trans|desc('Pending executions count') },
                 { content: 'job.property.last_execution.progress'|trans()|desc('Progress') },
                 { content: 'job.property.last_execution.status'|trans|desc('Status') },
