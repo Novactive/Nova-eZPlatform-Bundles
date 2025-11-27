@@ -41,8 +41,8 @@
                                     type="button"
                                     class="btn btn-danger"
                                     disabled
-                                    data-toggle="modal"
-                                    data-target="#{{ modal_data_target }}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#{{ modal_data_target }}"
                                     title="{{ 'solr_admin.page.synonyms.table.action.remove'|trans }}">
                                 <svg class="ibexa-icon ibexa-icon--trash">
                                     <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
@@ -51,7 +51,7 @@
                             {% include '@ibexadesign/ui/modal/bulk_delete_confirmation.html.twig' with {
                                 'id': modal_data_target,
                                 'message': 'solr_admin.page.stopwords.table.action.msg_delete'|trans,
-                                'data_click': '#delete-words-delete',
+                                'data_click': '#delete-terms-delete',
                             }%}
                         </div>
                     {% endif %}
