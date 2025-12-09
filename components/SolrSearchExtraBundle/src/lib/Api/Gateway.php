@@ -6,6 +6,7 @@ namespace Novactive\EzSolrSearchExtra\Api;
 
 use Exception;
 use Ibexa\Solr\Gateway\DistributionStrategy;
+use Ibexa\Solr\Gateway\DistributionStrategy\CloudDistributionStrategy;
 use Ibexa\Solr\Gateway\Endpoint;
 use Ibexa\Solr\Gateway\EndpointRegistry;
 use Ibexa\Solr\Gateway\EndpointResolver;
@@ -73,23 +74,12 @@ class Gateway extends Native
         $this->deleteByQuery('document_type_id:"document"');
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function reload(): void
-    {
-        $endpoint = $this->getAdminEndpoint();
-
-        $this->request(
-            'GET',
-            '&action=RELOAD',
-            null,
-            $endpoint
-        );
-    }
-
     public function getAdminEndpoint(): AdminEndpoint
     {
+        $distributionStrategyIdentifier = $this->distributionStrategy instanceof CloudDistributionStrategy ?
+            'cloud' :
+            'standalone';
+
         $endpoint = $this->getEndpoint();
 
         return new AdminEndpoint(
@@ -101,6 +91,7 @@ class Gateway extends Native
                 'port' => $endpoint->port,
                 'path' => $endpoint->path,
                 'core' => $endpoint->core,
+                'distributionStrategyIdentifier' => $distributionStrategyIdentifier,
             ]
         );
     }

@@ -24,7 +24,7 @@
     <section class="container page-list-terms my-4">
         {% block ajax_content %}
             {% if pager is defined %}
-                <div class="ez-table-header">
+                <div class="ibexa-table-header">
                     <div>
                         <a href="{{ path('solr_admin.dashboard') }}" class="btn btn-primary">
                             <svg class="ibexa-icon ibexa-icon--back">
@@ -32,7 +32,7 @@
                             </svg>
                         </a>
                     </div>
-                    <div class="ez-table-header__headline">{{ 'solr_admin.page.synonyms.table.nbr_termes'|trans({'%nbr%': pager|length }) }}</div>
+                    <div class="ibexa-table-header__headline">{{ 'solr_admin.page.synonyms.table.nbr_termes'|trans({'%nbr%': pager|length }) }}</div>
                     {% if manageAccess['synonyms.delete'] %}
                         <div>
                             {% set modal_data_target = 'delete-terms-modal' %}
@@ -41,8 +41,8 @@
                                     type="button"
                                     class="btn btn-danger"
                                     disabled
-                                    data-toggle="modal"
-                                    data-target="#{{ modal_data_target }}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#{{ modal_data_target }}"
                                     title="{{ 'solr_admin.page.synonyms.table.action.remove'|trans }}">
                                 <svg class="ibexa-icon ibexa-icon--trash">
                                     <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
@@ -51,7 +51,7 @@
                             {% include '@ibexadesign/ui/modal/bulk_delete_confirmation.html.twig' with {
                                 'id': modal_data_target,
                                 'message': 'solr_admin.page.stopwords.table.action.msg_delete'|trans,
-                                'data_click': '#delete-words-delete',
+                                'data_click': '#delete-terms-delete',
                             }%}
                         </div>
                     {% endif %}
@@ -67,13 +67,13 @@
                         {% else %}
                             {% for elt in pager %}
                                 <tr>
-                                    <td class="ez-table__cell ez-table__cell--has-checkbox">
+                                    <td class="ibexa-table__cell ibexa-table__cell--has-checkbox">
                                         {% if manageAccess['synonyms.delete'] %}
                                             <input id="delete-{{ loop.index }}" type="checkbox" name="termsToDelete[]" class="terms-to-delete" value="{{ elt.term }}" />
                                         {% endif %}
                                     </td>
-                                    <td class="ez-table__cell term"><label for="delete-{{ loop.index }}">{{ elt.term }}</label></td>
-                                    <td class="ez-table__cell synonyms">
+                                    <td class="ibexa-table__cell term"><label for="delete-{{ loop.index }}">{{ elt.term }}</label></td>
+                                    <td class="ibexa-table__cell synonyms">
                                         <ul>
                                             {% for synonym in elt.synonyms %}
                                                 <li> {{ synonym }} </li>
@@ -81,7 +81,7 @@
                                         </ul>
                                     </td>
                                     {% if manageAccess['synonyms.create'] %}
-                                        <td class="ez-table__cell ez-table__cell--has-action-btns text-right">
+                                        <td class="ibexa-table__cell ibexa-table__cell--has-action-btns text-right">
                                             <a
                                                     title="{{ 'solr_admin.page.synonyms.table.action.edit'|trans }}"
                                                     href=""
@@ -117,7 +117,7 @@
 
                         {% if add_form is defined %}
                             <tr>
-                                <td class="ez-table__cell words" colspan="2">
+                                <td class="ibexa-table__cell words" colspan="2">
                                     {{ form_start(add_form, {'attr' : {'class': 'row'}}) }}
                                     <div class="col-5">
                                         {{ form_widget(add_form.term) }}
@@ -141,14 +141,14 @@
                 <a href="{{ path('solr_admin.synonyms.delete', {'setId': setId}) }}" id="delete-terms-delete" style="display: none"></a>
             {% endif %}
             {% if pager.haveToPaginate %}
-                <div class="row justify-content-center align-items-center mb-2 ez-pagination__spacing">
-                    <span class="ez-pagination__text">
+                <div class="row justify-content-center align-items-center mb-2 ibexa-pagination__spacing">
+                    <span class="ibexa-pagination__text">
                         {{ 'pagination.viewing'|trans({
                             '%viewing%': pager.currentPageResults|length,
                             '%total%': pager.nbResults}, 'pagination')|desc('Viewing <strong>%viewing%</strong> out of <strong>%total%</strong> items')|raw }}
                     </span>
                 </div>
-                <div class="row justify-content-center align-items-center ez-pagination__btn mb-5">
+                <div class="row justify-content-center align-items-center ibexa-pagination__btn mb-5">
                     {{ pagerfanta(pager, 'ez') }}
                 </div>
             {% endif %}

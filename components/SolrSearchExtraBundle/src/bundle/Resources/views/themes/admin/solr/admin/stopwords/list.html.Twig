@@ -24,7 +24,7 @@
     <section class="container page-list-words my-4">
         {% block ajax_content %}
             {% if pager is defined %}
-                <div class="ez-table-header">
+                <div class="ibexa-table-header">
                     <div>
                         <a href="{{ path('solr_admin.dashboard') }}" class="btn btn-primary">
                             <svg class="ibexa-icon ibexa-icon--back">
@@ -32,7 +32,7 @@
                             </svg>
                         </a>
                     </div>
-                    <div class="ez-table-header__headline">{{ 'solr_admin.page.stopwords.table.nbr_termes'|trans({'%nbr%': pager|length }) }}</div>
+                    <div class="ibexa-table-header__headline">{{ 'solr_admin.page.stopwords.table.nbr_termes'|trans({'%nbr%': pager|length }) }}</div>
                     {% if manageAccess['stopwords.delete'] %}
                         <div>
                             {% set modal_data_target = 'delete-words-modal' %}
@@ -67,18 +67,18 @@
                         {% else %}
                             {% for elt in pager %}
                                 <tr>
-                                    <td class="ez-table__cell ez-table__cell--has-checkbox">
+                                    <td class="ibexa-table__cell ibexa-table__cell--has-checkbox">
                                         {% if manageAccess['stopwords.delete'] %}
                                             <input id="delete-{{ loop.index }}" type="checkbox" name="wordsToDelete[]" class="words-to-delete" value="{{ elt }}" />
                                         {% endif %}
                                     </td>
-                                    <td class="ez-table__cell word"><label for="delete-{{ loop.index }}">{{ elt }}</label></td>
+                                    <td class="ibexa-table__cell word"><label for="delete-{{ loop.index }}">{{ elt }}</label></td>
                                 </tr>
                             {% endfor %}
                         {% endif %}
                         {% if add_form is defined %}
                             <tr>
-                                <td class="ez-table__cell words" colspan="2">
+                                <td class="ibexa-table__cell words" colspan="2">
                                     {{ form_start(add_form, {'attr' : {'class': 'row'}}) }}
                                     <div class="col-6">
                                         {{ form_widget(add_form.words, {'attr': {'placeholder': 'solr_admin.page.stopwords.add.placeholder'|trans}}) }}
@@ -99,14 +99,14 @@
                 <a href="{{ path('solr_admin.stopwords.delete', {'setId': setId}) }}" id="delete-words-delete" style="display: none"></a>
             {% endif %}
             {% if pager.haveToPaginate %}
-                <div class="row justify-content-center align-items-center mb-2 ez-pagination__spacing">
-                    <span class="ez-pagination__text">
+                <div class="row justify-content-center align-items-center mb-2 ibexa-pagination__spacing">
+                    <span class="ibexa-pagination__text">
                         {{ 'pagination.viewing'|trans({
                             '%viewing%': pager.currentPageResults|length,
                             '%total%': pager.nbResults}, 'pagination')|desc('Viewing <strong>%viewing%</strong> out of <strong>%total%</strong> items')|raw }}
                     </span>
                 </div>
-                <div class="row justify-content-center align-items-center ez-pagination__btn mb-5">
+                <div class="row justify-content-center align-items-center ibexa-pagination__btn mb-5">
                     {{ pagerfanta(pager, 'ez') }}
                 </div>
             {% endif %}

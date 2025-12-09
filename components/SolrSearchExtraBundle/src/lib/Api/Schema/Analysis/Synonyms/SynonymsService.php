@@ -6,21 +6,17 @@ namespace Novactive\EzSolrSearchExtra\Api\Schema\Analysis\Synonyms;
 
 use Ibexa\Core\Base\Exceptions\NotFoundException;
 use Ibexa\Solr\Gateway\Message;
-use Novactive\EzSolrSearchExtra\Api\Gateway;
+use Novactive\EzSolrSearchExtra\Search\ExtendedSearchHandler;
 
 class SynonymsService
 {
     public const API_PATH = '/schema/analysis/synonyms';
 
-    /** @var Gateway */
-    protected $gateway;
+    protected ExtendedSearchHandler $searchHandler;
 
-    /**
-     * SynonymsService constructor.
-     */
-    public function __construct(Gateway $gateway)
+    public function __construct(ExtendedSearchHandler $searchHandler)
     {
-        $this->gateway = $gateway;
+        $this->searchHandler = $searchHandler;
     }
 
     /**
@@ -31,7 +27,7 @@ class SynonymsService
      */
     public function getMappings(string $setId, int $offset = 0, int $limit = 10): array
     {
-        $response = $this->gateway->request(
+        $response = $this->searchHandler->request(
             'GET',
             sprintf('%s/%s', self::API_PATH, $setId)
         );
@@ -58,7 +54,7 @@ class SynonymsService
     {
         $response = null;
         try {
-            $response = $this->gateway->request(
+            $response = $this->searchHandler->request(
                 'GET',
                 sprintf('%s/%s/%s', self::API_PATH, $setId, $term)
             );
@@ -86,7 +82,7 @@ class SynonymsService
         if ($termExist) {
             $this->deleteMapping($setId, $map->getTerm());
         }
-        $response = $this->gateway->request(
+        $response = $this->searchHandler->request(
             'PUT',
             sprintf('%s/%s', self::API_PATH, $setId),
             new Message(
@@ -101,7 +97,7 @@ class SynonymsService
             throw new NotFoundException('synonym set', $setId);
         }
 
-        $this->gateway->reload();
+        $this->searchHandler->reload();
 
         return 0 === $response->responseHeader->status;
     }
@@ -113,7 +109,7 @@ class SynonymsService
      */
     public function deleteMapping(string $setId, string $term): bool
     {
-        $response = $this->gateway->request(
+        $response = $this->searchHandler->request(
             'DELETE',
             sprintf('%s/%s/%s', self::API_PATH, $setId, urlencode($term))
         );
@@ -122,7 +118,7 @@ class SynonymsService
             throw new NotFoundException('synonym', $term);
         }
 
-        $this->gateway->reload();
+        $this->searchHandler->reload();
 
         return 0 === $response->responseHeader->status;
     }
