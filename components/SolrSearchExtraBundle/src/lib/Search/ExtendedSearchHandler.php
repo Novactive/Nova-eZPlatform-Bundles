@@ -7,9 +7,12 @@ namespace Novactive\EzSolrSearchExtra\Search;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
 use Ibexa\Contracts\Core\Search\Document;
 use Ibexa\Solr\CoreFilter;
+use Ibexa\Solr\Gateway\Endpoint;
+use Ibexa\Solr\Gateway\Message;
 use Novactive\EzSolrSearchExtra\Api\Gateway;
 use Novactive\EzSolrSearchExtra\Query\DocumentQuery;
 use Novactive\EzSolrSearchExtra\ResultExtractor\DocumentResultExtractor;
+use stdClass;
 
 class ExtendedSearchHandler
 {
@@ -77,5 +80,31 @@ class ExtendedSearchHandler
     public function bulkIndexDocuments(array $documents): void
     {
         $this->gateway->bulkIndexDocuments([$documents]);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function request(
+        string $method,
+        string $path,
+        ?Message $message = null,
+        ?Endpoint $endpoint = null
+    ): ?stdClass {
+        return $this->gateway->request($method, $path, $message, $endpoint);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function reload(): void
+    {
+        $endpoint = $this->gateway->getAdminEndpoint();
+        $this->gateway->request(
+            'GET',
+            '&action=RELOAD',
+            null,
+            $endpoint
+        );
     }
 }

@@ -193,7 +193,7 @@ services:
       - '@ibexa.solr.query.content.facet_builder_visitor.aggregate'
       - '@ibexa.solr.query.content.aggregation_visitor.dispatcher'
 
-  Novactive\EzSolrSearchExtra\Api\GatewayRegistry:
+  Novactive\EzSolrSearchExtra\Api\GatewayRegistry: ~
 
   Novactive\EzSolrSearchExtra\Search\ExtendedSearchHandlerFactory:
     arguments:
@@ -218,3 +218,14 @@ services:
 
   Novactive\EzSolrSearchExtra\Repository\DocumentSearchServiceInterface: '@Novactive\EzSolrSearchExtra\Repository\SiteAccessAware\DocumentSearchService'
 
+  Novactive\EzSolrSearchExtra\Api\Schema\Analysis\Synonyms\SynonymsService:
+      arguments:
+          $searchHandler: '@Novactive\EzSolrSearchExtra\Search\ExtendedSearchHandler'
+
+  Novactive\EzSolrSearchExtra\Api\Schema\Analysis\Stopwords\StopwordsService:
+      arguments:
+          $searchHandler: '@Novactive\EzSolrSearchExtra\Search\ExtendedSearchHandler'
+
+  Novactive\EzSolrSearchExtra\Api\Schema\ManagedResourcesService:
+      arguments:
+          $searchHandler: '@Novactive\EzSolrSearchExtra\Search\ExtendedSearchHandler'

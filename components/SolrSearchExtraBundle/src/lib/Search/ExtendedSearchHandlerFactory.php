@@ -47,7 +47,7 @@ class ExtendedSearchHandlerFactory
         return new ExtendedSearchHandler(
             $coreFilter,
             $gateway,
-            $this->resultExtractor,
+            $this->resultExtractor
         );
     }
 }
