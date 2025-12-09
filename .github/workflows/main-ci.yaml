@@ -49,9 +49,6 @@ jobs:
                     -   ibexa_version: 4.5.*
                         php: 8.1
                         node: 14.x
-                    -   ibexa_version: 4.3.0
-                        php: 7.4
-                        node: 14.x
         env:
             CACHE_POOL: cache.redis
             DATABASE_URL: mysql://root@127.0.0.1:3306/ezplatform_test
