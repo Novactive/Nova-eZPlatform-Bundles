@@ -1,0 +1,19 @@
+services:
+    _defaults:
+        autoconfigure: true
+        autowire: true
+        public: false
+
+    AlmaviaCX\Ibexa\Bundle\FieldTypes\Service\:
+        resource: '../../Service'
+
+    AlmaviaCX\Ibexa\Bundle\FieldTypes\FieldType\AcxSelection\Form\AcxSelectionType: ~
+
+    AlmaviaCX\Ibexa\Bundle\FieldTypes\FieldType\AcxSelection\Form\AcxSelectionSettingsType: ~
+
+    AlmaviaCX\Ibexa\Bundle\FieldTypes\FieldType\AcxSelection\Type:
+        tags:
+            - { name: ibexa.field_type, alias: acxselection }
+            - { name: ibexa.admin_ui.field_type.form.mapper.value, fieldType: acxselection }
+            - { name: ibexa.admin_ui.field_type.form.mapper.definition, fieldType: acxselection }
+            - { name: ibexa.field_type.indexable, alias: acxselection }
