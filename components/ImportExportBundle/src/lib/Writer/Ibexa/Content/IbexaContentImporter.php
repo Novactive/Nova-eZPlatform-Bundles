@@ -67,19 +67,21 @@ class IbexaContentImporter
                     ];
                 }
 
-                $content = ($this->contentUpdater)(
+                $publishedContent = ($this->contentUpdater)(
                     $content,
                     $contentData->getFields(),
                     $contentData->getParentLocationIdList(),
+                    $contentData->getChecksum(),
                     $ownerId,
                     $contentData->getMainLanguageCode(),
                     $contentData->isHidden(),
                     $contentData->isAllowMoveOnUpdate()
                 );
 
+                $didUpdate = $publishedContent->versionInfo->versionNo !== $content->versionInfo->versionNo;
                 return [
-                    'action' => 'update',
-                    'content' => $content,
+                    'action' => $didUpdate ? 'update' : 'ignored',
+                    'content' => $publishedContent,
                 ];
             } catch (NotFoundException $exception) {
                 if (
@@ -96,6 +98,7 @@ class IbexaContentImporter
                     $contentData->getParentLocationIdList(),
                     $contentData->getFields(),
                     $remoteId,
+                    $contentData->getChecksum(),
                     $ownerId,
                     $contentData->getMainLanguageCode(),
                     $contentData->getSectionId(),
@@ -109,7 +112,7 @@ class IbexaContentImporter
                 ];
             }
         } catch (\Throwable $exception) {
-            dump($exception, $contentData);
+            dd($exception, $contentData);
             throw $exception;
         }
     }

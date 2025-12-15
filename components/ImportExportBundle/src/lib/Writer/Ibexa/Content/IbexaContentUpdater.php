@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content;
 
+use AlmaviaCX\Bundle\IbexaImportExport\Writer\Utils\Checksum;
 use Exception;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location;
@@ -25,38 +26,44 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
         Content $content,
         array $fieldsByLanguages,
         array $parentLocationIdList,
+        Checksum $checksum,
         int $ownerId = null,
         string $mainLanguageCode = 'eng-GB',
         bool|null $hidden = null,
         bool $allowMove = false
     ): Content {
-        $contentType = $this->repository->getContentTypeService()->loadContentType(
-            $content->contentInfo->contentTypeId
-        );
+        $doUpdate = $this->doContentNeedUpdate($content, $checksum);
+        if ($doUpdate) {
+            $contentType = $this->repository->getContentTypeService()->loadContentType(
+                $content->contentInfo->contentTypeId
+            );
 
-        $contentInfo = $content->contentInfo;
-        $contentDraft = $this->repository->getContentService()->createContentDraft($contentInfo);
+            $contentInfo = $content->contentInfo;
+            $contentDraft = $this->repository->getContentService()->createContentDraft($contentInfo);
 
-        /* Creating new content update structure */
-        $contentUpdateStruct = $this->repository
-            ->getContentService()
-            ->newContentUpdateStruct();
-        $contentUpdateStruct->initialLanguageCode = $mainLanguageCode; // set language for new version
-        $contentUpdateStruct->creatorId = $ownerId;
+            /* Creating new content update structure */
+            $contentUpdateStruct = $this->repository
+                ->getContentService()
+                ->newContentUpdateStruct();
+            $contentUpdateStruct->initialLanguageCode = $mainLanguageCode; // set language for new version
+            $contentUpdateStruct->creatorId = $ownerId;
 
-        $this->setContentFields(
-            $contentType,
-            $contentUpdateStruct,
-            $fieldsByLanguages,
-        );
+            $this->setContentFields(
+                $contentType,
+                $contentUpdateStruct,
+                $fieldsByLanguages,
+            );
 
-        $contentDraft = $this->repository->getContentService()->updateContent(
-            $contentDraft->versionInfo,
-            $contentUpdateStruct
-        );
+            $contentDraft = $this->repository->getContentService()->updateContent(
+                $contentDraft->versionInfo,
+                $contentUpdateStruct
+            );
 
-        /* Publish the new content draft */
-        $publishedContent = $this->repository->getContentService()->publishVersion($contentDraft->versionInfo);
+            /* Publish the new content draft */
+            $content = $this->repository->getContentService()->publishVersion($contentDraft->versionInfo);
+
+            $this->saveContentChecksum($content, $checksum);
+        }
 
         if ($allowMove) {
             $this->handleLocations($content, $parentLocationIdList, $hidden);
@@ -64,7 +71,7 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
             $this->handleLocationsVisibility($content, $hidden);
         }
 
-        return $publishedContent;
+        return $content;
     }
 
     /**

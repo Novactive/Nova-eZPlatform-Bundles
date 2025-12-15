@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content;
 
+use AlmaviaCX\Bundle\IbexaImportExport\Writer\Utils\Checksum;
 use DateTime;
 use Exception;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
@@ -27,6 +28,7 @@ class IbexaContentCreator extends AbstractIbexaContentHandler
         array $parentLocationIdList,
         array $fieldsByLanguages,
         string $remoteId,
+        Checksum $checksum,
         int $ownerId = null,
         string $languageCode = 'eng-GB',
         int $sectionId = null,
@@ -90,6 +92,11 @@ class IbexaContentCreator extends AbstractIbexaContentHandler
         );
 
         /* Publish the new content draft */
-        return $this->repository->getContentService()->publishVersion($draft->versionInfo);
+        $publishedContent = $this->repository->getContentService()->publishVersion($draft->versionInfo);
+        if ($checksum->value) {
+            $this->saveContentChecksum($publishedContent, $checksum);
+        }
+
+        return $publishedContent;
     }
 }

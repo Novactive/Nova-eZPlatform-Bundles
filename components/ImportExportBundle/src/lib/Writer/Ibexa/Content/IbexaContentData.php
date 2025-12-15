@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content;
 
+use AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\Source;
+use AlmaviaCX\Bundle\IbexaImportExport\Writer\Utils\Checksum;
 use DateTime;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 
@@ -28,6 +30,12 @@ class IbexaContentData
     protected bool|null $hidden = null;
     protected int $importMode = self::IMPORT_MODE_UPDATE_AND_CREATE_IF_NOT_EXISTS;
     protected bool $allowMoveOnUpdate = false;
+    protected Checksum $checksum;
+
+    public function __construct()
+    {
+        $this->checksum = new Checksum();
+    }
 
     public function getContentRemoteId(): string
     {
@@ -149,5 +157,15 @@ class IbexaContentData
     public function setAllowMoveOnUpdate(bool $allowMoveOnUpdate): void
     {
         $this->allowMoveOnUpdate = $allowMoveOnUpdate;
+    }
+
+    public function getChecksum(): Checksum
+    {
+        return $this->checksum;
+    }
+
+    public function setChecksum(Checksum $checksum): void
+    {
+        $this->checksum = $checksum;
     }
 }

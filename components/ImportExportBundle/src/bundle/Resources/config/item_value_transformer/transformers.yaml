@@ -41,6 +41,10 @@ services:
         tags:
             - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.md5}
 
+    AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Utils\ChecksumTransformer:
+        tags:
+            - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.checksum}
+
     AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Utils\CallbackTransformer:
         tags:
             - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.callback}

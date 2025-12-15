@@ -172,9 +172,7 @@ class Job
     public function getLastExecution(): Execution|false
     {
         $criteria = new Criteria();
-        $criteria->where(
-            new Comparison('status', Comparison::EQ, Execution::STATUS_COMPLETED)
-        );
+        $criteria->orderBy(['id' => Criteria::DESC]);
         $criteria->setMaxResults(1);
 
         return $this->executions->matching($criteria)->first();
