@@ -36,7 +36,7 @@ abstract class TempFileUtil
                        DIRECTORY_SEPARATOR .
                        ltrim((string) Uuid::v4(), DIRECTORY_SEPARATOR);
 
-        $originalPathInfos = pathinfo($sourceUrl);
+        $originalPathInfos = pathinfo(strtok($sourceUrl, '?'));
         if (!empty($originalPathInfos['extension'])) {
             $tmpFilePath .= '.' . $originalPathInfos['extension'];
         }
