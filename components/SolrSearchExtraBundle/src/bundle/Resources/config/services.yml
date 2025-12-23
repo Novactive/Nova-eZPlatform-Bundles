@@ -188,11 +188,7 @@ services:
       - '@ibexa.solr.query.content.criterion_visitor.aggregate'
 
   Novactive\EzSolrSearchExtra\Query\DocumentQueryConverter:
-    arguments:
-      - '@ibexa.solr.query.content.criterion_visitor.aggregate'
-      - '@ibexa.solr.query.content.sort_clause_visitor.aggregate'
-      - '@ibexa.solr.query.content.facet_builder_visitor.aggregate'
-      - '@ibexa.solr.query.content.aggregation_visitor.dispatcher'
+    parent: ibexa.solr.query_converter.content
 
   Novactive\EzSolrSearchExtra\Api\GatewayRegistry: ~
 
