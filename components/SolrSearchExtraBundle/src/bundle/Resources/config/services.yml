@@ -23,6 +23,7 @@ services:
     parent: ibexa.solr.gateway
     arguments:
       $queryConverter: '@Novactive\EzSolrSearchExtra\Query\DocumentQueryConverter'
+      $configResolver: '@Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface'
 
   Novactive\EzSolrSearchExtra\FieldMapper\ContentTranslationFieldMapper\CustomFulltextFieldMapper:
     calls:
