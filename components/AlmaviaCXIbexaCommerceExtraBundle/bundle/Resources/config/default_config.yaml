@@ -1,0 +1,6 @@
+parameters:
+    almaviacx_ibexa_commerce_extra.default.named_cart_enabled: false
+    almaviacx_ibexa_commerce_extra.default.named_cart_name: default # this is the ibexa default cart name
+    almaviacx_ibexa_commerce_extra.default.named_cart_context: # default context that will populate the cart context at creation
+        custom_named_enabled: true
+    almaviacx_ibexa_commerce_extra.default.named_workflow_name: ~

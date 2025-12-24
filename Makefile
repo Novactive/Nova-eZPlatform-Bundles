@@ -18,7 +18,9 @@ DOCKER_DB_CONTAINER := dbezplbundl
 MYSQL := mysql -f -u root -pezplatform -h 127.0.0.1 -P 3300 ezplatform
 CONSOLE := $(PHP_BIN) bin/console
 IBEXA_VERSION ?= 4.*
-
+IBEXA_PACKAGE ?= oss
+HOME_EDITIONS_DIR := .ddev/homeadditions
+COMPOSER_AUTH_DIR := $(HOME_EDITIONS_DIR)/.composer
 .DEFAULT_GOAL := list
 
 .PHONY: list
@@ -35,8 +37,19 @@ codeclean: ## Coding Standard checks
 	@ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src/ components/ bin/"
 	@ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/phpmd src,components,bin text .cs/md_ruleset.xml"
 
+.PHONY: composer-auth
+composer-auth: ## Test if the auth.json file exists
+	@if [ -f ./auth.json ]; then \
+		echo "Creating auth.json in ${COMPOSER_AUTH_DIR}..."; \
+		mkdir -p ${COMPOSER_AUTH_DIR} && cp ./auth.json ${COMPOSER_AUTH_DIR}; \
+		echo "Restarting ddev to take ddev for auth.json..."; \
+		ddev restart; \
+	else \
+		echo "No auth.json auth.json in ${COMPOSER_AUTH_DIR}..."; \
+	fi
+
 .PHONY: install
-install: ## Install vendors
+install: composer-auth ## Install vendors
 	@ddev exec -d /var/www/html "$(COMPOSER) install"
 
 
@@ -77,7 +90,9 @@ post-install: wrap-bundles
 
 .PHONY: installibexa
 installibexa: install ## Install Ibexa as the local project
-	@ddev exec -d /var/www/html "$(COMPOSER) create-project 'ibexa/oss-skeleton:${IBEXA_VERSION}' --prefer-dist --no-progress --no-interaction ibexa"
+	echo "installing ibexa/${IBEXA_PACKAGE}-skeleton"
+	@echo "..:: RUNNING $(COMPOSER) create-project 'ibexa/${IBEXA_PACKAGE}-skeleton:${IBEXA_VERSION}' --prefer-dist --no-progress --no-interaction ibexa ::.."
+	@ddev exec -d /var/www/html "$(COMPOSER) create-project 'ibexa/${IBEXA_PACKAGE}-skeleton:${IBEXA_VERSION}' --prefer-dist --no-progress --no-interaction ibexa"
 	@echo "..:: Do Ibexa Install ::.."
 
 	@ddev exec "$(CONSOLE) ibexa:install"

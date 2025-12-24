@@ -1,0 +1,33 @@
+{
+    "name": "almaviacx/ibexa-commerce-extra-bundle",
+    "description": "Add some extra facility to Ibexa commerce",
+    "type": "ibexa-bundle",
+    "license": "MIT",
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "ibexa/cart": "~4.6",
+        "ibexa/checkout": "~4.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "AlmaviaCX\\Ibexa\\Commerce\\Extra\\": "bundle/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Almaviacx",
+            "email": "dir.tech@almaviacx.com"
+        },
+        {
+            "name": "Ousmane KANTE",
+            "email": "ousmane.kante@almaviacx.com"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": false,
+            "symfony/flex": false,
+            "ibexa/post-install": false
+        }
+    }
+}
