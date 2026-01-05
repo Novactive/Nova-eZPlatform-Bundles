@@ -40,7 +40,11 @@ class QueryConverter extends NativeQueryConverter
     {
         $params = $this->baseConverter->convert($query, $languageSettings);
 
-        if (false === strpos($params['fq'], 'document_type_id:')) {
+        if (!is_array($params['fq'])) {
+            $params['fq'] = [$params['fq']];
+        }
+
+        if (false === $this->hasDocumentTypeFilter($params['fq'])) {
             // If there is no filter on the document type, we add it based on the query type
             $criteria = [];
             if ($query instanceof LocationQuery) {
@@ -61,8 +65,9 @@ class QueryConverter extends NativeQueryConverter
             }
             $query->filter = new Query\Criterion\LogicalAnd($criteria);
         }
+
         if ($query->filter instanceof Query\Criterion\LogicalAnd) {
-            $params['fq'] = [];
+            unset($params['fq'][0]);
             $this->flattenFilterQueries($query->filter->criteria, $params['fq']);
         }
 
@@ -71,10 +76,24 @@ class QueryConverter extends NativeQueryConverter
         }
 
         if ($query instanceof DocumentQuery) {
-            $params['fl'] .= shell_exec(",{$query->childTransformer}");
+            $params['fl'] .= ",{$query->childTransformer}";
         }
 
         return $params;
+    }
+
+    /**
+     * @param string[] $fqs
+     */
+    protected function hasDocumentTypeFilter(array $fqs): bool
+    {
+        foreach ($fqs as $fq) {
+            if (false !== strpos($fq, 'document_type_id:')) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
