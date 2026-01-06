@@ -60,7 +60,7 @@ services:
             - ['setLocationService', ['@ibexa.siteaccessaware.service.location']]
             - ['setRouter', ['@router']]
             - ['setCache', ['@ibexa.cache_pool']]
-            - ['setSiteAccess', ['@Ibexa\Core\MVC\Symfony\SiteAccess']]
+            - ['setSiteAccessService', ['@Ibexa\Core\MVC\Symfony\SiteAccess\SiteAccessService']]
 
     Novactive\EzMenuManager\MenuItem\MenuItemTypeRegistry:
         arguments: [!tagged ezmenumanager.menuitemtype]
