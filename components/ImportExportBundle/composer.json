@@ -18,8 +18,9 @@
     "MIT"
   ],
   "require": {
-    "php": "^7.3 || ^8.0",
+    "php": "^8.1",
     "craue/formflow-bundle": "^3.0",
+    "erdnaxelaweb/contentadditionalinformations": "^1.0",
     "symfony/uid": "^5.4"
   },
   "autoload": {

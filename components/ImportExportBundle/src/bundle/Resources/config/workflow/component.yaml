@@ -16,6 +16,13 @@ services:
         tags:
             - { name: almaviacx.import_export.component, alias: processor.aggregator}
 
+    AlmaviaCX\Bundle\IbexaImportExport\Processor\CsvIterator\CsvIterator:
+        arguments:
+            $slugConverter: '@Ibexa\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter'
+            $sourceResolver: '@AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\SourceResolver'
+        tags:
+            - { name: almaviacx.import_export.component, alias: processor.csv_iterator}
+
     AlmaviaCX\Bundle\IbexaImportExport\Processor\Iterator\IteratorProcessor:
         arguments:
             $sourceResolver: '@AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\SourceResolver'

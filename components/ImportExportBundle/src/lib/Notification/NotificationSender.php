@@ -17,14 +17,14 @@ class NotificationSender implements TranslationContainerInterface
         self::JOB_DONE_TYPE => 'notification.job.done',
     ];
 
-    protected NotificationService $notificationService;
-
-    public function __construct(NotificationService $notificationService)
-    {
-        $this->notificationService = $notificationService;
+    public function __construct(
+        protected NotificationService $notificationService
+    ) {
     }
 
     /**
+     * @param array<string, mixed> $data
+     *
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
      */
     public function __invoke(int $receiverId, string $type, array $data = []): void

@@ -1,10 +1,10 @@
 services:
     AlmaviaCX\Bundle\IbexaImportExport\MessageHandler\JobRunMessageHandler:
         arguments:
-            $jobRepository: '@AlmaviaCX\Bundle\IbexaImportExport\Job\JobRepository'
-            $jobRunner: '@AlmaviaCX\Bundle\IbexaImportExport\Job\AsyncJobRunner.inner'
+            $executionRepository: '@AlmaviaCX\Bundle\IbexaImportExport\Execution\ExecutionRepository'
             $notificationSender: '@AlmaviaCX\Bundle\IbexaImportExport\Notification\NotificationSender'
             $messageBus: '@messenger.default_bus'
+            $executionRunner: '@AlmaviaCX\Bundle\IbexaImportExport\Execution\ExecutionRunner'
         tags:
             - {name: 'messenger.message_handler', handles: AlmaviaCX\Bundle\IbexaImportExport\Message\JobStartMessage}
             - {name: 'messenger.message_handler', handles: AlmaviaCX\Bundle\IbexaImportExport\Message\JobResumeMessage}
@@ -12,6 +12,7 @@ services:
     AlmaviaCX\Bundle\IbexaImportExport\Job\AsyncJobRunner:
         decorates: AlmaviaCX\Bundle\IbexaImportExport\Job\JobRunner
         arguments:
-            $eventDispatcher: '@Symfony\Contracts\EventDispatcher\EventDispatcherInterface'
             $jobRepository: '@AlmaviaCX\Bundle\IbexaImportExport\Job\JobRepository'
+            $executionRepository: '@AlmaviaCX\Bundle\IbexaImportExport\Execution\ExecutionRepository'
             $jobRunMessageHandler: '@AlmaviaCX\Bundle\IbexaImportExport\MessageHandler\JobRunMessageHandler'
+            $originalRunner: '@AlmaviaCX\Bundle\IbexaImportExport\Job\AsyncJobRunner.inner'

@@ -8,21 +8,22 @@ use AlmaviaCX\Bundle\IbexaImportExport\Item\ItemAccessorInterface;
 use ArrayAccess;
 use Exception;
 
+/**
+ * @template TKey
+ * @template TValue
+ * @implements ArrayAccess<TKey, TValue>
+ */
 class ArrayAccessor extends AbstractItemAccessor implements ItemAccessorInterface, ArrayAccess
 {
-    /** @var array<string|int, mixed> */
-    protected array $array;
-
     /**
-     * @param array<string|int, mixed> $array
+     * @param array<TKey, TValue> $array
      */
-    public function __construct(array $array)
+    public function __construct(protected array $array)
     {
-        $this->array = $array;
     }
 
     /**
-     * @param int|string $offset
+     * @param TKey $offset
      */
     public function offsetExists($offset): bool
     {
@@ -30,9 +31,13 @@ class ArrayAccessor extends AbstractItemAccessor implements ItemAccessorInterfac
     }
 
     /**
-     * @param $offset
+     * @param TKey $offset
+     *
+     * @throws \Exception
+     *
+     * @return TValue
      */
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
         if (!$this->offsetExists($offset)) {
             throw new Exception(
@@ -51,7 +56,8 @@ Available offsets are %s',
     }
 
     /**
-     * @param int|string $offset
+     * @param TKey   $offset
+     * @param TValue $value
      */
     public function offsetSet($offset, $value): void
     {
@@ -59,7 +65,7 @@ Available offsets are %s',
     }
 
     /**
-     * @param int|string $offset
+     * @param TKey $offset
      */
     public function offsetUnset($offset): void
     {

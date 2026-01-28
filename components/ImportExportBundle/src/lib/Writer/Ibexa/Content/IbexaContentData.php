@@ -4,11 +4,18 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content;
 
+use AlmaviaCX\Bundle\IbexaImportExport\Writer\Utils\Checksum;
 use DateTime;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 
 class IbexaContentData
 {
+    public const IMPORT_MODE_CREATE_ONLY = 0;
+    public const IMPORT_MODE_ONLY_UPDATE = 1;
+    public const IMPORT_MODE_UPDATE_AND_CREATE_IF_NOT_EXISTS = 2;
+    public const IMPORT_MODE_FETCH_ONLY = 3;
+    public const IMPORT_MODE_DELETE = 4;
+
     protected string $contentRemoteId;
     /** @var array<string, mixed> */
     protected array $fields = [];
@@ -19,6 +26,15 @@ class IbexaContentData
     protected array $parentLocationIdList = [2];
     protected ?int $sectionId = null;
     protected int|null|DateTime $modificationDate = null;
+    protected bool|null $hidden = null;
+    protected int $importMode = self::IMPORT_MODE_UPDATE_AND_CREATE_IF_NOT_EXISTS;
+    protected bool $allowMoveOnUpdate = false;
+    protected Checksum $checksum;
+
+    public function __construct()
+    {
+        $this->checksum = new Checksum();
+    }
 
     public function getContentRemoteId(): string
     {
@@ -110,5 +126,45 @@ class IbexaContentData
     public function setModificationDate(DateTime|int|null $modificationDate): void
     {
         $this->modificationDate = $modificationDate;
+    }
+
+    public function isHidden(): bool|null
+    {
+        return $this->hidden;
+    }
+
+    public function setHidden(bool|null $hidden): void
+    {
+        $this->hidden = $hidden;
+    }
+
+    public function getImportMode(): int
+    {
+        return $this->importMode;
+    }
+
+    public function setImportMode(int $importMode): void
+    {
+        $this->importMode = $importMode;
+    }
+
+    public function isAllowMoveOnUpdate(): bool
+    {
+        return $this->allowMoveOnUpdate;
+    }
+
+    public function setAllowMoveOnUpdate(bool $allowMoveOnUpdate): void
+    {
+        $this->allowMoveOnUpdate = $allowMoveOnUpdate;
+    }
+
+    public function getChecksum(): Checksum
+    {
+        return $this->checksum;
+    }
+
+    public function setChecksum(Checksum $checksum): void
+    {
+        $this->checksum = $checksum;
     }
 }

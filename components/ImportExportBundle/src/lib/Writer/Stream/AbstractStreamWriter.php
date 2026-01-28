@@ -7,11 +7,14 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Writer\Stream;
 use AlmaviaCX\Bundle\IbexaImportExport\File\FileHandler;
 use AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\ItemTransformer;
 use AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\SourceResolver;
-use AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag;
 use AlmaviaCX\Bundle\IbexaImportExport\Writer\AbstractWriter;
 use League\Flysystem\Config;
 use League\Flysystem\FilesystemException;
 
+/**
+ * @template TOptions of StreamWriterOptions
+ * @extends AbstractWriter<TOptions>
+ */
 abstract class AbstractStreamWriter extends AbstractWriter
 {
     public const MODE_NEW_FILE = 'new';
@@ -20,17 +23,14 @@ abstract class AbstractStreamWriter extends AbstractWriter
      * @var resource
      */
     protected $stream;
-    protected FileHandler $fileHandler;
     protected string $mode = self::MODE_NEW_FILE;
 
     public function __construct(
-        FileHandler $fileHandler,
+        protected FileHandler $fileHandler,
         SourceResolver $sourceResolver,
         ItemTransformer $itemTransformer,
-        ReferenceBag $references
     ) {
-        $this->fileHandler = $fileHandler;
-        parent::__construct($sourceResolver, $itemTransformer, $references);
+        parent::__construct($sourceResolver, $itemTransformer);
     }
 
     public function prepare(): void
@@ -71,7 +71,7 @@ abstract class AbstractStreamWriter extends AbstractWriter
         return StreamWriterOptionsFormType::class;
     }
 
-    public static function getOptionsType(): ?string
+    public static function getOptionsType(): string
     {
         return StreamWriterOptions::class;
     }

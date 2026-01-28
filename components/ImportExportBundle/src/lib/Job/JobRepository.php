@@ -8,16 +8,25 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
+/**
+ * @extends EntityRepository<Job>
+ */
 class JobRepository extends EntityRepository implements ServiceEntityRepositoryInterface
 {
-    public function __construct(EntityManagerInterface $em)
-    {
+    public function __construct(
+        EntityManagerInterface $em
+    ) {
         parent::__construct($em, $em->getClassMetadata(Job::class));
     }
 
     public function findById(int $id): ?Job
     {
         return $this->findOneBy(['id' => $id]);
+    }
+
+    public function findByUlid(string $ulid): ?Job
+    {
+        return $this->findOneBy(['ulid' => $ulid]);
     }
 
     public function save(Job $job): void
@@ -30,25 +39,5 @@ class JobRepository extends EntityRepository implements ServiceEntityRepositoryI
     {
         $this->_em->remove($job);
         $this->_em->flush();
-    }
-
-    /**
-     * @return array<int, int>
-     */
-    public function getJobLogsCountByLevel(int $jobId): array
-    {
-        $qb = $this->_em->getConnection()->createQueryBuilder();
-        $qb->select('count(id) as count, level');
-        $qb->from('import_export_job_record');
-        $qb->where($qb->expr()->eq('job_id', ':jobId'));
-        $qb->groupBy('level');
-        $qb->setParameter('jobId', $jobId);
-
-        $rows = $qb->execute()->fetchAllAssociative();
-
-        return array_combine(
-            array_column($rows, 'level'),
-            array_column($rows, 'count'),
-        );
     }
 }

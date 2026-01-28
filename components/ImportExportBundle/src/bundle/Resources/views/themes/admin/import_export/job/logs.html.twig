@@ -2,7 +2,7 @@
 
 {% form_theme form with '@ibexadesign/ui/form_fields.html.twig' %}
 
-<section class="container ibexa-container">
+<section id="logs" class="container ibexa-container">
     {% set levelColors = {
         'DEBUG'     : 'bg-info',
         'INFO'      : 'bg-success text-white',
@@ -26,7 +26,7 @@
                     <pre>{{ log.record.context.exception }}</pre>
                 </div>
             {% else %}
-                {{ log.record.message }}
+                {{ log.record.message|nl2br }}
             {% endif %}
         {% endset %}
         {% set body_row_cols = [
@@ -40,7 +40,7 @@
 
     {% set headline = 'job.view.logs.title'|trans()|desc('Logs') %}
     {% set actions %}
-        {{ form_start(form) }}
+        {{ form_start(form, {'action': '#logs'}) }}
             {{ form_widget(form.level) }}
         {{ form_end(form) }}
     {% endset %}
@@ -49,12 +49,20 @@
         headline: headline,
         actions: actions,
         head_cols: [
-            { content: 'job.view.log.item_index'|trans|desc('Item') },
-            { content: 'job.view.log.type'|trans|desc('Type') },
-            { content: 'job.view.log.message'|trans|desc('Message') },
+            { content: 'execution.view.log.item_index'|trans|desc('Item') },
+            { content: 'execution.view.log.type'|trans|desc('Type') },
+            { content: 'execution.view.log.message'|trans|desc('Message') },
         ],
         body_rows,
     } %}
     {% endembed %}
-    {{ pagerfanta(logs, 'ibexa', {'routeName': 'import_export.job.view', 'routeParams': {'id': job.id}|merge(request_query), 'pageParameter': '[logs][page]'}) }}
+    {{ pagerfanta(logs, 'ibexa', {
+        'routeName': 'import_export.job.execution.view',
+        'routeParams': {
+            'id': execution.job.id,
+            'executionId': execution.id,
+            '_fragment': 'logs'
+        }|merge(request_query),
+        'pageParameter': '[logs][page]'
+    }) }}
 </section>

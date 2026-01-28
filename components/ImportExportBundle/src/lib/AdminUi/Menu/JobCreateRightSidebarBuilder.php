@@ -27,6 +27,8 @@ class JobCreateRightSidebarBuilder extends AbstractBuilder implements Translatio
     }
 
     /**
+     * @param array<string, mixed> $options
+     *
      * @throws \InvalidArgumentException
      * @throws ApiExceptions\BadStateException
      * @throws \InvalidArgumentException

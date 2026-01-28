@@ -51,11 +51,6 @@ class WorkflowConfiguration
         $this->processConfiguration = new WorkflowProcessConfiguration();
     }
 
-    public function getIdentifier(): string
-    {
-        return $this->identifier;
-    }
-
     public function setIdentifier(string $identifier): void
     {
         $this->identifier = $identifier;
@@ -83,27 +78,20 @@ class WorkflowConfiguration
 
     public function setReader(string $class, ReaderOptions $options = null): void
     {
-        $requiredOptionsType = call_user_func([$class, 'getOptionsType']);
-        if (!$options) {
-            $options = new $requiredOptionsType();
-        }
-        if (!$options instanceof $requiredOptionsType) {
-            throw new InvalidArgumentException('Options must be an instance of '.$requiredOptionsType);
-        }
         $this->processConfiguration->setReader(new ComponentReference($class, $options));
     }
 
     /**
      * @param callable(ItemAccessorInterface $item): ?ItemAccessorInterface $callback
      */
-    public function addCallbackProcessor(callable $callback): void
+    public function addCallbackProcessor(string $id, callable $callback): void
     {
         $option = new CallbackStepOptions();
         $option->callback = $callback;
-        $this->addProcessor(CallbackStep::class, $option);
+        $this->addProcessor($id, CallbackStep::class, $option);
     }
 
-    public function addProcessor(string $class, ProcessorOptions $options = null): void
+    public function addProcessor(string $id, string $class, ProcessorOptions $options = null, int $priority = 0): void
     {
         $requiredOptionsType = call_user_func([$class, 'getOptionsType']);
         if (!$options) {
@@ -112,7 +100,14 @@ class WorkflowConfiguration
         if (!$options instanceof $requiredOptionsType) {
             throw new InvalidArgumentException('Options must be an instance of '.$requiredOptionsType);
         }
-        $this->processConfiguration->addProcessor(new ComponentReference($class, $options));
+        $this->processConfiguration->addProcessor(
+            $id,
+            new ComponentReference(
+                $class,
+                $options,
+                $priority
+            )
+        );
     }
 
     public function getReader(): ComponentReference
@@ -120,17 +115,19 @@ class WorkflowConfiguration
         return $this->processConfiguration->getReader();
     }
 
+    public function getProcessor(string $id): ?ComponentReference
+    {
+        return $this->processConfiguration->getProcessor($id);
+    }
+
     /**
-     * @return array<ComponentReference>
+     * @return array<string, ComponentReference>
      */
     public function getProcessors(): array
     {
         return $this->processConfiguration->getProcessors();
     }
 
-    /**
-     * @return int
-     */
     public function isAvailable(int $requiredAvailability): bool
     {
         return $requiredAvailability === ($requiredAvailability & $this->availability);
