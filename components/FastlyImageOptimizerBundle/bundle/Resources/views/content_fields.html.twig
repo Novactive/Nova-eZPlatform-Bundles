@@ -7,7 +7,7 @@
 #}
 {% block ezimage_field %}
     {% apply spaceless %}
-        {% if not ez_field_is_empty( content, field ) %}
+        {% if not ibexa_field_is_empty( content, field ) %}
             <figure {{ block( 'field_attributes' ) }}>
                 {% set imageAlias = nova_ezfastlyio_alias( field, versionInfo, parameters.alias|default( 'original' ) ) %}
                 {% set src = imageAlias ? asset( imageAlias.uri ) : "//:0" %}
