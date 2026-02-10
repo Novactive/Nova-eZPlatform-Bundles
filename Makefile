@@ -17,7 +17,7 @@ DOCKER := docker
 DOCKER_DB_CONTAINER := dbezplbundl
 MYSQL := mysql -f -u root -pezplatform -h 127.0.0.1 -P 3300 ezplatform
 CONSOLE := $(PHP_BIN) bin/console
-IBEXA_VERSION ?= 4.*
+IBEXA_VERSION ?= 5.*
 
 .DEFAULT_GOAL := list
 
@@ -42,28 +42,22 @@ install: ## Install vendors
 
 .PHONY: wrap-bundles
 wrap-bundles:
-	@echo "..:: Put Bundles in there ::.."
 	@for COMPONENT in $(shell ls components); do \
-		if COMPONENT=$${COMPONENT} bin/ci-should install; then \
-    		echo " ..:: Installing $${COMPONENT} ::.."; \
+		if ddev exec -q -d /var/www/html "COMPONENT=$${COMPONENT} bin/ci-should install"; then \
+    		echo "..:: $${COMPONENT} Installing ::.."; \
 			ddev exec -d /var/www/html "COMPONENT_CONFIG_DIR='components/$${COMPONENT}/tests/provisioning' COMPONENT=$${COMPONENT} bin/wrapbundle"; \
 		fi \
 	done
-
-.PHONY: post-install
-post-install: wrap-bundles
-	@echo "..:: Do bundle YARN deps ::.."
-	@ln -sf $(EZ_DIR)/node_modules
-	@ddev exec "yarn add --dev algoliasearch react react-collapsible react-dom react-instantsearch-dom"
-
 	@ddev exec "$(COMPOSER) update"
 	@ddev exec "$(CONSOLE) d:s:u --force"
 
+.PHONY: post-install
+post-install: wrap-bundles
 	@echo "..:: Do bundle specifics ::.."
 	cat components/SEOBundle/bundle/Resources/sql/schema.sql | ddev mysql
-	cat components/2FABundle/bundle/Resources/sql/schema.sql | ddev mysql
 
 # TO BE ADDED BACK WHEN COMPLIANT WITH 4.x
+#	cat components/2FABundle/bundle/Resources/sql/schema.sql | ddev mysql
 #	@ddev exec "$(CONSOLE) novaezextra:contenttypes:create ../tests/vmcd.xlsx"
 #	@ddev exec "$(CONSOLE) novaezprotectedcontent:install"
 #	@ddev exec "$(CONSOLE) novaezhelptooltip:create"
@@ -81,18 +75,18 @@ installibexa: install ## Install Ibexa as the local project
 	@echo "..:: Do Ibexa Install ::.."
 
 	@ddev exec "$(CONSOLE) ibexa:install"
+	@ddev exec "$(CONSOLE) ibexa:user:update-user admin --password=Administrat0r"
 	@ddev exec "$(CONSOLE) ibexa:graphql:generate-schema"
 	@$(MAKE) post-install
-	@ddev exec "$(COMPOSER) update"
-	@ddev exec "$(COMPOSER) require -W phpunit/phpunit:^9.5 symfony/phpunit-bridge:^5.3"
 	@rm -f $(EZ_DIR)/config/packages/test/doctrine.yaml
 
 .PHONY: tests
 tests: ## Run the tests
 	@echo " ..:: Global Mono Repo Testing ::.."
+	@ddev exec -d /var/www/html "vendor/bin/bdi detect drivers -v"
 	@ddev exec -d /var/www/html "PANTHER_NO_HEADLESS=${SHOW_CHROME} APP_ENV=test $(PHP_BIN) ./vendor/bin/phpunit -c 'tests' 'tests' --exclude-group behat"
 	@for COMPONENT in $(shell ls components); do \
-    	if COMPONENT=$${COMPONENT} bin/ci-should test; then \
+    	if ddev exec -q -d /var/www/html "COMPONENT=$${COMPONENT} bin/ci-should test"; then \
     		echo " ..:: Testing $${COMPONENT} ::.."; \
     		ddev exec -d /var/www/html "PANTHER_NO_HEADLESS=${SHOW_CHROME} APP_ENV=test $(PHP_BIN) ./vendor/bin/phpunit -c 'components/$${COMPONENT}/tests' 'components/$${COMPONENT}/tests' --exclude-group behat"; \
 		fi \

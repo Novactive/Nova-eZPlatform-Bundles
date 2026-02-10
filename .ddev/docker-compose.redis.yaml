@@ -3,7 +3,7 @@ version: '3.6'
 services:
   redis:
     container_name: ddev-${DDEV_SITENAME}-redis
-    image: redis:6
+    image: redis:8
     # These labels ensure this service is discoverable by ddev.
     labels:
       com.ddev.site-name: ${DDEV_SITENAME}

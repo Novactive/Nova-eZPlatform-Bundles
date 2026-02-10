@@ -26,6 +26,7 @@ final class Application extends BaseApplication
         
         ';
 
+    #[\Override]
     public function getHelp(): string
     {
         return self::$logo.parent::getHelp();
