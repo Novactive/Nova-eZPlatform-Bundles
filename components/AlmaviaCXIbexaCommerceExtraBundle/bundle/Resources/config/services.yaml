@@ -1,0 +1,21 @@
+services:
+    _defaults:
+        public: false
+        autowire: true
+        autoconfigure: true
+
+    AlmaviaCX\Ibexa\Commerce\Extra\:
+        resource: '../../'
+        exclude:
+            - '../../DependencyInjection/'
+            - '../../Resources/'
+
+    AlmaviaCX\Ibexa\Commerce\Extra\Service\SiteAccessAware\Cart\Handler\DatabaseHandler:
+        decorates: Ibexa\Cart\Persistence\Legacy\Cart\Handler\DatabaseHandler
+        arguments:
+            $innerHandler: '@.inner'
+
+    AlmaviaCX\Ibexa\Commerce\Extra\Service\SiteAccessAware\Cart\Handler\SessionHandler:
+        decorates: Ibexa\Cart\Persistence\Legacy\Cart\Handler\SessionHandler
+        arguments:
+            $innerHandler: '@.inner'
