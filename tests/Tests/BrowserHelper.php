@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Novactive\eZPlatform\Bundles\Tests;
 
+use Facebook\WebDriver\WebDriverDimension;
 use Symfony\Component\Panther\Client;
 use Symfony\Component\Panther\DomCrawler\Crawler;
 
@@ -35,7 +36,7 @@ final class BrowserHelper
     public function __construct(Client $client)
     {
         $this->client = $client;
-        $client->getWebDriver()->manage()->window()->maximize();
+        $client->getWebDriver()->manage()->window()->setSize(new WebDriverDimension(1200, 1000));
     }
 
     public function client(): Client

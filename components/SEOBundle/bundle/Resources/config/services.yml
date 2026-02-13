@@ -12,6 +12,9 @@ services:
         bind:
             $entityManager: "@novaezeo.doctrine.entity_manager"
 
+    Novactive\Bundle\eZSEOBundle\Core\FieldType\MetaFieldConverter\:
+        resource: '../../Core/FieldType/MetaFieldConverter/*'
+
     # Marking fieldtype as unindexable for ibexa platform solr bundle to stop errors
     novactive.novaseobundle.field_type.novaseometas.indexable.unindexed:
         class: Ibexa\Core\FieldType\Unindexed
@@ -66,6 +69,8 @@ services:
     Novactive\Bundle\eZSEOBundle\Core\Converter\ContentTypesHelper: ~
 
     Novactive\Bundle\eZSEOBundle\Listener\AdminTopMenu:
+        arguments:
+            $permissionResolver: '@Ibexa\Contracts\Core\Repository\PermissionResolver'
         tags:
             - { name: kernel.event_listener, event: "ezplatform_admin_ui.menu_configure.main_menu", method: "onMenuConfigure",  priority: -100 }
 

@@ -23,6 +23,7 @@ use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Ibexa\Contracts\Core\Variation\VariationHandler;
 use Ibexa\Contracts\FieldTypeRichText\RichText\Converter as RichTextConverterInterface;
 use Ibexa\Core\Base\Exceptions\InvalidArgumentType;
+use Ibexa\Core\Base\Exceptions\NotFoundException;
 use Ibexa\Core\FieldType\FieldTypeRegistry;
 use Ibexa\Core\FieldType\Image\Value as ImageValue;
 use Ibexa\Core\FieldType\ImageAsset\Value as ImageAssetValue;
@@ -34,7 +35,8 @@ use Ibexa\Core\MVC\Exception\SourceImageNotFoundException;
 use Ibexa\Core\Repository\Helper\NameSchemaService;
 use Ibexa\Core\Repository\Mapper\ContentTypeDomainMapper;
 use Ibexa\Core\Repository\Values\Content\VersionInfo;
-use Ibexa\FieldTypeRichText\FieldType\RichText as RichTextValue;
+use Ibexa\FieldTypeRichText\FieldType\RichText\Value as RichTextValue;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class MetaNameSchema extends NameSchemaService
 {
@@ -64,11 +66,6 @@ class MetaNameSchema extends NameSchemaService
     protected $fieldContentMaxLength = 255;
 
     /**
-     * @var FieldTypeRegistry
-     */
-    protected $fieldTypeRegistry;
-
-    /**
      * @var RelationListType
      */
     private $relationListField;
@@ -81,21 +78,21 @@ class MetaNameSchema extends NameSchemaService
     public function __construct(
         ContentTypeHandler $contentTypeHandler,
         FieldTypeRegistry $fieldTypeRegistry,
+        EventDispatcherInterface $eventDispatcher,
         ContentLanguageHandler $languageHandler,
         RepositoryInterface $repository,
         TranslationHelper $translationHelper,
         ConfigResolverInterface $configurationResolver,
         array $settings = []
     ) {
-        $this->fieldTypeRegistry = $fieldTypeRegistry;
         $settings['limit'] = $this->fieldContentMaxLength;
         $handler = new ContentTypeDomainMapper(
             $contentTypeHandler,
             $languageHandler,
-            $this->fieldTypeRegistry
+            $fieldTypeRegistry
         );
 
-        parent::__construct($contentTypeHandler, $handler, $fieldTypeRegistry, $settings);
+        parent::__construct($contentTypeHandler, $handler, $fieldTypeRegistry, $eventDispatcher, $settings);
 
         $this->repository = $repository;
         $this->translationHelper = $translationHelper;
@@ -114,11 +111,11 @@ class MetaNameSchema extends NameSchemaService
     }
 
     // @param ContentType|null $contentType: @deprecated argument.
-    public function resolveMeta(Meta $meta, Content $content, ContentType $contentType = null): bool
+    public function resolveMeta(Meta $meta, Content $content, ?ContentType $contentType = null): bool
     {
         $languages = $this->configurationResolver->getParameter('languages');
 
-        $resolveMultilingue = $this->resolve(
+        $resolveMultilingue = $this->resolveNameSchema(
             $meta->getContent(),
             $content->getContentType(),
             $content->fields,
@@ -126,8 +123,8 @@ class MetaNameSchema extends NameSchemaService
         );
         // we don't fallback on the other languages... it would be very bad for SEO to mix the languages
         if (
-            (\array_key_exists($languages[0], $resolveMultilingue)) &&
-            ('' !== $resolveMultilingue[$languages[0]])
+            \array_key_exists($languages[0], $resolveMultilingue)
+            && ('' !== $resolveMultilingue[$languages[0]])
         ) {
             $meta->setContent($resolveMultilingue[$languages[0]]);
 
@@ -320,7 +317,11 @@ class MetaNameSchema extends NameSchemaService
             return '';
         }
 
-        $content = $this->repository->getContentService()->loadContent($value->destinationContentId);
+        try {
+            $content = $this->repository->getContentService()->loadContent($value->destinationContentId);
+        } catch (NotFoundException $e) {
+            return '';
+        }
 
         foreach ($content->getFields() as $field) {
             if ($field->value instanceof ImageValue) {
@@ -329,5 +330,16 @@ class MetaNameSchema extends NameSchemaService
         }
 
         return '';
+    }
+
+    /**
+     * Override native function as this prevent usage of `()` inside metas in Ibexa 4.6
+     * {@inheritDoc}
+     */
+    protected function filterNameSchema(string $nameSchema): array
+    {
+        $groupLookupTable = [];
+
+        return [$nameSchema, $groupLookupTable];
     }
 }

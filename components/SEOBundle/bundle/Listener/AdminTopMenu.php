@@ -13,11 +13,19 @@
 namespace Novactive\Bundle\eZSEOBundle\Listener;
 
 use Ibexa\AdminUi\Menu\Event\ConfigureMenuEvent;
+use Ibexa\Contracts\Core\Repository\PermissionResolver;
 
 class AdminTopMenu
 {
+    public function __construct(protected PermissionResolver $permissionResolver)
+    {
+    }
+
     public function onMenuConfigure(ConfigureMenuEvent $event): void
     {
+        if (!$this->permissionResolver->hasAccess('novaseobundle.redirects', 'view')) {
+            return;
+        }
         $menu = $event->getMenu();
         $menu->addChild(
             'nova_create_redirect'
@@ -46,7 +54,7 @@ class AdminTopMenu
             ->addChild(
                 'nova_import_redirect_url',
                 [
-                  'route' => 'novactive_platform_admin_ui.import-redirect-url',
+                    'route' => 'novactive_platform_admin_ui.import-redirect-url',
                 ]
             )
             ->setLabel('menu.main_menu.import')

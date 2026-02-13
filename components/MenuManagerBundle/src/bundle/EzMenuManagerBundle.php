@@ -13,6 +13,7 @@
 namespace Novactive\EzMenuManagerBundle;
 
 use Novactive\EzMenuManager\MenuItem\MenuItemTypeInterface;
+use Novactive\EzMenuManagerBundle\DependencyInjection\Security\Provider\MenuPolicyProvider;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -26,5 +27,6 @@ class EzMenuManagerBundle extends Bundle
         parent::build($container);
         $container->registerForAutoconfiguration(MenuItemTypeInterface::class)
                   ->addTag('ezmenumanager.menuitemtype');
+        $container->getExtension('ibexa')->addPolicyProvider(new MenuPolicyProvider());
     }
 }

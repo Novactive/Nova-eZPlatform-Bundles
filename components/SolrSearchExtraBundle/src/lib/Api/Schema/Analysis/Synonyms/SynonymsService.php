@@ -1,44 +1,33 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
-
 declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Api\Schema\Analysis\Synonyms;
 
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
-use EzSystems\EzPlatformSolrSearchEngine\Gateway\Message;
-use Novactive\EzSolrSearchExtra\Api\Gateway;
+use Ibexa\Core\Base\Exceptions\NotFoundException;
+use Ibexa\Solr\Gateway\Message;
+use Novactive\EzSolrSearchExtra\Search\ExtendedSearchHandler;
 
 class SynonymsService
 {
     public const API_PATH = '/schema/analysis/synonyms';
 
-    /** @var Gateway */
-    protected $gateway;
+    protected ExtendedSearchHandler $searchHandler;
 
-    /**
-     * SynonymsService constructor.
-     */
-    public function __construct(Gateway $gateway)
+    public function __construct(ExtendedSearchHandler $searchHandler)
     {
-        $this->gateway = $gateway;
+        $this->searchHandler = $searchHandler;
     }
 
     /**
+     * @throws \Exception
+     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
+     *
      * @return SynonymsMap[]
      */
     public function getMappings(string $setId, int $offset = 0, int $limit = 10): array
     {
-        $response = $this->gateway->request(
+        $response = $this->searchHandler->request(
             'GET',
             sprintf('%s/%s', self::API_PATH, $setId)
         );
@@ -58,12 +47,20 @@ class SynonymsService
         return $maps;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function fetchTerm(string $setId, string $term): bool
     {
-        $response = $this->gateway->request(
-            'GET',
-            sprintf('%s/%s/%s', self::API_PATH, $setId, $term)
-        );
+        $response = null;
+        try {
+            $response = $this->searchHandler->request(
+                'GET',
+                sprintf('%s/%s/%s', self::API_PATH, $setId, $term)
+            );
+        } catch (\Exception $exception) {
+            return false;
+        }
         if (null === $response) {
             return false;
         }
@@ -74,13 +71,18 @@ class SynonymsService
         return true;
     }
 
+    /**
+     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
+     * @throws \Exception
+     * @throws \Exception
+     */
     public function addMapping(string $setId, SynonymsMap $map): bool
     {
         $termExist = $this->fetchTerm($setId, $map->getTerm());
         if ($termExist) {
             $this->deleteMapping($setId, $map->getTerm());
         }
-        $response = $this->gateway->request(
+        $response = $this->searchHandler->request(
             'PUT',
             sprintf('%s/%s', self::API_PATH, $setId),
             new Message(
@@ -95,14 +97,19 @@ class SynonymsService
             throw new NotFoundException('synonym set', $setId);
         }
 
-        $this->gateway->reload();
+        $this->searchHandler->reload();
 
         return 0 === $response->responseHeader->status;
     }
 
+    /**
+     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
+     * @throws \Exception
+     * @throws \Exception
+     */
     public function deleteMapping(string $setId, string $term): bool
     {
-        $response = $this->gateway->request(
+        $response = $this->searchHandler->request(
             'DELETE',
             sprintf('%s/%s/%s', self::API_PATH, $setId, urlencode($term))
         );
@@ -111,7 +118,7 @@ class SynonymsService
             throw new NotFoundException('synonym', $term);
         }
 
-        $this->gateway->reload();
+        $this->searchHandler->reload();
 
         return 0 === $response->responseHeader->status;
     }

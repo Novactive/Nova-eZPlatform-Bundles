@@ -23,19 +23,17 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 class PasswordProvided
 {
     public const COOKIE_PREFIX = 'protected-content-';
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
 
-    public function __construct(FormFactoryInterface $formFactory)
+    public function __construct(private readonly FormFactoryInterface $formFactory)
     {
-        $this->formFactory = $formFactory;
     }
 
     public function onKernelRequest(RequestEvent $event): void
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
+            return;
+        }
+        if (!$event->getRequest()->isMethod('POST')) {
             return;
         }
         $form = $this->formFactory->create(RequestProtectedAccessType::class);

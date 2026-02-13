@@ -1,0 +1,21 @@
+# Basic settings
+idp:
+    entityId: '%env(resolve:SAML_IDENTITY_PROVIDER_ENTITYID)%'
+    singleSignOnService:
+        url: '%env(resolve:SAML_IDENTITY_PROVIDER_LOGIN_URL)%'
+        binding: '%env(resolve:SAML_IDENTITY_PROVIDER_LOGIN_BINDING)%'
+    singleLogoutService:
+        url:  '%env(resolve:SAML_IDENTITY_PROVIDER_LOGOUT_URL)%'
+        binding: '%env(resolve:SAML_IDENTITY_PROVIDER_LOGOUT_BINDING)%'
+    x509cert: '%env(resolve:SAML_IDENTITY_PROVIDER_X509_CERT)%'
+sp:
+    entityId: '%env(resolve:SAML_SERVICE_PROVIDER_URL)%/saml/metadata'
+    assertionConsumerService:
+        url: '%env(resolve:SAML_SERVICE_PROVIDER_URL)%/saml/acs'
+        binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST'
+    singleLogoutService:
+        url: '%env(resolve:SAML_SERVICE_PROVIDER_URL)%/saml/logout'
+        binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect'
+    NameIDFormat: '%env(resolve:SAML_SERVICE_PROVIDER_NAMEID_FORMAT)%'
+baseurl: '%env(resolve:SAML_SERVICE_PROVIDER_URL)%/saml'
+debug: '%kernel.debug%'

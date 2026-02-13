@@ -12,17 +12,24 @@ declare(strict_types=1);
 
 namespace Novactive\eZPlatform\Bundles\Core\Collection;
 
-use Symfony\Component\Finder\Finder;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 final class Branches
 {
     public function __invoke(): array
     {
+        $process = Process::fromShellCommandline("git branch -a | grep 'remotes/origin/.*'  | awk '{print $1}'");
+        $process->run();
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+
         $branches = [];
-        $finder = new Finder();
-        $finder->depth(0)->files()->in('.git/refs/heads');
-        foreach ($finder as $file) {
-            $branches[] = $file->getBasename();
+        foreach (explode("\n", $process->getOutput()) as $branchName) {
+            if (preg_match('#^remotes/origin/(?!HEAD)(.*)$#', $branchName, $matches)) {
+                $branches[] = $matches[1];
+            }
         }
 
         return $branches;

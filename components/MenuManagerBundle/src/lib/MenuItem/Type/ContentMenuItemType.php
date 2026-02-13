@@ -12,38 +12,31 @@
 
 namespace Novactive\EzMenuManager\MenuItem\Type;
 
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
-use eZ\Publish\Core\Helper\TranslationHelper;
-use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
-use eZ\Publish\Core\MVC\Symfony\siteAccess;
-use eZ\Publish\Core\Repository\siteAccessAware\ContentService;
-use eZ\Publish\Core\Repository\siteAccessAware\LocationService;
+use Ibexa\Contracts\Core\Repository\ContentService;
+use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
+use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException;
+use Ibexa\Contracts\Core\Repository\LocationService;
+use Ibexa\Core\Helper\TranslationHelper;
+use Ibexa\Core\MVC\Symfony\Routing\UrlAliasRouter;
+use Ibexa\Core\MVC\Symfony\SiteAccess\SiteAccessServiceInterface;
 use Novactive\EzMenuManager\MenuItem\MenuItemValue;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
+use Psr\Cache\CacheException;
+use Psr\Cache\InvalidArgumentException;
+use RuntimeException;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Throwable;
 
 class ContentMenuItemType extends DefaultMenuItemType
 {
-    /** @var TranslationHelper */
-    protected $translationHelper;
-
-    /** @var ContentService */
-    protected $contentService;
-
-    /** @var LocationService */
-    protected $locationService;
-
-    /** @var RouterInterface */
-    protected $router;
-
-    /** @var TagAwareAdapterInterface */
-    protected $cache;
-
-    /** @var SiteAccess */
-    protected $siteAccess;
+    protected TranslationHelper $translationHelper;
+    protected ContentService $contentService;
+    protected LocationService $locationService;
+    protected RouterInterface $router;
+    protected TagAwareAdapterInterface $cache;
+    protected SiteAccessServiceInterface $siteAccessService;
 
     /**
      * @required
@@ -88,9 +81,9 @@ class ContentMenuItemType extends DefaultMenuItemType
     /**
      * @required
      */
-    public function setsiteAccess(siteAccess $siteAccess): void
+    public function setSiteAccessService(SiteAccessServiceInterface $siteAccessService): void
     {
-        $this->siteAccess = $siteAccess;
+        $this->siteAccessService = $siteAccessService;
     }
 
     /**
@@ -135,11 +128,6 @@ class ContentMenuItemType extends DefaultMenuItemType
         return $menuItem;
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     *
-     * @return MenuItemValue
-     */
     public function toMenuItemLink(MenuItem $menuItem): ?MenuItemValue
     {
         try {
@@ -152,27 +140,27 @@ class ContentMenuItemType extends DefaultMenuItemType
             $link->setExtras($menuItemLinkInfos['extras']);
 
             return $link;
-        } catch (UnauthorizedException $e) {
-            return null;
-        } catch (NotFoundException $e) {
+        } catch (UnauthorizedException|Throwable $e) {
             return null;
         }
-
-        return null;
     }
 
     /**
      * @throws NotFoundException
      * @throws UnauthorizedException
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws InvalidArgumentException|CacheException
      */
     protected function getMenuItemLinkInfos(MenuItem $menuItem): array
     {
-        $cacheItem = $this->cache->getItem("content-menu-item-link-{$menuItem->getId()}-{$this->siteAccess->name}");
+        $siteAccess = $this->siteAccessService->getCurrent();
+        $cacheItem = $this->cache->getItem("content-menu-item-link-{$menuItem->getId()}-{$siteAccess->name}");
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
         }
 
+        if (!$menuItem instanceof MenuItem\ContentMenuItem) {
+            throw new RuntimeException(sprintf('%s only works with ContentMenuItem', __METHOD__));
+        }
         $content = $this->contentService->loadContent($menuItem->getContentId());
         $location = $this->locationService->loadLocation($content->contentInfo->mainLocationId);
 
@@ -182,6 +170,7 @@ class ContentMenuItemType extends DefaultMenuItemType
                 UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
                 [
                     'location' => $location,
+                    'siteaccess' => $siteAccess->name,
                 ],
                 UrlGeneratorInterface::ABSOLUTE_URL
             ),
@@ -189,6 +178,7 @@ class ContentMenuItemType extends DefaultMenuItemType
             'extras' => [
                 'contentId' => $location->contentId,
                 'locationId' => $location->id,
+                'locationRemoteId' => $location->remoteId,
             ],
         ];
 

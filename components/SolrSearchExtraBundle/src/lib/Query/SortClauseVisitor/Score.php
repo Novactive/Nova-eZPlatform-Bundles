@@ -1,19 +1,11 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
+declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Query\SortClauseVisitor;
 
-use eZ\Publish\API\Repository\Values\Content\Query\SortClause as APISortClause;
-use EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\SortClause as APISortClause;
+use Ibexa\Contracts\Solr\Query\SortClauseVisitor;
 use Novactive\EzSolrSearchExtra\Query\SortClause;
 
 /**
@@ -23,20 +15,16 @@ class Score extends SortClauseVisitor
 {
     /**
      * Check if visitor is applicable to current sortClause.
-     *
-     * @return bool
      */
-    public function canVisit(APISortClause $sortClause)
+    public function canVisit(APISortClause $sortClause): bool
     {
         return $sortClause instanceof SortClause\Score;
     }
 
     /**
      * Map field value to a proper Solr representation.
-     *
-     * @return string
      */
-    public function visit(APISortClause $sortClause)
+    public function visit(APISortClause $sortClause): string
     {
         return 'score'.$this->getDirection($sortClause);
     }

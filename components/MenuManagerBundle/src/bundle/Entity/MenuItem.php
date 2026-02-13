@@ -13,6 +13,7 @@
 namespace Novactive\EzMenuManagerBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Novactive\EzMenuManager\Traits\IdentityTrait;
 
@@ -65,7 +66,6 @@ class MenuItem
      *     targetEntity="Novactive\EzMenuManagerBundle\Entity\MenuItem",
      *     mappedBy="parent",
      *     cascade={"persist","remove"},
-     *     fetch="EAGER",
      *     orphanRemoval=true
      *     )
      * @ORM\OrderBy({"position" = "ASC"})
@@ -120,6 +120,14 @@ class MenuItem
     public function getName(): ?string
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRemoteId(): ?string
+    {
+        return $this->remoteId;
     }
 
     /**
@@ -196,7 +204,10 @@ class MenuItem
      */
     public function getChildrens()
     {
-        return $this->childrens;
+        $criteria = new Criteria();
+        $criteria->orderBy(['position' => Criteria::ASC]);
+
+        return $this->childrens->matching($criteria);
     }
 
     /**
@@ -223,16 +234,13 @@ class MenuItem
         $this->childrens->removeElement($children);
     }
 
-    /**
-     * @return MenuItem
-     */
     public function getParent(): ?MenuItem
     {
         return $this->parent;
     }
 
     /**
-     * @param MenuItem $parent
+     * @param MenuItem|null $parent
      */
     public function setParent($parent): void
     {
@@ -296,10 +304,29 @@ class MenuItem
         return (string) $this->id;
     }
 
-    public function update(array $properties)
+    public function update(array $properties): void
     {
         foreach ($properties as $property => $value) {
-            $this->$property = $value;
+            if ($this->$property !== $value) {
+                $this->$property = $value;
+            }
+        }
+    }
+
+    public function assignPositions(): void
+    {
+        /** @var MenuItem[] $childrens */
+        $childrens = $this->getChildrens()->getValues();
+
+        usort($childrens, function (MenuItem $itemA, MenuItem $itemB) {
+            return $itemA->getPosition() <=> $itemB->getPosition();
+        });
+
+        $position = 0;
+        foreach ($childrens as $child) {
+            $child->setPosition($position);
+            $child->assignPositions();
+            ++$position;
         }
     }
 }

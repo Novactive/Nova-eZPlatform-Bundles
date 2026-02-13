@@ -1,0 +1,55 @@
+# JOB
+import_export.job.create:
+    path:     /import-export/job/create
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::create }
+
+import_export.job.list:
+    path:     /import-export/job/list
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::list }
+
+import_export.job.view:
+    path:     /import-export/job/{id}/view
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::view }
+
+import_export.job.run:
+    path:     /import-export/job/{id}/run
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::run }
+
+import_export.job.pause:
+    path:     /import-export/job/{id}/pause
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::pause }
+
+import_export.job.cancel:
+    path:     /import-export/job/{id}/cancel
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::cancel }
+
+import_export.job.debug:
+    path:     /import-export/job/{id}/debug/{index}
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::debug }
+
+import_export.job.run_w_limit:
+    path:     /import-export/job/{id}/run/{batchLimit}
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::run }
+    requirements:
+        batchLimit: '\d+'
+
+import_export.job.reset_run:
+    path:     /import-export/job/{id}/run/{reset}
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::run }
+    requirements:
+        reset: true|false
+
+import_export.job.reset_run_w_limit:
+    path:     /import-export/job/{id}/run/{batchLimit}/{reset}
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::run }
+    requirements:
+        reset: true|false
+        batchLimit: '\d+'
+
+import_export.job.delete:
+    path:     /import-export/job/{id}/delete
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::delete }
+
+import_export.writer.download_file:
+    path:     /import-export/writer/{id}/{writerIndex}/download
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\WriterController::downloadFile }

@@ -1,27 +1,21 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
-
 declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Query\Content\Criterion;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
 
 class FilterTag extends Criterion
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     public $tag;
 
-    /** @var Criterion */
+    /**
+     * @var \Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion
+     */
     public $criterion;
 
     /**
@@ -36,7 +30,7 @@ class FilterTag extends Criterion
     /**
      * {@inheritdoc}
      */
-    public function getSpecifications()
+    public function getSpecifications(): array
     {
         return [];
     }

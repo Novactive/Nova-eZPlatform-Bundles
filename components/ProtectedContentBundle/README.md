@@ -17,20 +17,30 @@ Documentation is available in this repository via `.md` files but also packaged 
 
 A bundle that provides quick password protection on Contents.
 
-## How does it work?
+# How it works
 
 Allows you to add 1 on N password on a Content in the Admin UI.
+Once a protection is set, the Content becomes Protected.
+In this situation you can have 3 new variables in the view full
+- canReadProtectedContent (always)
+- requestProtectedContentPasswordForm (if content is protected by password)
+- requestProtectedContentEmailForm (if content is protected with email verification)
 
-Once a Password is set, the Content becomes Protected. In this situation you will have 2 new variables in the view full.
 Allowing you do:
-
 ```twig
 <h2>{{ ibexa_content_name(content) }}</h2>
 {% if not canReadProtectedContent %}
-    <p>This content has been protected by a password</p>
-    <div class="protected-content-form">
-        {{ form(requestProtectedContentPasswordForm) }}
-    </div>
+    {% if requestProtectedContentPasswordForm is defined %}
+        <p>This content has been protected by a password</p>
+        <div class="protected-content-form">
+            {{ form(requestProtectedContentPasswordForm) }}
+        </div>
+    {% elseif requestProtectedContentEmailForm is defined %}
+        <p>This content has been protected by an email verification</p>
+            <div class="protected-content-form">
+                {{ form(requestProtectedContentEmailForm) }}
+            </div>
+    {% endif %}
 {% else %}
     {% for field in content.fieldsByLanguage(language|default(null)) %}
         <h3>{{ field.fieldDefIdentifier }}</h3>
@@ -63,6 +73,13 @@ Then inject the bundle in the `bundles.php` of your application.
 ```yaml
 _novaezprotectedcontent_routes:
     resource: '@NovaeZProtectedContentBundle/Resources/config/routing/main.yml'
+```
+
+### Copie migration files
+
+```shell
+cp vendor/novactive/ezprotectedcontentbundle/bundle/Resources/migrations/* src/Migrations/Ibexa/migrations/
+php bin/console ibexa:migrations:migrate --allow-no-migration --disable-locking -v
 ```
 
 ### Install the database schema

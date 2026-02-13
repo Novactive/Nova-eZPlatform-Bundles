@@ -1,39 +1,28 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
-
 declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Api\Schema;
 
-use Novactive\EzSolrSearchExtra\Api\Gateway;
+use Novactive\EzSolrSearchExtra\Search\ExtendedSearchHandler;
 
 class ManagedResourcesService
 {
     public const API_PATH = '/schema/managed';
 
-    /** @var Gateway */
-    protected $gateway;
+    protected ExtendedSearchHandler $searchHandler;
 
-    /**
-     * ManagedResourcesService constructor.
-     */
-    public function __construct(Gateway $gateway)
+    public function __construct(ExtendedSearchHandler $searchHandler)
     {
-        $this->gateway = $gateway;
+        $this->searchHandler = $searchHandler;
     }
 
-    public function getSets()
+    /**
+     * @throws \Exception
+     */
+    public function getSets(): array
     {
-        $response = $this->gateway->request(
+        $response = $this->searchHandler->request(
             'GET',
             self::API_PATH
         );

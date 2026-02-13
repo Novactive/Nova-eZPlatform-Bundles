@@ -17,11 +17,13 @@ parameters:
         locations: []
         subtrees: []
         contentTypeIdentifiers: ['image']
+        object_states: []
     # Includes take precedence on excludes.
     nova_ezseo.default.sitemap_includes:
         locations: []
         subtrees: []
         contentTypeIdentifiers: []
+        object_states: []
     nova_ezseo.default.default_metas:
         author: "Ibexa Community Bundle Nova eZ SEO Bundle"
         copyright: ~
@@ -86,3 +88,13 @@ parameters:
             label: 'Twitter - Image'
             default_pattern: "<image|picture>"
             icon: 'twitter-square'
+        'robots':
+            label: 'Robots'
+            type: 'select'
+            params:
+                choices:
+                    all: 'all'
+                    nofollow: 'nofollow'
+                    noindex: 'noindex'
+            default_pattern: 'all'
+            icon: 'book'

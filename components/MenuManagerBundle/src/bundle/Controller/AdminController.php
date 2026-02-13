@@ -13,9 +13,11 @@
 namespace Novactive\EzMenuManagerBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use EzSystems\EzPlatformAdminUi\Notification\NotificationHandlerInterface;
-use EzSystems\EzPlatformAdminUiBundle\Controller\Controller;
+use Ibexa\Contracts\AdminUi\Controller\Controller;
+use Ibexa\Contracts\AdminUi\Notification\NotificationHandlerInterface;
+use Ibexa\Contracts\Core\Repository\PermissionResolver;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
+use Ibexa\Core\Base\Exceptions\UnauthorizedException;
 use Novactive\EzMenuManager\Form\Type\MenuDeleteType;
 use Novactive\EzMenuManager\Form\Type\MenuSearchType;
 use Novactive\EzMenuManager\Form\Type\MenuType;
@@ -25,7 +27,9 @@ use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use PDO;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -39,17 +43,11 @@ class AdminController extends Controller
 {
     public const RESULTS_PER_PAGE = 20;
 
-    /** @var TranslatorInterface */
-    protected $translator;
-
-    /** @var NotificationHandlerInterface */
-    protected $notificationHandler;
-
-    /** @var EntityManagerInterface */
-    protected $em;
-
-    /** @var ConfigResolverInterface */
-    protected $configResolver;
+    protected TranslatorInterface $translator;
+    protected NotificationHandlerInterface $notificationHandler;
+    protected EntityManagerInterface $em;
+    protected ConfigResolverInterface $configResolver;
+    protected PermissionResolver $permissionResolver;
 
     /**
      * AdminController constructor.
@@ -58,12 +56,14 @@ class AdminController extends Controller
         TranslatorInterface $translator,
         NotificationHandlerInterface $notificationHandler,
         EntityManagerInterface $em,
-        ConfigResolverInterface $configResolver
+        ConfigResolverInterface $configResolver,
+        PermissionResolver $permissionResolver
     ) {
         $this->translator = $translator;
         $this->notificationHandler = $notificationHandler;
         $this->em = $em;
         $this->configResolver = $configResolver;
+        $this->permissionResolver = $permissionResolver;
     }
 
     /**
@@ -73,10 +73,13 @@ class AdminController extends Controller
      *
      * @SuppressWarnings(PHPMD.IfStatementAssignment)
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function listAction(Request $request, $page = 1)
     {
+        if (!$this->permissionResolver->hasAccess('menu_manager', 'list')) {
+            throw new UnauthorizedException('menu_manager', 'list', []);
+        }
         $queryBuilder = $this->em->createQueryBuilder()
                            ->select('m')
                            ->from(Menu::class, 'm')
@@ -115,7 +118,7 @@ class AdminController extends Controller
         $menuDeleteForm = $this->createForm(MenuDeleteType::class, $formData);
 
         return $this->render(
-            '@EzMenuManager/themes/standard/menu_manager/admin/list.html.twig',
+            '@ibexadesign/menu_manager/admin/list.html.twig',
             [
                 'search_form' => $searchForm->createView(),
                 'pager' => $pagerfanta,
@@ -143,32 +146,38 @@ class AdminController extends Controller
     /**
      * @Route("/new", name="menu_manager.menu_new")
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function newAction(Request $request)
     {
+        if (!$this->permissionResolver->hasAccess('menu_manager', 'new')) {
+            throw new UnauthorizedException('menu_manager', 'new', []);
+        }
         $menu = new Menu();
         $menu->setRootLocationId(
             $this->configResolver->getParameter('content.tree_root.location_id')
         );
 
-        return $this->editAction($request, $menu, $this->generateUrl('menu_manager.menu_list'));
+        return $this->editAction($request, $menu);
     }
 
     /**
      * @Route("/edit/{menu}", name="menu_manager.menu_edit")
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
-    public function editAction(Request $request, Menu $menu, ?string $lastAccessedUrl = null)
+    public function editAction(Request $request, Menu $menu)
     {
-        $lastAccessedUrl = $lastAccessedUrl ?? $this->lastAccessedUrl($request);
+        if (!$this->permissionResolver->hasAccess('menu_manager', 'edit')) {
+            throw new UnauthorizedException('menu_manager', 'edit', []);
+        }
 
         $form = $this->createForm(MenuType::class, $menu);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Menu $menu */
             $menu = $form->getData();
+            $menu->assignPositions();
             $this->em->persist($menu);
             $this->em->flush();
 
@@ -176,15 +185,14 @@ class AdminController extends Controller
                 $this->translator->trans('menu.notification.saved', [], 'menu_manager')
             );
 
-            return $this->redirect($lastAccessedUrl);
+            return $this->redirect($this->generateUrl('menu_manager.menu_list'));
         }
 
         return $this->render(
-            '@EzMenuManager/themes/standard/menu_manager/admin/edit.html.twig',
+            '@ibexadesign/menu_manager/admin/edit.html.twig',
             [
                 'form' => $form->createView(),
                 'title' => $menu->getId() ? $menu->getName() : $this->translator->trans('menu.new', [], 'menu_manager'),
-                'lastUrl' => $lastAccessedUrl,
             ]
         );
     }
@@ -194,6 +202,9 @@ class AdminController extends Controller
      */
     public function deleteAction(Request $request)
     {
+        if (!$this->permissionResolver->hasAccess('menu_manager', 'delete')) {
+            throw new UnauthorizedException('menu_manager', 'delete', []);
+        }
         $form = $this->createForm(MenuDeleteType::class);
         $form->handleRequest($request);
 
@@ -212,18 +223,5 @@ class AdminController extends Controller
         }
 
         return $this->redirectToRoute('menu_manager.menu_list');
-    }
-
-    /**
-     * @return string
-     */
-    protected function lastAccessedUrl(Request $request)
-    {
-        $targetUrl = $request->headers->get('Referer');
-        if ($targetUrl && false === strpos($targetUrl, '/login')) {
-            return $targetUrl;
-        }
-
-        return $this->generateUrl('menu_manager.menu_list');
     }
 }

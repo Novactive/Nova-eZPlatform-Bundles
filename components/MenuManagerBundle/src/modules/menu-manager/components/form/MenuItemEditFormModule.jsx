@@ -107,7 +107,7 @@ export default class MenuItemEditFormModule extends Component {
         <Form onSubmit={this.handleSubmit}>
           <FormGroup>
             <Label for="language">{Translator.trans('menu_item.property.language')}</Label>
-            <Input type="select" onChange={this.handleLanguageChange}>
+            <Input type="select" onChange={this.handleLanguageChange} value={this.state.language}>
               {[...languages].map((language) => (
                 <option key={language.id} value={language.languageCode}>
                   {language.name}

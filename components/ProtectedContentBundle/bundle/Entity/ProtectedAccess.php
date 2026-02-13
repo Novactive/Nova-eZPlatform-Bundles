@@ -21,7 +21,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity()
  * @ORM\Table(name="novaezprotectedcontent")
- * @ORM\EntityListeners({"Novactive\Bundle\eZProtectedContentBundle\Listener\EntityContentLink"})
  */
 class ProtectedAccess implements ContentInterface
 {
@@ -40,8 +39,7 @@ class ProtectedAccess implements ContentInterface
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255, nullable=false)
-     * @Assert\NotBlank()
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      */
     protected $password;
@@ -56,9 +54,23 @@ class ProtectedAccess implements ContentInterface
     /**
      * @var bool
      *
-     * @ORM\Column(type="boolean", nullable=false)
+     * @ORM\Column(type="boolean", nullable=false, name="as_email")
+     */
+    protected $asEmail = false;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", nullable=false, name="protect_children")
      */
     protected $protectChildren;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true, name="email_message")
+     */
+    protected $emailMessage;
 
     public function __construct()
     {
@@ -78,12 +90,24 @@ class ProtectedAccess implements ContentInterface
         return $this;
     }
 
+    public function getAsEmail(): bool
+    {
+        return $this->asEmail ?? false;
+    }
+
+    public function setAsEmail(bool $asEmail): self
+    {
+        $this->asEmail = $asEmail;
+
+        return $this;
+    }
+
     public function getPassword(): string
     {
         return $this->password ?? '';
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(?string $password): self
     {
         $this->password = $password;
 
@@ -110,5 +134,20 @@ class ProtectedAccess implements ContentInterface
     public function setProtectChildren(bool $protectChildren): void
     {
         $this->protectChildren = $protectChildren;
+    }
+
+    public function getEmailMessage(): ?string
+    {
+        return $this->emailMessage;
+    }
+
+    public function setEmailMessage(string $emailMessage): void
+    {
+        $this->emailMessage = $emailMessage;
+    }
+
+    public function getContentId(): int
+    {
+        return $this->contentId;
     }
 }

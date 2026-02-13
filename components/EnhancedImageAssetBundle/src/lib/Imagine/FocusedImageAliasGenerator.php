@@ -95,6 +95,19 @@ class FocusedImageAliasGenerator implements VariationHandler
         return null;
     }
 
+    protected function isFocusedThumbnail(string $variationName): bool
+    {
+        $variationConfig = $this->filterConfiguration->get($variationName);
+        if (isset($variationConfig['filters']['focusedThumbnail'])) {
+            return true;
+        }
+        if ($variationConfig['reference']) {
+            return $this->isFocusedThumbnail($variationConfig['reference']);
+        }
+
+        return false;
+    }
+
     /**
      * {@inheritdoc}
      *
@@ -114,8 +127,7 @@ class FocusedImageAliasGenerator implements VariationHandler
         $focusPoint = $this->getFocusPoint($field->value, $variationName);
 
         if (IORepositoryResolver::VARIATION_ORIGINAL !== $variationName) {
-            $variationConfig = $this->filterConfiguration->get($variationName);
-            if (isset($variationConfig['filters']['focusedThumbnail'])) {
+            if ($this->isFocusedThumbnail($variationName)) {
                 $parameters = [
                     'filters' => [
                         'focusedThumbnail' => [

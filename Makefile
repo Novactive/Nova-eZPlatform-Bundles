@@ -30,6 +30,7 @@ list:
 
 .PHONY: codeclean
 codeclean: ## Coding Standard checks
+	@ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/phpcbf --standard=.cs/cs_ruleset.xml --extensions=php src/ components/ bin/"
 	@ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/php-cs-fixer fix --config=.cs/.php_cs.php"
 	@ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src/ components/ bin/"
 	@ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/phpmd src,components,bin text .cs/md_ruleset.xml"
@@ -94,7 +95,6 @@ tests: ## Run the tests
     	if COMPONENT=$${COMPONENT} bin/ci-should test; then \
     		echo " ..:: Testing $${COMPONENT} ::.."; \
     		ddev exec -d /var/www/html "PANTHER_NO_HEADLESS=${SHOW_CHROME} APP_ENV=test $(PHP_BIN) ./vendor/bin/phpunit -c 'components/$${COMPONENT}/tests' 'components/$${COMPONENT}/tests' --exclude-group behat"; \
-    		ddev exec -d /var/www/html "PANTHER_NO_HEADLESS=${SHOW_CHROME} APP_ENV=test php ./vendor/bin/phpunit -c 'components/RssFeedBundle/tests' 'components/RssFeedBundle/tests' --exclude-group behat"; \
 		fi \
 	done
 

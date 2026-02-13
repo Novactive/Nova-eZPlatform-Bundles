@@ -1,0 +1,10 @@
+services:
+    AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Ibexa\TaxonomyEntryTransformer:
+        arguments:
+            $taxonomyService: '@Ibexa\Contracts\Taxonomy\Service\TaxonomyServiceInterface'
+        tags:
+            - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.taxonomy_entry}
+
+    AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Ibexa\TaxonomyEntryAssignementTransformer:
+        tags:
+            - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.taxonomy_entry_assignement}

@@ -36,7 +36,9 @@
             "Novactive\\Bundle\\eZFastlyImageOptimizerBundle\\": "components/FastlyImageOptimizerBundle/bundle",
             "Novactive\\Bundle\\eZAlgoliaSearchEngine\\": "components/AlgoliaSearchEngine/bundle",
             "Novactive\\Bundle\\eZAlgoliaSearchEngine\\Tests\\": "components/AlgoliaSearchEngine/tests/Tests",
-            "Novactive\\Bundle\\eZ2FABundle\\": "components/2FABundle/bundle"
+            "Novactive\\Bundle\\eZ2FABundle\\": "components/2FABundle/bundle",
+            "AlmaviaCX\\Bundle\\IbexaRichTextExtraBundle\\": "components/RichTextExtraBundle/src/bundle",
+            "AlmaviaCX\\Bundle\\IbexaRichTextExtra\\": "components/RichTextExtraBundle/src/lib"
         }
     },
     "require": {
@@ -50,7 +52,7 @@
         "symfony/http-client": "^5.2",
         "ext-json": "*",
         "phpunit/phpunit": "^9.5",
-        "dbrekelmans/bdi": "^1.0",
+        "dbrekelmans/bdi": "1.0.4",
         "symfony/panther": "^1.1",
         "symfony/yaml": "^5.2",
         "symfony/phpunit-bridge": "^5.3",

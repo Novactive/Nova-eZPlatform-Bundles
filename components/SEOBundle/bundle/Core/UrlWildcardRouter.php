@@ -12,7 +12,6 @@
 
 namespace Novactive\Bundle\eZSEOBundle\Core;
 
-use Exception;
 use Ibexa\Contracts\Core\Repository\URLWildcardService;
 use Ibexa\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use Ibexa\Core\MVC\Symfony\Routing\UrlWildcardRouter as BaseUrlWildcardRouter;
@@ -33,14 +32,14 @@ class UrlWildcardRouter extends BaseUrlWildcardRouter
     {
         try {
             // Manage full url : http://host.com/uri
-            $requestedPath = $request->attributes->get('semanticPathinfo', $request->getPathInfo());
+            $requestedPath = $request->getPathInfo();
             $requestUriFull = $request->getSchemeAndHttpHost().$requestedPath;
             $urlWildcard = $this->wildcardService->translate($requestUriFull);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             try {
                 // Manage full url : /uri
                 $urlWildcard = $this->wildcardService->translate($requestedPath);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 throw new ResourceNotFoundException($e->getMessage(), $e->getCode(), $e);
             }
         }
@@ -51,6 +50,7 @@ class UrlWildcardRouter extends BaseUrlWildcardRouter
 
         if (0 === strpos($urlWildcard->uri, 'http://') || 'https://' === substr($urlWildcard->uri, 0, 8)) {
             $params += ['semanticPathinfo' => trim($urlWildcard->uri, '/')];
+            $params += ['prependSiteaccessOnRedirect' => false];
         } else {
             $params += ['semanticPathinfo' => '/'.trim($urlWildcard->uri, '/')];
         }

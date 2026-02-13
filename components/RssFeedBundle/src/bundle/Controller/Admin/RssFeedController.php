@@ -23,7 +23,6 @@ use Novactive\EzRssFeedBundle\Entity\RssFeeds;
 use Novactive\EzRssFeedBundle\Form\RssFeedsType;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -131,10 +130,14 @@ class RssFeedController extends Controller
 
     /**
      * @Route("/edit/{id}", name="platform_admin_ui_rss_feeds_edit")
-     * @ParamConverter("rssFeed", class="Novactive\EzRssFeedBundle\Entity\RssFeeds")
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editAction(Request $request, RssFeeds $rssFeed): Response
+    public function editAction(Request $request, int $id)
     {
+        $rssFeedRepository = $this->entityManager->getRepository(RssFeeds::class);
+        $rssFeed = $rssFeedRepository->find($id);
+
         /**
          * @var PermissionResolver
          */
@@ -147,6 +150,7 @@ class RssFeedController extends Controller
         foreach ($rssFeed->getFeedSites() as $site) {
             $originalSites->add($site);
         }
+
         $originalFeedsItems = new ArrayCollection();
         foreach ($rssFeed->getFeedItems() as $item) {
             $originalFeedsItems->add($item);
@@ -208,10 +212,12 @@ class RssFeedController extends Controller
 
     /**
      * @Route("/delete/{id}", name="platform_admin_ui_rss_feeds_delete")
-     * @ParamConverter("rssFeed", class="Novactive\EzRssFeedBundle\Entity\RssFeeds")
      */
-    public function deleteAction(Request $request, RssFeeds $rssFeed): RedirectResponse
+    public function deleteAction(Request $request, int $id): RedirectResponse
     {
+        $rssFeedRepository = $this->entityManager->getRepository(RssFeeds::class);
+        $rssFeed = $rssFeedRepository->find($id);
+
         /**
          * @var PermissionResolver
          */
@@ -284,8 +290,8 @@ class RssFeedController extends Controller
 
         if ($request->get('contenttype_id')) {
             $contentType = $this->getRepository()
-                                ->getContentTypeService()
-                                ->loadContentType($request->get('contenttype_id'));
+                ->getContentTypeService()
+                ->loadContentType($request->get('contenttype_id'));
 
             foreach ($contentType->getFieldDefinitions() as $fieldDefinition) {
                 $fieldsMap[ucfirst($fieldDefinition->getName())] =

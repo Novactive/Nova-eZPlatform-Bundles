@@ -1,15 +1,17 @@
 {
     "name": "novactive/ez2fabundle",
-    "description": "Novactive eZ 2FA Bundle is an eZ Platform bundle that provides two-factor authentication for your ezplatform project",
+    "description": "Novactive eZ 2FA Bundle is an Ibexa bundle that provides two-factor authentication for your Ibexa project",
     "keywords": [
         "two-factor",
         "authentication",
         "ezpublish",
         "novactive",
-        "ezplatform"
+        "almaviacx",
+        "ezplatform",
+        "ibexa"
     ],
     "homepage": "https://github.com/Novactive/NovaeZ2FABundle",
-    "type": "ezplatform-bundle",
+    "type": "ibexa-bundle",
     "authors": [
         {
             "name": "AlmaviaCX",
@@ -26,13 +28,13 @@
         "MIT"
     ],
     "require": {
-        "php": "^7.3",
-        "scheb/2fa-bundle": "^5.0",
-        "scheb/2fa-google-authenticator": "^5.0",
-        "scheb/2fa-totp": "^5.0",
-        "scheb/2fa-trusted-device": "^5.0",
-        "scheb/2fa-backup-code":  "^5.0",
-        "scheb/2fa-email": "^5.0",
+        "php": "^7.3 || ^8.0",
+        "scheb/2fa-bundle": "v5.13.2",
+        "scheb/2fa-google-authenticator": "v5.13.2",
+        "scheb/2fa-totp": "v5.13.2",
+        "scheb/2fa-trusted-device": "v5.13.2",
+        "scheb/2fa-backup-code":  "^v5.13.2",
+        "scheb/2fa-email": "v5.13.2",
         "bacon/bacon-qr-code": "^2.0"
     },
     "require-dev": {

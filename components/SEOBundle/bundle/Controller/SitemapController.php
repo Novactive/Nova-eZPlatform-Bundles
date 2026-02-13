@@ -14,15 +14,12 @@ namespace Novactive\Bundle\eZSEOBundle\Controller;
 
 use DateTime;
 use DOMDocument;
-use DOMElement;
 use Ibexa\Bundle\Core\Controller;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location;
-use Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchHit;
 use Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchResult;
 use Ibexa\Contracts\Core\Variation\VariationHandler;
 use Ibexa\Core\Helper\FieldHelper;
 use Ibexa\Core\MVC\Symfony\Routing\UrlAliasRouter;
-use Ibexa\Core\Repository\Values\Content\VersionInfo;
 use Novactive\Bundle\eZSEOBundle\Core\Sitemap\QueryFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,12 +27,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SitemapController extends Controller
 {
-    /** @var FieldHelper */
-    private $fieldHelper;
-
-    /** @var VariationHandler */
-    protected $imageVariationService;
-
     /**
      * How many in a Sitemap.
      *
@@ -43,10 +34,10 @@ class SitemapController extends Controller
      */
     public const PACKET_MAX = 1000;
 
-    public function __construct(FieldHelper $fieldHelper, VariationHandler $imageVariationService)
-    {
-        $this->fieldHelper = $fieldHelper;
-        $this->imageVariationService = $imageVariationService;
+    public function __construct(
+        protected readonly FieldHelper $fieldHelper,
+        protected readonly VariationHandler $imageVariationService,
+    ) {
     }
 
     /**
@@ -117,14 +108,12 @@ class SitemapController extends Controller
     /**
      * Fill a sitemap.
      */
-    protected function fillSitemap(DOMDocument $sitemap, DOMElement $root, SearchResult $results): void
+    protected function fillSitemap(DOMDocument $sitemap, \DOMElement $root, SearchResult $results): void
     {
         foreach ($results->searchHits as $searchHit) {
-            /**
-             * @var SearchHit
-             * @var Location  $location
-             */
+            /** @var Location $location */
             $location = $searchHit->valueObject;
+
             try {
                 $url = $this->generateUrl(
                     UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
@@ -142,7 +131,8 @@ class SitemapController extends Controller
                 continue;
             }
 
-            $modified = $location->contentInfo->modificationDate->format('c');
+            $modified = $location->contentInfo->modificationDate ?
+                $location->contentInfo->modificationDate->format('c') : null;
             $loc = $sitemap->createElement('loc', $url);
             $lastmod = $sitemap->createElement('lastmod', $modified);
             $urlElt = $sitemap->createElement('url');
@@ -166,7 +156,11 @@ class SitemapController extends Controller
                     if ($this->fieldHelper->isFieldEmpty($content, $field->fieldDefIdentifier)) {
                         continue;
                     }
-                    $variation = $this->imageVariationService->getVariation($field, new VersionInfo(), 'original');
+                    $variation = $this->imageVariationService->getVariation(
+                        $field,
+                        $content->getVersionInfo(),
+                        'original'
+                    );
                     $imageContainer = $sitemap->createElement('image:image');
                     $imageLoc = $sitemap->createElement('image:loc', $variation->uri);
                     $imageContainer->appendChild($imageLoc);
@@ -183,7 +177,7 @@ class SitemapController extends Controller
     /**
      * Fill the sitemap index.
      */
-    protected function fillSitemapIndex(DOMDocument $sitemap, int $numberOfResults, DOMElement $root): void
+    protected function fillSitemapIndex(DOMDocument $sitemap, int $numberOfResults, \DOMElement $root): void
     {
         $numberOfPage = (int) ceil($numberOfResults / static::PACKET_MAX);
         for ($sitemapNumber = 1; $sitemapNumber <= $numberOfPage; ++$sitemapNumber) {

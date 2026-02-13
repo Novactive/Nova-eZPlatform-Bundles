@@ -1,0 +1,49 @@
+services:
+    AlmaviaCX\Bundle\IbexaImportExport\Job\Form\Type\JobFormType:
+        arguments:
+            $workflowRegistry: '@AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowRegistry'
+        tags:
+            - { name: form.type, alias: JobType }
+
+    AlmaviaCX\Bundle\IbexaImportExport\Job\Form\Type\JobProcessConfigurationFormType:
+        arguments:
+            $workflowRegistry: '@AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowRegistry'
+            $componentRegistry: '@AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentRegistry'
+        tags:
+            - { name: form.type, alias: JobProcessConfigurationFormType }
+
+    AlmaviaCX\Bundle\IbexaImportExport\Job\Form\JobCreateFlow:
+        parent: craue.form.flow
+
+    AlmaviaCX\Bundle\IbexaImportExport\Reader\File\FileReaderOptionsFormType:
+        tags:
+            - { name: form.type, alias: FileReaderOptionsFormType }
+
+    AlmaviaCX\Bundle\IbexaImportExport\Reader\Xml\XmlReaderOptionsFormType:
+        tags:
+            - { name: form.type, alias: XmlReaderOptionsFormType }
+
+    AlmaviaCX\Bundle\IbexaImportExport\Reader\Csv\CsvReaderOptionsFormType:
+        parent: AlmaviaCX\Bundle\IbexaImportExport\Reader\File\FileReaderOptionsFormType
+        tags:
+            - { name: form.type, alias: CsvReaderOptionsFormType }
+
+    AlmaviaCX\Bundle\IbexaImportExport\Reader\Ibexa\ContentList\IbexaContentListReaderOptionsFormType:
+        tags:
+            - { name: form.type, alias: IbexaContentListReaderOptionsFormType }
+
+    AlmaviaCX\Bundle\IbexaImportExport\Reader\Xls\XlsReaderOptionsFormType:
+        parent: AlmaviaCX\Bundle\IbexaImportExport\Reader\File\FileReaderOptionsFormType
+        tags:
+            - { name: form.type, alias: XlsReaderOptionsFormType }
+
+    AlmaviaCX\Bundle\IbexaImportExport\Writer\Stream\StreamWriterOptionsFormType:
+        arguments:
+            $filepathResolver: '@AlmaviaCX\Bundle\IbexaImportExport\Resolver\FilepathResolver'
+        tags:
+            - { name: form.type, alias: StreamWriterOptionsFormType }
+
+    AlmaviaCX\Bundle\IbexaImportExport\Reader\Mdb\MdbReaderOptionsFormType:
+        parent: AlmaviaCX\Bundle\IbexaImportExport\Reader\File\FileReaderOptionsFormType
+        tags:
+            - { name: form.type, alias: MdbReaderOptionsFormType }

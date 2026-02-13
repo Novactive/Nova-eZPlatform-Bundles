@@ -1,76 +1,104 @@
 <?php
 
-/**
- * NovaeZSolrSearchExtraBundle.
- *
- * @package   NovaeZSolrSearchExtraBundle
- *
- * @author    Novactive
- * @copyright 2020 Novactive
- * @license   https://github.com/Novactive/NovaeZSolrSearchExtraBundle/blob/master/LICENSE
- */
-
 declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Api;
 
 use Exception;
-use EzSystems\EzPlatformSolrSearchEngine\Gateway\Endpoint;
-use EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry;
-use EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver;
-use EzSystems\EzPlatformSolrSearchEngine\Gateway\HttpClient;
-use EzSystems\EzPlatformSolrSearchEngine\Gateway\Message;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
+use Ibexa\Solr\Gateway\DistributionStrategy;
+use Ibexa\Solr\Gateway\DistributionStrategy\CloudDistributionStrategy;
+use Ibexa\Solr\Gateway\Endpoint;
+use Ibexa\Solr\Gateway\EndpointRegistry;
+use Ibexa\Solr\Gateway\EndpointResolver;
+use Ibexa\Solr\Gateway\HttpClient;
+use Ibexa\Solr\Gateway\Message;
+use Ibexa\Solr\Gateway\Native;
+use Ibexa\Solr\Gateway\UpdateSerializerInterface;
+use Ibexa\Solr\Query\QueryConverter;
+use Novactive\EzSolrSearchExtra\Query\DocumentQuery;
 use stdClass;
 
-class Gateway
+class Gateway extends Native
 {
-    /**
-     * HTTP client to communicate with Solr server.
-     *
-     * @var HttpClient
-     */
-    protected $client;
+    protected QueryConverter $queryConverter;
+    protected ConfigResolverInterface $configResolver;
 
-    /**
-     * @var EndpointResolver
-     */
-    protected $endpointResolver;
-
-    /**
-     * Endpoint registry service.
-     *
-     * @var EndpointRegistry
-     */
-    protected $endpointRegistry;
-
-    /**
-     * Gateway constructor.
-     */
     public function __construct(
+        QueryConverter $queryConverter,
         HttpClient $client,
         EndpointResolver $endpointResolver,
-        EndpointRegistry $endpointRegistry
+        EndpointRegistry $endpointRegistry,
+        QueryConverter $contentQueryConverter,
+        QueryConverter $locationQueryConverter,
+        UpdateSerializerInterface $updateSerializer,
+        DistributionStrategy $distributionStrategy,
+        ConfigResolverInterface $configResolver
     ) {
-        $this->client = $client;
-        $this->endpointResolver = $endpointResolver;
-        $this->endpointRegistry = $endpointRegistry;
+        $this->queryConverter = $queryConverter;
+        $this->configResolver = $configResolver;
+
+        parent::__construct(
+            $client,
+            $endpointResolver,
+            $endpointRegistry,
+            $contentQueryConverter,
+            $locationQueryConverter,
+            $updateSerializer,
+            $distributionStrategy
+        );
     }
 
-    public function reload()
+    public function findDocument(DocumentQuery $query, array $languageSettings = [])
     {
-        $endpoint = $this->getAdminEndpoint();
+        $parameters = $this->queryConverter->convert($query, $languageSettings);
 
-        $this->request(
-            'GET',
-            sprintf('&action=RELOAD'),
-            null,
-            $endpoint
+        return $this->internalFind($parameters, $languageSettings);
+    }
+
+    public function rawSearch(array $parameters, array $languageSettings = [])
+    {
+        return $this->internalFind($parameters, $languageSettings);
+    }
+
+    /**
+     * @param string[] $ids
+     */
+    public function deleteDocuments(array $ids): void
+    {
+        $ids = array_map(function ($value) {
+            return preg_replace('([^A-Za-z0-9/*]+)', '', $value);
+        }, $ids);
+
+        $query = 'id:('.implode(' OR ', $ids).')';
+        $this->deleteByQuery($query);
+    }
+
+    public function purgeDocumentsFromIndex(): void
+    {
+        $this->deleteByQuery('document_type_id:"document"');
+    }
+
+    public function getDistributionStrategyIdentifier(): string
+    {
+        $distributionStrategyIdentifier = $this->configResolver->getParameter(
+            'distribution_strategy_identifier',
+            'nova_solr_extra'
         );
+        if (null === $distributionStrategyIdentifier) {
+            $distributionStrategyIdentifier = $this->distributionStrategy instanceof CloudDistributionStrategy ?
+                'cloud' :
+                'standalone';
+        }
+
+        return $distributionStrategyIdentifier;
     }
 
     public function getAdminEndpoint(): AdminEndpoint
     {
         $endpoint = $this->getEndpoint();
+
+        $distributionStrategyIdentifier = $this->getDistributionStrategyIdentifier();
 
         return new AdminEndpoint(
             [
@@ -81,6 +109,7 @@ class Gateway
                 'port' => $endpoint->port,
                 'path' => $endpoint->path,
                 'core' => $endpoint->core,
+                'distributionStrategyIdentifier' => $distributionStrategyIdentifier,
             ]
         );
     }
@@ -92,6 +121,9 @@ class Gateway
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function request(
         string $method,
         string $path,
