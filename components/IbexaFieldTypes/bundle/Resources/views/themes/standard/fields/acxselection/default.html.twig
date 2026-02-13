@@ -1,0 +1,9 @@
+{% if fieldSettings.isMultiple|default(false) %}
+    <ul>
+        {% for item in field.value.selection %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    {{ field.value.getSelection() }}
+{% endif %}

@@ -1,0 +1,20 @@
+{
+    "name": "almaviacx/ibexa-field-types",
+    "description": "Ibexa Bundle that add some ibexa fieldtypes",
+    "type": "ibexa-bundle",
+    "require": {
+        "php": ">=8.1"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "AlmaviaCX\\Ibexa\\Bundle\\FieldTypes\\": "bundle/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ousmane KANTE",
+            "email": "ousmane.kante@almaviacx.com"
+        }
+    ]
+}
