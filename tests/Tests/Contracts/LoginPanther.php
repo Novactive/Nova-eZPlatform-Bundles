@@ -26,7 +26,7 @@ trait LoginPanther
         $form->form(
             [
                 '_username' => 'admin',
-                '_password' => 'publish',
+                '_password' => 'Administrat0r',
             ]
         );
         $form->submit();

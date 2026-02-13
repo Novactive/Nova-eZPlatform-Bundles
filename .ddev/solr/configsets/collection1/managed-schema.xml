@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE schema [
 <!ENTITY langfields SYSTEM "language-fieldtypes.xml">
-<!ENTITY customfields SYSTEM "custom-fields-types.xml">
+<!ENTITY customfields SYSTEM "custom-fields-types-solr9.xml">
 ]>
 <!--
 This is the Solr schema file. This file should be named "schema.xml" and should
@@ -9,11 +9,11 @@ be in the conf directory under the solr home (i.e. ./solr/conf/schema.xml by
 default) or located where the classloader for the Solr webapp can find it.
 
 It provides the default types and definitions for a functional Solr based
-search in eZ Publish 5. You may extend it with your own definitions, but you
+search in Ibexa DXP. You may extend it with your own definitions, but you
 should not remove or drastically change the existing definitions.
 -->
 
-<schema name="eZ Publish 5 base schema" version="1.5">
+<schema name="Ibexa DXP base schema" version="1.5">
     <!--
     language specific field types are included here, there should be at least
     a field type with the name "text" be defined"
@@ -82,7 +82,28 @@ should not remove or drastically change the existing definitions.
 
     <fieldtype name="ignored" stored="false" indexed="false" multiValued="true" class="solr.StrField" />
     <fieldType name="point" class="solr.PointType" dimension="2" subFieldSuffix="_d"/>
-    <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate"/>
+    <fieldType name="location"
+               class="solr.LatLonPointSpatialField"
+               indexed="true"
+               stored="true"
+               docValues="true"
+               sortMissingLast="true"/>
+
+    <!-- for 1536-dim models (ada-002 & 3-small) -->
+    <fieldType name="vector_1536"
+               class="solr.DenseVectorField"
+               vectorDimension="1536"
+               similarityFunction="cosine"
+               indexed="true"
+               stored="true" />
+
+    <!-- for the 3072-dim model (3-large) -->
+    <fieldType name="vector_3072"
+               class="solr.DenseVectorField"
+               vectorDimension="3072"
+               similarityFunction="cosine"
+               indexed="true"
+               stored="true"/>
 
     <!--
       Required ID field.
@@ -124,17 +145,23 @@ should not remove or drastically change the existing definitions.
     <dynamicField name="*_d" type="double" indexed="true" stored="true"/>
     <dynamicField name="*_dt" type="date" indexed="true" stored="true"/>
     <dynamicField name="*_gl" type="location" indexed="true" stored="true"/>
-    <dynamicField name="*_gl_0_coordinate" type="double" indexed="true" stored="true"/>
-    <dynamicField name="*_gl_1_coordinate" type="double" indexed="true" stored="true"/>
-
-    <dynamicField name="*_t_raw" type="rawtext" indexed="true" stored="true" multiValued="true" omitNorms="false"/>
-    <copyField source="*_t" dest="*_t_raw"/>
-
 
    <!--
         This field is required to allow random sorting
     -->
     <dynamicField name="random*" type="random" indexed="true" stored="false"/>
+
+    <!--
+        This field is required for Embeddings
+    -->
+    <!-- 1536-dim suffix for ada-002 -->
+    <dynamicField name="*_ada002_dv" type="vector_1536"/>
+
+    <!-- 1536-dim suffix for 3-small -->
+    <dynamicField name="*_3small_dv" type="vector_1536"/>
+
+    <!-- 3072-dim suffix for 3-large -->
+    <dynamicField name="*_3large_dv" type="vector_3072"/>
 
     <!--
       This field is required since Solr 4

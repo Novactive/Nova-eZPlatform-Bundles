@@ -17,19 +17,17 @@ use Parsedown;
 
 final class Parser extends Parsedown
 {
-    private ItemInterface $menuPointer;
-
     private array $localLinks = [];
 
     private array $localImages = [];
 
-    public function __construct(ItemInterface $menu)
+    public function __construct(private ItemInterface $menuPointer)
     {
-        $this->menuPointer = $menu;
         $this->menuPointer->setExtra('level', 0);
         $this->menuPointer->setChildrenAttribute('class', 'nav flex-column');
     }
 
+    #[\Override]
     protected function inlineImage($Excerpt): ?array
     {
         $element = parent::inlineImage($Excerpt);
@@ -41,20 +39,21 @@ final class Parser extends Parsedown
         $element['element']['attributes']['class'] = 'img-fluid';
         $src = $element['element']['attributes']['src'];
 
-        if (!strpos($src, '://')) {
+        if (!strpos((string) $src, '://')) {
             $this->localImages[] = $src;
         }
 
         return $element;
     }
 
+    #[\Override]
     protected function inlineLink($Excerpt)
     {
         $element = parent::inlineLink($Excerpt);
 
         if (isset($element['element']['attributes']['href'])) {
             $href = $element['element']['attributes']['href'];
-            if (!strpos($href, '://') && (false !== strpos($href, '.md') || false === strpos($href, '.'))) {
+            if (!strpos($href, '://') && (str_contains($href, '.md') || !str_contains($href, '.'))) {
                 $anchor = strpos($href, '#');
                 if ($anchor) {
                     $this->localLinks[] = substr($href, 0, $anchor);
@@ -71,15 +70,16 @@ final class Parser extends Parsedown
         return $element;
     }
 
+    #[\Override]
     protected function blockHeader($Line): ?array
     {
         $element = parent::blockHeader($Line);
         if (null === $element) {
             return $element;
         }
-        $level = (int) substr($element['element']['name'], 1);
+        $level = (int) substr((string) $element['element']['name'], 1);
 
-        $value = strip_tags($element['element']['text']);
+        $value = strip_tags((string) $element['element']['text']);
         $element['element']['attributes']['name'] = md5($value);
 
         while (null !== $this->menuPointer->getParent() && $this->menuPointer->getExtra('level') !== $level - 1) {
@@ -105,12 +105,13 @@ final class Parser extends Parsedown
         return $this->localImages;
     }
 
+    #[\Override]
     protected function blockFencedCode($Line): ?array
     {
         $element = parent::blockFencedCode($Line);
         if (isset($element['element']['text']['attributes']['class'])) {
             $class = $element['element']['text']['attributes']['class'] ?? '';
-            if (false !== strpos($class, 'language-')) {
+            if (str_contains($class, 'language-')) {
                 $class = str_replace('language-', ' ', $class);
             }
 

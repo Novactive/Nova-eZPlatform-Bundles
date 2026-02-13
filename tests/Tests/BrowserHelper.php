@@ -19,11 +19,6 @@ use Symfony\Component\Panther\DomCrawler\Crawler;
 final class BrowserHelper
 {
     /**
-     * @var Client
-     */
-    private $client;
-
-    /**
      * @var array
      */
     private $lastRequest;
@@ -33,10 +28,9 @@ final class BrowserHelper
      */
     private $lastCrawler;
 
-    public function __construct(Client $client)
+    public function __construct(private readonly Client $client)
     {
-        $this->client = $client;
-        $client->getWebDriver()->manage()->window()->setSize(new WebDriverDimension(1200, 1000));
+        $this->client->getWebDriver()->manage()->window()->setSize(new WebDriverDimension(1200, 1000));
     }
 
     public function client(): Client

@@ -12,7 +12,7 @@ jobs:
             -   name: Setup PHP
                 uses: shivammathur/setup-php@master
                 with:
-                    php-version: 7.4
+                    php-version: 8.3
                 id: php
 
             -   name: Install dependencies
@@ -28,13 +28,12 @@ jobs:
         runs-on: ubuntu-latest
         services:
             mysql:
-                image: mariadb:10.4
+                image: mariadb:11.4
                 env:
-                    MYSQL_ALLOW_EMPTY_PASSWORD: yes
-                    MYSQL_DATABASE: ezplatform_test
+                    MYSQL_ROOT_PASSWORD: root
+                    MYSQL_DATABASE: db_test
                 ports:
                     - 3306:3306
-                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
             redis:
                 image: redis:latest
                 ports:
@@ -43,15 +42,12 @@ jobs:
         strategy:
             matrix:
                 include:
-                    -   ibexa_version: 4.6.*
+                    -   ibexa_version: 5.*
                         php: 8.3
-                        node: 18.x
-                    -   ibexa_version: 4.5.*
-                        php: 8.1
-                        node: 14.x
+                        node: 22.x
         env:
             CACHE_POOL: cache.redis
-            DATABASE_URL: mysql://root@127.0.0.1:3306/ezplatform_test
+            DATABASE_URL: mysql://root:root@127.0.0.1:3306/db_test
             CACHE_DSN: 127.0.0.1:6379
             APP_ENV: prod
             APP_DEBUG: 1
@@ -108,12 +104,10 @@ jobs:
             -   name: Install Ibexa DXP and Yarn deps
                 run: |
                     composer create-project "ibexa/oss-skeleton:${{ matrix.ibexa_version }}" --prefer-dist --no-progress --no-interaction ibexa
-                    mkdir -p ibexa/node_modules && ln -s ibexa/node_modules
                     cd ibexa
-                    composer require --dev -W phpunit/phpunit:^9.5 --no-scripts
                     php bin/console ibexa:install
+                    php bin/console ibexa:user:update-user admin --password=Administrat0r
                     php bin/console ibexa:graphql:generate-schema
-                    yarn add --dev algoliasearch react react-collapsible react-dom react-instantsearch-dom
 
             -   name: Run Webserver
                 run: |
@@ -138,8 +132,8 @@ jobs:
                     echo ::endgroup::
 
                     echo ::group::..:: Do bundle specifics ::..
-                    mysql -u root -h 127.0.0.1 -P 3306 ezplatform_test < ../components/SEOBundle/bundle/Resources/sql/schema.sql
-                    mysql -u root -h 127.0.0.1 -P 3306 ezplatform_test < ../components/2FABundle/bundle/Resources/sql/schema.sql
+                    mysql -u root -h 127.0.0.1 -P 3306 --password=root db_test < ../components/SEOBundle/bundle/Resources/sql/schema.sql
+                    #mysql -u root -h 127.0.0.1 -P 3306 --password=root db_test < ../components/2FABundle/bundle/Resources/sql/schema.sql
                     echo ::endgroup::
 
                     echo ::group::..:: Final Steps ::..
@@ -149,18 +143,15 @@ jobs:
             -   name: Test Web Server
                 run: curl -I http://127.0.0.1:8000 | grep "HTTP/1.1 200 OK"
 
-            -   name: Update PHP Unit
-                run: |
-                    composer update && composer require -W phpunit/phpunit:^9.5 symfony/phpunit-bridge:^5.3
-                    rm -f ibexa/config/packages/test/doctrine.yaml
-                    php vendor/bin/bdi detect drivers -v
-
             -   name: Components testing
                 run: |
+                    rm -f ibexa/config/packages/test/doctrine.yaml
+                    php vendor/bin/bdi detect drivers -v
+                    
                     for COMPONENT in `ls components`; do
                         if COMPONENT=${COMPONENT} bin/ci-should test; then
                             echo ::group::..:: ${COMPONENT} ::..
-                            DATABASE_URL=mysql://root@127.0.0.1:3306/ezplatform APP_ENV=test php ./vendor/bin/phpunit -c "components/${COMPONENT}/tests" "components/${COMPONENT}/tests" --exclude-group behat;
+                            DATABASE_URL=mysql://root:root@127.0.0.1:3306/db APP_ENV=test php ./vendor/bin/phpunit -c "components/${COMPONENT}/tests" "components/${COMPONENT}/tests" --exclude-group behat;
                             echo ::endgroup::
                         fi
                     done
@@ -173,4 +164,4 @@ jobs:
                     cat var/log/prod*
             -   name: Global Mono Repo Testing
                 run: |
-                    DATABASE_URL=mysql://root@127.0.0.1:3306/ezplatform APP_ENV=test php ./vendor/bin/phpunit -c "tests" "tests" --exclude-group behat                    
+                    DATABASE_URL=mysql://root:root@127.0.0.1:3306/db APP_ENV=test php ./vendor/bin/phpunit -c "tests" "tests" --exclude-group behat                    
