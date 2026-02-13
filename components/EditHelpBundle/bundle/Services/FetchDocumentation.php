@@ -29,7 +29,9 @@ class FetchDocumentation
 
     public function __construct(
         protected Repository $repository
-    ) { }
+    ) {
+
+    }
 
     public function getByContentType(ContentType $contentType): ?Content
     {
