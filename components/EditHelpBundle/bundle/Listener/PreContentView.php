@@ -24,7 +24,6 @@ class PreContentView
     public function __construct(
         protected FetchDocumentation $fetchDocumentation
     ) {
-
     }
 
     public function onPreContentView(PreContentViewEvent $event): void
