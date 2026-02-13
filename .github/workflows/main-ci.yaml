@@ -103,7 +103,7 @@ jobs:
                         ${{ runner.os }}-composer-cache-dir
 
             -   name: Install dependencies of the Mono Repo
-                run: composer install --prefer-dist --no-progress --no-suggest --no-interaction
+                run: composer install --prefer-dist --no-progress --no-suggest --no-interaction --no-dev
 
             -   name: Install Ibexa DXP and Yarn deps
                 run: |

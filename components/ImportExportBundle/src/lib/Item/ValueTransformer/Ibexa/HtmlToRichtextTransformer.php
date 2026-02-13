@@ -8,17 +8,17 @@ use AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\AbstractItemValueTr
 use Ibexa\Contracts\FieldTypeRichText\RichText\InputHandlerInterface as RichTextInputHandlerInterface;
 use Ibexa\FieldTypeRichText\FieldType\RichText\Value;
 
+/**
+ * Transform an HTML string to a RichText Value.
+ */
 class HtmlToRichtextTransformer extends AbstractItemValueTransformer
 {
-    protected RichTextInputHandlerInterface $richtextInputHandler;
-
     public function __construct(
-        RichTextInputHandlerInterface $richtextInputHandler
+        protected RichTextInputHandlerInterface $richtextInputHandler
     ) {
-        $this->richtextInputHandler = $richtextInputHandler;
     }
 
-    public function transform($value, array $options = [])
+    protected function transform(mixed $value, array $options = []): Value
     {
         if (null === $value) {
             return new Value();

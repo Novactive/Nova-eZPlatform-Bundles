@@ -8,9 +8,13 @@ use AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\AbstractItemValueTr
 use DateTime;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Transforms a string to a DateTime object.
+ * Accept an 'input_format' option to specify the format of the input value.
+ */
 class ToDateTimeTransformer extends AbstractItemValueTransformer
 {
-    protected function transform($value, array $options = [])
+    protected function transform(mixed $value, array $options = []): ?DateTime
     {
         if (empty($value)) {
             return null;
@@ -19,7 +23,7 @@ class ToDateTimeTransformer extends AbstractItemValueTransformer
         return DateTime::createFromFormat($options['input_format'], (string) $value);
     }
 
-    protected function configureOptions(OptionsResolver $optionsResolver)
+    protected function configureOptions(OptionsResolver $optionsResolver): void
     {
         parent::configureOptions($optionsResolver);
         $optionsResolver->define('input_format')

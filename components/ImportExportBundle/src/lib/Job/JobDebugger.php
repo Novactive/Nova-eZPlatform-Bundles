@@ -4,32 +4,32 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Job;
 
+use AlmaviaCX\Bundle\IbexaImportExport\Execution\Execution;
 use AlmaviaCX\Bundle\IbexaImportExport\Monolog\WorkflowLogger;
 use AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowExecutor;
 use AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowRegistry;
 
 class JobDebugger
 {
-    protected WorkflowExecutor $workflowExecutor;
-    protected WorkflowRegistry $workflowRegistry;
-
     public function __construct(
-        WorkflowExecutor $workflowExecutor,
-        WorkflowRegistry $workflowRegistry
+        protected WorkflowExecutor $workflowExecutor,
+        protected WorkflowRegistry $workflowRegistry
     ) {
-        $this->workflowRegistry = $workflowRegistry;
-        $this->workflowExecutor = $workflowExecutor;
     }
 
-    public function __invoke(Job $job, int $index): void
+    public function __invoke(Execution $execution, int $index): void
     {
-        $workflow = $this->workflowRegistry->getWorkflow($job->getWorkflowIdentifier());
+        $workflow = $this->workflowRegistry->getWorkflow($execution->getWorkflowIdentifier());
         $workflow->setLogger(new WorkflowLogger());
         $workflow->setDebug(true);
-        $workflow->setOffset($index - 1);
+
+        $state = $execution->getWorkflowState();
+        $state->setOffset($index - 1);
+        $workflow->setState($state);
+
         ($this->workflowExecutor)(
             $workflow,
-            $job->getOptions(),
+            $execution->getOptions(),
             1
         );
     }

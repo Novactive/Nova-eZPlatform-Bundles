@@ -12,21 +12,16 @@ use Ibexa\Taxonomy\Service\TaxonomyConfiguration;
 
 class IbexaTaxonomyUpdater
 {
-    protected TaxonomyServiceInterface $taxonomyService;
-    protected TaxonomyConfiguration $taxonomyConfiguration;
-    protected IbexaContentUpdater $contentUpdater;
-
     public function __construct(
-        TaxonomyServiceInterface $taxonomyService,
-        TaxonomyConfiguration $taxonomyConfiguration,
-        IbexaContentUpdater $contentUpdater,
+        protected TaxonomyServiceInterface $taxonomyService,
+        protected TaxonomyConfiguration $taxonomyConfiguration,
+        protected IbexaContentUpdater $contentUpdater,
     ) {
-        $this->contentUpdater = $contentUpdater;
-        $this->taxonomyConfiguration = $taxonomyConfiguration;
-        $this->taxonomyService = $taxonomyService;
     }
 
     /**
+     * @param array<string, string> $names
+     *
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\BadStateException
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\ContentFieldValidationException
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\ContentValidationException

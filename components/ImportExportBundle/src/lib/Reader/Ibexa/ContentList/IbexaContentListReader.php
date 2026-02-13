@@ -8,7 +8,6 @@ use AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\ObjectAccessorBuilder;
 use AlmaviaCX\Bundle\IbexaImportExport\Item\Iterator\ItemIterator;
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\AbstractReader;
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\Ibexa\IteratorItemTransformer\ContentSearchHitTransformerIterator;
-use AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderIteratorInterface;
 use Ibexa\Contracts\Core\Repository\Iterator\BatchIterator;
 use Ibexa\Contracts\Core\Repository\Iterator\BatchIteratorAdapter\ContentSearchAdapter;
 use Ibexa\Contracts\Core\Repository\SearchService;
@@ -17,18 +16,18 @@ use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Translation\TranslationContainerInterface;
 use Symfony\Component\Translation\TranslatableMessage;
 
+/**
+ * @extends AbstractReader<IbexaContentListReaderOptions>
+ */
 class IbexaContentListReader extends AbstractReader implements TranslationContainerInterface
 {
-    protected ObjectAccessorBuilder $objectAccessorBuilder;
-    protected SearchService $searchService;
-
-    public function __construct(ObjectAccessorBuilder $objectAccessorBuilder, SearchService $searchService)
-    {
-        $this->objectAccessorBuilder = $objectAccessorBuilder;
-        $this->searchService = $searchService;
+    public function __construct(
+        protected ObjectAccessorBuilder $objectAccessorBuilder,
+        protected SearchService $searchService
+    ) {
     }
 
-    public function __invoke(): ReaderIteratorInterface
+    public function __invoke()
     {
         /** @var IbexaContentListReaderOptions $options */
         $options = $this->getOptions();
@@ -93,7 +92,7 @@ class IbexaContentListReader extends AbstractReader implements TranslationContai
         return IbexaContentListReaderOptionsFormType::class;
     }
 
-    public static function getOptionsType(): ?string
+    public static function getOptionsType(): string
     {
         return IbexaContentListReaderOptions::class;
     }

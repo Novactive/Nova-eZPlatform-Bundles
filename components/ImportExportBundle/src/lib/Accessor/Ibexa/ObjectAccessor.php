@@ -16,6 +16,9 @@ class ObjectAccessor extends AbstractItemAccessor
 
     public ContentAccessor $content;
     public Location $mainLocation;
+    /**
+     * @var \Ibexa\Contracts\Core\Repository\Values\Content\Location[]
+     */
     public array $locations = [];
     public ContentType $contentType;
 }
