@@ -1,59 +1,70 @@
 {% trans_default_domain 'ezedithelp' %}
 {% if documentation is defined %}
-    <div class="alert alert-primary alert-dismissible fade show" role="alert">
-        <p>{{ "edithelp.alert"|trans }}:</p>
-        <div class="row">
-            <div class="col-4">
-                <div class="card p-2">
-                    {% if not ez_field_is_empty(documentation, 'image') %}
-                        {{ ez_render_field(documentation, 'image') }}
-                    {% endif %}
-                    <div class="card-body">
-                        {% if not ez_field_is_empty(documentation, 'title') %}
-                            <h5>{{ ez_render_field(documentation, 'title') }}</h5>
-                        {% endif %}
-                        {% if not ez_field_is_empty(documentation, 'body') %}
-                            {{ ez_render_field(documentation, 'body') }}
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            <div class="col-8">
+    <div class="alert ibexa-alert ibexa-alert--info ibexa-alert--toast" role="alert">
+        <div class="ibexa-alert__content ">
+            <div class="ibexa-alert__title">{{ "edithelp.alert"|trans }}:</div>
+            <div class="ibexa-alert__extra_content">
                 <div class="row">
-                    <div class="col-3">
-                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                            {% for identifier,item in documentation_items %}
-                                <a class="nav-link {% if loop.first %} active {% endif %}" id="{{ identifier }}" data-toggle="pill" href="#v-pills-{{ identifier }}" role="tab">
-                                    {% if not ez_field_is_empty(item, 'title') %}
-                                        {{ ez_render_field(item, 'title') }}
-                                    {% else %}
-                                        {{ identifier }}
-                                    {% endif %}
-                                </a>
-                            {% endfor %}
+                    <div class="col-4">
+                        <div class="card p-2">
+                            {% if not ibexa_field_is_empty(documentation, 'image') %}
+                                {{ ibexa_render_field(documentation, 'image', {
+                                    template: '@ibexadesign/fields/simple_ezimage_field.html.twig'
+                                }) }}
+                            {% endif %}
+                            <div class="card-body">
+                                {% if not ibexa_field_is_empty(documentation, 'title') %}
+                                    <h5>{{ ibexa_render_field(documentation, 'title') }}</h5>
+                                {% endif %}
+                                {% if not ibexa_field_is_empty(documentation, 'body') %}
+                                    {{ ibexa_render_field(documentation, 'body') }}
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
-                    <div class="col-9">
-                        <div class="tab-content" id="v-pills-tabContent">
-                            {% for identifier,item in documentation_items %}
-                                <div class="tab-pane fade show {% if loop.first %} active {% endif %}" id="v-pills-{{ identifier }}" role="tabpanel">
-                                    {% if item != 'identifier' and not ez_field_is_empty(item, identifier) %}
-                                        {% if not ez_field_is_empty(item, 'body') %}
-                                            {{ ez_render_field(item, 'body') }}
-                                        {% endif %}
-                                        {% if not ez_field_is_empty(item, 'image') %}
-                                            {{ ez_render_field(item, 'image') }}
-                                        {% endif %}
-                                    {% endif %}
+                    <div class="col-8">
+                        <div class="row">
+                            <div class="col-3">
+                                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                    {% for identifier, item in documentation_items %}
+                                        <a class="nav-link {% if loop.first %} active {% endif %}" id="{{ identifier }}" data-bs-toggle="pill"
+                                           href="#v-pills-{{ identifier }}"
+                                           data-bs-target="#v-pills-{{ identifier }}"
+                                           role="tab">
+                                            {% if not ibexa_field_is_empty(item, 'title') %}
+                                                {{ ibexa_render_field(item, 'title') }}
+                                            {% else %}
+                                                {{ identifier }}
+                                            {% endif %}
+                                        </a>
+                                    {% endfor %}
                                 </div>
-                            {% endfor %}
+                            </div>
+                            <div class="col-9">
+                                <div class="tab-content" id="v-pills-tabContent">
+                                    {% for identifier, item in documentation_items %}
+                                        <div class="tab-pane fade show {% if loop.first %} active {% endif %}" id="v-pills-{{ identifier }}" role="tabpanel">
+                                            {% if not ibexa_field_is_empty(item, 'body') %}
+                                                {{ ibexa_render_field(item, 'body') }}
+                                            {% endif %}
+                                            {% if not ibexa_field_is_empty(item, 'image') %}
+                                                {{ ibexa_render_field(item, 'image', {
+                                                    template: '@ibexadesign/fields/simple_ezimage_field.html.twig'
+                                                }) }}
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+        <button class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small ibexa-btn--no-text ibexa-alert__close-btn" data-bs-dismiss="alert">
+            <svg class="ibexa-icon ibexa-icon--tiny-small">
+                <use xlink:href="/bundles/ibexaicons/img/all-icons.svg#discard"></use>
+            </svg>
         </button>
     </div>
 {% endif %}
