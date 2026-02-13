@@ -1,0 +1,18 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Novactive\Bundle\IbexaRecaptchaField\Form\Type\ReCaptchaFieldType:
+        arguments:
+            $params: '@parameter_bag'
+        tags:
+            - { name: 'form.type' }
+
+    Novactive\Bundle\IbexaRecaptchaField\FormBuilder\Field\Mapper\ReCaptchaMapper:
+        arguments:
+            $fieldIdentifier: 'recaptcha'
+            $formType: 'Novactive\Bundle\IbexaRecaptchaField\Form\Type\ReCaptchaFieldType'
+        tags:
+            - { name: ibexa.form_builder.field.mapper }
