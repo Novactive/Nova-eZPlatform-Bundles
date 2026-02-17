@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -9,66 +11,40 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
-
 namespace Novactive\EzMenuManagerBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Novactive\EzMenuManager\Traits\IdentityTrait;
 
-/**
- * Class Menu.
- *
- * @ORM\Entity()
- * @ORM\Table(name="menu_manager_menu")
- *
- * @package Novactive\EzMenuManagerBundle\Entity
- */
-class Menu
+#[ORM\Entity]
+#[ORM\Table(name: 'menu_manager_menu')]
+class Menu implements \Stringable
 {
     use IdentityTrait;
 
-    /**
-     * @ORM\Column(name="name", type="string", nullable=false)
-     *
-     * @var string
-     */
-    protected $name;
+    #[ORM\Column(name: 'name', type: 'string', nullable: false)]
+    protected string $name;
 
-    /**
-     * @ORM\Column(name="root_location_id", type="integer", nullable=true)
-     *
-     * @var int
-     */
-    protected $rootLocationId;
+    #[ORM\Column(name: 'root_location_id', type: 'integer', nullable: true)]
+    protected ?int $rootLocationId = null;
 
-    /**
-     * @ORM\OneToMany(
-     *     targetEntity="Novactive\EzMenuManagerBundle\Entity\MenuItem",
-     *     mappedBy="menu",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     *     )
-     * @ORM\OrderBy({"position" = "ASC"})
-     *
-     * @var MenuItem[]|ArrayCollection
-     */
-    protected $items;
+    #[ORM\OneToMany(
+        targetEntity: MenuItem::class,
+        mappedBy: 'menu',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
+    #[ORM\OrderBy(['position' => 'ASC'])]
+    protected Collection $items;
 
-    /**
-     * @ORM\Column(name="type", type="string", nullable=true)
-     *
-     * @var string|null
-     */
-    protected $type;
+    #[ORM\Column(name: 'type', type: 'string', nullable: true)]
+    protected ?string $type = null;
 
-    /**
-     * @ORM\Column(name="remote_id", type="string", nullable=true)
-     *
-     * @var string
-     */
-    protected $remoteId;
+    #[ORM\Column(name: 'remote_id', type: 'string', nullable: true)]
+    protected string $remoteId;
 
     /**
      * Menu constructor.
@@ -76,12 +52,9 @@ class Menu
     public function __construct(?string $remoteId = null)
     {
         $this->items = new ArrayCollection();
-        $this->remoteId = $remoteId ?? md5(uniqid(get_class($this), true));
+        $this->remoteId = $remoteId ?? md5(uniqid(static::class, true));
     }
 
-    /**
-     * @return string
-     */
     public function getName(): ?string
     {
         return $this->name;
@@ -92,9 +65,6 @@ class Menu
         $this->name = $name;
     }
 
-    /**
-     * @return int
-     */
     public function getRootLocationId(): ?int
     {
         return $this->rootLocationId;
@@ -114,7 +84,7 @@ class Menu
     }
 
     /**
-     * @param MenuItem $parent
+     * @param MenuItem|null $parent
      *
      * @return MenuItem[]|ArrayCollection
      */
@@ -122,7 +92,7 @@ class Menu
     {
         $criteria = new Criteria();
         $criteria->where(Criteria::expr()->eq('parent', $parent))
-        ->orderBy(['position' => Criteria::ASC]);
+            ->orderBy(['position' => Criteria::ASC]);
 
         return $this->items->matching($criteria);
     }
@@ -132,10 +102,10 @@ class Menu
      */
     public function setItems(array $items): void
     {
-        $this->items = $items;
+        $this->items = new ArrayCollection($items);
     }
 
-    public function addItem(MenuItem $menuItem)
+    public function addItem(MenuItem $menuItem): void
     {
         if (false === $this->items->indexOf($menuItem)) {
             $menuItem->setMenu($this);
@@ -143,7 +113,7 @@ class Menu
         }
     }
 
-    public function removeItem(MenuItem $menuItem)
+    public function removeItem(MenuItem $menuItem): void
     {
         $this->items->removeElement($menuItem);
     }
@@ -153,9 +123,6 @@ class Menu
         return $this->type;
     }
 
-    /**
-     * @param string $type
-     */
     public function setType(?string $type): void
     {
         $this->type = $type;
@@ -171,24 +138,17 @@ class Menu
         $this->remoteId = $remoteId;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
-        return (string) $this->id;
+        return (string) ($this->id ?? '');
     }
 
     public function assignPositions(): void
     {
         /** @var MenuItem[] $childrens */
-        $childrens = $this->items->filter(function (MenuItem $item) {
-            return null === $item->getParent();
-        })->getValues();
+        $childrens = $this->items->filter(fn(MenuItem $item) => null === $item->getParent())->getValues();
 
-        usort($childrens, function (MenuItem $itemA, MenuItem $itemB) {
-            return $itemA->getPosition() <=> $itemB->getPosition();
-        });
+        usort($childrens, fn(MenuItem $itemA, MenuItem $itemB) => $itemA->getPosition() <=> $itemB->getPosition());
 
         $position = 0;
         foreach ($childrens as $item) {

@@ -9,7 +9,8 @@
  *
  */
 
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client';
+
 import React from 'react'
 import MenuManager from './MenuManagerModule'
 import ContainerMenuItemType from './type/ContainerMenuItemType'
@@ -48,36 +49,37 @@ import DefaultMenuItemType from './type/DefaultMenuItemType'
     render: (container, input, menuRootLocationInput) => {
       const token = doc.querySelector('meta[name="CSRF-Token"]').content
       const siteaccess = doc.querySelector('meta[name="SiteAccess"]').content
+      const root = createRoot(container);
+
       const renderComponent = () => {
-        ReactDOM.render(
-          React.createElement(MenuManager, {
-            loadJson: () => {
-              return input.value
-            },
-            onChange: (items) => {
-              const json = []
-              for (const item of items.values()) {
-                if (!item.isEnabled()) {
-                  continue
+        root.render(
+            React.createElement(MenuManager, {
+              loadJson: () => {
+                return input.value
+              },
+              onChange: (items) => {
+                const json = []
+                for (const item of items.values()) {
+                  if (!item.isEnabled()) {
+                    continue
+                  }
+                  json.push({
+                    id: item.id,
+                    name: item.name,
+                    parentId: item.parentId !== '#' ? item.parentId : null,
+                    position: item.position,
+                    url: item.url,
+                    target: item.target,
+                    type: item.type,
+                    options: item.options
+                  })
                 }
-                json.push({
-                  id: item.id,
-                  name: item.name,
-                  parentId: item.parentId !== '#' ? item.parentId : null,
-                  position: item.position,
-                  url: item.url,
-                  target: item.target,
-                  type: item.type,
-                  options: item.options
-                })
-              }
-              input.value = JSON.stringify(json)
-            },
-            config: MenuManagerConfig,
-            restInfo: { token, siteaccess },
-            treeRootLocationId: menuRootLocationInput.value
-          }),
-          container
+                input.value = JSON.stringify(json)
+              },
+              config: MenuManagerConfig,
+              restInfo: { token, siteaccess },
+              treeRootLocationId: menuRootLocationInput.value
+            })
         )
       }
 

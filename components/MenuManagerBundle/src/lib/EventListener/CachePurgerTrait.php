@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -9,62 +11,47 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
-
 namespace Novactive\EzMenuManager\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Ibexa\Contracts\HttpCache\PurgeClient\PurgeClientInterface;
-use Ibexa\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 
 trait CachePurgerTrait
 {
-    /** @var PurgeClientInterface */
+    /** @var object|null */
     protected $httpCachePurgeClient;
 
-    /** @var TransactionAwareAdapterInterface */
+    /** @var TransactionAwareAdapterInterface|null */
     protected $persistenceCacheAdapter;
 
     /** @var EntityManagerInterface */
     protected $em;
 
-    /**
-     * @required
-     */
-    public function setHttpCachePurgeClient(PurgeClientInterface $httpCachePurgeClient): void
+    #[\Symfony\Contracts\Service\Attribute\Required]
+    public function setHttpCachePurgeClient(?object $httpCachePurgeClient = null): void
     {
         $this->httpCachePurgeClient = $httpCachePurgeClient;
     }
 
-    /**
-     * @required
-     */
-    public function setPersistenceCache(TransactionAwareAdapterInterface $persistenceCacheAdapter): void
+    #[\Symfony\Contracts\Service\Attribute\Required]
+    public function setPersistenceCache(?TransactionAwareAdapterInterface $persistenceCacheAdapter = null): void
     {
         $this->persistenceCacheAdapter = $persistenceCacheAdapter;
     }
 
-    /**
-     * @required
-     */
+    #[\Symfony\Contracts\Service\Attribute\Required]
     public function setEm(EntityManagerInterface $em): void
     {
         $this->em = $em;
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     protected function purgeMenuCache(Menu $entity): void
     {
         $tags = ['menu-'.$entity->getId()];
         $this->invalidateTags($tags);
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     protected function purgeMenuItemCache(MenuItem $entity): void
     {
         $tags = [
@@ -74,9 +61,6 @@ trait CachePurgerTrait
         $this->invalidateTags($tags);
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     protected function purgeContentMenuItemCache(int $contentId): void
     {
         $menuItems = $this->em->getRepository(MenuItem::class)->findBy(
@@ -89,14 +73,28 @@ trait CachePurgerTrait
         }
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     protected function invalidateTags(array $tags): void
     {
-        if (!empty($tags)) {
-            $this->httpCachePurgeClient->purge($tags);
-            $this->persistenceCacheAdapter->invalidateTags($tags);
+        if (empty($tags)) {
+            return;
+        }
+
+        // Try HTTP cache purge if available
+        if ($this->httpCachePurgeClient && method_exists($this->httpCachePurgeClient, 'invalidateTags')) {
+            try {
+                $this->httpCachePurgeClient->invalidateTags($tags);
+            } catch (\Exception $e) {
+                // Silently fail if HTTP cache is not available
+            }
+        }
+
+        // Try persistence cache if available
+        if ($this->persistenceCacheAdapter && method_exists($this->persistenceCacheAdapter, 'invalidateTags')) {
+            try {
+                $this->persistenceCacheAdapter->invalidateTags($tags);
+            } catch (\Exception $e) {
+                // Silently fail if persistence cache is not available
+            }
         }
     }
 }

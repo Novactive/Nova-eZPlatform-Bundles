@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -9,7 +11,6 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
-
 namespace Novactive\EzMenuManagerBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,27 +24,19 @@ use Novactive\EzMenuManager\Form\Type\MenuSearchType;
 use Novactive\EzMenuManager\Form\Type\MenuType;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
 use Novactive\EzMenuManagerBundle\Entity\MenuSearch;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Doctrine\ORM\QueryAdapter as DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use PDO;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * Class AdminController.
- *
- * @Route("/menu-manager/admin")
- *
- * @package Novactive\EzMenuManagerBundle\Controller
- */
+#[Route('/menu-manager/admin')]
 class AdminController extends Controller
 {
     public const RESULTS_PER_PAGE = 20;
-
-    protected TranslatorInterface $translator;
     protected NotificationHandlerInterface $notificationHandler;
     protected EntityManagerInterface $em;
     protected ConfigResolverInterface $configResolver;
@@ -53,13 +46,12 @@ class AdminController extends Controller
      * AdminController constructor.
      */
     public function __construct(
-        TranslatorInterface $translator,
+        protected TranslatorInterface $translator,
         NotificationHandlerInterface $notificationHandler,
         EntityManagerInterface $em,
         ConfigResolverInterface $configResolver,
         PermissionResolver $permissionResolver
     ) {
-        $this->translator = $translator;
         $this->notificationHandler = $notificationHandler;
         $this->em = $em;
         $this->configResolver = $configResolver;
@@ -67,23 +59,18 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/list/{page}", name="menu_manager.menu_list", requirements={"page" = "\d+"})
-     *
-     * @param int $page
-     *
      * @SuppressWarnings(PHPMD.IfStatementAssignment)
-     *
-     * @return Response
      */
-    public function listAction(Request $request, $page = 1)
+    #[Route('/list/{page}', name: 'menu_manager.menu_list', requirements: ['page' => '\d+'])]
+    public function listAction(Request $request, int $page = 1): Response
     {
         if (!$this->permissionResolver->hasAccess('menu_manager', 'list')) {
             throw new UnauthorizedException('menu_manager', 'list', []);
         }
         $queryBuilder = $this->em->createQueryBuilder()
-                           ->select('m')
-                           ->from(Menu::class, 'm')
-                            ->orderBy('m.name');
+            ->select('m')
+            ->from(Menu::class, 'm')
+            ->orderBy('m.name');
 
         $search = new MenuSearch();
         $searchForm = $this->createForm(MenuSearchType::class, $search, ['method' => 'get']);
@@ -133,7 +120,7 @@ class AdminController extends Controller
      *
      * @return array
      */
-    protected function getMenusIds($menus)
+    protected function getMenusIds($menus): array
     {
         $ids = [];
         foreach ($menus as $menu) {
@@ -143,12 +130,8 @@ class AdminController extends Controller
         return $ids;
     }
 
-    /**
-     * @Route("/new", name="menu_manager.menu_new")
-     *
-     * @return RedirectResponse|Response
-     */
-    public function newAction(Request $request)
+    #[Route('/new', name: 'menu_manager.menu_new')]
+    public function newAction(Request $request): RedirectResponse|Response
     {
         if (!$this->permissionResolver->hasAccess('menu_manager', 'new')) {
             throw new UnauthorizedException('menu_manager', 'new', []);
@@ -161,12 +144,8 @@ class AdminController extends Controller
         return $this->editAction($request, $menu);
     }
 
-    /**
-     * @Route("/edit/{menu}", name="menu_manager.menu_edit")
-     *
-     * @return RedirectResponse|Response
-     */
-    public function editAction(Request $request, Menu $menu)
+    #[Route('/edit/{menu}', name: 'menu_manager.menu_edit')]
+    public function editAction(Request $request, Menu $menu): RedirectResponse|Response
     {
         if (!$this->permissionResolver->hasAccess('menu_manager', 'edit')) {
             throw new UnauthorizedException('menu_manager', 'edit', []);
@@ -197,10 +176,8 @@ class AdminController extends Controller
         );
     }
 
-    /**
-     * @Route("/delete", name="menu_manager.menu_delete", methods={"POST"})
-     */
-    public function deleteAction(Request $request)
+    #[Route('/delete', name: 'menu_manager.menu_delete', methods: ['POST'])]
+    public function deleteAction(Request $request): Response
     {
         if (!$this->permissionResolver->hasAccess('menu_manager', 'delete')) {
             throw new UnauthorizedException('menu_manager', 'delete', []);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -9,28 +11,19 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
-
 namespace Novactive\EzMenuManagerBundle\Entity\MenuItem;
 
 use Doctrine\ORM\Mapping as ORM;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 
-/**
- * Class ContentMenuItem.
- *
- * @ORM\Entity()
- *
- * @property int $contentId
- *
- * @package Novactive\EzMenuManagerBundle\Entity\MenuItem
- */
+#[ORM\Entity]
 class ContentMenuItem extends MenuItem
 {
     public const URL_PREFIX = 'content:';
 
     public function getContentId(): int
     {
-        return (int) ltrim($this->getUrl(), static::URL_PREFIX);
+        return (int) ltrim((string) $this->getUrl(), static::URL_PREFIX);
     }
 
     public function setContentId(int $contentId): void

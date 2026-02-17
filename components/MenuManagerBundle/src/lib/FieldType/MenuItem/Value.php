@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -9,27 +11,23 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
-
 namespace Novactive\EzMenuManager\FieldType\MenuItem;
 
 use Ibexa\Core\FieldType\Value as BaseValue;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 
-class Value extends BaseValue
+class Value extends BaseValue implements \Stringable
 {
     /**
+     * Construct a new Value object and initialize it $text.
+     */
+    public function __construct(/**
      * Text content.
      *
      * @var MenuItem\ContentMenuItem[]
      */
-    public array $menuItems;
-
-    /**
-     * Construct a new Value object and initialize it $text.
-     */
-    public function __construct(array $menuItems = [])
+    public array $menuItems = [])
     {
-        $this->menuItems = $menuItems;
         parent::__construct();
     }
 
@@ -37,7 +35,7 @@ class Value extends BaseValue
      * @see \Ibexa\Core\FieldType\Value
      * @see MenuItem
      */
-    public function __toString()
+    public function __toString(): string
     {
         $string = '';
         foreach ($this->menuItems as $menuItem) {

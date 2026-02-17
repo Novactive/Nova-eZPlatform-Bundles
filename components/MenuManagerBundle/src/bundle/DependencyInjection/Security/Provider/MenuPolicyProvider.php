@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * NovaeZRssFeedBundle.
  *
@@ -9,7 +11,6 @@
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZRssFeedBundle/blob/master/LICENSE
  */
-
 namespace Novactive\EzMenuManagerBundle\DependencyInjection\Security\Provider;
 
 use Ibexa\Bundle\Core\DependencyInjection\Security\PolicyProvider\YamlPolicyProvider;

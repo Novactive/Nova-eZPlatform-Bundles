@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -9,100 +11,55 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
-
 namespace Novactive\EzMenuManagerBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Novactive\EzMenuManager\Traits\IdentityTrait;
 
-/**
- * Class MenuItem.
- *
- * @ORM\Entity()
- * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="type", type="string")
- * @ORM\Table(name="menu_manager_menu_item")
- *
- * @package Novactive\EzMenuManagerBundle\Entity
- */
-class MenuItem
+#[ORM\Entity]
+#[ORM\Table(name: 'menu_manager_menu_item')]
+#[ORM\InheritanceType('SINGLE_TABLE')]
+#[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
+class MenuItem implements \Stringable
 {
     use IdentityTrait;
 
-    /**
-     * @ORM\Column(name="name", type="string", nullable=true)
-     *
-     * @var string
-     */
-    protected $name;
+    #[ORM\Column(name: 'name', type: 'string', nullable: true)]
+    protected ?string $name = null;
 
-    /**
-     * @ORM\Column(name="url", type="text", nullable=true)
-     *
-     * @var string
-     */
-    protected $url;
+    #[ORM\Column(name: 'url', type: 'text', nullable: true)]
+    protected ?string $url = null;
 
-    /**
-     * @ORM\Column(name="target", type="string", nullable=true)
-     *
-     * @var string
-     */
-    protected $target;
+    #[ORM\Column(name: 'target', type: 'string', nullable: true)]
+    protected ?string $target = null;
 
-    /**
-     * @var Menu
-     *
-     * @ORM\ManyToOne(targetEntity="Novactive\EzMenuManagerBundle\Entity\Menu", inversedBy="items")
-     */
-    protected $menu;
+    #[ORM\ManyToOne(targetEntity: Menu::class, inversedBy: 'items')]
+    protected Menu $menu;
 
-    /**
-     * @var MenuItem[]|ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Novactive\EzMenuManagerBundle\Entity\MenuItem",
-     *     mappedBy="parent",
-     *     cascade={"persist","remove"},
-     *     orphanRemoval=true
-     *     )
-     * @ORM\OrderBy({"position" = "ASC"})
-     */
-    protected $childrens;
+    #[ORM\OneToMany(
+        targetEntity: MenuItem::class,
+        mappedBy: 'parent',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
+    #[ORM\OrderBy(['position' => 'ASC'])]
+    protected Collection $childrens;
 
-    /**
-     * @var MenuItem
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Novactive\EzMenuManagerBundle\Entity\MenuItem",
-     *     inversedBy="childrens"
-     *     )
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
-     */
-    protected $parent;
+    #[ORM\ManyToOne(targetEntity: MenuItem::class, inversedBy: 'childrens')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id')]
+    protected ?MenuItem $parent = null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="position", type="integer")
-     */
-    protected $position = 0;
+    #[ORM\Column(name: 'position', type: 'integer')]
+    protected int $position = 0;
 
-    /**
-     * @ORM\Column(name="options", type="text")
-     *
-     * @var array
-     */
-    protected $options;
+    #[ORM\Column(name: 'options', type: 'text')]
+    protected string $options;
 
-    /**
-     * @ORM\Column(name="remote_id", type="string", nullable=true)
-     *
-     * @var string
-     */
-    protected $remoteId;
+    #[ORM\Column(name: 'remote_id', type: 'string', nullable: true)]
+    protected string $remoteId;
 
     /**
      * MenuItem constructor.
@@ -111,31 +68,25 @@ class MenuItem
     {
         $this->childrens = new ArrayCollection();
         $this->options = json_encode([]);
-        $this->remoteId = $remoteId ?? md5(uniqid(get_class($this), true));
+        $this->remoteId = $remoteId ?? md5(uniqid(static::class, true));
     }
 
-    /**
-     * @return string
-     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
     public function getRemoteId(): ?string
     {
         return $this->remoteId;
     }
 
     /**
-     * @param $language
+     * @param string $language
      */
     public function getTranslatedName($language): ?string
     {
-        $name = json_decode($this->getName(), true);
+        $name = json_decode((string) $this->getName(), true);
 
         return is_array($name) ? ($name[$language] ?? null) : $this->getName();
     }
@@ -145,35 +96,26 @@ class MenuItem
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
     public function getUrl(): ?string
     {
         return $this->url;
     }
 
     /**
-     * @param $language
+     * @param string $language
      */
     public function getTranslatedUrl($language): ?string
     {
-        $url = json_decode($this->getUrl(), true);
+        $url = json_decode((string) $this->getUrl(), true);
 
         return is_array($url) ? ($url[$language] ?? null) : $this->getUrl();
     }
 
-    /**
-     * @param string $url
-     */
-    public function setUrl($url): void
+    public function setUrl(?string $url): void
     {
         $this->url = $url;
     }
 
-    /**
-     * @return string
-     */
     public function getTarget(): ?string
     {
         return $this->target;
@@ -215,12 +157,9 @@ class MenuItem
      */
     public function setChildrens($childrens): void
     {
-        $this->childrens = $childrens;
+        $this->childrens = new ArrayCollection(is_array($childrens) ? $childrens : $childrens->toArray());
     }
 
-    /**
-     * @return array
-     */
     public function addChildren(MenuItem $children): void
     {
         if (false === $this->childrens->indexOf($children)) {
@@ -239,10 +178,7 @@ class MenuItem
         return $this->parent;
     }
 
-    /**
-     * @param MenuItem|null $parent
-     */
-    public function setParent($parent): void
+    public function setParent(?MenuItem $parent): void
     {
         $this->parent = $parent;
     }
@@ -276,7 +212,9 @@ class MenuItem
     }
 
     /**
-     * @param $name
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
      */
     public function getOption($name, $default = false)
     {
@@ -286,8 +224,8 @@ class MenuItem
     }
 
     /**
-     * @param $name
-     * @param $value
+     * @param string $name
+     * @param mixed $value
      */
     public function setOption($name, $value): void
     {
@@ -296,12 +234,9 @@ class MenuItem
         $this->setOptions($options);
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
-        return (string) $this->id;
+        return (string) ($this->id ?? '');
     }
 
     public function update(array $properties): void
@@ -318,9 +253,7 @@ class MenuItem
         /** @var MenuItem[] $childrens */
         $childrens = $this->getChildrens()->getValues();
 
-        usort($childrens, function (MenuItem $itemA, MenuItem $itemB) {
-            return $itemA->getPosition() <=> $itemB->getPosition();
-        });
+        usort($childrens, fn(MenuItem $itemA, MenuItem $itemB) => $itemA->getPosition() <=> $itemB->getPosition());
 
         $position = 0;
         foreach ($childrens as $child) {

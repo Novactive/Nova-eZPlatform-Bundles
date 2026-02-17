@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -9,7 +11,6 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
-
 namespace Novactive\EzMenuManager\MenuItem;
 
 use InvalidArgumentException;
@@ -32,6 +33,7 @@ class MenuItemValue extends KnpMenuItem
         parent::__construct($name, $factory);
     }
 
+    #[\Override]
     public function addChild($child, array $options = []): ItemInterface
     {
         if (!$child instanceof ItemInterface) {

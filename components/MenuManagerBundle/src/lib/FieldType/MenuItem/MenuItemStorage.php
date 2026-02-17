@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -9,22 +11,16 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
-
 namespace Novactive\EzMenuManager\FieldType\MenuItem;
 
 use Ibexa\Contracts\Core\FieldType\GatewayBasedStorage;
 use Ibexa\Contracts\Core\Persistence\Content\Field;
 use Ibexa\Contracts\Core\Persistence\Content\VersionInfo;
-use Novactive\EzMenuManager\FieldType\MenuItem\MenuItemStorage\Gateway;
 
 class MenuItemStorage extends GatewayBasedStorage
 {
-    /**
-     * @var Gateway
-     */
-    protected $gateway;
 
-    public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context)
+    public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context = [])
     {
         // VersionInfo return STATUS_DRAFT when publish Content
         // TODO: Store data field when content published
@@ -33,7 +29,7 @@ class MenuItemStorage extends GatewayBasedStorage
         // }
     }
 
-    public function getFieldData(VersionInfo $versionInfo, Field $field, array $context)
+    public function getFieldData(VersionInfo $versionInfo, Field $field, array $context = [])
     {
         if (VersionInfo::STATUS_PUBLISHED === $versionInfo->status) {
             return $this->gateway->getFieldData($versionInfo, $field);
@@ -43,7 +39,7 @@ class MenuItemStorage extends GatewayBasedStorage
     /**
      * @return bool
      */
-    public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds, array $context)
+    public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds, array $context = [])
     {
         if (VersionInfo::STATUS_PUBLISHED === $versionInfo->status) {
             return $this->gateway->deleteFieldData($versionInfo, $fieldIds);
@@ -75,7 +71,7 @@ class MenuItemStorage extends GatewayBasedStorage
      *
      * @return bool|null same as {@link \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()}
      */
-    public function copyLegacyField(VersionInfo $versionInfo, Field $field, Field $originalField, array $context)
+    public function copyLegacyField(VersionInfo $versionInfo, Field $field, Field $originalField, array $context = [])
     {
         return $this->storeFieldData($versionInfo, $field, $context);
     }

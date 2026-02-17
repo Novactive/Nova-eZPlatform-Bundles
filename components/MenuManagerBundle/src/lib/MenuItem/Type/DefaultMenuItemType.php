@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -9,7 +11,6 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
-
 namespace Novactive\EzMenuManager\MenuItem\Type;
 
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
@@ -23,9 +24,7 @@ class DefaultMenuItemType extends AbstractMenuItemType
     /** @var ConfigResolverInterface */
     protected $configResolver;
 
-    /**
-     * @required
-     */
+    #[\Symfony\Contracts\Service\Attribute\Required]
     public function setConfigResolver(ConfigResolverInterface $configResolver): void
     {
         $this->configResolver = $configResolver;

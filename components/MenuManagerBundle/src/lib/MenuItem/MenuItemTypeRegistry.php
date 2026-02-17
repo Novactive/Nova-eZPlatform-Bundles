@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -9,7 +11,6 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
-
 namespace Novactive\EzMenuManager\MenuItem;
 
 use Novactive\EzMenuManager\Exception\MenuItemTypeNotFoundException;
@@ -57,7 +58,7 @@ class MenuItemTypeRegistry
      */
     public function getMenuItemEntityType(MenuItem $entity)
     {
-        $className = get_class($entity);
+        $className = $entity::class;
 
         return $this->getMenuItemType($className);
     }

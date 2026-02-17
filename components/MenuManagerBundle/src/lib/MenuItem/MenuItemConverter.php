@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -9,7 +11,6 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
-
 namespace Novactive\EzMenuManager\MenuItem;
 
 use Novactive\EzMenuManager\Exception\MenuItemTypeNotFoundException;
@@ -18,11 +19,8 @@ use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 
 class MenuItemConverter
 {
-    protected MenuItemTypeRegistry $menuItemTypeRegistry;
-
-    public function __construct(MenuItemTypeRegistry $menuItemTypeRegistry)
+    public function __construct(protected MenuItemTypeRegistry $menuItemTypeRegistry)
     {
-        $this->menuItemTypeRegistry = $menuItemTypeRegistry;
     }
 
     /**
@@ -81,7 +79,7 @@ class MenuItemConverter
                 $menuItems[$hashItem['id']] = $menuItem;
                 if (
                     !$menuItem->getParent()
-                    && 0 === strpos($hashItem['parentId'], '_')
+                    && str_starts_with((string) $hashItem['parentId'], '_')
                     && ($parent = $menuItems[$hashItem['parentId']] ?? null)
                 ) {
                     $parent->addChildren($menuItem);

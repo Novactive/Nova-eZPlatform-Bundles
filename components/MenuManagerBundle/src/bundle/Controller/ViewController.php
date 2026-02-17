@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -9,7 +11,6 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
-
 namespace Novactive\EzMenuManagerBundle\Controller;
 
 use Ibexa\Contracts\AdminUi\Controller\Controller;
@@ -20,13 +21,7 @@ use Novactive\EzMenuManagerBundle\Entity\Menu;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class ViewController.
- *
- * @Route("/menu-manager")
- *
- * @package Novactive\EzMenuManagerBundle\Controller
- */
+#[Route('/menu-manager')]
 class ViewController extends Controller
 {
     protected PermissionResolver $permissionResolver;
@@ -36,9 +31,7 @@ class ViewController extends Controller
         $this->permissionResolver = $permissionResolver;
     }
 
-    /**
-     * @Route("/view/{menu}", name="menu_manager.menu_view")
-     */
+    #[Route('/view/{menu}', name: 'menu_manager.menu_view')]
     public function viewMenuAction(Menu $menu, MenuBuilder $menuBuilder): Response
     {
         if (!$this->permissionResolver->hasAccess('menu_manager', 'view')) {

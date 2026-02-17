@@ -48,7 +48,7 @@ Add the following routing config
 ```php
 novactive.menu_manager:
     resource: "@EzMenuManagerBundle/Controller/"
-    type:     annotation
+    type:     attribute
     prefix:   /
 ```
 

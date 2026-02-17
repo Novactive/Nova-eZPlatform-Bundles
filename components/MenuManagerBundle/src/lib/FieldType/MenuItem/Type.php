@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -9,7 +11,6 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
-
 namespace Novactive\EzMenuManager\FieldType\MenuItem;
 
 use Ibexa\Contracts\Core\FieldType\ValidationError;
@@ -25,14 +26,11 @@ class Type extends FieldType
 {
     protected $validatorConfigurationSchema = [];
 
-    protected ValueConverter $valueConverter;
-
     /**
      * Type constructor.
      */
-    public function __construct(ValueConverter $valueConverter)
+    public function __construct(protected ValueConverter $valueConverter)
     {
-        $this->valueConverter = $valueConverter;
     }
 
     /**

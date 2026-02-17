@@ -66,7 +66,7 @@ class AssignSectionToSubtreeListener implements EventSubscriberInterface
             );
 
         $contentIds = array_map(
-            'intval',
+            intval(...),
             $selectContentIdsQuery->execute()->fetchAll(PDO::FETCH_COLUMN)
         );
 

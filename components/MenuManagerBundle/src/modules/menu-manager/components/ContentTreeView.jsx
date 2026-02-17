@@ -137,7 +137,7 @@ export default class ContentTreeView extends PureComponent {
             .substr(2, 9)
       ),
       text: location.name,
-      // icon: eZ.helpers.contentType.getContentTypeIconUrl(location.contentTypeIdentifier) || eZ.helpers.contentType.getContentTypeIconUrl('file'),
+      // icon: ibexa.helpers.contentType.getContentTypeIconUrl(location.contentTypeIdentifier) || ibexa.helpers.contentType.getContentTypeIconUrl('file'),
       state: {
         opened: children.length > 0,
         disabled: false

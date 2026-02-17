@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -9,7 +11,6 @@
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
-
 namespace Novactive\EzMenuManager\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -81,15 +82,11 @@ class PublishVersionListener implements EventSubscriberInterface
                 $menuItemsToDelete = array_udiff(
                     $currentMenuItems,
                     $menuItems,
-                    function (MenuItem $currentMenuItem, MenuItem $menuItem) {
-                        return $currentMenuItem->getId() - $menuItem->getId();
-                    }
+                    fn(MenuItem $currentMenuItem, MenuItem $menuItem) => $currentMenuItem->getId() - $menuItem->getId()
                 );
 
-                if (!empty($menuItemsToDelete)) {
-                    foreach ($menuItemsToDelete as $menuItemToDelete) {
-                        $this->em->remove($menuItemToDelete);
-                    }
+                foreach ($menuItemsToDelete as $menuItemToDelete) {
+                    $this->em->remove($menuItemToDelete);
                 }
             }
 
