@@ -27,9 +27,4 @@ return RectorConfig::configure()
         [
                    IbexaSetList::IBEXA_50->value,
                ]
-    )
-    ->withRules(
-        [
-            DeclareStrictTypesRector::class,
-        ]
     );
