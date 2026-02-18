@@ -30,10 +30,19 @@ list:
 
 .PHONY: codeclean
 codeclean: ## Coding Standard checks
-	@ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/phpcbf --standard=.cs/cs_ruleset.xml --extensions=php src/ components/ bin/"
-	@ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/php-cs-fixer fix --config=.cs/.php_cs.php"
-	@ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src/ components/ bin/"
-	@ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/phpmd src,components,bin text .cs/md_ruleset.xml"
+	@ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/phpcbf --standard=.cs/cs_ruleset.xml --extensions=php src/ bin/ > /dev/null || true"
+	@ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/php-cs-fixer fix --config=.cs/.php_cs.php --allow-risky=yes"
+	@ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php src/ bin/"
+	@ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/phpmd src,bin text .cs/md_ruleset.xml"
+
+	@for COMPONENT in $(shell ls components); do \
+		if ddev exec -q -d /var/www/html "COMPONENT=$${COMPONENT} bin/ci-should install"; then \
+			ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/phpcbf --standard=.cs/cs_ruleset.xml --extensions=php components/${COMPONENT} > /dev/null || true"; \
+			ddev exec -d /var/www/html "COMPONENT=$${COMPONENT} $(PHP_BIN) ./vendor/bin/php-cs-fixer fix --config=.cs/.php_cs.php --allow-risky=yes"; \
+			ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/phpcs --standard=.cs/cs_ruleset.xml --extensions=php components/${COMPONENT}"; \
+			ddev exec -d /var/www/html "$(PHP_BIN) ./vendor/bin/phpmd components/${COMPONENT} text .cs/md_ruleset.xml"; \
+		fi \
+	done
 
 .PHONY: install
 install: ## Install vendors

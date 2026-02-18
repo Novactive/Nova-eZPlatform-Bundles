@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Novactive\eZPlatform\Bundles\Console;
 
+use Override;
 use Symfony\Component\Console\Application as BaseApplication;
 
 final class Application extends BaseApplication
@@ -26,7 +27,7 @@ final class Application extends BaseApplication
         
         ';
 
-    #[\Override]
+    #[Override]
     public function getHelp(): string
     {
         return self::$logo.parent::getHelp();
