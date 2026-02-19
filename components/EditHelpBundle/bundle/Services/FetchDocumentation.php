@@ -25,7 +25,7 @@ use Ibexa\Core\Repository\SiteAccessAware\Repository;
 
 class FetchDocumentation
 {
-    public const TOOLTIP_CONTENT_TYPE = 'nova_help_tooltip';
+    public const string TOOLTIP_CONTENT_TYPE = 'nova_help_tooltip';
 
     public function __construct(
         protected Repository $repository

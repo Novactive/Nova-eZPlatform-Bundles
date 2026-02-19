@@ -3,9 +3,10 @@
     "description": "Add a helper when editing or creating a Content. This helper allows you to display personalised text for the Content creation/edition",
     "keywords": [
         "tooltip",
-        "ezpublish",
+        "ibexa",
+        "ibexa5",
         "novactive",
-        "ezplatform"
+        "almaviacx"
     ],
     "homepage": "https://github.com/Novactive/NovaeZEditHelpBundle",
     "type": "ibexa-bundle",
@@ -20,17 +21,21 @@
         "MIT"
     ],
     "require": {
-        "php": "^8.1"
+        "php": "^8.3",
+        "ibexa/oss": "^5",
+        "guzzlehttp/promises": "^2.3",
+        "nyholm/psr7": "^1.8"
     },
     "autoload": {
         "psr-4": {
             "Novactive\\Bundle\\NovaeZEditHelpBundle\\": "bundle/"
         }
     },
-    "extra": {
-        "thanks": {
-            "name": "ezsystems/ezplatform",
-            "url": "https://github.com/ezsystems/ezplatform"
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "symfony/flex": true,
+            "ibexa/post-install": true
         }
     }
 }
