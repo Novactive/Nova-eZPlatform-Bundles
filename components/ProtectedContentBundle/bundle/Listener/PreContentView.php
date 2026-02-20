@@ -26,49 +26,18 @@ use Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedTokenStorageRe
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class PreContentView
+readonly class PreContentView
 {
-    /**
-     * @var PermissionResolver
-     */
-    private $permissionResolver;
-
-    /**
-     * @var ProtectedAccessRepository
-     */
-    private $protectedAccessRepository;
-
-    /**
-     * @var ProtectedAccessRepository
-     */
-    private $protectedTokenStorageRepository;
-
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
-
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
-    private ContentPreviewHelper $contentPreviewHelper;
-
     public function __construct(
-        PermissionResolver $permissionResolver,
-        ProtectedAccessRepository $protectedAccessRepository,
-        ProtectedTokenStorageRepository $protectedTokenStorageRepository,
-        FormFactoryInterface $factory,
-        RequestStack $requestStack,
-        ContentPreviewHelper $contentPreviewHelper
-    ) {
-        $this->permissionResolver = $permissionResolver;
-        $this->protectedAccessRepository = $protectedAccessRepository;
-        $this->protectedTokenStorageRepository = $protectedTokenStorageRepository;
-        $this->formFactory = $factory;
-        $this->requestStack = $requestStack;
-        $this->contentPreviewHelper = $contentPreviewHelper;
+        protected PermissionResolver              $permissionResolver,
+        protected ProtectedAccessRepository       $protectedAccessRepository,
+        protected ProtectedTokenStorageRepository $protectedTokenStorageRepository,
+        protected FormFactoryInterface            $factory,
+        protected RequestStack                    $requestStack,
+        protected ContentPreviewHelper            $contentPreviewHelper,
+        protected FormFactoryInterface            $formFactory,
+    )
+    {
     }
 
     /**

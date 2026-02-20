@@ -24,8 +24,6 @@ use Novactive\Bundle\eZProtectedContentBundle\Form\RequestEmailProtectedAccessTy
 use Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedAccessRepository;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
-use Swift_Mailer;
-use Swift_Message;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -34,13 +32,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EmailProvided
 {
-    protected const SENDMAIL_ERROR = 'Impossible d\'envoyer le lien formaté à l\'adresse mail %s';
+    protected const string SENDMAIL_ERROR = 'Impossible d\'envoyer le lien formaté à l\'adresse mail %s';
 
-    protected Swift_Message $messageInstance;
 
     public function __construct(
         protected readonly FormFactoryInterface $formFactory,
-        protected readonly Swift_Mailer $mailer,
         protected readonly EntityManagerInterface $entityManager,
         protected readonly TranslatorInterface $translator,
         protected readonly ParameterBagInterface $parameterBag,
@@ -48,7 +44,6 @@ class EmailProvided
         protected readonly ContentService $contentService,
         protected readonly LoggerInterface $logger,
     ) {
-        $this->messageInstance = new Swift_Message();
     }
 
     public function onKernelRequest(RequestEvent $event): void
@@ -135,19 +130,20 @@ class EmailProvided
         $mailLink = "<a href='$link'>".$this->translator->trans('mail.link', [], 'ezprotectedcontent').'</a>';
         $bodyMessage = str_replace('{{ url }}', $mailLink, $protectedAccess->getEmailMessage());
 
-        $message = $this->messageInstance
-            ->setSubject($this->translator->trans('mail.subject', [], 'ezprotectedcontent'))
-            ->setFrom($this->parameterBag->get('default_sender_email'))
-            ->setTo($receiver)
-            ->setContentType('text/html')
-            ->setBody(
-                $bodyMessage
-            );
-
-        try {
-            $this->mailer->send($message);
-        } catch (Exception $exception) {
-            throw new Exception(sprintf(self::SENDMAIL_ERROR, $receiver));
-        }
+        throw new \Exception('Not Implemented');
+//        $message = $this->messageInstance
+//            ->setSubject($this->translator->trans('mail.subject', [], 'ezprotectedcontent'))
+//            ->setFrom($this->parameterBag->get('default_sender_email'))
+//            ->setTo($receiver)
+//            ->setContentType('text/html')
+//            ->setBody(
+//                $bodyMessage
+//            );
+//
+//        try {
+//            $this->mailer->send($message);
+//        } catch (Exception $exception) {
+//            throw new Exception(sprintf(self::SENDMAIL_ERROR, $receiver));
+//        }
     }
 }
