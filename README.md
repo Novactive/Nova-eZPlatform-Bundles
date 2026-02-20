@@ -12,11 +12,17 @@ This is the Mono Repo that manages all the Novactive Ibexa Bundles that have eac
 ```bash
 git clone
 ddev start
-make installibexa IBEXA_VERSION="4.*"
+make installibexa IBEXA_VERSION="5.*"
 ddev describe
 ```
 
 This will install the last version of Ibexa and bundles on top of it.
+
+### Install Bundles
+
+To enable one of the bundles in the development environment, edit the ci-config.yaml file (set install: true) and then run the make wrap-bundles command.
+
+This should add the repository to the composer.json file in the ibexa directory, as well as add a require entry in bundles.php.
 
 ## Contribution
 
