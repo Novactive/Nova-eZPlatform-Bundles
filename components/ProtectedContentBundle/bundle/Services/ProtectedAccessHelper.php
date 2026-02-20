@@ -12,12 +12,12 @@ use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
 use Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedAccessRepository;
 use Psr\Log\LoggerInterface;
 
-class ProtectedAccessHelper
+readonly class ProtectedAccessHelper
 {
     public function __construct(
-        protected readonly ProtectedAccessRepository $protectedAccessRepository,
-        protected readonly Repository $repository,
-        protected readonly LoggerInterface $logger,
+        protected ProtectedAccessRepository $protectedAccessRepository,
+        protected Repository                $repository,
+        protected LoggerInterface           $logger,
     ) {
     }
 
