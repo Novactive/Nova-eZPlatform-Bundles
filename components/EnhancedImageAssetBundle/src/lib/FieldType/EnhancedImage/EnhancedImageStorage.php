@@ -27,10 +27,8 @@ class EnhancedImageStorage extends ImageStorage
      * @throws InvalidArgumentException
      * @throws InvalidArgumentValue
      * @throws NotFoundException
-     *
-     * @return bool|mixed
      */
-    public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context)
+    public function storeFieldData(VersionInfo $versionInfo, Field $field): bool
     {
         if (isset($field->value->externalData)) {
             $isNewFocusPoint = $field->value->externalData['isNewFocusPoint'] ?? false;
@@ -47,6 +45,6 @@ class EnhancedImageStorage extends ImageStorage
             }
         }
 
-        return parent::storeFieldData($versionInfo, $field, $context);
+        return parent::storeFieldData($versionInfo, $field);
     }
 }

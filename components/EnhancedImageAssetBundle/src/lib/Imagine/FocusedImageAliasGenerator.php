@@ -122,7 +122,7 @@ class FocusedImageAliasGenerator implements VariationHandler
      * @throws InvalidVariationException
      * @throws ReflectionException
      */
-    public function getVariation(Field $field, VersionInfo $versionInfo, $variationName, array $parameters = [])
+    public function getVariation(Field $field, VersionInfo $versionInfo, string $variationName, array $parameters = []): \Ibexa\Contracts\Core\Variation\Values\Variation
     {
         $focusPoint = $this->getFocusPoint($field->value, $variationName);
 
@@ -168,7 +168,9 @@ class FocusedImageAliasGenerator implements VariationHandler
         $array = [];
         foreach ($reflectionClass->getProperties() as $property) {
             $property->setAccessible(true);
-            $array[$property->getName()] = $property->getValue($variation);
+            if ($property->isInitialized($variation)) {
+                $array[$property->getName()] = $property->getValue($variation);
+            }
             $property->setAccessible(false);
         }
         $array['focusPoint'] = $focusPoint;

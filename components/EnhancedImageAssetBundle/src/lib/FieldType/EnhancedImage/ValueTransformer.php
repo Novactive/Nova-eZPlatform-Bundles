@@ -14,47 +14,72 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage;
 
-use Ibexa\AdminUi\Form\DataTransformer\FieldType\ImageValueTransformer;
+use Ibexa\Contracts\Core\Repository\FieldType;
+use Ibexa\Core\FieldType\Value as BaseValue;
+use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-class ValueTransformer extends ImageValueTransformer
+class ValueTransformer implements DataTransformerInterface
 {
-    /**
-     * @param Value $value
-     */
-    public function transform($value): array
+    public function __construct(
+        private FieldType $fieldType,
+        private BaseValue $initialValue,
+        private string $valueClass
+    ) {
+    }
+
+    public function transform(mixed $value): array
     {
         if (null === $value) {
             $value = $this->fieldType->getEmptyValue();
         }
 
-        $properties = parent::transform($value);
-
         return array_merge(
-            $properties,
-            ['focusPoint' => $value->focusPoint]
+            ['file' => null, 'remove' => false],
+            [
+                'alternativeText' => $value->alternativeText,
+                'focusPoint' => $value->focusPoint,
+            ]
         );
     }
 
     /**
-     * @param array $value
-     *
      * @throws TransformationFailedException
      */
-    public function reverseTransform($value): Value
+    public function reverseTransform(mixed $value): Value
     {
         /** @var Value $valueObject */
-        $valueObject = parent::reverseTransform($value);
+        $valueObject = $this->getReverseTransformedValue($value);
 
         if ($this->fieldType->isEmptyValue($valueObject)) {
             return $valueObject;
         }
 
+        $valueObject->alternativeText = $value['alternativeText'];
         $valueObject->focusPoint = $value['focusPoint'];
         if ($value['isNewFocusPoint']) {
             $valueObject->isNewFocusPoint = true;
         }
 
         return $valueObject;
+    }
+
+    private function getReverseTransformedValue(array $value): BaseValue
+    {
+        if ($value['remove']) {
+            return $this->fieldType->getEmptyValue();
+        }
+
+        if (null === $value['file']) {
+            return clone $this->initialValue;
+        }
+
+        $properties = [
+            'inputUri' => $value['file']->getRealPath(),
+            'fileName' => $value['file']->getClientOriginalName(),
+            'fileSize' => $value['file']->getSize(),
+        ];
+
+        return new $this->valueClass($properties);
     }
 }

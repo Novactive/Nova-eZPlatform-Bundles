@@ -88,7 +88,7 @@ class ImageAliasGenerator implements VariationHandler
     /**
      * {@inheritdoc}
      */
-    public function getVariation(Field $field, VersionInfo $versionInfo, $variationName, array $parameters = [])
+    public function getVariation(Field $field, VersionInfo $versionInfo, string $variationName, array $parameters = []): \Ibexa\Contracts\Core\Variation\Values\Variation
     {
         /** @var \Ibexa\Core\FieldType\Image\Value $imageValue */
         $imageValue = $field->value;

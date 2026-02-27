@@ -1,7 +1,7 @@
 import IbexaEmbedImageEditing from '@ibexa-richtext/src/bundle/Resources/public/js/CKEditor/embed/image/embed-image-editing.js'
 import IbexaEmbedImageCommand from '@ibexa-richtext/src/bundle/Resources/public/js/CKEditor/embed/image/embed-image-command.js'
 import { findContent } from '@ibexa-richtext/src/bundle/Resources/public/js/CKEditor/services/content-service.js';
-import Widget from '@ckeditor/ckeditor5-widget/src/widget';
+import { Widget } from 'ckeditor5';
 class EnhancedImageEmbedImageEditing extends IbexaEmbedImageEditing {
     loadImagePreview(modelElement) {
         const contentId = modelElement.getAttribute('contentId');
