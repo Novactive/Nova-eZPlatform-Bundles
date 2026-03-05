@@ -195,20 +195,16 @@ class ContentMenuItemType extends DefaultMenuItemType
 
         // Save to cache if cache is available
         if (null !== $this->cache && null !== $cacheItem) {
-            try {
-                $cacheItem->set($menuItemLinkInfos);
-                $cacheItem->tag(
-                    [
-                        'content-'.$content->id,
-                        'location-'.$location->id,
-                        'menu-item-'.$menuItem->getId(),
-                        'menu-'.$menuItem->getMenu()->getId(),
-                    ]
-                );
-                $this->cache->save($cacheItem);
-            } catch (Exception $e) {
-                // Cache save failed, continue without it
-            }
+            $cacheItem->set($menuItemLinkInfos);
+            $cacheItem->tag(
+                [
+                    'content-'.$content->id,
+                    'location-'.$location->id,
+                    'menu-item-'.$menuItem->getId(),
+                    'menu-'.$menuItem->getMenu()->getId(),
+                ]
+            );
+            $this->cache->save($cacheItem);
         }
 
         return $menuItemLinkInfos;

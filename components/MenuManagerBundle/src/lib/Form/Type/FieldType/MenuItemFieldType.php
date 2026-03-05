@@ -158,7 +158,10 @@ class MenuItemFieldType extends AbstractType
             }
         }
 
-        usort($availableMenus, fn ($first, $second) => strcmp((string) $first['menu']->getName(), (string) $second['menu']->getName()));
+        usort(
+            $availableMenus,
+            fn ($first, $second) => strcmp((string) $first['menu']->getName(), (string) $second['menu']->getName())
+        );
         $view->vars['available_menus'] = $availableMenus;
     }
 

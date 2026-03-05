@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Novactive\EzMenuManager\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Ibexa\Contracts\HttpCache\PurgeClient\PurgeClientInterface;
 use Ibexa\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
@@ -85,20 +84,12 @@ trait CachePurgerTrait
 
         // Try HTTP cache purge if available
         if ($this->httpCachePurgeClient && method_exists($this->httpCachePurgeClient, 'invalidateTags')) {
-            try {
-                $this->httpCachePurgeClient->invalidateTags($tags);
-            } catch (Exception $e) {
-                // Silently fail if HTTP cache is not available
-            }
+            $this->httpCachePurgeClient->invalidateTags($tags);
         }
 
         // Try persistence cache if available
         if ($this->persistenceCacheAdapter && method_exists($this->persistenceCacheAdapter, 'invalidateTags')) {
-            try {
-                $this->persistenceCacheAdapter->invalidateTags($tags);
-            } catch (Exception $e) {
-                // Silently fail if persistence cache is not available
-            }
+            $this->persistenceCacheAdapter->invalidateTags($tags);
         }
     }
 }
