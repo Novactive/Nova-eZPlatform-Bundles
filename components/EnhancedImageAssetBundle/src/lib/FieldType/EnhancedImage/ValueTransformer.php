@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage;
 
-use Ibexa\Core\FieldType\Image\Value;
 use Ibexa\AdminUi\Form\DataTransformer\FieldType\AbstractBinaryBaseTransformer;
+use Ibexa\Core\FieldType\Image\Value;
 use Symfony\Component\Form\DataTransformerInterface;
 
 class ValueTransformer extends AbstractBinaryBaseTransformer implements DataTransformerInterface
