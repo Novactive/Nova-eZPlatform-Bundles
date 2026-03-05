@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php": "^7.3 || ^8.0",
+        "php": "^8.3",
         "knplabs/knp-menu-bundle": "*",
         "jms/translation-bundle": "^1.5",
         "kaliop/ezmigrationbundle": "^3.0",

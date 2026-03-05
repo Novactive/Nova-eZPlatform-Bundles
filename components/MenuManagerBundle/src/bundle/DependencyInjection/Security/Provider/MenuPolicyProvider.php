@@ -1,16 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
 /**
- * NovaeZRssFeedBundle.
+ * NovaeZMenuManagerBundle.
  *
- * @package   NovaeZRssFeedBundle
+ * @package   NovaeZMenuManagerBundle
  *
- * @author    Novactive
- * @copyright 2018 Novactive
- * @license   https://github.com/Novactive/NovaeZRssFeedBundle/blob/master/LICENSE
+ * @author    Novactive <f.alexandre@novactive.com>
+ * @copyright 2019 Novactive
+ * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
+
+declare(strict_types=1);
 
 namespace Novactive\EzMenuManagerBundle\DependencyInjection\Security\Provider;
 

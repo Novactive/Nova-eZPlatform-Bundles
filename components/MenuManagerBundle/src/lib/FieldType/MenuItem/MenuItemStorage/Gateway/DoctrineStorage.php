@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * NovaeZMenuManagerBundle.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
+
+declare(strict_types=1);
 
 namespace Novactive\EzMenuManager\FieldType\MenuItem\MenuItemStorage\Gateway;
 
