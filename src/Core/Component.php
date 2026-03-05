@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Novactive\eZPlatform\Bundles\Core;
 
-class Component implements \Stringable
+use Stringable;
+
+class Component implements Stringable
 {
     protected string $repo;
 
-    /**
-     * @param $name
-     * @param $repo
-     */
     public function __construct(protected string $name, $repo = null)
     {
         $this->repo = $repo ?? "Novactive/NovaeZ{$this->name}";

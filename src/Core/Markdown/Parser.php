@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Novactive\eZPlatform\Bundles\Core\Markdown;
 
 use Knp\Menu\ItemInterface;
+use Override;
 use Parsedown;
 
 final class Parser extends Parsedown
@@ -27,7 +28,7 @@ final class Parser extends Parsedown
         $this->menuPointer->setChildrenAttribute('class', 'nav flex-column');
     }
 
-    #[\Override]
+    #[Override]
     protected function inlineImage($Excerpt): ?array
     {
         $element = parent::inlineImage($Excerpt);
@@ -46,7 +47,7 @@ final class Parser extends Parsedown
         return $element;
     }
 
-    #[\Override]
+    #[Override]
     protected function inlineLink($Excerpt)
     {
         $element = parent::inlineLink($Excerpt);
@@ -70,7 +71,7 @@ final class Parser extends Parsedown
         return $element;
     }
 
-    #[\Override]
+    #[Override]
     protected function blockHeader($Line): ?array
     {
         $element = parent::blockHeader($Line);
@@ -105,7 +106,7 @@ final class Parser extends Parsedown
         return $this->localImages;
     }
 
-    #[\Override]
+    #[Override]
     protected function blockFencedCode($Line): ?array
     {
         $element = parent::blockFencedCode($Line);

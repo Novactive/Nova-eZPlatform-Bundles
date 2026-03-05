@@ -51,7 +51,7 @@ final readonly class Documenter
         $mdFileContentLines = file($source);
 
         // we remove the cartouche
-        if (trim($mdFileContentLines[2] ?? '').trim($mdFileContentLines[11] ?? '') === '----'.'----') {
+        if ('--------' === trim($mdFileContentLines[2] ?? '').trim($mdFileContentLines[11] ?? '')) {
             \array_splice($mdFileContentLines, 2, 9);
         }
 

@@ -1,5 +1,14 @@
 <?php
-$finder = PhpCsFixer\Finder::create()->in('src')->in('components');
+
+$component = $_ENV['COMPONENT'] ?? null;
+
+$finder = PhpCsFixer\Finder::create();
+
+if($component){
+    $finder->in('components/'.$component);
+}else{
+    $finder->in('src');
+}
 
 return (new PhpCsFixer\Config())->setRules(
     [
@@ -14,5 +23,15 @@ return (new PhpCsFixer\Config())->setRules(
         'cast_spaces' => false,
         'no_superfluous_phpdoc_tags' => true,
         'single_line_throw' => false,
+        'trailing_comma_in_multiline' => false,
+        'global_namespace_import' => [
+            'import_classes' => true,
+            'import_constants' => false,
+            'import_functions' => false,
+        ],
+        'operator_linebreak' => [
+            'only_booleans' => true,
+            'position' => 'end',
+        ]
     ]
 )->setFinder($finder);
