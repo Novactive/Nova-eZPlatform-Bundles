@@ -107,9 +107,9 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
     /**
      * Analyzer wildcard handling configuration.
      *
-     * @TODO: Define how this could look like
+     * Enablind this will prefix every searched words with a wildcard
      */
-    public $wildcards;
+    public $wildcards = false;
 
     /**
      * Custom field definitions to query instead of default field.

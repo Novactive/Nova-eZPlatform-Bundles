@@ -11,27 +11,36 @@
 
 declare(strict_types=1);
 
-$configDir = "components/{$_SERVER['COMPONENT']}/tests/provisioning";
+$componentName = $_SERVER['COMPONENT'];
+$configDir = "components/{$componentName}/tests/provisioning";
 if (!file_exists($configDir)) {
     exit(0);
 }
-$appRootDir = __DIR__."/../ibexa";
-$componentDir = __DIR__."/../components/".$_SERVER['COMPONENT'];
 
-$bundleName = "nova_ez".strtolower($_SERVER['COMPONENT']);
+$appRootDir = __DIR__."/../ibexa";
+$componentDir = __DIR__."/../components/" . $componentName;
+
+$bundleComposerJson = json_decode(file_get_contents("{$componentDir}/composer.json"), true, 512, JSON_THROW_ON_ERROR);
+$bundleComposerName = $bundleComposerJson['name'];
+$bundleName = str_replace( '/', '_', $bundleComposerName );
+
+exec("cd {$appRootDir} && composer config repositories.{$bundleName} '{\"type\": \"path\", \"url\": \"../components/{$componentName}\", \"options\": {\"symlink\": true}}' --json");
+exec("cd {$appRootDir} && composer require {$bundleComposerName}:dev-master --no-update");
+exec("cd {$appRootDir} && yarn install --cwd ../components/{$componentName}");
+
 
 /**
- * Add the to the list
+ * Enable Bundle
  */
 $bundleFile = "{$appRootDir}/config/bundles.php";
 $bundleList = file_get_contents($bundleFile);
 $bundles = array_map(
-    function ($line) {
-        $fqdn = trim(trim($line, "- "));
+        function ($line) {
+            $fqdn = trim(trim($line, "- "));
 
-        return "{$fqdn}::class => [ 'all'=> true ],";
-    },
-    file($configDir."/bundles.yaml")
+            return "{$fqdn}::class => [ 'all'=> true ],";
+        },
+        file($configDir."/bundles.yaml")
 );
 
 $bundleList = str_replace( '];', implode( PHP_EOL, $bundles) . PHP_EOL . '];', $bundleList);
@@ -42,9 +51,6 @@ file_put_contents($bundleFile, $bundleList);
  */
 if (file_exists($configDir."/configs.yaml") && trim(file_get_contents($configDir."/configs.yaml")) !== '') {
     $firstLine = substr(trim(file($configDir."/configs.yaml")[0]), 0, -1);
-    if(strpos($firstLine, 'nova_') === 0) {
-        $bundleName = $firstLine;
-    }
     file_put_contents(
         "{$appRootDir}/config/packages/{$bundleName}.yaml",
         file_get_contents($configDir."/configs.yaml")
@@ -60,42 +66,3 @@ if (file_exists($configDir."/routes.yaml") && trim(file_get_contents($configDir.
         file_get_contents($configDir."/routes.yaml")
     );
 }
-
-/**
- * Trick Composer
- */
-
-$composerJsonPath = "{$appRootDir}/composer.json";
-$data = json_decode(file_get_contents($composerJsonPath), true, 512, JSON_THROW_ON_ERROR);
-$bundleComposerJson = json_decode(file_get_contents("{$componentDir}/composer.json"), true, 512, JSON_THROW_ON_ERROR);
-
-// re map paths, one directory before because composer create-project install in a dir
-$psr4 = array_map(
-    function ($item) use ($componentDir) {
-        return "{$componentDir}/{$item}";
-    },
-    $bundleComposerJson["autoload"]['psr-4'] ?? []
-);
-
-$data["autoload"]['psr-4'] = array_merge($data["autoload"]['psr-4'], $psr4);
-$data['require'] = ($data['require'] ?? []) + ($bundleComposerJson['require'] ?? []);
-if( !empty( $bundleComposerJson['require-dev']) ) {
-    $data['require-dev'] = ($data['require-dev'] ?? []) +  $bundleComposerJson['require-dev'];
-}
-
-
-
-/**
- * Trick Yarn/NPM
- * do yarn install inside the component folder
- */
-$bundlePackageJsonPath = "{$componentDir}/package.json";
-if(file_exists($bundlePackageJsonPath)) {
-    $data["scripts"]['auto-scripts'] = ["yarn install --cwd ../components/{$_SERVER['COMPONENT']}" => "script"] + $data["scripts"]['auto-scripts'];
-}
-
-// write the composer.json
-file_put_contents(
-    $composerJsonPath,
-    json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
-);

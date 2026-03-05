@@ -6,15 +6,19 @@ namespace Novactive\EzSolrSearchExtra\Query\AggregationVisitor;
 
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation;
 use Ibexa\Contracts\Solr\Query\AggregationVisitor;
+use Ibexa\Contracts\Solr\Query\CriterionVisitor;
 use Novactive\EzSolrSearchExtra\Query\Aggregation\RawTermAggregation;
 
 class RawTermAggregationVisitor implements AggregationVisitor
 {
     private AggregationVisitor $aggregationVisitor;
+    private CriterionVisitor $criterionVisitor;
 
     public function __construct(
-        AggregationVisitor $aggregationVisitor
+        AggregationVisitor $aggregationVisitor,
+        CriterionVisitor $criterionVisitor
     ) {
+        $this->criterionVisitor = $criterionVisitor;
         $this->aggregationVisitor = $aggregationVisitor;
     }
 
@@ -38,13 +42,32 @@ class RawTermAggregationVisitor implements AggregationVisitor
             'field' => $aggregation->getFieldName(),
             'limit' => $aggregation->getLimit(),
             'mincount' => $aggregation->getMinCount(),
+            'domain' => $aggregation->getDomain(),
         ];
+        if ($aggregation->sort) {
+            $facetInfos['sort'] = $aggregation->sort;
+        }
         if (!empty($aggregation->excludeTags)) {
             $facetInfos['domain']['excludeTags'] = implode(',', $aggregation->excludeTags);
         }
+
+        if (isset($facetInfos['domain']['filter'])) {
+            $facetDomainFilters = [];
+            foreach ($facetInfos['domain']['filter'] as $facetDomainFilter) {
+                if (is_string($facetDomainFilter)) {
+                    $facetDomainFilters[] = $facetDomainFilter;
+                } else {
+                    $facetDomainFilters[] = $this->criterionVisitor->visit($facetDomainFilter);
+                }
+            }
+            $facetInfos['domain']['filter'] = $facetDomainFilters;
+        }
+
         if (!empty($aggregation->nestedAggregations)) {
-            foreach ($aggregation->nestedAggregations as $aggregation) {
-                if ($this->aggregationVisitor->canVisit($aggregation, $languageFilter)) {
+            foreach ($aggregation->nestedAggregations as $nestedAggregationName => $aggregation) {
+                if (is_string($aggregation)) {
+                    $facetInfos['facet'][$nestedAggregationName] = $aggregation;
+                } elseif ($this->aggregationVisitor->canVisit($aggregation, $languageFilter)) {
                     $facetInfos['facet'][$aggregation->getName()] = $this->aggregationVisitor->visit(
                         $this->aggregationVisitor,
                         $aggregation,
@@ -52,6 +75,10 @@ class RawTermAggregationVisitor implements AggregationVisitor
                     );
                 }
             }
+        }
+
+        if (empty($facetInfos['domain'])) {
+            unset($facetInfos['domain']);
         }
 
         return $facetInfos;

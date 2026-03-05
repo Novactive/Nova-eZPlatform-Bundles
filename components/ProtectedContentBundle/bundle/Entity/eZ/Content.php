@@ -23,7 +23,9 @@ trait Content
 {
     /**
      * @var int
+     *
      * @ORM\Column(name="content_id", type="integer", nullable=false)
+     *
      * @Assert\NotBlank()
      */
     private $contentId;

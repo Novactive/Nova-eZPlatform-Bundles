@@ -6,10 +6,9 @@ namespace Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor;
 
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
 use Ibexa\Contracts\Solr\Query\CriterionVisitor;
-use Ibexa\Solr\Query\Common\CriterionVisitor\CustomField\CustomFieldIn as BaseVisitor;
 use Novactive\EzSolrSearchExtra\Query\Content\Criterion\FilterTag as FiltertagCriterion;
 
-class FilterTag extends BaseVisitor
+class FilterTag extends CriterionVisitor
 {
     /**
      * Check if visitor is applicable to current criterion.

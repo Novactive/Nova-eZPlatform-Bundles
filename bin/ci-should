@@ -19,7 +19,8 @@ set_time_limit( 0 );
 require dirname( __DIR__ ) . '/vendor/autoload.php';
 
 $action = $_SERVER['argv'][1] ?? '';
-$componentDir = "components/{$_SERVER['COMPONENT']}";
+$componentName = $_SERVER['COMPONENT'];
+$componentDir = "components/{$componentName}";
 $configFile = "{$componentDir}/ci-config.yaml";
 if ( $action === '' || !file_exists( $configFile ) )
 {
@@ -42,6 +43,7 @@ $componentComposerJson = json_decode( file_get_contents( "{$componentDir}/compos
 $requiredPhpVersion = $componentComposerJson->require->php ?? null;
 if($requiredPhpVersion) {
     if(!Semver::satisfies(PHP_VERSION, $requiredPhpVersion)) {
+        echo "..:: $componentName ::.. PHP version required: {$requiredPhpVersion} but found ".PHP_VERSION.".".PHP_EOL;
         exit( 1 );
     }
 }
@@ -51,6 +53,7 @@ $requiredIbexaVersion = $config['required_ibexa_version'] ?? null;
 if ( $requiredIbexaVersion && $ibexaVersion )
 {
     if(!Semver::satisfies( $ibexaVersion, $requiredIbexaVersion )) {
+        echo "..:: $componentName ::.. Ibexa version required: {$requiredIbexaVersion} but found {$ibexaVersion}.".PHP_EOL;
         exit( 1 );
     }
 }

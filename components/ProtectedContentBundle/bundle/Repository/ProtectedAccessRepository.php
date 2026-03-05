@@ -38,6 +38,22 @@ class ProtectedAccessRepository
         return ProtectedAccess::class;
     }
 
+    /** @retrun ProtectedAccess[] */
+    public function findAll(int $offset = 0, int $limit = 50): array
+    {
+        $entityRepository = $this->entityManager->getRepository($this->getEntityClass());
+        $qb = $entityRepository->createQueryBuilder($this->getAlias());
+        $qb->setFirstResult($offset);
+        $qb->setMaxResults($limit);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Retourne toutes les protections qui affectent ce contenu.
+     * Que ce soit directement, ou via ses ancêtres.
+     * En prenant en compte ses multiples emplacements.
+     */
     public function findByContent(?Content $content): array
     {
         if (null === $content) {
@@ -73,7 +89,7 @@ class ProtectedAccessRepository
     }
 
     /**
-     * Retourne les ContentID du contenu et de tous ces descendants en prenant en compte ses multiples emplacements.
+     * Retourne les ContentID du contenu et de tous ces ancêtres en prenant en compte ses multiples emplacements.
      */
     protected function getContentIds(Content $content): array
     {
@@ -103,5 +119,11 @@ class ProtectedAccessRepository
                 return $ids;
             }
         );
+    }
+
+    public function delete(ProtectedAccess $protectedAccess): void
+    {
+        $this->entityManager->remove($protectedAccess);
+        $this->entityManager->flush();
     }
 }

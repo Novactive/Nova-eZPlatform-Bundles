@@ -19,16 +19,10 @@ use Novactive\eZPlatform\Bundles\Core\Markdown\Parser;
 use Symfony\Component\Filesystem\Filesystem;
 use Twig\Environment;
 
-final class Documenter
+final readonly class Documenter
 {
-    private Environment $twig;
-
-    private array $components;
-
-    public function __construct(Environment $twig, array $components)
+    public function __construct(private Environment $twig, private array $components)
     {
-        $this->twig = $twig;
-        $this->components = $components;
     }
 
     public function __invoke(string $branch): void
@@ -57,7 +51,7 @@ final class Documenter
         $mdFileContentLines = file($source);
 
         // we remove the cartouche
-        if (trim($mdFileContentLines[2] ?? '').trim($mdFileContentLines[11] ?? '') === '----'.'----') {
+        if ('--------' === trim($mdFileContentLines[2] ?? '').trim($mdFileContentLines[11] ?? '')) {
             \array_splice($mdFileContentLines, 2, 9);
         }
 
@@ -123,7 +117,7 @@ final class Documenter
         foreach ($links as $subPage) {
             $this->generatePage(
                 $branch,
-                trim($subPage, ' ./'),
+                trim((string) $subPage, ' ./'),
                 $folder,
                 $from,
                 $component

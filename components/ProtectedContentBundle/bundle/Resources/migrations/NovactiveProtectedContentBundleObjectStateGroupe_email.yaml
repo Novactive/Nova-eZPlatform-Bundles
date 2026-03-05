@@ -1,0 +1,43 @@
+-
+    type: object_state_group
+    mode: create
+    metadata:
+        identifier: 'protected_content_email'
+        mainTranslation: fre-FR
+        translations:
+            fre-FR:
+                name: 'Protection de contenu (Par email)'
+                description: ''
+            eng-GB:
+                name: 'Content Protection (Email)'
+                description: ''
+-
+  type: object_state
+  mode: create
+  metadata:
+    identifier: 'unprotected'
+    mainTranslation: fre-FR
+    objectStateGroup: 'protected_content_email'
+    priority: 0
+    translations:
+      fre-FR:
+        name: 'Pas de protection'
+        description: 'Ce contenu n''est pas protégé.'
+      eng-GB:
+        name: 'No protection'
+        description: 'This content is not protected.'
+-
+  type: object_state
+  mode: create
+  metadata:
+    identifier: 'protected'
+    mainTranslation: fre-FR
+    objectStateGroup: 'protected_content_email'
+    priority: 1
+    translations:
+      fre-FR:
+        name: 'Contenu protégé'
+        description: 'Ce contenu est protégé par un email.'
+      eng-GB:
+        name: 'Protected content'
+        description: 'This content is protected by email.'

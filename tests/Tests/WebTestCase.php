@@ -18,7 +18,7 @@ class WebTestCase extends BaseTestCase
 {
     protected function get(string $serviceId)
     {
-        return self::$container->get($serviceId);
+        return self::getContainer()->get($serviceId);
     }
 
     protected function setUp(): void

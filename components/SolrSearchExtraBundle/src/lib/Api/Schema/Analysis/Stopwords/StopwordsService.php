@@ -6,21 +6,17 @@ namespace Novactive\EzSolrSearchExtra\Api\Schema\Analysis\Stopwords;
 
 use Ibexa\Core\Base\Exceptions\NotFoundException;
 use Ibexa\Solr\Gateway\Message;
-use Novactive\EzSolrSearchExtra\Api\Gateway;
+use Novactive\EzSolrSearchExtra\Search\ExtendedSearchHandler;
 
 class StopwordsService
 {
     public const API_PATH = '/schema/analysis/stopwords';
 
-    /** @var Gateway */
-    protected $gateway;
+    protected ExtendedSearchHandler $searchHandler;
 
-    /**
-     * StopwordsService constructor.
-     */
-    public function __construct(Gateway $gateway)
+    public function __construct(ExtendedSearchHandler $searchHandler)
     {
-        $this->gateway = $gateway;
+        $this->searchHandler = $searchHandler;
     }
 
     /**
@@ -29,7 +25,7 @@ class StopwordsService
      */
     public function getWords(string $setId, int $offset = 0, int $limit = 10): array
     {
-        $response = $this->gateway->request(
+        $response = $this->searchHandler->request(
             'GET',
             sprintf('%s/%s', self::API_PATH, $setId)
         );
@@ -47,7 +43,7 @@ class StopwordsService
      */
     public function addWords(string $setId, array $words): bool
     {
-        $response = $this->gateway->request(
+        $response = $this->searchHandler->request(
             'PUT',
             sprintf('%s/%s', self::API_PATH, $setId),
             new Message(
@@ -62,7 +58,7 @@ class StopwordsService
             throw new NotFoundException('stopword set', $setId);
         }
 
-        $this->gateway->reload();
+        $this->searchHandler->reload();
 
         return 0 === $response->responseHeader->status;
     }
@@ -73,7 +69,7 @@ class StopwordsService
      */
     public function deleteWord(string $setId, string $word): bool
     {
-        $response = $this->gateway->request(
+        $response = $this->searchHandler->request(
             'DELETE',
             sprintf('%s/%s/%s', self::API_PATH, $setId, $word)
         );
@@ -82,7 +78,7 @@ class StopwordsService
             throw new NotFoundException('stopword', $word);
         }
 
-        $this->gateway->reload();
+        $this->searchHandler->reload();
 
         return 0 === $response->responseHeader->status;
     }

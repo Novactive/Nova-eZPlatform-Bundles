@@ -28,8 +28,8 @@
                     {% set titleSet = 'solr_admin.page.stopwords.title'|trans %}
                     {% set empty = 'solr_admin.page.stopwords.empty'|trans %}
                 {% endif %}
-                <div class="ez-table-header">
-                    <div class="ez-table-header__headline">{{ titleSet }}</div>
+                <div class="ibexa-table-header">
+                    <div class="ibexa-table-header__headline">{{ titleSet }}</div>
                 </div>
                 {% if sets is empty %}
                     <table class="table">
@@ -43,10 +43,10 @@
                     <table class="table">
                         <tbody>
                         <tr>
-                            <td class="ez-table__cell">
+                            <td class="ibexa-table__cell">
                                 {{ ('solr_admin.' ~ set.type ~ '.' ~ set.id)|trans }}
                             </td>
-                            <td class="ez-table__cell ez-table__cell--has-action-btns text-right">
+                            <td class="ibexa-table__cell ibexa-table__cell--has-action-btns text-right">
                                 <a
                                         title="{{ ('solr_admin.page.' ~ set.type ~ '.action.view')|trans }}"
                                         href="{{ path('solr_admin.' ~ set.type ~ '.index', {'setId': set.id}) }}"

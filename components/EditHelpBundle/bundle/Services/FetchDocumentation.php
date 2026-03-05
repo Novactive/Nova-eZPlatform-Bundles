@@ -14,38 +14,32 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\NovaeZEditHelpBundle\Services;
 
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException;
+use Ibexa\Contracts\Core\Repository\Exceptions\InvalidCriterionArgumentException;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content;
+use Ibexa\Contracts\Core\Repository\Values\Content\LocationQuery;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query;
+use Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchHit;
+use Ibexa\Contracts\Core\Repository\Values\ContentType\ContentType;
+use Ibexa\Core\Repository\SiteAccessAware\Repository;
 
 class FetchDocumentation
 {
     public const TOOLTIP_CONTENT_TYPE = 'nova_help_tooltip';
 
-    /**
-     * @var Repository
-     */
-    protected $repository;
-
-    public function __construct(Repository $repository)
-    {
-        $this->repository = $repository;
+    public function __construct(
+        protected Repository $repository
+    ) {
     }
 
     public function getByContentType(ContentType $contentType): ?Content
     {
         $query = new Query(
             [
-                'filter' => new LogicalAnd(
+                'filter' => new Query\Criterion\LogicalAnd(
                     [
-                        new Criterion\ContentTypeIdentifier([self::TOOLTIP_CONTENT_TYPE]),
-                        new Field('identifier', '=', $contentType->identifier),
+                        new Query\Criterion\ContentTypeIdentifier([self::TOOLTIP_CONTENT_TYPE]),
+                        new Query\Criterion\Field('identifier', '=', $contentType->identifier),
                     ]
                 ),
             ]
@@ -55,19 +49,29 @@ class FetchDocumentation
         $searchResult = $searchService->findContent($query);
         // Content is found
         if ($searchResult->totalCount > 0) {
-            return $searchResult->searchHits[0]->valueObject;
+            $hit = $searchResult->searchHits[0];
+            $valueObject = $hit->valueObject;
+            if ($valueObject instanceof Content) {
+                return $valueObject;
+            }
         }
 
         return null;
     }
 
+    /**
+     * @param int $locationId
+     * @return SearchHit[] de Content.
+     * @throws InvalidArgumentException
+     * @throws InvalidCriterionArgumentException
+     */
     public function getChildrenByLocationId(int $locationId): array
     {
         $query = new LocationQuery(
             [
-                'filter' => new LogicalAnd(
+                'filter' => new Query\Criterion\LogicalAnd(
                     [
-                        new ParentLocationId($locationId),
+                        new Query\Criterion\ParentLocationId($locationId),
                     ]
                 ),
             ]

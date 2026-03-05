@@ -18,7 +18,7 @@ use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException;
 use Ibexa\Contracts\Core\Repository\LocationService;
 use Ibexa\Core\Helper\TranslationHelper;
 use Ibexa\Core\MVC\Symfony\Routing\UrlAliasRouter;
-use Ibexa\Core\MVC\Symfony\SiteAccess;
+use Ibexa\Core\MVC\Symfony\SiteAccess\SiteAccessServiceInterface;
 use Novactive\EzMenuManager\MenuItem\MenuItemValue;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 use Psr\Cache\CacheException;
@@ -36,7 +36,7 @@ class ContentMenuItemType extends DefaultMenuItemType
     protected LocationService $locationService;
     protected RouterInterface $router;
     protected TagAwareAdapterInterface $cache;
-    protected SiteAccess $siteAccess;
+    protected SiteAccessServiceInterface $siteAccessService;
 
     /**
      * @required
@@ -81,9 +81,9 @@ class ContentMenuItemType extends DefaultMenuItemType
     /**
      * @required
      */
-    public function setsiteAccess(siteAccess $siteAccess): void
+    public function setSiteAccessService(SiteAccessServiceInterface $siteAccessService): void
     {
-        $this->siteAccess = $siteAccess;
+        $this->siteAccessService = $siteAccessService;
     }
 
     /**
@@ -152,7 +152,8 @@ class ContentMenuItemType extends DefaultMenuItemType
      */
     protected function getMenuItemLinkInfos(MenuItem $menuItem): array
     {
-        $cacheItem = $this->cache->getItem("content-menu-item-link-{$menuItem->getId()}-{$this->siteAccess->name}");
+        $siteAccess = $this->siteAccessService->getCurrent();
+        $cacheItem = $this->cache->getItem("content-menu-item-link-{$menuItem->getId()}-{$siteAccess->name}");
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
         }
@@ -169,7 +170,7 @@ class ContentMenuItemType extends DefaultMenuItemType
                 UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
                 [
                     'location' => $location,
-                    'siteaccess' => $this->siteAccess->name,
+                    'siteaccess' => $siteAccess->name,
                 ],
                 UrlGeneratorInterface::ABSOLUTE_URL
             ),
