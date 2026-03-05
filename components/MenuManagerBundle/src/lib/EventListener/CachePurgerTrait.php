@@ -11,15 +11,19 @@ declare(strict_types=1);
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
+
 namespace Novactive\EzMenuManager\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use Ibexa\Contracts\HttpCache\PurgeClient\PurgeClientInterface;
+use Ibexa\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 
 trait CachePurgerTrait
 {
-    /** @var object|null */
+    /** @var PurgeClientInterface */
     protected $httpCachePurgeClient;
 
     /** @var TransactionAwareAdapterInterface|null */
@@ -29,13 +33,13 @@ trait CachePurgerTrait
     protected $em;
 
     #[\Symfony\Contracts\Service\Attribute\Required]
-    public function setHttpCachePurgeClient(?object $httpCachePurgeClient = null): void
+    public function setHttpCachePurgeClient(PurgeClientInterface $httpCachePurgeClient): void
     {
         $this->httpCachePurgeClient = $httpCachePurgeClient;
     }
 
     #[\Symfony\Contracts\Service\Attribute\Required]
-    public function setPersistenceCache(?TransactionAwareAdapterInterface $persistenceCacheAdapter = null): void
+    public function setPersistenceCache(TransactionAwareAdapterInterface $persistenceCacheAdapter): void
     {
         $this->persistenceCacheAdapter = $persistenceCacheAdapter;
     }
@@ -83,7 +87,7 @@ trait CachePurgerTrait
         if ($this->httpCachePurgeClient && method_exists($this->httpCachePurgeClient, 'invalidateTags')) {
             try {
                 $this->httpCachePurgeClient->invalidateTags($tags);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // Silently fail if HTTP cache is not available
             }
         }
@@ -92,7 +96,7 @@ trait CachePurgerTrait
         if ($this->persistenceCacheAdapter && method_exists($this->persistenceCacheAdapter, 'invalidateTags')) {
             try {
                 $this->persistenceCacheAdapter->invalidateTags($tags);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // Silently fail if persistence cache is not available
             }
         }

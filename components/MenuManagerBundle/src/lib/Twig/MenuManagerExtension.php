@@ -11,6 +11,7 @@ declare(strict_types=1);
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
+
 namespace Novactive\EzMenuManager\Twig;
 
 use Ibexa\Contracts\Core\Repository\ContentService;
@@ -20,6 +21,7 @@ use Novactive\EzMenuManager\MenuItem\MenuItemConverter;
 use Novactive\EzMenuManager\Service\MenuBuilder;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
+use Override;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -58,7 +60,7 @@ class MenuManagerExtension extends AbstractExtension
         $this->menuItemConverter = $menuItemConverter;
     }
 
-    #[\Override]
+    #[Override]
     public function getFunctions()
     {
         return [
@@ -67,7 +69,7 @@ class MenuManagerExtension extends AbstractExtension
         ];
     }
 
-    #[\Override]
+    #[Override]
     public function getFilters()
     {
         return [

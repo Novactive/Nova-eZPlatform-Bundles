@@ -11,6 +11,7 @@ declare(strict_types=1);
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
+
 namespace Novactive\EzMenuManager\MenuItem;
 
 use Novactive\EzMenuManager\Exception\MenuItemTypeNotFoundException;
@@ -64,8 +65,6 @@ class MenuItemTypeRegistry
     }
 
     /**
-     * @param $entityClassName
-     *
      * @throws MenuItemTypeNotFoundException
      *
      * @return MenuItemTypeInterface

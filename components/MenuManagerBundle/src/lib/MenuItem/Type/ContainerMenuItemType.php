@@ -11,17 +11,19 @@ declare(strict_types=1);
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
+
 namespace Novactive\EzMenuManager\MenuItem\Type;
 
 use Novactive\EzMenuManager\MenuItem\MenuItemValue;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
+use Override;
 
 class ContainerMenuItemType extends DefaultMenuItemType
 {
     /**
      * {@inheritdoc}
      */
-    #[\Override]
+    #[Override]
     public function getEntityClassName(): string
     {
         return MenuItem\ContainerMenuItem::class;
@@ -30,7 +32,7 @@ class ContainerMenuItemType extends DefaultMenuItemType
     /**
      * {@inheritDoc}
      */
-    #[\Override]
+    #[Override]
     public function toMenuItemLink(MenuItem $menuItem): ?MenuItemValue
     {
         $name = $this->getName($menuItem);

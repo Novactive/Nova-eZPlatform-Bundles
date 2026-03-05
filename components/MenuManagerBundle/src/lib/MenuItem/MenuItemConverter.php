@@ -11,11 +11,14 @@ declare(strict_types=1);
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
+
 namespace Novactive\EzMenuManager\MenuItem;
 
+use ArrayAccess;
 use Novactive\EzMenuManager\Exception\MenuItemTypeNotFoundException;
 use Novactive\EzMenuManager\Exception\UnexpectedTypeException;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
+use Traversable;
 
 class MenuItemConverter
 {
@@ -34,8 +37,6 @@ class MenuItemConverter
     }
 
     /**
-     * @param $hash
-     *
      * @throws MenuItemTypeNotFoundException
      */
     public function fromHash($hash, string $defaultClass = MenuItem::class): ?MenuItem
@@ -46,13 +47,11 @@ class MenuItemConverter
     }
 
     /**
-     * @param $menuItems
-     *
      * @throws UnexpectedTypeException
      */
     public function toHashArray($menuItems): array
     {
-        if (!is_array($menuItems) && !($menuItems instanceof \Traversable && $menuItems instanceof \ArrayAccess)) {
+        if (!is_array($menuItems) && !($menuItems instanceof Traversable && $menuItems instanceof ArrayAccess)) {
             throw new UnexpectedTypeException($menuItems, 'array or (\Traversable and \ArrayAccess)');
         }
         $hash = [];
@@ -67,6 +66,7 @@ class MenuItemConverter
      * @throws MenuItemTypeNotFoundException
      *
      * @return MenuItem[]
+     *
      * @SuppressWarnings(PHPMD.IfStatementAssignment)
      */
     public function fromHashArray(array $hashArray, string $defaultClass = MenuItem::class): array
@@ -78,9 +78,9 @@ class MenuItemConverter
             if ($menuItem) {
                 $menuItems[$hashItem['id']] = $menuItem;
                 if (
-                    !$menuItem->getParent()
-                    && str_starts_with((string) $hashItem['parentId'], '_')
-                    && ($parent = $menuItems[$hashItem['parentId']] ?? null)
+                    !$menuItem->getParent() &&
+                    str_starts_with((string) $hashItem['parentId'], '_') &&
+                    ($parent = $menuItems[$hashItem['parentId']] ?? null)
                 ) {
                     $parent->addChildren($menuItem);
                 }

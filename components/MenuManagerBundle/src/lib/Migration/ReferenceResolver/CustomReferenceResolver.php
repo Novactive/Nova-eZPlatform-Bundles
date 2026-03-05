@@ -60,7 +60,7 @@ class CustomReferenceResolver extends AbstractResolver
 
                 return $this->em->getRepository(ContentMenuItem::class)->findBy(
                     [
-                    'url' => ContentMenuItem::URL_PREFIX.$location->contentId,
+                        'url' => ContentMenuItem::URL_PREFIX.$location->contentId,
                     ]
                 );
         }

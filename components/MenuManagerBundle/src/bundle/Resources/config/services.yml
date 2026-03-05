@@ -10,6 +10,11 @@ services:
         # this means you cannot fetch services directly from the container via $container->get()
         # if you need to do this, you can override this setting on individual services
         public: false
+        bind:
+            $translationHelper: '@Ibexa\Core\Helper\TranslationHelper'
+            $knpHelper: '@knp_menu.helper'
+            $httpCachePurgeClient: '@ibexa.http_cache.purge_client'
+            $persistenceCacheAdapter: '@ibexa.cache_pool'
 
     Novactive\EzMenuManagerBundle\Controller\:
         resource: '../../Controller/*'
@@ -46,9 +51,5 @@ services:
         resource: '../../../lib/MenuItem/*'
 
     Novactive\EzMenuManager\MenuItem\Type\ContentMenuItemType: ~
-    Knp\Menu\Twig\Helper: ~
-    Knp\Menu\Renderer\RendererProviderInterface: '@knp_menu.renderer_provider'
-    Knp\Menu\Matcher\MatcherInterface: '@knp_menu.matcher'
-    Knp\Menu\MenuFactory: '@knp_menu.factory'
     Novactive\EzMenuManager\MenuItem\MenuItemTypeRegistry:
         arguments: [!tagged ezmenumanager.menuitemtype]

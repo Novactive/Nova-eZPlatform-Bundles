@@ -11,6 +11,7 @@ declare(strict_types=1);
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
+
 namespace Novactive\EzMenuManagerBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -18,12 +19,13 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Novactive\EzMenuManager\Traits\IdentityTrait;
+use Stringable;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'menu_manager_menu_item')]
 #[ORM\InheritanceType('SINGLE_TABLE')]
 #[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
-class MenuItem implements \Stringable
+class MenuItem implements Stringable
 {
     use IdentityTrait;
 
@@ -213,8 +215,6 @@ class MenuItem implements \Stringable
 
     /**
      * @param string $name
-     * @param mixed $default
-     * @return mixed
      */
     public function getOption($name, $default = false)
     {
@@ -225,7 +225,6 @@ class MenuItem implements \Stringable
 
     /**
      * @param string $name
-     * @param mixed $value
      */
     public function setOption($name, $value): void
     {
@@ -253,7 +252,7 @@ class MenuItem implements \Stringable
         /** @var MenuItem[] $childrens */
         $childrens = $this->getChildrens()->getValues();
 
-        usort($childrens, fn(MenuItem $itemA, MenuItem $itemB) => $itemA->getPosition() <=> $itemB->getPosition());
+        usort($childrens, fn (MenuItem $itemA, MenuItem $itemB) => $itemA->getPosition() <=> $itemB->getPosition());
 
         $position = 0;
         foreach ($childrens as $child) {

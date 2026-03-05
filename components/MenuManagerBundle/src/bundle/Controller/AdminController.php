@@ -11,6 +11,7 @@ declare(strict_types=1);
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
+
 namespace Novactive\EzMenuManagerBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -117,8 +118,6 @@ class AdminController extends Controller
 
     /**
      * @param Menu[] $menus
-     *
-     * @return array
      */
     protected function getMenusIds($menus): array
     {

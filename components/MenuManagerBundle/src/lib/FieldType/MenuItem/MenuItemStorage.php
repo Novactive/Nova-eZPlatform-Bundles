@@ -11,6 +11,7 @@ declare(strict_types=1);
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
+
 namespace Novactive\EzMenuManager\FieldType\MenuItem;
 
 use Ibexa\Contracts\Core\FieldType\GatewayBasedStorage;
@@ -19,7 +20,6 @@ use Ibexa\Contracts\Core\Persistence\Content\VersionInfo;
 
 class MenuItemStorage extends GatewayBasedStorage
 {
-
     public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context = [])
     {
         // VersionInfo return STATUS_DRAFT when publish Content

@@ -11,6 +11,7 @@ declare(strict_types=1);
  * @copyright 2018 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
+
 namespace Novactive\EzMenuManager\Form\Type\FieldType;
 
 use Doctrine\ORM\EntityManagerInterface;

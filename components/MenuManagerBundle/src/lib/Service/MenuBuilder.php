@@ -11,6 +11,7 @@ declare(strict_types=1);
  * @copyright 2019 Novactive
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
+
 namespace Novactive\EzMenuManager\Service;
 
 use Knp\Menu\FactoryInterface;
@@ -57,9 +58,7 @@ class MenuBuilder
     }
 
     /**
-     * @param $name
-     *
-     * @return \Knp\Menu\ItemInterface
+     * @return ItemInterface
      */
     public function createItem($name, array $options = [])
     {
@@ -73,7 +72,7 @@ class MenuBuilder
     /**
      * @throws \Novactive\EzMenuManager\Exception\MenuItemTypeNotFoundException
      *
-     * @return \Knp\Menu\ItemInterface
+     * @return ItemInterface
      */
     public function appendChild(MenuItem $menuItem, ItemInterface $knpMenu)
     {
