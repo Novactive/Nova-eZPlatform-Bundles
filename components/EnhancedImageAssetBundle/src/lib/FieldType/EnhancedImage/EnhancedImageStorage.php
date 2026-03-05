@@ -33,9 +33,9 @@ class EnhancedImageStorage extends ImageStorage
         if (isset($field->value->externalData)) {
             $isNewFocusPoint = $field->value->externalData['isNewFocusPoint'] ?? false;
             if (
-                $isNewFocusPoint
-                && !isset($field->value->externalData['inputUri'])
-                && isset($field->value->externalData['id'])
+                $isNewFocusPoint &&
+                !isset($field->value->externalData['inputUri']) &&
+                isset($field->value->externalData['id'])
             ) {
                 $binaryFile = $this->ioService->loadBinaryFile($field->value->externalData['id']);
                 $stream = $this->ioService->getFileInputStream($binaryFile);

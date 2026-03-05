@@ -64,8 +64,6 @@ class ObjectRelationFieldValueConverter implements FieldValueConverterInterface
 
     /**
      * @throws UnauthorizedException
-     *
-     * @return ImageAssetValue
      */
     public function toImageAssetValue(Content $content, Field $field): ?ImageAssetValue
     {
