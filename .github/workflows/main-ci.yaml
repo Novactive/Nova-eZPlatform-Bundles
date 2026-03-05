@@ -117,6 +117,7 @@ jobs:
 
             -   name: Install All the bundle on Top of a fresh eZ Installation
                 run: |
+                    composer config minimum-stability dev
                     for COMPONENT in `ls components`; do
                         if COMPONENT=${COMPONENT} bin/ci-should install; then
                             echo ::group::..:: ${COMPONENT} ::..
