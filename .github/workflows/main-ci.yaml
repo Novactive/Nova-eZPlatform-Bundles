@@ -127,6 +127,7 @@ jobs:
                     cd ibexa
                     echo ::group::..:: Update Composer ::..
                     rm var/cache/prod -rf
+                    composer config minimum-stability dev
                     composer update
                     bin/console d:s:u --force
                     echo ::endgroup::
