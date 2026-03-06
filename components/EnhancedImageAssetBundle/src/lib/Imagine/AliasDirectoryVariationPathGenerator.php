@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\Imagine;
 
-use Ibexa\Bundle\Core\Imagine\VariationPathGenerator;
+use Ibexa\Contracts\Core\Variation\VariationPathGenerator;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 
 class AliasDirectoryVariationPathGenerator implements VariationPathGenerator
@@ -29,7 +29,7 @@ class AliasDirectoryVariationPathGenerator implements VariationPathGenerator
         $this->filterConfiguration = $filterConfiguration;
     }
 
-    public function getVariationPath($originalPath, $filter)
+    public function getVariationPath(string $originalPath, string $filter): string
     {
         $filterConfig = $this->filterConfiguration->get($filter);
         $info = pathinfo($originalPath);

@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Novactive\EzEnhancedImageAssetBundle\Command;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use Exception;
 use Ibexa\Contracts\Core\Repository\ContentService;
@@ -45,6 +44,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Contracts\Service\Attribute\Required;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -72,49 +72,37 @@ class ConvertToImageAsset extends Command
     /** @var SymfonyStyle */
     protected $io;
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setConnection(Connection $connection): void
     {
         $this->connection = $connection;
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setRepository(Repository $repository): void
     {
         $this->repository = $repository;
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setContentTypeService(ContentTypeService $contentTypeService): void
     {
         $this->contentTypeService = $contentTypeService;
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setContentService(ContentService $contentService): void
     {
         $this->contentService = $contentService;
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setValueConverter(ChainFieldValueConverter $valueConverter): void
     {
         $this->valueConverter = $valueConverter;
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setCache(TagAwareAdapterInterface $cache): void
     {
         $this->cache = $cache;
@@ -145,7 +133,7 @@ class ConvertToImageAsset extends Command
     /**
      * @throws Exception
      */
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->repository->sudo(
             function () use ($input) {
@@ -198,7 +186,7 @@ class ConvertToImageAsset extends Command
             }
         );
 
-        return null;
+        return Command::SUCCESS;
     }
 
     /**
@@ -260,7 +248,7 @@ class ConvertToImageAsset extends Command
 
         $countQuery = clone $query;
         $countQuery->select('count(*)');
-        $totalCount = $countQuery->execute()->fetch(FetchMode::COLUMN);
+        $totalCount = (int) $countQuery->executeQuery()->fetchOne();
         $progressBar = new ProgressBar($this->io, $totalCount);
 
         $batch = 500;
@@ -271,7 +259,7 @@ class ConvertToImageAsset extends Command
 
         do {
             $query->setFirstResult($offset);
-            $contentIds = $query->execute()->fetchAll(FetchMode::COLUMN);
+            $contentIds = $query->executeQuery()->fetchFirstColumn();
             foreach ($contentIds as $contentId) {
                 $contentInfo = $this->contentService->loadContentInfo($contentId);
                 $this->updateContent($contentInfo, $originalFieldDefinition, $fieldDefinition);
@@ -350,7 +338,7 @@ class ConvertToImageAsset extends Command
             ->set('oa.data_int', ':destination_content_id')
             ->set('oa.data_text', ':alternative_text')
             ->where(
-                $query->expr()->andX(
+                $query->expr()->and(
                     $query->expr()->eq('oa.contentclassattribute_id', ':contentclassattribute_id'),
                     $query->expr()->eq('oa.contentobject_id', ':contentobject_id'),
                     $query->expr()->eq('oa.version', ':attribute_version'),
@@ -364,7 +352,7 @@ class ConvertToImageAsset extends Command
             ->setParameter(':language_code', $languageCode, ParameterType::STRING)
             ->setParameter(':destination_content_id', $value->destinationContentId, ParameterType::INTEGER)
             ->setParameter(':alternative_text', $value->alternativeText, ParameterType::STRING);
-        $query->execute();
+        $query->executeStatement();
     }
 
     /**
