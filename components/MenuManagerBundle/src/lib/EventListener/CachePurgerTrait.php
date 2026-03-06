@@ -25,7 +25,7 @@ trait CachePurgerTrait
     /** @var PurgeClientInterface */
     protected $httpCachePurgeClient;
 
-    /** @var TransactionAwareAdapterInterface|null */
+    /** @var TransactionAwareAdapterInterface */
     protected $persistenceCacheAdapter;
 
     /** @var EntityManagerInterface */

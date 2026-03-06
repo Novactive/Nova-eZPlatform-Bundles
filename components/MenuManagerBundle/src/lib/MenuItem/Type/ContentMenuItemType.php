@@ -39,7 +39,7 @@ class ContentMenuItemType extends DefaultMenuItemType
     protected ContentService $contentService;
     protected LocationService $locationService;
     protected RouterInterface $router;
-    protected ?TagAwareCacheInterface $cache = null;
+    protected TagAwareCacheInterface $cache;
     protected SiteAccessServiceInterface $siteAccessService;
 
     #[\Symfony\Contracts\Service\Attribute\Required]
@@ -67,7 +67,7 @@ class ContentMenuItemType extends DefaultMenuItemType
     }
 
     #[\Symfony\Contracts\Service\Attribute\Required]
-    public function setCache(?TagAwareCacheInterface $cache = null): void
+    public function setCache(TagAwareCacheInterface $cache): void
     {
         $this->cache = $cache;
     }
