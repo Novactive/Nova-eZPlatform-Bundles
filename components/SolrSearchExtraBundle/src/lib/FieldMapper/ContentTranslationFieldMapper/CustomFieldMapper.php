@@ -23,22 +23,22 @@ class CustomFieldMapper extends ContentTranslationFieldMapper
     protected $fieldsConfig = [];
 
     /**
-     * @var \Ibexa\Contracts\Core\Persistence\Content\Type\Handler
+     * @var ContentType\Handler
      */
     protected $contentTypeHandler;
 
     /**
-     * @var \Ibexa\Core\Search\Common\FieldRegistry
+     * @var FieldRegistry
      */
     protected $fieldRegistry;
 
     /**
-     * @var \Ibexa\Core\Search\Common\FieldNameGenerator
+     * @var FieldNameGenerator
      */
     protected $fieldNameGenerator;
 
     /**
-     * @var \Ibexa\Solr\FieldMapper\BoostFactorProvider
+     * @var BoostFactorProvider
      */
     protected $boostFactorProvider;
 
@@ -69,10 +69,7 @@ class CustomFieldMapper extends ContentTranslationFieldMapper
         $this->fieldsConfig = $this->configResolver->getParameter($customFields, 'nova_solr_extra');
     }
 
-    /**
-     * @param string $languageCode
-     */
-    public function accept(Content $content, $languageCode): bool
+    public function accept(Content $content, string $languageCode): bool
     {
         return !empty($this->fieldsConfig);
     }
@@ -80,9 +77,9 @@ class CustomFieldMapper extends ContentTranslationFieldMapper
     /**
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException
      *
-     * @return array|\Ibexa\Contracts\Core\Search\Field[]
+     * @return array|Field[]
      */
-    public function mapFields(Content $content, $languageCode): array
+    public function mapFields(Content $content, string $languageCode): array
     {
         $fields = [];
         $contentType = $this->contentTypeHandler->load(
@@ -149,10 +146,6 @@ class CustomFieldMapper extends ContentTranslationFieldMapper
         }
     }
 
-    /**
-     * @param $fieldDefinition
-     * @param $contentType
-     */
     protected function getFieldNames($fieldDefinition, $contentType): array
     {
         $fieldNames = [];
@@ -175,12 +168,10 @@ class CustomFieldMapper extends ContentTranslationFieldMapper
 
     /**
      * Return index field type for the given arguments.
-     *
-     * @param \Ibexa\Contracts\Core\Persistence\Content\Type\FieldDefinition $fieldDefinition
      */
     private function getIndexFieldType(
         ContentType $contentType,
-        ContentType\FieldDefinition $fieldDefinition,
+        FieldDefinition $fieldDefinition,
         FieldType $fieldType
     ): FieldType {
         if (!$fieldType instanceof FieldType\TextField) {

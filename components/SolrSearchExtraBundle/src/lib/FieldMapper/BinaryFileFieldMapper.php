@@ -64,9 +64,9 @@ class BinaryFileFieldMapper
     {
         foreach ($contentType->fieldDefinitions as $fieldDefinition) {
             if (
-                $fieldDefinition->id !== $field->fieldDefinitionId
-                 || !$fieldDefinition->isSearchable
-                 || !$field->value->externalData
+                $fieldDefinition->id !== $field->fieldDefinitionId ||
+                 !$fieldDefinition->isSearchable ||
+                 !$field->value->externalData
             ) {
                 continue;
             }
@@ -101,8 +101,6 @@ class BinaryFileFieldMapper
 
     /**
      * Return index field type for the given $contentType.
-     *
-     * @return \Ibexa\Contracts\Core\Search\FieldType\TextField
      */
     private function getIndexFieldType(SPIContentType $contentType): SPISearchFieldType\TextField
     {

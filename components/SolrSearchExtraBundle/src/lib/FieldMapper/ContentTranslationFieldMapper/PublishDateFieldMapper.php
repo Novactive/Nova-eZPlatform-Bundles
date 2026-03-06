@@ -27,12 +27,12 @@ class PublishDateFieldMapper extends ContentTranslationFieldMapper
     protected $fieldIdentifiers = [];
 
     /**
-     * @var \Ibexa\Contracts\Core\Persistence\Content\Type\Handler
+     * @var ContentTypeHandler
      */
     protected $contentTypeHandler;
 
     /**
-     * @var \Ibexa\Core\Search\Common\FieldRegistry
+     * @var FieldRegistry
      */
     protected $fieldRegistry;
 
@@ -59,22 +59,17 @@ class PublishDateFieldMapper extends ContentTranslationFieldMapper
         $this->fieldIdentifiers = $this->configResolver->getParameter($fieldIdentifiers, 'nova_solr_extra');
     }
 
-    /**
-     * @param string $languageCode
-     */
-    public function accept(Content $content, $languageCode): bool
+    public function accept(Content $content, string $languageCode): bool
     {
         return true;
     }
 
     /**
-     * @param $languageCode
-     *
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException
      *
-     * @return \Ibexa\Contracts\Core\Search\Field[]
+     * @return Field[]
      */
-    public function mapFields(Content $content, $languageCode): array
+    public function mapFields(Content $content, string $languageCode): array
     {
         $contentType = $this->contentTypeHandler->load(
             $content->versionInfo->contentInfo->contentTypeId
@@ -87,13 +82,13 @@ class PublishDateFieldMapper extends ContentTranslationFieldMapper
 
             foreach ($contentType->fieldDefinitions as $fieldDefinition) {
                 if (
-                    $fieldDefinition->id !== $field->fieldDefinitionId
-                    || (
+                    $fieldDefinition->id !== $field->fieldDefinitionId ||
+                    (
                         !in_array(
                             $fieldDefinition->identifier,
                             $this->fieldIdentifiers
-                        )
-                        && !in_array(
+                        ) &&
+                        !in_array(
                             "{$contentType->identifier}/{$fieldDefinition->identifier}",
                             $this->fieldIdentifiers
                         )

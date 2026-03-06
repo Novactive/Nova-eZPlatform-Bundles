@@ -10,7 +10,7 @@ use QueryTranslator\Values\Node;
 
 class WordVisitor extends BaseWordVisitor
 {
-    public function visit(Node $node, Visitor $subVisitor = null, $options = null)
+    public function visit(Node $node, ?Visitor $subVisitor = null, $options = null): string
     {
         $word = parent::visit($node, $subVisitor, $options);
         if (isset($options['wildcard'])) {

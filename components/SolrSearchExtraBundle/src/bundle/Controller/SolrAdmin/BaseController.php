@@ -7,44 +7,30 @@ namespace Novactive\EzSolrSearchExtraBundle\Controller\SolrAdmin;
 use Ibexa\Contracts\AdminUi\Controller\Controller;
 use Ibexa\Contracts\AdminUi\Notification\NotificationHandlerInterface;
 use Ibexa\Contracts\Core\Repository\PermissionResolver;
+use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class BaseController extends Controller
 {
-    /**
-     * @var PermissionResolver
-     */
-    protected $permissionResolver;
+    protected PermissionResolver $permissionResolver;
 
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
+    protected TranslatorInterface $translator;
 
-    /**
-     * @var NotificationHandlerInterface
-     */
-    protected $notificationHandler;
+    protected NotificationHandlerInterface $notificationHandler;
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setPermissionResolver(PermissionResolver $permissionResolver): void
     {
         $this->permissionResolver = $permissionResolver;
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setTranslator(TranslatorInterface $translator): void
     {
         $this->translator = $translator;
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setNotificationHandler(NotificationHandlerInterface $notificationHandler): void
     {
         $this->notificationHandler = $notificationHandler;
@@ -53,7 +39,7 @@ abstract class BaseController extends Controller
     /**
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
      */
-    protected function permissionAccess(string $module, string $function)
+    protected function permissionAccess(string $module, string $function): null
     {
         if (!$this->permissionResolver->hasAccess($module, $function)) {
             $exception = $this->createAccessDeniedException($this->translator->trans(

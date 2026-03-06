@@ -13,19 +13,19 @@ use stdClass;
 
 class RawTermAggregationResultExtractor implements AggregationResultExtractor
 {
-    /** @var \Novactive\EzSolrSearchExtra\ResultExtractor\AggregationKeyMapper\AbstractRawTermAggregationKeyMapper */
+    /** @var AbstractRawTermAggregationKeyMapper */
     private $keyMapper;
 
     /** @var string */
     private $aggregationClass;
 
-    /** @var \Ibexa\Contracts\Solr\ResultExtractor\AggregationResultExtractor */
+    /** @var AggregationResultExtractor */
     protected $aggregationResultExtractor;
 
     public function __construct(
         string $aggregationClass,
         AggregationResultExtractor $aggregationResultExtractor,
-        AbstractRawTermAggregationKeyMapper $keyMapper = null
+        ?AbstractRawTermAggregationKeyMapper $keyMapper = null
     ) {
         if (null === $keyMapper) {
             $keyMapper = new RawTermAggregationKeyMapper();

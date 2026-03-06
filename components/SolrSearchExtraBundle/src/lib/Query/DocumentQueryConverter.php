@@ -10,9 +10,9 @@ use Ibexa\Solr\Query\Common\QueryConverter\NativeQueryConverter;
 class DocumentQueryConverter extends NativeQueryConverter
 {
     /**
-     * @param \Novactive\EzSolrSearchExtra\Query\DocumentQuery $query
+     * @param DocumentQuery $query
      */
-    public function convert(Query $query, array $languageSettings = [])
+    public function convert(Query $query, array $languageSettings = []): array
     {
         $params = parent::convert($query, $languageSettings);
 

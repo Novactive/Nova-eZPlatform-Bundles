@@ -50,7 +50,7 @@ class CustomField extends FacetBuilderVisitor implements FacetFieldVisitor
         $excludeTags = implode(',', $excludeTags);
 
         $facetParams = [
-            'facet.field' => "{!ex={$excludeTags} key=${fieldId}}$facetBuilder->field",
+            'facet.field' => "{!ex={$excludeTags} key={$fieldId}}$facetBuilder->field",
             "f.{$facetBuilder->field}.facet.limit" => $facetBuilder->limit,
             "f.{$facetBuilder->field}.facet.mincount" => $facetBuilder->minCount,
         ];
