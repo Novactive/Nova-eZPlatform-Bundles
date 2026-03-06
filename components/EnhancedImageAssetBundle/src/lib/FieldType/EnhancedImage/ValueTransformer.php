@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage;
 
 use Ibexa\AdminUi\Form\DataTransformer\FieldType\AbstractBinaryBaseTransformer;
-use Ibexa\Core\FieldType\Image\Value;
 use Symfony\Component\Form\DataTransformerInterface;
 
 class ValueTransformer extends AbstractBinaryBaseTransformer implements DataTransformerInterface
@@ -27,7 +26,7 @@ class ValueTransformer extends AbstractBinaryBaseTransformer implements DataTran
         }
 
         return array_merge(
-            ['file' => null, 'remove' => false],
+            $this->getDefaultProperties(),
             [
                 'alternativeText' => $value->alternativeText,
                 'focusPoint' => $value->focusPoint,
@@ -36,7 +35,7 @@ class ValueTransformer extends AbstractBinaryBaseTransformer implements DataTran
     }
 
     /**
-     * @throws TransformationFailedException
+     * @throws \Symfony\Component\Form\Exception\TransformationFailedException
      */
     public function reverseTransform(mixed $value): Value
     {
