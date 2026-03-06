@@ -18,8 +18,10 @@
         }
     ],
     "require": {
-        "php": "^7.3 || ^8.0",
-        "knplabs/knp-menu-bundle": "*"
+        "php": "^8.3",
+        "knplabs/knp-menu-bundle": "*",
+        "jms/translation-bundle": "^2.4",
+        "pagerfanta/pagerfanta": "^3.0"
     },
     "autoload": {
         "psr-4": {

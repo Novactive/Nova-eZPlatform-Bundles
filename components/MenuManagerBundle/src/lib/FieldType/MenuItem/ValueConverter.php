@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\EzMenuManager\FieldType\MenuItem;
 
 use Novactive\EzMenuManager\MenuItem\MenuItemTypeRegistry;
@@ -39,9 +41,6 @@ class ValueConverter
         return $hash;
     }
 
-    /**
-     * @param $hash
-     */
     public function fromHash($hash): Value
     {
         if (!is_array($hash)) {

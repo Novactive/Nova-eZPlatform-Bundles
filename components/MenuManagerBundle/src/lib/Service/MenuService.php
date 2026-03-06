@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\EzMenuManager\Service;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -47,8 +49,6 @@ class MenuService
     }
 
     /**
-     * @param $locationId
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      *
@@ -79,9 +79,7 @@ class MenuService
     }
 
     /**
-     * @param $menuId
-     *
-     * @throws \Novactive\EzMenuManager\Exception\MenuNotFoundException
+     * @throws MenuNotFoundException
      *
      * @return Menu|object|null
      */
@@ -96,7 +94,7 @@ class MenuService
     }
 
     /**
-     * @throws \Novactive\EzMenuManager\Exception\MenuNotFoundException
+     * @throws MenuNotFoundException
      *
      * @return Menu|object|null
      */

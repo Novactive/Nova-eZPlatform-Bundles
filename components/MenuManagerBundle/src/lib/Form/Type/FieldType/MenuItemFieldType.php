@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\EzMenuManager\Form\Type\FieldType;
 
 use Ibexa\ContentForms\Data\Content\ContentCreateData;
@@ -156,9 +158,10 @@ class MenuItemFieldType extends AbstractType
             }
         }
 
-        usort($availableMenus, function ($first, $second) {
-            return strcmp($first['menu']->getName(), $second['menu']->getName());
-        });
+        usort(
+            $availableMenus,
+            fn ($first, $second) => strcmp((string) $first['menu']->getName(), (string) $second['menu']->getName())
+        );
         $view->vars['available_menus'] = $availableMenus;
     }
 

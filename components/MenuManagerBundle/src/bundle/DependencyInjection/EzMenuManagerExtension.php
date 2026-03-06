@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\EzMenuManagerBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
@@ -34,10 +36,6 @@ class EzMenuManagerExtension extends Extension implements PrependExtensionInterf
         $loader->load('indexable_fieldtypes.yml');
         $loader->load('field_value_converters.yml');
         $loader->load('ezadminui/components.yml');
-
-        if (class_exists('Kaliop\eZMigrationBundle\eZMigrationBundle')) {
-            $loader->load('migration.yml');
-        }
     }
 
     /**

@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\EzMenuManager\Twig;
 
 use Ibexa\Contracts\Core\Repository\ContentService;
@@ -19,6 +21,7 @@ use Novactive\EzMenuManager\MenuItem\MenuItemConverter;
 use Novactive\EzMenuManager\Service\MenuBuilder;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
+use Override;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -57,18 +60,20 @@ class MenuManagerExtension extends AbstractExtension
         $this->menuItemConverter = $menuItemConverter;
     }
 
+    #[Override]
     public function getFunctions()
     {
         return [
-            new TwigFunction('ezmenumanager_menu_jstree', [$this, 'getMenuJstree']),
-            new TwigFunction('ezmenumanager_breadcrumb', [$this, 'buildBreadcrumb']),
+            new TwigFunction('ezmenumanager_menu_jstree', $this->getMenuJstree(...)),
+            new TwigFunction('ezmenumanager_breadcrumb', $this->buildBreadcrumb(...)),
         ];
     }
 
+    #[Override]
     public function getFilters()
     {
         return [
-            new TwigFilter('sort_menu_items_by_menu', [$this, 'sortMenuItemsByMenu']),
+            new TwigFilter('sort_menu_items_by_menu', $this->sortMenuItemsByMenu(...)),
         ];
     }
 
@@ -118,7 +123,7 @@ class MenuManagerExtension extends AbstractExtension
             $hash = $this->menuItemConverter->toHash($menuItem);
             $list[] = [
                 'id' => $hash['id'],
-                'parent' => $hash['parentId'] ? $hash['parentId'] : 'root',
+                'parent' => $hash['parentId'] ?: 'root',
                 'text' => $hash['name'],
                 'type' => $hash['type'],
                 'state' => [

@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\EzMenuManager\Service\DataTransformer;
 
 use Novactive\EzMenuManager\FieldType\MenuItem\ValueConverter;
@@ -39,7 +41,7 @@ class MenuItemValueTransformer implements DataTransformerInterface
      *
      * @return array|null the value's hash, or null if $value was not a FieldType Value
      */
-    public function transform($value)
+    public function transform($value): mixed
     {
         return json_encode($this->valueConverter->toHash($value));
     }
@@ -50,9 +52,9 @@ class MenuItemValueTransformer implements DataTransformerInterface
      *
      * @return \eZ\Publish\SPI\FieldType\Value
      */
-    public function reverseTransform($value)
+    public function reverseTransform($value): mixed
     {
-        $hash = json_decode($value, true);
+        $hash = json_decode((string) $value, true);
 
         return $this->valueConverter->fromHash($hash);
     }

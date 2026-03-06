@@ -10,8 +10,11 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\EzMenuManager\MenuItem\Type;
 
+use Exception;
 use Ibexa\Contracts\Core\Repository\ContentService;
 use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
 use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException;
@@ -21,12 +24,13 @@ use Ibexa\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use Ibexa\Core\MVC\Symfony\SiteAccess\SiteAccessServiceInterface;
 use Novactive\EzMenuManager\MenuItem\MenuItemValue;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
+use Override;
 use Psr\Cache\CacheException;
 use Psr\Cache\InvalidArgumentException;
 use RuntimeException;
-use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Throwable;
 
 class ContentMenuItemType extends DefaultMenuItemType
@@ -35,52 +39,40 @@ class ContentMenuItemType extends DefaultMenuItemType
     protected ContentService $contentService;
     protected LocationService $locationService;
     protected RouterInterface $router;
-    protected TagAwareAdapterInterface $cache;
+    protected TagAwareCacheInterface $cache;
     protected SiteAccessServiceInterface $siteAccessService;
 
-    /**
-     * @required
-     */
+    #[\Symfony\Contracts\Service\Attribute\Required]
     public function setTranslationHelper(TranslationHelper $translationHelper): void
     {
         $this->translationHelper = $translationHelper;
     }
 
-    /**
-     * @required
-     */
+    #[\Symfony\Contracts\Service\Attribute\Required]
     public function setContentService(ContentService $contentService): void
     {
         $this->contentService = $contentService;
     }
 
-    /**
-     * @required
-     */
+    #[\Symfony\Contracts\Service\Attribute\Required]
     public function setLocationService(LocationService $locationService): void
     {
         $this->locationService = $locationService;
     }
 
-    /**
-     * @required
-     */
+    #[\Symfony\Contracts\Service\Attribute\Required]
     public function setRouter(RouterInterface $router): void
     {
         $this->router = $router;
     }
 
-    /**
-     * @required
-     */
-    public function setCache(TagAwareAdapterInterface $cache): void
+    #[\Symfony\Contracts\Service\Attribute\Required]
+    public function setCache(TagAwareCacheInterface $cache): void
     {
         $this->cache = $cache;
     }
 
-    /**
-     * @required
-     */
+    #[\Symfony\Contracts\Service\Attribute\Required]
     public function setSiteAccessService(SiteAccessServiceInterface $siteAccessService): void
     {
         $this->siteAccessService = $siteAccessService;
@@ -89,6 +81,7 @@ class ContentMenuItemType extends DefaultMenuItemType
     /**
      * {@inheritdoc}
      */
+    #[Override]
     public function getEntityClassName(): string
     {
         return MenuItem\ContentMenuItem::class;
@@ -97,12 +90,13 @@ class ContentMenuItemType extends DefaultMenuItemType
     /**
      * @param MenuItem\ContentMenuItem $menuItem
      */
+    #[Override]
     public function toHash(MenuItem $menuItem): array
     {
         $hash = parent::toHash($menuItem);
         try {
             $contentInfo = $this->contentService->loadContentInfo($menuItem->getContentId());
-        } catch (NotFoundException|UnauthorizedException $exception) {
+        } catch (NotFoundException|UnauthorizedException) {
             return $hash;
         }
         $hash['name'] = $this->translationHelper->getTranslatedContentNameByContentInfo($contentInfo);
@@ -113,6 +107,7 @@ class ContentMenuItemType extends DefaultMenuItemType
     /**
      * {@inheritDoc}
      */
+    #[Override]
     public function fromHash($hash): ?MenuItem
     {
         $menuItem = parent::fromHash($hash);
@@ -128,6 +123,7 @@ class ContentMenuItemType extends DefaultMenuItemType
         return $menuItem;
     }
 
+    #[Override]
     public function toMenuItemLink(MenuItem $menuItem): ?MenuItemValue
     {
         try {
@@ -153,9 +149,23 @@ class ContentMenuItemType extends DefaultMenuItemType
     protected function getMenuItemLinkInfos(MenuItem $menuItem): array
     {
         $siteAccess = $this->siteAccessService->getCurrent();
-        $cacheItem = $this->cache->getItem("content-menu-item-link-{$menuItem->getId()}-{$siteAccess->name}");
-        if ($cacheItem->isHit()) {
-            return $cacheItem->get();
+        $siteAccessName = '';
+        if ($siteAccess instanceof \Ibexa\Core\MVC\Symfony\SiteAccess) {
+            $siteAccessName = $siteAccess->name;
+        }
+
+        // Try to get from cache if cache is available
+        $cacheItem = null;
+        if (null !== $this->cache) {
+            try {
+                $cacheItem = $this->cache->getItem("content-menu-item-link-{$menuItem->getId()}-{$siteAccessName}");
+                if ($cacheItem->isHit()) {
+                    return $cacheItem->get();
+                }
+            } catch (Exception $e) {
+                // Cache failed, continue without it
+                $cacheItem = null;
+            }
         }
 
         if (!$menuItem instanceof MenuItem\ContentMenuItem) {
@@ -163,15 +173,16 @@ class ContentMenuItemType extends DefaultMenuItemType
         }
         $content = $this->contentService->loadContent($menuItem->getContentId());
         $location = $this->locationService->loadLocation($content->contentInfo->mainLocationId);
+        $parameters = ['location' => $location];
+        if ($siteAccessName) {
+            $parameters['siteaccess'] = $siteAccessName;
+        }
 
         $menuItemLinkInfos = [
             'id' => "location-{$location->id}",
             'uri' => $this->router->generate(
                 UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
-                [
-                    'location' => $location,
-                    'siteaccess' => $siteAccess->name,
-                ],
+                $parameters,
                 UrlGeneratorInterface::ABSOLUTE_URL
             ),
             'label' => $this->translationHelper->getTranslatedContentNameByContentInfo($content->contentInfo),
@@ -182,16 +193,19 @@ class ContentMenuItemType extends DefaultMenuItemType
             ],
         ];
 
-        $cacheItem->set($menuItemLinkInfos);
-        $cacheItem->tag(
-            [
-                'content-'.$content->id,
-                'location-'.$location->id,
-                'menu-item-'.$menuItem->getId(),
-                'menu-'.$menuItem->getMenu()->getId(),
-            ]
-        );
-        $this->cache->save($cacheItem);
+        // Save to cache if cache is available
+        if (null !== $this->cache && null !== $cacheItem) {
+            $cacheItem->set($menuItemLinkInfos);
+            $cacheItem->tag(
+                [
+                    'content-'.$content->id,
+                    'location-'.$location->id,
+                    'menu-item-'.$menuItem->getId(),
+                    'menu-'.$menuItem->getMenu()->getId(),
+                ]
+            );
+            $this->cache->save($cacheItem);
+        }
 
         return $menuItemLinkInfos;
     }

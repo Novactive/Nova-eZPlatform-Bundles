@@ -98,7 +98,7 @@ export default class MenuManagerModule extends Component {
                 items={this.state.items}
                 onChange={this.handleTreeChange}
                 onEdit={this.handeEdit}
-                language={eZ.adminUiConfig.languages.priority[0]}
+                language={ibexa.adminUiConfig.languages.priority[0]}
                 types={this.props.config.getTypesMap()}
                 jsTreeTypes={this.props.config.getJsTreeTypes()}
               />
