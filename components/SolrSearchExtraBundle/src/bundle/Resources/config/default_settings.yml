@@ -3,3 +3,5 @@ parameters:
   nova_solr_extra.default.fulltext_fields: []
   nova_solr_extra.default.custom_fields: []
   nova_solr_extra.default.publishdate_fields: []
+
+  nova_solr_extra.default.distribution_strategy_identifier: null

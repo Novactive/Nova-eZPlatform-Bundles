@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Novactive\EzSolrSearchExtra\Api;
 
 use Exception;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Ibexa\Solr\Gateway\DistributionStrategy;
 use Ibexa\Solr\Gateway\DistributionStrategy\CloudDistributionStrategy;
 use Ibexa\Solr\Gateway\Endpoint;
@@ -21,6 +22,7 @@ use stdClass;
 class Gateway extends Native
 {
     protected QueryConverter $queryConverter;
+    protected ConfigResolverInterface $configResolver;
 
     public function __construct(
         QueryConverter $queryConverter,
@@ -30,9 +32,12 @@ class Gateway extends Native
         QueryConverter $contentQueryConverter,
         QueryConverter $locationQueryConverter,
         UpdateSerializerInterface $updateSerializer,
-        DistributionStrategy $distributionStrategy
+        DistributionStrategy $distributionStrategy,
+        ConfigResolverInterface $configResolver
     ) {
         $this->queryConverter = $queryConverter;
+        $this->configResolver = $configResolver;
+
         parent::__construct(
             $client,
             $endpointResolver,
@@ -74,13 +79,26 @@ class Gateway extends Native
         $this->deleteByQuery('document_type_id:"document"');
     }
 
+    public function getDistributionStrategyIdentifier(): string
+    {
+        $distributionStrategyIdentifier = $this->configResolver->getParameter(
+            'distribution_strategy_identifier',
+            'nova_solr_extra'
+        );
+        if (null === $distributionStrategyIdentifier) {
+            $distributionStrategyIdentifier = $this->distributionStrategy instanceof CloudDistributionStrategy ?
+                'cloud' :
+                'standalone';
+        }
+
+        return $distributionStrategyIdentifier;
+    }
+
     public function getAdminEndpoint(): AdminEndpoint
     {
-        $distributionStrategyIdentifier = $this->distributionStrategy instanceof CloudDistributionStrategy ?
-            'cloud' :
-            'standalone';
-
         $endpoint = $this->getEndpoint();
+
+        $distributionStrategyIdentifier = $this->getDistributionStrategyIdentifier();
 
         return new AdminEndpoint(
             [
