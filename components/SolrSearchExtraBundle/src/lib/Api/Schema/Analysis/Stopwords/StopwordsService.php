@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Api\Schema\Analysis\Stopwords;
 
+use Exception;
 use Ibexa\Core\Base\Exceptions\NotFoundException;
 use Ibexa\Solr\Gateway\Message;
 use Novactive\EzSolrSearchExtra\Search\ExtendedSearchHandler;
@@ -20,8 +21,8 @@ class StopwordsService
     }
 
     /**
-     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
-     * @throws \Exception
+     * @throws NotFoundException
+     * @throws Exception
      */
     public function getWords(string $setId, int $offset = 0, int $limit = 10): array
     {
@@ -38,8 +39,8 @@ class StopwordsService
     }
 
     /**
-     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
-     * @throws \Exception
+     * @throws NotFoundException
+     * @throws Exception
      */
     public function addWords(string $setId, array $words): bool
     {
@@ -64,8 +65,8 @@ class StopwordsService
     }
 
     /**
-     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
-     * @throws \Exception
+     * @throws NotFoundException
+     * @throws Exception
      */
     public function deleteWord(string $setId, string $word): bool
     {

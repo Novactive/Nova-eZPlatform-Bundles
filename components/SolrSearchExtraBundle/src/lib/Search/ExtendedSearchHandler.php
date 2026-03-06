@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Search;
 
+use Exception;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
 use Ibexa\Contracts\Core\Search\Document;
 use Ibexa\Solr\CoreFilter;
@@ -44,7 +45,6 @@ class ExtendedSearchHandler
 
         return $this->resultExtractor->extract(
             $this->gateway->findDocument($query, $languageFilter),
-            $query->facetBuilders,
             $query->aggregations,
             $languageFilter,
             $query->spellcheck
@@ -83,7 +83,7 @@ class ExtendedSearchHandler
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function request(
         string $method,
@@ -95,7 +95,7 @@ class ExtendedSearchHandler
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function reload(): void
     {

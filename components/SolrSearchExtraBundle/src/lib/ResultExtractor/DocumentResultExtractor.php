@@ -7,32 +7,30 @@ namespace Novactive\EzSolrSearchExtra\ResultExtractor;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Spellcheck;
 use Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchHit;
 use Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchResult;
+use Ibexa\Contracts\Core\Repository\Values\ValueObject;
 use Ibexa\Solr\ResultExtractor;
 use Novactive\EzSolrSearchExtra\Search\ExtendedSearchResult;
+use Novactive\EzSolrSearchExtra\Values\DocumentHit;
 use stdClass;
 
 class DocumentResultExtractor extends ResultExtractor
 {
     public function extract(
-        $data,
-        array $facetBuilders = [],
+        stdClass $data,
         array $aggregations = [],
         array $languageFilter = [],
         ?Spellcheck $spellcheck = null
-    ) {
+    ): SearchResult {
         $result = parent::extract(
             $data,
-            $facetBuilders,
             $aggregations,
             $languageFilter,
             $spellcheck
         );
 
         $properties = [
-            'facets' => $result->facets,
             'aggregations' => $result->aggregations,
             'searchHits' => $result->searchHits,
-            'spellSuggestion' => $result->spellSuggestion,
             'spellcheck' => $result->spellcheck,
             'time' => $result->time,
             'timedOut' => $result->timedOut,
@@ -43,7 +41,7 @@ class DocumentResultExtractor extends ResultExtractor
         if (isset($data->expanded)) {
             $properties['expanded'] = [];
             foreach ($data->expanded as $key => $expanded) {
-                $result = new SearchResult(
+                $expandedResult = new SearchResult(
                     [
                         'time' => $data->responseHeader->QTime / 1000,
                         'maxScore' => $expanded->maxScore,
@@ -52,10 +50,10 @@ class DocumentResultExtractor extends ResultExtractor
                 );
 
                 foreach ($expanded->docs as $doc) {
-                    $result->searchHits[] = $this->extractSearchHit($doc, $languageFilter);
+                    $expandedResult->searchHits[] = $this->extractSearchHit($doc);
                 }
 
-                $properties['expanded'][$key] = $result;
+                $properties['expanded'][$key] = $expandedResult;
             }
         }
 
@@ -64,7 +62,7 @@ class DocumentResultExtractor extends ResultExtractor
         );
     }
 
-    protected function extractSearchHit(stdClass $doc, array $languageFilter): SearchHit
+    protected function extractSearchHit(stdClass $doc): SearchHit
     {
         return new SearchHit(
             [
@@ -75,8 +73,8 @@ class DocumentResultExtractor extends ResultExtractor
         );
     }
 
-    public function extractHit($hit)
+    public function extractHit(stdClass $hit): ValueObject
     {
-        return $hit;
+        return new DocumentHit($hit);
     }
 }

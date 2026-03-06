@@ -12,5 +12,5 @@ class DocumentQuery extends Query
 
     public array $rawParams = [];
 
-    public string $childTransformer = '[child limit=-1]';
+    public string $childTransformer = '[child limit=-1 parentFilter=*:*]';
 }

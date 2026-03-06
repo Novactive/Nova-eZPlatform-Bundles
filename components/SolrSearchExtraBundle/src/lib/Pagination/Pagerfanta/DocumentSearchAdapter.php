@@ -17,15 +17,17 @@ class DocumentSearchAdapter implements AdapterInterface, SearchResultAdapter
     protected array $languageFilter = [];
     protected DocumentSearchServiceInterface $documentSearchService;
     protected DocumentQuery $query;
-    private ?AggregationResultCollection $aggregations;
+    private ?AggregationResultCollection $aggregations = null;
 
-    private ?int $totalCount;
+    private ?SpellcheckResult $spellcheck = null;
 
-    private ?float $time;
+    private ?int $totalCount = null;
 
-    private ?bool $timedOut;
+    private ?float $time = null;
 
-    private ?float $maxScore;
+    private ?bool $timedOut = null;
+
+    private ?float $maxScore = null;
 
     public function __construct(
         DocumentQuery $query,
@@ -50,8 +52,7 @@ class DocumentSearchAdapter implements AdapterInterface, SearchResultAdapter
 
         $countQuery = clone $this->query;
         $countQuery->limit = 0;
-        // Skip facets/aggregations & spellcheck computing
-        $countQuery->facetBuilders = [];
+        // Skip aggregations & spellcheck computing
         $countQuery->aggregations = [];
         $countQuery->spellcheck = null;
 

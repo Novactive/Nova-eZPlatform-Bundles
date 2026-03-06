@@ -26,9 +26,6 @@ class TikaLocalClient implements TikaClientInterface
         $this->jar = $jar;
     }
 
-    /**
-     * @param $command
-     */
     protected function run($command): string
     {
         $shellCommand = [

@@ -132,9 +132,6 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
      */
     public $boostQueries = [];
 
-    /**
-     * @param $value
-     */
     public function __construct($value, array $properties = [])
     {
         parent::__construct(null, Criterion\Operator::LIKE, $value);

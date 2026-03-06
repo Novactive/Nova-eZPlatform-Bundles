@@ -11,40 +11,27 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion\Operator;
 use Ibexa\Contracts\Solr\DocumentMapper;
 use Ibexa\Contracts\Solr\Query\CriterionVisitor;
 use Ibexa\Solr\CoreFilter\NativeCoreFilter;
-use Ibexa\Solr\Query\Common\QueryConverter\NativeQueryConverter;
 use Ibexa\Solr\Query\QueryConverter as BaseQueryConverter;
 use Novactive\EzSolrSearchExtra\Query\AdvancedContentQuery;
 use Novactive\EzSolrSearchExtra\Query\DocumentQuery;
 
-class QueryConverter extends NativeQueryConverter
+class QueryConverter extends BaseQueryConverter
 {
-    /** @var BaseQueryConverter */
-    protected $baseConverter;
+    protected BaseQueryConverter $baseConverter;
 
-    /** @var \Ibexa\Contracts\Solr\Query\CriterionVisitor */
-    protected $criterionVisitor;
+    protected CriterionVisitor $criterionVisitor;
 
-    /**
-     * QueryConverter constructor.
-     */
     public function __construct(BaseQueryConverter $baseConverter, CriterionVisitor $criterionVisitor)
     {
         $this->baseConverter = $baseConverter;
         $this->criterionVisitor = $criterionVisitor;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function convert(Query $query, array $languageSettings = []): array
     {
         $params = $this->baseConverter->convert($query, $languageSettings);
 
-        if (!is_array($params['fq'])) {
-            $params['fq'] = [$params['fq']];
-        }
-
-        if (false === $this->hasDocumentTypeFilter($params['fq'])) {
+        if (false === strpos($params['fq'], 'document_type_id:')) {
             // If there is no filter on the document type, we add it based on the query type
             $criteria = [];
             if ($query instanceof LocationQuery) {
@@ -65,9 +52,8 @@ class QueryConverter extends NativeQueryConverter
             }
             $query->filter = new Query\Criterion\LogicalAnd($criteria);
         }
-
         if ($query->filter instanceof Query\Criterion\LogicalAnd) {
-            unset($params['fq'][0]);
+            $params['fq'] = [];
             $this->flattenFilterQueries($query->filter->criteria, $params['fq']);
         }
 
@@ -76,24 +62,10 @@ class QueryConverter extends NativeQueryConverter
         }
 
         if ($query instanceof DocumentQuery) {
-            $params['fl'] .= ",{$query->childTransformer}";
+            $params['fl'] .= shell_exec(",{$query->childTransformer}");
         }
 
         return $params;
-    }
-
-    /**
-     * @param string[] $fqs
-     */
-    protected function hasDocumentTypeFilter(array $fqs): bool
-    {
-        foreach ($fqs as $fq) {
-            if (false !== strpos($fq, 'document_type_id:')) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
