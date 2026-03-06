@@ -11,31 +11,22 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion\Operator;
 use Ibexa\Contracts\Solr\DocumentMapper;
 use Ibexa\Contracts\Solr\Query\CriterionVisitor;
 use Ibexa\Solr\CoreFilter\NativeCoreFilter;
-use Ibexa\Solr\Query\Common\QueryConverter\NativeQueryConverter;
 use Ibexa\Solr\Query\QueryConverter as BaseQueryConverter;
 use Novactive\EzSolrSearchExtra\Query\AdvancedContentQuery;
 use Novactive\EzSolrSearchExtra\Query\DocumentQuery;
 
-class QueryConverter extends NativeQueryConverter
+class QueryConverter extends BaseQueryConverter
 {
-    /** @var BaseQueryConverter */
-    protected $baseConverter;
+    protected BaseQueryConverter $baseConverter;
 
-    /** @var \Ibexa\Contracts\Solr\Query\CriterionVisitor */
-    protected $criterionVisitor;
+    protected CriterionVisitor $criterionVisitor;
 
-    /**
-     * QueryConverter constructor.
-     */
     public function __construct(BaseQueryConverter $baseConverter, CriterionVisitor $criterionVisitor)
     {
         $this->baseConverter = $baseConverter;
         $this->criterionVisitor = $criterionVisitor;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function convert(Query $query, array $languageSettings = []): array
     {
         $params = $this->baseConverter->convert($query, $languageSettings);

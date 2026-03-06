@@ -122,7 +122,7 @@ class Gateway extends Native
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function request(
         string $method,

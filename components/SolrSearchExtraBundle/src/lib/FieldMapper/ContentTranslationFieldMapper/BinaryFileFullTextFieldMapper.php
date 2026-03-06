@@ -63,7 +63,7 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
     /**
      * {@inheritdoc}
      */
-    public function accept(SPIContent $content, $languageCode): bool
+    public function accept(SPIContent $content, string $languageCode): bool
     {
         return $this->enabled;
     }
@@ -74,7 +74,7 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException
      * @throws \Ibexa\Core\Base\Exceptions\InvalidArgumentValue
      */
-    public function mapFields(SPIContent $content, $languageCode): array
+    public function mapFields(SPIContent $content, string $languageCode): array
     {
         $fields = [];
 
@@ -84,8 +84,8 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
 
         foreach ($content->fields as $field) {
             if (
-                $field->languageCode !== $languageCode
-                 || !in_array($field->type, $this->binaryFileFieldTypeIdentifiers)
+                $field->languageCode !== $languageCode ||
+                 !in_array($field->type, $this->binaryFileFieldTypeIdentifiers)
             ) {
                 continue;
             }

@@ -1,10 +1,10 @@
 {
     "name": "novactive/ezsolrsearchextrabundle",
-    "type": "ezplatform-bundle",
-    "description": "A bundle which extend ezplatform solr search handler",
+    "type": "ibexa-bundle",
+    "description": "A bundle which extend ibexa solr search handler",
     "keywords": [
         "novactive",
-        "ezplatform",
+        "ibexa",
         "solr"
     ],
     "license": [
@@ -18,8 +18,8 @@
         }
     ],
     "require": {
-        "ezsystems/ezplatform-solr-search-engine": "*",
-        "php": "^7.4 || ^8.0"
+        "ibexa/solr": "~5.0",
+        "php": "^8.3"
     },
     "autoload": {
         "psr-4": {
@@ -29,8 +29,8 @@
     },
     "extra": {
         "thanks": {
-            "name": "ezsystems/ezplatform",
-            "url": "https://github.com/ezsystems/ezplatform"
+            "name": "ibexa/oss",
+            "url": "https://github.com/ibexa/oss"
         }
     }
 }

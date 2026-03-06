@@ -1,16 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Novactive\EzSolrSearchExtra\Container\Compiler;
 
+use LogicException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class EndpointResolverPass implements CompilerPassInterface
 {
     /**
-     * @throws \LogicException
+     * @throws LogicException
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $config = $container->getExtensionConfig('ibexa_solr');
         $this->processConnectionConfiguration($container, $config[0]);
