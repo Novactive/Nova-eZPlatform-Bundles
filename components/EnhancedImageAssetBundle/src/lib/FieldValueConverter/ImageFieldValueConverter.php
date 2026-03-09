@@ -30,6 +30,7 @@ use Ibexa\Contracts\Core\Variation\VariationHandler;
 use Ibexa\Core\Base\Exceptions\InvalidArgumentType;
 use Ibexa\Core\FieldType\Image\Value as ImageValue;
 use Ibexa\Core\FieldType\ImageAsset\Value as ImageAssetValue;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class ImageFieldValueConverter implements FieldValueConverterInterface
 {
@@ -56,33 +57,25 @@ class ImageFieldValueConverter implements FieldValueConverterInterface
         $this->configResolver = $configResolver;
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setImageVariationService(VariationHandler $imageVariationService): void
     {
         $this->imageVariationService = $imageVariationService;
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setContentService(ContentService $contentService): void
     {
         $this->contentService = $contentService;
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setLocationService(LocationService $locationService): void
     {
         $this->locationService = $locationService;
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setContentTypeService(ContentTypeService $contentTypeService): void
     {
         $this->contentTypeService = $contentTypeService;

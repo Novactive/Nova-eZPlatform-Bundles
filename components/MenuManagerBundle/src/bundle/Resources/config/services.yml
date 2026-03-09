@@ -15,7 +15,6 @@ services:
             $knpHelper: '@knp_menu.helper'
             $httpCachePurgeClient: '@ibexa.http_cache.purge_client'
             $persistenceCacheAdapter: '@ibexa.cache_pool'
-#            $locationHandler: '@Ibexa\Contracts\Core\Persistence\Content\Location\Handler'
 
     Novactive\EzMenuManagerBundle\Controller\:
         resource: '../../Controller/*'
@@ -30,8 +29,6 @@ services:
     Novactive\EzMenuManager\Service\MenuCacheService:
         arguments:
             $cache: '@ibexa.cache_pool'
-        calls:
-            - [setSiteAccess, ['@Ibexa\Core\MVC\Symfony\SiteAccess']]
 
     Novactive\EzMenuManager\Twig\:
         resource: '../../../lib/Twig/*'
@@ -53,14 +50,6 @@ services:
     Novactive\EzMenuManager\MenuItem\:
         resource: '../../../lib/MenuItem/*'
 
-    Novactive\EzMenuManager\MenuItem\Type\ContentMenuItemType:
-        calls:
-            - ['setTranslationHelper', ['@Ibexa\Core\Helper\TranslationHelper']]
-            - ['setContentService', ['@ibexa.siteaccessaware.service.content']]
-            - ['setLocationService', ['@ibexa.siteaccessaware.service.location']]
-            - ['setRouter', ['@router']]
-            - ['setCache', ['@ibexa.cache_pool']]
-            - ['setSiteAccessService', ['@Ibexa\Core\MVC\Symfony\SiteAccess\SiteAccessService']]
-
+    Novactive\EzMenuManager\MenuItem\Type\ContentMenuItemType: ~
     Novactive\EzMenuManager\MenuItem\MenuItemTypeRegistry:
         arguments: [!tagged ezmenumanager.menuitemtype]

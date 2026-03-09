@@ -5,9 +5,8 @@ services:
         public: false
 
         bind:
-            $imageVariationService: '@ibexa.field_type.ezimage.variation_service'
+            $imageVariationService: '@ibexa.field_type.ibexa_image.variation_service'
             $filterConfiguration: '@liip_imagine.filter.configuration'
-            $cache: "@ibexa.cache_pool"
             $assetExtension: '@twig.extension.assets'
 
     Novactive\EzEnhancedImageAsset\Twig\:
@@ -18,6 +17,8 @@ services:
 
     Novactive\EzEnhancedImageAssetBundle\Command\:
         resource: '../../Command/*'
+        bind:
+            $cache: '@ibexa.cache_pool'
 
     Novactive\EzEnhancedImageAsset\FocusPoint\FocusPointCalculator:
 

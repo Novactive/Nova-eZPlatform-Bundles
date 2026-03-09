@@ -57,6 +57,7 @@ wrap-bundles:
 			ddev exec -d /var/www/html "COMPONENT_CONFIG_DIR='components/$${COMPONENT}/tests/provisioning' COMPONENT=$${COMPONENT} bin/wrapbundle"; \
 		fi \
 	done
+	@ddev exec "$(COMPOSER) config minimum-stability dev"
 	@ddev exec "$(COMPOSER) update"
 	@ddev exec "$(CONSOLE) d:s:u --force"
 

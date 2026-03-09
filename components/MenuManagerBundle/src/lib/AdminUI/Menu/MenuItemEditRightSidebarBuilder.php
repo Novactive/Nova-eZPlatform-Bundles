@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\EzMenuManager\AdminUI\Menu;
 
 use Ibexa\Contracts\AdminUi\Menu\AbstractBuilder;
@@ -30,8 +32,8 @@ class MenuItemEditRightSidebarBuilder extends AbstractBuilder implements Transla
     public static function getTranslationMessages(): array
     {
         return [
-            ( new Message(self::ITEM__EDIT, 'menu_manager') )->setDesc('Publish'),
-            ( new Message(self::ITEM__CANCEL, 'menu_manager') )->setDesc('Discard changes'),
+            (new Message(self::ITEM__EDIT, 'menu_manager'))->setDesc('Publish'),
+            (new Message(self::ITEM__CANCEL, 'menu_manager'))->setDesc('Discard changes'),
         ];
     }
 

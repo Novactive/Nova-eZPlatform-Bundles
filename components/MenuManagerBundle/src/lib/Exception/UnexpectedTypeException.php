@@ -10,8 +10,12 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\EzMenuManager\Exception;
 
-class UnexpectedTypeException extends \Exception
+use Exception;
+
+class UnexpectedTypeException extends Exception
 {
 }

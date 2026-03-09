@@ -1,12 +1,13 @@
 {
     "name": "novactive/ezenhancedimageassetbundle",
-    "type": "ezplatform-bundle",
     "description": "",
     "keywords": [
         "novactive",
-        "ez",
-        "image"
+        "ibexa5",
+        "image",
+        "AlmaviaCX"
     ],
+    "type": "ibexa-bundle",
     "license": [
         "MIT"
     ],
@@ -18,7 +19,10 @@
         }
     ],
     "require": {
-        "php": "^7.3 || ^8.0"
+        "php": ">=8.3",
+        "ibexa/oss": "^5",
+        "guzzlehttp/promises": "^2.3",
+        "nyholm/psr7": "^1.8"
     },
     "autoload": {
         "psr-4": {
@@ -26,10 +30,11 @@
             "Novactive\\EzEnhancedImageAsset\\": "src/lib"
         }
     },
-    "extra": {
-        "thanks": {
-            "name": "ezsystems/ezplatform",
-            "url": "https://github.com/ezsystems/ezplatform"
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "symfony/flex": true,
+            "ibexa/post-install": true
         }
     }
 }

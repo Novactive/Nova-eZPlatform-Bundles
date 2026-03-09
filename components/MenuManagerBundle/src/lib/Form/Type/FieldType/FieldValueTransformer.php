@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\EzMenuManager\Form\Type\FieldType;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,13 +34,7 @@ class FieldValueTransformer implements DataTransformerInterface
         $this->em = $em;
     }
 
-    /**
-     * Transforms a FieldType Value into a hash using `FieldTpe::toHash()`.
-     * This hash is compatible with `reverseTransform()`.
-     *
-     * @return array|null the value's hash, or null if $value was not a FieldType Value
-     */
-    public function transform($value)
+    public function transform($value): mixed
     {
         if (!$value instanceof Value) {
             return null;
@@ -58,17 +54,11 @@ class FieldValueTransformer implements DataTransformerInterface
         return json_encode($hash);
     }
 
-    /**
-     * Transforms a hash into a FieldType Value using `FieldType::fromHash()`.
-     * The FieldValue is compatible with `transform()`.
-     *
-     * @return \eZ\Publish\SPI\FieldType\Value
-     */
-    public function reverseTransform($value)
+    public function reverseTransform($value): mixed
     {
         $menuRepo = $this->em->getRepository(Menu::class);
         $menuItemRepo = $this->em->getRepository(MenuItem::class);
-        $hash = json_decode($value, true);
+        $hash = json_decode((string) $value, true);
         $menuItems = [];
         foreach ($hash as $hashItem) {
             if ($hashItem['id']) {

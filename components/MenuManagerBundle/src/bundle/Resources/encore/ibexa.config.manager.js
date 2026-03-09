@@ -11,9 +11,9 @@
 
 const path = require('path')
 
-module.exports = (eZConfig, eZConfigManager) => {
-  eZConfigManager.add({
-    eZConfig,
+module.exports = (ibexaConfig, ibexaConfigManager) => {
+  ibexaConfigManager.add({
+    ibexaConfig,
     entryName: 'ibexa-admin-ui-content-edit-parts-js',
     newItems: [
       path.resolve(__dirname, '../../../modules/menu-manager/menu.manager.renderer.js'),

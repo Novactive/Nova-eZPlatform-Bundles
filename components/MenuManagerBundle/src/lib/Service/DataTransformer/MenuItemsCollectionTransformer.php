@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\EzMenuManager\Service\DataTransformer;
 
 use Novactive\EzMenuManager\Exception\MenuItemTypeNotFoundException;
@@ -20,14 +22,11 @@ use Symfony\Component\Form\DataTransformerInterface;
 
 class MenuItemsCollectionTransformer implements DataTransformerInterface
 {
-    protected MenuItemConverter $menuItemConverter;
-
     /**
      * MenuItemsCollection constructor.
      */
-    public function __construct(MenuItemConverter $menuItemConverter)
+    public function __construct(protected MenuItemConverter $menuItemConverter)
     {
-        $this->menuItemConverter = $menuItemConverter;
     }
 
     /**
@@ -38,7 +37,7 @@ class MenuItemsCollectionTransformer implements DataTransformerInterface
      *
      * @return string|false the value's hash, or null if $value was not a FieldType Value
      */
-    public function transform($value)
+    public function transform($value): mixed
     {
         return json_encode($this->menuItemConverter->toHashArray($value->getValues()));
     }
@@ -53,6 +52,6 @@ class MenuItemsCollectionTransformer implements DataTransformerInterface
      */
     public function reverseTransform($value): array
     {
-        return $this->menuItemConverter->fromHashArray(json_decode($value, true));
+        return $this->menuItemConverter->fromHashArray(json_decode((string) $value, true));
     }
 }
