@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\EzMenuManager\Form\Type;
 
 use Symfony\Component\Form\AbstractType;

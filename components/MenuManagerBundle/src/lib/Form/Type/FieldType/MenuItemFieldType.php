@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\EzMenuManager\Form\Type\FieldType;
 
 use Ibexa\ContentForms\Data\Content\ContentCreateData;
@@ -94,10 +96,10 @@ class MenuItemFieldType extends AbstractType
     }
 
     /**
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\BadStateException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException
+     * @throws \Ibexa\Core\Base\Exceptions\InvalidArgumentException
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
@@ -156,9 +158,10 @@ class MenuItemFieldType extends AbstractType
             }
         }
 
-        usort($availableMenus, function ($first, $second) {
-            return strcmp($first['menu']->getName(), $second['menu']->getName());
-        });
+        usort(
+            $availableMenus,
+            fn ($first, $second) => strcmp((string) $first['menu']->getName(), (string) $second['menu']->getName())
+        );
         $view->vars['available_menus'] = $availableMenus;
     }
 

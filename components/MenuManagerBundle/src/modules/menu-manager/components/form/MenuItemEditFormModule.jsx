@@ -16,7 +16,7 @@ import { Button, Form, FormGroup, Input, Label } from 'reactstrap'
 export default class MenuItemEditFormModule extends Component {
   constructor (props) {
     super(props)
-    this.defaultLanguage = eZ.adminUiConfig.languages.priority[0]
+    this.defaultLanguage = ibexa.adminUiConfig.languages.priority[0]
     this.state = {
       name: this.props.item.name,
       url: this.props.item.url,
@@ -99,8 +99,8 @@ export default class MenuItemEditFormModule extends Component {
 
   render () {
     const languages = []
-    for (const languageCode in eZ.adminUiConfig.languages.mappings) {
-      languages.push(eZ.adminUiConfig.languages.mappings[languageCode])
+    for (const languageCode in ibexa.adminUiConfig.languages.mappings) {
+      languages.push(ibexa.adminUiConfig.languages.mappings[languageCode])
     }
     return (
       <div>

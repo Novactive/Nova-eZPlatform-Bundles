@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\EzMenuManager\MenuItem\Type;
 
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
@@ -17,15 +19,14 @@ use Novactive\EzMenuManager\MenuItem\AbstractMenuItemType;
 use Novactive\EzMenuManager\MenuItem\MenuItemValue;
 use Novactive\EzMenuManagerBundle\Entity\Menu;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
+use ReflectionException;
 
 class DefaultMenuItemType extends AbstractMenuItemType
 {
     /** @var ConfigResolverInterface */
     protected $configResolver;
 
-    /**
-     * @required
-     */
+    #[\Symfony\Contracts\Service\Attribute\Required]
     public function setConfigResolver(ConfigResolverInterface $configResolver): void
     {
         $this->configResolver = $configResolver;
@@ -107,9 +108,7 @@ class DefaultMenuItemType extends AbstractMenuItemType
     }
 
     /**
-     * @param $id
-     *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return MenuItem|object|null
      */

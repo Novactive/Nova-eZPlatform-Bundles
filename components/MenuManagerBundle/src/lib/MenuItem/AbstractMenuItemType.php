@@ -10,12 +10,15 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\EzMenuManager\MenuItem;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Menu\FactoryInterface;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 use ReflectionClass;
+use ReflectionException;
 
 abstract class AbstractMenuItemType implements MenuItemTypeInterface
 {
@@ -35,7 +38,7 @@ abstract class AbstractMenuItemType implements MenuItemTypeInterface
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function createEntity(): MenuItem
     {

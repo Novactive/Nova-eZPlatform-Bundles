@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\EzMenuManager\Service;
 
 use Ibexa\Core\MVC\Symfony\SiteAccess;
@@ -43,8 +45,6 @@ class MenuCacheService
     }
 
     /**
-     * @param $key
-     *
      * @throws \Psr\Cache\InvalidArgumentException
      *
      * @return CacheItem

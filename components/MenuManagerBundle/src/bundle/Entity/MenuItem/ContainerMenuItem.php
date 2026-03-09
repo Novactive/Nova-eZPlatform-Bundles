@@ -10,20 +10,14 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\EzMenuManagerBundle\Entity\MenuItem;
 
 use Doctrine\ORM\Mapping as ORM;
 use Novactive\EzMenuManagerBundle\Entity\MenuItem;
 
-/**
- * Class ContainerMenuItem.
- *
- * @ORM\Entity()
- *
- * @property int $contentId
- *
- * @package Novactive\EzMenuManagerBundle\Entity\MenuItem
- */
+#[ORM\Entity]
 class ContainerMenuItem extends MenuItem
 {
 }

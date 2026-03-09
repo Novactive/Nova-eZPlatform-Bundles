@@ -17,15 +17,71 @@
   const SELECTOR_LABEL_WRAPPER = '.ibexa-field-edit__label-wrapper'
   const SELECTOR_COLLAPSE = '.collapse'
 
-  class MenuItemValidator extends window.ibexa.BaseFieldValidator {
+  class MenuItemValidator {
+    constructor(config) {
+      this.classInvalid = config.classInvalid || 'is-invalid';
+      this.fieldContainer = config.fieldContainer;
+      this.eventsMap = config.eventsMap || [];
+    }
+
+    init() {
+      this.eventsMap.forEach((eventConfig) => {
+        const elements = this.fieldContainer.querySelectorAll(eventConfig.selector);
+        elements.forEach((element) => {
+          element.addEventListener(eventConfig.eventName, (event) => {
+            const result = this[eventConfig.callback](event);
+            this.toggleInvalidState(event.target, result.isError, result.errorMessage, eventConfig.errorNodeSelectors);
+          });
+        });
+      });
+    }
+
+    toggleInvalidState(input, isError, errorMessage, errorNodeSelectors) {
+      const method = isError ? 'add' : 'remove';
+
+      input.classList[method](this.classInvalid);
+
+      if (errorNodeSelectors) {
+        errorNodeSelectors.forEach((selector) => {
+          const errorNode = input.closest(SELECTOR_FIELD).querySelector(selector);
+          if (errorNode) {
+            errorNode.classList[method](this.classInvalid);
+          }
+        });
+      }
+
+      if (isError) {
+        this.showError(input, errorMessage);
+      } else {
+        this.hideError(input);
+      }
+    }
+
+    showError(input, message) {
+      let errorElement = input.parentElement.querySelector('.ibexa-form-error');
+      if (!errorElement) {
+        errorElement = document.createElement('div');
+        errorElement.className = 'ibexa-form-error';
+        input.parentElement.appendChild(errorElement);
+      }
+      errorElement.textContent = message;
+    }
+
+    hideError(input) {
+      const errorElement = input.parentElement.querySelector('.ibexa-form-error');
+      if (errorElement) {
+        errorElement.remove();
+      }
+    }
+
     /**
-         * Validates the input
-         *
-         * @method validateInput
-         * @param {Event} event
-         * @returns {Object}
-         * @memberof EzStringValidator
-         */
+     * Validates the input
+     *
+     * @method validateInput
+     * @param {Event} event
+     * @returns {Object}
+     * @memberof MenuItemValidator
+     */
     validateInput (event) {
       const label = event.target.closest(SELECTOR_FIELD).querySelector('.ibexa-field-edit__label').innerHTML
       const isRequired = event.target.required
@@ -41,10 +97,14 @@
 
       if (isRequired && isEmpty) {
         result.isError = true
-        result.errorMessage = window.ibexa.errors.emptyField.replace('{fieldName}', label)
+        result.errorMessage = (window.ibexa && window.ibexa.errors && window.ibexa.errors.emptyField)
+            ? window.ibexa.errors.emptyField.replace('{fieldName}', label)
+            : `${label} cannot be empty`;
       } else if (!isEmpty && !hasCorrectValues) {
         result.isError = true
-        result.errorMessage = window.ibexa.errors.invalidValue.replace('{fieldName}', label)
+        result.errorMessage = (window.ibexa && window.ibexa.errors && window.ibexa.errors.invalidValue)
+            ? window.ibexa.errors.invalidValue.replace('{fieldName}', label)
+            : `${label} has an invalid value`;
       }
 
       return result
@@ -53,12 +113,12 @@
 
   class MenuItem {
     /**
-         * @param id int
-         * @param menuId int
-         * @param parentId int
-         * @param position int
-         * @param isNew bool
-         */
+     * @param id int
+     * @param menuId int
+     * @param parentId int
+     * @param position int
+     * @param isNew bool
+     */
     constructor (id, menuId, parentId, position, isNew) {
       this.id = id
       this.menuId = menuId
@@ -88,10 +148,10 @@
 
   class Menu {
     /**
-         * @param id int
-         * @param tree array
-         * @param enabled bool
-         */
+     * @param id int
+     * @param tree array
+     * @param enabled bool
+     */
     constructor (el, updateInputCallback) {
       this.element = el
       this.id = parseInt(el.querySelector(SELECT_MENU_TREE_WRAPPER).dataset.menu_id)
@@ -102,24 +162,24 @@
       this.updateInputCallback = updateInputCallback
 
       const defaultParents = el
-        .querySelector(SELECT_MENU_TREE_WRAPPER)
-        .dataset.default_parents.split(',')
-        .filter(Number)
+          .querySelector(SELECT_MENU_TREE_WRAPPER)
+          .dataset.default_parents.split(',')
+          .filter(Number)
       this.defaultParents = defaultParents.length > 0 ? defaultParents : ['root']
     }
 
     /**
-         * @param item MenuItem
-         */
+     * @param item MenuItem
+     */
     addItem (item) {
       const key = this.id + '-' + item.parentId
       this.items.set(key, item)
     }
 
     /**
-         * @param parentId int
-         * @returns {MenuItem}
-         */
+     * @param parentId int
+     * @returns {MenuItem}
+     */
     getItemByParentId (parentId) {
       const key = this.id + '-' + parentId
       return this.items.get(key)
@@ -134,22 +194,22 @@
     }
 
     /**
-         * @param parentId int
-         */
+     * @param parentId int
+     */
     enableItem (parentId) {
       let menuItem = this.getItemByParentId(parentId)
       if (!menuItem) {
         const id = this.tree.createNode(
-          {
-            id: null,
-            text: this.menuItemName,
-            state: {
-              disabled: true
+            {
+              id: null,
+              text: this.menuItemName,
+              state: {
+                disabled: true
+              },
+              type: 'Novactive\\EzMenuManagerBundle\\Entity\\MenuItem\\ContentMenuItem'
             },
-            type: 'Novactive\\EzMenuManagerBundle\\Entity\\MenuItem\\ContentMenuItem'
-          },
-          parentId,
-          'last'
+            parentId,
+            'last'
         )
 
         menuItem = new MenuItem(id, this.id, parentId, null, true)
@@ -160,8 +220,8 @@
     }
 
     /**
-         * @param parentId int
-         */
+     * @param parentId int
+     */
     disableItem (parentId) {
       const menuItem = this.getItemByParentId(parentId)
       if (menuItem) {
@@ -186,17 +246,17 @@
     onTreeReady () {
       const menu = this
       $(SELECTOR_COLLAPSE, this.element)
-        .on('show.bs.collapse', function () {
-          menu.enable()
-          $('[data-target="#' + $(this).attr('id') + '"]').prop('checked', true)
-          menu.updateInputCallback()
-        })
-        .on('hide.bs.collapse', function () {
-          menu.disable()
-          $('[data-target="#' + $(this).attr('id') + '"]').prop('checked', false)
-          menu.updateInputCallback()
-        })
-        .collapse(this.hasItems() ? 'show' : 'hide')
+          .on('show.bs.collapse', function () {
+            menu.enable()
+            $('[data-target="#' + $(this).attr('id') + '"]').prop('checked', true)
+            menu.updateInputCallback()
+          })
+          .on('hide.bs.collapse', function () {
+            menu.disable()
+            $('[data-target="#' + $(this).attr('id') + '"]').prop('checked', false)
+            menu.updateInputCallback()
+          })
+          .collapse(this.hasItems() ? 'show' : 'hide')
 
       if (!this.hasItems()) {
         menu.disable()
@@ -260,19 +320,19 @@
 
     init () {
       this.tree = $(this.element)
-        .on('ready.jstree', this.onReady.bind(this))
-        .jstree({
-          core: {
-            data: this.json,
-            check_callback: this.check.bind(this)
-          },
-          types: global.Novactive.MenuManagerConfig.getJsTreeTypes(),
-          checkbox: {
-            three_state: false
-          },
-          plugins: ['checkbox', 'changed', 'types']
-        })
-        .jstree(true)
+          .on('ready.jstree', this.onReady.bind(this))
+          .jstree({
+            core: {
+              data: this.json,
+              check_callback: this.check.bind(this)
+            },
+            types: global.Novactive.MenuManagerConfig.getJsTreeTypes(),
+            checkbox: {
+              three_state: false
+            },
+            plugins: ['checkbox', 'changed', 'types']
+          })
+          .jstree(true)
     }
 
     check (operation, node, parentNode, nodePosition, more) {
@@ -361,19 +421,23 @@
       for (const rawMenuItem of rawMenuItems) {
         if (rawMenuItem['menuId'] === menu.id) {
           menu.addItem(
-            new MenuItem(
-              rawMenuItem['id'],
-              rawMenuItem['menuId'],
-              rawMenuItem['parentId'] || 'root',
-              rawMenuItem['position'],
-              false
-            )
+              new MenuItem(
+                  rawMenuItem['id'],
+                  rawMenuItem['menuId'],
+                  rawMenuItem['parentId'] || 'root',
+                  rawMenuItem['position'],
+                  false
+              )
           )
         }
       }
       menu.init()
     })
     validator.init()
-    window.ibexa.fieldTypeValidators = window.ibexa.fieldTypeValidators ? [...window.ibexa.fieldTypeValidators, validator] : [validator]
+
+    // Register validator with ibexa if available
+    if (window.ibexa) {
+      window.ibexa.fieldTypeValidators = window.ibexa.fieldTypeValidators ? [...window.ibexa.fieldTypeValidators, validator] : [validator]
+    }
   })
 })(window, window.jQuery)

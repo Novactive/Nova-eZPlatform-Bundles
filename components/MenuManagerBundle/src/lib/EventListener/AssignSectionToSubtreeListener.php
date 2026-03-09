@@ -48,8 +48,8 @@ class AssignSectionToSubtreeListener implements EventSubscriberInterface
 
     /**
      * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException
      */
     public function onAssignSectionToSubtree(AssignSectionToSubtreeEvent $event): void
     {
@@ -66,7 +66,7 @@ class AssignSectionToSubtreeListener implements EventSubscriberInterface
             );
 
         $contentIds = array_map(
-            'intval',
+            intval(...),
             $selectContentIdsQuery->execute()->fetchAll(PDO::FETCH_COLUMN)
         );
 
