@@ -25,31 +25,12 @@ module.exports = (Encore) => {
         path.resolve(__dirname, '../public/css/menu-manager.css')
     ]);
 
-    // Copy static assets
-    // Configure css-loader to process url() - this is what Ibexa 4 did automatically
-    Encore.configureCssLoader((options) => {
-        options.url = {
-            filter: (url) => {
-                // Process relative URLs (like ../images/jstree/32px.png)
-                return url.startsWith('../') || url.startsWith('./');
-            }
-        };
-        return options;
-    });
-
-    // Configure how assets are handled (mimics Ibexa 4 behavior)
-    Encore.configureLoaderRule('images', (loaderRule) => {
-        loaderRule.type = 'asset/resource';
-        loaderRule.generator = {
-            filename: 'images/bundles/novaezmenumanager/[path][name].[hash:8][ext]'
-        };
-    });
-
-    Encore.configureLoaderRule('fonts', (loaderRule) => {
-        loaderRule.type = 'asset/resource';
-        loaderRule.generator = {
-            filename: 'fonts/bundles/novaezmenumanager/[path][name].[hash:8][ext]'
-        };
-    });
-
+    Encore.copyFiles({
+        from: path.resolve(__dirname, '../public/images/'),
+        to: '../images/[path][name].[ext]',
+    })
+    Encore.copyFiles({
+        from: path.resolve(__dirname, '../public/fonts/'),
+        to: '../fonts/[path][name].[ext]',
+    })
 };

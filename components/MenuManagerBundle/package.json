@@ -1,10 +1,12 @@
 {
     "name": "@novactive/ezmenumanagerbundle",
+    "version": "1.0.0",
     "license": "MIT",
     "dependencies": {
         "jquery": "^3.7.1",
         "jstree": "^3.3.17",
         "reactstrap": "^9.2.3",
+        "react": "^19.1.0",
         "react-dom": "^19.1.0"
     }
 }

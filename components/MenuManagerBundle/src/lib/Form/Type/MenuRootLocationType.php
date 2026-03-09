@@ -45,8 +45,7 @@ class MenuRootLocationType extends AbstractType
     }
 
     /**
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {

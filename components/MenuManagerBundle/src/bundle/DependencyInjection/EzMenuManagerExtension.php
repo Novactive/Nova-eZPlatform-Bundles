@@ -43,6 +43,20 @@ class EzMenuManagerExtension extends Extension implements PrependExtensionInterf
      */
     public function prepend(ContainerBuilder $container)
     {
+        $ibexaOrmConfig = [
+            'orm' => [
+                'entity_mappings' => [
+                    'EzMenuManagerBundle' => [
+                        'type' => 'attribute',
+                        'dir' => __DIR__.'/../Entity',
+                        'prefix' => 'Novactive\EzMenuManagerBundle',
+                        'is_bundle' => false,
+                    ],
+                ],
+            ],
+        ];
+        $container->prependExtensionConfig('ibexa', $ibexaOrmConfig);
+
         $container->prependExtensionConfig(
             'assetic',
             [

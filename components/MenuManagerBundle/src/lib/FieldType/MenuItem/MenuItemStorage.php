@@ -36,9 +36,6 @@ class MenuItemStorage extends GatewayBasedStorage
         }
     }
 
-    /**
-     * @return bool
-     */
     public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds, array $context = [])
     {
         if (VersionInfo::STATUS_PUBLISHED === $versionInfo->status) {
@@ -46,31 +43,16 @@ class MenuItemStorage extends GatewayBasedStorage
         }
     }
 
-    /**
-     * @return bool
-     */
     public function hasFieldData()
     {
         return true;
     }
 
-    /**
-     * @return bool|\eZ\Publish\SPI\Search\Field[]
-     */
     public function getIndexData(VersionInfo $versionInfo, Field $field, array $context)
     {
         return false;
     }
 
-    /**
-     * This method is used exclusively by Legacy Storage to copy external data of existing field in main language to
-     * the untranslatable field not passed in create or update struct, but created implicitly in storage layer.
-     *
-     * By default the method falls back to the {@link \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()}.
-     * External storages implement this method as needed.
-     *
-     * @return bool|null same as {@link \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()}
-     */
     public function copyLegacyField(VersionInfo $versionInfo, Field $field, Field $originalField, array $context = [])
     {
         return $this->storeFieldData($versionInfo, $field, $context);

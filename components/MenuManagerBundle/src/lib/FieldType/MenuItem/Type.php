@@ -50,14 +50,6 @@ class Type extends FieldType
         return $validationErrors;
     }
 
-    /**
-     * Validates a field based on the validators in the field definition.
-     *
-     * @param FieldDefinition $fieldDefinition The field definition of the field
-     * @param SPIValue        $value           The field value for which an action is performed
-     *
-     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
-     */
     public function validate(FieldDefinition $fieldDefinition, SPIValue $value): array
     {
         $validationErrors = [];
@@ -85,10 +77,6 @@ class Type extends FieldType
      */
     public function getName(ValueInterface $value, FieldDefinition $fieldDefinition, string $languageCode): string
     {
-        if ($value instanceof Value) {
-            return (string) $value->menuItems;
-        }
-
         return '';
     }
 
