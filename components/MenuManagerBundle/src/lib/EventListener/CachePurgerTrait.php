@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\EzMenuManager\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,42 +31,30 @@ trait CachePurgerTrait
     /** @var EntityManagerInterface */
     protected $em;
 
-    /**
-     * @required
-     */
+    #[\Symfony\Contracts\Service\Attribute\Required]
     public function setHttpCachePurgeClient(PurgeClientInterface $httpCachePurgeClient): void
     {
         $this->httpCachePurgeClient = $httpCachePurgeClient;
     }
 
-    /**
-     * @required
-     */
+    #[\Symfony\Contracts\Service\Attribute\Required]
     public function setPersistenceCache(TransactionAwareAdapterInterface $persistenceCacheAdapter): void
     {
         $this->persistenceCacheAdapter = $persistenceCacheAdapter;
     }
 
-    /**
-     * @required
-     */
+    #[\Symfony\Contracts\Service\Attribute\Required]
     public function setEm(EntityManagerInterface $em): void
     {
         $this->em = $em;
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     protected function purgeMenuCache(Menu $entity): void
     {
         $tags = ['menu-'.$entity->getId()];
         $this->invalidateTags($tags);
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     protected function purgeMenuItemCache(MenuItem $entity): void
     {
         $tags = [
@@ -74,9 +64,6 @@ trait CachePurgerTrait
         $this->invalidateTags($tags);
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     protected function purgeContentMenuItemCache(int $contentId): void
     {
         $menuItems = $this->em->getRepository(MenuItem::class)->findBy(
@@ -89,13 +76,19 @@ trait CachePurgerTrait
         }
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     protected function invalidateTags(array $tags): void
     {
-        if (!empty($tags)) {
-            $this->httpCachePurgeClient->purge($tags);
+        if (empty($tags)) {
+            return;
+        }
+
+        // Try HTTP cache purge if available
+        if ($this->httpCachePurgeClient && method_exists($this->httpCachePurgeClient, 'invalidateTags')) {
+            $this->httpCachePurgeClient->invalidateTags($tags);
+        }
+
+        // Try persistence cache if available
+        if ($this->persistenceCacheAdapter && method_exists($this->persistenceCacheAdapter, 'invalidateTags')) {
             $this->persistenceCacheAdapter->invalidateTags($tags);
         }
     }

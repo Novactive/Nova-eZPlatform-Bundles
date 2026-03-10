@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\EzMenuManager\FieldType\MenuItem\MenuItemStorage;
 
 use Ibexa\Contracts\Core\FieldType\StorageGateway;

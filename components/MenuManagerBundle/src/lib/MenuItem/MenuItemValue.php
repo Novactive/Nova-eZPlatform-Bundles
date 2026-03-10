@@ -10,12 +10,15 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\EzMenuManager\MenuItem;
 
 use InvalidArgumentException;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\MenuItem as KnpMenuItem;
+use Override;
 
 class MenuItemValue extends KnpMenuItem
 {
@@ -32,6 +35,7 @@ class MenuItemValue extends KnpMenuItem
         parent::__construct($name, $factory);
     }
 
+    #[Override]
     public function addChild($child, array $options = []): ItemInterface
     {
         if (!$child instanceof ItemInterface) {
@@ -52,9 +56,6 @@ class MenuItemValue extends KnpMenuItem
         return $child;
     }
 
-    /**
-     * @param $target
-     */
     public function setTarget($target)
     {
         $this->setLinkAttribute('target', $target);

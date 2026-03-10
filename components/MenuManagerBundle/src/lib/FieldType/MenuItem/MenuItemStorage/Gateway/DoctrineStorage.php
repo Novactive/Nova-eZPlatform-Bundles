@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\EzMenuManager\FieldType\MenuItem\MenuItemStorage\Gateway;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,15 +27,12 @@ class DoctrineStorage extends Gateway
 {
     protected EntityManagerInterface $em;
 
-    protected ValueConverter $valueConverter;
-
     /**
      * DoctrineStorage constructor.
      */
-    public function __construct(EntityManagerInterface $em, ValueConverter $valueConverter)
+    public function __construct(EntityManagerInterface $em, protected ValueConverter $valueConverter)
     {
         $this->em = $em;
-        $this->valueConverter = $valueConverter;
     }
 
     public function storeFieldData(VersionInfo $versionInfo, Field $field)

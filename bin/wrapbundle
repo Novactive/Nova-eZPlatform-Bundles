@@ -26,8 +26,12 @@ $bundleName = str_replace( '/', '_', $bundleComposerName );
 
 exec("cd {$appRootDir} && composer config repositories.{$bundleName} '{\"type\": \"path\", \"url\": \"../components/{$componentName}\", \"options\": {\"symlink\": true}}' --json");
 exec("cd {$appRootDir} && composer require {$bundleComposerName}:* --no-update");
-exec("cd {$appRootDir} && yarn install --cwd ../components/{$componentName}");
 
+if(file_exists("{$componentDir}/package.json")) {
+    exec("cd {$appRootDir} && yarn add --dev link:../components/{$componentName}");
+    exec("cp {$appRootDir}/yarn.lock {$componentDir}/.");
+    exec("cd {$appRootDir} && yarn install --cwd ../components/{$componentName}");
+}
 
 /**
  * Enable Bundle

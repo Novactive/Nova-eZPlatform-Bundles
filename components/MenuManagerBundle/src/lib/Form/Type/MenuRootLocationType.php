@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZMenuManagerBundle/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\EzMenuManager\Form\Type;
 
 use Ibexa\Contracts\Core\Repository\ContentService;
@@ -43,8 +45,7 @@ class MenuRootLocationType extends AbstractType
     }
 
     /**
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
@@ -61,7 +62,7 @@ class MenuRootLocationType extends AbstractType
                     'contentInfo' => $contentInfo,
                 ];
             }
-        } catch (NotFoundException $e) {
+        } catch (NotFoundException) {
             $view->vars['rootLocation'] = null;
         }
     }
