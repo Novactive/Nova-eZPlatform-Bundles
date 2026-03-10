@@ -9,3 +9,14 @@
 ./node_modules
 ./drivers
 ./.php-cs-fixer.cache
+/vendor
+/ibexa
+/chromedriver
+/.php_cs.cache
+/bin/do.bash
+/.phpunit.result.cache
+/documentation/export
+/.idea
+/node_modules
+/drivers
+/.php-cs-fixer.cache
