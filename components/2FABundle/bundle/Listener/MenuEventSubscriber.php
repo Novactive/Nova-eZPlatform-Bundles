@@ -19,22 +19,10 @@ use Knp\Menu\Util\MenuManipulator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-final class MenuEventSubscriber implements EventSubscriberInterface
+final readonly class MenuEventSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var MenuManipulator
-     */
-    private $menuManipulator;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    public function __construct(MenuManipulator $menuManipulator, TranslatorInterface $translator)
+    public function __construct(private MenuManipulator $menuManipulator, private TranslatorInterface $translator)
     {
-        $this->menuManipulator = $menuManipulator;
-        $this->translator = $translator;
     }
 
     public static function getSubscribedEvents(): array

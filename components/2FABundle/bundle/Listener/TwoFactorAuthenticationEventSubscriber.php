@@ -19,16 +19,10 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-final class TwoFactorAuthenticationEventSubscriber implements EventSubscriberInterface
+final readonly class TwoFactorAuthenticationEventSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var SiteAccessAwareAuthenticatorResolver
-     */
-    private $saAwareAuthenticatorResolver;
-
-    public function __construct(SiteAccessAwareAuthenticatorResolver $saAwareAuthenticatorResolver)
+    public function __construct(private SiteAccessAwareAuthenticatorResolver $saAwareAuthenticatorResolver)
     {
-        $this->saAwareAuthenticatorResolver = $saAwareAuthenticatorResolver;
     }
 
     public static function getSubscribedEvents(): array

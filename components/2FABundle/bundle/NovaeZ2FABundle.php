@@ -17,6 +17,7 @@ namespace Novactive\Bundle\eZ2FABundle;
 use LogicException;
 use Novactive\Bundle\eZ2FABundle\DependencyInjection\NovaeZ2FAExtension;
 use Novactive\Bundle\eZ2FABundle\DependencyInjection\Security\PolicyProvider;
+use Override;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -30,12 +31,13 @@ final class NovaeZ2FABundle extends Bundle
         $eZExtension->addPolicyProvider(new PolicyProvider());
     }
 
-    public function getContainerExtension()
+    #[Override]
+    public function getContainerExtension(): ?ExtensionInterface
     {
         if (null === $this->extension) {
             $extension = new NovaeZ2FAExtension();
             if (!$extension instanceof ExtensionInterface) {
-                $fqdn = \get_class($extension);
+                $fqdn = $extension::class;
                 $message = 'Extension %s must implement %s.';
                 throw new LogicException(sprintf($message, $fqdn, ExtensionInterface::class));
             }

@@ -18,16 +18,10 @@ use Ibexa\Contracts\Core\Repository\Events\User\DeleteUserEvent;
 use Novactive\Bundle\eZ2FABundle\Core\UserRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-final class UserEventSubscriber implements EventSubscriberInterface
+final readonly class UserEventSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-
-    public function __construct(UserRepository $userRepository)
+    public function __construct(private UserRepository $userRepository)
     {
-        $this->userRepository = $userRepository;
     }
 
     public static function getSubscribedEvents(): array
