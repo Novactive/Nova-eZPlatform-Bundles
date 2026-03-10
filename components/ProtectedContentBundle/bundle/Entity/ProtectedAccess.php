@@ -20,6 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
+ *
  * @ORM\Table(name="novaezprotectedcontent")
  */
 class ProtectedAccess implements ContentInterface
@@ -29,13 +30,16 @@ class ProtectedAccess implements ContentInterface
 
     /**
      * @ORM\Id
+     *
      * @ORM\Column(type="integer")
+     *
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private int $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
      * @Assert\Length(max=255)
      */
     protected string $password;

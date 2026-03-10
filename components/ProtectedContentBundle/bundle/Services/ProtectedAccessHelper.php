@@ -16,8 +16,8 @@ readonly class ProtectedAccessHelper
 {
     public function __construct(
         protected ProtectedAccessRepository $protectedAccessRepository,
-        protected Repository                $repository,
-        protected LoggerInterface           $logger,
+        protected Repository $repository,
+        protected LoggerInterface $logger,
     ) {
     }
 

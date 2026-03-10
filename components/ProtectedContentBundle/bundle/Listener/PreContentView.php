@@ -29,15 +29,14 @@ use Symfony\Component\HttpFoundation\RequestStack;
 readonly class PreContentView
 {
     public function __construct(
-        protected PermissionResolver              $permissionResolver,
-        protected ProtectedAccessRepository       $protectedAccessRepository,
+        protected PermissionResolver $permissionResolver,
+        protected ProtectedAccessRepository $protectedAccessRepository,
         protected ProtectedTokenStorageRepository $protectedTokenStorageRepository,
-        protected FormFactoryInterface            $factory,
-        protected RequestStack                    $requestStack,
-        protected ContentPreviewHelper            $contentPreviewHelper,
-        protected FormFactoryInterface            $formFactory,
-    )
-    {
+        protected FormFactoryInterface $factory,
+        protected RequestStack $requestStack,
+        protected ContentPreviewHelper $contentPreviewHelper,
+        protected FormFactoryInterface $formFactory,
+    ) {
     }
 
     /**
@@ -77,9 +76,9 @@ readonly class PreContentView
             $request = $this->requestStack->getCurrentRequest();
 
             if (
-                $request->query->has('mail')
-                && $request->query->has('token')
-                && !$request->query->has('waiting_validation')
+                $request->query->has('mail') &&
+                $request->query->has('token') &&
+                !$request->query->has('waiting_validation')
             ) {
                 $unexpiredToken = $this->protectedTokenStorageRepository->findUnexpiredBy([
                     'content_id' => $content->id,

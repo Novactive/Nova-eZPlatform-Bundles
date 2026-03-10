@@ -12,9 +12,9 @@ use Ibexa\Core\Repository\SearchService;
 readonly class ReindexHelper
 {
     public function __construct(
-        protected SearchService      $searchService,
-        protected Repository         $repository,
-        protected SearchHandler      $searchHandler,
+        protected SearchService $searchService,
+        protected Repository $repository,
+        protected SearchHandler $searchHandler,
         protected PersistenceHandler $persistenceHandler,
     ) {
     }

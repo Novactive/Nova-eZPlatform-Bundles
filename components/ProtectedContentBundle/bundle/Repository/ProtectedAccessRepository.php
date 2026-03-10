@@ -23,7 +23,7 @@ use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
 readonly class ProtectedAccessRepository
 {
     public function __construct(
-        protected Repository             $repository,
+        protected Repository $repository,
         protected EntityManagerInterface $entityManager,
     ) {
     }
@@ -102,11 +102,11 @@ readonly class ProtectedAccessRepository
                     /** @var Location $loc */
                     $loc = $location;
                     while (
-                        $loc->parentLocationId
-                        && ($loc = $repository->getLocationService()->loadLocation($loc->parentLocationId))
-                        && $loc instanceof Location
-                        && $loc->parentLocationId
-                        && 1 !== $loc->parentLocationId
+                        $loc->parentLocationId &&
+                        ($loc = $repository->getLocationService()->loadLocation($loc->parentLocationId)) &&
+                        $loc instanceof Location &&
+                        $loc->parentLocationId &&
+                        1 !== $loc->parentLocationId
                     ) {
                         ++$ct;
                         $ids[] = $loc->getContentInfo()->id;
