@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Api\Schema;
 
+use Exception;
 use Novactive\EzSolrSearchExtra\Search\ExtendedSearchHandler;
 
 class ManagedResourcesService
@@ -18,7 +19,9 @@ class ManagedResourcesService
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
+     *
+     * @return array<array{type: string, id: string}>
      */
     public function getSets(): array
     {

@@ -16,42 +16,22 @@ class PublishDateFieldMapper extends ContentTranslationFieldMapper
 {
     /**
      * Field name, untyped.
-     *
-     * @var string
      */
-    private static $fieldName = 'meta_publishdate__date';
+    private static string $fieldName = 'meta_publishdate__date';
 
     /**
-     * @var array
+     * @var array<string>
      */
-    protected $fieldIdentifiers = [];
-
-    /**
-     * @var \Ibexa\Contracts\Core\Persistence\Content\Type\Handler
-     */
-    protected $contentTypeHandler;
-
-    /**
-     * @var \Ibexa\Core\Search\Common\FieldRegistry
-     */
-    protected $fieldRegistry;
-
-    /**
-     * @var ConfigResolverInterface
-     */
-    private $configResolver;
+    protected array $fieldIdentifiers = [];
 
     /**
      * PublishDateFieldMapper constructor.
      */
     public function __construct(
-        ContentTypeHandler $contentTypeHandler,
-        FieldRegistry $fieldRegistry,
-        ConfigResolverInterface $configResolver
+        protected ContentTypeHandler $contentTypeHandler,
+        protected FieldRegistry $fieldRegistry,
+        private ConfigResolverInterface $configResolver
     ) {
-        $this->contentTypeHandler = $contentTypeHandler;
-        $this->fieldRegistry = $fieldRegistry;
-        $this->configResolver = $configResolver;
     }
 
     public function setFieldIdentifiers(string $fieldIdentifiers): void
@@ -59,22 +39,17 @@ class PublishDateFieldMapper extends ContentTranslationFieldMapper
         $this->fieldIdentifiers = $this->configResolver->getParameter($fieldIdentifiers, 'nova_solr_extra');
     }
 
-    /**
-     * @param string $languageCode
-     */
-    public function accept(Content $content, $languageCode): bool
+    public function accept(Content $content, string $languageCode): bool
     {
         return true;
     }
 
     /**
-     * @param $languageCode
-     *
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException
      *
-     * @return \Ibexa\Contracts\Core\Search\Field[]
+     * @return Field[]
      */
-    public function mapFields(Content $content, $languageCode): array
+    public function mapFields(Content $content, string $languageCode): array
     {
         $contentType = $this->contentTypeHandler->load(
             $content->versionInfo->contentInfo->contentTypeId
@@ -87,13 +62,13 @@ class PublishDateFieldMapper extends ContentTranslationFieldMapper
 
             foreach ($contentType->fieldDefinitions as $fieldDefinition) {
                 if (
-                    $fieldDefinition->id !== $field->fieldDefinitionId
-                    || (
+                    $fieldDefinition->id !== $field->fieldDefinitionId ||
+                    (
                         !in_array(
                             $fieldDefinition->identifier,
                             $this->fieldIdentifiers
-                        )
-                        && !in_array(
+                        ) &&
+                        !in_array(
                             "{$contentType->identifier}/{$fieldDefinition->identifier}",
                             $this->fieldIdentifiers
                         )

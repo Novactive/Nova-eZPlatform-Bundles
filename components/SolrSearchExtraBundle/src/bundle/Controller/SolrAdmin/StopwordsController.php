@@ -8,66 +8,34 @@ use Novactive\EzSolrSearchExtra\Api\Schema\Analysis\Stopwords\StopwordsService;
 use Novactive\EzSolrSearchExtra\Form\AddStopWordType;
 use Novactive\EzSolrSearchExtra\Pagination\Pagerfanta\StopwordsAdapter;
 use Pagerfanta\Pagerfanta;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * Class SynonymsController.
- *
- * @package Novactive\EzSolrSearchExtraBundle\Controller\SolrAdmin
- *
- * @Route("/solr/admin/stopwords")
- */
+#[Route('/solr/admin/stopwords')]
 class StopwordsController extends BaseController
 {
     protected const RESULTS_PER_PAGE = 20;
 
-    /**
-     * @var StopwordsService
-     */
-    protected $stopwordsService;
+    protected StopwordsService $stopwordsService;
 
-    /**
-     * @var FormFactoryInterface
-     */
-    protected $formFactory;
+    protected FormFactoryInterface $formFactory;
 
-    /**
-     * StopwordsController constructor.
-     */
     public function __construct(StopwordsService $stopwordsService, FormFactoryInterface $formFactory)
     {
         $this->stopwordsService = $stopwordsService;
         $this->formFactory = $formFactory;
     }
 
-    /**
-     * @param $words
-     */
-    public function getWordsData($words): array
-    {
-        $ids = [];
-        foreach ($words as $word) {
-            $ids[] = $word;
-        }
-
-        return $ids;
-    }
-
-    /**
-     * @Route("/{setId}/{page}/{noLayout}", name="solr_admin.stopwords.index", requirements={"page" = "\d+"})
-     * @Template("@ibexadesign/solr/admin/stopwords/list.html.Twig")
-     *
-     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
-     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
-     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
-     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
-     */
-    public function stopwordsIndexAction(Request $request, string $setId, int $page = 1, bool $noLayout = false)
-    {
+    #[Route('/{setId}/{page}/{noLayout}', name: 'solr_admin.stopwords.index', requirements: ['page' => '\d+'])]
+    public function stopwordsIndexAction(
+        Request $request,
+        string $setId,
+        int $page = 1,
+        bool $noLayout = false
+    ): Response {
         $this->permissionAccess('solradmin', 'stopwords.view');
 
         $manageAccess = $this->permissionManageAccess('solradmin', ['stopwords.delete']);
@@ -114,15 +82,10 @@ class StopwordsController extends BaseController
             'manageAccess' => $manageAccess,
         ];
 
-        return $viewParameters;
+        return $this->render('@ibexadesign/solr/admin/stopwords/list.html.Twig', $viewParameters);
     }
 
-    /**
-     * @Route("/{setId}/add", name="solr_admin.stopwords.add")
-     *
-     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
-     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
-     */
+    #[Route('/{setId}/add', name: 'solr_admin.stopwords.add')]
     public function addStopwordAction(string $setId, Request $request): RedirectResponse
     {
         $this->permissionAccess('solradmin', 'stopwords.create');
@@ -145,17 +108,12 @@ class StopwordsController extends BaseController
         );
     }
 
-    /**
-     * @Route("/{setId}/word/delete", name="solr_admin.stopwords.delete")
-     *
-     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
-     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
-     */
+    #[Route('/{setId}/word/delete', name: 'solr_admin.stopwords.delete')]
     public function deleteStopwordsAction(string $setId, Request $request): RedirectResponse
     {
         $this->permissionAccess('solradmin', 'stopwords.delete');
 
-        $words = $request->request->get('wordsToDelete');
+        $words = $request->get('wordsToDelete');
         foreach ($words as $elt) {
             $this->stopwordsService->deleteWord($setId, $elt);
         }

@@ -17,42 +17,22 @@ use Novactive\EzSolrSearchExtra\FieldMapper\BinaryFileFieldMapper;
  */
 class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
 {
-    /** @var BinaryFileFieldMapper */
-    private $binaryFileFieldMapper;
-
-    /** @var ContentTypePersistenceHandler */
-    private $contentTypeHandler;
-
-    /** @var ConfigResolverInterface */
-    private $configResolver;
-
-    /**
-     * List of field type which should be indexed.
-     *
-     * @var string[]
-     */
-    private $binaryFileFieldTypeIdentifiers = [];
-
     /**
      * Bool to enable indexation.
-     *
-     * @var bool
      */
-    private $enabled = false;
+    private bool $enabled = false;
 
     /**
      * BinaryFileFullTextFieldMapper constructor.
+     *
+     * @param string[] $binaryFileFieldTypeIdentifiers
      */
     public function __construct(
-        BinaryFileFieldMapper $binaryFileFieldMapper,
-        ContentTypePersistenceHandler $contentTypeHandler,
-        ConfigResolverInterface $configResolver,
-        array $binaryFileFieldTypeIdentifiers
+        private BinaryFileFieldMapper $binaryFileFieldMapper,
+        private ContentTypePersistenceHandler $contentTypeHandler,
+        private ConfigResolverInterface $configResolver,
+        private array $binaryFileFieldTypeIdentifiers = []
     ) {
-        $this->binaryFileFieldMapper = $binaryFileFieldMapper;
-        $this->contentTypeHandler = $contentTypeHandler;
-        $this->binaryFileFieldTypeIdentifiers = $binaryFileFieldTypeIdentifiers;
-        $this->configResolver = $configResolver;
     }
 
     public function setEnabled(string $enabled): void
@@ -63,7 +43,7 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
     /**
      * {@inheritdoc}
      */
-    public function accept(SPIContent $content, $languageCode): bool
+    public function accept(SPIContent $content, string $languageCode): bool
     {
         return $this->enabled;
     }
@@ -74,7 +54,7 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException
      * @throws \Ibexa\Core\Base\Exceptions\InvalidArgumentValue
      */
-    public function mapFields(SPIContent $content, $languageCode): array
+    public function mapFields(SPIContent $content, string $languageCode): array
     {
         $fields = [];
 
@@ -84,8 +64,8 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
 
         foreach ($content->fields as $field) {
             if (
-                $field->languageCode !== $languageCode
-                 || !in_array($field->type, $this->binaryFileFieldTypeIdentifiers)
+                $field->languageCode !== $languageCode ||
+                 !in_array($field->type, $this->binaryFileFieldTypeIdentifiers)
             ) {
                 continue;
             }

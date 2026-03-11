@@ -19,6 +19,9 @@ class EZSolrSearchPolicyProvider extends YamlPolicyProvider
         $this->path = $path;
     }
 
+    /**
+     * @return string[]
+     */
     public function getFiles(): array
     {
         return [$this->path.'/Resources/config/policies.yml'];

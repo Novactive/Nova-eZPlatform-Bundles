@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Search;
 
+use Exception;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
+use Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchResult;
+use Ibexa\Contracts\Core\Repository\Values\ValueObject;
 use Ibexa\Contracts\Core\Search\Document;
 use Ibexa\Solr\CoreFilter;
 use Ibexa\Solr\Gateway\Endpoint;
@@ -12,6 +15,7 @@ use Ibexa\Solr\Gateway\Message;
 use Novactive\EzSolrSearchExtra\Api\Gateway;
 use Novactive\EzSolrSearchExtra\Query\DocumentQuery;
 use Novactive\EzSolrSearchExtra\ResultExtractor\DocumentResultExtractor;
+use Novactive\EzSolrSearchExtra\Values\DocumentHit;
 use stdClass;
 
 class ExtendedSearchHandler
@@ -30,7 +34,12 @@ class ExtendedSearchHandler
         $this->coreFilter = $coreFilter;
     }
 
-    public function findDocument(DocumentQuery $query, array $languageFilter = [])
+    /**
+     * @param array{languages?: string[], languageCode?: string, useAlwaysAvailable?: bool} $languageFilter
+     *
+     * @return ExtendedSearchResult<DocumentHit, ValueObject>
+     */
+    public function findDocument(DocumentQuery $query, array $languageFilter = []): SearchResult
     {
         $query = clone $query;
         $query->filter = $query->filter ?: new Criterion\MatchAll();
@@ -44,14 +53,17 @@ class ExtendedSearchHandler
 
         return $this->resultExtractor->extract(
             $this->gateway->findDocument($query, $languageFilter),
-            $query->facetBuilders,
             $query->aggregations,
             $languageFilter,
             $query->spellcheck
         );
     }
 
-    public function rawSearch(array $parameters, array $languageSettings = [])
+    /**
+     * @param array<string, mixed>                                                          $parameters
+     * @param array{languages?: string[], languageCode?: string, useAlwaysAvailable?: bool} $languageSettings
+     */
+    public function rawSearch(array $parameters, array $languageSettings = []): mixed
     {
         return $this->gateway->rawSearch($parameters, $languageSettings);
     }
@@ -83,7 +95,7 @@ class ExtendedSearchHandler
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function request(
         string $method,
@@ -95,7 +107,7 @@ class ExtendedSearchHandler
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function reload(): void
     {

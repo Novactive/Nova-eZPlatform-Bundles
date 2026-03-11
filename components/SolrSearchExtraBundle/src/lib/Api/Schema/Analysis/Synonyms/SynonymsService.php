@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Api\Schema\Analysis\Synonyms;
 
+use Exception;
 use Ibexa\Core\Base\Exceptions\NotFoundException;
 use Ibexa\Solr\Gateway\Message;
 use Novactive\EzSolrSearchExtra\Search\ExtendedSearchHandler;
@@ -20,8 +21,8 @@ class SynonymsService
     }
 
     /**
-     * @throws \Exception
-     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
+     * @throws Exception
+     * @throws NotFoundException
      *
      * @return SynonymsMap[]
      */
@@ -48,7 +49,7 @@ class SynonymsService
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function fetchTerm(string $setId, string $term): bool
     {
@@ -58,7 +59,7 @@ class SynonymsService
                 'GET',
                 sprintf('%s/%s/%s', self::API_PATH, $setId, $term)
             );
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return false;
         }
         if (null === $response) {
@@ -72,9 +73,9 @@ class SynonymsService
     }
 
     /**
-     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
-     * @throws \Exception
-     * @throws \Exception
+     * @throws NotFoundException
+     * @throws Exception
+     * @throws Exception
      */
     public function addMapping(string $setId, SynonymsMap $map): bool
     {
@@ -103,9 +104,9 @@ class SynonymsService
     }
 
     /**
-     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
-     * @throws \Exception
-     * @throws \Exception
+     * @throws NotFoundException
+     * @throws Exception
+     * @throws Exception
      */
     public function deleteMapping(string $setId, string $term): bool
     {

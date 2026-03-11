@@ -21,11 +21,8 @@ use stdClass;
 
 class Gateway extends Native
 {
-    protected QueryConverter $queryConverter;
-    protected ConfigResolverInterface $configResolver;
-
     public function __construct(
-        QueryConverter $queryConverter,
+        protected QueryConverter $queryConverter,
         HttpClient $client,
         EndpointResolver $endpointResolver,
         EndpointRegistry $endpointRegistry,
@@ -33,11 +30,8 @@ class Gateway extends Native
         QueryConverter $locationQueryConverter,
         UpdateSerializerInterface $updateSerializer,
         DistributionStrategy $distributionStrategy,
-        ConfigResolverInterface $configResolver
+        protected ConfigResolverInterface $configResolver
     ) {
-        $this->queryConverter = $queryConverter;
-        $this->configResolver = $configResolver;
-
         parent::__construct(
             $client,
             $endpointResolver,
@@ -49,14 +43,21 @@ class Gateway extends Native
         );
     }
 
-    public function findDocument(DocumentQuery $query, array $languageSettings = [])
+    /**
+     * @param array{languages?: string[], languageCode?: string, useAlwaysAvailable?: bool} $languageSettings
+     */
+    public function findDocument(DocumentQuery $query, array $languageSettings = []): mixed
     {
         $parameters = $this->queryConverter->convert($query, $languageSettings);
 
         return $this->internalFind($parameters, $languageSettings);
     }
 
-    public function rawSearch(array $parameters, array $languageSettings = [])
+    /**
+     * @param array<string, mixed>                                                          $parameters
+     * @param array{languages?: string[], languageCode?: string, useAlwaysAvailable?: bool} $languageSettings
+     */
+    public function rawSearch(array $parameters, array $languageSettings = []): mixed
     {
         return $this->internalFind($parameters, $languageSettings);
     }
@@ -122,7 +123,7 @@ class Gateway extends Native
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function request(
         string $method,

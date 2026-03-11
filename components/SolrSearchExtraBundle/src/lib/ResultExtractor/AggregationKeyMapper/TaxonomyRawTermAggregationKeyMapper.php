@@ -9,15 +9,12 @@ use Ibexa\Contracts\Taxonomy\Service\TaxonomyServiceInterface;
 
 final class TaxonomyRawTermAggregationKeyMapper extends AbstractRawTermAggregationKeyMapper
 {
-    private $taxonomyService;
-
     public function __construct(
-        TaxonomyServiceInterface $taxonomyService
+        private TaxonomyServiceInterface $taxonomyService
     ) {
-        $this->taxonomyService = $taxonomyService;
     }
 
-    public function mapKey(Aggregation $aggregation, $key): array
+    public function mapKey(Aggregation $aggregation, mixed $key): array
     {
         $taxonomyEntry = $this->taxonomyService->loadEntryById((int) $key);
 

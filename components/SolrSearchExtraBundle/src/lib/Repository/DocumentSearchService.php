@@ -10,51 +10,33 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion\Location as LocationCriterion;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion\LogicalAnd;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion\LogicalOperator;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\CriterionInterface;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\SortClause\Location as LocationSortClause;
 use Ibexa\Core\Base\Exceptions\InvalidArgumentException;
-use Ibexa\Core\Base\Exceptions\InvalidArgumentType;
 use Novactive\EzSolrSearchExtra\Query\DocumentQuery;
 use Novactive\EzSolrSearchExtra\Search\ExtendedSearchHandler;
 use Novactive\EzSolrSearchExtra\Search\ExtendedSearchResult;
 
 class DocumentSearchService implements DocumentSearchServiceInterface
 {
-    protected PermissionCriterionResolver $permissionCriterionResolver;
-    protected ExtendedSearchHandler $searchHandler;
-
     public function __construct(
-        PermissionCriterionResolver $permissionCriterionResolver,
-        ExtendedSearchHandler $searchHandler
+        protected PermissionCriterionResolver $permissionCriterionResolver,
+        protected ExtendedSearchHandler $searchHandler
     ) {
-        $this->searchHandler = $searchHandler;
-        $this->permissionCriterionResolver = $permissionCriterionResolver;
     }
 
+    /**
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
+     */
     public function findDocument(
         DocumentQuery $query,
         array $languageFilter = [],
         bool $filterOnUserPermissions = true
     ): ExtendedSearchResult {
-        if (!is_int($query->offset)) {
-            throw new InvalidArgumentType(
-                '$query->offset',
-                'integer',
-                $query->offset
-            );
-        }
-
-        if (!is_int($query->limit)) {
-            throw new InvalidArgumentType(
-                '$query->limit',
-                'integer',
-                $query->limit
-            );
-        }
-
         $query = clone $query;
         $query->filter = $query->filter ?: new Criterion\MatchAll();
 
-        $this->validateContentCriteria([$query->query], '$query');
+        $this->validateContentCriteria($query->query ? [$query->query] : [], '$query');
         $this->validateContentCriteria([$query->filter], '$query');
         $this->validateContentSortClauses($query);
 
@@ -71,14 +53,13 @@ class DocumentSearchService implements DocumentSearchServiceInterface
     }
 
     /**
-     * Checks that $criteria does not contain Location criterions.
+     * Checks that $criterion does not contain Location criterions.
      *
-     * @param Criterion[] $criteria
-     * @param string      $argumentName
+     * @param CriterionInterface[] $criteria
      *
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
      */
-    protected function validateContentCriteria(array $criteria, $argumentName)
+    protected function validateContentCriteria(array $criteria, string $argumentName): void
     {
         foreach ($criteria as $criterion) {
             if ($criterion instanceof LocationCriterion) {
@@ -98,7 +79,7 @@ class DocumentSearchService implements DocumentSearchServiceInterface
      *
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
      */
-    protected function validateContentSortClauses(Query $query)
+    protected function validateContentSortClauses(Query $query): void
     {
         foreach ($query->sortClauses as $sortClause) {
             if ($sortClause instanceof LocationSortClause) {
@@ -112,7 +93,7 @@ class DocumentSearchService implements DocumentSearchServiceInterface
      *
      * @uses \Ibexa\Contracts\Core\Repository\PermissionCriterionResolver::getPermissionsCriterion()
      */
-    protected function addPermissionsCriterion(Criterion &$criterion): bool
+    protected function addPermissionsCriterion(CriterionInterface &$criterion): bool
     {
         $permissionCriterion = $this->permissionCriterionResolver->getPermissionsCriterion('content', 'read');
         if (true === $permissionCriterion || false === $permissionCriterion) {

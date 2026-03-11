@@ -7,24 +7,20 @@ namespace Novactive\EzSolrSearchExtra\Pagination\Pagerfanta;
 use Novactive\EzSolrSearchExtra\Api\Schema\Analysis\Stopwords\StopwordsService;
 use Pagerfanta\Adapter\AdapterInterface;
 
+/**
+ * @implements AdapterInterface<string>
+ */
 class StopwordsAdapter implements AdapterInterface
 {
-    /** @var string */
-    private $setId;
-
-    /** @var StopwordsService */
-    private $stopwordsService;
-
-    /** @var int */
-    private $nbResults;
+    private int $nbResults;
 
     /**
      * StopwordsAdapter constructor.
      */
-    public function __construct(string $setId, StopwordsService $stopwordsService)
-    {
-        $this->setId = $setId;
-        $this->stopwordsService = $stopwordsService;
+    public function __construct(
+        private string $setId,
+        private StopwordsService $stopwordsService
+    ) {
     }
 
     /**
@@ -47,6 +43,8 @@ class StopwordsAdapter implements AdapterInterface
      * {@inheritDoc}
      *
      * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
+     *
+     * @return string[]
      */
     public function getSlice($offset, $length): array
     {

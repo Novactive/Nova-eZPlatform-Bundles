@@ -4,47 +4,28 @@ declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Query\Aggregation;
 
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation\AbstractTermAggregation;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation\RawAggregation;
 
 class RawTermAggregation extends AbstractTermAggregation implements RawAggregation
 {
     /**
-     * @var string
-     */
-    private $fieldName;
-
-    /**
-     * @see https://solr.apache.org/guide/7_7/json-facet-api.html#filter-exclusions
+     * https://solr.apache.org/guide/7_7/json-facet-api.html#filter-exclusions.
      *
-     * @var string[]
+     * @param array<string>                     $excludeTags
+     * @param array<string>                     $domain
+     * @param array<string, Aggregation|string> $nestedAggregations
      */
-    public array $excludeTags;
-
-    public ?string $sort;
-
-    public array $domain;
-
-    /**
-     * @var \Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation[]
-     */
-    public array $nestedAggregations;
-
     public function __construct(
         string $name,
-        string $fieldName,
-        ?array $excludeTags = [],
-        ?string $sort = null,
-        ?array $domain = [],
-        ?array $nestedAggregations = []
+        private string $fieldName,
+        public array $excludeTags = [],
+        public ?string $sort = null,
+        public array $domain = [],
+        public array $nestedAggregations = []
     ) {
         parent::__construct($name);
-
-        $this->fieldName = $fieldName;
-        $this->excludeTags = $excludeTags;
-        $this->sort = $sort;
-        $this->domain = $domain;
-        $this->nestedAggregations = $nestedAggregations;
     }
 
     public function getFieldName(): string
@@ -52,11 +33,17 @@ class RawTermAggregation extends AbstractTermAggregation implements RawAggregati
         return $this->fieldName;
     }
 
+    /**
+     * @param array<string, Aggregation|string> $nestedAggregations
+     */
     public function setNestedAggregations(array $nestedAggregations): void
     {
         $this->nestedAggregations = $nestedAggregations;
     }
 
+    /**
+     * @return string[]
+     */
     public function getDomain(): array
     {
         return $this->domain;

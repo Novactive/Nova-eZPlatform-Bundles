@@ -4,45 +4,24 @@ declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Pagination\Pagerfanta;
 
-use eZ\Publish\API\Repository\Values\Content\Search\Facet;
 use Ibexa\Contracts\Core\Repository\SearchService;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 use Ibexa\Contracts\Core\Repository\Values\Content\Search\AggregationResultCollection;
 use Pagerfanta\Adapter\AdapterInterface;
 
+/**
+ * @implements AdapterInterface<\Ibexa\Contracts\Core\Repository\Values\Content\Content>
+ */
 class FacetedContentSearchAdapter implements AdapterInterface
 {
-    /**
-     * @var \Ibexa\Contracts\Core\Repository\Values\Content\Query
-     */
-    private $query;
+    private ?int $nbResults = null;
 
-    /**
-     * @var \Ibexa\Contracts\Core\Repository\SearchService
-     */
-    private $searchService;
+    private ?AggregationResultCollection $aggregations = null;
 
-    /**
-     * @var int
-     */
-    private $nbResults;
-
-    /**
-     * @var \Ibexa\Contracts\Core\Repository\Values\Content\Search\AggregationResultCollection
-     */
-    private $aggregations;
-
-    /**
-     * @var Facet[]
-     *
-     * @deprecated since eZ Platform 3.2.0, to be removed in Ibexa 4.0.0.
-     */
-    private $facets;
-
-    public function __construct(Query $query, SearchService $searchService)
-    {
-        $this->query = $query;
-        $this->searchService = $searchService;
+    public function __construct(
+        private Query $query,
+        private SearchService $searchService
+    ) {
     }
 
     /**
@@ -65,9 +44,9 @@ class FacetedContentSearchAdapter implements AdapterInterface
     }
 
     /**
-     * Return search facets.
+     * Return search aggregations.
      *
-     *@throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
      */
     public function getAggregations(): AggregationResultCollection
     {
@@ -75,31 +54,10 @@ class FacetedContentSearchAdapter implements AdapterInterface
             return $this->aggregations;
         }
 
-        $facetQuery = clone $this->query;
-        $facetQuery->limit = 0;
+        $aggregationQuery = clone $this->query;
+        $aggregationQuery->limit = 0;
 
-        return $this->aggregations = $this->searchService->findContent($facetQuery)->aggregations;
-    }
-
-    /**
-     * Return search facets.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     *
-     * @return Facet[]
-     *
-     * @deprecated since eZ Platform 3.2.0, to be removed in Ibexa 4.0.0.
-     */
-    public function getFacets(): array
-    {
-        if (isset($this->facets)) {
-            return $this->facets;
-        }
-
-        $facetQuery = clone $this->query;
-        $facetQuery->limit = 0;
-
-        return $this->facets = $this->searchService->findContent($facetQuery)->facets;
+        return $this->aggregations = $this->searchService->findContent($aggregationQuery)->aggregations;
     }
 
     /**
@@ -110,9 +68,9 @@ class FacetedContentSearchAdapter implements AdapterInterface
      *
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
      *
-     * @return \Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchHit[]
+     * @return \Ibexa\Contracts\Core\Repository\Values\Content\Content[]
      */
-    public function getSlice($offset, $length): array
+    public function getSlice(int $offset, int $length): array
     {
         $query = clone $this->query;
         $query->offset = $offset;
@@ -127,10 +85,6 @@ class FacetedContentSearchAdapter implements AdapterInterface
 
         if (!isset($this->aggregations) && isset($searchResult->aggregations)) {
             $this->aggregations = $searchResult->aggregations;
-        }
-
-        if (!isset($this->facets) && isset($searchResult->facets)) {
-            $this->facets = $searchResult->facets;
         }
 
         $list = [];

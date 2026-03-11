@@ -9,53 +9,34 @@ use Novactive\EzSolrSearchExtra\Api\Schema\Analysis\Synonyms\SynonymsService;
 use Novactive\EzSolrSearchExtra\Form\AddSynonymsType;
 use Novactive\EzSolrSearchExtra\Pagination\Pagerfanta\SynonymsAdapter;
 use Pagerfanta\Pagerfanta;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * Class SynonymsController.
- *
- * @package Novactive\EzSolrSearchExtraBundle\Controller\SolrAdmin
- *
- * @Route("/solr/admin/synonyms")
- */
+#[Route('/solr/admin/synonyms')]
 class SynonymsController extends BaseController
 {
     protected const RESULTS_PER_PAGE = 20;
 
-    /**
-     * @var SynonymsService
-     */
-    protected $synonymsService;
+    protected SynonymsService $synonymsService;
 
-    /**
-     * @var FormFactoryInterface
-     */
-    protected $formFactory;
+    protected FormFactoryInterface $formFactory;
 
-    /**
-     * SynonymsController constructor.
-     */
     public function __construct(SynonymsService $synonymsService, FormFactoryInterface $formFactory)
     {
         $this->synonymsService = $synonymsService;
         $this->formFactory = $formFactory;
     }
 
-    /**
-     * @Route("/{setId}/{page}/{noLayout}", name="solr_admin.synonyms.index", requirements={"page" = "\d+"})
-     * @Template("@ibexadesign/solr/admin/synonyms/list.html.Twig")
-     *
-     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
-     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
-     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
-     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
-     */
-    public function synonymsIndexAction(Request $request, string $setId, int $page = 1, bool $noLayout = false)
-    {
+    #[Route('/{setId}/{page}/{noLayout}', name: 'solr_admin.synonyms.index', requirements: ['page' => '\d+'])]
+    public function synonymsIndexAction(
+        Request $request,
+        string $setId,
+        int $page = 1,
+        bool $noLayout = false
+    ): Response {
         $this->permissionAccess('solradmin', 'synonyms.view');
 
         $manageAccess = $this->permissionManageAccess('solradmin', ['synonyms.create', 'synonyms.delete']);
@@ -103,15 +84,10 @@ class SynonymsController extends BaseController
             'manageAccess' => $manageAccess,
         ];
 
-        return $viewParameters;
+        return $this->render('@ibexadesign/solr/admin/synonyms/list.html.Twig', $viewParameters);
     }
 
-    /**
-     * @Route("/{setId}/add", name="solr_admin.synonyms.add")
-     *
-     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
-     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
-     */
+    #[Route('/{setId}/add', name: 'solr_admin.synonyms.add')]
     public function addSynonymAction(string $setId, Request $request): RedirectResponse
     {
         $this->permissionAccess('solradmin', 'synonyms.create');
@@ -137,17 +113,12 @@ class SynonymsController extends BaseController
         );
     }
 
-    /**
-     * @Route("/{setId}/terms/delete", name="solr_admin.synonyms.delete")
-     *
-     * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
-     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
-     */
+    #[Route('/{setId}/terms/delete', name: 'solr_admin.synonyms.delete')]
     public function deleteSynonymAction(string $setId, Request $request): RedirectResponse
     {
         $this->permissionAccess('solradmin', 'synonyms.delete');
 
-        $terms = $request->request->get('termsToDelete');
+        $terms = $request->get('termsToDelete');
 
         foreach ($terms as $elt) {
             $this->synonymsService->deleteMapping($setId, $elt);

@@ -11,16 +11,17 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Search\AggregationResult;
 use Iterator;
 use IteratorAggregate;
 
+/**
+ * @implements IteratorAggregate<mixed, int>
+ */
 class RawTermAggregationResult extends AggregationResult implements IteratorAggregate, Countable
 {
-    /** @var RawTermAggregationResultEntry[] */
-    private $entries;
-
-    public function __construct(string $name, iterable $entries = [])
+    /**
+     * @param RawTermAggregationResultEntry[] $entries
+     */
+    public function __construct(string $name, private iterable $entries = [])
     {
         parent::__construct($name);
-
-        $this->entries = $entries;
     }
 
     /**
@@ -34,7 +35,7 @@ class RawTermAggregationResult extends AggregationResult implements IteratorAggr
     /**
      * @param object|string|int $key
      */
-    public function getEntry($key): ?RawTermAggregationResultEntry
+    public function getEntry(mixed $key): ?RawTermAggregationResultEntry
     {
         foreach ($this->entries as $entry) {
             if ($entry->getKey() == $key) {
@@ -48,7 +49,7 @@ class RawTermAggregationResult extends AggregationResult implements IteratorAggr
     /**
      * @param object|string|int $key
      */
-    public function hasEntry($key): bool
+    public function hasEntry(mixed $key): bool
     {
         return null !== $this->getEntry($key);
     }
@@ -58,6 +59,9 @@ class RawTermAggregationResult extends AggregationResult implements IteratorAggr
         return count($this->entries);
     }
 
+    /**
+     * @return Iterator<mixed, int>
+     */
     public function getIterator(): Iterator
     {
         if (empty($this->entries)) {
@@ -69,6 +73,9 @@ class RawTermAggregationResult extends AggregationResult implements IteratorAggr
         }
     }
 
+    /**
+     * @param RawTermAggregationResultEntry[] $entries
+     */
     public static function createForAggregation(Aggregation $aggregation, iterable $entries = []): self
     {
         return new self($aggregation->getName(), $entries);

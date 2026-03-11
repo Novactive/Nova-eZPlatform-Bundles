@@ -16,26 +16,18 @@ use Ibexa\Solr\Query\QueryConverter as BaseQueryConverter;
 use Novactive\EzSolrSearchExtra\Query\AdvancedContentQuery;
 use Novactive\EzSolrSearchExtra\Query\DocumentQuery;
 
-class QueryConverter extends NativeQueryConverter
+class QueryConverter extends BaseQueryConverter
 {
-    /** @var BaseQueryConverter */
-    protected $baseConverter;
+    protected NativeQueryConverter $baseConverter;
 
-    /** @var \Ibexa\Contracts\Solr\Query\CriterionVisitor */
-    protected $criterionVisitor;
+    protected CriterionVisitor $criterionVisitor;
 
-    /**
-     * QueryConverter constructor.
-     */
-    public function __construct(BaseQueryConverter $baseConverter, CriterionVisitor $criterionVisitor)
+    public function __construct(NativeQueryConverter $baseConverter, CriterionVisitor $criterionVisitor)
     {
         $this->baseConverter = $baseConverter;
         $this->criterionVisitor = $criterionVisitor;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function convert(Query $query, array $languageSettings = []): array
     {
         $params = $this->baseConverter->convert($query, $languageSettings);
@@ -97,7 +89,8 @@ class QueryConverter extends NativeQueryConverter
     }
 
     /**
-     * @param Query\Criterion[] $criterions
+     * @param Query\CriterionInterface[] $criterions
+     * @param array<string>              $filterQuery
      */
     public function flattenFilterQueries(array $criterions, array &$filterQuery): void
     {

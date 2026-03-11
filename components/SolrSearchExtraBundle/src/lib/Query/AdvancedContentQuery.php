@@ -8,6 +8,5 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 
 class AdvancedContentQuery extends Query
 {
-    /** @var array */
-    public $groupConfig;
+    public array $groupConfig;
 }

@@ -10,6 +10,7 @@ use Ibexa\Contracts\Core\Search\Field as SPISearchField;
 use Ibexa\Contracts\Core\Search\FieldType as SPISearchFieldType;
 use Ibexa\Core\IO\ConfigScopeChangeAwareIOService;
 use Ibexa\Core\IO\Exception\BinaryFileNotFoundException;
+use Ibexa\Core\IO\IOServiceInterface;
 use Ibexa\Core\IO\Values\BinaryFile;
 use Ibexa\Solr\FieldMapper\BoostFactorProvider;
 use Novactive\EzSolrSearchExtra\TextExtractor\TextExtractorInterface;
@@ -24,22 +25,16 @@ class BinaryFileFieldMapper
 {
     /**
      * Field name, untyped.
-     *
-     * @var string
      */
-    private static $fieldName = 'meta_content__text';
+    private static string $fieldName = 'meta_content__text';
 
-    /** @var \Ibexa\Core\IO\IOServiceInterface */
-    private $ioService;
+    private IOServiceInterface $ioService;
 
-    /** @var BoostFactorProvider */
-    private $boostFactorProvider;
+    private BoostFactorProvider $boostFactorProvider;
 
-    /** @var TextExtractorInterface */
-    private $textExtractor;
+    private TextExtractorInterface $textExtractor;
 
-    /** @var LoggerInterface */
-    private $logger;
+    private LoggerInterface $logger;
 
     /**
      * BinaryFileFieldMapper constructor.
@@ -64,9 +59,9 @@ class BinaryFileFieldMapper
     {
         foreach ($contentType->fieldDefinitions as $fieldDefinition) {
             if (
-                $fieldDefinition->id !== $field->fieldDefinitionId
-                 || !$fieldDefinition->isSearchable
-                 || !$field->value->externalData
+                $fieldDefinition->id !== $field->fieldDefinitionId ||
+                 !$fieldDefinition->isSearchable ||
+                 !$field->value->externalData
             ) {
                 continue;
             }
@@ -101,8 +96,6 @@ class BinaryFileFieldMapper
 
     /**
      * Return index field type for the given $contentType.
-     *
-     * @return \Ibexa\Contracts\Core\Search\FieldType\TextField
      */
     private function getIndexFieldType(SPIContentType $contentType): SPISearchFieldType\TextField
     {

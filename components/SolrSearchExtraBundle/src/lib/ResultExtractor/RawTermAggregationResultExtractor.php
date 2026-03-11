@@ -13,27 +13,19 @@ use stdClass;
 
 class RawTermAggregationResultExtractor implements AggregationResultExtractor
 {
-    /** @var \Novactive\EzSolrSearchExtra\ResultExtractor\AggregationKeyMapper\AbstractRawTermAggregationKeyMapper */
-    private $keyMapper;
-
-    /** @var string */
-    private $aggregationClass;
-
-    /** @var \Ibexa\Contracts\Solr\ResultExtractor\AggregationResultExtractor */
-    protected $aggregationResultExtractor;
+    /** @var AbstractRawTermAggregationKeyMapper */
+    private RawTermAggregationKeyMapper|AbstractRawTermAggregationKeyMapper $keyMapper;
 
     public function __construct(
-        string $aggregationClass,
-        AggregationResultExtractor $aggregationResultExtractor,
-        AbstractRawTermAggregationKeyMapper $keyMapper = null
+        private string $aggregationClass,
+        protected AggregationResultExtractor $aggregationResultExtractor,
+        ?AbstractRawTermAggregationKeyMapper $keyMapper = null
     ) {
         if (null === $keyMapper) {
             $keyMapper = new RawTermAggregationKeyMapper();
         }
 
         $this->keyMapper = $keyMapper;
-        $this->aggregationClass = $aggregationClass;
-        $this->aggregationResultExtractor = $aggregationResultExtractor;
     }
 
     public function canVisit(Aggregation $aggregation, array $languageFilter): bool
@@ -87,6 +79,9 @@ class RawTermAggregationResultExtractor implements AggregationResultExtractor
         return new TermAggregationResult($aggregation->getName(), $entries);
     }
 
+    /**
+     * @return array<mixed>
+     */
     private function getKeys(stdClass $data): array
     {
         $keys = [];
