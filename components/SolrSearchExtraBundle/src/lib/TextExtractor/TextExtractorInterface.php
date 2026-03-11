@@ -14,5 +14,5 @@ interface TextExtractorInterface
     /**
      * Extract text from a file.
      */
-    public function extract($fileName): ?string;
+    public function extract(string $fileName): ?string;
 }

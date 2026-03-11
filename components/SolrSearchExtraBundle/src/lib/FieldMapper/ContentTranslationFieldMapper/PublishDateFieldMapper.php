@@ -16,42 +16,22 @@ class PublishDateFieldMapper extends ContentTranslationFieldMapper
 {
     /**
      * Field name, untyped.
-     *
-     * @var string
      */
-    private static $fieldName = 'meta_publishdate__date';
+    private static string $fieldName = 'meta_publishdate__date';
 
     /**
-     * @var array
+     * @var array<string>
      */
-    protected $fieldIdentifiers = [];
-
-    /**
-     * @var ContentTypeHandler
-     */
-    protected $contentTypeHandler;
-
-    /**
-     * @var FieldRegistry
-     */
-    protected $fieldRegistry;
-
-    /**
-     * @var ConfigResolverInterface
-     */
-    private $configResolver;
+    protected array $fieldIdentifiers = [];
 
     /**
      * PublishDateFieldMapper constructor.
      */
     public function __construct(
-        ContentTypeHandler $contentTypeHandler,
-        FieldRegistry $fieldRegistry,
-        ConfigResolverInterface $configResolver
+        protected ContentTypeHandler $contentTypeHandler,
+        protected FieldRegistry $fieldRegistry,
+        private ConfigResolverInterface $configResolver
     ) {
-        $this->contentTypeHandler = $contentTypeHandler;
-        $this->fieldRegistry = $fieldRegistry;
-        $this->configResolver = $configResolver;
     }
 
     public function setFieldIdentifiers(string $fieldIdentifiers): void

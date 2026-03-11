@@ -42,22 +42,22 @@ abstract class BaseController extends Controller
     protected function permissionAccess(string $module, string $function): null
     {
         if (!$this->permissionResolver->hasAccess($module, $function)) {
-            $exception = $this->createAccessDeniedException($this->translator->trans(
+            throw $this->createAccessDeniedException($this->translator->trans(
                 'solr_admin.permission.failed',
                 [],
                 'solr_admin'
             ));
-            $exception->setAttributes(null);
-            $exception->setSubject(null);
-
-            throw $exception;
         }
 
         return null;
     }
 
     /**
+     * @param array<string> $functions
+     *
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
+     *
+     * @return array<string, bool>
      */
     protected function permissionManageAccess(string $module, array $functions): array
     {

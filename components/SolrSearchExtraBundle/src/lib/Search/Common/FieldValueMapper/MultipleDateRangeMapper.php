@@ -16,7 +16,10 @@ class MultipleDateRangeMapper extends FieldValueMapper
         return $field->getType() instanceof \Novactive\EzSolrSearchExtra\Search\FieldType\MultipleDateField;
     }
 
-    public function map(Field $field)
+    /**
+     * @return array<string>
+     */
+    public function map(Field $field): array
     {
         $values = [];
 

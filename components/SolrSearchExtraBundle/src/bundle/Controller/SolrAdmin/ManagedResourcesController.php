@@ -30,14 +30,4 @@ class ManagedResourcesController extends BaseController
             'sets' => $sets,
         ]);
     }
-
-    protected function getTermsData($terms): array
-    {
-        $ids = [];
-        foreach ($terms as $term) {
-            $ids[] = $term->getTerm();
-        }
-
-        return $ids;
-    }
 }

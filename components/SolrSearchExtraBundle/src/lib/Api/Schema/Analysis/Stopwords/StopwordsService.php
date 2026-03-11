@@ -11,7 +11,7 @@ use Novactive\EzSolrSearchExtra\Search\ExtendedSearchHandler;
 
 class StopwordsService
 {
-    public const API_PATH = '/schema/analysis/stopwords';
+    public const string API_PATH = '/schema/analysis/stopwords';
 
     protected ExtendedSearchHandler $searchHandler;
 
@@ -23,6 +23,8 @@ class StopwordsService
     /**
      * @throws NotFoundException
      * @throws Exception
+     *
+     * @return string[]
      */
     public function getWords(string $setId, int $offset = 0, int $limit = 10): array
     {
@@ -39,6 +41,8 @@ class StopwordsService
     }
 
     /**
+     * @param array<string> $words
+     *
      * @throws NotFoundException
      * @throws Exception
      */

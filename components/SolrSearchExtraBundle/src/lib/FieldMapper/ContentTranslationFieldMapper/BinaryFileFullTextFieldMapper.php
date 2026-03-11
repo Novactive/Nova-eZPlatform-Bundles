@@ -17,42 +17,22 @@ use Novactive\EzSolrSearchExtra\FieldMapper\BinaryFileFieldMapper;
  */
 class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
 {
-    /** @var BinaryFileFieldMapper */
-    private $binaryFileFieldMapper;
-
-    /** @var ContentTypePersistenceHandler */
-    private $contentTypeHandler;
-
-    /** @var ConfigResolverInterface */
-    private $configResolver;
-
-    /**
-     * List of field type which should be indexed.
-     *
-     * @var string[]
-     */
-    private $binaryFileFieldTypeIdentifiers = [];
-
     /**
      * Bool to enable indexation.
-     *
-     * @var bool
      */
-    private $enabled = false;
+    private bool $enabled = false;
 
     /**
      * BinaryFileFullTextFieldMapper constructor.
+     *
+     * @param string[] $binaryFileFieldTypeIdentifiers
      */
     public function __construct(
-        BinaryFileFieldMapper $binaryFileFieldMapper,
-        ContentTypePersistenceHandler $contentTypeHandler,
-        ConfigResolverInterface $configResolver,
-        array $binaryFileFieldTypeIdentifiers
+        private BinaryFileFieldMapper $binaryFileFieldMapper,
+        private ContentTypePersistenceHandler $contentTypeHandler,
+        private ConfigResolverInterface $configResolver,
+        private array $binaryFileFieldTypeIdentifiers = []
     ) {
-        $this->binaryFileFieldMapper = $binaryFileFieldMapper;
-        $this->contentTypeHandler = $contentTypeHandler;
-        $this->binaryFileFieldTypeIdentifiers = $binaryFileFieldTypeIdentifiers;
-        $this->configResolver = $configResolver;
     }
 
     public function setEnabled(string $enabled): void

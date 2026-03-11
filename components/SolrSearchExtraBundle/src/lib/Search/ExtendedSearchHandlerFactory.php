@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Search;
 
-use Ibexa\Bundle\Core\ApiLoader\RepositoryConfigurationProvider;
+use Ibexa\Contracts\Core\Container\ApiLoader\RepositoryConfigurationProviderInterface;
 use Ibexa\Solr\CoreFilter;
 use Ibexa\Solr\CoreFilter\CoreFilterRegistry;
 use Novactive\EzSolrSearchExtra\Api\Gateway;
@@ -15,24 +15,14 @@ class ExtendedSearchHandlerFactory
 {
     protected CoreFilter $coreFilter;
     protected Gateway $gateway;
-    protected DocumentResultExtractor $resultExtractor;
-    protected GatewayRegistry $gatewayRegistry;
-    protected CoreFilterRegistry $coreFilterRegistry;
-    protected RepositoryConfigurationProvider $repositoryConfigurationProvider;
-    protected $defaultConnection;
 
     public function __construct(
-        RepositoryConfigurationProvider $repositoryConfigurationProvider,
-        $defaultConnection,
-        GatewayRegistry $gatewayRegistry,
-        CoreFilterRegistry $coreFilterRegistry,
-        DocumentResultExtractor $resultExtractor
+        protected RepositoryConfigurationProviderInterface $repositoryConfigurationProvider,
+        protected string $defaultConnection,
+        protected GatewayRegistry $gatewayRegistry,
+        protected CoreFilterRegistry $coreFilterRegistry,
+        protected DocumentResultExtractor $resultExtractor
     ) {
-        $this->defaultConnection = $defaultConnection;
-        $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
-        $this->coreFilterRegistry = $coreFilterRegistry;
-        $this->gatewayRegistry = $gatewayRegistry;
-        $this->resultExtractor = $resultExtractor;
     }
 
     public function build(): ExtendedSearchHandler

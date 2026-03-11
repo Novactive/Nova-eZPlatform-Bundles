@@ -17,51 +17,18 @@ use Ibexa\Solr\FieldMapper\BoostFactorProvider;
 
 class CustomFieldMapper extends ContentTranslationFieldMapper
 {
-    /**
-     * @var array
-     */
-    protected $fieldsConfig = [];
-
-    /**
-     * @var ContentType\Handler
-     */
-    protected $contentTypeHandler;
-
-    /**
-     * @var FieldRegistry
-     */
-    protected $fieldRegistry;
-
-    /**
-     * @var FieldNameGenerator
-     */
-    protected $fieldNameGenerator;
-
-    /**
-     * @var BoostFactorProvider
-     */
-    protected $boostFactorProvider;
-
-    /**
-     * @var ConfigResolverInterface
-     */
-    private $configResolver;
+    protected array $fieldsConfig = [];
 
     /**
      * CustomFulltextFieldMapper constructor.
      */
     public function __construct(
-        ContentType\Handler $contentTypeHandler,
-        FieldRegistry $fieldRegistry,
-        FieldNameGenerator $fieldNameGenerator,
-        BoostFactorProvider $boostFactorProvider,
-        ConfigResolverInterface $configResolver
+        protected ContentType\Handler $contentTypeHandler,
+        protected FieldRegistry $fieldRegistry,
+        protected FieldNameGenerator $fieldNameGenerator,
+        protected BoostFactorProvider $boostFactorProvider,
+        private ConfigResolverInterface $configResolver
     ) {
-        $this->contentTypeHandler = $contentTypeHandler;
-        $this->fieldRegistry = $fieldRegistry;
-        $this->fieldNameGenerator = $fieldNameGenerator;
-        $this->boostFactorProvider = $boostFactorProvider;
-        $this->configResolver = $configResolver;
     }
 
     public function setFieldsConfig(string $customFields): void

@@ -4,27 +4,24 @@ declare(strict_types=1);
 
 namespace Novactive\EzSolrSearchExtra\Pagination\Pagerfanta;
 
+use Novactive\EzSolrSearchExtra\Api\Schema\Analysis\Synonyms\SynonymsMap;
 use Novactive\EzSolrSearchExtra\Api\Schema\Analysis\Synonyms\SynonymsService;
 use Pagerfanta\Adapter\AdapterInterface;
 
+/**
+ * @implements AdapterInterface<SynonymsMap>
+ */
 class SynonymsAdapter implements AdapterInterface
 {
-    /** @var string */
-    private $setId;
-
-    /** @var SynonymsService */
-    private $synonymsService;
-
-    /** @var int */
-    private $nbResults;
+    private int $nbResults;
 
     /**
      * SynonymsAdapter constructor.
      */
-    public function __construct(string $setId, SynonymsService $synonymsService)
-    {
-        $this->setId = $setId;
-        $this->synonymsService = $synonymsService;
+    public function __construct(
+        private string $setId,
+        private SynonymsService $synonymsService
+    ) {
     }
 
     /**
@@ -47,6 +44,8 @@ class SynonymsAdapter implements AdapterInterface
      * {@inheritDoc}
      *
      * @throws \Ibexa\Core\Base\Exceptions\NotFoundException
+     *
+     * @return SynonymsMap[]
      */
     public function getSlice($offset, $length): array
     {

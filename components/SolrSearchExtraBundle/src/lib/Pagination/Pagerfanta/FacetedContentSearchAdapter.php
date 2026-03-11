@@ -9,20 +9,19 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 use Ibexa\Contracts\Core\Repository\Values\Content\Search\AggregationResultCollection;
 use Pagerfanta\Adapter\AdapterInterface;
 
+/**
+ * @implements AdapterInterface<\Ibexa\Contracts\Core\Repository\Values\Content\Content>
+ */
 class FacetedContentSearchAdapter implements AdapterInterface
 {
-    private Query $query;
-
-    private SearchService $searchService;
-
     private ?int $nbResults = null;
 
     private ?AggregationResultCollection $aggregations = null;
 
-    public function __construct(Query $query, SearchService $searchService)
-    {
-        $this->query = $query;
-        $this->searchService = $searchService;
+    public function __construct(
+        private Query $query,
+        private SearchService $searchService
+    ) {
     }
 
     /**
@@ -69,9 +68,9 @@ class FacetedContentSearchAdapter implements AdapterInterface
      *
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
      *
-     * @return \Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchHit[]
+     * @return \Ibexa\Contracts\Core\Repository\Values\Content\Content[]
      */
-    public function getSlice($offset, $length): array
+    public function getSlice(int $offset, int $length): array
     {
         $query = clone $this->query;
         $query->offset = $offset;

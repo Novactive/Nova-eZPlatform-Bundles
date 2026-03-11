@@ -20,6 +20,8 @@ class ManagedResourcesService
 
     /**
      * @throws Exception
+     *
+     * @return array<array{type: string, id: string}>
      */
     public function getSets(): array
     {

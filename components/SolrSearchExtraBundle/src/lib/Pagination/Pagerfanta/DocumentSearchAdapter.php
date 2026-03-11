@@ -6,17 +6,16 @@ namespace Novactive\EzSolrSearchExtra\Pagination\Pagerfanta;
 
 use Ibexa\Contracts\Core\Repository\Values\Content\Search\AggregationResultCollection;
 use Ibexa\Contracts\Core\Repository\Values\Content\Search\SpellcheckResult;
+use Ibexa\Contracts\Core\Repository\Values\ValueObject;
 use Ibexa\Core\Pagination\Pagerfanta\SearchResultAdapter;
 use Novactive\EzSolrSearchExtra\Query\DocumentQuery;
 use Novactive\EzSolrSearchExtra\Repository\DocumentSearchServiceInterface;
 use Novactive\EzSolrSearchExtra\Search\ExtendedSearchResult;
+use Novactive\EzSolrSearchExtra\Values\DocumentHit;
 use Pagerfanta\Adapter\AdapterInterface;
 
 class DocumentSearchAdapter implements AdapterInterface, SearchResultAdapter
 {
-    protected array $languageFilter = [];
-    protected DocumentSearchServiceInterface $documentSearchService;
-    protected DocumentQuery $query;
     private ?AggregationResultCollection $aggregations = null;
 
     private ?SpellcheckResult $spellcheck = null;
@@ -30,13 +29,10 @@ class DocumentSearchAdapter implements AdapterInterface, SearchResultAdapter
     private ?float $maxScore = null;
 
     public function __construct(
-        DocumentQuery $query,
-        DocumentSearchServiceInterface $documentSearchService,
-        array $languageFilter = []
+        protected DocumentQuery $query,
+        protected DocumentSearchServiceInterface $documentSearchService,
+        protected array $languageFilter = []
     ) {
-        $this->query = $query;
-        $this->documentSearchService = $documentSearchService;
-        $this->languageFilter = $languageFilter;
     }
 
     /**
@@ -44,7 +40,7 @@ class DocumentSearchAdapter implements AdapterInterface, SearchResultAdapter
      *
      * @return int the number of results
      */
-    public function getNbResults()
+    public function getNbResults(): int
     {
         if (isset($this->totalCount)) {
             return $this->totalCount;
@@ -73,7 +69,7 @@ class DocumentSearchAdapter implements AdapterInterface, SearchResultAdapter
      *
      * @return \Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchHit[]
      */
-    public function getSlice($offset, $length)
+    public function getSlice(int $offset, int $length): iterable
     {
         $query = clone $this->query;
         $query->offset = $offset;
@@ -164,6 +160,9 @@ class DocumentSearchAdapter implements AdapterInterface, SearchResultAdapter
         return $this->maxScore;
     }
 
+    /**
+     * @return ExtendedSearchResult<DocumentHit, ValueObject>
+     */
     protected function executeQuery(
         DocumentSearchServiceInterface $documentSearchService,
         DocumentQuery $query,

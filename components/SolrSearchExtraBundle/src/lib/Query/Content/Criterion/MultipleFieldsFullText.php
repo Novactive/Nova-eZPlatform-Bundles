@@ -50,10 +50,8 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
      * Fuzziness of the fulltext search.
      *
      * May be a value between 0. (fuzzy) and 1. (sharp).
-     *
-     * @var float
      */
-    public $fuzziness = 1.;
+    public float $fuzziness = 1.;
 
     /**
      * Boost for certain fields.
@@ -67,10 +65,8 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
      *      …
      *  )
      * </code>
-     *
-     * @var array
      */
-    public $boost = [];
+    public array $boost = [];
 
     /**
      * Boost for certain meta fields.
@@ -84,18 +80,14 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
      *      …
      *  )
      * </code>
-     *
-     * @var array
      */
-    public $metaBoost = [];
+    public array $metaBoost = [];
 
     /**
      * Enable publish date boosting.
      * This will boost most recent contents.
-     *
-     * @var bool
      */
-    public $boostPublishDate = false;
+    public bool $boostPublishDate = false;
 
     /**
      * Analyzer configuration.
@@ -109,28 +101,22 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
      *
      * Enablind this will prefix every searched words with a wildcard
      */
-    public $wildcards = false;
+    public bool $wildcards = false;
 
     /**
      * Custom field definitions to query instead of default field.
-     *
-     * @var array
      */
-    protected $customFields = [];
+    protected array $customFields = [];
 
     /**
      * Array of boost functions.
-     *
-     * @var array
      */
-    public $boostFunctions = [];
+    public array $boostFunctions = [];
 
     /**
      * Array of boost queries.
-     *
-     * @var array
      */
-    public $boostQueries = [];
+    public array $boostQueries = [];
 
     public function __construct($value, array $properties = [])
     {
@@ -154,23 +140,11 @@ class MultipleFieldsFullText extends Criterion implements CustomFieldInterface
         ];
     }
 
-    /**
-     * Set a custom field to query.
-     *
-     * Set a custom field to query for a defined field in a defined type.
-     */
     public function setCustomField(string $type, string $field, string $customField): void
     {
         $this->customFields[$type][$field] = $customField;
     }
 
-    /**
-     * Retun custom field.
-     *
-     * If no custom field is set, return null
-     *
-     * @return mixed
-     */
     public function getCustomField(string $type, string $field): ?string
     {
         if (!isset($this->customFields[$type]) || !isset($this->customFields[$type][$field])) {

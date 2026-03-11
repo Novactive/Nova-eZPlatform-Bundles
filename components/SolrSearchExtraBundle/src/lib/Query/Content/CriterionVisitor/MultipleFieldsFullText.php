@@ -36,9 +36,9 @@ class MultipleFieldsFullText extends CriterionVisitor
     }
 
     /**
-     * @return array
+     * @return array<string, \Ibexa\Contracts\Core\Search\FieldType>
      */
-    protected function getSearchFields(Criterion $criterion, string $fieldDefinitionIdentifier)
+    protected function getSearchFields(Criterion $criterion, string $fieldDefinitionIdentifier): array
     {
         return $this->fieldNameResolver->getFieldTypes($criterion, $fieldDefinitionIdentifier);
     }
@@ -48,6 +48,9 @@ class MultipleFieldsFullText extends CriterionVisitor
         return $criterion instanceof MultipleFieldsFullTextCriterion;
     }
 
+    /**
+     * @param MultipleFieldsFullTextCriterion $criterion
+     */
     public function visit(CriterionInterface $criterion, ?CriterionVisitor $subVisitor = null): string
     {
         /** @var MultipleFieldsFullTextCriterion $criterion */

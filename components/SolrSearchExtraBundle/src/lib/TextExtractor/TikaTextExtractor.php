@@ -30,10 +30,7 @@ class TikaTextExtractor implements TextExtractorInterface
         $this->logger = $logger;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function extract($fileName): ?string
+    public function extract(string $fileName): ?string
     {
         try {
             $plaintext = $this->tikaClient->getText($fileName);

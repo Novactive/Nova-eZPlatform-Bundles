@@ -29,16 +29,6 @@ class StopwordsController extends BaseController
         $this->formFactory = $formFactory;
     }
 
-    public function getWordsData($words): array
-    {
-        $ids = [];
-        foreach ($words as $word) {
-            $ids[] = $word;
-        }
-
-        return $ids;
-    }
-
     #[Route('/{setId}/{page}/{noLayout}', name: 'solr_admin.stopwords.index', requirements: ['page' => '\d+'])]
     public function stopwordsIndexAction(
         Request $request,

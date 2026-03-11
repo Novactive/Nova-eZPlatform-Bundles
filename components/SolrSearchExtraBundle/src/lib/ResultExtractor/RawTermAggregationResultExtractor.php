@@ -14,17 +14,11 @@ use stdClass;
 class RawTermAggregationResultExtractor implements AggregationResultExtractor
 {
     /** @var AbstractRawTermAggregationKeyMapper */
-    private $keyMapper;
-
-    /** @var string */
-    private $aggregationClass;
-
-    /** @var AggregationResultExtractor */
-    protected $aggregationResultExtractor;
+    private RawTermAggregationKeyMapper|AbstractRawTermAggregationKeyMapper $keyMapper;
 
     public function __construct(
-        string $aggregationClass,
-        AggregationResultExtractor $aggregationResultExtractor,
+        private string $aggregationClass,
+        protected AggregationResultExtractor $aggregationResultExtractor,
         ?AbstractRawTermAggregationKeyMapper $keyMapper = null
     ) {
         if (null === $keyMapper) {
@@ -32,8 +26,6 @@ class RawTermAggregationResultExtractor implements AggregationResultExtractor
         }
 
         $this->keyMapper = $keyMapper;
-        $this->aggregationClass = $aggregationClass;
-        $this->aggregationResultExtractor = $aggregationResultExtractor;
     }
 
     public function canVisit(Aggregation $aggregation, array $languageFilter): bool
@@ -87,6 +79,9 @@ class RawTermAggregationResultExtractor implements AggregationResultExtractor
         return new TermAggregationResult($aggregation->getName(), $entries);
     }
 
+    /**
+     * @return array<mixed>
+     */
     private function getKeys(stdClass $data): array
     {
         $keys = [];

@@ -19,9 +19,12 @@ class LocationDistanceIn extends CriterionVisitor
                  Operator::EQ === $criterion->operator);
     }
 
+    /**
+     * @param LocationDistance $criterion
+     */
     public function visit(CriterionInterface $criterion, ?CriterionVisitor $subVisitor = null): string
     {
-        /** @var Criterion\Value\MapLocationValue $location */
+        /** @var \Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion\Value\MapLocationValue $location */
         $location = $criterion->valueData;
         $criterion->value = (array) $criterion->value;
 

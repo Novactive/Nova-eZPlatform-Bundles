@@ -11,16 +11,12 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class MenuListener implements EventSubscriberInterface
 {
-    /** @var PermissionResolver */
-    private $permissionResolver;
-
     /**
      * MenuListener constructor.
      */
     public function __construct(
-        PermissionResolver $permissionResolver
+        private PermissionResolver $permissionResolver
     ) {
-        $this->permissionResolver = $permissionResolver;
     }
 
     public static function getSubscribedEvents(): array
@@ -33,7 +29,7 @@ class MenuListener implements EventSubscriberInterface
     /**
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
      */
-    public function onMenuConfigure(ConfigureMenuEvent $event)
+    public function onMenuConfigure(ConfigureMenuEvent $event): void
     {
         $menu = $event->getMenu();
         if ($this->permissionResolver->hasAccess('solradmin', 'dashboard')) {

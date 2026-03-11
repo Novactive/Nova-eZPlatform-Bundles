@@ -15,12 +15,18 @@ use stdClass;
 
 class DocumentResultExtractor extends ResultExtractor
 {
+    /**
+     * @param \Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation[]           $aggregations
+     * @param array{languages?: string[], languageCode?: string, useAlwaysAvailable?: bool} $languageFilter
+     *
+     * @return ExtendedSearchResult<DocumentHit, ValueObject>
+     */
     public function extract(
         stdClass $data,
         array $aggregations = [],
         array $languageFilter = [],
         ?Spellcheck $spellcheck = null
-    ): SearchResult {
+    ) {
         $result = parent::extract(
             $data,
             $aggregations,
@@ -62,6 +68,9 @@ class DocumentResultExtractor extends ResultExtractor
         );
     }
 
+    /**
+     * @return SearchHit<DocumentHit>
+     */
     protected function extractSearchHit(stdClass $doc): SearchHit
     {
         return new SearchHit(

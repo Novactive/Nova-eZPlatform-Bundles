@@ -96,6 +96,8 @@ services:
     - {name: ibexa.search.solr.query.location.criterion.visitor}
 
   Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor\LocationDistanceRange:
+    arguments:
+        - '%ibexa.solr.version%'
     tags:
       - { name: ibexa.search.solr.query.content.criterion.visitor }
       - { name: ibexa.search.solr.query.location.criterion.visitor }
