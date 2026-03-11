@@ -10,6 +10,8 @@
  * @license   https://github.com/Novactive/NovaeZ2FA/blob/main/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\Bundle\eZ2FABundle\Controller;
 
 use Ibexa\Contracts\AdminUi\Controller\Controller;

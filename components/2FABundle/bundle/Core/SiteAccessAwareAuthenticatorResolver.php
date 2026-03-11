@@ -61,16 +61,6 @@ class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
     private $totpAuthenticator;
 
     /**
-     * @var UserRepository
-     */
-    private $userRepository;
-
-    /**
-     * @var bool
-     */
-    private $backupCodesEnabled;
-
-    /**
      * @var bool
      */
     private $emailMethodEnabled;
@@ -84,20 +74,16 @@ class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
         ConfigResolverInterface $configResolver,
         GoogleAuthenticator $googleAuthenticator,
         TotpAuthenticator $totpAuthenticator,
-        UserRepository $userRepository,
-        bool $backupCodesEnabled
+        private readonly UserRepository $userRepository,
+        private readonly bool $backupCodesEnabled
     ) {
         $this->configResolver = $configResolver;
         $this->googleAuthenticator = $googleAuthenticator;
         $this->totpAuthenticator = $totpAuthenticator;
-        $this->userRepository = $userRepository;
-        $this->backupCodesEnabled = $backupCodesEnabled;
     }
 
-    /**
-     * @required
-     */
-    public function setSiteAccess(SiteAccess $siteAccess = null): void
+    #[\Symfony\Contracts\Service\Attribute\Required]
+    public function setSiteAccess(?SiteAccess $siteAccess = null): void
     {
         $this->siteAccess = $siteAccess;
         $this->setConfig();
@@ -182,7 +168,7 @@ class SiteAccessAwareAuthenticatorResolver implements SiteAccessAware
             $authenticatorEntity->setEmailAuthCode($userAuthData['email_authentication_code']);
         } else {
             $authenticatorEntity->setAuthenticatorSecret($userAuthData["{$this->method}_authentication_secret"]);
-            $authenticatorEntity->setBackupCodes(json_decode($userAuthData['backup_codes']) ?? []);
+            $authenticatorEntity->setBackupCodes(json_decode((string) $userAuthData['backup_codes']) ?? []);
         }
 
         return $authenticatorEntity;

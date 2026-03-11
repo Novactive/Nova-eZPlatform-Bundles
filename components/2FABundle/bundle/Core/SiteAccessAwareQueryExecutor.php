@@ -16,23 +16,16 @@ namespace Novactive\Bundle\eZ2FABundle\Core;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry as Registry;
-use Ibexa\Bundle\Core\ApiLoader\RepositoryConfigurationProvider;
+use Ibexa\Contracts\Core\Container\ApiLoader\RepositoryConfigurationProviderInterface;
 
 final class SiteAccessAwareQueryExecutor
 {
-    /**
-     * @var Registry
-     */
-    private $registry;
+    private RepositoryConfigurationProviderInterface $repositoryConfigurationProvider;
 
-    /**
-     * @var RepositoryConfigurationProvider
-     */
-    private $repositoryConfigurationProvider;
-
-    public function __construct(Registry $registry, RepositoryConfigurationProvider $repositoryConfigurationProvider)
-    {
-        $this->registry = $registry;
+    public function __construct(
+        private readonly Registry $registry,
+        RepositoryConfigurationProviderInterface $repositoryConfigurationProvider
+    ) {
         $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
     }
 
