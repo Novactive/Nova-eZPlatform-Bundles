@@ -11,5 +11,5 @@ _novaezprotectedcontent_form_private_access:
 
 _novaezprotectedcontent_bundle_admin:
     resource: "@NovaeZProtectedContentBundle/Controller/Admin"
-    type:     annotation
+    type:     attribute
     prefix:   /novaezprotectedcontent/admin/

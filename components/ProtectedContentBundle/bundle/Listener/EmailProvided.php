@@ -24,31 +24,29 @@ use Novactive\Bundle\eZProtectedContentBundle\Form\RequestEmailProtectedAccessTy
 use Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedAccessRepository;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
-use Swift_Mailer;
-use Swift_Message;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EmailProvided
 {
-    protected const SENDMAIL_ERROR = 'Impossible d\'envoyer le lien formaté à l\'adresse mail %s';
-
-    protected Swift_Message $messageInstance;
+    protected const string SENDMAIL_ERROR = 'Impossible d\'envoyer le lien formaté à l\'adresse mail %s';
 
     public function __construct(
         protected readonly FormFactoryInterface $formFactory,
-        protected readonly Swift_Mailer $mailer,
         protected readonly EntityManagerInterface $entityManager,
         protected readonly TranslatorInterface $translator,
         protected readonly ParameterBagInterface $parameterBag,
         protected readonly ProtectedAccessRepository $protectedAccessRepository,
         protected readonly ContentService $contentService,
+        protected readonly MailerInterface $mailer,
         protected readonly LoggerInterface $logger,
     ) {
-        $this->messageInstance = new Swift_Message();
     }
 
     public function onKernelRequest(RequestEvent $event): void
@@ -124,7 +122,7 @@ class EmailProvided
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|TransportExceptionInterface
      */
     private function sendMail(int $contentId, string $receiver, string $link): void
     {
@@ -135,19 +133,16 @@ class EmailProvided
         $mailLink = "<a href='$link'>".$this->translator->trans('mail.link', [], 'ezprotectedcontent').'</a>';
         $bodyMessage = str_replace('{{ url }}', $mailLink, $protectedAccess->getEmailMessage());
 
-        $message = $this->messageInstance
-            ->setSubject($this->translator->trans('mail.subject', [], 'ezprotectedcontent'))
-            ->setFrom($this->parameterBag->get('default_sender_email'))
-            ->setTo($receiver)
-            ->setContentType('text/html')
-            ->setBody(
-                $bodyMessage
-            );
+        $subject = $this->translator->trans('mail.subject', [], 'ezprotectedcontent');
+        $from = $this->parameterBag->get('default_sender_email');
 
-        try {
-            $this->mailer->send($message);
-        } catch (Exception $exception) {
-            throw new Exception(sprintf(self::SENDMAIL_ERROR, $receiver));
-        }
+        $email = (new Email())
+            ->from($from)
+            ->to($receiver)
+            ->subject($subject)
+            // ->text('Bonjour, ceci est un email envoyé depuis Ibexa 5 / Symfony 7.')
+            ->html($bodyMessage)
+        ;
+        $this->mailer->send($email);
     }
 }
