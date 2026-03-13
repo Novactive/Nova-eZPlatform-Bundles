@@ -64,17 +64,18 @@ wrap-bundles:
 .PHONY: post-install
 post-install: wrap-bundles
 	@echo "..:: Do bundle specifics ::.."
-	cat components/SEOBundle/bundle/Resources/sql/schema.sql | ddev mysql
 
 # TO BE ADDED BACK WHEN COMPLIANT WITH 4.x
-#	cat components/2FABundle/bundle/Resources/sql/schema.sql | ddev mysql
 #	@ddev exec "$(CONSOLE) novaezextra:contenttypes:create ../tests/vmcd.xlsx"
 #	@ddev exec "$(CONSOLE) novaezprotectedcontent:install"
 #	@ddev exec "$(CONSOLE) novaezhelptooltip:create"
 #	@ddev exec "$(CONSOLE) doctrine:schema:update --dump-sql --force"
 #	@ddev exec "$(CONSOLE) novaezmailing:install"
 #	@cp -rp components/ProtectedContentBundle/tests/provisioning/article.html.twig $(EZ_DIR)/templates/themes/standard/full/
-#	@cp -rp components/StaticTemplatesBundle/tests/provisioning/static_ultimatenova $(EZ_DIR)/templates/themes/
+	@cp -rp components/StaticTemplatesBundle/tests/provisioning/static_ultimatenova $(EZ_DIR)/templates/themes/
+
+	cat components/SEOBundle/bundle/Resources/sql/schema.sql | ddev mysql
+#	cat components/2FABundle/bundle/Resources/sql/schema.sql | ddev mysql
 
 	@echo "..:: Final Cleaning Cache ::.."
 	@ddev exec "$(CONSOLE) cache:clear"

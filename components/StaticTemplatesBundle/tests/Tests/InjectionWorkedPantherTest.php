@@ -25,7 +25,7 @@ class InjectionWorkedPantherTest extends PantherTestCase
         $form->form(
             [
                 '_username' => 'admin',
-                '_password' => 'publish',
+                '_password' => 'Administrat0r',
             ]
         );
         $form->submit();

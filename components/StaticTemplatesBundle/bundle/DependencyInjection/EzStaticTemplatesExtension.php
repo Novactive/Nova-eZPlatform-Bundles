@@ -37,6 +37,7 @@ class EzStaticTemplatesExtension extends Extension implements PrependExtensionIn
     public function prepend(ContainerBuilder $container): void
     {
         $siteaccessList = $this->getSiteaccessIdentifierList($container);
+
         if (!empty($siteaccessList)) {
             $ezpublishConfig = [
                 'siteaccess' => [
