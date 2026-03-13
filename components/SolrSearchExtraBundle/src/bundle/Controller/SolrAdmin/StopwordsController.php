@@ -17,16 +17,12 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/solr/admin/stopwords')]
 class StopwordsController extends BaseController
 {
-    protected const RESULTS_PER_PAGE = 20;
+    protected const int RESULTS_PER_PAGE = 20;
 
-    protected StopwordsService $stopwordsService;
-
-    protected FormFactoryInterface $formFactory;
-
-    public function __construct(StopwordsService $stopwordsService, FormFactoryInterface $formFactory)
-    {
-        $this->stopwordsService = $stopwordsService;
-        $this->formFactory = $formFactory;
+    public function __construct(
+        protected StopwordsService $stopwordsService,
+        protected FormFactoryInterface $formFactory
+    ) {
     }
 
     #[Route('/{setId}/{page}/{noLayout}', name: 'solr_admin.stopwords.index', requirements: ['page' => '\d+'])]
@@ -49,7 +45,7 @@ class StopwordsController extends BaseController
                 $words = $data['words'] ?? [];
                 $this->stopwordsService->addWords(
                     $setId,
-                    array_map('trim', explode(',', $words))
+                    array_map(trim(...), explode(',', $words))
                 );
 
                 $this->notificationHandler->success(
@@ -92,7 +88,7 @@ class StopwordsController extends BaseController
 
         $words = $request->request->get('words');
 
-        $words = array_map('trim', explode(',', $words));
+        $words = array_map(trim(...), explode(',', $words));
         $this->stopwordsService->addWords(
             $setId,
             $words

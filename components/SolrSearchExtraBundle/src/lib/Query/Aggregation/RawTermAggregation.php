@@ -19,7 +19,7 @@ class RawTermAggregation extends AbstractTermAggregation implements RawAggregati
      */
     public function __construct(
         string $name,
-        private string $fieldName,
+        private readonly string $fieldName,
         public array $excludeTags = [],
         public ?string $sort = null,
         public array $domain = [],

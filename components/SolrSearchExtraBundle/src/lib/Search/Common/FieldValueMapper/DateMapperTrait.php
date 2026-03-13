@@ -17,7 +17,7 @@ trait DateMapperTrait
         } else {
             try {
                 $date = new DateTime($value);
-            } catch (Exception $e) {
+            } catch (Exception) {
                 throw new InvalidArgumentException('Invalid date provided: '.$value);
             }
         }

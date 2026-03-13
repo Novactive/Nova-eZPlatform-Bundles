@@ -11,6 +11,7 @@ use Ibexa\Contracts\Core\Repository\Values\ValueObject;
 use Ibexa\Solr\ResultExtractor;
 use Novactive\EzSolrSearchExtra\Search\ExtendedSearchResult;
 use Novactive\EzSolrSearchExtra\Values\DocumentHit;
+use Override;
 use stdClass;
 
 class DocumentResultExtractor extends ResultExtractor
@@ -21,6 +22,7 @@ class DocumentResultExtractor extends ResultExtractor
      *
      * @return ExtendedSearchResult<DocumentHit, ValueObject>
      */
+    #[Override]
     public function extract(
         stdClass $data,
         array $aggregations = [],
@@ -71,6 +73,7 @@ class DocumentResultExtractor extends ResultExtractor
     /**
      * @return SearchHit<DocumentHit>
      */
+    #[Override]
     protected function extractSearchHit(stdClass $doc): SearchHit
     {
         return new SearchHit(

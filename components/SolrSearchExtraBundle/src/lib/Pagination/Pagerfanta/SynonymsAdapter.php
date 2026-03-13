@@ -19,8 +19,8 @@ class SynonymsAdapter implements AdapterInterface
      * SynonymsAdapter constructor.
      */
     public function __construct(
-        private string $setId,
-        private SynonymsService $synonymsService
+        private readonly string $setId,
+        private readonly SynonymsService $synonymsService
     ) {
     }
 

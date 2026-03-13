@@ -13,11 +13,8 @@ class ManagedResourcesController extends BaseController
 {
     protected const RESULTS_PER_PAGE = 20;
 
-    protected ManagedResourcesService $managedResourcesService;
-
-    public function __construct(ManagedResourcesService $managedResourcesService)
+    public function __construct(protected ManagedResourcesService $managedResourcesService)
     {
-        $this->managedResourcesService = $managedResourcesService;
     }
 
     #[Route('/', name: 'solr_admin.dashboard')]

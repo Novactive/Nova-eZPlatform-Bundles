@@ -18,14 +18,10 @@ use Novactive\EzSolrSearchExtra\Query\DocumentQuery;
 
 class QueryConverter extends BaseQueryConverter
 {
-    protected NativeQueryConverter $baseConverter;
-
-    protected CriterionVisitor $criterionVisitor;
-
-    public function __construct(NativeQueryConverter $baseConverter, CriterionVisitor $criterionVisitor)
-    {
-        $this->baseConverter = $baseConverter;
-        $this->criterionVisitor = $criterionVisitor;
+    public function __construct(
+        protected NativeQueryConverter $baseConverter,
+        protected CriterionVisitor $criterionVisitor
+    ) {
     }
 
     public function convert(Query $query, array $languageSettings = []): array
@@ -80,7 +76,7 @@ class QueryConverter extends BaseQueryConverter
     protected function hasDocumentTypeFilter(array $fqs): bool
     {
         foreach ($fqs as $fq) {
-            if (false !== strpos($fq, 'document_type_id:')) {
+            if (str_contains($fq, 'document_type_id:')) {
                 return true;
             }
         }

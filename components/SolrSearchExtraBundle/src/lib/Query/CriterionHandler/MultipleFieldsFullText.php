@@ -7,12 +7,14 @@ namespace Novactive\EzSolrSearchExtra\Query\CriterionHandler;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\CriterionInterface;
 use Ibexa\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FullText;
 use Novactive\EzSolrSearchExtra\Query\Content\Criterion\MultipleFieldsFullText as MultipleFieldsFullTextCriterion;
+use Override;
 
 class MultipleFieldsFullText extends FullText
 {
     /**
      * Check if this criterion handler accepts to handle the given criterion.
      */
+    #[Override]
     public function accept(CriterionInterface $criterion): bool
     {
         return $criterion instanceof MultipleFieldsFullTextCriterion;

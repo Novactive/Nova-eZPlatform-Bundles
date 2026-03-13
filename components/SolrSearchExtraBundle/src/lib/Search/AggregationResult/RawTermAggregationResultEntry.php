@@ -7,11 +7,11 @@ use Ibexa\Contracts\Core\Repository\Values\ValueObject;
 class RawTermAggregationResultEntry extends ValueObject
 {
     public function __construct(
-        private mixed $key,
-        private int $count,
-        private ?string $name = null,
-        private ?string $identifier = null,
-        private array $nestedResults = []
+        private readonly mixed $key,
+        private readonly int $count,
+        private readonly ?string $name = null,
+        private readonly ?string $identifier = null,
+        private readonly array $nestedResults = []
     ) {
         parent::__construct();
     }

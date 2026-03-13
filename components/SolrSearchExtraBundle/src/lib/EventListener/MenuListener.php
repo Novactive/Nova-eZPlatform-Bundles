@@ -15,7 +15,7 @@ class MenuListener implements EventSubscriberInterface
      * MenuListener constructor.
      */
     public function __construct(
-        private PermissionResolver $permissionResolver
+        private readonly PermissionResolver $permissionResolver
     ) {
     }
 

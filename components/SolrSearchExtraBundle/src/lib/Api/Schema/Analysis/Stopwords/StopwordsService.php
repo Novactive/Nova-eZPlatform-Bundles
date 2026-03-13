@@ -13,11 +13,8 @@ class StopwordsService
 {
     public const string API_PATH = '/schema/analysis/stopwords';
 
-    protected ExtendedSearchHandler $searchHandler;
-
-    public function __construct(ExtendedSearchHandler $searchHandler)
+    public function __construct(protected ExtendedSearchHandler $searchHandler)
     {
-        $this->searchHandler = $searchHandler;
     }
 
     /**

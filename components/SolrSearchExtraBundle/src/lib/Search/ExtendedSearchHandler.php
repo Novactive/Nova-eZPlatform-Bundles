@@ -20,18 +20,11 @@ use stdClass;
 
 class ExtendedSearchHandler
 {
-    protected CoreFilter $coreFilter;
-    protected Gateway $gateway;
-    protected DocumentResultExtractor $resultExtractor;
-
     public function __construct(
-        CoreFilter $coreFilter,
-        Gateway $gateway,
-        DocumentResultExtractor $resultExtractor
+        protected CoreFilter $coreFilter,
+        protected Gateway $gateway,
+        protected DocumentResultExtractor $resultExtractor
     ) {
-        $this->resultExtractor = $resultExtractor;
-        $this->gateway = $gateway;
-        $this->coreFilter = $coreFilter;
     }
 
     /**

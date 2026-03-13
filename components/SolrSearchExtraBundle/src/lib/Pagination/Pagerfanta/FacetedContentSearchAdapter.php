@@ -19,8 +19,8 @@ class FacetedContentSearchAdapter implements AdapterInterface
     private ?AggregationResultCollection $aggregations = null;
 
     public function __construct(
-        private Query $query,
-        private SearchService $searchService
+        private readonly Query $query,
+        private readonly SearchService $searchService
     ) {
     }
 

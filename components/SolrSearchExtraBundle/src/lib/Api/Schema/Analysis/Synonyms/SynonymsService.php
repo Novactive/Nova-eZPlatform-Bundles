@@ -11,13 +11,10 @@ use Novactive\EzSolrSearchExtra\Search\ExtendedSearchHandler;
 
 class SynonymsService
 {
-    public const API_PATH = '/schema/analysis/synonyms';
+    public const string API_PATH = '/schema/analysis/synonyms';
 
-    protected ExtendedSearchHandler $searchHandler;
-
-    public function __construct(ExtendedSearchHandler $searchHandler)
+    public function __construct(protected ExtendedSearchHandler $searchHandler)
     {
-        $this->searchHandler = $searchHandler;
     }
 
     /**
@@ -59,7 +56,7 @@ class SynonymsService
                 'GET',
                 sprintf('%s/%s/%s', self::API_PATH, $setId, $term)
             );
-        } catch (Exception $exception) {
+        } catch (Exception) {
             return false;
         }
         if (null === $response) {

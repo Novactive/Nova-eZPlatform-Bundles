@@ -9,13 +9,10 @@ use Novactive\EzSolrSearchExtra\Search\ExtendedSearchHandler;
 
 class ManagedResourcesService
 {
-    public const API_PATH = '/schema/managed';
+    public const string API_PATH = '/schema/managed';
 
-    protected ExtendedSearchHandler $searchHandler;
-
-    public function __construct(ExtendedSearchHandler $searchHandler)
+    public function __construct(protected ExtendedSearchHandler $searchHandler)
     {
-        $this->searchHandler = $searchHandler;
     }
 
     /**
@@ -32,7 +29,7 @@ class ManagedResourcesService
         $sets = [];
         foreach ($response->managedResources as $infos) {
             $matches = [];
-            if (preg_match('/^\/schema\/analysis\/([a-z]*)\/(.*)$/', $infos->resourceId, $matches)) {
+            if (preg_match('/^\/schema\/analysis\/([a-z]*)\/(.*)$/', (string) $infos->resourceId, $matches)) {
                 $sets[] = [
                     'type' => $matches[1],
                     'id' => $matches[2],

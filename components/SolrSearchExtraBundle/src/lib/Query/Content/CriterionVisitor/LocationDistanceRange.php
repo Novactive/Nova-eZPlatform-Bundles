@@ -15,7 +15,7 @@ class LocationDistanceRange extends CriterionVisitor
     private const int MAX_EARTH_DISTANCE_KM = 63510;
 
     public function __construct(
-        private string $solrVersion
+        private readonly string $solrVersion
     ) {
     }
 

@@ -18,8 +18,8 @@ class StopwordsAdapter implements AdapterInterface
      * StopwordsAdapter constructor.
      */
     public function __construct(
-        private string $setId,
-        private StopwordsService $stopwordsService
+        private readonly string $setId,
+        private readonly StopwordsService $stopwordsService
     ) {
     }
 

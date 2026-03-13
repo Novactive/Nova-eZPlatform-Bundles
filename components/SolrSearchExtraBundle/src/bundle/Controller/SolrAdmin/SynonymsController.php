@@ -20,14 +20,8 @@ class SynonymsController extends BaseController
 {
     protected const RESULTS_PER_PAGE = 20;
 
-    protected SynonymsService $synonymsService;
-
-    protected FormFactoryInterface $formFactory;
-
-    public function __construct(SynonymsService $synonymsService, FormFactoryInterface $formFactory)
+    public function __construct(protected SynonymsService $synonymsService, protected FormFactoryInterface $formFactory)
     {
-        $this->synonymsService = $synonymsService;
-        $this->formFactory = $formFactory;
     }
 
     #[Route('/{setId}/{page}/{noLayout}', name: 'solr_admin.synonyms.index', requirements: ['page' => '\d+'])]
@@ -53,7 +47,7 @@ class SynonymsController extends BaseController
                     $setId,
                     new SynonymsMap(
                         $term,
-                        array_map('trim', explode(',', $synonyms))
+                        array_map(trim(...), explode(',', $synonyms))
                     )
                 );
 
