@@ -8,7 +8,6 @@ use Ibexa\Contracts\Core\Persistence\Content\Field as SPIField;
 use Ibexa\Contracts\Core\Persistence\Content\Type as SPIContentType;
 use Ibexa\Contracts\Core\Search\Field as SPISearchField;
 use Ibexa\Contracts\Core\Search\FieldType as SPISearchFieldType;
-use Ibexa\Core\IO\ConfigScopeChangeAwareIOService;
 use Ibexa\Core\IO\Exception\BinaryFileNotFoundException;
 use Ibexa\Core\IO\IOServiceInterface;
 use Ibexa\Core\IO\Values\BinaryFile;
@@ -28,27 +27,15 @@ class BinaryFileFieldMapper
      */
     private static string $fieldName = 'meta_content__text';
 
-    private IOServiceInterface $ioService;
-
-    private BoostFactorProvider $boostFactorProvider;
-
-    private TextExtractorInterface $textExtractor;
-
-    private LoggerInterface $logger;
-
     /**
      * BinaryFileFieldMapper constructor.
      */
     public function __construct(
-        ConfigScopeChangeAwareIOService $ioService,
-        BoostFactorProvider $boostFactorProvider,
-        TextExtractorInterface $textExtractor,
-        LoggerInterface $logger
+        private readonly IOServiceInterface $ioService,
+        private readonly BoostFactorProvider $boostFactorProvider,
+        private readonly TextExtractorInterface $textExtractor,
+        private readonly LoggerInterface $logger
     ) {
-        $this->ioService = $ioService;
-        $this->boostFactorProvider = $boostFactorProvider;
-        $this->textExtractor = $textExtractor;
-        $this->logger = $logger;
     }
 
     /**

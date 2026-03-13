@@ -67,9 +67,7 @@ class Gateway extends Native
      */
     public function deleteDocuments(array $ids): void
     {
-        $ids = array_map(function ($value) {
-            return preg_replace('([^A-Za-z0-9/*]+)', '', $value);
-        }, $ids);
+        $ids = array_map(fn ($value) => preg_replace('([^A-Za-z0-9/*]+)', '', $value), $ids);
 
         $query = 'id:('.implode(' OR ', $ids).')';
         $this->deleteByQuery($query);

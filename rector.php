@@ -10,6 +10,7 @@ return RectorConfig::configure()
     ->withPaths([
         __DIR__ . '/bin',
         __DIR__ . '/src',
+        __DIR__ . '/components/SolrSearchExtraBundle',
         __DIR__ . '/tests',
     ])
     // uncomment to reach your current PHP version

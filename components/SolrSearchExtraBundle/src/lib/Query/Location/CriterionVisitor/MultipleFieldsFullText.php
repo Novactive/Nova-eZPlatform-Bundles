@@ -7,9 +7,11 @@ namespace Novactive\EzSolrSearchExtra\Query\Location\CriterionVisitor;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\CriterionInterface;
 use Ibexa\Contracts\Solr\Query\CriterionVisitor;
 use Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor\MultipleFieldsFullText as ContentMultipleFieldsFullText;
+use Override;
 
 class MultipleFieldsFullText extends ContentMultipleFieldsFullText
 {
+    #[Override]
     public function visit(CriterionInterface $criterion, ?CriterionVisitor $subVisitor = null): string
     {
         $condition = $this->escapeQuote(parent::visit($criterion, $subVisitor));

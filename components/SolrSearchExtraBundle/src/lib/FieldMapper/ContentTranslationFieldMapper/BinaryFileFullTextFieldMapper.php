@@ -28,10 +28,10 @@ class BinaryFileFullTextFieldMapper extends ContentTranslationFieldMapper
      * @param string[] $binaryFileFieldTypeIdentifiers
      */
     public function __construct(
-        private BinaryFileFieldMapper $binaryFileFieldMapper,
-        private ContentTypePersistenceHandler $contentTypeHandler,
-        private ConfigResolverInterface $configResolver,
-        private array $binaryFileFieldTypeIdentifiers = []
+        private readonly BinaryFileFieldMapper $binaryFileFieldMapper,
+        private readonly ContentTypePersistenceHandler $contentTypeHandler,
+        private readonly ConfigResolverInterface $configResolver,
+        private readonly array $binaryFileFieldTypeIdentifiers = []
     ) {
     }
 

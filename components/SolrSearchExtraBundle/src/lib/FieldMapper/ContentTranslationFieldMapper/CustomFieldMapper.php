@@ -27,7 +27,7 @@ class CustomFieldMapper extends ContentTranslationFieldMapper
         protected FieldRegistry $fieldRegistry,
         protected FieldNameGenerator $fieldNameGenerator,
         protected BoostFactorProvider $boostFactorProvider,
-        private ConfigResolverInterface $configResolver
+        private readonly ConfigResolverInterface $configResolver
     ) {
     }
 

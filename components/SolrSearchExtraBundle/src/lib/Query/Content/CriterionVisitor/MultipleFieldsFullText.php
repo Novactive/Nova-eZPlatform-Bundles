@@ -15,24 +15,13 @@ use QueryTranslator\Languages\Galach\Tokenizer;
 
 class MultipleFieldsFullText extends CriterionVisitor
 {
-    protected FieldNameResolver $fieldNameResolver;
-    protected Tokenizer $tokenizer;
-    protected Parser $parser;
-    protected ExtendedDisMax $generator;
-    protected int $maxDepth;
-
     public function __construct(
-        FieldNameResolver $fieldNameResolver,
-        Tokenizer $tokenizer,
-        Parser $parser,
-        ExtendedDisMax $generator,
-        int $maxDepth = 0
+        protected FieldNameResolver $fieldNameResolver,
+        protected Tokenizer $tokenizer,
+        protected Parser $parser,
+        protected ExtendedDisMax $generator,
+        protected int $maxDepth = 0
     ) {
-        $this->fieldNameResolver = $fieldNameResolver;
-        $this->tokenizer = $tokenizer;
-        $this->parser = $parser;
-        $this->generator = $generator;
-        $this->maxDepth = $maxDepth;
     }
 
     /**
@@ -94,12 +83,10 @@ class MultipleFieldsFullText extends CriterionVisitor
 
         $queryParamsString = implode(' ', array_map(function ($key, $value) {
             if (is_array($value)) {
-                return implode(' ', array_map(function ($value) use ($key) {
-                    return "{$key}='{$value}'";
-                }, $value));
-            } else {
-                return "{$key}='{$value}'";
+                return implode(' ', array_map(fn ($value) => "{$key}='{$value}'", $value));
             }
+
+            return "{$key}='{$value}'";
         }, array_keys($queryParams), $queryParams));
 
         return "{!edismax {$queryParamsString}}";
@@ -132,6 +119,6 @@ class MultipleFieldsFullText extends CriterionVisitor
 
     private function getBoostFactorForRelatedContent(int $depth): float
     {
-        return 1.0 / pow(2.0, $depth);
+        return 1.0 / 2.0 ** $depth;
     }
 }

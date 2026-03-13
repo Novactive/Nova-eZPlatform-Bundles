@@ -11,15 +11,10 @@ use Novactive\EzSolrSearchExtra\Query\Aggregation\RawTermAggregation;
 
 class RawTermAggregationVisitor implements AggregationVisitor
 {
-    private AggregationVisitor $aggregationVisitor;
-    private CriterionVisitor $criterionVisitor;
-
     public function __construct(
-        AggregationVisitor $aggregationVisitor,
-        CriterionVisitor $criterionVisitor
+        private readonly AggregationVisitor $aggregationVisitor,
+        private readonly CriterionVisitor $criterionVisitor
     ) {
-        $this->criterionVisitor = $criterionVisitor;
-        $this->aggregationVisitor = $aggregationVisitor;
     }
 
     public function canVisit(Aggregation $aggregation, array $languageFilter): bool
@@ -63,17 +58,15 @@ class RawTermAggregationVisitor implements AggregationVisitor
             $facetInfos['domain']['filter'] = $facetDomainFilters;
         }
 
-        if (!empty($aggregation->nestedAggregations)) {
-            foreach ($aggregation->nestedAggregations as $nestedAggregationName => $aggregation) {
-                if (is_string($aggregation)) {
-                    $facetInfos['facet'][$nestedAggregationName] = $aggregation;
-                } elseif ($this->aggregationVisitor->canVisit($aggregation, $languageFilter)) {
-                    $facetInfos['facet'][$aggregation->getName()] = $this->aggregationVisitor->visit(
-                        $this->aggregationVisitor,
-                        $aggregation,
-                        $languageFilter
-                    );
-                }
+        foreach ($aggregation->nestedAggregations as $nestedAggregationName => $aggregation) {
+            if (is_string($aggregation)) {
+                $facetInfos['facet'][$nestedAggregationName] = $aggregation;
+            } elseif ($this->aggregationVisitor->canVisit($aggregation, $languageFilter)) {
+                $facetInfos['facet'][$aggregation->getName()] = $this->aggregationVisitor->visit(
+                    $this->aggregationVisitor,
+                    $aggregation,
+                    $languageFilter
+                );
             }
         }
 

@@ -10,7 +10,7 @@ use Ibexa\Contracts\Taxonomy\Service\TaxonomyServiceInterface;
 final class TaxonomyRawTermAggregationKeyMapper extends AbstractRawTermAggregationKeyMapper
 {
     public function __construct(
-        private TaxonomyServiceInterface $taxonomyService
+        private readonly TaxonomyServiceInterface $taxonomyService
     ) {
     }
 

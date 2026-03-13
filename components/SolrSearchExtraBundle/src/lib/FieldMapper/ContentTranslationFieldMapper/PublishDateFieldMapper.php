@@ -30,7 +30,7 @@ class PublishDateFieldMapper extends ContentTranslationFieldMapper
     public function __construct(
         protected ContentTypeHandler $contentTypeHandler,
         protected FieldRegistry $fieldRegistry,
-        private ConfigResolverInterface $configResolver
+        private readonly ConfigResolverInterface $configResolver
     ) {
     }
 

@@ -19,7 +19,7 @@ class RawTermAggregationResult extends AggregationResult implements IteratorAggr
     /**
      * @param RawTermAggregationResultEntry[] $entries
      */
-    public function __construct(string $name, private iterable $entries = [])
+    public function __construct(string $name, private readonly iterable $entries = [])
     {
         parent::__construct($name);
     }

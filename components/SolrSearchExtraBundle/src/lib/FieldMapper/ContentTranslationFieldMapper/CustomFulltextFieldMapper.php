@@ -8,9 +8,11 @@ use Ibexa\Contracts\Core\Persistence\Content\Type as ContentType;
 use Ibexa\Contracts\Core\Persistence\Content\Type\FieldDefinition;
 use Ibexa\Contracts\Core\Search\Field;
 use Ibexa\Contracts\Core\Search\FieldType;
+use Override;
 
 class CustomFulltextFieldMapper extends CustomFieldMapper
 {
+    #[Override]
     protected function appendField(
         array &$fields,
         Field $indexField,

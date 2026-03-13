@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Novactive\EzSolrSearchExtra\Values;
 
 use Ibexa\Contracts\Core\Repository\Values\ValueObject;
+use Override;
 use stdClass;
 
 /**
@@ -13,14 +14,12 @@ use stdClass;
  */
 class DocumentHit extends ValueObject
 {
-    public stdClass $document;
-
-    public function __construct(stdClass $document)
+    public function __construct(public stdClass $document)
     {
         parent::__construct();
-        $this->document = $document;
     }
 
+    #[Override]
     public function __get($property)
     {
         if (property_exists($this->document, $property)) {
@@ -30,6 +29,7 @@ class DocumentHit extends ValueObject
         return parent::__get($property);
     }
 
+    #[Override]
     public function __isset($property)
     {
         if (property_exists($this->document, $property)) {

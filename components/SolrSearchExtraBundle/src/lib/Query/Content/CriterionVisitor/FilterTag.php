@@ -21,7 +21,7 @@ class FilterTag extends CriterionVisitor
     public function visit(CriterionInterface $criterion, ?CriterionVisitor $subVisitor = null): string
     {
         $stringQuery = $subVisitor->visit($criterion->criterion);
-        $stringQuery = trim($stringQuery, '()');
+        $stringQuery = trim((string) $stringQuery, '()');
 
         return '{!tag='.$criterion->tag.'}('.$stringQuery.')';
     }

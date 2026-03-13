@@ -7,6 +7,7 @@ namespace Novactive\EzSolrSearchExtraBundle\DependencyInjection;
 use Exception;
 use Ibexa\Bundle\Core\DependencyInjection\Configuration\SiteAccessAware\ConfigurationProcessor;
 use Ibexa\Bundle\Core\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
+use Override;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -22,6 +23,7 @@ class EzSolrSearchExtraExtension extends Extension
     /**
      * {@inheritdoc}
      */
+    #[Override]
     public function getAlias(): string
     {
         return 'ez_solr_search_extra';

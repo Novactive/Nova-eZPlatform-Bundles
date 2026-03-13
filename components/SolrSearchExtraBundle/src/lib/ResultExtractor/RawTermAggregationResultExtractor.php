@@ -14,10 +14,10 @@ use stdClass;
 class RawTermAggregationResultExtractor implements AggregationResultExtractor
 {
     /** @var AbstractRawTermAggregationKeyMapper */
-    private RawTermAggregationKeyMapper|AbstractRawTermAggregationKeyMapper $keyMapper;
+    private readonly RawTermAggregationKeyMapper|AbstractRawTermAggregationKeyMapper $keyMapper;
 
     public function __construct(
-        private string $aggregationClass,
+        private readonly string $aggregationClass,
         protected AggregationResultExtractor $aggregationResultExtractor,
         ?AbstractRawTermAggregationKeyMapper $keyMapper = null
     ) {
