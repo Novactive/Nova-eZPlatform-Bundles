@@ -21,6 +21,7 @@ use Symfony\Cmf\Component\Routing\ChainedRouterInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
@@ -28,6 +29,8 @@ use Twig\Environment;
 
 class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAccessAware
 {
+    public const string ROUTE_NAME = 'static_template';
+
     protected SiteAccess $siteAccess;
 
     protected RequestContext $context;
@@ -63,7 +66,7 @@ class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAcc
         $requestedPath = trim($requestedPath, '/');
 
         $params = [
-            '_route' => 'static_template',
+            '_route' => self::ROUTE_NAME,
             '_controller' => fn (string $template = 'index') => new Response(
                 $this->twig->render("@ibexadesign/{$template}.html.twig")
             ),
@@ -95,16 +98,17 @@ class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAcc
      */
     public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
-        $template = $parameters['template'];
-        unset($parameters['template']);
-        $query = http_build_query($parameters);
-        $linkUri = "$template?$query";
+        if($name === self::ROUTE_NAME) {
+            $template = $parameters['template'];
+            unset($parameters['template']);
+            $query = http_build_query($parameters);
+            $linkUri = "$template?$query";
 
-        if ($this->siteAccess->matcher instanceof SiteAccess\URILexer) {
-            return $this->siteAccess->matcher->analyseLink($linkUri);
+            if ($this->siteAccess->matcher instanceof SiteAccess\URILexer) {
+                return $this->siteAccess->matcher->analyseLink($linkUri);
+            }
         }
-
-        return $linkUri;
+        throw new RouteNotFoundException('Could not match route');
     }
 
     /**

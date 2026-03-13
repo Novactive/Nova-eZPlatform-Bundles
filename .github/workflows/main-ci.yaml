@@ -135,6 +135,8 @@ jobs:
                     echo ::group::..:: Do bundle specifics ::..
                     mysql -u root -h 127.0.0.1 -P 3306 --password=root db_test < ../components/SEOBundle/bundle/Resources/sql/schema.sql
                     #mysql -u root -h 127.0.0.1 -P 3306 --password=root db_test < ../components/2FABundle/bundle/Resources/sql/schema.sql
+                    
+                    cp -rp ../components/StaticTemplatesBundle/tests/provisioning/static_ultimatenova ./templates/themes/
                     echo ::endgroup::
 
                     echo ::group::..:: Final Steps ::..
