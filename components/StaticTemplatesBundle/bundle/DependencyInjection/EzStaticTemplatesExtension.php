@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\EzStaticTemplatesBundle\DependencyInjection;
 
 use ReflectionClass;
+use ReflectionException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -69,6 +70,11 @@ class EzStaticTemplatesExtension extends Extension implements PrependExtensionIn
         }
     }
 
+    /**
+     * @throws ReflectionException
+     *
+     * @return array<string>
+     */
     protected function getSiteaccessIdentifierList(ContainerBuilder $container): array
     {
         $StaticTemplatesThemePrefix = 'static_';
@@ -103,8 +109,7 @@ class EzStaticTemplatesExtension extends Extension implements PrependExtensionIn
                 }
             }
         }
-        array_unique($siteaccessList);
 
-        return $siteaccessList;
+        return array_unique($siteaccessList);
     }
 }

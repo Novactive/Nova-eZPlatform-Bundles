@@ -14,52 +14,41 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\EzStaticTemplatesBundle\Routing;
 
-use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
+use Ibexa\Core\MVC\Symfony\SiteAccess;
+use Ibexa\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
+use RuntimeException;
 use Symfony\Cmf\Component\Routing\ChainedRouterInterface;
-use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\Route as SymfonyRoute;
 use Symfony\Component\Routing\RouteCollection;
 use Twig\Environment;
 
 class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAccessAware
 {
-    /**
-     * @var array
-     */
-    protected $siteAccessGroups;
+    protected SiteAccess $siteAccess;
+
+    protected RequestContext $context;
 
     /**
-     * @var SiteAccess
+     * @param array<string, mixed> $siteAccessGroups
      */
-    protected $siteAccess;
-
-    /**
-     * @var RequestContext
-     */
-    protected $context;
-
-    /**
-     * @var Environment
-     */
-    protected $twig;
-
-    public function __construct(array $siteAccessGroups, Environment $twig)
-    {
-        $this->siteAccessGroups = $siteAccessGroups;
-        $this->twig = $twig;
+    public function __construct(
+        protected array $siteAccessGroups,
+        protected Environment $twig
+    ) {
     }
 
-    public function setSiteAccess(SiteAccess $siteAccess = null): void
+    public function setSiteAccess(?SiteAccess $siteAccess = null): void
     {
         $this->siteAccess = $siteAccess;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function matchRequest(Request $request): array
     {
         if (
@@ -68,14 +57,16 @@ class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAcc
         ) {
             throw new ResourceNotFoundException();
         }
-        $requestedPath = rawurldecode($request->attributes->get('semanticPathinfo', $request->getPathInfo()));
+        $requestedPath = rawurldecode(
+            (string) $request->attributes->get('semanticPathinfo', $request->getPathInfo())
+        );
         $requestedPath = trim($requestedPath, '/');
 
         $params = [
             '_route' => 'static_template',
-            '_controller' => function (string $template = 'index') {
-                return new Response($this->twig->render("@ibexadesign/{$template}.html.twig"));
-            },
+            '_controller' => fn (string $template = 'index') => new Response(
+                $this->twig->render("@ibexadesign/{$template}.html.twig")
+            ),
         ];
         if (!empty($requestedPath)) {
             $params['template'] = $requestedPath;
@@ -99,36 +90,35 @@ class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAcc
         return new RouteCollection();
     }
 
-    public function generate($name, $parameters = [], $referenceType = self::ABSOLUTE_PATH)
+    /**
+     * @param array<string, scalar> $parameters
+     */
+    public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
         $template = $parameters['template'];
         unset($parameters['template']);
         $query = http_build_query($parameters);
         $linkUri = "$template?$query";
 
-        return $this->siteAccess->matcher->analyseLink($linkUri);
-    }
-
-    public function match($pathinfo)
-    {
-        // nothing to do
-    }
-
-    public function supports($name): bool
-    {
-        return 'static_template' === $name;
-    }
-
-    public function getRouteDebugMessage($name, array $parameters = [])
-    {
-        if ($name instanceof RouteObjectInterface) {
-            return 'Route with key '.$name->getRouteKey();
+        if ($this->siteAccess->matcher instanceof SiteAccess\URILexer) {
+            return $this->siteAccess->matcher->analyseLink($linkUri);
         }
 
-        if ($name instanceof SymfonyRoute) {
-            return 'Route with pattern '.$name->getPath();
-        }
+        return $linkUri;
+    }
 
+    /**
+     * @return array<string, mixed>
+     */
+    public function match(string $pathinfo): array
+    {
+        throw new RuntimeException(
+            'The '.static::class." doesn't support the match() method. Use matchRequest() instead."
+        );
+    }
+
+    public function getRouteDebugMessage(string $name, array $parameters = []): string
+    {
         return $name;
     }
 }

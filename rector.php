@@ -11,6 +11,7 @@ return RectorConfig::configure()
         __DIR__ . '/bin',
         __DIR__ . '/src',
         __DIR__ . '/components/SolrSearchExtraBundle',
+        __DIR__ . '/components/StaticTemplatesBundle',
         __DIR__ . '/tests',
     ])
     // uncomment to reach your current PHP version
