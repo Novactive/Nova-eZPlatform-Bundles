@@ -20,15 +20,15 @@ class InjectionWorkedPantherTest extends PantherTestCase
     public function testInjectionWorked(): void
     {
         $helper = new BrowserHelper($this->getPantherClient());
-        $crawler = $helper->get('/static-ultimatenova/legrasclavie');
-        $form = $crawler->filter('form');
-        $form->form(
+
+        $helper->get('/static-ultimatenova/legrasclavie');
+        $helper->client()->submitForm(
+            'Login',
             [
                 '_username' => 'admin',
-                '_password' => 'publish',
+                '_password' => 'Administrat0r',
             ]
         );
-        $form->submit();
 
         $helper->get('/static-ultimatenova/legrasclavie');
 

@@ -2,6 +2,7 @@ parameters:
 	level: 6
 	paths:
 		- components/SolrSearchExtraBundle
+		- components/StaticTemplatesBundle
 #		- bin
 #		- src
 #		- tests
