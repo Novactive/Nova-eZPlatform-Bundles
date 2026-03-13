@@ -98,7 +98,7 @@ class Router implements ChainedRouterInterface, RequestMatcherInterface, SiteAcc
      */
     public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
-        if($name === self::ROUTE_NAME) {
+        if (self::ROUTE_NAME === $name) {
             $template = $parameters['template'];
             unset($parameters['template']);
             $query = http_build_query($parameters);
