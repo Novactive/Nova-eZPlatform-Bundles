@@ -105,6 +105,10 @@ jobs:
                 run: |
                     composer create-project "ibexa/oss-skeleton:${{ matrix.ibexa_version }}" --prefer-dist --no-progress --no-interaction ibexa
                     cd ibexa
+                    
+                    APP_SECRET=$(openssl rand -hex 32)
+                    echo "APP_SECRET=$APP_SECRET" >> .env.local
+        
                     php bin/console ibexa:install
                     php bin/console ibexa:user:update-user admin --password=Administrat0r
                     php bin/console ibexa:graphql:generate-schema
