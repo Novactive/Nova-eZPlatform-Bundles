@@ -75,7 +75,7 @@ post-install: wrap-bundles
 	@cp -rp components/StaticTemplatesBundle/tests/provisioning/static_ultimatenova $(EZ_DIR)/templates/themes/
 
 	cat components/SEOBundle/bundle/Resources/sql/schema.sql | ddev mysql
-#	cat components/2FABundle/bundle/Resources/sql/schema.sql | ddev mysql
+	cat components/2FABundle/bundle/Resources/sql/schema.sql | ddev mysql
 
 	@echo "..:: Final Cleaning Cache ::.."
 	@ddev exec "$(CONSOLE) cache:clear"
