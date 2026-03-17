@@ -17,8 +17,8 @@ Novactive eZ 2FA Bundle provides two-factor authentication for your ezplatform/i
 
 ### Requirements
 
-* eZ Platform 3.1+
-* PHP 7.3
+* Ibexa 5
+* PHP 8.3
 
 ### Use Composer
 
@@ -59,12 +59,12 @@ security:
         ...
         ibexa_front:
             pattern: ^/
-            user_checker: eZ\Publish\Core\MVC\Symfony\Security\UserChecker
-            anonymous: ~
-            ibexa_rest_session: ~
+            user_checker: Ibexa\Core\MVC\Symfony\Security\UserChecker
+            lazy: true
             form_login:
-                require_previous_session: false
-                csrf_token_generator: security.csrf.token_manager
+                  enable_csrf: true|false
+                  csrf_parameter: _csrf_token
+                  csrf_token_id: login
             logout: ~
             two_factor:
                 auth_form_path: 2fa_login    # The route name you have used in the routes.yaml
@@ -103,7 +103,6 @@ scheb_two_factor:
         server_name: Local Ez Server                # Server name used in QR code
         issuer: EzIssuer                            # Issuer name used in QR code
         digits: 6                                   # Number of digits in authentication code
-        window: 1                                   # How many codes before/after the current one would be accepted as valid
         template: "@ibexadesign/2fa/auth.html.twig"    # Template for the 2FA login page
 
     # TOTP Authenticator config
@@ -111,7 +110,6 @@ scheb_two_factor:
         enabled: true                               # If TOTP authentication should be enabled, default false
         server_name: Server Name                    # Server name used in QR code
         issuer: TOTP Issuer                         # Issuer name used in QR code
-        window: 1                                   # How many codes before/after the current one would be accepted as valid
         template: "@ibexadesign/2fa/auth.html.twig"    # Template used to render the authentication form
 
     # Trusted device feature

@@ -22,10 +22,7 @@ final class UserGoogleAuthSecret extends User implements TwoFactorInterface, Bac
 {
     use BackupCodeAware;
 
-    /**
-     * @var string|null
-     */
-    private $secret;
+    private ?string $secret;
 
     public function __construct(APIUser $user, array $roles = [])
     {

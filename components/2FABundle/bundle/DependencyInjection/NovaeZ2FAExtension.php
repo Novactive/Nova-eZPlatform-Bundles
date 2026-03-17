@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZ2FABundle\DependencyInjection;
 
 use Ibexa\Bundle\Core\DependencyInjection\Configuration\SiteAccessAware\ConfigurationProcessor;
+use Override;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
@@ -22,6 +23,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 final class NovaeZ2FAExtension extends Extension
 {
+    #[Override]
     public function getAlias(): string
     {
         return Configuration::NAMESPACE;
