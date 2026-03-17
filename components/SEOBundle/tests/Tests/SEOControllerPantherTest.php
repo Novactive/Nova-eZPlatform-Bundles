@@ -10,8 +10,6 @@
  * @license   https://github.com/Novactive/NovaeZSEOBundle/blob/master/LICENSE MIT Licence
  */
 
-declare(strict_types=1);
-
 namespace Novactive\Bundle\eZSEOBundle\Tests;
 
 use Novactive\eZPlatform\Bundles\Tests\BrowserHelper;
@@ -41,7 +39,7 @@ class SEOControllerPantherTest extends PantherTestCase
     public function testBingSiteAuth(): void
     {
         $helper = new BrowserHelper($this->getPantherClient());
-        $crawler = $helper->get('/BingSiteAuth.xml');
+        $crawler = $helper->getXML('/BingSiteAuth.xml');
         $this->assertEquals(1, $crawler->filter('users')->count());
     }
 }
