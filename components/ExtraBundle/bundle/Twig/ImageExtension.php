@@ -14,71 +14,39 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\Twig;
 
-use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\Content\Field;
-use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
-use eZ\Publish\Core\FieldType\ImageAsset\Value as ImageAssetValue;
-use eZ\Publish\SPI\Variation\VariationHandler;
-use Ibexa\Core\MVC\ConfigResolverInterface;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content;
+use Ibexa\Contracts\Core\Repository\Values\Content\Field;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
+use Ibexa\Contracts\Core\Variation\VariationHandler;
+use Ibexa\Core\FieldType\Image\Value as ImageValue;
+use Ibexa\Core\FieldType\ImageAsset\Value as ImageAssetValue;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\WrapperFactory;
+use Override;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 final class ImageExtension extends AbstractExtension
 {
-    /**
-     * @var Environment
-     */
-    private $twig;
-
-    /**
-     * @var ConfigResolverInterface
-     */
-    private $configResolver;
-
-    /**
-     * @var bool
-     */
-    private $enablePlaceholder;
-
-    /**
-     * @var bool
-     */
-    private $forcePlaceholder;
-
-    /**
-     * @var VariationHandler
-     */
-    private $variationHandler;
-
-    /**
-     * @var WrapperFactory
-     */
-    private $wrapperFactory;
+    private readonly bool $forcePlaceholder;
 
     public function __construct(
-        bool $enableImagePlaceholder,
-        Environment $twig,
-        ConfigResolverInterface $configResolver,
-        VariationHandler $variationHandler,
-        WrapperFactory $wrapperFactory
+        private readonly bool $enablePlaceholder,
+        private readonly Environment $twig,
+        private readonly ConfigResolverInterface $configResolver,
+        private readonly VariationHandler $variationHandler,
+        private readonly WrapperFactory $wrapperFactory,
     ) {
-        $this->enablePlaceholder = $enableImagePlaceholder;
-        $this->twig = $twig;
-        $this->configResolver = $configResolver;
-        $forcePlaceholder = (bool) ($_SERVER['CONTINUOUS_INTEGRATION'] ?? false);
-        $this->forcePlaceholder = $forcePlaceholder;
-        $this->variationHandler = $variationHandler;
-        $this->wrapperFactory = $wrapperFactory;
+        $this->forcePlaceholder = (bool) ($_SERVER['CONTINUOUS_INTEGRATION'] ?? false);
     }
 
+    #[Override]
     public function getFunctions(): array
     {
         return [
             new TwigFunction(
                 'get_image_tag',
-                [$this, 'getImageTag'],
+                $this->getImageTag(...),
                 [
                     'needs_environment' => false,
                     'is_safe' => ['html'],
@@ -86,7 +54,7 @@ final class ImageExtension extends AbstractExtension
             ),
             new TwigFunction(
                 'get_image_url',
-                [$this, 'getImageUrl'],
+                $this->getImageUrl(...),
                 [
                     'needs_environment' => false,
                     'is_safe' => ['html'],
@@ -94,7 +62,7 @@ final class ImageExtension extends AbstractExtension
             ),
             new TwigFunction(
                 'get_image_asset_content',
-                [$this, 'getImageAssetContent'],
+                $this->getImageAssetContent(...),
                 [
                     'needs_environment' => false,
                     'is_safe' => ['html'],
@@ -124,9 +92,7 @@ final class ImageExtension extends AbstractExtension
             return '';
         }
 
-        $pictureIt = static function (string $tag): string {
-            return "<picture>{$tag}</picture>";
-        };
+        $pictureIt = (static fn (string $tag): string => "<picture>{$tag}</picture>");
 
         $placeholderUrl = $this->getPlaceholderUrl($params, $identifier, $alias);
         $classes = implode(' ', $params['classes'] ?? []);
@@ -148,7 +114,7 @@ final class ImageExtension extends AbstractExtension
 
     private function fillPlaceholderForAlias(array &$params, string $alias): void
     {
-        if (!isset($params['placeholder'])) {
+        if (!isset($params['placeholder']) && true === $this->enablePlaceholder) {
             // check if we have a variation Fastly and get the retina
             $imageVariationsList = $this->configResolver->getParameter('image_variations');
             $variation = $imageVariationsList[$alias] ?? $imageVariationsList['default_placeholder'];
@@ -231,7 +197,7 @@ final class ImageExtension extends AbstractExtension
         }
 
         return $this->twig->render(
-            '@ezdesign/fields/display_image_tag.html.twig',
+            '@ibexadesign/fields/display_image_tag.html.twig',
             [
                 'content' => $content,
                 'identifier' => $identifier,

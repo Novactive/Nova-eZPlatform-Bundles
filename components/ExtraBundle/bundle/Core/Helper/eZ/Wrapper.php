@@ -16,11 +16,11 @@ namespace Novactive\Bundle\eZExtraBundle\Core\Helper\eZ;
 
 use ArrayAccess;
 use Exception;
-use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
-use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\Values\Content\Content as ValueContent;
-use eZ\Publish\API\Repository\Values\Content\Location as ValueLocation;
+use Ibexa\Contracts\Core\Repository\Exceptions\PropertyNotFoundException;
+use Ibexa\Contracts\Core\Repository\Exceptions\PropertyReadOnlyException;
+use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content as ValueContent;
+use Ibexa\Contracts\Core\Repository\Values\Content\Location as ValueLocation;
 
 /**
  * @property ValueLocation $location
@@ -164,13 +164,11 @@ final class Wrapper implements ArrayAccess
      */
     public function __get(string $name)
     {
-        switch ($name) {
-            case 'content':
-                return $this->getContent();
-            case 'location':
-                return $this->getLocation();
-        }
-        throw new PropertyNotFoundException("Can't find property: ".__CLASS__."->{$name}");
+        return match ($name) {
+            'content' => $this->getContent(),
+            'location' => $this->getLocation(),
+            default => throw new PropertyNotFoundException("Can't find property: ".self::class."->{$name}"),
+        };
     }
 
     /**
@@ -180,7 +178,7 @@ final class Wrapper implements ArrayAccess
      */
     public function __set(string $name, $value): void
     {
-        throw new PropertyReadOnlyException("Can't set property: ".__CLASS__."->{$name}");
+        throw new PropertyReadOnlyException("Can't set property: ".self::class."->{$name}");
     }
 
     public function offsetExists($offset): bool
@@ -199,11 +197,11 @@ final class Wrapper implements ArrayAccess
 
     public function offsetSet($offset, $value): void
     {
-        throw new PropertyReadOnlyException("Can't set property: ".__CLASS__."[{$offset}]");
+        throw new PropertyReadOnlyException("Can't set property: ".self::class."[{$offset}]");
     }
 
     public function offsetUnset($offset): void
     {
-        throw new PropertyReadOnlyException("Can't unset property: ".__CLASS__."[{$offset}]");
+        throw new PropertyReadOnlyException("Can't unset property: ".self::class."[{$offset}]");
     }
 }

@@ -24,11 +24,6 @@ final class ContentTypeField extends RepositoryAware implements ViewMatcherInter
     /**
      * @var string
      */
-    private $fieldIdentifier;
-
-    /**
-     * @var string
-     */
     private $attribute;
 
     public function setMatchingConfig($matchingConfig): void
@@ -36,9 +31,8 @@ final class ContentTypeField extends RepositoryAware implements ViewMatcherInter
         $this->attribute = $matchingConfig;
     }
 
-    public function __construct(string $fieldIdentifier)
+    public function __construct(private readonly string $fieldIdentifier)
     {
-        $this->fieldIdentifier = $fieldIdentifier;
     }
 
     public function match(View $view): bool

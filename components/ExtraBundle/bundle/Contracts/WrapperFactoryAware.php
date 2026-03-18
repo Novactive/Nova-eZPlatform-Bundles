@@ -23,9 +23,7 @@ trait WrapperFactoryAware
      */
     protected $wrapperFactory;
 
-    /**
-     * @required
-     */
+    #[\Symfony\Contracts\Service\Attribute\Required]
     public function setWrapperFactory(WrapperFactory $wrapperFactory): void
     {
         $this->wrapperFactory = $wrapperFactory;

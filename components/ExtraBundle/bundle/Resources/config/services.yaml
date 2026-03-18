@@ -10,7 +10,7 @@ services:
 
     Novactive\Bundle\eZExtraBundle\Command\CreateContentTypesCommand:
         bind:
-            $translationHelper: '@ezpublish.translation_helper'
+            $translationHelper: "@Ibexa\\Core\\Helper\\TranslationHelper"
 
     Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\WrapperFactory: ~
     Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\Content: ~
@@ -21,14 +21,13 @@ services:
     Novactive\Bundle\eZExtraBundle\Twig\TextParsingExtension: ~
     Novactive\Bundle\eZExtraBundle\Twig\ImageExtension:
         bind:
-            $enableImagePlaceholder: '%env(bool:ENABLE_IMAGE_PLACEHOLDER)%'
+            $enablePlaceholder: '%env(bool:ENABLE_IMAGE_PLACEHOLDER)%'
 
     Novactive\Bundle\eZExtraBundle\EventListener\PreContentViewListener:
-        arguments: ['@ezpublish.api.repository', '@ezpublish.templating.global_helper']
-        tags:
-            - {name: kernel.event_listener, event: ezpublish.pre_content_view, method: onPreContentView}
+        arguments:
+            $templateGlobalHelper: '@ibexa.templating.global_helper'
 
     Novactive\Bundle\eZExtraBundle\Core\ViewMatcher\ContentTypeField:
-        tags: [ 'ezplatform.view.matcher' ]
+        tags: [ 'ibexa.view.matcher' ]
         bind:
             $fieldIdentifier: '%env(VIEW_MATCHER_FIELD_IDENTIFIER)%'
