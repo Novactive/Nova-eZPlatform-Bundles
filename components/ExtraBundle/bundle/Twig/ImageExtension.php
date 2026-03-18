@@ -58,11 +58,11 @@ final class ImageExtension extends AbstractExtension
     private $wrapperFactory;
 
     public function __construct(
-        bool                    $enablePlaceholder,
-        Environment             $twig,
+        bool $enablePlaceholder,
+        Environment $twig,
         ConfigResolverInterface $configResolver,
-        VariationHandler        $variationHandler,
-        WrapperFactory          $wrapperFactory
+        VariationHandler $variationHandler,
+        WrapperFactory $wrapperFactory
     ) {
         $this->enablePlaceholder = $enablePlaceholder;
         $this->twig = $twig;

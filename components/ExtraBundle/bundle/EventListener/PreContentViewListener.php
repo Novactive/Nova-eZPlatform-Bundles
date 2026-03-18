@@ -39,7 +39,7 @@ class PreContentViewListener implements EventSubscriberInterface
     /**
      * @var array
      */
-    protected $types;
+    protected $types = [];
 
     public function __construct(Repository $repository, GlobalHelper $templateGlobalHelper)
     {
