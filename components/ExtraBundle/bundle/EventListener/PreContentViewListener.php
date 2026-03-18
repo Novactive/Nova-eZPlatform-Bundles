@@ -41,10 +41,10 @@ class PreContentViewListener implements EventSubscriberInterface
      */
     protected $types;
 
-    public function __construct(Repository $repository, GlobalHelper $gHelper)
+    public function __construct(Repository $repository, GlobalHelper $templateGlobalHelper)
     {
         $this->repository = $repository;
-        $this->templateGlobalHelper = $gHelper;
+        $this->templateGlobalHelper = $templateGlobalHelper;
     }
 
     public static function getSubscribedEvents(): array
