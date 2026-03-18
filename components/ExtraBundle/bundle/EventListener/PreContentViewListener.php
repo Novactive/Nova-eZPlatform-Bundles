@@ -27,12 +27,24 @@ use Symfony\Component\String\UnicodeString;
 class PreContentViewListener implements EventSubscriberInterface
 {
     /**
+     * @var Repository
+     */
+    protected $repository;
+
+    /**
+     * @var GlobalHelper
+     */
+    protected $templateGlobalHelper;
+
+    /**
      * @var array
      */
-    protected array $types = [];
+    protected $types;
 
-    public function __construct(protected Repository $repository, protected GlobalHelper $templateGlobalHelper)
+    public function __construct(Repository $repository, GlobalHelper $gHelper)
     {
+        $this->repository = $repository;
+        $this->templateGlobalHelper = $gHelper;
     }
 
     public static function getSubscribedEvents(): array
@@ -98,7 +110,9 @@ class PreContentViewListener implements EventSubscriberInterface
                 } catch (\Throwable $e) {
                     $method = 'get'.preg_replace_callback(
                             '/(?:^|_)(.?)/',
-                            static fn(array $matches): string => strtoupper($matches[1]),
+                            static function ( array $matches): string {
+                                return strtoupper( $matches[1] );
+                            },
                             $viewType
                         ).'Children';
                 }

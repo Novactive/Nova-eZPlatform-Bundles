@@ -22,20 +22,48 @@ use Ibexa\Core\MVC\Symfony\SiteAccess;
 use Ibexa\Core\MVC\Symfony\View\ContentView;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Content as ContentHelper;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\WrapperFactory;
-use Symfony\Contracts\Service\Attribute\Required;
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 
 abstract class Type
 {
-    protected ContentView $contentView;
-    protected Location $location;
-    protected Content $content;
-    protected Repository $repository;
-    protected ContentHelper $contentHelper;
-    protected ConfigResolverInterface $configResolver;
-    protected WrapperFactory $wrapperFactory;
+    /**
+     * @var ContentView
+     */
+    protected $contentView;
 
-    #[Required]
+    /**
+     * @var Location
+     */
+    protected $location;
+
+    /**
+     * @var Content
+     */
+    protected $content;
+
+    /**
+     * @var Repository
+     */
+    protected $repository;
+
+    /**
+     * @var ContentHelper
+     */
+    protected $contentHelper;
+
+    /**
+     * @var ConfigResolver
+     */
+    protected $configResolver;
+
+    /**
+     * @var WrapperFactory
+     */
+    protected $wrapperFactory;
+
+    /**
+     * @required
+     */
     public function setDependencies(
         Repository $repository,
         ContentHelper $contentHelper,
@@ -66,8 +94,9 @@ abstract class Type
     /**
      * @deprecated Now use dynamic children instead.
      *             Example : for full view children build a method getFullChildren
+     * @return array|Result
      */
-    public function getChildren(array $viewParameters, ?SiteAccess $siteAccess = null): array|Result
+    public function getChildren(array $viewParameters, ?SiteAccess $siteAccess = null): array
     {
         return [];
     }

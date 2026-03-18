@@ -28,18 +28,49 @@ use Twig\TwigFunction;
 final class ImageExtension extends AbstractExtension
 {
     /**
+     * @var Environment
+     */
+    private $twig;
+
+    /**
+     * @var ConfigResolverInterface
+     */
+    private $configResolver;
+
+    /**
      * @var bool
      */
-    private bool $forcePlaceholder;
+    private $enablePlaceholder;
+
+    /**
+     * @var bool
+     */
+    private $forcePlaceholder;
+
+    /**
+     * @var VariationHandler
+     */
+    private $variationHandler;
+
+    /**
+     * @var WrapperFactory
+     */
+    private $wrapperFactory;
 
     public function __construct(
-        private bool $enablePlaceholder,
-        private Environment $twig,
-        private ConfigResolverInterface $configResolver,
-        private VariationHandler $variationHandler,
-        private WrapperFactory $wrapperFactory,
+        bool $enableImagePlaceholder,
+        Environment $twig,
+        ConfigResolverInterface $configResolver,
+        VariationHandler $variationHandler,
+        WrapperFactory $wrapperFactory
     ) {
-        $this->forcePlaceholder = (bool) ($_SERVER['CONTINUOUS_INTEGRATION'] ?? false);
+        $this->enablePlaceholder = $enableImagePlaceholder;
+        $this->twig = $twig;
+        $this->configResolver = $configResolver;
+        $forcePlaceholder = (bool) ($_SERVER['CONTINUOUS_INTEGRATION'] ?? false);
+        $this->forcePlaceholder = $forcePlaceholder;
+        $this->variationHandler = $variationHandler;
+        $this->wrapperFactory = $wrapperFactory;
     }
 
     public function getFunctions(): array

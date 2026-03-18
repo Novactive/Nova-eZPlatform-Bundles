@@ -25,9 +25,20 @@ use Ibexa\Core\FieldType\DateAndTime\Value as DateTimeValue;
 
 class Content
 {
-    
-    public function __construct(protected RepositoryInterface $repository, protected WrapperFactory $wrapperFactory)
+    /**
+     * @var RepositoryInterface
+     */
+    protected $repository;
+
+    /**
+     * @var WrapperFactory
+     */
+    protected $wrapperFactory;
+
+    public function __construct(RepositoryInterface $repository, WrapperFactory $wrapperFactory)
     {
+        $this->repository = $repository;
+        $this->wrapperFactory = $wrapperFactory;
     }
 
     /**

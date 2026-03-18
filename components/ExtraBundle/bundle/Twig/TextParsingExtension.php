@@ -24,8 +24,14 @@ final class TextParsingExtension extends AbstractExtension
 {
     use RouterAware;
 
-    public function __construct(private WrapperFactory $wrapperFactory)
+    /**
+     * @var WrapperFactory
+     */
+    private $wrapperFactory;
+
+    public function __construct(WrapperFactory $wrapperFactory)
     {
+        $this->wrapperFactory = $wrapperFactory;
     }
 
     public function getFilters(): array
