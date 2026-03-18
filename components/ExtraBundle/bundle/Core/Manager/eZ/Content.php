@@ -14,16 +14,16 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\Core\Manager\eZ;
 
-use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\API\Repository\ContentTypeService;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\LocationService;
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\Values\Content\Content as ValueContent;
-use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
-use eZ\Publish\API\Repository\Values\ContentType\ContentType as eZContentType;
-use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use Ibexa\Contracts\Core\Repository\ContentService;
+use Ibexa\Contracts\Core\Repository\ContentTypeService;
+use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
+use Ibexa\Contracts\Core\Repository\LocationService;
+use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content as ValueContent;
+use Ibexa\Contracts\Core\Repository\Values\Content\ContentUpdateStruct;
+use Ibexa\Contracts\Core\Repository\Values\ContentType\ContentType as eZContentType;
+use Ibexa\Contracts\Core\Repository\Values\ValueObject;
+use Ibexa\Core\Repository\Values\ContentType\FieldDefinition;
 
 class Content
 {
