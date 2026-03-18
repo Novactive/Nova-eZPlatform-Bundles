@@ -1,6 +1,6 @@
 {
     "name": "novactive/ezextrabundle",
-    "description": "Novactive eZ Platform Extra Bundle",
+    "description": "Novactive Ibexa Extra Bundle",
     "license": "MIT",
     "homepage": "https://github.com/Novactive/NovaeZExtraBundle",
     "authors": [
@@ -17,12 +17,12 @@
         }
     ],
     "require": {
-        "php": ">7.3",
-        "novactive/collection": "1.*",
+        "php": "^7.3 || ^8.0",
+        "novactive/collection": "3.*",
         "phpoffice/phpspreadsheet": "*"
     },
     "require-dev": {
-        "fzaninotto/faker": "^1.9"
+        "fzaninotto/faker": "dev-master"
     },
     "autoload": {
         "psr-4": {

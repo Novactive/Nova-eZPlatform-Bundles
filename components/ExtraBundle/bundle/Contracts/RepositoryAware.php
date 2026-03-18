@@ -14,10 +14,10 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\Contracts;
 
-use eZ\Publish\API\Repository\Repository as ApiRepository;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\API\Repository\Values\Content\RelationList;
-use eZ\Publish\API\Repository\Values\Content\RelationList\Item\RelationListItem;
+use Ibexa\Contracts\Core\Repository\Repository as ApiRepository;
+use Ibexa\Contracts\Core\Repository\Values\Content\ContentInfo;
+use Ibexa\Contracts\Core\Repository\Values\Content\RelationList;
+use Ibexa\Contracts\Core\Repository\Values\Content\RelationList\Item\RelationListItem;
 
 trait RepositoryAware
 {

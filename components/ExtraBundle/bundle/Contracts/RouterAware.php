@@ -14,8 +14,9 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\Contracts;
 
-use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\Content\Location;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content;
+use Ibexa\Contracts\Core\Repository\Values\Content\Location;
+use Ibexa\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Wrapper;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -38,7 +39,7 @@ trait RouterAware
     public function generateRouteLocation(Location $location): string
     {
         return $this->router->generate(
-            'ez_urlalias',
+            UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
             ['locationId' => $location->id, 'contentId' => $location->contentId]
         );
     }
@@ -46,7 +47,7 @@ trait RouterAware
     public function generateRouteContent(Content $content): string
     {
         return $this->router->generate(
-            'ez_urlalias',
+            UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
             ['locationId' => $content->contentInfo->mainLocationId, 'contentId' => $content->id]
         );
     }

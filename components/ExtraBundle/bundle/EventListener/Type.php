@@ -14,14 +14,15 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\EventListener;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver as ConfigResolver;
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\Content\Location;
+use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Result;
+use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content;
+use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 use Ibexa\Core\MVC\Symfony\SiteAccess;
 use Ibexa\Core\MVC\Symfony\View\ContentView;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Content as ContentHelper;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\WrapperFactory;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 
 abstract class Type
 {
@@ -66,7 +67,7 @@ abstract class Type
     public function setDependencies(
         Repository $repository,
         ContentHelper $contentHelper,
-        ConfigResolver $configResolver,
+        ConfigResolverInterface $configResolver,
         WrapperFactory $wrapperFactory
     ): void {
         $this->repository = $repository;
@@ -93,6 +94,7 @@ abstract class Type
     /**
      * @deprecated Now use dynamic children instead.
      *             Example : for full view children build a method getFullChildren
+     * @return array|Result
      */
     public function getChildren(array $viewParameters, ?SiteAccess $siteAccess = null): array
     {

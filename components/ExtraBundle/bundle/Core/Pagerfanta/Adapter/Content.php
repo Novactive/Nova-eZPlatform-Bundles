@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\Core\Pagerfanta\Adapter;
 
-use eZ\Publish\Core\Pagination\Pagerfanta\LocationSearchAdapter;
+use Ibexa\Core\Pagination\Pagerfanta\LocationSearchAdapter;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Result;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\WrapperFactory;
 
