@@ -58,13 +58,13 @@ final class ImageExtension extends AbstractExtension
     private $wrapperFactory;
 
     public function __construct(
-        bool $enableImagePlaceholder,
-        Environment $twig,
+        bool                    $enablePlaceholder,
+        Environment             $twig,
         ConfigResolverInterface $configResolver,
-        VariationHandler $variationHandler,
-        WrapperFactory $wrapperFactory
+        VariationHandler        $variationHandler,
+        WrapperFactory          $wrapperFactory
     ) {
-        $this->enablePlaceholder = $enableImagePlaceholder;
+        $this->enablePlaceholder = $enablePlaceholder;
         $this->twig = $twig;
         $this->configResolver = $configResolver;
         $forcePlaceholder = (bool) ($_SERVER['CONTINUOUS_INTEGRATION'] ?? false);
