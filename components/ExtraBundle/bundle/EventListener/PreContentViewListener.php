@@ -109,12 +109,12 @@ class PreContentViewListener implements EventSubscriberInterface
                     $method =  (new UnicodeString('get_'.$viewType.'_children'))->camel()->toString();
                 } catch (\Throwable $e) {
                     $method = 'get'.preg_replace_callback(
-                            '/(?:^|_)(.?)/',
-                            static function ( array $matches): string {
-                                return strtoupper( $matches[1] );
-                            },
-                            $viewType
-                        ).'Children';
+                        '/(?:^|_)(.?)/',
+                        static function (array $matches): string {
+                                return strtoupper($matches[1]);
+                        },
+                        $viewType
+                    ).'Children';
                 }
 
                 if (method_exists($type, $method)) {
