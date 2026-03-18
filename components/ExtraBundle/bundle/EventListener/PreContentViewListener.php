@@ -23,28 +23,14 @@ use Ibexa\Core\MVC\Symfony\View\ContentView;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\String\UnicodeString;
+use Throwable;
 
 class PreContentViewListener implements EventSubscriberInterface
 {
-    /**
-     * @var Repository
-     */
-    protected $repository;
+    protected array $types = [];
 
-    /**
-     * @var GlobalHelper
-     */
-    protected $templateGlobalHelper;
-
-    /**
-     * @var array
-     */
-    protected $types = [];
-
-    public function __construct(Repository $repository, GlobalHelper $templateGlobalHelper)
+    public function __construct(protected Repository $repository, protected GlobalHelper $templateGlobalHelper)
     {
-        $this->repository = $repository;
-        $this->templateGlobalHelper = $templateGlobalHelper;
     }
 
     public static function getSubscribedEvents(): array
@@ -106,13 +92,11 @@ class PreContentViewListener implements EventSubscriberInterface
 
                 $children = [];
                 try {
-                    $method =  (new UnicodeString('get_'.$viewType.'_children'))->camel()->toString();
-                } catch (\Throwable $e) {
+                    $method = (new UnicodeString('get_'.$viewType.'_children'))->camel()->toString();
+                } catch (Throwable) {
                     $method = 'get'.preg_replace_callback(
                         '/(?:^|_)(.?)/',
-                        static function (array $matches): string {
-                                return strtoupper($matches[1]);
-                        },
+                        static fn (array $matches): string => strtoupper($matches[1]),
                         $viewType
                     ).'Children';
                 }

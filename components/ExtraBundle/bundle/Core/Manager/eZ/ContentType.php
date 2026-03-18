@@ -28,14 +28,8 @@ use Ibexa\Core\Base\Exceptions\BadStateException;
 
 class ContentType
 {
-    /**
-     * @var Repository
-     */
-    protected $eZPublishRepository;
-
-    public function __construct(Repository $api)
+    public function __construct(protected Repository $eZPublishRepository)
     {
-        $this->eZPublishRepository = $api;
     }
 
     public function getRepository(): Repository
@@ -97,7 +91,7 @@ class ContentType
 
         try {
             $contentTypeDraft = $contentTypeService->createContentTypeDraft($contentType);
-        } catch (BadStateException $e) {
+        } catch (BadStateException) {
             $contentTypeDraft = $contentTypeService->loadContentTypeDraft($contentType->id);
         }
         $contentTypeUpdateStruct = $contentTypeService->newContentTypeUpdateStruct();
@@ -209,7 +203,7 @@ class ContentType
 
         if ($definition['settings']) {
             $settings = [];
-            $lines = explode("\n", $definition['settings']);
+            $lines = explode("\n", (string) $definition['settings']);
             foreach ($lines as $line) {
                 $matches = null;
                 preg_match('/(\\s*)([a-zA-Z]*)(\\s*):(\\s*)\\[?([^\\[\\]]*)\\]?(\\s*)/uisx', $line, $matches);
@@ -217,8 +211,8 @@ class ContentType
                 $value = explode(',', trim($matches[5]));
                 array_walk(
                     $value,
-                    function (&$value, &$key) {
-                        $value = trim($value);
+                    function (&$value, &$key): void {
+                        $value = trim((string) $value);
                     }
                 );
                 if ('' !== $key) {
@@ -263,7 +257,7 @@ class ContentType
                     try {
                         $urlAlias = $this->getRepository()->getURLAliasService()->lookup($alias);
                         $struct->fieldSettings['selectionDefaultLocation'] = $urlAlias->destination;
-                    } catch (NotFoundException $e) {
+                    } catch (NotFoundException) {
                         unset($struct->fieldSettings['selectionDefaultLocation']);
                     }
                 }
@@ -272,7 +266,7 @@ class ContentType
         if ('ezobjectrelation' === $fieldTypeIdentifier) {
             if (
                 isset($settings['BrowseMode']) &&
-                (false !== strpos(strtolower(implode('', $settings['BrowseMode'])), 'dropdownlist'))
+                str_contains(strtolower(implode('', $settings['BrowseMode'])), 'dropdownlist')
             ) {
                 $struct->fieldSettings['selectionMethod'] = 1;
             } else {
@@ -287,7 +281,7 @@ class ContentType
                             $alias
                         );
                         $struct->fieldSettings['selectionRoot'] = $urlAlias->destination;
-                    } catch (NotFoundException $e) {
+                    } catch (NotFoundException) {
                         unset($struct->fieldSettings['selectionRoot']);
                     }
                 }
@@ -312,7 +306,7 @@ class ContentType
 
         try {
             $contentType = $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
-            if ((\array_key_exists('do_no_update', $options)) && (true === $options['do_no_update'])) {
+            if (\array_key_exists('do_no_update', $options) && (true === $options['do_no_update'])) {
                 return;
             }
             $this->updateContentType(
@@ -322,10 +316,10 @@ class ContentType
                 $options,
                 $lang
             );
-            if ((\array_key_exists('callback_update', $options)) && (\is_callable($options['callback_update']))) {
+            if (\array_key_exists('callback_update', $options) && \is_callable($options['callback_update'])) {
                 $options['callback_update']($contentType);
             }
-        } catch (NotFoundException $e) {
+        } catch (NotFoundException) {
             $this->createContentType(
                 $contentTypeIdentifier,
                 $contentTypeGroupIdentifier,
@@ -334,7 +328,7 @@ class ContentType
                 $options,
                 $lang
             );
-            if ((\array_key_exists('callback_create', $options)) && (\is_callable($options['callback_create']))) {
+            if (\array_key_exists('callback_create', $options) && \is_callable($options['callback_create'])) {
                 $options['callback_create'](
                     $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier)
                 );

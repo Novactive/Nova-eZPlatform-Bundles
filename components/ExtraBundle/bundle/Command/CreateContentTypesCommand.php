@@ -14,8 +14,9 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\Command;
 
-use Ibexa\Contracts\Core\Repository\Repository;
+use Exception;
 use Ibexa\Contracts\Core\FieldType\ValidationError;
+use Ibexa\Contracts\Core\Repository\Repository;
 use Ibexa\Core\Helper\TranslationHelper;
 use Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\ContentType as ContentTypeManager;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
@@ -42,9 +43,7 @@ final class CreateContentTypesCommand extends Command
      */
     private $contentTypeManager;
 
-    /**
-     * @required
-     */
+    #[\Symfony\Contracts\Service\Attribute\Required]
     public function setDependencies(
         Repository $eZPublishRepository,
         TranslationHelper $translationHelper,
@@ -128,7 +127,7 @@ final class CreateContentTypesCommand extends Command
             foreach ($oWorksheet->getRowIterator() as $row) {
                 $rowIndex = $row->getRowIndex();
                 $fieldIdentifier = $oWorksheet->getCell("B{$rowIndex}")->getValue();
-                if (($rowIndex) >= 11 && ('' != $fieldIdentifier)) {
+                if ($rowIndex >= 11 && ('' != $fieldIdentifier)) {
                     $cellIterator = $row->getCellIterator();
                     $cellIterator->setIterateOnlyExistingCells(false); // Loop all cells, even if it is not set
                     $contentTypeFieldsData = [];
@@ -200,7 +199,7 @@ final class CreateContentTypesCommand extends Command
                     [],
                     $lang
                 );
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $output->writeln("<error>{$e->getMessage()}</error>");
                 $errors = $e->getFieldErrors();
                 foreach ($errors as $attrIdentifier => $errorArray) {

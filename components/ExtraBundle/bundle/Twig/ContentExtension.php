@@ -22,35 +22,33 @@ use Ibexa\Contracts\Core\Repository\Values\Content\ContentInfo;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 use Ibexa\Core\FieldType\Relation\Value as RelationValue;
 use Ibexa\Core\FieldType\RelationList\Value as RelationListValue;
+use Override;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class ContentExtension extends AbstractExtension
 {
-    /**
-     * @var Repository
-     */
-    private $repository;
-
-    public function __construct(Repository $repository)
-    {
-        $this->repository = $repository;
+    public function __construct(
+        protected Repository $repository
+    ) {
     }
 
+    #[Override]
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('eznova_content_by_contentinfo', [$this, 'contentByContentInfo']),
-            new TwigFunction('eznova_parentcontent_by_contentinfo', [$this, 'parentContentByContentInfo']),
-            new TwigFunction('eznova_location_by_content', [$this, 'locationByContent']),
-            new TwigFunction('eznova_relation_field_to_content', [$this, 'relationFieldToContent']),
+            new TwigFunction('eznova_content_by_contentinfo', $this->contentByContentInfo(...)),
+            new TwigFunction('eznova_parentcontent_by_contentinfo', $this->parentContentByContentInfo(...)),
+            new TwigFunction('eznova_location_by_content', $this->locationByContent(...)),
+            new TwigFunction('eznova_relation_field_to_content', $this->relationFieldToContent(...)),
             new TwigFunction(
                 'eznova_relationlist_field_to_content_list',
-                [$this, 'relationsListFieldToContentList']
+                $this->relationsListFieldToContentList(...)
             ),
-            new TwigFunction('eznova_is_rich_text_really_empty', [$this, 'isRichTextReallyEmpty']),
+            new TwigFunction('eznova_is_rich_text_really_empty', $this->isRichTextReallyEmpty(...)),
         ];
     }
+
     public function contentByContentInfo(ContentInfo $contentInfo): Content
     {
         $location = $this->repository->getLocationService()->loadLocation($contentInfo->mainLocationId);
@@ -93,7 +91,7 @@ class ContentExtension extends AbstractExtension
                     return false;
                 }
             }
-        } catch (NotFoundException $e) {
+        } catch (NotFoundException) {
             return false;
         }
 
@@ -118,7 +116,7 @@ class ContentExtension extends AbstractExtension
                     }
                     $list[] = $content;
                 }
-            } catch (Exception $exception) {
+            } catch (Exception) {
                 continue;
             }
         }

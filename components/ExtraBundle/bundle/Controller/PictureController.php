@@ -14,29 +14,28 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\Controller;
 
+use Exception;
 use Ibexa\Bundle\Core\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 class PictureController extends Controller
 {
-    /**
-     * Controller to handler image alias of an content id.
-     *
-     * @return array|Response
-     * @Template
-     */
-    public function aliasAction(int $contentId, string $fieldIdentifier, string $alias, array $options = [])
+    #[Route('/picture/{contentId}/{fieldIdentifier}/{alias}', name: 'novaezextra_picture_alias', methods: ['GET'])]
+    public function aliasAction(int $contentId, string $fieldIdentifier, string $alias, array $options = []): Response
     {
         $repository = $this->getRepository();
         try {
             $contentService = $repository->getContentService();
             $content = $contentService->loadContent($contentId);
 
-            return [
-                'picture' => $content, 'fieldIdentifier' => $fieldIdentifier, 'alias' => $alias, 'options' => $options,
-            ];
-        } catch (\Exception $e) {
+            return $this->render('@NovaeZExtraBundle/Picture/alias.html.twig', [
+                'picture' => $content,
+                'fieldIdentifier' => $fieldIdentifier,
+                'alias' => $alias,
+                'options' => $options,
+            ]);
+        } catch (Exception) {
             $r = new Response();
             $r->setContent("Object $contentId doesn't exist ($fieldIdentifier, $alias)");
 

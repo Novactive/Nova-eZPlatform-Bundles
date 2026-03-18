@@ -26,9 +26,7 @@ trait RepositoryAware
      */
     protected $repository;
 
-    /**
-     * @required
-     */
+    #[\Symfony\Contracts\Service\Attribute\Required]
     public function setRepository(ApiRepository $repository): void
     {
         $this->repository = $repository;

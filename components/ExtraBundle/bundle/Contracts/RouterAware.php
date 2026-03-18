@@ -28,9 +28,7 @@ trait RouterAware
      */
     private $router;
 
-    /**
-     * @required
-     */
+    #[\Symfony\Contracts\Service\Attribute\Required]
     public function setRouter(RouterInterface $router): void
     {
         $this->router = $router;

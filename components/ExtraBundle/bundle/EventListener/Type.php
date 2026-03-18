@@ -14,56 +14,28 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\EventListener;
 
-use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Result;
 use Ibexa\Contracts\Core\Repository\Repository;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Ibexa\Core\MVC\Symfony\SiteAccess;
 use Ibexa\Core\MVC\Symfony\View\ContentView;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Content as ContentHelper;
+use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\Result;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\WrapperFactory;
-use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
+use Symfony\Contracts\Service\Attribute\Required;
 
 abstract class Type
 {
-    /**
-     * @var ContentView
-     */
-    protected $contentView;
+    protected ContentView $contentView;
+    protected Location $location;
+    protected Content $content;
+    protected Repository $repository;
+    protected ContentHelper $contentHelper;
+    protected ConfigResolverInterface $configResolver;
+    protected WrapperFactory $wrapperFactory;
 
-    /**
-     * @var Location
-     */
-    protected $location;
-
-    /**
-     * @var Content
-     */
-    protected $content;
-
-    /**
-     * @var Repository
-     */
-    protected $repository;
-
-    /**
-     * @var ContentHelper
-     */
-    protected $contentHelper;
-
-    /**
-     * @var ConfigResolver
-     */
-    protected $configResolver;
-
-    /**
-     * @var WrapperFactory
-     */
-    protected $wrapperFactory;
-
-    /**
-     * @required
-     */
+    #[Required]
     public function setDependencies(
         Repository $repository,
         ContentHelper $contentHelper,
@@ -94,9 +66,8 @@ abstract class Type
     /**
      * @deprecated Now use dynamic children instead.
      *             Example : for full view children build a method getFullChildren
-     * @return array|Result
      */
-    public function getChildren(array $viewParameters, ?SiteAccess $siteAccess = null): array
+    public function getChildren(array $viewParameters, ?SiteAccess $siteAccess = null): array|Result
     {
         return [];
     }
