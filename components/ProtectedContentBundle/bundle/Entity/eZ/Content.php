@@ -22,23 +22,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 trait Content
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="content_id", type="integer", nullable=false)
      *
      * @Assert\NotBlank()
      */
-    private $contentId;
-
-    /**
-     * @var eZContent
-     */
-    private $content;
-
-    /**
-     * @var eZLocation
-     */
-    private $location;
+    private int $contentId;
+    private eZContent $content;
+    private eZLocation $location;
 
     public function getContent(): eZContent
     {

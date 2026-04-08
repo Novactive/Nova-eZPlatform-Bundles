@@ -20,37 +20,33 @@ use Doctrine\ORM\Mapping as ORM;
 trait Metadata
 {
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="created", type="datetime")
      */
-    private $created;
+    private DateTime $created;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="updated", type="datetime")
      */
-    private $updated;
+    private DateTime $updated;
 
-    public function getCreated(): \DateTime
+    public function getCreated(): DateTime
     {
         return $this->created;
     }
 
-    public function setCreated(\DateTime $created): self
+    public function setCreated(DateTime $created): self
     {
         $this->created = $created;
 
         return $this;
     }
 
-    public function getUpdated(): \DateTime
+    public function getUpdated(): DateTime
     {
         return $this->updated;
     }
 
-    public function setUpdated(\DateTime $updated): self
+    public function setUpdated(DateTime $updated): self
     {
         $this->updated = $updated;
 

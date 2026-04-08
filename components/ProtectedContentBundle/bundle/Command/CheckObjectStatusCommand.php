@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZProtectedContentBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 use Ibexa\Core\Repository\SiteAccessAware\Repository;
@@ -96,7 +97,7 @@ class CheckObjectStatusCommand extends Command
 
             try {
                 $this->process1($protectedAccess);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 $this->io->error($exception->getMessage());
             }
 

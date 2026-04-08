@@ -20,11 +20,11 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Content;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
 
-class ProtectedAccessRepository
+readonly class ProtectedAccessRepository
 {
     public function __construct(
-        protected readonly Repository $repository,
-        protected readonly EntityManagerInterface $entityManager,
+        protected Repository $repository,
+        protected EntityManagerInterface $entityManager,
     ) {
     }
 
@@ -102,11 +102,11 @@ class ProtectedAccessRepository
                     /** @var Location $loc */
                     $loc = $location;
                     while (
-                        $loc->parentLocationId
-                        && ($loc = $repository->getLocationService()->loadLocation($loc->parentLocationId))
-                        && $loc instanceof Location
-                        && $loc->parentLocationId
-                        && 1 !== $loc->parentLocationId
+                        $loc->parentLocationId &&
+                        ($loc = $repository->getLocationService()->loadLocation($loc->parentLocationId)) &&
+                        $loc instanceof Location &&
+                        $loc->parentLocationId &&
+                        1 !== $loc->parentLocationId
                     ) {
                         ++$ct;
                         $ids[] = $loc->getContentInfo()->id;

@@ -20,6 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
+ *
  * @ORM\Table(name="novaezprotectedcontent")
  */
 class ProtectedAccess implements ContentInterface
@@ -28,49 +29,40 @@ class ProtectedAccess implements ContentInterface
     use eZ\Content;
 
     /**
-     * @var int
-     *
      * @ORM\Id
+     *
      * @ORM\Column(type="integer")
+     *
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
      * @Assert\Length(max=255)
      */
-    protected $password;
+    protected string $password;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(type="boolean", nullable=false)
      */
-    protected $enabled;
+    protected bool $enabled;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(type="boolean", nullable=false, name="as_email")
      */
-    protected $asEmail = false;
+    protected bool $asEmail = false;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(type="boolean", nullable=false, name="protect_children")
      */
-    protected $protectChildren;
+    protected bool $protectChildren;
 
     /**
-     * @var string
-     *
      * @ORM\Column(type="string", nullable=true, name="email_message")
      */
-    protected $emailMessage;
+    protected string $emailMessage;
 
     public function __construct()
     {
