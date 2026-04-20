@@ -1,0 +1,26 @@
+ibexa_form_builder:
+    fields:
+        recaptcha:
+            name: 'reCAPTCHA'
+            category: 'Basic form fields'
+            thumbnail: '/bundles/ibexaicons/img/all-icons.svg#captcha'
+            attributes:
+                help:
+                    name: 'Help text'
+                    type: 'string'
+                theme:
+                    name: 'Theme'
+                    type: 'select'
+                    options:
+                        choices:
+                            'Light': 'light'
+                            'Dark': 'dark'
+                    default_value: 'light'
+                size:
+                    name: 'Size'
+                    type: 'select'
+                    options:
+                        choices:
+                            'Normal': 'normal'
+                            'Compact': 'compact'
+                    default_value: 'normal'
