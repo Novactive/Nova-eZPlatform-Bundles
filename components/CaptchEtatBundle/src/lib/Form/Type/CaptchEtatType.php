@@ -62,7 +62,7 @@ class CaptchEtatType extends AbstractType implements TranslationContainerInterfa
         return 'captchetat';
     }
 
-    public static function getTranslationMessages()
+    public static function getTranslationMessages(): array
     {
         return [
             ( new Message('form.captcha.input_answer', 'messages') )->setDesc('Captcha answer'),

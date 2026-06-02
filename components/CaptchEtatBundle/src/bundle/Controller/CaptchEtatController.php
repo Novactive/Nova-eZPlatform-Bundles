@@ -9,12 +9,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
-class CaptchEtatController
+readonly class CaptchEtatController
 {
     public function __construct(
-        Gateway $gateway
+        protected Gateway $gateway
     ) {
-        $this->gateway = $gateway;
     }
 
     /**
@@ -22,9 +21,9 @@ class CaptchEtatController
      */
     public function apiSimpleCaptchaEndpointAction(Request $request): Response
     {
-        $get = $request->get('get');
-        $tech = $request->get('t');
-        $type = $request->get('c');
+        $get = (string) $this->get($request, 'get');
+        $tech = (string) $this->get($request, 't');
+        $type = (string) $this->get($request, 'c');
         $content = $this->gateway->getSimpleCaptchaEndpoint($get, $tech, $type);
         $response = new Response($content);
 
@@ -40,5 +39,22 @@ class CaptchEtatController
         $response->setPrivate();
 
         return $response;
+    }
+
+    protected function get(Request $request, string $key): ?string
+    {
+        if ($request->attributes->get($key)) {
+            return $request->attributes->get($key);
+        }
+
+        if ($request->query->has($key)) {
+            return $request->query->all()[$key];
+        }
+
+        if ($request->request->has($key)) {
+            return $request->request->all()[$key];
+        }
+
+        return null;
     }
 }

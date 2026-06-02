@@ -9,9 +9,9 @@ use Symfony\Component\Validator\Constraint;
 
 class CaptchEtatValidChallenge extends Constraint
 {
-    public $message = 'captchetat.form.answer.wrongAnswer';
+    public string $message = 'captchetat.form.answer.wrongAnswer';
 
-    public function validatedBy()
+    public function validatedBy(): string
     {
         return CaptchEtatChallengeValidator::class;
     }
