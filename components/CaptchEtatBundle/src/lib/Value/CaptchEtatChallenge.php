@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\CaptchEtat\Value;
 
-//use Symfony\Component\VarExporter\LazyGhostTrait;
+// use Symfony\Component\VarExporter\LazyGhostTrait;
 
 class CaptchEtatChallenge
 {
-//    use LazyGhostTrait;
+    //    use LazyGhostTrait;
 
     public ?string $captchaHtml;
     public ?string $captchaId;

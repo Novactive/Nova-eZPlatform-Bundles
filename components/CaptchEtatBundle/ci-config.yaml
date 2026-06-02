@@ -1,4 +1,4 @@
-install: false
-test: false
+install: true
+test: true
 repo: Novactive/AlmaviaCXCaptchEtatBundle
 
