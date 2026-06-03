@@ -16,54 +16,32 @@ namespace Novactive\Bundle\eZProtectedContentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\eZ\ContentInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity()
- *
- * @ORM\Table(name="novaezprotectedcontent")
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'novaezprotectedcontent')]
 class ProtectedAccess implements ContentInterface
 {
     use Compose\Metadata;
     use eZ\Content;
 
-    /**
-     * @ORM\Id
-     *
-     * @ORM\Column(type="integer")
-     *
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private int $id;
 
-    /*
-     * @ORM\Column(type="string", length=255, nullable=true)
-     *
-     * @Assert\Length(max=255)
-     */
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    // #[Assert\Length(max: 255)]
     protected ?string $password;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=false)
-     */
+    #[ORM\Column(type: 'boolean', nullable: false)]
     protected bool $enabled;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=false, name="as_email")
-     */
+    #[ORM\Column(name: 'as_email', type: 'boolean', nullable: false)]
     protected bool $asEmail = false;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=false, name="protect_children")
-     */
+    #[ORM\Column(name: 'protect_children', type: 'boolean', nullable: false)]
     protected bool $protectChildren;
 
-    /**
-     * @ORM\Column(type="string", nullable=true, name="email_message")
-     */
+    #[ORM\Column(name: 'email_message', type: 'string', nullable: true)]
     protected string $emailMessage;
 
     public function __construct()
