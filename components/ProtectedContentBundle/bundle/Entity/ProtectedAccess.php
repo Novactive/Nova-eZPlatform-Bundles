@@ -37,12 +37,14 @@ class ProtectedAccess implements ContentInterface
      */
     private int $id;
 
-    /**
+    /*
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      * @Assert\Length(max=255)
      */
-    protected string $password;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    // #[Assert\Length(max: 255)]
+    protected ?string $password;
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
