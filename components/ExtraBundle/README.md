@@ -68,7 +68,7 @@ Go to : */_novaezextra/dev/test*
 #### eznova_relationlist_field_to_content_list( fieldValue )
 
 ```twig
-{% set content = eznova_relationlist_field_to_content_list( ez_field_value( content, 'internal_links' ) ) %}
+{% set content = eznova_relationlist_field_to_content_list( ibexa_field_value( content, 'internal_links' ) ) %}
 ```
 
 > Note : return an array of direct linked contents by the relation objects FieldType
@@ -76,7 +76,7 @@ Go to : */_novaezextra/dev/test*
 #### eznova_is_rich_text_really_empty(richTextFieldValue)
 
 ```twig
-{% set content = eznova_is_rich_text_really_empty( ez_field_value( content, 'description' ) ) %}
+{% set content = eznova_is_rich_text_really_empty( ibexa_field_value( content, 'description' ) ) %}
 ```
 
 > Note : returns true if the value of RichText field is empty excluding the tags, whitespaces and line breaks, false otherwise
@@ -150,7 +150,7 @@ optimized_original_mobile:
 
 #### get_image_asset_content(field)
 
-> Returns the Content by the Image Asset field. Requires the eZ\Publish\API\Repository\Values\Content\Field to be specified.
+> Returns the Content by the Image Asset field. Requires the Ibexa\Contracts\Core\Repository\Values\Content\Field to be specified.
 
 > **IMPORTANT**: The image placeholder is enabled by default but can be disabled by setting the bool value to _ENABLE_IMAGE_PLACEHOLDER_ env variable.
 
@@ -178,9 +178,9 @@ Usage:
 
 ```twig
     {% for child in children %}
-        <h2>{{ ez_field_value( child.content, "title" ) }}</h2>
-        {{ ez_render_field( child.content, "overview" ) }}
-        <a href="{{ path( "ez_urlalias", { "locationId" : child.content.contentInfo.mainLocationId } ) }}">{{ "Learn more" | trans() }}</a>
+        <h2>{{ ibexa_field_value( child.content, "title" ) }}</h2>
+        {{ ibexa_render_field( child.content, "overview" ) }}
+        <a href="{{ path( "ibexa.url.alias", { "locationId" : child.content.contentInfo.mainLocationId } ) }}">{{ "Learn more" | trans() }}</a>
     {% endfor %}
 ```
 
@@ -206,7 +206,7 @@ Ex:
 ```php
 namespace Yoochoose\Bundle\GeneralBundle\ChildrenProvider;
 use Novactive\Bundle\eZExtraBundle\EventListener\Type;
-use eZ\Publish\API\Repository\Values\Content\Query;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 class PersonalizationEngine extends Type
 {
     //its also use as default to get the full view children
@@ -247,7 +247,7 @@ Then for example if you set the **business** value to the field that is set to i
 
 ```yaml
 article_business:
-    template: '@ezdesign/full/article_business.html.twig'
+    template: '@ibexadesign/full/article_business.html.twig'
     match:
         Identifier\ContentType: [ 'article' ]
         '@Novactive\Bundle\eZExtraBundle\Core\ViewMatcher\ContentTypeField': 'business'

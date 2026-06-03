@@ -20,15 +20,9 @@ use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 
 final class UserEmailAuth extends User implements TwoFactorInterface
 {
-    /**
-     * @var string
-     */
-    private $email;
+    private string $email;
 
-    /**
-     * @var string
-     */
-    private $authCode;
+    private string $authCode;
 
     public function __construct(APIUser $user, array $roles = [])
     {

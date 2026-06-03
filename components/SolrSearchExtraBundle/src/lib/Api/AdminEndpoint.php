@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Novactive\EzSolrSearchExtra\Api;
 
 use Ibexa\Solr\Gateway\Endpoint;
+use Override;
 
 class AdminEndpoint extends Endpoint
 {
@@ -13,6 +14,7 @@ class AdminEndpoint extends Endpoint
     /**
      * {@inheritDoc}
      */
+    #[Override]
     public function getIdentifier(): string
     {
         $authorization = (!empty($this->user) ? "{$this->user}:{$this->pass}@" : '');

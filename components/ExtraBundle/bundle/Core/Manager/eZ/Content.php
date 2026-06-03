@@ -14,27 +14,21 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\Core\Manager\eZ;
 
-use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\API\Repository\ContentTypeService;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\LocationService;
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\Values\Content\Content as ValueContent;
-use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
-use eZ\Publish\API\Repository\Values\ContentType\ContentType as eZContentType;
-use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use Ibexa\Contracts\Core\Repository\ContentService;
+use Ibexa\Contracts\Core\Repository\ContentTypeService;
+use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
+use Ibexa\Contracts\Core\Repository\LocationService;
+use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content as ValueContent;
+use Ibexa\Contracts\Core\Repository\Values\Content\ContentUpdateStruct;
+use Ibexa\Contracts\Core\Repository\Values\ContentType\ContentType as eZContentType;
+use Ibexa\Contracts\Core\Repository\Values\ValueObject;
+use Ibexa\Core\Repository\Values\ContentType\FieldDefinition;
 
 class Content
 {
-    /**
-     * @var Repository
-     */
-    private $eZPublishRepository;
-
-    public function __construct(Repository $api)
+    public function __construct(private readonly Repository $eZPublishRepository)
     {
-        $this->eZPublishRepository = $api;
     }
 
     public function getRepository(): Repository
@@ -137,8 +131,8 @@ class Content
     protected function publishVersion(ValueContent $draft, array $options = []): ValueContent
     {
         if (
-            (\array_key_exists('callback_before_publish', $options)) &&
-            (\is_callable($options['callback_before_publish']))
+            \array_key_exists('callback_before_publish', $options) &&
+            \is_callable($options['callback_before_publish'])
         ) {
             $contentService = $this->getContentService();
             $contentUpdateStruct = $contentService->newContentUpdateStruct();
@@ -205,16 +199,16 @@ class Content
         $options['remoteId'] = $remoteId;
         try {
             $content = $this->getContentService()->loadContentByRemoteId($remoteId);
-            if ((\array_key_exists('do_no_update', $options)) && (true == $options['do_no_update'])) {
+            if (\array_key_exists('do_no_update', $options) && (true == $options['do_no_update'])) {
                 return $content;
             }
             $newContent = $this->updateContent($content, $data, $options, $lang);
-            if ((\array_key_exists('callback_update', $options)) && (\is_callable($options['callback_update']))) {
+            if (\array_key_exists('callback_update', $options) && \is_callable($options['callback_update'])) {
                 $options['callback_update']($newContent);
             }
-        } catch (NotFoundException $e) {
+        } catch (NotFoundException) {
             $newContent = $this->createContent($contentTypeIdentifier, $parentLocationId, $data, $options, $lang);
-            if ((\array_key_exists('callback_create', $options)) && (\is_callable($options['callback_create']))) {
+            if (\array_key_exists('callback_create', $options) && \is_callable($options['callback_create'])) {
                 $options['callback_create']($newContent);
             }
         }

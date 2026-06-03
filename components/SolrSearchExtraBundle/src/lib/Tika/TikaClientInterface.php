@@ -11,8 +11,5 @@ namespace Novactive\EzSolrSearchExtra\Tika;
  */
 interface TikaClientInterface
 {
-    /**
-     * @param $fileName
-     */
-    public function getText($fileName): ?string;
+    public function getText(string $fileName): ?string;
 }

@@ -17,6 +17,7 @@ namespace Novactive\Bundle\eZExtraBundle\Twig;
 use Exception;
 use Novactive\Bundle\eZExtraBundle\Contracts\RouterAware;
 use Novactive\Bundle\eZExtraBundle\Core\Helper\eZ\WrapperFactory;
+use Override;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
@@ -34,12 +35,13 @@ final class TextParsingExtension extends AbstractExtension
         $this->wrapperFactory = $wrapperFactory;
     }
 
+    #[Override]
     public function getFilters(): array
     {
         return [
-            new TwigFilter('ctaize', [$this, 'ctaConvert']),
-            new TwigFilter('ezlinks', [$this, 'ezLinks'], ['is_safe' => ['html']]),
-            new TwigFilter('htmldecode', [$this, 'htmlDecode'], ['is_safe' => ['html']]),
+            new TwigFilter('ctaize', $this->ctaConvert(...)),
+            new TwigFilter('ezlinks', $this->ezLinks(...), ['is_safe' => ['html']]),
+            new TwigFilter('htmldecode', $this->htmlDecode(...), ['is_safe' => ['html']]),
         ];
     }
 
@@ -51,8 +53,8 @@ final class TextParsingExtension extends AbstractExtension
     public function eZLinks(string $string): string
     {
         $fixHtml = static function ($string) {
-            $openedDiv = substr_count($string, '<div');
-            $closedDiv = substr_count($string, '</div>');
+            $openedDiv = substr_count((string) $string, '<div');
+            $closedDiv = substr_count((string) $string, '</div>');
             $diff = $openedDiv - $closedDiv;
             if ($diff > 0) {
                 for ($i = 0; $i < $diff; ++$i) {
@@ -74,7 +76,7 @@ final class TextParsingExtension extends AbstractExtension
             try {
                 $wrapper = $this->wrapperFactory->createByLocationId($contentId);
                 $replacements[$matchFound] = $this->generateRouteWrapper($wrapper);
-            } catch (Exception $exception) {
+            } catch (Exception) {
                 $replacements[$matchFound] = '/';
             }
         }
@@ -103,7 +105,7 @@ final class TextParsingExtension extends AbstractExtension
 
                 return $this->generateRouteWrapper($wrapper);
             }
-        } catch (Exception $exception) {
+        } catch (Exception) {
             return '/';
         }
 
@@ -116,6 +118,6 @@ final class TextParsingExtension extends AbstractExtension
 
     private function startsWith(string $haystack, string $needle): bool
     {
-        return 0 === strpos($haystack, $needle);
+        return str_starts_with($haystack, $needle);
     }
 }

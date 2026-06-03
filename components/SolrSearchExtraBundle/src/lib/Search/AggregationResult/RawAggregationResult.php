@@ -5,18 +5,16 @@ declare(strict_types=1);
 namespace Novactive\EzSolrSearchExtra\Search\AggregationResult;
 
 use Ibexa\Contracts\Core\Repository\Values\Content\Search\AggregationResult;
+use stdClass;
 
 class RawAggregationResult extends AggregationResult
 {
-    protected $value;
-
-    public function __construct(string $name, $value)
+    public function __construct(string $name, protected stdClass $value)
     {
-        $this->value = $value;
         parent::__construct($name);
     }
 
-    public function getValue()
+    public function getValue(): stdClass
     {
         return $this->value;
     }

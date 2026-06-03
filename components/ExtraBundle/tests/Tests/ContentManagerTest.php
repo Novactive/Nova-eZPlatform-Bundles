@@ -12,8 +12,7 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZExtraBundle\Tests;
 
-use eZ\Publish\API\Repository\Repository;
-use Faker\Factory;
+use Ibexa\Contracts\Core\Repository\Repository;
 use Novactive\Bundle\eZExtraBundle\Core\Manager\eZ\Content as ContentManager;
 use Novactive\eZPlatform\Bundles\Tests\WebTestCase;
 
@@ -51,9 +50,8 @@ class ContentManagerTest extends WebTestCase
 
     public function testContentCreation(): void
     {
-        $faker = Factory::create();
-        $title = $faker->streetName;
-        $subTitle = $faker->city;
+        $title = 'Test Title '.uniqid();
+        $subTitle = 'Test Subtitle '.uniqid();
         $content = $this->manager->createContent(
             'article',
             2,

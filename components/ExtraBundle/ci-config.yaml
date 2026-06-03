@@ -1,2 +1,2 @@
-install: false
+install: true
 test: false

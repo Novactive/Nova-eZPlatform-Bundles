@@ -18,16 +18,10 @@ use Ibexa\Core\MVC\Symfony\Security\User;
 use Novactive\Bundle\eZ2FABundle\Entity\BackupCodeInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
 
-final class BackupCodeManager implements BackupCodeManagerInterface
+final readonly class BackupCodeManager implements BackupCodeManagerInterface
 {
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-
-    public function __construct(UserRepository $userRepository)
+    public function __construct(private UserRepository $userRepository)
     {
-        $this->userRepository = $userRepository;
     }
 
     public function isBackupCode($user, string $code): bool
