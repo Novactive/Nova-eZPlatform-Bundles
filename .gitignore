@@ -9,3 +9,8 @@
 ./node_modules
 ./drivers
 ./.php-cs-fixer.cache
+/ibexa
+/.php-cs-fixer.cache
+/vendor
+/components/EnhancedImageAssetBundle/node_modules
+/components/MenuManagerBundle/node_modules
