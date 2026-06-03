@@ -1,4 +1,4 @@
 solr:
     resource: "@EzSolrSearchExtraBundle/Controller/"
-    type:     annotation
+    type:     attribute
     prefix:   /

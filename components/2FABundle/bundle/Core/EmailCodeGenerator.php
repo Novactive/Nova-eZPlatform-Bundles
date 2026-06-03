@@ -26,21 +26,12 @@ final class EmailCodeGenerator implements CodeGeneratorInterface
      */
     private $mailer;
 
-    /**
-     * @var int
-     */
-    private $digits;
-
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-
-    public function __construct(UserRepository $userRepository, AuthCodeMailerInterface $mailer, int $digits)
-    {
-        $this->userRepository = $userRepository;
+    public function __construct(
+        private readonly UserRepository $userRepository,
+        AuthCodeMailerInterface $mailer,
+        private readonly int $digits
+    ) {
         $this->mailer = $mailer;
-        $this->digits = $digits;
     }
 
     public function generateAndSend(TwoFactorInterface $user): void
