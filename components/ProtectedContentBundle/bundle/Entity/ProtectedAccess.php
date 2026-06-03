@@ -15,19 +15,27 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZProtectedContentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Novactive\Bundle\eZProtectedContentBundle\Entity\eZ\ContentInterface;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content as eZContent;
+use Ibexa\Contracts\Core\Repository\Values\Content\Location as eZLocation;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'novaezprotectedcontent')]
-class ProtectedAccess implements ContentInterface
+class ProtectedAccess
 {
     use Compose\Metadata;
-    use eZ\Content;
+
+    private eZContent $content;
+    private eZLocation $location;
 
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private int $id;
+
+    #[ORM\Column(name: 'content_id', type: 'integer', nullable: false)]
+    #[Assert\NotBlank]
+    private int $contentId;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected ?string $password;
@@ -118,8 +126,39 @@ class ProtectedAccess implements ContentInterface
         $this->emailMessage = $emailMessage;
     }
 
+    public function getContent(): eZContent
+    {
+        return $this->content;
+    }
+
+    public function setContent(eZContent $content): self
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
     public function getContentId(): int
     {
-        return $this->contentId;
+        return $this->contentId ?? 0;
+    }
+
+    public function setContentId(int $contentId): self
+    {
+        $this->contentId = $contentId;
+
+        return $this;
+    }
+
+    public function getLocation(): eZLocation
+    {
+        return $this->location;
+    }
+
+    public function setLocation(eZLocation $location): self
+    {
+        $this->location = $location;
+
+        return $this;
     }
 }
