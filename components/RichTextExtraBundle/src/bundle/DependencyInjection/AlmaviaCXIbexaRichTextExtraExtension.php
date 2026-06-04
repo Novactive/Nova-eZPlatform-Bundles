@@ -2,6 +2,7 @@
 
 namespace AlmaviaCX\Bundle\IbexaRichTextExtraBundle\DependencyInjection;
 
+use Exception;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -12,14 +13,15 @@ use Symfony\Component\Yaml\Yaml;
 
 class AlmaviaCXIbexaRichTextExtraExtension extends Extension implements PrependExtensionInterface
 {
-    public function load(array $configs, ContainerBuilder $container)
+    /** @throws Exception */
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('default_settings.yaml');
         $loader->load('services.yaml');
     }
 
-    public function prepend(ContainerBuilder $container)
+    public function prepend(ContainerBuilder $container): void
     {
         $coreExtensionConfigFile = realpath(__DIR__.'/../Resources/config/prepend/ibexa.yaml');
         $container->prependExtensionConfig('ibexa', Yaml::parseFile($coreExtensionConfigFile));
