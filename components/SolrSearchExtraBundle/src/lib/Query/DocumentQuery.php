@@ -10,6 +10,9 @@ class DocumentQuery extends Query
 {
     public string $documentType = 'document';
 
+    /**
+     * @var array<string>
+     */
     public array $rawParams = [];
 
     public string $childTransformer = '[child limit=-1]';

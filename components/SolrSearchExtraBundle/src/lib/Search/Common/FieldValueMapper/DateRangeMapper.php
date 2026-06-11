@@ -16,7 +16,7 @@ class DateRangeMapper extends FieldValueMapper
         return $field->getType() instanceof \Novactive\EzSolrSearchExtra\Search\FieldType\DateRangeField;
     }
 
-    public function map(Field $field)
+    public function map(Field $field): string
     {
         return $this->mapDateRange(...$field->getValue());
     }

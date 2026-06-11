@@ -26,10 +26,7 @@ class TikaLocalClient implements TikaClientInterface
         $this->jar = $jar;
     }
 
-    /**
-     * @param $command
-     */
-    protected function run($command): string
+    protected function run(string $command): string
     {
         $shellCommand = [
             'java',
@@ -50,10 +47,7 @@ class TikaLocalClient implements TikaClientInterface
         return $process->getOutput();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getText($fileName): ?string
+    public function getText(string $fileName): ?string
     {
         $file = new SplFileInfo($fileName);
         $command = sprintf('--text %s', $file->getRealPath());

@@ -9,6 +9,7 @@ use Ibexa\Contracts\AdminUi\Controller\Controller;
 use Ibexa\Contracts\Core\Repository\Exceptions\ContentFieldValidationException;
 use Ibexa\Core\Base\Translatable;
 use Ibexa\Core\FieldType\BinaryFile\Value as BinaryFileValue;
+use JMS\TranslationBundle\Annotation\Desc;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,38 +21,19 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UploadFileController extends Controller
 {
-    public const CSRF_TOKEN_HEADER = 'X-CSRF-Token';
+    public const string CSRF_TOKEN_HEADER = 'X-CSRF-Token';
 
-    public const LANGUAGE_CODE_KEY = 'languageCode';
-    public const FILE_KEY = 'file';
-
-    /** @var \Symfony\Component\Validator\Validator\ValidatorInterface */
-    private $validator;
-
-    /** @var \Symfony\Component\Security\Csrf\CsrfTokenManagerInterface */
-    private $csrfTokenManager;
-
-    /** @var \AlmaviaCX\Bundle\IbexaRichTextExtra\FieldType\BinaryFile\Mapper */
-    private $imageAssetMapper;
-
-    /** @var \Symfony\Contracts\Translation\TranslatorInterface */
-    private $translator;
+    public const string LANGUAGE_CODE_KEY = 'languageCode';
+    public const string FILE_KEY = 'file';
 
     public function __construct(
-        ValidatorInterface $validator,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        Mapper $imageAssetMapper,
-        TranslatorInterface $translator
+        private readonly ValidatorInterface $validator,
+        private readonly CsrfTokenManagerInterface $csrfTokenManager,
+        private readonly Mapper $imageAssetMapper,
+        private readonly TranslatorInterface $translator
     ) {
-        $this->validator = $validator;
-        $this->csrfTokenManager = $csrfTokenManager;
-        $this->imageAssetMapper = $imageAssetMapper;
-        $this->translator = $translator;
     }
 
-    /**
-     * @throws \Ibexa\Core\Base\Exceptions\InvalidArgumentType
-     */
     public function uploadBinaryFileAction(Request $request): Response
     {
         if ($this->isValidCsrfToken($request)) {
@@ -68,21 +50,21 @@ class UploadFileController extends Controller
                     $content = $this->imageAssetMapper->createAsset(
                         $file->getClientOriginalName(),
                         new BinaryFileValue([
-                                                 'path' => $file->getRealPath(),
-                                                 'fileSize' => $file->getSize(),
-                                                 'fileName' => $file->getClientOriginalName(),
-                                             ]),
+                            'path' => $file->getRealPath(),
+                            'fileSize' => $file->getSize(),
+                            'fileName' => $file->getClientOriginalName(),
+                        ]),
                         $data->getLanguageCode()
                     );
 
                     return new JsonResponse([
-                                                 'destinationContent' => [
-                                                     'id' => $content->contentInfo->id,
-                                                     'name' => $content->getName(),
-                                                     'locationId' => $content->contentInfo->mainLocationId,
-                                                 ],
-                                                 'value' => $this->imageAssetMapper->getAssetValue($content),
-                                             ]);
+                        'destinationContent' => [
+                            'id' => $content->contentInfo->id,
+                            'name' => $content->getName(),
+                            'locationId' => $content->contentInfo->mainLocationId,
+                        ],
+                        'value' => $this->imageAssetMapper->getAssetValue($content),
+                    ]);
                 } catch (ContentFieldValidationException $exception) {
                     $exception = \Ibexa\Core\Base\Exceptions\ContentFieldValidationException::createNewWithMultiline(
                         $exception->getFieldErrors(),
@@ -104,7 +86,7 @@ class UploadFileController extends Controller
     private function createInvalidCsrfResponse(): JsonResponse
     {
         $errorMessage = $this->translator->trans(
-        /* @Desc("Missing or invalid CSRF token") */
+            /* @Desc("Missing or invalid CSRF token") */
             'asset.upload.invalid_csrf',
             [],
             'assets'
@@ -140,9 +122,9 @@ class UploadFileController extends Controller
     private function createGenericErrorResponse(string $errorMessage): JsonResponse
     {
         return new JsonResponse([
-                                     'status' => 'failed',
-                                     'error' => $errorMessage,
-                                 ]);
+            'status' => 'failed',
+            'error' => $errorMessage,
+        ]);
     }
 
     private function isValidCsrfToken(Request $request): bool

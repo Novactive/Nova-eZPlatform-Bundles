@@ -10,14 +10,14 @@ use InvalidArgumentException;
 
 trait DateMapperTrait
 {
-    protected function mapDate($value): string
+    protected function mapDate(int|string $value): string
     {
         if (is_numeric($value)) {
             $date = new DateTime("@{$value}");
         } else {
             try {
                 $date = new DateTime($value);
-            } catch (Exception $e) {
+            } catch (Exception) {
                 throw new InvalidArgumentException('Invalid date provided: '.$value);
             }
         }
@@ -25,7 +25,7 @@ trait DateMapperTrait
         return $date->format('Y-m-d\\TH:i:s\\Z');
     }
 
-    protected function mapDateRange($dateFrom, $dateTo): string
+    protected function mapDateRange(int|string $dateFrom, int|string $dateTo): string
     {
         return sprintf(
             '[%s TO %s]',

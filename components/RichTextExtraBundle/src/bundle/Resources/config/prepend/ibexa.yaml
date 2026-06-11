@@ -1,7 +1,7 @@
 system:
     admin_group:
         fieldtypes:
-            ezrichtext:
+            ibexa_richtext:
                 toolbar:
                     group5:
                         buttons:

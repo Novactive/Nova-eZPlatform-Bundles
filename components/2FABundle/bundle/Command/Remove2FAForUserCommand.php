@@ -10,10 +10,13 @@
  * @license   https://github.com/Novactive/NovaeZ2FA/blob/main/LICENSE
  */
 
+declare(strict_types=1);
+
 namespace Novactive\Bundle\eZ2FABundle\Command;
 
 use Ibexa\Core\MVC\Symfony\Security\User;
 use Novactive\Bundle\eZ2FABundle\Core\UserRepository;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,48 +24,35 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
+#[AsCommand(
+    name: 'nova:2fa:remove-secret-key',
+    description: 'Removes the 2FA secret key for the specified user',
+)]
 final class Remove2FAForUserCommand extends Command
 {
-    /**
-     * @var UserProviderInterface
-     */
-    private $userProvider;
-
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-
-    /**
-     * @required
-     */
-    public function setAuthenticators(UserProviderInterface $userProvider, UserRepository $userRepository): self
-    {
-        $this->userProvider = $userProvider;
-        $this->userRepository = $userRepository;
-
-        return $this;
+    public function __construct(
+        private readonly UserProviderInterface $userProvider,
+        private readonly UserRepository $userRepository,
+    ) {
+        parent::__construct();
     }
 
     protected function configure(): void
     {
-        $this
-            ->setName('nova:2fa:remove-secret-key')
-            ->setDescription('Removes the 2FA secret key for the specified user')
-            ->addArgument('user_login', InputArgument::REQUIRED, 'User Login');
+        $this->addArgument('user_login', InputArgument::REQUIRED, 'User Login');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        /* @var User $user */
-        $user = $this->userProvider->loadUserByUsername($input->getArgument('user_login'));
+        /** @var User $user */
+        $user = $this->userProvider->loadUserByIdentifier($input->getArgument('user_login'));
 
         $this->userRepository->deleteUserAuthData($user->getAPIUser()->id);
 
         $io->success('Done.');
 
-        return 0;
+        return Command::SUCCESS;
     }
 }
