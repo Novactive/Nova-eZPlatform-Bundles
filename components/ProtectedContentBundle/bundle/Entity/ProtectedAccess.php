@@ -50,7 +50,7 @@ class ProtectedAccess
     protected bool $protectChildren;
 
     #[ORM\Column(name: 'email_message', type: 'string', nullable: true)]
-    protected string $emailMessage;
+    protected ?string $emailMessage = null;
 
     public function __construct()
     {
