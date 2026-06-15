@@ -33,6 +33,10 @@ Add NovaeZMenuManagerBundle in your composer.json:
 composer require novactive/ezmenumanagerbundle
 ```
 
+> The bundle is self-contained on the front-end side: `jstree` is shipped with the
+> bundle and the forms rely on the Bootstrap markup already provided by the Ibexa
+> back office, so there is no extra npm/yarn package to install in your project.
+
 ### Register the bundle
 
 Register the bundle in the `bundles.php` of your application.
