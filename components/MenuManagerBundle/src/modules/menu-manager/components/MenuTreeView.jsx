@@ -13,7 +13,9 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
 import $ from 'jquery'
-import 'jstree/dist/jstree'
+// jstree is bundled with this package: a Composer-installed bundle cannot rely
+// on the consumer project having it in its node_modules
+import '../../../bundle/Resources/public/js/vendors/jstree.min.js'
 import MenuItem from '../entity/MenuItem'
 
 const ROOT_ID = 'root'

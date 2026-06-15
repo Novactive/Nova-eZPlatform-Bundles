@@ -12,7 +12,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import MenuItemEditFormModule from './MenuItemEditFormModule'
-import { Button, Form, FormGroup, Input, Label } from 'reactstrap'
 
 export default class ContainerMenuItemEditFormModule extends MenuItemEditFormModule {
   constructor (props) {
@@ -47,36 +46,42 @@ export default class ContainerMenuItemEditFormModule extends MenuItemEditFormMod
     }
     return (
       <div>
-        <Form onSubmit={this.handleSubmit}>
-          <FormGroup>
-            <Label for="language">{Translator.trans('menu_item.property.language')}</Label>
-            <Input type="select" onChange={this.handleLanguageChange} value={this.state.language}>
+        <form onSubmit={this.handleSubmit}>
+          <div className="form-group mb-3">
+            <label className="form-label" htmlFor="item_language">{Translator.trans('menu_item.property.language')}</label>
+            <select
+              className="form-select form-control"
+              id="item_language"
+              onChange={this.handleLanguageChange}
+              value={this.state.language}
+            >
               {[...languages].map((language) => (
                 <option key={language.id} value={language.languageCode}>
                   {language.name}
                 </option>
               ))}
-            </Input>
-          </FormGroup>
-          <FormGroup>
-            <Label for="item_name">
+            </select>
+          </div>
+          <div className="form-group mb-3">
+            <label className="form-label" htmlFor="item_name">
               {Translator.trans('menu_item.property.container_name')} ({this.state.language})
-            </Label>
-            <Input
+            </label>
+            <input
               type="text"
+              className="form-control"
               name="name"
               value={this.getInputValue(this.state.name)}
               id="item_name"
               onChange={this.handleLocalizedInputChange}
             />
-          </FormGroup>
-          <Button type="submit" className="pull-right" color="primary">
+          </div>
+          <button type="submit" className="btn btn-primary pull-right">
             {Translator.trans('menu_item.edit_form.save_container')}
-          </Button>
-          <Button type="button" onClick={this.handleCancel}>
+          </button>
+          <button type="button" className="btn btn-secondary" onClick={this.handleCancel}>
             {Translator.trans('menu_item.edit_form.cancel')}
-          </Button>
-        </Form>
+          </button>
+        </form>
       </div>
     )
   }

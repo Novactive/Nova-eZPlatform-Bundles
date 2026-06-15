@@ -12,7 +12,9 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import $ from 'jquery'
-import 'jstree/dist/jstree'
+// jstree is bundled with this package: a Composer-installed bundle cannot rely
+// on the consumer project having it in its node_modules
+import '../../../bundle/Resources/public/js/vendors/jstree.min.js'
 
 const NOTIFICATION_ERROR_LABEL = 'error';
 const ENDPOINT_LOAD_SUBITEMS = '/api/ibexa/v2/location/tree/load-subitems';

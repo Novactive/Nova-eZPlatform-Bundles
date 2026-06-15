@@ -9,8 +9,6 @@
  *
  */
 
-import { createRoot } from 'react-dom/client';
-
 import React from 'react'
 import MenuManager from './MenuManagerModule'
 import ContainerMenuItemType from './type/ContainerMenuItemType'
@@ -49,7 +47,10 @@ import DefaultMenuItemType from './type/DefaultMenuItemType'
     render: (container, input, menuRootLocationInput) => {
       const token = doc.querySelector('meta[name="CSRF-Token"]').content
       const siteaccess = doc.querySelector('meta[name="SiteAccess"]').content
-      const root = createRoot(container);
+      // use the ReactDOMClient global exposed by the Ibexa back office
+      // (react.dom.load.js) so react-dom is never bundled twice with a
+      // version that differs from the page-level React
+      const root = global.ReactDOMClient.createRoot(container)
 
       const renderComponent = () => {
         root.render(
