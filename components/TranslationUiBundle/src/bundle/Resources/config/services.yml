@@ -1,3 +1,4 @@
+parameters:
 services:
   AlmaviaCX\Bundle\IbexaTranslationUi\Translation\Translator:
     decorates: 'lexik_translation.translator'
