@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Novactive\EzSolrSearchExtra\Query\Content\CriterionVisitor;
 
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\CriterionInterface;
 use Ibexa\Contracts\Solr\Query\CriterionVisitor;
 use Ibexa\Core\Search\Common\FieldNameResolver;
 use Novactive\EzSolrSearchExtra\Query\Content\Criterion\MultipleFieldsFullText as MultipleFieldsFullTextCriterion;
@@ -14,82 +15,34 @@ use QueryTranslator\Languages\Galach\Tokenizer;
 
 class MultipleFieldsFullText extends CriterionVisitor
 {
-    /**
-     * Field map.
-     *
-     * @var \Ibexa\Core\Search\Common\FieldNameResolver
-     */
-    protected $fieldNameResolver;
-
-    /**
-     * @var \QueryTranslator\Languages\Galach\Tokenizer
-     */
-    protected $tokenizer;
-
-    /**
-     * @var \QueryTranslator\Languages\Galach\Parser
-     */
-    protected $parser;
-
-    /**
-     * @var \QueryTranslator\Languages\Galach\Generators\ExtendedDisMax
-     */
-    protected $generator;
-
-    /**
-     * @var int
-     */
-    protected $maxDepth;
-
-    /**
-     * Create from content type handler and field registry.
-     *
-     * @param int $maxDepth
-     */
     public function __construct(
-        FieldNameResolver $fieldNameResolver,
-        Tokenizer $tokenizer,
-        Parser $parser,
-        ExtendedDisMax $generator,
-        $maxDepth = 0
+        protected FieldNameResolver $fieldNameResolver,
+        protected Tokenizer $tokenizer,
+        protected Parser $parser,
+        protected ExtendedDisMax $generator,
+        protected int $maxDepth = 0
     ) {
-        $this->fieldNameResolver = $fieldNameResolver;
-        $this->tokenizer = $tokenizer;
-        $this->parser = $parser;
-        $this->generator = $generator;
-        $this->maxDepth = $maxDepth;
     }
 
     /**
-     * Get field type information.
-     *
-     * @param string $fieldDefinitionIdentifier
-     *
-     * @return array
+     * @return array<string, \Ibexa\Contracts\Core\Search\FieldType>
      */
-    protected function getSearchFields(Criterion $criterion, $fieldDefinitionIdentifier)
+    protected function getSearchFields(Criterion $criterion, string $fieldDefinitionIdentifier): array
     {
         return $this->fieldNameResolver->getFieldTypes($criterion, $fieldDefinitionIdentifier);
     }
 
-    /**
-     * Check if visitor is applicable to current criterion.
-     *
-     * @return bool
-     */
-    public function canVisit(Criterion $criterion)
+    public function canVisit(CriterionInterface $criterion): bool
     {
         return $criterion instanceof MultipleFieldsFullTextCriterion;
     }
 
     /**
-     * Map field value to a proper Solr representation.
-     *
-     * @return string
+     * @param MultipleFieldsFullTextCriterion $criterion
      */
-    public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
+    public function visit(CriterionInterface $criterion, ?CriterionVisitor $subVisitor = null): string
     {
-        /** @var \Novactive\EzSolrSearchExtra\Query\Content\Criterion\MultipleFieldsFullText $criterion */
+        /** @var MultipleFieldsFullTextCriterion $criterion */
         $tokenSequence = $this->tokenizer->tokenize($criterion->value);
         $syntaxTree = $this->parser->parse($tokenSequence);
 
@@ -130,20 +83,18 @@ class MultipleFieldsFullText extends CriterionVisitor
 
         $queryParamsString = implode(' ', array_map(function ($key, $value) {
             if (is_array($value)) {
-                return implode(' ', array_map(function ($value) use ($key) {
-                    return "{$key}='{$value}'";
-                }, $value));
-            } else {
-                return "{$key}='{$value}'";
+                return implode(' ', array_map(fn ($value) => "{$key}='{$value}'", $value));
             }
+
+            return "{$key}='{$value}'";
         }, array_keys($queryParams), $queryParams));
 
         return "{!edismax {$queryParamsString}}";
     }
 
-    private function getQueryFields(Criterion $criterion): string
+    private function getQueryFields(CriterionInterface $criterion): string
     {
-        /** @var \Novactive\EzSolrSearchExtra\Query\Content\Criterion\MultipleFieldsFullText $criterion */
+        /** @var MultipleFieldsFullTextCriterion $criterion */
         $queryFields = ['meta_content__text_t', 'meta_content__text_t_raw'];
 
         for ($i = 1; $i <= $this->maxDepth; ++$i) {
@@ -166,11 +117,8 @@ class MultipleFieldsFullText extends CriterionVisitor
         return implode(' ', $queryFields);
     }
 
-    /**
-     * Returns boost factor for the related content.
-     */
     private function getBoostFactorForRelatedContent(int $depth): float
     {
-        return 1.0 / pow(2.0, $depth);
+        return 1.0 / 2.0 ** $depth;
     }
 }

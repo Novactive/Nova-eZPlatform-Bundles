@@ -15,18 +15,13 @@ namespace Novactive\eZPlatform\Bundles\Tests;
 use Facebook\WebDriver\WebDriverDimension;
 use Symfony\Component\Panther\Client;
 use Symfony\Component\Panther\DomCrawler\Crawler;
+use Symfony\Component\DomCrawler\Crawler as BaseCrawler;
 
 final class BrowserHelper
 {
-    /**
-     * @var array
-     */
-    private $lastRequest;
+    private array $lastRequest = [];
 
-    /**
-     * @var Crawler
-     */
-    private $lastCrawler;
+    private BaseCrawler $lastCrawler;
 
     public function __construct(private readonly Client $client)
     {
@@ -46,8 +41,9 @@ final class BrowserHelper
         array $files = [],
         array $server = [],
         string $content = null,
-        bool $changeHistory = true
-    ): Crawler {
+        bool $changeHistory = true,
+        bool $isHTML = true
+    ): BaseCrawler {
         $request = [
             'method' => $method,
             'uri' => $uri,
@@ -78,24 +74,36 @@ final class BrowserHelper
                 $changeHistory
             );
 
+        if(!$isHTML) {
+            $crawler = new BaseCrawler(
+                $this->client->getWebDriver()->getPageSource(),
+                $this->client->getCurrentURL()
+            );
+        }
+
         $this->lastCrawler = $crawler;
 
         return $this->lastCrawler;
     }
 
-    public function get(string $url): Crawler
+    public function getXML(string $url): BaseCrawler
+    {
+        return $this->request('GET', $url, isHTML: false);
+    }
+
+    public function get(string $url): BaseCrawler
     {
         return $this->request('GET', $url);
     }
 
-    public function crawler(): Crawler
+    public function crawler(): BaseCrawler
     {
         $this->client->refreshCrawler();
 
         return $this->client->getCrawler();
     }
 
-    public function waitFor(string $locator): Crawler
+    public function waitFor(string $locator): BaseCrawler
     {
         $this->lastCrawler = $this->client->waitFor($locator);
 

@@ -55,15 +55,6 @@ class EzEnhancedImageAssetExtension extends Extension implements PrependExtensio
      */
     public function prepend(ContainerBuilder $container): void
     {
-        $container->prependExtensionConfig(
-            'assetic',
-            [
-                'bundles' => [
-                    'EzEnhancedImageAssetBundle',
-                ],
-            ]
-        );
-
         $configs = [
             'field_templates.yml' => 'ibexa',
             'admin_ui_forms.yml' => 'ibexa',

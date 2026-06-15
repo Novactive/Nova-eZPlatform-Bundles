@@ -8,15 +8,13 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation;
 
 class RawAggregation implements Aggregation
 {
-    protected array $value;
-    protected string $name;
-
+    /**
+     * @param array<mixed> $value
+     */
     public function __construct(
-        string $name,
-        array $value
+        protected string $name,
+        protected array $value
     ) {
-        $this->name = $name;
-        $this->value = $value;
     }
 
     public function getName(): string

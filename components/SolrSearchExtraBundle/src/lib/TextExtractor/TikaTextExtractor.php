@@ -15,25 +15,16 @@ use RuntimeException;
  */
 class TikaTextExtractor implements TextExtractorInterface
 {
-    /** @var TikaClientInterface */
-    private $tikaClient;
-
-    /** @var LoggerInterface */
-    private $logger;
-
     /**
      * TikaTextExtractor constructor.
      */
-    public function __construct(TikaClientInterface $tikaClient, LoggerInterface $logger)
-    {
-        $this->tikaClient = $tikaClient;
-        $this->logger = $logger;
+    public function __construct(
+        private readonly TikaClientInterface $tikaClient,
+        private readonly LoggerInterface $logger
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function extract($fileName): ?string
+    public function extract(string $fileName): ?string
     {
         try {
             $plaintext = $this->tikaClient->getText($fileName);

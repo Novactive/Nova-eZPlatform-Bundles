@@ -103,7 +103,7 @@ class EnhancedImage extends FileFieldHandler implements FieldValueConverterInter
             'path' => sprintf(
                 '%s/%s',
                 realpath($this->ioRootDir),
-                ($this->ioDecorator ? $this->ioDecorator->undecorate($fieldValue->uri) : $fieldValue->uri)
+                $this->ioDecorator ? $this->ioDecorator->undecorate($fieldValue->uri) : $fieldValue->uri
             ),
             'filename' => $fieldValue->fileName,
             'alternativeText' => $fieldValue->alternativeText,

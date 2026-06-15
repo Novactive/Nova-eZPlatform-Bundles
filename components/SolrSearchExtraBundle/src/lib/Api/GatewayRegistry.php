@@ -8,15 +8,12 @@ use OutOfBoundsException;
 
 class GatewayRegistry
 {
-    /** @var Gateway[] */
-    private $gateways;
-
     /**
      * @param Gateway[] $gateways
      */
-    public function __construct(array $gateways = [])
-    {
-        $this->gateways = $gateways;
+    public function __construct(
+        private array $gateways = []
+    ) {
     }
 
     /**

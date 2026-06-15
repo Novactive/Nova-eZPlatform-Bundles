@@ -23,6 +23,7 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Field;
 use Ibexa\Core\FieldType\ImageAsset\AssetMapper;
 use Ibexa\Core\FieldType\ImageAsset\Value as ImageAssetValue;
 use Ibexa\Core\FieldType\Relation\Value;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class ObjectRelationFieldValueConverter implements FieldValueConverterInterface
 {
@@ -35,25 +36,19 @@ class ObjectRelationFieldValueConverter implements FieldValueConverterInterface
     /** @var AssetMapper */
     protected $assetMapper;
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setContentService(ContentService $contentService): void
     {
         $this->contentService = $contentService;
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setContentTypeService(ContentTypeService $contentTypeService): void
     {
         $this->contentTypeService = $contentTypeService;
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setAssetMapper(AssetMapper $assetMapper): void
     {
         $this->assetMapper = $assetMapper;
@@ -69,8 +64,6 @@ class ObjectRelationFieldValueConverter implements FieldValueConverterInterface
 
     /**
      * @throws UnauthorizedException
-     *
-     * @return ImageAssetValue
      */
     public function toImageAssetValue(Content $content, Field $field): ?ImageAssetValue
     {

@@ -1,6 +1,6 @@
-{% trans_default_domain 'ezplatform_content_forms_content' %}
+{% trans_default_domain 'ibexa_content_forms_content' %}
 
-{% use '@ibexadesign/ui/field_type/edit/ezimage.html.twig' %}
+{% use '@ibexadesign/ui/field_type/edit/ibexa_image.html.twig' %}
 
 {%- block ezplatform_fieldtype_enhancedimage_row -%}
     {% set preview_block_name = 'enhancedimage_preview' %}
@@ -12,6 +12,7 @@
 {% block enhancedimage_preview %}
     {% form_theme form '@ibexadesign/ui/field_type/edit/binary_base_fields.html.twig' %}
 
+    {% set readonly = attr.readonly|default(false) %}
     {% set image = form.parent.vars.value.value %}
     {% set focusPoint = image.focusPoint %}
     <div class="ibexa-field-edit-preview">
@@ -21,27 +22,31 @@
                     <button
                             type="button"
                             class="ibexa-field-edit-preview__action ibexa-field-edit-preview__action--remove btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
+                            {{ readonly ? 'disabled' }}
                     >
                         <svg class="ibexa-icon ibexa-icon--small">
                             <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
                         </svg>
-                        <span class="ibexa-btn__label">{{ 'content.field_type.ezimage.delete'|trans|desc('Delete') }}</span>
+                        <span class="ibexa-btn__label">{{ 'content.field_type.ibexa_image.delete'|trans|desc('Delete') }}</span>
                     </button>
                     <a
                             class="ibexa-field-edit-preview__action ibexa-field-edit-preview__action--preview btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
                             href="{{ form.parent.vars.value.value.uri }}"
                             target="_blank"
+                            {{ readonly ? 'disabled' }}
                     >
                         <svg class="ibexa-icon ibexa-icon--small">
                             <use xlink:href="{{ ibexa_icon_path('open-newtab') }}"></use>
                         </svg>
-                        <span class="ibexa-btn__label">{{ 'content.field_type.ezimage.preview'|trans|desc('Preview') }}</span>
+                        <span class="ibexa-btn__label">{{ 'content.field_type.ibexa_image.preview'|trans|desc('Preview') }}</span>
                     </a>
-                    {{ ibexa_render_component_group(
-                        'image-edit-actions-after',
+                    {{ ibexa_twig_component_group(
+                        'admin-ui-image-edit-actions-after',
                         {
                             'fieldDefinitionIdentifier' : form.parent.vars.value.fieldDefinition.identifier,
-                            'contentId' : app.request.get('contentId')
+                            'contentId' : app.request.get('contentId'),
+                            'versionNo' : app.request.get('versionNo'),
+                            'disabled': readonly ? true : false,
                         }
                     ) }}
                 </div>
@@ -50,7 +55,7 @@
                         <div class="focuspoint-helper--frame focuspoint-helper--frame-{{ loop.index }}">
                             <picture class="enhancedimage--wrapper enhancedimage--focused-img--wrapper">
                                 <img data-srcset="{{ image.uri }}"
-                                     alt="{{ 'content.field_type.ezimage.img_alt'|trans({'%label%': form.vars.label})|desc("Image stored in Field '%label%'") }}"
+                                     alt="{{ 'content.field_type.ibexa_image.img_alt'|trans({'%label%': form.vars.label})|desc("Image stored in Field '%label%'") }}"
                                      class="enhancedimage--img enhancedimage--focused-img enhancedimage--img--lazyload blur-up"
                                      data-focus-x="{{ focusPoint.posX }}"
                                      data-focus-y="{{ focusPoint.posY }}">
@@ -64,46 +69,46 @@
                         <img
                                 class="ibexa-field-edit-preview__media focuspoint-helper--img"
                                 src="{{ image.uri }}"
-                                alt="{{ 'content.field_type.ezimage.img_alt'|trans({'%label%': form.vars.label})|desc("Image stored in field '%label%'") }}" />
+                                alt="{{ 'content.field_type.ibexa_image.img_alt'|trans({'%label%': form.vars.label})|desc("Image stored in field '%label%'") }}" />
                         {% set reticleX = ((focusPoint.posX + 1) / 2) * 100 %}
                         {% set reticleY = ((-focusPoint.posY + 1) / 2) * 100 %}
                         <img class="focuspoint-helper--reticle" src="{{ asset('bundles/ezenhancedimageasset/img/focuspoint-target.png') }}" style="top: {{ reticleY|round(2) }}%; left: {{ reticleX|round(2) }}%;">
                         <img    draggable="false"
                                 class="ibexa-field-edit-preview__media focuspoint-helper--img focuspoint-helper--target-overlay"
                                 src="{{ image.uri }}"
-                                alt="{{ 'content.field_type.ezimage.img_alt'|trans({'%label%': form.vars.label})|desc("Image stored in Field '%label%'") }}" />
+                                alt="{{ 'content.field_type.ibexa_image.img_alt'|trans({'%label%': form.vars.label})|desc("Image stored in Field '%label%'") }}" />
                     </div>
                 </div>
             </div>
             <div class="ibexa-field-edit-preview__details">
                 <div class="ibexa-field-edit-preview__file-name-wrapper">
-                    <label class="ibexa-label form-label">{{ 'content.field_type.ezimage.file_name.label'|trans|desc('File name') }}</label>
+                    <label class="ibexa-label form-label">{{ 'content.field_type.ibexa_image.file_name.label'|trans|desc('File name') }}</label>
                     <p class="ibexa-field-edit-preview__file-name">{{ form.parent.vars.value.value.fileName }}</p>
                 </div>
                 <div class="ibexa-field-edit-preview__dimensions-wrapper">
-                    <label class="ibexa-label form-label">{{ 'content.field_type.ezimage.dimensions.label'|trans|desc('Master dimension') }}</label>
+                    <label class="ibexa-label form-label">{{ 'content.field_type.ibexa_image.dimensions.label'|trans|desc('Master dimension') }}</label>
                     <p>
                         <span class="ibexa-field-edit-preview__dimension ibexa-field-edit-preview__dimension--width">
-                            {{ 'content.field_type.ezimage.dimensions.width'|trans({ '%width%': form.parent.vars.value.value.width})|desc('W:%width% px') }}
+                            {{ 'content.field_type.ibexa_image.dimensions.width'|trans({ '%width%': form.parent.vars.value.value.width})|desc('W:%width% px') }}
                         </span>
                         <span class="ibexa-field-edit-preview__dimension ibexa-field-edit-preview__dimension--height">
-                            {{ 'content.field_type.ezimage.dimensions.height'|trans({ '%height%': form.parent.vars.value.value.height})|desc('H:%height% px') }}
+                            {{ 'content.field_type.ibexa_image.dimensions.height'|trans({ '%height%': form.parent.vars.value.value.height})|desc('H:%height% px') }}
                         </span>
                     </p>
                 </div>
                 <div class="ibexa-field-edit-preview__file-size-wrapper">
-                    <label class="ibexa-label form-label">{{ 'content.field_type.ezimage.file_size.label'|trans|desc('Size') }}</label>
+                    <label class="ibexa-label form-label">{{ 'content.field_type.ibexa_image.file_size.label'|trans|desc('Size') }}</label>
                     <p class="ibexa-field-edit-preview__file-size">{{ form.parent.vars.value.value.fileSize|ibexa_file_size(2) }}</p>
                 </div>
             </div>
             <div class="ibexa-field-edit-preview__image-alt">
                 {% set alternative_text_label_class = form.vars.is_alternative_text_required ? 'required' : '' %}
                 {{ form_row(form.alternativeText, {
-                    attr: { 'data-is-required': form.vars.is_alternative_text_required },
+                    attr: { 'data-is-required': form.vars.is_alternative_text_required, readonly: readonly },
                     label_attr: { 'class': alternative_text_label_class }
                 }) }}
             </div>
-            {{ form_widget(form.additionalData, {attr: {class: 'ibexa-field-edit-preview__additional-data'}}) }}
+            {{ form_widget(form.additionalData, {attr: {class: 'ibexa-field-edit-preview__additional-data', readonly: readonly}}) }}
             <div hidden="true">
                 {{ form_widget(form.focusPoint) }}
                 {{ form_widget(form.isNewFocusPoint) }}

@@ -24,7 +24,7 @@ class CaptchEtatChallengeValidator extends ConstraintValidator
         $this->challengeValidator = $challengeValidator;
     }
 
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         if (!$constraint instanceof CaptchEtatValidChallenge) {
             throw new UnexpectedTypeException($constraint, CaptchEtatValidChallenge::class);

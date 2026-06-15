@@ -113,9 +113,9 @@ class Gateway
             ],
             'timeout' => $this->timeout,
             'body' => json_encode([
-                                      'uuid' => $captchaId,
-                                      'code' => $answer,
-                                  ]),
+                'uuid' => $captchaId,
+                'code' => $answer,
+            ]),
         ];
 
         $requestLog = [

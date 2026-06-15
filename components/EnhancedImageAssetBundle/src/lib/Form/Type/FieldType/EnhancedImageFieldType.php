@@ -79,9 +79,9 @@ class EnhancedImageFieldType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-                                   'translation_domain' => 'ezplatform_content_forms_fieldtype',
-                                   'is_alternative_text_required' => false,
-                               ]);
+            'translation_domain' => 'ezplatform_content_forms_fieldtype',
+            'is_alternative_text_required' => false,
+        ]);
 
         $resolver->setAllowedTypes('is_alternative_text_required', 'bool');
     }

@@ -18,15 +18,14 @@ use Imagine\Image\ImageInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 use Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\FocusPoint;
 use Novactive\EzEnhancedImageAsset\FocusPoint\FocusPointCalculator;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class FocusedThumbnailFilterLoader implements LoaderInterface
 {
     /** @var FocusPointCalculator */
     protected $focusPointCalculator;
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setFocusPointCalculator(FocusPointCalculator $focusPointCalculator): void
     {
         $this->focusPointCalculator = $focusPointCalculator;

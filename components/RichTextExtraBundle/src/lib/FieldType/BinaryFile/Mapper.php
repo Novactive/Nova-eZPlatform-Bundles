@@ -12,31 +12,14 @@ use Ibexa\Core\FieldType\BinaryFile\Value as BinaryFileValue;
 
 class Mapper
 {
-    /** @var \Ibexa\Contracts\Core\Repository\ContentService */
-    private $contentService;
-
-    /** @var \Ibexa\Contracts\Core\Repository\LocationService */
-    private $locationService;
-
-    /** @var \Ibexa\Contracts\Core\Repository\ContentTypeService */
-    private $contentTypeService;
-
-    /** @var \Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface */
-    private $configResolver;
-
-    /** @var int */
-    private $contentTypeId = null;
+    private ?int $contentTypeId = null;
 
     public function __construct(
-        ContentService $contentService,
-        LocationService $locationService,
-        ContentTypeService $contentTypeService,
-        ConfigResolverInterface $configResolver
+        private readonly ContentService $contentService,
+        private readonly LocationService $locationService,
+        private readonly ContentTypeService $contentTypeService,
+        private readonly ConfigResolverInterface $configResolver
     ) {
-        $this->contentService = $contentService;
-        $this->locationService = $locationService;
-        $this->contentTypeService = $contentTypeService;
-        $this->configResolver = $configResolver;
     }
 
     /**
@@ -79,7 +62,7 @@ class Mapper
     }
 
     /**
-     * Returns TRUE if content is an Image Asset.
+     * Returns TRUE if the content is an Image Asset.
      *
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException
      */

@@ -106,7 +106,6 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
     }
 
     /**
-     * @param       $variationName
      * @param array $parameters
      *
      * @throws ReflectionException
@@ -158,9 +157,7 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
     }
 
     /**
-     * @param $variationName
-     *
-     *@throws ReflectionException
+     * @throws ReflectionException
      *
      * @return ImageVariation|FocusedVariation|null
      */
@@ -191,8 +188,6 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
      * Returns the image variation object for $field/$versionInfo.
      *
      * @throws ReflectionException
-     *
-     * @return \Ibexa\Contracts\Core\Variation\Values\Variation
      */
     public function getImageVariation(Field $field, VersionInfo $versionInfo, string $variationName): ?Variation
     {
@@ -241,8 +236,6 @@ class ImageExtension extends AbstractExtension implements GlobalsInterface
     }
 
     /**
-     * @param $variationName
-     *
      * @throws ReflectionException
      *
      * @return ImageVariation|FocusedVariation|null

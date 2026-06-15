@@ -8,7 +8,7 @@
  * @license   https://github.com/Novactive/NovaeZEnhancedImageAssetBundle/blob/master/LICENSE
  */
 
-(function (global) {
+(function (global, doc, ibexa) {
     const SELECTOR_FIELD = '.ibexa-field-edit--enhancedimage';
     const SELECTOR_INPUT_FILE = 'input[type="file"]';
     const SELECTOR_LABEL_WRAPPER = '.ibexa-field-edit__label-wrapper';
@@ -23,10 +23,10 @@
     const SELECTOR_INPUT_FOCUS_Y = '.focuspoint-helper--input-focus-y';
     const SELECTOR_CB_IS_NEW = '.focuspoint-helper--cb-is-new';
 
-    if (!global.eZ.BasePreviewField || !global.eZ.BaseFileFieldValidator)
+    if (!ibexa.BasePreviewField || !ibexa.BaseFileFieldValidator)
         return null;
 
-    class EnhancedImageFilePreviewField extends global.eZ.BasePreviewField {
+    class EnhancedImageFilePreviewField extends ibexa.BasePreviewField {
         /**
          * Gets a temporary image URL
          *
@@ -102,7 +102,7 @@
         }
     }
 
-    class EnhancedImageFieldValidator extends global.eZ.BaseFileFieldValidator {
+    class EnhancedImageFieldValidator extends ibexa.BaseFileFieldValidator {
         /**
          * Validates the alternative text input
          *
@@ -121,7 +121,7 @@
             const result = { isError };
 
             if (isEmpty) {
-                result.errorMessage = global.eZ.errors.emptyField.replace(
+                result.errorMessage = ibexa.errors.emptyField.replace(
                     '{fieldName}',
                     label
                 );
@@ -200,7 +200,7 @@
         }
     }
 
-    [...document.querySelectorAll(SELECTOR_FIELD)].forEach(fieldContainer => {
+    [...doc.querySelectorAll(SELECTOR_FIELD)].forEach(fieldContainer => {
         const validator = new EnhancedImageFieldValidator({
             classInvalid: 'is-invalid',
             fieldContainer,
@@ -260,8 +260,8 @@
 
         previewField.init();
 
-        global.eZ.fieldTypeValidators = global.eZ.fieldTypeValidators
-            ? [...global.eZ.fieldTypeValidators, validator]
+        ibexa.fieldTypeValidators = ibexa.fieldTypeValidators
+            ? [...ibexa.fieldTypeValidators, validator]
             : [validator];
     });
-})(window);
+})(window, document, window.ibexa);

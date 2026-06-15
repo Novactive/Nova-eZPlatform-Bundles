@@ -8,8 +8,8 @@ use Ibexa\Contracts\Core\Persistence\Content\Field as SPIField;
 use Ibexa\Contracts\Core\Persistence\Content\Type as SPIContentType;
 use Ibexa\Contracts\Core\Search\Field as SPISearchField;
 use Ibexa\Contracts\Core\Search\FieldType as SPISearchFieldType;
-use Ibexa\Core\IO\ConfigScopeChangeAwareIOService;
 use Ibexa\Core\IO\Exception\BinaryFileNotFoundException;
+use Ibexa\Core\IO\IOServiceInterface;
 use Ibexa\Core\IO\Values\BinaryFile;
 use Ibexa\Solr\FieldMapper\BoostFactorProvider;
 use Novactive\EzSolrSearchExtra\TextExtractor\TextExtractorInterface;
@@ -24,36 +24,18 @@ class BinaryFileFieldMapper
 {
     /**
      * Field name, untyped.
-     *
-     * @var string
      */
-    private static $fieldName = 'meta_content__text';
-
-    /** @var \Ibexa\Core\IO\IOServiceInterface */
-    private $ioService;
-
-    /** @var BoostFactorProvider */
-    private $boostFactorProvider;
-
-    /** @var TextExtractorInterface */
-    private $textExtractor;
-
-    /** @var LoggerInterface */
-    private $logger;
+    private static string $fieldName = 'meta_content__text';
 
     /**
      * BinaryFileFieldMapper constructor.
      */
     public function __construct(
-        ConfigScopeChangeAwareIOService $ioService,
-        BoostFactorProvider $boostFactorProvider,
-        TextExtractorInterface $textExtractor,
-        LoggerInterface $logger
+        private readonly IOServiceInterface $ioService,
+        private readonly BoostFactorProvider $boostFactorProvider,
+        private readonly TextExtractorInterface $textExtractor,
+        private readonly LoggerInterface $logger
     ) {
-        $this->ioService = $ioService;
-        $this->boostFactorProvider = $boostFactorProvider;
-        $this->textExtractor = $textExtractor;
-        $this->logger = $logger;
     }
 
     /**
@@ -64,9 +46,9 @@ class BinaryFileFieldMapper
     {
         foreach ($contentType->fieldDefinitions as $fieldDefinition) {
             if (
-                $fieldDefinition->id !== $field->fieldDefinitionId
-                 || !$fieldDefinition->isSearchable
-                 || !$field->value->externalData
+                $fieldDefinition->id !== $field->fieldDefinitionId ||
+                 !$fieldDefinition->isSearchable ||
+                 !$field->value->externalData
             ) {
                 continue;
             }
@@ -101,8 +83,6 @@ class BinaryFileFieldMapper
 
     /**
      * Return index field type for the given $contentType.
-     *
-     * @return \Ibexa\Contracts\Core\Search\FieldType\TextField
      */
     private function getIndexFieldType(SPIContentType $contentType): SPISearchFieldType\TextField
     {

@@ -1,5 +1,6 @@
 system:
     admin_group:
         admin_ui_forms:
-            content_edit_form_templates:
-                - { template: '@ibexadesign/content/enhanced_image_asset_form_fields.html.twig', priority: 0 }
+            content_edit:
+                form_templates:
+                    - { template: '@ibexadesign/content/enhanced_image_asset_form_fields.html.twig', priority: 0 }

@@ -14,42 +14,39 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage;
 
-use Ibexa\AdminUi\Form\DataTransformer\FieldType\ImageValueTransformer;
-use Symfony\Component\Form\Exception\TransformationFailedException;
+use Ibexa\AdminUi\Form\DataTransformer\FieldType\AbstractBinaryBaseTransformer;
+use Symfony\Component\Form\DataTransformerInterface;
 
-class ValueTransformer extends ImageValueTransformer
+class ValueTransformer extends AbstractBinaryBaseTransformer implements DataTransformerInterface
 {
-    /**
-     * @param Value $value
-     */
-    public function transform($value): array
+    public function transform(mixed $value): array
     {
         if (null === $value) {
             $value = $this->fieldType->getEmptyValue();
         }
 
-        $properties = parent::transform($value);
-
         return array_merge(
-            $properties,
-            ['focusPoint' => $value->focusPoint]
+            $this->getDefaultProperties(),
+            [
+                'alternativeText' => $value->alternativeText,
+                'focusPoint' => $value->focusPoint,
+            ]
         );
     }
 
     /**
-     * @param array $value
-     *
-     * @throws TransformationFailedException
+     * @throws \Symfony\Component\Form\Exception\TransformationFailedException
      */
-    public function reverseTransform($value): Value
+    public function reverseTransform(mixed $value): Value
     {
         /** @var Value $valueObject */
-        $valueObject = parent::reverseTransform($value);
+        $valueObject = parent::getReverseTransformedValue($value);
 
         if ($this->fieldType->isEmptyValue($valueObject)) {
             return $valueObject;
         }
 
+        $valueObject->alternativeText = $value['alternativeText'];
         $valueObject->focusPoint = $value['focusPoint'];
         if ($value['isNewFocusPoint']) {
             $valueObject->isNewFocusPoint = true;

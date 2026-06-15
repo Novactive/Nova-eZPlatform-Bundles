@@ -13,12 +13,10 @@ $ibexa-color-danger-100: #fbe5ea;
 
 $base-font-size: 16px;
 
-@function div($number1, $number2) {
-    @return $number1 / $number2;
-}
+@use 'sass:math';
 
 @function calculateRem($size) {
-    $remSize: div($size, $base-font-size);
+    $remSize: math.div($size, $base-font-size);
 
     @return $remSize + 0rem; // + 0rem converts value to proper `rem`
 }

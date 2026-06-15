@@ -15,17 +15,17 @@ namespace Novactive\eZPlatform\Bundles\Command;
 use Novactive\eZPlatform\Bundles\Core\Collection\RemoteTags;
 use Novactive\eZPlatform\Bundles\Core\Tagger;
 use RuntimeException;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand('tag')]
 final class TagCommand extends Command
 {
     use AskValidLocaleBranch;
     use AskValidComponents;
-
-    protected static $defaultName = 'tag';
 
     protected function configure(): void
     {

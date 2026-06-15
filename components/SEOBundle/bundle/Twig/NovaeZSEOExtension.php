@@ -33,38 +33,28 @@ class NovaeZSEOExtension extends AbstractExtension implements GlobalsInterface
 {
     /**
      * The Ibexa Platform object name pattern service (extended).
-     *
-     * @var MetaNameSchema
      */
-    protected $metaNameSchema;
+    protected MetaNameSchema $metaNameSchema;
 
     /**
      * ConfigResolver useful to get the config aware of siteaccess.
-     *
-     * @var ConfigResolverInterface
      */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
     /**
      * The Ibexa Platform API.
-     *
-     * @var Repository
      */
-    protected $ibexaRepository;
+    protected Repository $ibexaRepository;
 
     /**
      * Locale Converter.
-     *
-     * @var LocaleConverter
      */
-    protected $localeConverter;
+    protected LocaleConverter $localeConverter;
 
     /**
      * CustomFallBack Service.
-     *
-     * @var CustomFallbackInterface
      */
-    protected $customFallBackService;
+    protected CustomFallbackInterface $customFallBackService;
 
     public function __construct(
         Repository $repository,
@@ -78,12 +68,12 @@ class NovaeZSEOExtension extends AbstractExtension implements GlobalsInterface
         $this->localeConverter = $localeConverter;
     }
 
-    public function setCustomFallbackService(CustomFallbackInterface $service)
+    public function setCustomFallbackService(CustomFallbackInterface $service): void
     {
         $this->customFallBackService = $service;
     }
 
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
             new TwigFilter('compute_novaseometas', [$this, 'computeMetas']),
@@ -118,10 +108,10 @@ class NovaeZSEOExtension extends AbstractExtension implements GlobalsInterface
         if ($content instanceof ContentInfo) {
             try {
                 $content = $this->ibexaRepository->getContentService()->loadContentByContentInfo($content, $languages);
-            } catch (NotFoundException|UnauthorizedException $e) {
+            } catch (NotFoundException|UnauthorizedException) {
                 return '';
             }
-        } elseif (!($content instanceof Content)) {
+        } elseif (!$content instanceof Content) {
             throw new InvalidArgumentType('$content', 'Content of ContentType');
         }
 

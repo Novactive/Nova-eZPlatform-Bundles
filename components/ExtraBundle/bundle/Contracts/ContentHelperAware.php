@@ -23,9 +23,7 @@ trait ContentHelperAware
      */
     protected $contentHelper;
 
-    /**
-     * @required
-     */
+    #[\Symfony\Contracts\Service\Attribute\Required]
     public function setContentHelper(BaseContentHelper $contentHelper): void
     {
         $this->contentHelper = $contentHelper;
