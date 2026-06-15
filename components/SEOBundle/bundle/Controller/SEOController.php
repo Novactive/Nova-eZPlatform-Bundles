@@ -35,7 +35,7 @@ class SEOController extends Controller
             'nova_ezseo'
         );
 
-        $robotRules = [ '*' => []];
+        $robotRules = ['*' => []];
         $addRule = function (array|string $paths, bool $allow = true, string $userAgent = '*') use (&$robotRules) {
             if (is_string($paths)) {
                 $paths = [$paths];
