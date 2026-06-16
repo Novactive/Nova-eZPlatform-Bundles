@@ -42,9 +42,9 @@ class PurgeExecutionsCommand extends Command
             'ISO 8601 formated date (ex: 2004-02-12T15:19:21+00:00)'
         );
         $this->addOption(
-            'status',
-            's',
-            InputOption::VALUE_OPTIONAL,
+                     'status',
+                     's',
+                     InputOption::VALUE_OPTIONAL,
             default: Execution::STATUS_COMPLETED
         );
 
@@ -69,7 +69,7 @@ class PurgeExecutionsCommand extends Command
         }
 
         $qb->innerJoin('e.workflowState', 's');
-        $qb->where($qb->expr()->orX(
+        $qb->andWhere($qb->expr()->orX(
             $qb->expr()->lte('s.endTime', ':until'),
             $qb->expr()->andX(
                 $qb->expr()->lte('s.startTime', ':until'),
@@ -79,7 +79,7 @@ class PurgeExecutionsCommand extends Command
 
         $untilInput = $input->getOption('until');
         if ($untilInput) {
-            $until = DateTime::createFromFormat('c', $untilInput);
+            $until = DateTime::createFromFormat(DateTime::ISO8601, $untilInput);
         } else {
             $until = new DateTime();
             $until->modify('-2 week');
