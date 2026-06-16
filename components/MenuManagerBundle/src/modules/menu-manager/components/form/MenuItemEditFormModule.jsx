@@ -11,7 +11,6 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Button, Form, FormGroup, Input, Label } from 'reactstrap'
 
 export default class MenuItemEditFormModule extends Component {
   constructor (props) {
@@ -104,60 +103,68 @@ export default class MenuItemEditFormModule extends Component {
     }
     return (
       <div>
-        <Form onSubmit={this.handleSubmit}>
-          <FormGroup>
-            <Label for="language">{Translator.trans('menu_item.property.language')}</Label>
-            <Input type="select" onChange={this.handleLanguageChange} value={this.state.language}>
+        <form onSubmit={this.handleSubmit}>
+          <div className="form-group mb-3">
+            <label className="form-label" htmlFor="item_language">{Translator.trans('menu_item.property.language')}</label>
+            <select
+              className="form-select form-control"
+              id="item_language"
+              onChange={this.handleLanguageChange}
+              value={this.state.language}
+            >
               {[...languages].map((language) => (
                 <option key={language.id} value={language.languageCode}>
                   {language.name}
                 </option>
               ))}
-            </Input>
-          </FormGroup>
-          <FormGroup>
-            <Label for="item_name">
+            </select>
+          </div>
+          <div className="form-group mb-3">
+            <label className="form-label" htmlFor="item_name">
               {Translator.trans('menu_item.property.name')} ({this.state.language})
-            </Label>
-            <Input
+            </label>
+            <input
               type="text"
+              className="form-control"
               name="name"
               value={this.getInputValue(this.state.name)}
               id="item_name"
               onChange={this.handleLocalizedInputChange}
             />
-          </FormGroup>
-          <FormGroup>
-            <Label for="item_url">
+          </div>
+          <div className="form-group mb-3">
+            <label className="form-label" htmlFor="item_url">
               {Translator.trans('menu_item.property.url')} ({this.state.language})
-            </Label>
-            <Input
+            </label>
+            <input
               type="text"
+              className="form-control"
               name="url"
               value={this.getInputValue(this.state.url)}
               id="item_url"
               onChange={this.handleLocalizedInputChange}
             />
-          </FormGroup>
-          <FormGroup check>
-            <Label check for="item_target">
-              <Input
-                type="checkbox"
-                name="blank"
-                checked={this.state.blank}
-                id="item_target"
-                onChange={this.handleInputChange}
-              />
+          </div>
+          <div className="form-check mb-3">
+            <input
+              type="checkbox"
+              className="form-check-input"
+              name="blank"
+              checked={this.state.blank}
+              id="item_target"
+              onChange={this.handleInputChange}
+            />
+            <label className="form-check-label" htmlFor="item_target">
               {Translator.trans('menu_item.property.new_window')}
-            </Label>
-          </FormGroup>
-          <Button type="submit" className="pull-right" color="primary">
+            </label>
+          </div>
+          <button type="submit" className="btn btn-primary pull-right">
             {Translator.trans('menu_item.edit_form.save')}
-          </Button>
-          <Button type="button" onClick={this.handleCancel}>
+          </button>
+          <button type="button" className="btn btn-secondary" onClick={this.handleCancel}>
             {Translator.trans('menu_item.edit_form.cancel')}
-          </Button>
-        </Form>
+          </button>
+        </form>
       </div>
     )
   }
