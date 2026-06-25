@@ -14,7 +14,7 @@ class UploadFileConfiguration implements ProviderInterface
         $this->mapper = $mapper;
     }
 
-    public function getConfig()
+    public function getConfig(): array
     {
         return $this->mapper->getMappings();
     }
