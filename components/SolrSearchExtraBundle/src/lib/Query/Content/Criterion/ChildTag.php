@@ -10,13 +10,16 @@ class ChildTag extends Criterion
 {
     public string $ofParameter;
     public Criterion $criterion;
+    public ?string $tag = null;
 
     public function __construct(
         string $ofParameter,
-        Criterion $criterion
+        Criterion $criterion,
+        ?string $tag = null
     ) {
         $this->criterion = $criterion;
         $this->ofParameter = $ofParameter;
+        $this->tag = $tag;
     }
 
     /**
