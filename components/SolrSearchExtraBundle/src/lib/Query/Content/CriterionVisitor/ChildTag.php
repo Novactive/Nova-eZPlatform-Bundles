@@ -20,8 +20,12 @@ class ChildTag extends CriterionVisitor
      */
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null): string
     {
-        $stringQuery = $subVisitor->visit($criterion->criterion);
+        $subQueryString = $subVisitor->visit($criterion->criterion);
+        $parameters = ['of="'.$criterion->ofParameter.'"'];
+        if ($criterion->tag) {
+            $parameters[] = 'tag='.$criterion->tag;
+        }
 
-        return '{!child of="'.$criterion->ofParameter.'"}'.$stringQuery;
+        return '{!child '.implode(' ', $parameters).'}'.$subQueryString;
     }
 }

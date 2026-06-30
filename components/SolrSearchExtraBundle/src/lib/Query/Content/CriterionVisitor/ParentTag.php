@@ -20,8 +20,12 @@ class ParentTag extends CriterionVisitor
      */
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null): string
     {
-        $stringQuery = $subVisitor->visit($criterion->criterion);
+        $subQueryString = $subVisitor->visit($criterion->criterion);
+        $parameters = ['which="'.$criterion->whichParameter.'"'];
+        if ($criterion->tag) {
+            $parameters[] = 'tag='.$criterion->tag;
+        }
 
-        return '{!parent which="'.$criterion->whichParameter.'"}'.$stringQuery;
+        return '{!parent '.implode(' ', $parameters).'}'.$subQueryString;
     }
 }
