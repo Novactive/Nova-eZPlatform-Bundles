@@ -11,7 +11,8 @@ class ChildTag extends Criterion
 {
     public function __construct(
         public string $ofParameter,
-        public CriterionInterface $criterion
+        public CriterionInterface $criterion,
+        public ?string       $tag = null
     ) {
     }
 

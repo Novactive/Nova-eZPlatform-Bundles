@@ -9,8 +9,11 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Query\CriterionInterface;
 
 class ParentTag extends Criterion
 {
-    public function __construct(public string $whichParameter, public CriterionInterface $criterion)
-    {
+    public function __construct(
+        public string $whichParameter,
+        public CriterionInterface $criterion,
+        public ?string       $tag = null
+    ) {
     }
 
     /**
