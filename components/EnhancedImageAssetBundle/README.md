@@ -19,7 +19,7 @@ An eZPlatform bundle providing new field type with enhanced features related to 
 
 ## Features
 
-- [Focus point managment in admin UI](#1-focus-point)
+- [Focus point management in admin UI](#1-focus-point)
 - [Default image configuration for file size optimization](#2-default-image-configuration)
 - [Lazy and Progressive loading](#3-lazyloading)
 - [Retina variations](#4-retina-variations)
@@ -27,6 +27,11 @@ An eZPlatform bundle providing new field type with enhanced features related to 
 - [Twig render field parameters](#6-twig-render-field-parameters)
 
 ## Installation
+
+### Requirements
+
+* Ibexa 5
+* PHP 8.3
 
 ### Use Composer
 

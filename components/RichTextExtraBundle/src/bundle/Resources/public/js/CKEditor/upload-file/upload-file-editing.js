@@ -40,7 +40,6 @@ class UploadFileEditing extends Plugin {
     }
 
     init() {
-        console.log('UploadFileEditing.init()');
         this.addListeners();
 
         this.editor.commands.add('insertIbexaUploadFile', new UploadFileCommand(this.editor));

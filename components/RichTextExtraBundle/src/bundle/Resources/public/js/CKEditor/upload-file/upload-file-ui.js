@@ -38,7 +38,6 @@ class UploadFileUi extends Plugin {
     }
 
     init() {
-        console.log('UploadFileUi.init()')
         this.editor.ui.componentFactory.add('ibexaUploadFile', (locale) => {
             const buttonView = new IbexaButtonView(locale);
 
