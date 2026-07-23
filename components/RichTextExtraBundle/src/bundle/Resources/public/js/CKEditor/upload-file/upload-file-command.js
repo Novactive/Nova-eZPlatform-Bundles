@@ -1,4 +1,4 @@
-import Command from '@ckeditor/ckeditor5-core/src/command';
+import { Command } from 'ckeditor5';
 
 const { ibexa, Routing, Translator } = window;
 const { showErrorNotification } = ibexa.helpers.notification;
