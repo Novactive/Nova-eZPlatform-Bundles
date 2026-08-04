@@ -161,9 +161,4 @@ class OidcResourceOwnerMapper extends ResourceOwnerToExistingOrNewUserMapper
         // Get first prioritized language for current scope
         return $this->languageResolver->getPrioritizedLanguages()[0];
     }
-
-    private function getUsername(ResourceOwnerInterface $resourceOwner): string
-    {
-        return self::PROVIDER_PREFIX.$resourceOwner->getId();
-    }
 }
