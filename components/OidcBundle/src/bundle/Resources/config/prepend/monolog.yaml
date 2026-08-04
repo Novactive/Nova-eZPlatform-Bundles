@@ -1,0 +1,9 @@
+channels:
+    - sso
+
+handlers:
+    sso:
+        type:  rotating_file
+        path: '%kernel.logs_dir%/sso.log'
+        channels: ['sso']
+        max_files: 30

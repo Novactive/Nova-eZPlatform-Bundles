@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=../../../../../../ibexa/vendor/symfony/dependency-injection/Loader/schema/services.schema.json
+services:
+    almaviacx.oidc.components.oidc_login:
+        parent: Ibexa\AdminUi\Component\TwigComponent
+        arguments:
+            $template: '@@ibexadesign/account/login/oidc_login.html.twig'
+        tags:
+            - { name: ibexa.twig.component, group: admin-ui-login-form-after }
+
+    AlmaviaCX\Bundle\IbexaOidc\ResourceOwnerMapper\OidcResourceOwnerMapper:
+        arguments:
+            $repository: '@Ibexa\Contracts\Core\Repository\Repository'
+            $oauthUserService: '@Ibexa\Contracts\OAuth2Client\Repository\OAuth2UserService'
+            $languageResolver: '@Ibexa\Contracts\Core\Repository\LanguageResolver'
+            $userService: '@Ibexa\Contracts\Core\Repository\UserService'
+            $configResolver: '@Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface'
+        tags:
+            - { name: ibexa.oauth2_client.resource_owner_mapper, identifier: oidc }
+

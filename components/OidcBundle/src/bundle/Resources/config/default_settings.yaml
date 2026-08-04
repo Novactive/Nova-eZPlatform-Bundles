@@ -1,0 +1,22 @@
+parameters:
+    env(OIDC_USER_GROUP_ID): ~
+
+    env(OIDC_ACCESS_TOKEN_METHOD): !php/const League\OAuth2\Client\Provider\AbstractProvider::METHOD_POST
+    env(OIDC_ACCESS_TOKEN_RESOURCE_OWNER_ID): ~
+    env(OIDC_SCOPE_SEPARATOR): ','
+    env(OIDC_RESPONSE_ERROR): 'error'
+    env(OIDC_RESPONSE_CODE): ~
+    env(OIDC_RESPONSE_RESOURCE_OWNER_ID): 'id'
+    env(OIDC_SCOPES): ~
+    env(OIDC_PKCE_METHOD): ~
+
+    # Content Id or Remote Content Id of the user group where new users will be created
+    almaviacx.oidc.config.default.user_group_id: '%env(resolve:OIDC_USER_GROUP_ID)%'
+
+    # Method used to load existing users
+    almaviacx.oidc.config.default.user_load_method: !php/const AlmaviaCX\Bundle\IbexaOidc\ResourceOwnerMapper\OidcResourceOwnerMapper::LOAD_METHOD_LOGIN
+
+    # Map user content type fields to the oidc response attributes
+    almaviacx.oidc.config.default.user_attributes_mapping: ~
+
+    almaviacx.oidc.config.default.user_content_type_identifier: ~
