@@ -1,0 +1,17 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: false
+        public: false
+
+    AlmaviaCX\Bundle\IbexaMigrationExtra\Migration\Serializer\Normalizer\Step\LocationMoveStepNormalizer:
+        tags:
+            - 'ibexa.migrations.serializer.step_normalizer'
+            - 'ibexa.migrations.serializer.normalizer'
+
+    AlmaviaCX\Bundle\IbexaMigrationExtra\Migration\StepExecutor\LocationMoveStepExecutor:
+        arguments:
+            $locationService: '@Ibexa\Contracts\Core\Repository\LocationService'
+        tags:
+            - 'ibexa.migrations.step_executor'
+            - 'container.service_subscriber'
