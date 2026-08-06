@@ -14,17 +14,18 @@ declare(strict_types=1);
 
 namespace Novactive\Bundle\eZProtectedContentBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content as eZContent;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location as eZLocation;
 use Symfony\Component\Validator\Constraints as Assert;
+use DateTimeInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'novaezprotectedcontent')]
+#[ORM\HasLifecycleCallbacks]
 class ProtectedAccess
 {
-    use Compose\Metadata;
-
     private eZContent $content;
     private eZLocation $location;
 
@@ -32,6 +33,12 @@ class ProtectedAccess
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private int $id;
+
+    #[ORM\Column(name: 'created', type: 'datetime', nullable: true)]
+    private ?DateTime $created = null;
+
+    #[ORM\Column(name: 'updated', type: 'datetime', nullable: true)]
+    private ?DateTime $updated = null;
 
     #[ORM\Column(name: 'content_id', type: 'integer', nullable: false)]
     #[Assert\NotBlank]
@@ -66,6 +73,30 @@ class ProtectedAccess
     public function setId(int $id): self
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    public function getCreated(): ?DateTime
+    {
+        return $this->created;
+    }
+
+    public function setCreated(DateTimeInterface $created): self
+    {
+        $this->created = DateTime::createFromInterface($created);
+
+        return $this;
+    }
+
+    public function getUpdated(): ?DateTime
+    {
+        return $this->updated;
+    }
+
+    public function setUpdated(DateTimeInterface $updated): self
+    {
+        $this->updated = DateTime::createFromInterface($updated);
 
         return $this;
     }
@@ -160,5 +191,23 @@ class ProtectedAccess
         $this->location = $location;
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function initializeDates(): void
+    {
+        if (!isset($this->created)) {
+            $this->created = new DateTime();
+        }
+
+        if (!isset($this->updated)) {
+            $this->updated = new DateTime();
+        }
+    }
+
+    #[ORM\PreUpdate]
+    public function updateModificationDate(): void
+    {
+        $this->updated = new DateTime();
     }
 }
