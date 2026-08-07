@@ -80,5 +80,6 @@
             "symfony/flex": true,
             "ibexa/post-install": true
         }
-    }
+    },
+    "minimum-stability": "dev"
 }

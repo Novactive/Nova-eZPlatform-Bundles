@@ -7,20 +7,19 @@ It is used by Composer to allow developers to depend on specific bundles.
 
 If you want to report or contribute, you should instead open your issue on the main repository: https://github.com/Novactive/Nova-eZPlatform-Bundles
 
-Documentation is available in this repository via `.md` files but also packaged here: https://novactive.github.io/Nova-eZPlatform-Bundles/master/2FABundle/README.md.html
+Documentation is available in this repository via `.md` files but also packaged here: https://github.com/Novactive/Nova-eZPlatform-Bundles/tree/master/components/RichTextExtraBundle/README.md.html
 
 ----
 
-This bundle extend the Ibexa Richtext Editor with the following features :
-- add an edit button to embed and images in the editor which allow to edit the corresponding content
+This bundle extends the Ibexa Richtext Editor with the following features :
 - add a button to upload a file as an embed in the editor
 
 ## Installation
 
 ### Requirements
 
-* Ibexa 4.5
-* PHP 7.3 || 8.0
+* Ibexa 5
+* PHP 8.3
 
 ### Use Composer
 
@@ -50,7 +49,7 @@ _almaviacx_ibexa_rich_text_extra_bundle_routes:
 
 ### Configuration
 
-This bundle define the following setting which allow tu customize the file upload behavior
+This bundle defines the following setting that allows customizing the file upload behavior
 
 ```yaml
 # Binary files mappings

@@ -1,10 +1,10 @@
-import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
+import { Plugin } from 'ckeditor5';
 
 import IbexaButtonView from '@ibexa-richtext/src/bundle/Resources/public/js/CKEditor/common/button-view/button-view';
 
 const { ibexa, Translator } = window;
 
-class UploadFileUi  extends Plugin {
+class UploadFileUi extends Plugin {
     constructor(props) {
         super(props);
 
@@ -13,7 +13,7 @@ class UploadFileUi  extends Plugin {
 
     createFileSelector() {
         const fileSelector = document.createElement('input');
-        const allowedExtensions = ibexa.adminUiConfig.fileUpload.mime_types.join(',')
+        const allowedExtensions = ibexa.adminUiConfig.fileUpload.mime_types.join(',');
 
         fileSelector.setAttribute('type', 'file');
         fileSelector.setAttribute('accept', allowedExtensions);
@@ -25,9 +25,13 @@ class UploadFileUi  extends Plugin {
         const fileSelector = this.createFileSelector();
 
         fileSelector.addEventListener(
-            'change',
-            ({ currentTarget }) => this.editor.execute('insertIbexaUploadFile', { file: currentTarget.files[0] }),
-            false,
+          'change',
+          ({ currentTarget }) => {
+              this.editor.execute('insertIbexaUploadFile', {
+                  file: currentTarget.files[0],
+              });
+          },
+          false,
         );
 
         fileSelector.click();
@@ -38,7 +42,11 @@ class UploadFileUi  extends Plugin {
             const buttonView = new IbexaButtonView(locale);
 
             buttonView.set({
-                label: Translator.trans(/*@Desc("Upload file")*/ 'upload_file_btn.label', {}, 'ck_editor'),
+                label: Translator.trans(
+                  /*@Desc("Upload file")*/ 'upload_file_btn.label',
+                  {},
+                  'ck_editor',
+                ),
                 icon: ibexa.helpers.icon.getIconPath('upload'),
                 tooltip: true,
             });

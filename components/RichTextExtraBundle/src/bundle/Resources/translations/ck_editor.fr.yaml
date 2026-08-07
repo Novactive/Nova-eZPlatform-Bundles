@@ -1,7 +1,3 @@
-content_edit:
-    label: Editer le contenu
-image_edit:
-    label: Editer l'image
 upload_file_btn:
     label: Envoyer un fichier
 upload_file:

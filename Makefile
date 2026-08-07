@@ -50,8 +50,13 @@ install: ## Install vendors
 
 
 .PHONY: wrap-bundles
-wrap-bundles:
-	@for COMPONENT in $(shell ls components); do \
+wrap-bundles: ## Installe les bundles ou un seul : `make wrap-bundles COMPONENT=TranslationUiBundle`
+	@if [ -n "$(COMPONENT)" ]; then \
+		COMPONENTS="$(COMPONENT)"; \
+	else \
+		COMPONENTS="$$(ls components)"; \
+	fi; \
+	for COMPONENT in $$COMPONENTS; do \
 		if ddev exec -q -d /var/www/html "COMPONENT=$${COMPONENT} bin/ci-should install"; then \
     		echo "..:: $${COMPONENT} Installing ::.."; \
 			ddev exec -d /var/www/html "COMPONENT_CONFIG_DIR='components/$${COMPONENT}/tests/provisioning' COMPONENT=$${COMPONENT} bin/wrapbundle"; \
@@ -62,7 +67,7 @@ wrap-bundles:
 	@ddev exec "$(CONSOLE) d:s:u --force"
 
 .PHONY: post-install
-post-install: wrap-bundles
+post-install: wrap-bundles ## Do bundles specifics
 	@echo "..:: Do bundle specifics ::.."
 
 # TO BE ADDED BACK WHEN COMPLIANT WITH 4.x

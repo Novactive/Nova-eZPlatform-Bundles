@@ -17,8 +17,8 @@ This bundle integrate the UI provided by https://github.com/lexik/LexikTranslati
 
 ### Requirements
 
-* Ibexa 4
-* PHP 7.3 || 8.0
+* Ibexa 5
+* PHP 8.3
 
 ### Use Composer
 

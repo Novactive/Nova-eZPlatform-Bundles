@@ -12,7 +12,7 @@
     "authors": [
         {
             "name": "AlmaviaCX",
-            "homepage": "https://almaviacx.com/expertises/web-mobile/",
+            "homepage": "https://almaviacx.com/expertises/digital",
             "email": "dirtech.web@almaviacx.com"
         }
     ],
@@ -20,9 +20,9 @@
         "MIT"
     ],
     "require": {
-        "php": "^7.3 || ^8.0",
-        "ibexa/admin-ui": "^4.0",
-        "lexik/translation-bundle": "^6.0"
+        "php": "^8.3",
+        "ibexa/admin-ui": "~5.0",
+        "lexik/translation-bundle": "^7.1"
     },
     "autoload": {
         "psr-4": {
