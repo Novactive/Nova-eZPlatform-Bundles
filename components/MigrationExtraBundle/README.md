@@ -19,3 +19,15 @@ New step used to move location
         field: location_id
         value: 2
 ```
+
+### Taxonomy ID reference
+
+```yaml
+-
+    type: content
+    mode: create
+    ...
+    references:
+        -   name: taxonomy_activity_domain_root_taxonomy_id
+            type: taxonomy_id
+```

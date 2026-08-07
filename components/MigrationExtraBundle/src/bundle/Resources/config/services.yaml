@@ -15,3 +15,6 @@ services:
         tags:
             - 'ibexa.migrations.step_executor'
             - 'container.service_subscriber'
+
+    AlmaviaCX\Bundle\IbexaMigrationExtra\Migration\StepExecutor\ReferenceDefinition\Content\TaxonomyIdResolverInterface:
+        tags: [ 'ibexa.migrations.reference_resolver.content_resolver' ]
