@@ -10,7 +10,7 @@ class EnhancedImageEmbedImageEditing extends IbexaEmbedImageEditing {
 
         findContent({ token, siteaccess, contentId }, (contents) => {
             const fields = contents[0].CurrentVersion.Version.Fields.field;
-            const fieldImage = fields.find((field) => ['enhancedimage', 'ezimage'].includes(field.fieldTypeIdentifier));
+            const fieldImage = fields.find((field) => ['enhancedimage', 'ezimage', 'ibexa_image'].includes(field.fieldTypeIdentifier));
             const size = modelElement.getAttribute('size');
             const variationHref = fieldImage.fieldValue.variations[size].href;
 
