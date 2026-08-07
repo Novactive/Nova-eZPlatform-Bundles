@@ -18,55 +18,28 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity()
- *
- * @ORM\Table(name="novaezprotectedcontentstorage")
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'novaezprotectedcontentstorage')]
 class ProtectedTokenStorage
 {
-    /**
-     * @var int
-     *
-     * @ORM\Id
-     *
-     * @ORM\Column(type="integer")
-     *
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private int $id;
 
-    /**
-     * @var DateTime
-     *
-     * @ORM\Column(name="created", type="datetime")
-     */
-    private $created;
+    #[ORM\Column(name: 'created', type: 'datetime')]
+    private DateTime $created;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", length=255, nullable=false)
-     *
-     * @Assert\Length(max=255)
-     */
-    protected $token;
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    #[Assert\Length(max: 255)]
+    protected string $token;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", length=255, nullable=false)
-     *
-     * @Assert\Length(max=255)
-     */
-    protected $mail;
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    #[Assert\Length(max: 255)]
+    protected string $mail;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(type="integer")
-     */
-    protected $content_id;
+    #[ORM\Column(type: 'integer')]
+    protected int $content_id;
 
     public function getId(): int
     {

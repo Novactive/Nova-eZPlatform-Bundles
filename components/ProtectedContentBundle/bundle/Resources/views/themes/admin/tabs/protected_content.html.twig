@@ -75,14 +75,12 @@
                 </td>
                 <td class="ibexa-table__cell">{{ item.enabled ? 'tab.yes'|trans:'tab.no'|trans }}</td>
 
-                <td class="ez-table__cell">{{ item.asEmail ? 'tab.yes'|trans:'tab.no'|trans }}</td>
-                <td class="ez-table__cell">{{ item.emailMessage ? 'tab.yes'|trans:'tab.no'|trans }}</td>
+                <td class="ibexa-table__cell">{{ item.asEmail ? 'tab.yes'|trans:'tab.no'|trans }}</td>
+                <td class="ibexa-table__cell">{{ item.emailMessage ? 'tab.yes'|trans:'tab.no'|trans }}</td>
                 <td class="ibexa-table__cell">
                     {% if item.contentId == location.contentInfo.id %}
                         <a href="{{ path("novaezprotectedcontent_bundle_admin_remove_protection", {locationId: location.id, access: item.id }) }}" class="button">
-                            <svg class="ibexa-icon ibexa-icon--medium">
-                                <use xlink:href="/bundles/ibexaicons/img/all-icons.svg#trash"></use>
-                            </svg>
+                            x
                         </a>
                     {% endif %}
                 </td>
