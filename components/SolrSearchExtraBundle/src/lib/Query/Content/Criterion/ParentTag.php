@@ -12,7 +12,7 @@ class ParentTag extends Criterion
     public function __construct(
         public string $whichParameter,
         public CriterionInterface $criterion,
-        public ?string       $tag = null
+        public ?string $tag = null
     ) {
     }
 

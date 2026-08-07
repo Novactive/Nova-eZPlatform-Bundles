@@ -1,8 +1,4 @@
-RUN apt-get -y install lsb-release ca-certificates curl && \
-    curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb && \
-    dpkg -i /tmp/debsuryorg-archive-keyring.deb && \
-    sh -c 'echo "deb [signed-by=/usr/share/keyrings/debsuryorg-archive-keyring.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list' && \
-    apt-get update
+# .ddev/web-build/Dockerfile
 
 RUN sudo install -d -m 0755 /etc/apt/keyrings && \
     wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | sudo tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null && \
