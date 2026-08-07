@@ -15,11 +15,11 @@ declare(strict_types=1);
 namespace Novactive\Bundle\eZProtectedContentBundle\Entity;
 
 use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content as eZContent;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location as eZLocation;
 use Symfony\Component\Validator\Constraints as Assert;
-use DateTimeInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'novaezprotectedcontent')]
