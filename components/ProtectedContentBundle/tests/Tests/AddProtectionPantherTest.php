@@ -27,9 +27,9 @@ class AddProtectionPantherTest extends PantherTestCase
 
         $helper->get('/admin/future-protected-article');
 
-        $crawler = $helper->waitFor('#ez-tab-location-view-protect-content');
-        $crawler->filter('a[href="#ez-tab-location-view-protect-content"]')->click();
-        $crawler->filter('button[data-target="#ez-modal--add-content-protection"]')->click();
+        $crawler = $helper->waitFor('#ibexa-tab-location-view-protect-content');
+        $crawler->filter('a[href="#ibexa-tab-location-view-protect-content"]')->click();
+        $crawler->filter('button[data-target="#ibexa-modal--add-content-protection"]')->click();
         $helper->wait(1);
         $form = $crawler->filter('form[name="protected_access"]');
         $this->assertEquals(1, $form->count());
@@ -41,8 +41,8 @@ class AddProtectionPantherTest extends PantherTestCase
             ]
         );
         $form->submit();
-        $crawler = $helper->waitFor('#ez-tab-location-view-protect-content');
-        $count = $crawler->filter('#ez-tab-location-view-protect-content table.ez-table.table > tbody > tr')->count();
+        $crawler = $helper->waitFor('#ibexa-tab-location-view-protect-content');
+        $count = $crawler->filter('#ibexa-tab-location-view-protect-content table.ibexa-table.table > tbody > tr')->count();
         $this->assertGreaterThan(0, $count);
     }
 
