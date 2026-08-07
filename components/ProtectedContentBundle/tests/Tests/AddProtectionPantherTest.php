@@ -42,7 +42,8 @@ class AddProtectionPantherTest extends PantherTestCase
         );
         $form->submit();
         $crawler = $helper->waitFor('#ibexa-tab-location-view-protect-content');
-        $count = $crawler->filter('#ibexa-tab-location-view-protect-content table.ibexa-table.table > tbody > tr')->count();
+        $rowSelector = '#ibexa-tab-location-view-protect-content table.ibexa-table.table > tbody > tr';
+        $count = $crawler->filter($rowSelector)->count();
         $this->assertGreaterThan(0, $count);
     }
 
