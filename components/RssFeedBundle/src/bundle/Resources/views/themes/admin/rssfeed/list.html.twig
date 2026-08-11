@@ -32,7 +32,6 @@
         <table class="ibexa-table table">
             <thead>
             <tr class="ibexa-table__head-row">
-                <th class="ibexa-table__header-cell">{{ 'ez_rss_feed.status'|trans }}</th>
                 <th class="ibexa-table__header-cell">{{ 'ez_rss_feed.title'|trans }}</th>
                 <th class="ibexa-table__header-cell">{{ 'ez_rss_feed.url_slug'|trans }}</th>
                 <th class="ibexa-table__header-cell">{{ 'ez_rss_feed.created_at'|trans }}</th>
@@ -49,11 +48,11 @@
                     <td class="ibexa-table__cell">{{ rss.createdAt|date("d/m/Y H:i") }}</td>
                     <td class="ibexa-table__cell">{{ rss.modifiedAt|date("d/m/Y H:i") }}</td>
                     <td class="ibexa-table__cell ibexa-table__cell--has-checkbox ">
-                         <div class="form-check">
+                        <div class="form-check">
                             <label class="ibexa-checkbox-icon {% if rss.status %}is-checked{% endif %}">
                                 <input class="ibexa-checkbox-icon__checkbox" checked="" type="checkbox" name="updateVisibility" value="{{ rss.id }}">
                             </label>
-                         </div>
+                        </div>
                     </td>
                     <td class="ibexa-table__cell ibexa-table__cell--has-action-btns">
                         <div class="ibexa-table__cell-btns-wrapper">
