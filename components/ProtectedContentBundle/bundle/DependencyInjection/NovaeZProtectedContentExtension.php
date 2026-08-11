@@ -28,13 +28,13 @@ class NovaeZProtectedContentExtension extends Extension implements PrependExtens
         $loader->load('services.yaml');
     }
 
-    public function prepend(ContainerBuilder $container)
+    public function prepend(ContainerBuilder $container): void
     {
         $config = [
             'orm' => [
                 'entity_mappings' => [
                     'eZProtectedContentBundle' => [
-                        'type' => 'annotation',
+                        'type' => 'attribute',
                         'dir' => __DIR__.'/../Entity',
                         'prefix' => 'Novactive\Bundle\eZProtectedContentBundle\Entity',
                         'is_bundle' => false,
