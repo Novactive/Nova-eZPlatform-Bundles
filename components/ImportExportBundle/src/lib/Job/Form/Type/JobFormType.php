@@ -14,13 +14,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class JobFormType extends AbstractType
 {
-    protected WorkflowRegistry $workflowRegistry;
-
-    public function __construct(WorkflowRegistry $workflowRegistry)
-    {
-        $this->workflowRegistry = $workflowRegistry;
+    public function __construct(
+        protected WorkflowRegistry $workflowRegistry
+    ) {
     }
 
+    /**
+     * @param array<string, mixed> $options
+     *
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('label', TextType::class, [

@@ -11,15 +11,10 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Content;
 
 class ContentAccessorBuilder
 {
-    protected ContentFieldAccessorBuilder $contentFieldAccessorBuilder;
-    protected ContentService $contentService;
-
     public function __construct(
-        ContentFieldAccessorBuilder $contentFieldAccessorBuilder,
-        ContentService $contentService
+        protected ContentFieldAccessorBuilder $contentFieldAccessorBuilder,
+        protected ContentService $contentService
     ) {
-        $this->contentService = $contentService;
-        $this->contentFieldAccessorBuilder = $contentFieldAccessorBuilder;
     }
 
     public function buildFromContent(Content $content): ContentAccessor

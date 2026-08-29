@@ -7,22 +7,31 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Item\Iterator;
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\AbstractReaderIterator;
 use Iterator;
 
+/**
+ * @template TKey
+ * @template-covariant TValue
+ * @template TInnerIterator of Iterator
+ * @template TItemTransformer of IteratorItemTransformerInterface
+ * @extends AbstractReaderIterator<TKey, TValue>
+ */
 class ItemIterator extends AbstractReaderIterator
 {
-    protected Iterator $innerIterator;
-    protected ?IteratorItemTransformerInterface $itemTransformer = null;
-
+    /**
+     * @param TInnerIterator        $innerIterator
+     * @param TItemTransformer|null $itemTransformer
+     */
     public function __construct(
         int $totalCount,
-        Iterator $innerIterator,
-        ?IteratorItemTransformerInterface $itemTransformer = null
+        protected Iterator $innerIterator,
+        protected ?IteratorItemTransformerInterface $itemTransformer = null
     ) {
-        $this->itemTransformer = $itemTransformer;
-        $this->innerIterator = $innerIterator;
         parent::__construct($totalCount);
     }
 
-    public function current()
+    /**
+     * @return TValue
+     */
+    public function current(): mixed
     {
         $item = $this->innerIterator->current();
         if ($this->itemTransformer instanceof IteratorItemTransformerInterface) {
@@ -37,7 +46,10 @@ class ItemIterator extends AbstractReaderIterator
         $this->innerIterator->next();
     }
 
-    public function key(): int
+    /**
+     * @return TKey
+     */
+    public function key(): mixed
     {
         return $this->innerIterator->key();
     }

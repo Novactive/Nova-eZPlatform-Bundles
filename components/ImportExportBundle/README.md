@@ -27,3 +27,23 @@ Options are :
 
 ## Writer
 
+# Update 0.x => 1.x
+
+```mysql
+ALTER TABLE import_export_job_record RENAME import_export_execution_record;
+ALTER TABLE import_export_execution_record CHANGE job_id execution_id INT;
+CREATE TABLE import_export_execution
+(
+    id            INT AUTO_INCREMENT NOT NULL,
+    job_id        INT DEFAULT NULL,
+    workflowState LONGTEXT           NOT NULL COMMENT '(DC2Type:object)',
+    status        INT                NOT NULL,
+    options       LONGTEXT           NOT NULL COMMENT '(DC2Type:object)',
+    INDEX IDX_43AF329BE04EA9 (job_id),
+    PRIMARY KEY (id)
+) DEFAULT CHARACTER SET utf8mb4
+  COLLATE `utf8mb4_unicode_ci`
+  ENGINE = InnoDB;
+
+```
+TODO : migration command

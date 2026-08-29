@@ -1,0 +1,22 @@
+services:
+    AlmaviaCX\Bundle\IbexaImportExport\Execution\ExecutionRepository:
+        lazy: true
+        arguments:
+            $em: '@ibexa.doctrine.orm.entity_manager'
+        tags:
+            - doctrine.repository_service
+
+    AlmaviaCX\Bundle\IbexaImportExport\Execution\ExecutionRunner:
+        arguments:
+            $workflowExecutor: '@AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowExecutor'
+            $workflowRegistry: '@AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowRegistry'
+            $eventDispatcher: '@Symfony\Contracts\EventDispatcher\EventDispatcherInterface'
+            $executionRepository: '@AlmaviaCX\Bundle\IbexaImportExport\Execution\ExecutionRepository'
+            $em: '@ibexa.doctrine.orm.entity_manager'
+
+    AlmaviaCX\Bundle\IbexaImportExport\Execution\ExecutionOptionsFormType:
+        arguments:
+            $workflowRegistry: '@AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowRegistry'
+            $componentRegistry: '@AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentRegistry'
+        tags:
+            - { name: form.type, alias: ExecutionOptions }

@@ -9,6 +9,9 @@ use Ibexa\Contracts\Core\Repository\Values\ContentType\FieldDefinition;
 
 class SelectionFieldValueTransformer implements FieldValueTransformerInterface
 {
+    /**
+     * @return array<string, string>
+     */
     public function __invoke(Field $field, FieldDefinition $fieldDefinition): array
     {
         $fieldValue = $field->getValue();

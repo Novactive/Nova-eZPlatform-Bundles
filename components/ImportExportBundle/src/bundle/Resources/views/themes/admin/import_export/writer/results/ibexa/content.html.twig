@@ -1,0 +1,53 @@
+{% trans_default_domain 'import_export' %}
+
+{% set action_badges = {
+    'update'     : 'bg-info',
+    'create'      : 'bg-success text-white',
+    'delete'     : 'bg-danger text-white',
+    'ignored'     : 'bg-dark text-white',
+} %}
+
+{% if results is not empty %}
+    <section id="{{ writerIndex }}" class="container ibexa-container">
+        {% set body_rows = [] %}
+        {% for contentId, infos in results %}
+            {% set action %}
+                <span class="badge {{ action_badges[infos['action']]|default() }}">{{ infos['action'] }}</span>
+            {% endset %}
+            {% set name %}
+                {% if infos['action'] != 'delete' %}
+                    <a target="_blank" href="{{ infos['contentId']|default() ? url('ibexa.url.alias', {contentId: infos['contentId']}) : '#' }}">
+                        {{ infos['name'] }}
+                    </a>
+                {% else %}
+                    {{ infos['name'] }}
+                {% endif %}
+            {% endset %}
+            {% set body_row_cols = [
+                { content: action, raw: true, has_icon: true },
+                { content: name, raw: true }
+            ] %}
+
+            {% set body_rows = body_rows|merge([{ cols: body_row_cols }]) %}
+        {% endfor %}
+
+        {% embed '@ibexadesign/ui/component/table/table.html.twig' with {
+            headline: writer.name|trans() ~ " (" ~ results.count() ~ ")",
+            head_cols: [
+                { content: 'execution.view.log.type'|trans|desc('Type') },
+                { content: 'execution.view.log.message'|trans|desc('Message') },
+            ],
+            body_rows,
+        } %}
+        {% endembed %}
+        {{ pagerfanta(results, 'ibexa', {
+            'routeName': 'import_export.job.execution.view',
+            'routeParams': {
+                'id': execution.job.id,
+                'executionId': execution.id,
+                '_fragment': writerIndex
+            }|merge(request_query),
+            'pageParameter': '['~ writerIndex ~'][page]'
+        }) }}
+    </section>
+{% endif %}

@@ -9,5 +9,8 @@ use Ibexa\Contracts\Core\Repository\Values\ContentType\FieldDefinition;
 
 interface FieldValueTransformerInterface
 {
+    /**
+     * @return mixed
+     */
     public function __invoke(Field $field, FieldDefinition $fieldDefinition);
 }

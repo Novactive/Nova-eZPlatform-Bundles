@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Monolog\Handler;
 
-use AlmaviaCX\Bundle\IbexaImportExport\Job\JobRecord;
+use AlmaviaCX\Bundle\IbexaImportExport\Execution\ExecutionRecord;
 use BadMethodCallException;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
@@ -17,22 +17,24 @@ use Symfony\Component\Uid\Ulid;
  */
 class WorkflowHandler extends AbstractProcessingHandler
 {
-    /** @var array<JobRecord> */
+    /** @var array<ExecutionRecord> */
     protected array $records = [];
-    /** @var array<Level, JobRecord[]> */
+    /** @var array<Level, ExecutionRecord[]> */
     protected array $recordsByLevel = [];
 
     protected bool $skipReset = false;
 
-    public function __construct($level = Logger::DEBUG, bool $bubble = true)
-    {
+    public function __construct(
+        int|string $level = Logger::DEBUG,
+        bool $bubble = true
+    ) {
         parent::__construct($level, $bubble);
     }
 
     /**
-     * @return array<JobRecord>
+     * @return array<ExecutionRecord>
      */
-    public function getRecords()
+    public function getRecords(): array
     {
         return $this->records;
     }
@@ -64,25 +66,15 @@ class WorkflowHandler extends AbstractProcessingHandler
         $this->skipReset = $skipReset;
     }
 
-    /**
-     * @param string|int $level Logging level value or name
-     *
-     * @phpstan-param Level|LevelName|LogLevel::* $level
-     */
-    public function hasRecords($level): bool
+    public function hasRecords(int|string $level): bool
     {
         return isset($this->recordsByLevel[Logger::toMonologLevel($level)]);
     }
 
     /**
-     * @param string|array $record Either a message string or an array containing message
-     *                             and optionally context keys that will be checked against all records
-     * @param string|int   $level  Logging level value or name
-     *
      * @phpstan-param array{message: string, context?: mixed[]}|string $record
-     * @phpstan-param Level|LevelName|LogLevel::*                      $level
      */
-    public function hasRecord($record, $level): bool
+    public function hasRecord(array|string $record, int|string $level): bool
     {
         if (is_string($record)) {
             $record = ['message' => $record];
@@ -100,24 +92,14 @@ class WorkflowHandler extends AbstractProcessingHandler
         }, $level);
     }
 
-    /**
-     * @param string|int $level Logging level value or name
-     *
-     * @phpstan-param Level|LevelName|LogLevel::* $level
-     */
-    public function hasRecordThatContains(string $message, $level): bool
+    public function hasRecordThatContains(string $message, int|string $level): bool
     {
         return $this->hasRecordThatPasses(function ($rec) use ($message) {
             return false !== strpos($rec['message'], $message);
         }, $level);
     }
 
-    /**
-     * @param string|int $level Logging level value or name
-     *
-     * @phpstan-param Level|LevelName|LogLevel::* $level
-     */
-    public function hasRecordThatMatches(string $regex, $level): bool
+    public function hasRecordThatMatches(string $regex, int|string $level): bool
     {
         return $this->hasRecordThatPasses(function (array $rec) use ($regex): bool {
             return preg_match($regex, $rec['message']) > 0;
@@ -125,14 +107,9 @@ class WorkflowHandler extends AbstractProcessingHandler
     }
 
     /**
-     * @param string|int $level Logging level value or name
-     *
-     * @return bool
-     *
-     * @psalm-param callable(Record, int): mixed $predicate
-     * @phpstan-param Level|LevelName|LogLevel::* $level
+     * @psalm-param callable(Record, int): mixed  $predicate
      */
-    public function hasRecordThatPasses(callable $predicate, $level)
+    public function hasRecordThatPasses(callable $predicate, int|string $level): bool
     {
         $level = Logger::toMonologLevel($level);
 
@@ -154,7 +131,7 @@ class WorkflowHandler extends AbstractProcessingHandler
      */
     protected function write(array $record): void
     {
-        $jobRecord = new JobRecord(
+        $jobRecord = new ExecutionRecord(
             new Ulid(),
             $record
         );

@@ -8,11 +8,9 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class WorkflowConfigurationRepository
 {
-    protected EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->entityManager = $entityManager;
+    public function __construct(
+        protected EntityManagerInterface $entityManager
+    ) {
     }
 
     public function find(string $identifier): ?WorkflowConfiguration

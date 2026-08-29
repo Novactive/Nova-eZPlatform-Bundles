@@ -6,21 +6,15 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content;
 
 use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
 use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content;
 
 class IbexaContentImporter
 {
-    protected Repository $repository;
-    protected IbexaContentUpdater $contentUpdater;
-    protected IbexaContentCreator $contentCreator;
-
     public function __construct(
-        Repository $repository,
-        IbexaContentUpdater $contentUpdater,
-        IbexaContentCreator $contentCreator
+        protected Repository $repository,
+        protected IbexaContentUpdater $contentUpdater,
+        protected IbexaContentCreator $contentCreator
     ) {
-        $this->contentCreator = $contentCreator;
-        $this->contentUpdater = $contentUpdater;
-        $this->repository = $repository;
     }
 
     /**
@@ -33,9 +27,9 @@ class IbexaContentImporter
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException
      *
-     * @return \Ibexa\Contracts\Core\Repository\Values\Content\Content
+     * @return array{action: ?string, content: Content}|null
      */
-    public function __invoke(IbexaContentData $contentData, bool $allowUpdate = true)
+    public function __invoke(IbexaContentData $contentData): ?array
     {
         $remoteId = $contentData->getContentRemoteId();
         $ownerId = $contentData->getOwnerId();
@@ -51,31 +45,75 @@ class IbexaContentImporter
                 $content = $this->repository->getContentService()->loadContentByRemoteId(
                     $contentData->getContentRemoteId()
                 );
-                if (!$allowUpdate) {
-                    return $content;
+
+                if (IbexaContentData::IMPORT_MODE_DELETE === $contentData->getImportMode()) {
+                    $this->repository->getContentService()->deleteContent($content->contentInfo);
+
+                    return [
+                        'action' => 'delete',
+                        'content' => $content,
+                    ];
                 }
 
-                return ($this->contentUpdater)(
+                if (
+                    !in_array($contentData->getImportMode(), [
+                    IbexaContentData::IMPORT_MODE_ONLY_UPDATE,
+                    IbexaContentData::IMPORT_MODE_UPDATE_AND_CREATE_IF_NOT_EXISTS,
+                    ])
+                ) {
+                    return [
+                        'action' => null,
+                        'content' => $content,
+                    ];
+                }
+
+                $publishedContent = ($this->contentUpdater)(
                     $content,
                     $contentData->getFields(),
                     $contentData->getParentLocationIdList(),
+                    $contentData->getChecksum(),
                     $ownerId,
-                    $contentData->getMainLanguageCode()
+                    $contentData->getMainLanguageCode(),
+                    $contentData->isHidden(),
+                    $contentData->isAllowMoveOnUpdate()
                 );
+
+                $didUpdate = $publishedContent->versionInfo->versionNo !== $content->versionInfo->versionNo;
+
+                return [
+                    'action' => $didUpdate ? 'update' : 'ignored',
+                    'content' => $publishedContent,
+                ];
             } catch (NotFoundException $exception) {
-                return ($this->contentCreator)(
+                if (
+                    !in_array($contentData->getImportMode(), [
+                    IbexaContentData::IMPORT_MODE_CREATE_ONLY,
+                    IbexaContentData::IMPORT_MODE_UPDATE_AND_CREATE_IF_NOT_EXISTS,
+                    ])
+                ) {
+                    return null;
+                }
+
+                $content = ($this->contentCreator)(
                     $contentData->getContentTypeIdentifier(),
                     $contentData->getParentLocationIdList(),
                     $contentData->getFields(),
                     $remoteId,
+                    $contentData->getChecksum(),
                     $ownerId,
                     $contentData->getMainLanguageCode(),
                     $contentData->getSectionId(),
-                    $contentData->getModificationDate()
+                    $contentData->getModificationDate(),
+                    $contentData->isHidden()
                 );
+
+                return [
+                    'action' => 'create',
+                    'content' => $content,
+                ];
             }
         } catch (\Throwable $exception) {
-            dump($exception, $contentData);
+            dd($exception, $contentData);
             throw $exception;
         }
     }

@@ -8,11 +8,10 @@ use Throwable;
 
 class SourceResolutionException extends BaseException
 {
-    protected $source;
-
-    public function __construct($source, ?Throwable $previous = null)
-    {
-        $this->source = $source;
+    public function __construct(
+        protected string $source,
+        ?Throwable $previous = null
+    ) {
         parent::__construct(sprintf('[%s] %s', $source, $previous->getMessage()), $previous->getCode(), $previous);
     }
 }

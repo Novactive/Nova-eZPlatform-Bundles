@@ -6,7 +6,6 @@ services:
     AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\SourceResolver:
         arguments:
             $itemValueTransformerRegistry: '@AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\ItemValueTransformerRegistry'
-            $referenceBag: '@AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag'
 
     AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\ItemTransformer:
         arguments:
@@ -42,6 +41,10 @@ services:
         tags:
             - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.md5}
 
+    AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Utils\ChecksumTransformer:
+        tags:
+            - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.checksum}
+
     AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Utils\CallbackTransformer:
         tags:
             - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.callback}
@@ -49,6 +52,12 @@ services:
     AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Utils\DownloadToTmpTransformer:
         tags:
             - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.download_to_tmp_transformer}
+
+    AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Utils\OptimizeImageTransformer:
+        arguments:
+            $filterManager: '@liip_imagine.filter.manager'
+        tags:
+            - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.optimize_image_transformer}
 
     AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Ibexa\HtmlToRichtextTransformer:
         arguments:
@@ -65,3 +74,7 @@ services:
     AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Ibexa\HtmlToTextBlockTransformer:
         tags:
             - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.html_to_textblock}
+
+    AlmaviaCX\Bundle\IbexaImportExport\Item\ValueTransformer\Utils\DefaultTransformer:
+        tags:
+            - { name: almaviacx.import_export.item.value_transformer, alias: almaviacx.import_export.item.value_transformer.default}

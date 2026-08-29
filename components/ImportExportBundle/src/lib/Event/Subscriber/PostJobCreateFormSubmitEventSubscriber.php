@@ -15,12 +15,9 @@ use Symfony\Component\Uid\Uuid;
 
 class PostJobCreateFormSubmitEventSubscriber implements EventSubscriberInterface
 {
-    protected FileHandler $fileHandler;
-
     public function __construct(
-        FileHandler $fileHandler
+        protected FileHandler $fileHandler
     ) {
-        $this->fileHandler = $fileHandler;
     }
 
     public static function getSubscribedEvents(): array
@@ -30,11 +27,14 @@ class PostJobCreateFormSubmitEventSubscriber implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * @throws \League\Flysystem\FilesystemException
+     */
     public function onPostJobCreateFormSubmit(PostJobCreateFormSubmitEvent $event): void
     {
         $job = $event->getJob();
 
-        $options = $job->getOptions()['reader'] ?? null;
+        $options = $job->getOptions()->readerOptions ?? null;
         if ($options instanceof FileReaderOptions && $options->file instanceof File) {
             $file = $options->file;
             $fileHandler = fopen($file->getPathname(), 'rb');

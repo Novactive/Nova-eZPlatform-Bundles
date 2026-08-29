@@ -7,14 +7,28 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Accessor;
 use DOMNode;
 use DOMXPath;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
+use Symfony\Component\PropertyAccess\PropertyPathInterface;
 
 class XpathPropertyAccessor implements PropertyAccessorInterface
 {
-    public function setValue(&$objectOrArray, $propertyPath, $value)
+    /**
+     * @param object|array<mixed>          $objectOrArray The object or array to modify
+     * @param string|PropertyPathInterface $propertyPath  The property path to modify
+     * @param mixed                        $value         The value to set at the end of the property path
+     */
+    public function setValue(&$objectOrArray, $propertyPath, $value): void
     {
         return;
     }
 
+    /**
+     * @param object|array<mixed>          $objectOrArray The object or array to traverse
+     * @param string|PropertyPathInterface $propertyPath  The property path to read
+     *
+     * @throws \Symfony\Component\PropertyAccess\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\PropertyAccess\Exception\AccessException
+     * @throws \Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException
+     */
     public function getValue($objectOrArray, $propertyPath)
     {
         if (!$objectOrArray instanceof DOMNode) {
@@ -26,12 +40,20 @@ class XpathPropertyAccessor implements PropertyAccessorInterface
         return $xpath->evaluate((string) $propertyPath, $objectOrArray);
     }
 
-    public function isWritable($objectOrArray, $propertyPath)
+    /**
+     * @param object|array<mixed>          $objectOrArray The object or array to check
+     * @param string|PropertyPathInterface $propertyPath  The property path to check
+     */
+    public function isWritable($objectOrArray, $propertyPath): bool
     {
         return false;
     }
 
-    public function isReadable($objectOrArray, $propertyPath)
+    /**
+     * @param object|array<mixed>          $objectOrArray The object or array to check
+     * @param string|PropertyPathInterface $propertyPath  The property path to check
+     */
+    public function isReadable($objectOrArray, $propertyPath): bool
     {
         return true;
     }

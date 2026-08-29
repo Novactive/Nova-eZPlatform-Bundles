@@ -4,4 +4,6 @@ import_export:
     workflow.edit: ~
     workflow.delete: ~
     job.create: ~
-    job.views: ~
+    job.view: ~
+    job.delete: ~
+    job.execute: ~

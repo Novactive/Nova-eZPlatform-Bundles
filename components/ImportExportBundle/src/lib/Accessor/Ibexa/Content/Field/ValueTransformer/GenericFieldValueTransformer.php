@@ -10,15 +10,12 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class GenericFieldValueTransformer implements FieldValueTransformerInterface
 {
-    protected string $propertyName = 'value';
-
     public function __construct(
-        string $propertyName = 'value'
+        protected string $propertyName = 'value'
     ) {
-        $this->propertyName = $propertyName;
     }
 
-    public function __invoke(Field $field, FieldDefinition $fieldDefinition)
+    public function __invoke(Field $field, FieldDefinition $fieldDefinition): mixed
     {
         $accessor = PropertyAccess::createPropertyAccessor();
 
