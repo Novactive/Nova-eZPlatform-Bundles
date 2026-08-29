@@ -14,6 +14,7 @@ namespace Novactive\EzRssFeedBundle\Form;
 
 use Ibexa\Contracts\Core\Repository\ContentTypeService;
 use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content;
 use Ibexa\Contracts\Core\Repository\Values\ContentType\ContentType;
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Novactive\EzRssFeedBundle\Entity\RssFeedItems;
@@ -26,6 +27,8 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Ibexa\Contracts\Taxonomy\Service\TaxonomyEntryAssignmentServiceInterface;
+
 
 class RssFeedItemsType extends AbstractType
 {
@@ -38,12 +41,18 @@ class RssFeedItemsType extends AbstractType
     /** @var array */
     protected $fieldTypeMap;
 
+    protected $taxonomyByField;
+
+    protected $taxonomyEntryAssignmentService;
+
     public function __construct(
         ContentTypeService $contentTypeService,
-        ConfigResolverInterface $configResolver
+        ConfigResolverInterface $configResolver,
+        TaxonomyEntryAssignmentServiceInterface $taxonomyEntryAssignmentService
     ) {
         $this->contentTypeService = $contentTypeService;
         $this->configResolver = $configResolver;
+        $this->taxonomyEntryAssignmentService = $taxonomyEntryAssignmentService;
     }
 
     /**
@@ -53,6 +62,7 @@ class RssFeedItemsType extends AbstractType
     {
         $contentTypeList = $this->getContentTypeList();
         $fieldTypeMap = $this->fieldTypeMap;
+        $taxonomyByField = $this->taxonomyByField;
 
         $builder
             ->add(
@@ -87,6 +97,24 @@ class RssFeedItemsType extends AbstractType
                 [
                     'label' => 'ez_rss_feed.form.contenttype',
                     'choices' => $contentTypeList,
+                ]
+            )->add(
+                'chTaxonomy',
+                ChoiceType::class,
+                [
+                    'label' => 'ez_rss_feed.form.chtaxonomy',
+                    'required' => false,
+                    'choices' =>  $taxonomyByField,
+                    'empty_data' => null,
+                ]
+            )->add(
+                'taxonomy',
+                ChoiceType::class,
+                [
+                    'label' => 'ez_rss_feed.form.taxonomy',
+                    'required' => false,
+                    'choices' => $taxonomyByField,
+                    'empty_data' => null,
                 ]
             )
             ->add(
@@ -129,6 +157,28 @@ class RssFeedItemsType extends AbstractType
 
         $formModifier = function (FormInterface $form, ContentType $contentType) {
             $fieldTypeMap = $this->getFieldTypeByContentType($contentType);
+            $fieldTypeMapTax = $this->getFieldTypeByTaxonomy($contentType);
+            $taxonomyByField = $this->getTaxonomyByFieldType($fieldTypeMapTax,$contentType);
+            $form->add(
+                'chTaxonomy',
+                ChoiceType::class,
+                [
+                    'label' => 'ez_rss_feed.form.chtaxonomy',
+                    'required' => false,
+                    'choices' =>  $fieldTypeMapTax,
+                    'empty_data' => null,
+                ]
+            );
+            $form->add(
+                'taxonomy',
+                ChoiceType::class,
+                [
+                    'label' => 'ez_rss_feed.form.taxonomy',
+                    'required' => false,
+                    'choices' => $taxonomyByField,
+                    'empty_data' => null,
+                ]
+            );
             $form->add(
                 'title',
                 ChoiceType::class,
@@ -139,7 +189,7 @@ class RssFeedItemsType extends AbstractType
             );
 
             $fieldTypeMap = array_merge(['[Passer]' => ''], $fieldTypeMap);
-
+            $fieldTypeMapTax = array_merge(['[Passer]' => ''], $fieldTypeMapTax);
             $form->add(
                 'description',
                 ChoiceType::class,
@@ -176,11 +226,9 @@ class RssFeedItemsType extends AbstractType
             FormEvents::PRE_SET_DATA,
             function (FormEvent $event) use ($formModifier) {
                 $data = $event->getData();
-
                 if (null !== $data) {
                     $contentTypeId = $data->getContentTypeId();
                     $contentType = $this->contentTypeService->loadContentType($contentTypeId);
-
                     $formModifier($event->getForm(), $contentType);
                 }
             }
@@ -191,7 +239,6 @@ class RssFeedItemsType extends AbstractType
             function (FormEvent $event) use ($formModifier) {
                 $contentTypeId = $event->getData();
                 $contentType = $this->contentTypeService->loadContentType($contentTypeId);
-
                 $formModifier($event->getForm()->getParent(), $contentType);
             }
         );
@@ -232,6 +279,7 @@ class RssFeedItemsType extends AbstractType
                 $defaultContentType = $this->contentTypeService
                     ->loadContentType(array_values($contentTypesMap)[0]);
                 $this->fieldTypeMap = $this->getFieldTypeByContentType($defaultContentType);
+                $this->fieldTypeMapTax = $this->getFieldTypeByTaxonomy($defaultContentType);
             }
         } catch (NotFoundException $e) {
             return [];
@@ -250,6 +298,17 @@ class RssFeedItemsType extends AbstractType
         ksort($fieldsMap);
 
         return $fieldsMap;
+    }
+    public function getFieldTypeByTaxonomy(ContentType $contentType): array
+    {
+        $fieldsMapTax = [];
+
+        foreach ($contentType->getFieldDefinitions()->filterByType('ibexa_taxonomy_entry_assignment') as $fieldDefinition) {
+            $fieldsMapTax[ucfirst($fieldDefinition->getName())] = $fieldDefinition->identifier;
+        }
+        ksort($fieldsMapTax);
+
+        return $fieldsMapTax;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
