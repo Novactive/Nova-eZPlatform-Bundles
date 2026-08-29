@@ -132,7 +132,8 @@ class SitemapController extends Controller
                 continue;
             }
 
-            if (!str_starts_with($url, 'view/content/')) {
+            $path = (string) parse_url($url, PHP_URL_PATH);
+            if (str_starts_with($path, '/view/content/') || str_starts_with($path, 'view/content/')) {
                 continue;
             }
 
