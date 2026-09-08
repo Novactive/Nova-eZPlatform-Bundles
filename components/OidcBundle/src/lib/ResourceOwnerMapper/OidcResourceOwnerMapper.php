@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaOidc\ResourceOwnerMapper;
 
 use AlmaviaCX\Bundle\IbexaOidc\Client\Provider\OidcGenericResourceOwner;
+use Ibexa\Contracts\AdminUi\Notification\TranslatableNotificationHandlerInterface;
 use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
 use Ibexa\Contracts\Core\Repository\LanguageResolver;
 use Ibexa\Contracts\Core\Repository\Repository;
@@ -17,6 +18,7 @@ use Ibexa\Core\MVC\Symfony\Security\User;
 use Ibexa\Core\Repository\Values\ContentType\ContentType;
 use Ibexa\OAuth2Client\ResourceOwner\ResourceOwnerToExistingOrNewUserMapper;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
@@ -33,6 +35,8 @@ class OidcResourceOwnerMapper extends ResourceOwnerToExistingOrNewUserMapper
         protected LanguageResolver $languageResolver,
         protected UserService $userService,
         protected ConfigResolverInterface $configResolver,
+        protected LoggerInterface $logger,
+        protected TranslatableNotificationHandlerInterface $notificationHandler
     ) {
         parent::__construct($repository);
     }
@@ -105,11 +109,30 @@ class OidcResourceOwnerMapper extends ResourceOwnerToExistingOrNewUserMapper
             $userCreateStruct->setField($fieldDefIdentifier, $value);
         }
 
+        $userGroup = $this->getUserGroup();
         $parentGroups = [
-            $this->getUserGroup(),
+            $userGroup,
         ];
 
         $apiUser = $this->userService->createUser($userCreateStruct, $parentGroups);
+
+        $this->logger->info(
+            sprintf(
+                'An SSO user was created successfully in BO user Group,'.
+                'UserContentId:"%s" GroupUserId:"%s" ',
+                $apiUser->contentInfo->id,
+                $userGroup->contentInfo->id
+            )
+        );
+
+        $this->notificationHandler->success(
+            'sso.user_creation_confirmation',
+            [
+                '%username%' => $resourceOwner->getUsername(),
+                '%email%' => $resourceOwner->getEmail(),
+                '%usergroupname%' => $userGroup->contentInfo->name,
+            ]
+        );
 
         return $this->createSecurityUser($apiUser);
     }

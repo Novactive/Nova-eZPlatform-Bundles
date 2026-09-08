@@ -14,6 +14,8 @@ services:
             $languageResolver: '@Ibexa\Contracts\Core\Repository\LanguageResolver'
             $userService: '@Ibexa\Contracts\Core\Repository\UserService'
             $configResolver: '@Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface'
+            $logger: '@monolog.logger.sso'
+            $notificationHandler: '@Ibexa\AdminUi\Notification\TranslatableNotificationHandler'
         tags:
             - { name: ibexa.oauth2_client.resource_owner_mapper, identifier: oidc }
 
