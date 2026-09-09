@@ -21,6 +21,7 @@ use Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException;
 use Ibexa\Contracts\Core\Repository\Values\ContentType\FieldDefinition;
 use Ibexa\Core\Base\Exceptions\InvalidArgumentType;
 use Ibexa\Core\FieldType\Image\Type as ImageType;
+use Ibexa\Core\FieldType\Image\Value as BaseImageValue;
 use Ibexa\Core\FieldType\Value as BaseValue;
 
 /**
@@ -69,6 +70,24 @@ class Type extends ImageType
             }
 
             $inputValue = new Value($inputValue);
+        }
+
+        if ($inputValue instanceof BaseImageValue) {
+            return new Value(
+                [
+                    'id' => $inputValue->id,
+                    'alternativeText' => $inputValue->alternativeText,
+                    'fileName' => $inputValue->fileName,
+                    'fileSize' => $inputValue->fileSize,
+                    'uri' => $inputValue->uri,
+                    'imageId' => $inputValue->imageId,
+                    'inputUri' => $inputValue->inputUri,
+                    'width' => $inputValue->width,
+                    'height' => $inputValue->height,
+                    'additionalData' => $inputValue->additionalData,
+                    'mime' => $inputValue->mime,
+                ]
+            );
         }
 
         return $inputValue;
