@@ -14,7 +14,6 @@ use Ibexa\Contracts\Core\Repository\Values\User\User as APIUser;
 use Ibexa\Contracts\Core\Repository\Values\User\UserGroup;
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Ibexa\Contracts\OAuth2Client\Repository\OAuth2UserService;
-use Ibexa\Core\MVC\Symfony\Security\User;
 use Ibexa\Core\Repository\Values\ContentType\ContentType;
 use Ibexa\OAuth2Client\ResourceOwner\ResourceOwnerToExistingOrNewUserMapper;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
@@ -27,7 +26,7 @@ class OidcResourceOwnerMapper extends ResourceOwnerToExistingOrNewUserMapper
     public const LOAD_METHOD_LOGIN = 'loadUserByLogin';
     public const LOAD_METHOD_EMAIL = 'loadUserByEmail';
 
-    public const PROVIDER_PREFIX = 'oidc:';
+    public const PROVIDER_PREFIX = 'oidc';
 
     public function __construct(
         Repository $repository,
@@ -51,18 +50,10 @@ class OidcResourceOwnerMapper extends ResourceOwnerToExistingOrNewUserMapper
         try {
             $apiUser = $this->loadApiUser($resourceOwner);
 
-            return $this->createSecurityUser($apiUser);
+            return $userProvider->loadUserByUsername($apiUser->getLogin());
         } catch (NotFoundException $e) {
             return $userProvider->loadUserByUsername($resourceOwner->getUsername());
         }
-    }
-
-    /**
-     * Creates user object, usable by Symfony Security component, from a user object returned by Public API.
-     */
-    protected function createSecurityUser(APIUser $apiUser): User
-    {
-        return new User($apiUser, ['ROLE_USER']);
     }
 
     /**
@@ -134,7 +125,7 @@ class OidcResourceOwnerMapper extends ResourceOwnerToExistingOrNewUserMapper
             ]
         );
 
-        return $this->createSecurityUser($apiUser);
+        return $userProvider->loadUserByUsername($apiUser->getLogin());
     }
 
     /**
@@ -145,8 +136,10 @@ class OidcResourceOwnerMapper extends ResourceOwnerToExistingOrNewUserMapper
         $attributesMap = $this->configResolver->getParameter('user_attributes_mapping', 'almaviacx.oidc.config');
 
         $attributes = [];
-        foreach ($attributesMap as $target => $source) {
-            $attributes[$target] = $resourceOwner->getAttributeValue($source);
+        if ($attributesMap) {
+            foreach ($attributesMap as $target => $source) {
+                $attributes[$target] = $resourceOwner->getAttributeValue($source);
+            }
         }
 
         return $attributes;

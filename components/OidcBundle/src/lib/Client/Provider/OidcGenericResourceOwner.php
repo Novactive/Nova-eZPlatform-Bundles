@@ -36,7 +36,11 @@ class OidcGenericResourceOwner implements ResourceOwnerInterface
             return $this->response['preferred_username'];
         }
 
-        return OidcResourceOwnerMapper::PROVIDER_PREFIX.$this->getId();
+        return sprintf(
+            '%s-%s',
+            OidcResourceOwnerMapper::PROVIDER_PREFIX,
+            $this->getId()
+        );
     }
 
     public function getEmail()
