@@ -1,0 +1,235 @@
+# Create "Site skeleton" section
+-
+    type: section
+    mode: create
+    metadata:
+        identifier: site_skeleton
+        name: Site skeleton
+
+-
+    type: content
+    mode: create
+    metadata:
+        contentType: folder
+        mainTranslation: fre-FR
+        alwaysAvailable: true
+        section:
+            identifier: site_skeleton
+    location:
+        parentLocationId: 15303
+        locationRemoteId: minisite_1_skeleton_root
+        hidden: false
+        sortField: 1
+        sortOrder: 1
+        priority: 0
+    fields:
+        -
+            fieldDefIdentifier: name
+            languageCode: fre-FR
+            value: 'Theme 1'
+-
+    type: content
+    mode: create
+    metadata:
+        contentType: minisite_homepage
+        mainTranslation: fre-FR
+        alwaysAvailable: true
+        section:
+            identifier: site_skeleton
+    location:
+        parentLocationRemoteId: minisite_1_skeleton_root
+        locationRemoteId: minisite_1_homepage
+        hidden: false
+        sortField: 2
+        sortOrder: 0
+        priority: 0
+    fields:
+        -
+            fieldDefIdentifier: name
+            languageCode: fre-FR
+            value: Accueil
+        -
+            fieldDefIdentifier: name
+            languageCode: eng-GB
+            value: Home
+        -
+            fieldDefIdentifier: blocks
+            languageCode: fre-FR
+            value:
+                layout: default
+                zones:
+                    - { id: '1', name: 'Colonne centrale', blocks: {  } }
+        -
+            fieldDefIdentifier: blocks
+            languageCode: eng-GB
+            value:
+                layout: default
+                zones:
+                    - { id: '2', name: 'Colonne centrale', blocks: {  } }
+-
+    type: content
+    mode: create
+    metadata:
+        contentType: minisite_configuration
+        mainTranslation: fre-FR
+        alwaysAvailable: true
+        section:
+            identifier: site_skeleton
+    location:
+        parentLocationRemoteId: minisite_1_skeleton_root
+        locationRemoteId: minisite_1_configuration
+        hidden: false
+        sortField: 2
+        sortOrder: 0
+        priority: 0
+    fields:
+        -
+            fieldDefIdentifier: name
+            languageCode: fre-FR
+            value: Configuration
+        -
+            fieldDefIdentifier: site_name
+            languageCode: fre-FR
+            value: Site 1
+        -
+            fieldDefIdentifier: name
+            languageCode: eng-GB
+            value: Configuration
+        -
+            fieldDefIdentifier: header_menu_links
+            languageCode: fre-FR
+            value:
+                entries:
+                    - { label: Agenda, url: /agenda }
+        -
+            fieldDefIdentifier: header_menu_links
+            languageCode: eng-GB
+            value:
+                entries:
+                    - { label: Agenda, url: /agenda }
+        -
+            fieldDefIdentifier: footer_menu_links
+            languageCode: fre-FR
+            value:
+                entries:
+                    - { label: Cookies, url: /cookies }
+                    - { label: 'Mentions légales', url: /mentions-legales }
+        -
+            fieldDefIdentifier: footer_menu_links
+            languageCode: eng-GB
+            value:
+                entries:
+                    - { label: Cookies, url: /cookies }
+                    - { label: 'Legal notice', url: /legal-notice }
+        -
+            fieldDefIdentifier: facebook_url
+            languageCode: fre-FR
+            value: null
+        -
+            fieldDefIdentifier: twitter_url
+            languageCode: fre-FR
+            value: null
+        -
+            fieldDefIdentifier: linkedin_url
+            languageCode: fre-FR
+            value: null
+        -
+            fieldDefIdentifier: youtube_url
+            languageCode: fre-FR
+            value: null
+        -
+            fieldDefIdentifier: copyright
+            languageCode: fre-FR
+            value: null
+-
+    type: content
+    mode: create
+    metadata:
+        contentType: article
+        mainTranslation: fre-FR
+        alwaysAvailable: false
+        section:
+            identifier: site_skeleton
+    location:
+        parentLocationRemoteId: minisite_1_homepage
+        hidden: false
+        sortField: 2
+        sortOrder: 0
+        priority: 0
+    fields:
+        -
+            fieldDefIdentifier: title
+            languageCode: fre-FR
+            value: Cookies
+        -
+            fieldDefIdentifier: title
+            languageCode: eng-GB
+            value: Cookies
+-
+    type: content
+    mode: create
+    metadata:
+        contentType: article
+        mainTranslation: fre-FR
+        alwaysAvailable: false
+        section:
+            identifier: site_skeleton
+    location:
+        parentLocationRemoteId: minisite_1_homepage
+        hidden: false
+        sortField: 2
+        sortOrder: 0
+        priority: 0
+    fields:
+        -
+            fieldDefIdentifier: title
+            languageCode: fre-FR
+            value: 'Mentions légales'
+        -
+            fieldDefIdentifier: title
+            languageCode: eng-GB
+            value: 'Legal notice'
+-
+    type: content
+    mode: create
+    metadata:
+        contentType: event_list
+        mainTranslation: fre-FR
+        alwaysAvailable: false
+        section:
+            identifier: site_skeleton
+    location:
+        parentLocationRemoteId: minisite_1_homepage
+        hidden: false
+        sortField: 2
+        sortOrder: 0
+        priority: 0
+    fields:
+        -
+            fieldDefIdentifier: title
+            languageCode: fre-FR
+            value: Agenda
+        -
+            fieldDefIdentifier: title
+            languageCode: eng-GB
+            value: Agenda
+-
+    type: content
+    mode: create
+    metadata:
+        contentType: folder
+        mainTranslation: fre-FR
+        alwaysAvailable: false
+        section:
+            identifier: site_skeleton
+    location:
+        parentLocationRemoteId: minisite_1_skeleton_root
+        hidden: false
+        sortField: 1
+        sortOrder: 1
+        priority: 0
+    fields:
+        -
+            fieldDefIdentifier: name
+            languageCode: fre-FR
+            value: Contenus transverses

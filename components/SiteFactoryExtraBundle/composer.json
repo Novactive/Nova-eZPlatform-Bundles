@@ -1,0 +1,31 @@
+{
+  "name": "almaviacx/ibexasitefactoryextrabundle",
+  "description": "Bundle that add a way to connect to Ibexa using the OIDC protocol",
+  "keywords": [
+    "ibexa",
+    "bundle"
+  ],
+  "homepage": "https://github.com/Novactive/AlmaviaCXIbexaSiteFactoryExtraBundle",
+  "type": "ibexa-bundle",
+  "authors": [
+    {
+      "name": "AlmaviaCX",
+      "homepage": "https://almaviacx.com/expertises/web-mobile/",
+      "email": "dirtech.web@almaviacx.com"
+    }
+  ],
+  "license": [
+    "MIT"
+  ],
+  "require": {
+    "php": "^7.4 || ^8.0",
+    "ibexa/oauth2-client": "^4.0",
+    "symfony/messenger": "5.4.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "AlmaviaCX\\Bundle\\IbexaSiteFactoryExtraBundle\\": "src/bundle",
+      "AlmaviaCX\\Bundle\\IbexaSiteFactoryExtra\\": "src/lib"
+    }
+  }
+}
