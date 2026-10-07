@@ -1,0 +1,17 @@
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    AlmaviaCX\Bundle\IbexaSiteFactoryExtra\Event\:
+        resource: '../../../lib/Event/*'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    AlmaviaCX\Bundle\IbexaSiteFactoryExtra\MessageHandler\:
+        resource: '../../../lib/MessageHandler/*'
+
+    AlmaviaCX\Bundle\IbexaSiteFactoryExtra\MessageHandler\UpdatePublicAccessesMessageHandler:
+        arguments:
+            $publicAccessService: '@Ibexa\SiteFactory\Service\PublicAccessService'
