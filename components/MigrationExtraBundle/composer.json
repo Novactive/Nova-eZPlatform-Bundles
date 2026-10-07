@@ -1,0 +1,30 @@
+{
+  "name": "almaviacx/ibexamigrationextrabundle",
+  "description": "Bundle that add extra steps and actions to the migration process of Ibexa DXP",
+  "keywords": [
+    "ibexa",
+    "bundle"
+  ],
+  "homepage": "https://github.com/Novactive/AlmaviaCXIbexaMigrationExtraBundle",
+  "type": "ibexa-bundle",
+  "authors": [
+    {
+      "name": "AlmaviaCX",
+      "homepage": "https://almaviacx.com/expertises/web-mobile/",
+      "email": "dirtech.web@almaviacx.com"
+    }
+  ],
+  "license": [
+    "MIT"
+  ],
+  "require": {
+    "php": "^7.4 || ^8.0",
+    "ibexa/oauth2-client": "^4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "AlmaviaCX\\Bundle\\IbexaMigrationExtraBundle\\": "src/bundle",
+      "AlmaviaCX\\Bundle\\IbexaMigrationExtra\\": "src/lib"
+    }
+  }
+}
