@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Taxonomy;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentUpdater;
+use AlmaviaCX\Bundle\IbexaImportExport\Writer\Utils\Checksum;
 use Ibexa\Contracts\Taxonomy\Service\TaxonomyServiceInterface;
 use Ibexa\Contracts\Taxonomy\Value\TaxonomyEntry;
 use Ibexa\Core\FieldType\TextLine\Value as TextLineValue;
@@ -52,6 +53,7 @@ class IbexaTaxonomyUpdater
             $entry->getContent(),
             $fields,
             [$parent->content->contentInfo->getMainLocation()],
+            new Checksum(),
             $ownerId,
             $mainLanguageCode,
             $hidden

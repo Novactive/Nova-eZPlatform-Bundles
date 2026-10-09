@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Taxonomy;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentCreator;
+use AlmaviaCX\Bundle\IbexaImportExport\Writer\Utils\Checksum;
 use DateTime;
 use Ibexa\Contracts\Taxonomy\Service\TaxonomyServiceInterface;
 use Ibexa\Contracts\Taxonomy\Value\TaxonomyEntry;
@@ -69,6 +70,7 @@ class IbexaTaxonomyCreator
             [$parent->content->contentInfo->getMainLocation()],
             $fields,
             $remoteId,
+            new Checksum(),
             $ownerId,
             $mainLanguageCode,
             $sectionId,
