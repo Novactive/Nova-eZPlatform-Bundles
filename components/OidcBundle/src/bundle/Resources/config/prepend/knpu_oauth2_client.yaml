@@ -1,0 +1,24 @@
+clients:
+    oidc:
+        type: generic
+        provider_class: AlmaviaCX\Bundle\IbexaOidc\Client\Provider\OidcGenericProvider
+
+        client_id: '%env(resolve:OIDC_CLIENT_ID)%'
+        client_secret: '%env(resolve:OIDC_CLIENT_SECRET)%'
+
+        redirect_route: ibexa.oauth2.check
+        redirect_params:
+            identifier: oidc
+
+        provider_options:
+            urlAuthorize: '%env(resolve:OIDC_URL_AUTHORIZE)%'
+            urlAccessToken: '%env(resolve:OIDC_URL_ACCESS_TOKEN)%'
+            urlResourceOwnerDetails: '%env(resolve:OIDC_URL_RESOURCE_OWNER_DETAILS)%'
+            accessTokenMethod: '%env(resolve:OIDC_ACCESS_TOKEN_METHOD)%'
+            accessTokenResourceOwnerId: '%env(resolve:OIDC_ACCESS_TOKEN_RESOURCE_OWNER_ID)%'
+            scopeSeparator: '%env(resolve:OIDC_SCOPE_SEPARATOR)%'
+            responseError: '%env(resolve:OIDC_RESPONSE_ERROR)%'
+            responseCode: '%env(resolve:OIDC_RESPONSE_CODE)%'
+            responseResourceOwnerId: '%env(resolve:OIDC_RESPONSE_RESOURCE_OWNER_ID)%'
+            scopes: '%env(resolve:OIDC_SCOPES)%'
+            pkceMethod: '%env(resolve:OIDC_PKCE_METHOD)%'

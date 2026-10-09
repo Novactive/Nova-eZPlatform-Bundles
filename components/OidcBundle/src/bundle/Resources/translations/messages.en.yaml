@@ -1,0 +1,2 @@
+sso.login: Log in via SSO
+sso.user_creation_confirmation: 'Your BO Account with Login: "%username%" and Email: "%email%" has been successfully created in the Group "%usergroupname%".'
