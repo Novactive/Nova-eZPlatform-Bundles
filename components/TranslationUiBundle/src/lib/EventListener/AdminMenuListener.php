@@ -6,8 +6,8 @@ namespace AlmaviaCX\Bundle\IbexaTranslationUi\EventListener;
 
 use Ibexa\AdminUi\Menu\Event\ConfigureMenuEvent;
 use Ibexa\AdminUi\Menu\MainMenuBuilder;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Ibexa\Contracts\Core\Repository\PermissionResolver;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class AdminMenuListener implements EventSubscriberInterface
 {

@@ -11,7 +11,7 @@ final class TranslationPolicyProvider extends YamlPolicyProvider
     protected function getFiles(): array
     {
         return [
-            __DIR__ . '/../../Resources/config/policies.yml',
+            __DIR__.'/../../Resources/config/policies.yml',
         ];
     }
 }
