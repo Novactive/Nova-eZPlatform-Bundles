@@ -1,0 +1,3 @@
+role.policy.translation: 'Translation management'
+role.policy.translation.all_functions: 'Translation management / All functions'
+role.policy.translation.manage: 'Manage translations'

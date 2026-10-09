@@ -7,5 +7,11 @@ services:
       - [ 'setDefaultTranslator', [ '@translator.default' ] ]
 
   AlmaviaCX\Bundle\IbexaTranslationUi\EventListener\AdminMenuListener:
+    autowire: true
+    tags:
+      - { name: kernel.event_subscriber }
+
+  AlmaviaCX\Bundle\IbexaTranslationUi\EventListener\TranslationAccessListener:
+    autowire: true
     tags:
       - { name: kernel.event_subscriber }
