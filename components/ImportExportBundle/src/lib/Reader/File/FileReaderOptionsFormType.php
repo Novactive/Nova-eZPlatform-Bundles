@@ -17,7 +17,7 @@ class FileReaderOptionsFormType extends ReaderOptionsFormType
         parent::buildForm($builder, $options);
 
         $builder->add('file', FileType::class, [
-            'label' => /* @Desc("File") */ 'file_reader.form.options.file.label',
+            'label' => /* @Desc("File") */ 'file_reader_input.form.options.file.label',
         ]);
     }
 
@@ -25,8 +25,8 @@ class FileReaderOptionsFormType extends ReaderOptionsFormType
     {
         parent::configureOptions($resolver);
         $resolver->setDefaults([
-                                    'data_class' => AbstractFileReader::getOptionsType(),
-                                    'translation_domain' => 'forms',
-                                ]);
+                                   'data_class' => FileReaderOptions::class,
+                                   'translation_domain' => 'forms',
+                               ]);
     }
 }

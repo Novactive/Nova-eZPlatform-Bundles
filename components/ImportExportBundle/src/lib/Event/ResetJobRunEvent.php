@@ -4,19 +4,17 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Event;
 
-use AlmaviaCX\Bundle\IbexaImportExport\Job\Job;
+use AlmaviaCX\Bundle\IbexaImportExport\Execution\Execution;
 
 class ResetJobRunEvent
 {
-    protected Job $job;
-
-    public function __construct(Job $job)
-    {
-        $this->job = $job;
+    public function __construct(
+        protected Execution $execution
+    ) {
     }
 
-    public function getJob(): Job
+    public function getExecution(): Execution
     {
-        return $this->job;
+        return $this->execution;
     }
 }

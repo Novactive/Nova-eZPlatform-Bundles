@@ -12,12 +12,9 @@ use Ibexa\Core\FieldType\RelationList\Value as RelationListValue;
 
 class RelationListFieldValueTransformer implements FieldValueTransformerInterface
 {
-    protected ContentAccessorBuilder $contentAccessorBuilder;
-
     public function __construct(
-        ContentAccessorBuilder $contentAccessorBuilder
+        protected ContentAccessorBuilder $contentAccessorBuilder
     ) {
-        $this->contentAccessorBuilder = $contentAccessorBuilder;
     }
 
     /**

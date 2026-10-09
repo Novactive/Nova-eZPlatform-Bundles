@@ -8,11 +8,9 @@ use AlmaviaCX\Bundle\IbexaImportExport\Job\Job;
 
 class PostJobCreateFormSubmitEvent
 {
-    protected Job $job;
-
-    public function __construct(Job $job)
-    {
-        $this->job = $job;
+    public function __construct(
+        protected Job $job
+    ) {
     }
 
     public function getJob(): Job

@@ -13,5 +13,8 @@ use AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderOptions;
 class IbexaContentListReaderOptions extends ReaderOptions
 {
     protected ?int $parentLocationId = null;
+    /**
+     * @var array<int|string>
+     */
     protected array $contentTypes = [];
 }

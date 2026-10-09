@@ -23,4 +23,9 @@ class WorkflowConsoleLogger extends ConsoleLogger implements WorkflowLoggerInter
     {
         return [];
     }
+
+    public function clearRecords(): void
+    {
+        return;
+    }
 }

@@ -1,0 +1,29 @@
+{# @var reader \AlmaviaCX\Bundle\IbexaImportExport\Reader\Json\JsonReader #}
+<section id="reader-details" class="container ibexa-container">
+    {% embed '@ibexadesign/ui/component/details/details.html.twig' %}
+        {% block details_header %}
+            <div class="ibexa-details__header">
+                {% include '@ibexadesign/ui/component/table/table_header.html.twig' with {
+                    headline: 'tab.details.reader_details.json.headline'|trans()|desc('Input')
+                } %}
+            </div>
+        {% endblock %}
+        {% block details_items %}
+            {% set json = reader.options.getJson() %}
+
+            <andypf-json-viewer
+                    indent="4"
+                    expanded="{{ json|length > 10 ? 0 : 1 }}"
+                    theme="default-dark"
+                    show-data-types="true"
+                    show-toolbar="false"
+                    expand-icon-type="square"
+                    show-copy="false"
+                    show-size="true"
+            >
+                {{ json|json_encode() }}
+            </andypf-json-viewer>
+        {% endblock %}
+    {% endembed %}
+</section>
+

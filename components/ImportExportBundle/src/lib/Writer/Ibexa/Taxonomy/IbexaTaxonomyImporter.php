@@ -11,24 +11,31 @@ use Ibexa\Taxonomy\Exception\TaxonomyEntryNotFoundException;
 
 class IbexaTaxonomyImporter
 {
-    protected Repository $repository;
-    protected TaxonomyServiceInterface $taxonomyService;
-    protected IbexaTaxonomyCreator $taxonomyCreator;
-    protected IbexaTaxonomyUpdater $taxonomyUpdater;
-
     public function __construct(
-        Repository $repository,
-        TaxonomyServiceInterface $taxonomyService,
-        IbexaTaxonomyCreator $taxonomyCreator,
-        IbexaTaxonomyUpdater $taxonomyUpdater,
+        protected Repository $repository,
+        protected TaxonomyServiceInterface $taxonomyService,
+        protected IbexaTaxonomyCreator $taxonomyCreator,
+        protected IbexaTaxonomyUpdater $taxonomyUpdater,
     ) {
-        $this->taxonomyUpdater = $taxonomyUpdater;
-        $this->taxonomyCreator = $taxonomyCreator;
-        $this->taxonomyService = $taxonomyService;
-        $this->repository = $repository;
     }
 
-    public function __invoke(IbexaTaxonomyData $ibexaTaxonomyData, bool $allowUpdate = true): TaxonomyEntry
+    /**
+     * @param \AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Taxonomy\IbexaTaxonomyData $ibexaTaxonomyData
+     *
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\BadStateException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\ContentFieldValidationException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\ContentValidationException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException
+     * @throws \Ibexa\Taxonomy\Exception\TaxonomyConfigurationNotFoundException
+     * @throws \Ibexa\Taxonomy\Exception\TaxonomyEntryNotFoundException
+     * @throws \Ibexa\Taxonomy\Exception\TaxonomyNotFoundException
+     * @throws \Throwable
+     *
+     * @return array{action: ?string, taxonomyEntry: TaxonomyEntry}|null
+     */
+    public function __invoke(IbexaTaxonomyData $ibexaTaxonomyData): ?array
     {
         $remoteId = $ibexaTaxonomyData->getContentRemoteId();
         $ownerId = $ibexaTaxonomyData->getOwnerId();
@@ -49,19 +56,42 @@ class IbexaTaxonomyImporter
                     $ibexaTaxonomyData->getIdentifier(),
                     $ibexaTaxonomyData->getTaxonomyName()
                 );
-                if (!$allowUpdate) {
-                    return $taxonomyEntry;
+
+                if (
+                    !in_array($ibexaTaxonomyData->getImportMode(), [
+                    IbexaTaxonomyData::IMPORT_MODE_ONLY_UPDATE,
+                    IbexaTaxonomyData::IMPORT_MODE_UPDATE_AND_CREATE_IF_NOT_EXISTS,
+                    ])
+                ) {
+                    return [
+                        'action' => null,
+                        'taxonomyEntry' => $taxonomyEntry,
+                    ];
                 }
 
-                return ($this->taxonomyUpdater)(
+                $taxonomyEntry = ($this->taxonomyUpdater)(
                     $taxonomyEntry,
                     $parent,
                     $ibexaTaxonomyData->getNames(),
                     $ownerId,
                     $ibexaTaxonomyData->getMainLanguageCode()
                 );
+
+                return [
+                    'action' => 'update',
+                    'taxonomyEntry' => $taxonomyEntry,
+                ];
             } catch (TaxonomyEntryNotFoundException $exception) {
-                return ($this->taxonomyCreator)(
+                if (
+                    !in_array($ibexaTaxonomyData->getImportMode(), [
+                    IbexaTaxonomyData::IMPORT_MODE_CREATE_ONLY,
+                    IbexaTaxonomyData::IMPORT_MODE_UPDATE_AND_CREATE_IF_NOT_EXISTS,
+                    ])
+                ) {
+                    return null;
+                }
+
+                $taxonomyEntry = ($this->taxonomyCreator)(
                     $ibexaTaxonomyData->getIdentifier(),
                     $parent,
                     $ibexaTaxonomyData->getNames(),
@@ -71,6 +101,11 @@ class IbexaTaxonomyImporter
                     $ibexaTaxonomyData->getSectionId(),
                     $ibexaTaxonomyData->getModificationDate()
                 );
+
+                return [
+                    'action' => 'create',
+                    'taxonomyEntry' => $taxonomyEntry,
+                ];
             }
         } catch (\Throwable $exception) {
             dump($exception, $ibexaTaxonomyData);

@@ -7,34 +7,38 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\File;
 use Countable;
 use SeekableIterator;
 
+/**
+ * @template TValue
+ * @implements SeekableIterator<int, TValue>
+ */
 class FileReadIterator implements SeekableIterator, Countable
 {
-    /** @var resource */
-    protected $stream;
-    /** @var string|false */
+    /** @var TValue */
     protected $line;
     protected int $lineNumber = 0;
-    protected int $firstLineNumber = 0;
 
     /**
      * @param resource $stream
      */
-    public function __construct($stream, int $firstLineNumber = 0)
-    {
-        $this->stream = $stream;
-        $this->firstLineNumber = $firstLineNumber;
+    public function __construct(
+        protected $stream,
+        protected int $firstLineNumber = 0
+    ) {
         $this->lineNumber = $firstLineNumber;
     }
 
     /**
-     * @return string|false
+     * @return TValue
      */
     protected function getLine()
     {
         return fgets($this->stream);
     }
 
-    public function seek($offset)
+    /**
+     * @param int $offset
+     */
+    public function seek($offset): void
     {
         fseek($this->stream, 0);
         if ($offset > 0) {
@@ -46,7 +50,7 @@ class FileReadIterator implements SeekableIterator, Countable
         $this->line = $this->getLine();
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         $this->seek($this->firstLineNumber);
     }
@@ -57,9 +61,9 @@ class FileReadIterator implements SeekableIterator, Countable
     }
 
     /**
-     * @return false|string
+     * @return TValue
      */
-    public function current()
+    public function current(): mixed
     {
         return $this->line;
     }
@@ -69,7 +73,7 @@ class FileReadIterator implements SeekableIterator, Countable
         return $this->lineNumber;
     }
 
-    public function next()
+    public function next(): void
     {
         if (false !== $this->line) {
             $this->line = $this->getLine();

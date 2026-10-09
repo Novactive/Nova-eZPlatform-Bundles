@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content;
 
+use AlmaviaCX\Bundle\IbexaImportExport\Writer\Utils\Checksum;
 use Exception;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location;
@@ -11,7 +12,8 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 class IbexaContentUpdater extends AbstractIbexaContentHandler
 {
     /**
-     * @param array<string, mixed> $fieldsByLanguages
+     * @param array<string, mixed>                   $fieldsByLanguages
+     * @param array<int|string, Location|string|int> $parentLocationIdList
      *
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\BadStateException
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\ContentFieldValidationException
@@ -24,44 +26,61 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
         Content $content,
         array $fieldsByLanguages,
         array $parentLocationIdList,
+        Checksum $checksum,
         int $ownerId = null,
         string $mainLanguageCode = 'eng-GB',
-        bool $hidden = false
+        bool|null $hidden = null,
+        bool $allowMove = false
     ): Content {
-        $contentType = $this->repository->getContentTypeService()->loadContentType(
-            $content->contentInfo->contentTypeId
-        );
+        $doUpdate = $this->doContentNeedUpdate($content, $checksum);
+        if ($doUpdate) {
+            $contentType = $this->repository->getContentTypeService()->loadContentType(
+                $content->contentInfo->contentTypeId
+            );
 
-        $contentInfo = $content->contentInfo;
-        $contentDraft = $this->repository->getContentService()->createContentDraft($contentInfo);
+            $contentInfo = $content->contentInfo;
+            $contentDraft = $this->repository->getContentService()->createContentDraft($contentInfo);
 
-        /* Creating new content update structure */
-        $contentUpdateStruct = $this->repository
-            ->getContentService()
-            ->newContentUpdateStruct();
-        $contentUpdateStruct->initialLanguageCode = $mainLanguageCode; // set language for new version
-        $contentUpdateStruct->creatorId = $ownerId;
+            /* Creating new content update structure */
+            $contentUpdateStruct = $this->repository
+                ->getContentService()
+                ->newContentUpdateStruct();
+            $contentUpdateStruct->initialLanguageCode = $mainLanguageCode; // set language for new version
+            $contentUpdateStruct->creatorId = $ownerId;
 
-        $this->setContentFields(
-            $contentType,
-            $contentUpdateStruct,
-            $fieldsByLanguages,
-        );
+            $this->setContentFields(
+                $contentType,
+                $contentUpdateStruct,
+                $fieldsByLanguages,
+            );
 
-        $contentDraft = $this->repository->getContentService()->updateContent(
-            $contentDraft->versionInfo,
-            $contentUpdateStruct
-        );
+            $contentDraft = $this->repository->getContentService()->updateContent(
+                $contentDraft->versionInfo,
+                $contentUpdateStruct
+            );
 
-        /* Publish the new content draft */
-        $publishedContent = $this->repository->getContentService()->publishVersion($contentDraft->versionInfo);
+            /* Publish the new content draft */
+            $content = $this->repository->getContentService()->publishVersion($contentDraft->versionInfo);
 
-        $this->handleLocations($content, $parentLocationIdList, $hidden);
+            $this->saveContentChecksum($content, $checksum);
+        }
 
-        return $publishedContent;
+        if ($allowMove) {
+            $this->handleLocations($content, $parentLocationIdList, $hidden);
+        } elseif (null !== $hidden) {
+            $this->handleLocationsVisibility($content, $hidden);
+        }
+
+        return $content;
     }
 
-    protected function handleLocations(Content $content, array $parentLocationIdList, bool $hidden): void
+    /**
+     * @param array<int|string, Location|string|int> $parentLocationIdList
+     *
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\BadStateException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException
+     */
+    protected function handleLocations(Content $content, array $parentLocationIdList, bool|null $hidden): void
     {
         $existingLocations = $this->repository->getLocationService()->loadLocations($content->contentInfo);
         $locationsToKeep = [];
@@ -85,12 +104,19 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
         }
     }
 
+    /**
+     * @param Location[] $existingLocations
+     *
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException
+     */
     protected function handleLocation(
         Content $content,
-        $parentLocationId,
-        $locationRemoteId,
+        Location|int|string $parentLocationId,
+        int|string $locationRemoteId,
         array $existingLocations,
-        bool $hidden
+        bool|null $hidden
     ): Location {
         if ($parentLocationId instanceof Location) {
             $parentLocationId = $parentLocationId->id;
@@ -103,6 +129,14 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
 
         foreach ($existingLocations as $existingLocation) {
             if ($existingLocation->parentLocationId === $parentLocationId) {
+                if (null !== $hidden && $existingLocation->hidden !== $hidden) {
+                    if ($hidden) {
+                        $this->repository->getLocationService()->hideLocation($existingLocation);
+                    } else {
+                        $this->repository->getLocationService()->unhideLocation($existingLocation);
+                    }
+                }
+
                 return $existingLocation;
             }
         }
@@ -113,7 +147,7 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
         if (is_string($locationRemoteId)) {
             $locationCreateStruct->remoteId = $locationRemoteId;
         }
-        if ($hidden) {
+        if (true === $hidden) {
             $locationCreateStruct->hidden = true;
         }
 
@@ -121,5 +155,23 @@ class IbexaContentUpdater extends AbstractIbexaContentHandler
             $content->contentInfo,
             $locationCreateStruct
         );
+    }
+
+    /**
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\BadStateException
+     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException
+     */
+    protected function handleLocationsVisibility(Content $content, bool $hidden): void
+    {
+        $existingLocations = $this->repository->getLocationService()->loadLocations($content->contentInfo);
+        foreach ($existingLocations as $existingLocation) {
+            if ($existingLocation->hidden !== $hidden) {
+                if ($hidden) {
+                    $this->repository->getLocationService()->hideLocation($existingLocation);
+                } else {
+                    $this->repository->getLocationService()->unhideLocation($existingLocation);
+                }
+            }
+        }
     }
 }

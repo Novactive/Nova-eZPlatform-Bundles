@@ -11,13 +11,10 @@ use Twig\Environment;
 
 class NotificationRenderer implements NotificationRendererInterface
 {
-    protected RouterInterface $router;
-    protected Environment $twig;
-
-    public function __construct(Environment $twig, RouterInterface $router)
-    {
-        $this->twig = $twig;
-        $this->router = $router;
+    public function __construct(
+        protected Environment $twig,
+        protected RouterInterface $router
+    ) {
     }
 
     public function render(Notification $notification): string

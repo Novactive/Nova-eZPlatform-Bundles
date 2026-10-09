@@ -12,7 +12,7 @@ return (new PhpCsFixer\Config())->setRules(
         'phpdoc_no_package' => false,
         'phpdoc_inline_tag_normalizer' => false,
         'cast_spaces' => false,
-        'no_superfluous_phpdoc_tags' => true,
+        'no_superfluous_phpdoc_tags' => ['allow_mixed' => true],
         'single_line_throw' => false,
     ]
 )->setFinder($finder);

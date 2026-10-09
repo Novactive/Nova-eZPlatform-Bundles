@@ -7,35 +7,30 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content;
 use AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\ObjectAccessorBuilder;
 use AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\ItemTransformer;
 use AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\SourceResolver;
-use AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag;
 use AlmaviaCX\Bundle\IbexaImportExport\Writer\AbstractWriter;
 use Ibexa\Contracts\Core\Repository\Exceptions\ContentFieldValidationException;
 use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content;
 use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Translation\TranslationContainerInterface;
 use Symfony\Component\Translation\TranslatableMessage;
 
+/**
+ * @extends AbstractWriter<IbexaContentWriterOptions>
+ */
 class IbexaContentWriter extends AbstractWriter implements TranslationContainerInterface
 {
-    protected Repository $repository;
-    protected IbexaContentImporter $contentImporter;
-    protected ObjectAccessorBuilder $objectAccessorBuilder;
-
     public function __construct(
-        Repository $repository,
-        IbexaContentImporter $contentImporter,
-        ObjectAccessorBuilder $objectAccessorBuilder,
+        protected Repository $repository,
+        protected IbexaContentImporter $contentImporter,
+        protected ObjectAccessorBuilder $objectAccessorBuilder,
         SourceResolver $sourceResolver,
         ItemTransformer $itemTransformer,
-        ReferenceBag $references
     ) {
-        $this->repository = $repository;
-        $this->contentImporter = $contentImporter;
-        $this->objectAccessorBuilder = $objectAccessorBuilder;
-        parent::__construct($sourceResolver, $itemTransformer, $references);
+        parent::__construct($sourceResolver, $itemTransformer);
     }
 
-    protected function getMappedItemInstance()
+    protected function getMappedItemInstance(): IbexaContentData
     {
         return new IbexaContentData();
     }
@@ -47,33 +42,39 @@ class IbexaContentWriter extends AbstractWriter implements TranslationContainerI
      */
     protected function writeItem($item, $mappedItem)
     {
-        /** @var \AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentWriterOptions $options */
-        $options = $this->getOptions();
-
-        $content = $this->repository->sudo(function (Repository $repository) use ($options, $mappedItem) {
+        /** @var array{action: string, content: Content}|null $contentImportResult */
+        $contentImportResult = $this->repository->sudo(function (Repository $repository) use ($mappedItem) {
             try {
-                return ($this->contentImporter)($mappedItem, $options->allowUpdate);
+                return ($this->contentImporter)($mappedItem);
             } catch (ContentFieldValidationException $exception) {
                 $newException = \Ibexa\Core\Base\Exceptions\ContentFieldValidationException::createNewWithMultiline(
                     $exception->getFieldErrors(),
                     $mappedItem->getContentRemoteId()
                 );
-                $this->logger->notice('----> '.get_class($newException));
-                $this->logger->notice($newException->getMessage());
-                $this->logger->notice(print_r($newException->getFieldErrors(), true));
-                $this->logger->notice(print_r($newException->getTraceAsString(), true));
+                $this->logger->error($newException->getMessage());
 
-                throw $exception;
+                return null;
             }
         });
 
+        if (!$contentImportResult) {
+            return null;
+        }
+
+        $content = $contentImportResult['content'];
         $this->logger->info(
             'Imported content "'.$content->contentInfo->name.'" ('.$content->contentInfo->remoteId.')'
         );
 
-        $imported_content_ids = $this->results->getResult('imported_content_ids');
-        $imported_content_ids[] = $content->id;
-        $this->results->setResult('imported_content_ids', $imported_content_ids);
+        if ($contentImportResult['action']) {
+            $imported_content_ids = $this->results->getResult('imported_content_ids');
+            $imported_content_ids[$content->id] = [
+                'name' => $content->getName(),
+                'contentId' => $content->id,
+                'action' => $contentImportResult['action'],
+            ];
+            $this->results->setResult('imported_content_ids', $imported_content_ids);
+        }
 
         return $this->objectAccessorBuilder->buildFromContent($content);
     }

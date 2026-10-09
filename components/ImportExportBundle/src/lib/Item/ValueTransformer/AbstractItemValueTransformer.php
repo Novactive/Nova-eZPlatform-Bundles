@@ -8,15 +8,25 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractItemValueTransformer implements ItemValueTransformerInterface
 {
-    public function __invoke($value, array $options = [])
+    public function __invoke(mixed $value, array $options = [])
     {
         $options = $this->resolveOptions($options);
 
         return $this->transform($value, $options);
     }
 
-    abstract protected function transform($value, array $options = []);
+    /**
+     * @param array<string, mixed> $options*
+     *
+     * @return mixed
+     */
+    abstract protected function transform(mixed $value, array $options = []);
 
+    /**
+     * @param array<string, mixed> $options
+     *
+     * @return array<string, mixed>
+     */
     protected function resolveOptions(array $options): array
     {
         $optionsResolver = new OptionsResolver();
@@ -25,7 +35,7 @@ abstract class AbstractItemValueTransformer implements ItemValueTransformerInter
         return $optionsResolver->resolve($options);
     }
 
-    protected function configureOptions(OptionsResolver $optionsResolver)
+    protected function configureOptions(OptionsResolver $optionsResolver): void
     {
     }
 }

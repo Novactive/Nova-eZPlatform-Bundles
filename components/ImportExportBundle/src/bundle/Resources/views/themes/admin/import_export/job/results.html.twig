@@ -1,7 +1,5 @@
 {% trans_default_domain 'import_export' %}
 
-<div class="container ibexa-container">
-    {% for result in results %}
-        {% include result.template with result.parameters only %}
-    {% endfor %}
-</div>
+{% for result in results %}
+    {% include result.template with result.parameters only %}
+{% endfor %}

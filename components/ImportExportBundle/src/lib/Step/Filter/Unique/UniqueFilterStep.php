@@ -11,18 +11,22 @@ use JMS\TranslationBundle\Translation\TranslationContainerInterface;
 use Symfony\Component\PropertyAccess\PropertyPath;
 use Symfony\Component\Translation\TranslatableMessage;
 
+/**
+ * @extends AbstractStep<UniqueFilterStepOptions>
+ */
 class UniqueFilterStep extends AbstractStep implements TranslationContainerInterface
 {
+    /**
+     * @var mixed[]
+     */
     protected array $values = [];
-    protected SourceResolver $sourceResolver;
 
     public function __construct(
-        SourceResolver $sourceResolver
+        protected SourceResolver $sourceResolver
     ) {
-        $this->sourceResolver = $sourceResolver;
     }
 
-    public function processItem($item)
+    public function processItem($item): mixed
     {
         $value = $this->sourceResolver->getPropertyValue(
             $item,
@@ -46,7 +50,7 @@ class UniqueFilterStep extends AbstractStep implements TranslationContainerInter
         return [( new Message('step.filter.unique.name', 'import_export') )->setDesc('Unique filter')];
     }
 
-    public static function getOptionsType(): ?string
+    public static function getOptionsType(): string
     {
         return UniqueFilterStepOptions::class;
     }

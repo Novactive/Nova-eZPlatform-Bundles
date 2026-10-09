@@ -13,13 +13,13 @@ class WorkflowProcessConfiguration
 
     protected ?ComponentReference $reader = null;
 
-    public function setReader(ComponentReference $reader)
+    public function setReader(ComponentReference $reader): void
     {
         $this->reader = $reader;
     }
 
     /**
-     * @param array<ComponentReference> $processors
+     * @param array<string, ComponentReference> $processors
      */
     public function setProcessors(array $processors): void
     {

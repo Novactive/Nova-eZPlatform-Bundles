@@ -10,12 +10,9 @@ use Ibexa\Contracts\FieldTypeRichText\RichText\Converter as RichTextConverterInt
 
 class RichtextFieldValueTransformer implements FieldValueTransformerInterface
 {
-    protected RichTextConverterInterface $richTextOutputConverter;
-
     public function __construct(
-        RichTextConverterInterface $richTextOutputConverter
+        protected RichTextConverterInterface $richTextOutputConverter
     ) {
-        $this->richTextOutputConverter = $richTextOutputConverter;
     }
 
     public function __invoke(Field $field, FieldDefinition $fieldDefinition): object

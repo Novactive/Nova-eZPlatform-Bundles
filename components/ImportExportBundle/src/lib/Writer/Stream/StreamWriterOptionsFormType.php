@@ -16,11 +16,9 @@ use Symfony\Component\Translation\TranslatableMessage;
 
 class StreamWriterOptionsFormType extends WriterOptionsFormType implements TranslationContainerInterface
 {
-    protected FilepathResolver $filepathResolver;
-
-    public function __construct(FilepathResolver $filepathResolver)
-    {
-        $this->filepathResolver = $filepathResolver;
+    public function __construct(
+        protected FilepathResolver $filepathResolver
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void

@@ -11,24 +11,15 @@ use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\PathPrefixer;
 
 /**
- * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings("PHPMD.TooManyPublicMethods")
  */
 class FileHandler implements FilesystemAdapter
 {
-    private FilesystemAdapter $innerAdapter;
-
-    private PathPrefixer $prefixer;
-
-    private FilepathResolver $filepathResolver;
-
     public function __construct(
-        FilesystemAdapter $innerAdapter,
-        PathPrefixer $prefixer,
-        FilepathResolver $filepathResolver
+        private FilesystemAdapter $innerAdapter,
+        private PathPrefixer $prefixer,
+        private FilepathResolver $filepathResolver
     ) {
-        $this->innerAdapter = $innerAdapter;
-        $this->prefixer = $prefixer;
-        $this->filepathResolver = $filepathResolver;
     }
 
     public function fileExists(string $path): bool

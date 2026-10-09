@@ -6,56 +6,76 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Workflow;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Processor\Aggregator\ProcessorAggregator;
 use AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorInterface;
+use AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorOptions;
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderInterface;
+use AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderOptions;
 use AlmaviaCX\Bundle\IbexaImportExport\Writer\WriterInterface;
-use Generator;
+use AlmaviaCX\Bundle\IbexaImportExport\Writer\WriterOptions;
 
 class WorkflowExecutionConfiguration
 {
-    protected ReaderInterface $reader;
-    /** @var \AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorInterface[] */
+    /**
+     * @var \AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorInterface<ProcessorOptions>[]
+     */
     protected array $processors = [];
 
-    public function __construct(ReaderInterface $reader)
-    {
-        $this->reader = $reader;
+    /**
+     * @param \AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderInterface<ReaderOptions> $reader
+     */
+    public function __construct(
+        protected ReaderInterface $reader
+    ) {
     }
 
+    /**
+     * @return \AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderInterface<ReaderOptions>
+     */
     public function getReader(): ReaderInterface
     {
         return $this->reader;
     }
 
-    public function addProcessor(ProcessorInterface $processor): void
+    /**
+     * @param \AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorInterface<ProcessorOptions> $processor
+     */
+    public function addProcessor(string $id, ProcessorInterface $processor): void
     {
-        $this->processors[] = $processor;
+        $this->processors[$id] = $processor;
     }
 
     /**
-     * @return \AlmaviaCX\Bundle\IbexaImportExport\Writer\WriterInterface[]
+     * @return array<string, WriterInterface<WriterOptions>>
      */
     public function getWriters(): array
     {
-        return iterator_to_array($this->findWriters($this->processors));
+        return $this->findWriters($this->processors);
     }
 
     /**
-     * @param \AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorInterface[] $processors
+     * @param array<string, ProcessorInterface<ProcessorOptions>> $processors
+     *
+     * @return array<string, WriterInterface<WriterOptions>>
      */
-    protected function findWriters(array $processors): Generator
+    protected function findWriters(array $processors): array
     {
-        foreach ($processors as $processor) {
+        $writers = [];
+        foreach ($processors as $id => $processor) {
             if ($processor instanceof WriterInterface) {
-                yield $processor;
+                $writers[$id] = $processor;
             }
             if ($processor instanceof ProcessorAggregator) {
-                $this->findWriters($processor->getProcessors());
+                $writers = array_merge(
+                    $writers,
+                    $this->findWriters($processor->getProcessors())
+                );
             }
         }
+
+        return $writers;
     }
 
     /**
-     * @return \AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorInterface[]
+     * @return \AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorInterface<ProcessorOptions>[]
      */
     public function getProcessors(): array
     {

@@ -5,37 +5,34 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Workflow;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Event\BasicEventDispatcherTrait;
+use AlmaviaCX\Bundle\IbexaImportExport\Exception\BaseException;
+use AlmaviaCX\Bundle\IbexaImportExport\File\TempFileUtil;
+use AlmaviaCX\Bundle\IbexaImportExport\Item\ItemAccessorInterface;
+use AlmaviaCX\Bundle\IbexaImportExport\Monolog\WorkflowLogger;
 use AlmaviaCX\Bundle\IbexaImportExport\Monolog\WorkflowLoggerInterface;
+use AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderIteratorInterface;
 use AlmaviaCX\Bundle\IbexaImportExport\Reference\Reference;
-use AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag;
 use DateTimeImmutable;
-use Iterator;
 use LimitIterator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Throwable;
 
+/**
+ * @phpstan-import-type ProcessableItem from \AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorInterface
+ */
 abstract class AbstractWorkflow implements WorkflowInterface
 {
     use BasicEventDispatcherTrait;
 
-    protected Iterator $itemsIterator;
-    protected WorkflowLoggerInterface $logger;
+    /**
+     * @var \AlmaviaCX\Bundle\IbexaImportExport\Reader\ReaderIteratorInterface<mixed, ItemAccessorInterface>
+     */
+    protected ReaderIteratorInterface $itemsIterator;
+    protected ?WorkflowLoggerInterface $logger = null;
     protected WorkflowExecutionConfiguration $configuration;
     protected EventDispatcherInterface $dispatcher;
-
-    protected ReferenceBag $referenceBag;
-    protected DateTimeImmutable $startTime;
-    protected DateTimeImmutable $endTime;
-    protected array $writerResults = [];
-    protected ?int $totalItemsCount = null;
-    protected int $offset = 0;
-    protected float $progress = 0;
+    protected WorkflowState $state;
     protected bool $debug = false;
-
-    public function __construct(ReferenceBag $references)
-    {
-        $this->referenceBag = $references;
-    }
 
     /**
      * @param \AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowExecutionConfiguration $configuration
@@ -45,27 +42,40 @@ abstract class AbstractWorkflow implements WorkflowInterface
         $this->configuration = $configuration;
     }
 
+    public function setState(WorkflowState $state): void
+    {
+        $this->state = $state;
+    }
+
+    /**
+     * @return \AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowState
+     */
+    public function getState(): WorkflowState
+    {
+        return $this->state;
+    }
+
     protected function prepare(): void
     {
-        $this->startTime = new DateTimeImmutable();
-        $this->referenceBag->resetScope(Reference::SCOPE_WORKFLOW);
-
-        foreach ($this->configuration->getWriters() as $index => $writer) {
-            if (isset($this->writerResults[$index])) {
-                $writer->setResults($this->writerResults[$index]);
-            }
+        if (!$this->logger) {
+            $this->logger = new WorkflowLogger();
         }
 
-        foreach ($this->configuration->getProcessors() as $processor) {
+        foreach ($this->configuration->getProcessors() as $processorIdentifier => $processor) {
+            $processor->setIdentifier($processorIdentifier);
             $processor->setLogger($this->logger);
+            $processor->setState($this->state);
             $processor->prepare();
         }
-
         $reader = $this->configuration->getReader();
+        $reader->setLogger($this->logger);
+        $reader->setState($this->state);
         $reader->prepare();
         $this->itemsIterator = ($reader)();
-        if (!$this->totalItemsCount) {
-            $this->totalItemsCount = $this->itemsIterator->count();
+
+        if (0 === $this->state->getOffset()) {
+            $this->state->setStartTime(new DateTimeImmutable());
+            $this->state->setTotalItemsCount($this->itemsIterator->count());
         }
 
         $this->dispatchEvent(new WorkflowEvent($this), WorkflowEvent::PREPARE);
@@ -73,14 +83,16 @@ abstract class AbstractWorkflow implements WorkflowInterface
 
     protected function finish(): void
     {
-        $this->endTime = new DateTimeImmutable();
+        TempFileUtil::removeTempFiles();
         foreach ($this->configuration->getProcessors() as $processor) {
             $processor->finish();
         }
-        foreach ($this->configuration->getWriters() as $index => $writer) {
-            $this->writerResults[$index] = $writer->getResults();
-        }
         $this->configuration->getReader()->finish();
+
+        if ($this->state->isCompleted()) {
+            $this->state->setEndTime(new DateTimeImmutable());
+            $this->state->getCache()->clear();
+        }
 
         $this->dispatchEvent(new WorkflowEvent($this), WorkflowEvent::FINISH);
     }
@@ -92,23 +104,26 @@ abstract class AbstractWorkflow implements WorkflowInterface
             $workflowEvent = new WorkflowEvent($this);
             $this->dispatchEvent($workflowEvent, WorkflowEvent::START);
 
-            $limitIterator = new LimitIterator($this->itemsIterator, $this->offset, $batchLimit);
+            $limitIterator = new LimitIterator(
+                $this->itemsIterator,
+                $this->state->getOffset(),
+                $batchLimit
+            );
+
             foreach ($limitIterator as $index => $item) {
                 $this->logger->setItemIndex($index + 1);
-                $this->referenceBag->resetScope(Reference::SCOPE_ITEM);
+                $this->state->getReferenceBag()->resetScope(Reference::SCOPE_ITEM);
                 $this->processItem($item);
-                ++$this->offset;
+                $this->state->setOffset($this->state->getOffset() + 1);
                 $this->dispatchEvent($workflowEvent, WorkflowEvent::PROGRESS);
                 if (!$workflowEvent->canContinue()) {
                     break;
                 }
             }
         } catch (Throwable $e) {
-            if ($this->debug) {
-                throw $e;
-            }
             $this->logger->setItemIndex(null);
             $this->logger->logException($e);
+            throw $e;
         }
         $this->finish();
     }
@@ -126,47 +141,12 @@ abstract class AbstractWorkflow implements WorkflowInterface
         $this->logger = $logger;
     }
 
+    public function getLogger(): ?WorkflowLoggerInterface
+    {
+        return $this->logger;
+    }
+
     abstract public function getDefaultConfig(): WorkflowConfiguration;
-
-    public function getStartTime(): DateTimeImmutable
-    {
-        return $this->startTime;
-    }
-
-    public function getEndTime(): DateTimeImmutable
-    {
-        return $this->endTime;
-    }
-
-    public function getWriterResults(): array
-    {
-        return $this->writerResults;
-    }
-
-    public function setWriterResults(array $writerResults): void
-    {
-        $this->writerResults = $writerResults;
-    }
-
-    public function getOffset(): int
-    {
-        return $this->offset;
-    }
-
-    public function setOffset(int $offset): void
-    {
-        $this->offset = $offset;
-    }
-
-    public function getTotalItemsCount(): int
-    {
-        return $this->totalItemsCount;
-    }
-
-    public function setTotalItemsCount(?int $totalItemsCount): void
-    {
-        $this->totalItemsCount = $totalItemsCount;
-    }
 
     public function setDebug(bool $debug): void
     {
@@ -174,12 +154,15 @@ abstract class AbstractWorkflow implements WorkflowInterface
     }
 
     /**
+     * @param ProcessableItem $item
+     *
      * @throws \Throwable
      */
     protected function processItem($item): void
     {
         try {
-            foreach ($this->configuration->getProcessors() as $processor) {
+            $processorId = null;
+            foreach ($this->configuration->getProcessors() as $processorId => $processor) {
                 $processResult = ($processor)($item);
                 if (false === $processResult) {
                     return;
@@ -189,10 +172,21 @@ abstract class AbstractWorkflow implements WorkflowInterface
                 }
             }
         } catch (Throwable $procesItemException) {
+            $exception = new BaseException(
+                sprintf('[%s] %s', $processorId, $procesItemException->getMessage()),
+                $procesItemException->getCode(),
+                $procesItemException
+            );
+
             if ($this->debug) {
-                throw $procesItemException;
+                throw $exception;
             }
-            $this->logger->logException($procesItemException);
+            $this->logger->logException($exception);
         }
+    }
+
+    public function isDebug(): bool
+    {
+        return $this->debug;
     }
 }

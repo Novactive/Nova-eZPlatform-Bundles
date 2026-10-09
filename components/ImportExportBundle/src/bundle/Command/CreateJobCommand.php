@@ -17,19 +17,16 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CreateJobCommand extends Command
 {
-    protected JobService $jobService;
-    protected EventDispatcherInterface $eventDispatcher;
-
     protected static $defaultName = 'import_export:job:create';
 
-    public function __construct(JobService $jobService, EventDispatcherInterface $eventDispatcher)
-    {
+    public function __construct(
+        protected JobService $jobService,
+        protected EventDispatcherInterface $eventDispatcher
+    ) {
         parent::__construct();
-        $this->jobService = $jobService;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
         $this->addArgument('identifier', InputArgument::REQUIRED, 'Workflow identifier');
@@ -38,7 +35,7 @@ class CreateJobCommand extends Command
         $this->addOption('debug', null, InputOption::VALUE_NONE, 'Enable debug mode');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $job = new Job();
         $job->setLabel($input->getArgument('label'));

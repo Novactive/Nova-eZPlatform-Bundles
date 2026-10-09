@@ -11,17 +11,17 @@ use JMS\TranslationBundle\Translation\TranslationContainerInterface;
 use Symfony\Component\PropertyAccess\PropertyPath;
 use Symfony\Component\Translation\TranslatableMessage;
 
+/**
+ * @extends AbstractStep<NotEmptyFilterStepOptions>
+ */
 class NotEmptyFilterStep extends AbstractStep implements TranslationContainerInterface
 {
-    protected SourceResolver $sourceResolver;
-
     public function __construct(
-        SourceResolver $sourceResolver
+        protected SourceResolver $sourceResolver
     ) {
-        $this->sourceResolver = $sourceResolver;
     }
 
-    public function processItem($item)
+    public function processItem($item): mixed
     {
         $value = $this->sourceResolver->getPropertyValue(
             $item,
@@ -44,7 +44,7 @@ class NotEmptyFilterStep extends AbstractStep implements TranslationContainerInt
         return [( new Message('step.filter.not_empty.name', 'import_export') )->setDesc('Not empty filter')];
     }
 
-    public static function getOptionsType(): ?string
+    public static function getOptionsType(): string
     {
         return NotEmptyFilterStepOptions::class;
     }
