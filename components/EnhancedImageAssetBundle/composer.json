@@ -21,7 +21,6 @@
     "require": {
         "php": ">=8.3",
         "ibexa/oss": "^5",
-        "guzzlehttp/promises": "^2.3",
         "nyholm/psr7": "^1.8"
     },
     "autoload": {
