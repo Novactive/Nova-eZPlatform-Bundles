@@ -6,10 +6,16 @@ namespace AlmaviaCX\Bundle\IbexaTranslationUi\EventListener;
 
 use Ibexa\AdminUi\Menu\Event\ConfigureMenuEvent;
 use Ibexa\AdminUi\Menu\MainMenuBuilder;
+use Ibexa\Contracts\Core\Repository\PermissionResolver;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class AdminMenuListener implements EventSubscriberInterface
 {
+    public function __construct(
+        private readonly PermissionResolver $permissionResolver,
+    ) {
+    }
+
     public static function getSubscribedEvents(): array
     {
         return [
@@ -19,6 +25,10 @@ class AdminMenuListener implements EventSubscriberInterface
 
     public function onMenuConfigure(ConfigureMenuEvent $event): void
     {
+        if (!$this->permissionResolver->hasAccess('translation', 'manage')) {
+            return;
+        }
+
         $menu = $event->getMenu();
 
         $menu[MainMenuBuilder::ITEM_CONTENT]->addChild(
