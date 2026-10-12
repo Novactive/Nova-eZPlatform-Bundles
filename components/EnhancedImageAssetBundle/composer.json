@@ -20,9 +20,11 @@
     ],
     "require": {
         "php": ">=8.3",
-        "ibexa/oss": "^5",
         "guzzlehttp/promises": "^2.3",
-        "nyholm/psr7": "^1.8"
+        "nyholm/psr7": "^1.8",
+        "ibexa/core": "^5.0",
+        "ibexa/admin-ui": "^5.0",
+        "ibexa/content-forms": "^5.0"
     },
     "autoload": {
         "psr-4": {
@@ -36,5 +38,8 @@
             "symfony/flex": true,
             "ibexa/post-install": true
         }
+    },
+    "require-dev": {
+        "ibexa/oss": "^5.0"
     }
 }

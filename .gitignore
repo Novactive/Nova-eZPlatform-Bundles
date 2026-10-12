@@ -14,3 +14,9 @@
 /vendor
 /components/EnhancedImageAssetBundle/node_modules
 /components/MenuManagerBundle/node_modules
+/drivers/geckodriver
+/.idea/shelf/Uncommitted_changes_before_Checkout_at_2026-06-12_17_54_[Changes]/shelved.patch
+/.idea/shelf/Uncommitted_changes_before_Checkout_at_2026-06-12_17_54__Changes_.xml
+/tests/.phpunit.result.cache
+/components/EnhancedImageAssetBundle/vendor/
+/components/EnhancedImageAssetBundle/composer.lock
