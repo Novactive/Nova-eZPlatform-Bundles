@@ -20,22 +20,17 @@ use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
 use Novactive\Bundle\eZProtectedContentBundle\Form\ProtectedAccessType;
 use Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedAccessRepository;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class ProtectContent extends AbstractTab implements OrderedTabInterface
 {
-    /**
-     * @var ProtectedAccessRepository
-     */
-    private $protectedAccessRepository;
-
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
+    private ProtectedAccessRepository $protectedAccessRepository;
+    private FormFactoryInterface $formFactory;
 
     /**
      * @required
      */
+    #[Required]
     public function setProtectedAccessRepository(ProtectedAccessRepository $protectedAccessRepository): void
     {
         $this->protectedAccessRepository = $protectedAccessRepository;
@@ -44,6 +39,7 @@ class ProtectContent extends AbstractTab implements OrderedTabInterface
     /**
      * @required
      */
+    #[Required]
     public function setFormFactory(FormFactoryInterface $formFactory): void
     {
         $this->formFactory = $formFactory;

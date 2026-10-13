@@ -32,7 +32,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\RouterInterface;
 
 class ProtectedAccessController extends Controller
@@ -81,11 +81,11 @@ class ProtectedAccessController extends Controller
         ]);
     }
 
-    /**
+    /*
      * @Route("/handle/{locationId}/{access}", name="novaezprotectedcontent_bundle_admin_handle_form",
      *                                           defaults={"accessId": null})
      */
-    // #[Route(path: '/handle/{locationId}/{access}', name: 'novaezprotectedcontent_bundle_admin_handle_form')]
+    #[Route(path: '/handle/{locationId}/{access}', name: 'novaezprotectedcontent_bundle_admin_handle_form')]
     public function handle(
         int $locationId,
         Request $request,
