@@ -22,7 +22,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class PasswordProvided
 {
-    public const COOKIE_PREFIX = 'protected-content-';
+    public const string COOKIE_PREFIX = 'protected-content-';
 
     public function __construct(private readonly FormFactoryInterface $formFactory)
     {

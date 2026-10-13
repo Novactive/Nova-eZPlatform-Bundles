@@ -6,10 +6,10 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedTokenStorage;
 
-class ProtectedTokenStorageRepository
+readonly class ProtectedTokenStorageRepository
 {
     public function __construct(
-        protected readonly EntityManagerInterface $entityManager,
+        protected EntityManagerInterface $entityManager,
     ) {
     }
 

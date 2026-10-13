@@ -47,8 +47,8 @@
               <td>{{ protectedAccess.isEnabled() }}</td>
             <td>{{ protectedAccess.getAsEmail() }}</td>
             <td>{{ protectedAccess.isProtectChildren() }}</td>
-              <td>{{ protectedAccess.created|ibexa_short_datetime }}</td>
-              <td>{{ protectedAccess.updated|ibexa_short_datetime }}</td>
+              <td>{{ protectedAccess.created ? protectedAccess.created|ibexa_short_datetime }}</td>
+              <td>{{ protectedAccess.updated ? protectedAccess.updated|ibexa_short_datetime }}</td>
 {#              <td>{{ protectedAccess.getEmailMessage() }}</td>#}
               <td><pre>{{ protectedAccess.getContentId() }}</pre></td>
               <td>
