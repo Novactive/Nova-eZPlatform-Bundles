@@ -17,16 +17,16 @@ class DownloadFileResponse extends Response
     protected int $maxlen;
 
     /**
-     * @param \AlmaviaCX\Bundle\IbexaImportExport\File\FileHandler $fileHandler
+     * @param array<string, string> $headers
      */
     public function __construct(
         string $filepath,
         FileHandler $fileHandler,
-        $status = 200,
-        $headers = [],
-        $public = true,
-        $contentDisposition = null,
-        $autoLastModified = true
+        int $status = 200,
+        array $headers = [],
+        bool $public = true,
+        ?string $contentDisposition = null,
+        bool $autoLastModified = true
     ) {
         $this->fileHandler = $fileHandler;
 
@@ -70,8 +70,11 @@ class DownloadFileResponse extends Response
         return $this;
     }
 
-    public function setContentDisposition($disposition, $filename = '', $filenameFallback = ''): DownloadFileResponse
-    {
+    public function setContentDisposition(
+        string $disposition,
+        string $filename = '',
+        string $filenameFallback = ''
+    ): DownloadFileResponse {
         if (empty($filename)) {
             $filename = pathinfo($this->filepath, PATHINFO_FILENAME);
         }
@@ -85,10 +88,13 @@ class DownloadFileResponse extends Response
         return $this;
     }
 
+    /**
+     * @throws \League\Flysystem\FilesystemException
+     */
     public function prepare(Request $request): DownloadFileResponse
     {
         $fileSize = $this->fileHandler->fileSize($this->filepath)->fileSize();
-        $this->headers->set('Content-Length', $fileSize);
+        $this->headers->set('Content-Length', (string) $fileSize);
         $this->headers->set('Accept-Ranges', 'bytes');
         $this->headers->set('Content-Transfer-Encoding', 'binary');
 
@@ -134,7 +140,7 @@ class DownloadFileResponse extends Response
 
                         $this->setStatusCode(206); // HTTP_PARTIAL_CONTENT
                         $this->headers->set('Content-Range', sprintf('bytes %s-%s/%s', $start, $end, $fileSize));
-                        $this->headers->set('Content-Length', $end - $start + 1);
+                        $this->headers->set('Content-Length', (string) ($end - $start + 1));
                     }
                 }
             }
@@ -143,16 +149,19 @@ class DownloadFileResponse extends Response
         return $this;
     }
 
+    /**
+     * @throws \League\Flysystem\FilesystemException
+     *
+     * @return $this
+     */
     public function sendContent()
     {
         if (!$this->isSuccessful()) {
-            parent::sendContent();
-
-            return;
+            return parent::sendContent();
         }
 
         if (0 === $this->maxlen) {
-            return;
+            return $this;
         }
 
         $destinationStream = fopen('php://output', 'wb');
@@ -160,6 +169,8 @@ class DownloadFileResponse extends Response
         stream_copy_to_stream($sourceStream, $destinationStream, $this->maxlen, $this->offset);
 
         fclose($destinationStream);
+
+        return $this;
     }
 
     /**
@@ -167,15 +178,20 @@ class DownloadFileResponse extends Response
      *
      * @throws \LogicException when the content is not null
      */
-    public function setContent($content)
+    public function setContent(?string $content)
     {
         if (null !== $content) {
             throw new LogicException('The content cannot be set on a BinaryStreamResponse instance.');
         }
+
+        return $this;
     }
 
+    /**
+     * @return false
+     */
     public function getContent()
     {
-        return null;
+        return false;
     }
 }

@@ -5,7 +5,7 @@ services:
 
     AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowExecutor:
         arguments:
-            $componentBuilder: '@AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentBuilder'
+            $runConfigurationBuilder: '@AlmaviaCX\Bundle\IbexaImportExport\Workflow\RunConfigurationBuilder'
 
     AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowRegistry:
         arguments:
@@ -15,14 +15,7 @@ services:
     AlmaviaCX\Bundle\IbexaImportExport\Workflow\AbstractWorkflow:
         lazy: true
         abstract: true
-        arguments:
-            $references: '@AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag'
 
-    AlmaviaCX\Bundle\IbexaImportExport\Workflow\ConfigurableWorkflowFactory:
-
-    AlmaviaCX\Bundle\IbexaImportExport\Workflow\Form\Type\WorkflowProcessConfigurationFormType:
+    AlmaviaCX\Bundle\IbexaImportExport\Workflow\RunConfigurationBuilder:
         arguments:
-            $workflowRegistry: '@AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowRegistry'
-            $componentRegistry: '@AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentRegistry'
-        tags:
-            - { name: form.type, alias: WorkflowProcessConfigurationFormType }
+            $componentBuilder: '@AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentBuilder'

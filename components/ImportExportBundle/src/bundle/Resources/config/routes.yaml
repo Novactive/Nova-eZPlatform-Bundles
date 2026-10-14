@@ -11,21 +11,13 @@ import_export.job.view:
     path:     /import-export/job/{id}/view
     defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::view }
 
+import_export.job.execution.view:
+    path:     /import-export/job/{id}/{executionId}/view
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::view }
+
 import_export.job.run:
     path:     /import-export/job/{id}/run
     defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::run }
-
-import_export.job.pause:
-    path:     /import-export/job/{id}/pause
-    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::pause }
-
-import_export.job.cancel:
-    path:     /import-export/job/{id}/cancel
-    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::cancel }
-
-import_export.job.debug:
-    path:     /import-export/job/{id}/debug/{index}
-    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::debug }
 
 import_export.job.run_w_limit:
     path:     /import-export/job/{id}/run/{batchLimit}
@@ -46,6 +38,42 @@ import_export.job.reset_run_w_limit:
         reset: true|false
         batchLimit: '\d+'
 
+import_export.execution.run:
+    path:     /import-export/execution/{id}/run
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\ExecutionController::runExecution }
+
+import_export.execution.run_w_limit:
+    path:     /import-export/execution/{id}/run/{batchLimit}
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\ExecutionController::runExecution }
+    requirements:
+        batchLimit: '\d+'
+
+import_export.execution.retry:
+    path:     /import-export/execution/{id}/retry
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\ExecutionController::retryExecution }
+
+import_export.execution.retry_w_limit:
+    path:     /import-export/execution/{id}/retry/{batchLimit}
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\ExecutionController::retryExecution }
+    requirements:
+        batchLimit: '\d+'
+
+import_export.execution.pause:
+    path:     /import-export/execution/{id}/pause
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\ExecutionController::pauseExecution }
+
+import_export.execution.cancel:
+    path:     /import-export/execution/{id}/cancel
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\ExecutionController::cancelExecution }
+
+import_export.execution.debug:
+    path:     /import-export/execution/{id}/debug/{index}
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\ExecutionController::debugExecution }
+
+import_export.execution.delete:
+    path:     /import-export/execution/{id}/delete
+    defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\ExecutionController::delete }
+
 import_export.job.delete:
     path:     /import-export/job/{id}/delete
     defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\JobController::delete }
@@ -53,3 +81,9 @@ import_export.job.delete:
 import_export.writer.download_file:
     path:     /import-export/writer/{id}/{writerIndex}/download
     defaults: { _controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\WriterController::downloadFile }
+
+# REST
+
+import_export.rest:
+    resource: routes_rest.yaml
+    prefix: '%ibexa.rest.path_prefix%'

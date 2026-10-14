@@ -7,48 +7,59 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Processor\Iterator;
 use AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\SourceResolver;
 use AlmaviaCX\Bundle\IbexaImportExport\Monolog\WorkflowLoggerInterface;
 use AlmaviaCX\Bundle\IbexaImportExport\Processor\AbstractProcessor;
-use AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorInterface;
+use AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowState;
 use Symfony\Component\Translation\TranslatableMessage;
 
-class IteratorProcessor extends AbstractProcessor implements ProcessorInterface
+/**
+ * This processor is used to iterate over an array and apply a processor to each value.
+ *
+ * @extends AbstractProcessor<IteratorProcessorOptions>
+ */
+class IteratorProcessor extends AbstractProcessor
 {
-    protected SourceResolver $sourceResolver;
-
     public function __construct(
-        SourceResolver $sourceResolver
+        protected SourceResolver $sourceResolver
     ) {
-        $this->sourceResolver = $sourceResolver;
     }
 
-    public function processItem($item)
+    /**
+     * @throws \AlmaviaCX\Bundle\IbexaImportExport\Exception\SourceResolutionException
+     */
+    public function processItem($item): mixed
     {
-        /** @var ProcessorInterface $processor */
-        $processor = $this->getOption('processor', []);
-        $source = $this->getOption('value', []);
+        $options = $this->getOptions();
 
-        $values = ($this->sourceResolver)($source, $item);
+        $values = ($this->sourceResolver)($options->value, $item, $this->getReferenceBag());
         if (!is_array($values)) {
             $values = [$values];
         }
 
         foreach ($values as $value) {
-            ($processor)(
-                [
-                    'iteration_value' => $value,
-                    'item' => $item,
-                ]
-            );
+            $iterationItem = [
+                'iteration_value' => $value,
+                'item' => $item,
+            ];
+
+            ($options->processor)($iterationItem);
         }
 
         return $item;
     }
 
-    public static function getName()
+    public function setIdentifier(string $identifier): void
+    {
+        parent::setIdentifier($identifier);
+
+        $processor = $this->getOption('processor', null);
+        $processor?->setIdentifier(sprintf('%s.processor', $identifier));
+    }
+
+    public static function getName(): TranslatableMessage
     {
         return new TranslatableMessage(/* @Desc("Iterator") */ 'processor.iterator.name');
     }
 
-    public static function getOptionsType(): ?string
+    public static function getOptionsType(): string
     {
         return IteratorProcessorOptions::class;
     }
@@ -56,7 +67,14 @@ class IteratorProcessor extends AbstractProcessor implements ProcessorInterface
     public function setLogger(WorkflowLoggerInterface $logger): void
     {
         parent::setLogger($logger);
-        $processor = $this->getOption('processor', []);
-        $processor->setLogger($logger);
+        $processor = $this->getOption('processor', null);
+        $processor?->setLogger($logger);
+    }
+
+    public function setState(WorkflowState $state): void
+    {
+        parent::setState($state);
+        $processor = $this->getOption('processor', null);
+        $processor?->setState($state);
     }
 }

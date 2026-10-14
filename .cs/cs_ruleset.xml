@@ -21,4 +21,11 @@
     <rule ref="PSR12.Operators.OperatorSpacing">
         <exclude name="PSR12.Operators.OperatorSpacing"/>
     </rule>
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="120"/>
+            <property name="absoluteLineLimit" value="0"/>
+            <property name="ignoreComments" value="true"/>
+        </properties>
+    </rule>
 </ruleset>

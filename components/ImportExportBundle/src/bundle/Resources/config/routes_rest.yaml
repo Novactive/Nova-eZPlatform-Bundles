@@ -1,0 +1,6 @@
+import_export.rest.job.execute:
+    path: '/job/execute'
+    controller: AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Rest\JobController::executeJob
+    methods: [POST]
+    defaults:
+        csrf_protection: false

@@ -8,5 +8,4 @@ use AlmaviaCX\Bundle\IbexaImportExport\Writer\WriterOptions;
 
 class IbexaTaxonomyWriterOptions extends WriterOptions
 {
-    protected bool $allowUpdate = true;
 }

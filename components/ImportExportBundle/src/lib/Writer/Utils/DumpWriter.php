@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Writer\Utils;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Writer\AbstractWriter;
+use AlmaviaCX\Bundle\IbexaImportExport\Writer\WriterOptions;
 use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Translation\TranslationContainerInterface;
 use Symfony\Component\Translation\TranslatableMessage;
 
+/**
+ * @extends AbstractWriter<WriterOptions>
+ */
 class DumpWriter extends AbstractWriter implements TranslationContainerInterface
 {
     protected function writeItem($item, $mappedItem)

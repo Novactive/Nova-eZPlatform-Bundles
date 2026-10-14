@@ -8,9 +8,9 @@ use Throwable;
 
 trait WorkflowLoggerTrait
 {
-    protected $itemIndex = null;
+    protected ?int $itemIndex = null;
 
-    public function setItemIndex($itemIndex): void
+    public function setItemIndex(?int $itemIndex): void
     {
         $this->itemIndex = $itemIndex;
     }

@@ -1,7 +1,11 @@
 {# @var job \AlmaviaCX\Bundle\IbexaImportExport\Job\Job #}
+{# @var workflow \AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowInterface #}
+{# @var execution \AlmaviaCX\Bundle\IbexaImportExport\Execution\Execution #}
+{# @var current_execution \AlmaviaCX\Bundle\IbexaImportExport\Execution\Execution #}
 {% extends '@ibexadesign/ui/layout.html.twig' %}
 
 {% trans_default_domain 'import_export' %}
+{% from '@ibexadesign/ui/component/macros.html.twig' import results_headline %}
 
 {% block body_class %}import_export-job-view{% endblock %}
 
@@ -33,67 +37,31 @@
         'job.status.queued'|trans()|desc('Queued'),
         'job.status.paused'|trans()|desc('Paused'),
         'job.status.canceled'|trans()|desc('Canceled'),
-        'job.status.force_paused'|trans()|desc('Paused')
-    ] %}
-    {% set progress_bar %}</div>
-        {% include '@ibexadesign/import_export/components/progress_bar.html.twig' with {processedCount: job.processedItemsCount, totalCount: job.totalItemsCount} only %}
-    {% endset %}
-    {% set information_items = [
-        {
-            label: 'job.property.id'|trans|desc('Id'),
-            content: job.id,
-        },
-        {
-            label: 'job.property.label'|trans|desc('Label'),
-            content: job.label,
-        },
-        {
-            label: 'job.property.requested_date'|trans|desc('Requested date'),
-            content: job.requestedDate|ibexa_full_datetime,
-        },
-        {
-            label: 'job.property.status'|trans|desc('Status'),
-            content: status[job.status],
-        },
-        {
-            label: 'job.property.startTime'|trans|desc('Start time'),
-            content: job.startTime ? job.startTime|ibexa_full_datetime : '',
-        },
-        {
-            label: 'job.property.endTime'|trans|desc('End time'),
-            content: job.endTime ? job.endTime|ibexa_full_datetime : '',
-        },
-        {
-            label: 'job.property.progress'|trans()|desc('Progress'),
-            content_raw: progress_bar,
-        },
+        'job.status.force_paused'|trans()|desc('Paused'),
+        'job.status.error'|trans()|desc('Error')
     ] %}
 
-    {% set information_headline_items %}
-        {% if job.isRunning() %}
-            <a
-                    href="{{ path('import_export.job.cancel', {'id': job.id}) }}"
-                    class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
-            >
-                <svg class="ibexa-icon ibexa-icon--small ibexa-icon--edit">
-                    <use xlink:href="{{ ibexa_icon_path('discard') }}"></use>
-                </svg>
-                <span class="ibexa-btn__label">
-                    {{ 'job.cancel'|trans|desc('Cancel') }}
-                </span>
-            </a>
-            <a
-                    href="{{ path('import_export.job.pause', {'id': job.id}) }}"
-                    class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
-            >
-                <svg class="ibexa-icon ibexa-icon--small ibexa-icon--edit">
-                    <use xlink:href="{{ ibexa_icon_path('interface-block') }}"></use>
-                </svg>
-                <span class="ibexa-btn__label">
-                    {{ 'job.pause'|trans|desc('pause') }}
-                </span>
-            </a>
-        {% else %}
+    <section class="container ibexa-container">
+        {% set information_items = [
+            {
+                label: 'job.property.id'|trans|desc('Id'),
+                content: job.id,
+            },
+            {
+                label: 'job.property.ulid'|trans|desc('Ulid'),
+                content: job.ulid,
+            },
+            {
+                label: 'job.property.label'|trans|desc('Label'),
+                content: job.label,
+            },
+            {
+                label: 'job.property.requested_date'|trans|desc('Requested date'),
+                content: job.requestedDate|ibexa_full_datetime,
+            }
+        ] %}
+
+        {% set information_headline_items %}
             <a
                     href="{{ path('import_export.job.run', {'id': job.id}) }}"
                     class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
@@ -102,13 +70,11 @@
                     <use xlink:href="{{ ibexa_icon_path('refresh') }}"></use>
                 </svg>
                 <span class="ibexa-btn__label">
-                    {{ 'job.run'|trans|desc('Run') }}
-                </span>
+                            {{ 'job.execution.run'|trans|desc('Run') }}
+                        </span>
             </a>
-        {% endif %}
-    {% endset %}
+        {% endset %}
 
-    <section class="container ibexa-container">
         {% include '@ibexadesign/ui/component/details/details.html.twig' with {
             headline: 'tab.details.technical_details'|trans()|desc('Technical details'),
             headline_items: information_headline_items,
@@ -116,9 +82,188 @@
         } only %}
     </section>
 
-    {{ render(controller('AlmaviaCX\\Bundle\\IbexaImportExportBundle\\Controller\\Admin\\WriterController::displayResults', {job: job})) }}
-    {{ render(controller('AlmaviaCX\\Bundle\\IbexaImportExportBundle\\Controller\\Admin\\JobController::displayLogs', {job: job})) }}
+    <section class="container ibexa-container">
+        {% set body_rows = [] %}
+        {% set show_table_notice = false %}
+        {% for execution in pager.currentPageResults %}
+            {% set body_row_cols = [] %}
+
+            {% set col_raw %}
+                {% set view_url = path('import_export.job.execution.view', {
+                    id: job.id,
+                    executionId: execution.id
+                }) %}
+                <a href="{{ view_url }}">{{ execution.id }}</a>
+            {% endset %}
+            {% set body_row_cols = body_row_cols|merge([{
+                content: col_raw,
+                raw: true,
+            }]) %}
+
+            {% set progress_bar %}
+                {% include '@ibexadesign/import_export/components/progress_bar.html.twig' with {processedCount: execution.workflowState.offset, totalCount: execution.workflowState.totalItemsCount} only %}
+            {% endset %}
+            {% set body_row_cols = body_row_cols|merge([{
+                content: progress_bar,
+                raw: true,
+            }]) %}
+
+            {% set body_row_cols = body_row_cols|merge([
+                { content: status[execution.status]  },
+                { content: execution.workflowState.startTime ? execution.workflowState.startTime|ibexa_full_datetime : ''  },
+                { content: execution.workflowState.endTime ? execution.workflowState.endTime|ibexa_full_datetime : ''  },
+                { content: execution.workflowState.endTime ? execution.workflowState.startTime.diff(execution.workflowState.endTime).format('%H:%I:%S')  : '',},
+            ]) %}
+
+            {% set col_raw %}
+                {% if execution.isCancelable() %}
+                    <a
+                        title="{{ 'job.execution.cancel'|trans|desc('Cancel') }}"
+                        href="{{ path('import_export.execution.cancel', {'id': execution.id}|merge(app.request.query)) }}"
+                        class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
+                    >
+                        <svg class="ibexa-icon ibexa-icon--small ibexa-icon--edit">
+                            <use xlink:href="{{ ibexa_icon_path('discard') }}"></use>
+                        </svg>
+                    </a>
+                {% endif  %}
+                {% if execution.isRunning()  %}
+                    <a
+                        title="{{ 'job.execution.pause'|trans|desc('pause') }}"
+                        href="{{ path('import_export.execution.pause', {'id': execution.id}|merge(app.request.query)) }}"
+                        class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
+                    >
+                        <svg class="ibexa-icon ibexa-icon--small ibexa-icon--edit">
+                            <use xlink:href="{{ ibexa_icon_path('interface-block') }}"></use>
+                        </svg>
+                    </a>
+                {% elseif execution.canRun() %}
+                    <a
+                        title="{{ 'job.execution.run'|trans|desc('Run') }}"
+                        href="{{ path('import_export.execution.run', {'id': execution.id}|merge(app.request.query)) }}"
+                        class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
+                    >
+                        <svg class="ibexa-icon ibexa-icon--small ibexa-icon--edit">
+                            <use xlink:href="{{ ibexa_icon_path('refresh') }}"></use>
+                        </svg>
+                    </a>
+                {% endif %}
+            {% endset %}
+            {% set body_row_cols = body_row_cols|merge([{
+                has_action_btns: true,
+                content: col_raw,
+                raw: true,
+            }]) %}
+
+
+            {% set body_rows = body_rows|merge([{ cols: body_row_cols }]) %}
+        {% endfor %}
+
+        {% embed '@ibexadesign/ui/component/table/table.html.twig' with {
+            headline: 'job.executions.headline'|trans({ '%count%': pager.getNbResults(), '%pending_count%': job.pendingExecutionCount })|desc('Executions (%count%) - %pending_count% pending'),
+            head_cols: [
+                { content: 'job.execution.property.id'|trans|desc('Id') },
+                { content: 'job.execution.property.progress'|trans()|desc('Progress') },
+                { content: 'job.execution.property.status'|trans|desc('Status') },
+                { content: 'job.execution.property.start_time'|trans|desc('Start time') },
+                { content: 'job.execution.property.end_time'|trans|desc('End time') },
+                { content: 'job.execution.property.executionTime'|trans|desc('Execution time') },
+                { },
+            ],
+            body_rows,
+            show_notice: show_table_notice,
+        } %}
+        {% endembed %}
+        {% if pager.haveToPaginate %}
+            {% include '@ibexadesign/ui/pagination.html.twig' with {
+                'pager': pager
+            } %}
+        {% endif %}
+    </section>
+
+    {% if current_execution %}
+        <section class="container ibexa-container">
+            {% set progress_bar %}
+                {% include '@ibexadesign/import_export/components/progress_bar.html.twig' with {processedCount: current_execution.workflowState.offset, totalCount: current_execution.workflowState.totalItemsCount} only %}
+            {% endset %}
+            {% set information_items = [
+                {
+                    label: 'job.execution.property.status'|trans|desc('Status'),
+                    content: status[current_execution.status],
+                },
+                {
+                    label: 'job.execution.property.startTime'|trans|desc('Start time'),
+                    content: current_execution.workflowState.startTime ? current_execution.workflowState.startTime|ibexa_full_datetime : '',
+                },
+                {
+                    label: 'job.execution.property.endTime'|trans|desc('End time'),
+                    content: current_execution.workflowState.endTime ? current_execution.workflowState.endTime|ibexa_full_datetime : '',
+                },
+                {
+                    label: 'job.execution.property.executionTime'|trans|desc('Execution time'),
+                    content: current_execution.workflowState.endTime ? current_execution.workflowState.startTime.diff(current_execution.workflowState.endTime).format('%H:%I:%S')  : '',
+                },
+                {
+                    label: 'job.execution.property.progress'|trans()|desc('Progress'),
+                    content_raw: progress_bar,
+                },
+            ] %}
+
+            {% set information_headline_items %}
+
+                {% if current_execution.isCancelable() %}
+                    <a
+                        href="{{ path('import_export.execution.cancel', {'id': current_execution.id}) }}"
+                        class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
+                    >
+                        <svg class="ibexa-icon ibexa-icon--small ibexa-icon--edit">
+                            <use xlink:href="{{ ibexa_icon_path('discard') }}"></use>
+                        </svg>
+                        <span class="ibexa-btn__label">
+                            {{ 'job.execution.cancel'|trans|desc('Cancel') }}
+                        </span>
+                    </a>
+                {% endif %}
+                {% if current_execution.isRunning() %}
+                    <a
+                        href="{{ path('import_export.execution.pause', {'id': current_execution.id}) }}"
+                        class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
+                    >
+                        <svg class="ibexa-icon ibexa-icon--small ibexa-icon--edit">
+                            <use xlink:href="{{ ibexa_icon_path('interface-block') }}"></use>
+                        </svg>
+                        <span class="ibexa-btn__label">
+                            {{ 'job.execution.pause'|trans|desc('pause') }}
+                        </span>
+                    </a>
+                {% elseif current_execution.canRun() %}
+                    <a
+                            href="{{ path('import_export.execution.run', {'id': current_execution.id}) }}"
+                            class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
+                    >
+                        <svg class="ibexa-icon ibexa-icon--small ibexa-icon--edit">
+                            <use xlink:href="{{ ibexa_icon_path('refresh') }}"></use>
+                        </svg>
+                        <span class="ibexa-btn__label">
+                            {{ 'job.execution.run'|trans|desc('Run') }}
+                        </span>
+                    </a>
+                {% endif %}
+            {% endset %}
+
+            {% include '@ibexadesign/ui/component/details/details.html.twig' with {
+                headline: '%s (%s)'|format('tab.details.execution_details'|trans()|desc('Execution details'), current_execution.id),
+                headline_items: information_headline_items,
+                items: information_items,
+            } only %}
+            {{ render(controller('AlmaviaCX\\Bundle\\IbexaImportExportBundle\\Controller\\Admin\\ReaderController::displayDetails', {execution: current_execution})) }}
+            {{ render(controller('AlmaviaCX\\Bundle\\IbexaImportExportBundle\\Controller\\Admin\\WriterController::displayResults', {execution: current_execution})) }}
+            {{ render(controller('AlmaviaCX\\Bundle\\IbexaImportExportBundle\\Controller\\Admin\\ExecutionController::displayLogs', {execution: current_execution})) }}
+        </section>
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('ibexa-admin-ui-import-export-js', null, 'ibexa') }}
 {% endblock %}

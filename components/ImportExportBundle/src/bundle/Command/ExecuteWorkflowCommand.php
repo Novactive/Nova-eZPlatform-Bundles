@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExportBundle\Command;
 
+use AlmaviaCX\Bundle\IbexaImportExport\Execution\ExecutionOptionsFormType;
 use AlmaviaCX\Bundle\IbexaImportExport\Monolog\WorkflowConsoleLogger;
-use AlmaviaCX\Bundle\IbexaImportExport\Workflow\Form\Type\WorkflowProcessConfigurationFormType;
 use AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowConfiguration;
 use AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowEvent;
 use AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowExecutor;
@@ -20,19 +20,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ExecuteWorkflowCommand extends Command
 {
-    protected WorkflowRegistry $workflowRegistry;
-    protected WorkflowExecutor $workflowExecutor;
-
     protected static $defaultName = 'import_export:workflow:execute';
 
-    public function __construct(WorkflowRegistry $workflowRegistry, WorkflowExecutor $workflowExecutor)
-    {
-        $this->workflowExecutor = $workflowExecutor;
-        $this->workflowRegistry = $workflowRegistry;
+    public function __construct(
+        protected WorkflowRegistry $workflowRegistry,
+        protected WorkflowExecutor $workflowExecutor
+    ) {
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
         $this->addArgument('identifier', InputArgument::REQUIRED, 'Workflow identifier');
@@ -51,7 +48,7 @@ class ExecuteWorkflowCommand extends Command
         /** @var \Matthias\SymfonyConsoleForm\Console\Helper\FormHelper $formHelper */
         $formHelper = $this->getHelper('form');
         $runtimeProcessConfiguration = $formHelper->interactUsingForm(
-            WorkflowProcessConfigurationFormType::class,
+            ExecutionOptionsFormType::class,
             $input,
             $output,
             ['default_configuration' => $baseConfiguration->getProcessConfiguration()]
@@ -60,7 +57,7 @@ class ExecuteWorkflowCommand extends Command
         $progressBar = new ProgressBar($output);
 
         $workflow->addEventListener(WorkflowEvent::START, function (WorkflowEvent $event) use ($progressBar) {
-            $progressBar->start($event->getWorkflow()->getTotalItemsCount());
+            $progressBar->start($event->getWorkflow()->getState()->getTotalItemsCount());
         });
         $workflow->addEventListener(WorkflowEvent::PROGRESS, function () use ($progressBar) {
             $progressBar->advance();

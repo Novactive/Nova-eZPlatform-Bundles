@@ -2,4 +2,7 @@
 'Job configuration': 'Configuration de la tâche'
 breadcrumb.admin: Admin
 job.list.title: Tâches
+job.logs.level: 'Niveau de log'
 job.options.empty: 'Il n''y a pas d''options à configurer'
+processor.csv_iterator.name: 'CSV Iterator'
+tab.details.reader_details.json.headline: Input

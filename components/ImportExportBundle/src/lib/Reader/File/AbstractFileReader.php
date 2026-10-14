@@ -8,23 +8,27 @@ use AlmaviaCX\Bundle\IbexaImportExport\File\FileHandler;
 use AlmaviaCX\Bundle\IbexaImportExport\Reader\AbstractReader;
 use Symfony\Component\HttpFoundation\File\File;
 
+/**
+ * @template TFileReaderOptions of FileReaderOptions
+ * @extends  AbstractReader<TFileReaderOptions>
+ */
 abstract class AbstractFileReader extends AbstractReader
 {
-    protected FileHandler $fileHandler;
     /** @var resource|null */
     protected $tmpFile = null;
 
-    public function __construct(FileHandler $fileHandler)
-    {
-        $this->fileHandler = $fileHandler;
+    public function __construct(
+        protected FileHandler $fileHandler
+    ) {
     }
 
     /**
      * @throws \League\Flysystem\FilesystemException
+     *
+     * @return resource
      */
     protected function getFileStream()
     {
-        /** @var FileReaderOptions $options */
         $options = $this->getOptions();
         if ($options->file instanceof File) {
             return fopen($options->file->getRealPath(), 'rb');
@@ -35,8 +39,10 @@ abstract class AbstractFileReader extends AbstractReader
 
     /**
      * @throws \League\Flysystem\FilesystemException
+     *
+     * @return resource
      */
-    protected function getFileTmpCopy(): string
+    protected function getFileTmpCopy()
     {
         if (null === $this->tmpFile) {
             $this->tmpFile = tmpfile();
@@ -44,9 +50,16 @@ abstract class AbstractFileReader extends AbstractReader
             stream_copy_to_stream($originalFile, $this->tmpFile);
         }
 
-        $tmpFileMetadata = stream_get_meta_data($this->tmpFile);
+        return $this->tmpFile;
+    }
 
-        return $tmpFileMetadata['uri'];
+    public function clean(): void
+    {
+        $options = $this->getOptions();
+
+        if (is_string($options->file)) {
+            $this->fileHandler->delete($options->file);
+        }
     }
 
     public static function getOptionsFormType(): ?string
@@ -54,18 +67,8 @@ abstract class AbstractFileReader extends AbstractReader
         return FileReaderOptionsFormType::class;
     }
 
-    public static function getOptionsType(): ?string
+    public static function getOptionsType(): string
     {
         return FileReaderOptions::class;
-    }
-
-    public function clean(): void
-    {
-        /** @var \AlmaviaCX\Bundle\IbexaImportExport\Reader\File\FileReaderOptions $options */
-        $options = $this->getOptions();
-
-        if (is_string($options->file)) {
-            $this->fileHandler->delete($options->file);
-        }
     }
 }

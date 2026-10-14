@@ -1,0 +1,12 @@
+services:
+    AlmaviaCX\Bundle\IbexaImportExport\Rest\InputParser\ExecuteJobInputParser:
+        parent: Ibexa\Rest\Server\Common\Parser
+        arguments:
+            $jobService: '@AlmaviaCX\Bundle\IbexaImportExport\Job\JobService'
+            $workflowRegistry: '@AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowRegistry'
+        tags:
+            - { name: ibexa.rest.input.parser, mediaType: application/vnd.ibexa.api.ExecuteJobInput }
+
+    AlmaviaCX\Bundle\IbexaImportExport\Rest\ValueObjectVisitor\ExecutionVisitor:
+        tags:
+            - { name: ibexa.rest.output.value_object.visitor, type: AlmaviaCX\Bundle\IbexaImportExport\Execution\Execution }

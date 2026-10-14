@@ -5,28 +5,35 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Component;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Monolog\WorkflowLoggerInterface;
+use AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag;
+use AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowState;
 use InvalidArgumentException;
 
+/**
+ * @template TComponentOptions of ComponentOptions
+ * @implements ComponentInterface<TComponentOptions>
+ */
 abstract class AbstractComponent implements ComponentInterface
 {
     protected WorkflowLoggerInterface $logger;
+    protected WorkflowState $workflowState;
 
-    protected ComponentOptions $options;
+    /**
+     * @var TComponentOptions
+     */
+    protected $options;
 
     public static function getOptionsFormType(): ?string
     {
         return null;
     }
 
-    public static function getOptionsType(): ?string
+    public static function getOptionsType(): string
     {
         return ComponentOptions::class;
     }
 
-    /**
-     * @param \AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentOptions $options
-     */
-    public function setOptions(ComponentOptions $options): void
+    public function setOptions($options): void
     {
         $requiredOptionType = static::getOptionsType();
         if (!$options instanceof $requiredOptionType) {
@@ -35,12 +42,15 @@ abstract class AbstractComponent implements ComponentInterface
         $this->options = $options;
     }
 
-    public function getOptions(): ComponentOptions
+    public function getOptions()
     {
         return $this->options;
     }
 
-    public function getOption(string $name, $default = null)
+    /**
+     * @return mixed|null
+     */
+    public function getOption(string $name, mixed $default = null): mixed
     {
         return $this->options->{$name} ?? $default;
     }
@@ -60,5 +70,15 @@ abstract class AbstractComponent implements ComponentInterface
     public function setLogger(WorkflowLoggerInterface $logger): void
     {
         $this->logger = $logger;
+    }
+
+    public function setState(WorkflowState $state): void
+    {
+        $this->workflowState = $state;
+    }
+
+    protected function getReferenceBag(): ReferenceBag
+    {
+        return $this->workflowState->getReferenceBag();
     }
 }

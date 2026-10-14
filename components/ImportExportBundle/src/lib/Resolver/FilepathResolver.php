@@ -11,8 +11,9 @@ class FilepathResolver
 {
     protected ParameterBag $parameterBag;
 
-    public function __construct(ParameterBag $parameterBag)
-    {
+    public function __construct(
+        ParameterBag $parameterBag
+    ) {
         $this->parameterBag = $parameterBag;
     }
 
@@ -27,6 +28,9 @@ class FilepathResolver
         );
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function buildTokens(): array
     {
         $datetime = new DateTimeImmutable();

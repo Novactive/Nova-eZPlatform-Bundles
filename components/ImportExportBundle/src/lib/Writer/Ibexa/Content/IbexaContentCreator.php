@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content;
 
+use AlmaviaCX\Bundle\IbexaImportExport\Writer\Utils\Checksum;
 use DateTime;
 use Exception;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
@@ -27,11 +28,12 @@ class IbexaContentCreator extends AbstractIbexaContentHandler
         array $parentLocationIdList,
         array $fieldsByLanguages,
         string $remoteId,
+        Checksum $checksum,
         int $ownerId = null,
         string $languageCode = 'eng-GB',
         int $sectionId = null,
-        $modificationDate = null,
-        bool $hidden = false
+        int|DateTime $modificationDate = null,
+        bool|null $hidden = null
     ): Content {
         $contentType = $this->repository->getContentTypeService()->loadContentTypeByIdentifier(
             $contentTypeIdentifier
@@ -58,6 +60,25 @@ class IbexaContentCreator extends AbstractIbexaContentHandler
         $this->setContentFields($contentType, $contentCreateStruct, $fieldsByLanguages);
 
         /* Assigning the content locations */
+        $locationCreateStructs = $this->getLocationCreateStructs($parentLocationIdList, $hidden);
+
+        /* Creating new draft */
+        $draft = $this->repository->getContentService()->createContent(
+            $contentCreateStruct,
+            $locationCreateStructs
+        );
+
+        /* Publish the new content draft */
+        $publishedContent = $this->repository->getContentService()->publishVersion($draft->versionInfo);
+        if ($checksum->value) {
+            $this->saveContentChecksum($publishedContent, $checksum);
+        }
+
+        return $publishedContent;
+    }
+
+    protected function getLocationCreateStructs(array $parentLocationIdList, ?bool $hidden): array
+    {
         $locationCreateStructs = [];
         foreach ($parentLocationIdList as $locationRemoteId => $parentLocationId) {
             if (empty($parentLocationId)) {
@@ -77,19 +98,12 @@ class IbexaContentCreator extends AbstractIbexaContentHandler
             if (is_string($locationRemoteId)) {
                 $locationCreateStruct->remoteId = $locationRemoteId;
             }
-            if ($hidden) {
+            if (true === $hidden) {
                 $locationCreateStruct->hidden = true;
             }
             $locationCreateStructs[] = $locationCreateStruct;
         }
 
-        /* Creating new draft */
-        $draft = $this->repository->getContentService()->createContent(
-            $contentCreateStruct,
-            $locationCreateStructs
-        );
-
-        /* Publish the new content draft */
-        return $this->repository->getContentService()->publishVersion($draft->versionInfo);
+        return $locationCreateStructs;
     }
 }

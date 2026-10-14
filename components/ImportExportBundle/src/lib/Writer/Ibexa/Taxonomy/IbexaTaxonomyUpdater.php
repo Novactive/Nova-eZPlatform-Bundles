@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Taxonomy;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Content\IbexaContentUpdater;
+use AlmaviaCX\Bundle\IbexaImportExport\Writer\Utils\Checksum;
 use Ibexa\Contracts\Taxonomy\Service\TaxonomyServiceInterface;
 use Ibexa\Contracts\Taxonomy\Value\TaxonomyEntry;
 use Ibexa\Core\FieldType\TextLine\Value as TextLineValue;
@@ -12,21 +13,16 @@ use Ibexa\Taxonomy\Service\TaxonomyConfiguration;
 
 class IbexaTaxonomyUpdater
 {
-    protected TaxonomyServiceInterface $taxonomyService;
-    protected TaxonomyConfiguration $taxonomyConfiguration;
-    protected IbexaContentUpdater $contentUpdater;
-
     public function __construct(
-        TaxonomyServiceInterface $taxonomyService,
-        TaxonomyConfiguration $taxonomyConfiguration,
-        IbexaContentUpdater $contentUpdater,
+        protected TaxonomyServiceInterface $taxonomyService,
+        protected TaxonomyConfiguration $taxonomyConfiguration,
+        protected IbexaContentUpdater $contentUpdater,
     ) {
-        $this->contentUpdater = $contentUpdater;
-        $this->taxonomyConfiguration = $taxonomyConfiguration;
-        $this->taxonomyService = $taxonomyService;
     }
 
     /**
+     * @param array<string, string> $names
+     *
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\BadStateException
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\ContentFieldValidationException
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\ContentValidationException
@@ -57,6 +53,7 @@ class IbexaTaxonomyUpdater
             $entry->getContent(),
             $fields,
             [$parent->content->contentInfo->getMainLocation()],
+            new Checksum(),
             $ownerId,
             $mainLanguageCode,
             $hidden
