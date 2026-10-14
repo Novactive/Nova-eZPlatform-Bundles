@@ -94,11 +94,12 @@ class MultipleFieldsFullText extends CriterionVisitor
         $syntaxTree = $this->parser->parse($tokenSequence);
 
         $options = [];
-        if ($criterion->fuzziness < 1) {
-            $options['fuzziness'] = $criterion->fuzziness;
-        }
-
         $queryString = $this->generator->generate($syntaxTree, $options);
+
+        if ($criterion->fuzziness < 1) {
+            $fuzzyQueryString = $this->generator->generate($syntaxTree, ['fuzziness' => $criterion->fuzziness]);
+            $queryString .= sprintf(' OR %s', $fuzzyQueryString);
+        }
 
         if (true === $criterion->wildcards) {
             $wildcardQueryString = $this->generator->generate($syntaxTree, ['wildcard' => true]);
