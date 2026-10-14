@@ -76,3 +76,9 @@ services:
         arguments:
             $httpClient: '@http_client'
             $cache: '@ibexa.cache_pool'
+
+    AlmaviaCX\Bundle\IbexaImportExport\Twig\Extension:
+        arguments:
+            $router: '@router'
+        tags:
+            - { name: twig.extension }

@@ -16,7 +16,7 @@
             {% endset %}
             {% set name %}
                 {% if infos['action'] != 'delete' %}
-                    <a target="_blank" href="{{ infos['contentId']|default() ? url('ibexa.url.alias', {contentId: infos['contentId']}) : '#' }}">
+                    <a target="_blank" href="{{ infos['contentId']|default() ? imported_content_url(infos['contentId']) : '#' }}">
                         {{ infos['name'] }}
                     </a>
                 {% else %}
