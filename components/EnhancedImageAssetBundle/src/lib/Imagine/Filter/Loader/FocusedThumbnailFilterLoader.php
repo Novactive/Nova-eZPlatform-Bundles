@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Novactive\EzEnhancedImageAsset\Imagine\Filter\Loader;
 
+use Imagine\Filter\Basic\Autorotate;
 use Imagine\Image\ImageInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 use Novactive\EzEnhancedImageAsset\FieldType\EnhancedImage\FocusPoint;
@@ -37,6 +38,9 @@ class FocusedThumbnailFilterLoader implements LoaderInterface
      */
     public function load(ImageInterface $image, array $options = []): ImageInterface
     {
+        $autoRotateFilter = new Autorotate();
+        $autoRotateFilter->apply($image);
+
         $imageSize = $image->getSize();
         $cropSize = $this->focusPointCalculator->calculateCropSize($imageSize, $options);
         if (null === $cropSize) {
