@@ -72,7 +72,6 @@
         doc.dispatchEvent(new CustomEvent("rss.item.add", {detail : {"selector": newRow}}));
         setCTEvent(index);
     }
-
     function setCTEvent(index) {
         const itemContainer = doc.querySelector(`#rss_feeds_feed_items_${index}`)
         itemContainer.querySelector(`#rss_feeds_feed_items_${index}_contenttype_id`)
@@ -80,34 +79,73 @@
                 const val = e.currentTarget.value;
                 const prefixItem = "#rss_feeds_feed_items";
                 const selectFields = ["title", "description", "category", "media"];
+                const selectFieldsTaxonomy = ["chTaxonomy"];
                 const loader = htmlToElement('<div class="loading-image">' +
                     '<img src="' + templateValues.dataset.loaderPath + '" class="img-responsive"  alt=""/>' +
                     '</div>');
                 e.currentTarget.after(loader);
-
                 const xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function () {
-                if (this.readyState !== 4) return;
-
-                if (this.status === 200) {
-                    for (const fieldName of selectFields) {
-                        const mainSelector = document.querySelector(prefixItem + "_" + index + "_" + fieldName);
+                    if (this.readyState !== 4) return;
+                    if (this.status === 200) {
+                        console.log(this.response.field)
+                        for (const fieldName of selectFields) {
+                            const mainSelector = document.querySelector(prefixItem + "_" + index + "_" + fieldName);
+                            mainSelector.innerHTML = '';
+                            mainSelector.append(htmlToElement("<option value='' selected>[Passer]</option>"));
+                            const response = JSON.parse(this.responseText);
+                            for (const responseElement in response.field) {
+                                const option = htmlToElement('<option value="">' + responseElement + '</option>');
+                                option.setAttribute("value", response[responseElement]);
+                                mainSelector.append(option);
+                            }
+                        }
+                        for (const fieldName of selectFieldsTaxonomy) {
+                            const mainSelector = document.querySelector(prefixItem + "_" + index + "_" + fieldName);
+                            console.log(prefixItem + "_" + index + "_" + fieldName)
+                            mainSelector.innerHTML = '';
+                            mainSelector.append(htmlToElement("<option value='' selected>[Passer]</option>"));
+                            const response = JSON.parse(this.responseText);
+                            for (const responseElement in response.taxonomy) {
+                                const option = htmlToElement('<option value="">' + responseElement + '</option>');
+                                option.setAttribute("value", response.taxonomy[responseElement]);
+                                mainSelector.append(option);
+                            }
+                        }
+                        loader.remove();
+                    }
+                };
+                console.log(templateValues.dataset.rssFieldsPath)
+                xhr.open('POST', templateValues.dataset.rssFieldsPath + '?contenttype_id=' + val, true);
+                xhr.send();
+            });
+        itemContainer.querySelector(`#rss_feeds_feed_items_${index}_chTaxonomy`)
+            .addEventListener('change', function (e) {
+                const val = e.currentTarget.value;
+                const prefixItem = "#rss_feeds_feed_items";
+                const loader = htmlToElement('<div class="loading-image">' +
+                    '<img src="' + templateValues.dataset.loaderPath + '" class="img-responsive"  alt=""/>' +
+                    '</div>');
+                e.currentTarget.after(loader);
+                const xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function () {
+                    if (this.status === 200) {
+                        const mainSelector = document.querySelector(prefixItem + "_" + index + "_taxonomy");
                         mainSelector.innerHTML = '';
                         mainSelector.append(htmlToElement("<option value='' selected>[Passer]</option>"));
                         const response = JSON.parse(this.responseText);
-                        for (const responseElement in response) {
+                        for (const responseElement in response.Alltaxonomy) {
+                            console.log(responseElement)
                             const option = htmlToElement('<option value="">' + responseElement + '</option>');
                             option.setAttribute("value", response[responseElement]);
                             mainSelector.append(option);
                         }
                     }
-                    loader.remove();
                 }
-            };
-
-            xhr.open('POST', templateValues.dataset.rssFieldsPath + '?contenttype_id=' + val, true);
-            xhr.send();
-        });
+                console.log(templateValues.dataset.rssFieldsPath + '?chTaxonomy=' + val)
+                xhr.open('POST', templateValues.dataset.rssFieldsPath + '?chTaxonomy=' + val, true);
+                xhr.send();
+            });
 
 
         const selectLocationButton = itemContainer.querySelector('.js-novaezrssfeed-select-location-id');
