@@ -14,7 +14,10 @@ class WordVisitor extends BaseWordVisitor
     {
         $word = parent::visit($node, $subVisitor, $options);
         if (isset($options['wildcard'])) {
-            $word .= '*';
+            $word .= '*^0.1';
+        }
+        if (isset($options['fuzziness'])) {
+            $word .= '^0.1';
         }
 
         return $word;
