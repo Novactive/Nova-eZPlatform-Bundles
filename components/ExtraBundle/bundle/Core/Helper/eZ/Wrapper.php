@@ -188,6 +188,7 @@ final class Wrapper implements ArrayAccess
         return property_exists($this, $offset);
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         if (property_exists($this, $offset)) {
