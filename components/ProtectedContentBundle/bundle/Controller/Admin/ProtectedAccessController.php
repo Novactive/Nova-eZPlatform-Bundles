@@ -18,6 +18,7 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Ibexa\Bundle\Core\Controller;
 use Ibexa\Contracts\Core\Persistence\Handler as PersistenceHandler;
+use Ibexa\Contracts\Core\Repository\PermissionResolver;
 use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 use Ibexa\Contracts\Core\Search\Handler as SearchHandler;
 use Ibexa\Contracts\HttpCache\Handler\ContentTagInterface;
@@ -34,6 +35,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Novactive\Bundle\eZProtectedContentBundle\Event\BeforeProtectContentEvent;
 
 class ProtectedAccessController extends Controller
 {
@@ -47,6 +50,7 @@ class ProtectedAccessController extends Controller
         protected readonly ProtectedAccessHelper $protectedAccessHelper,
         protected readonly EntityManagerInterface $entityManager,
         protected readonly ContentTagInterface $responseTagger,
+        protected readonly PermissionResolver $permissionResolver,
         protected readonly RouterInterface $router,
     ) {
     }
@@ -81,11 +85,12 @@ class ProtectedAccessController extends Controller
         ]);
     }
 
-    /**
-     * @Route("/handle/{locationId}/{access}", name="novaezprotectedcontent_bundle_admin_handle_form",
-     *                                           defaults={"accessId": null})
-     */
-    // #[Route(path: '/handle/{locationId}/{access}', name: 'novaezprotectedcontent_bundle_admin_handle_form')]
+    #[Route(
+        path: '/handle/{locationId}/{access}',
+        name: 'novaezprotectedcontent_bundle_admin_handle_form',
+        defaults: ['access' => null],
+        methods: ['POST'],
+    )]
     public function handle(
         int $locationId,
         Request $request,
@@ -93,40 +98,63 @@ class ProtectedAccessController extends Controller
         EntityManagerInterface $entityManager,
         RouterInterface $router,
         ContentTagInterface $responseTagger,
+        EventDispatcherInterface $eventDispatcher,
         ?ProtectedAccess $access = null,
     ): RedirectResponse {
-        if ($request->isMethod('post')) {
-            $location = $this->repository->getLocationService()->loadLocation($locationId);
+        $location = $this->repository->getLocationService()->loadLocation($locationId);
+
+        $content = $location->getContent();
+
+        // Check Ibexa permissions on the current content.
+        if (!$this->permissionResolver->canUser('private_content', 'add', $content)) {
+            throw $this->createAccessDeniedException(
+                'You are not allowed to protect this content.'
+            );
+        }
+
+        // Allow subscribers to validate the operation before persisting changes.
+        $eventDispatcher->dispatch(
+            new BeforeProtectContentEvent($content->contentInfo)
+        );
+
+        $access ??= new ProtectedAccess();
+
+        $form = $formFactory->create(ProtectedAccessType::class, $access);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
             $now = new DateTime();
-            if (null === $access) {
-                $access = new ProtectedAccess();
+
+            if (null === $access->getCreated()) {
                 $access->setCreated($now);
             }
-            $form = $formFactory->create(ProtectedAccessType::class, $access);
-            $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $access->setUpdated($now);
-                $entityManager->persist($access);
-                $entityManager->flush();
-                $this->responseTagger->addLocationTags([$location->id]);
-                $this->responseTagger->addParentLocationTags([$location->parentLocationId]);
-                $this->responseTagger->addContentTags([$location->contentId]);
+            $access->setUpdated($now);
 
-                $content = $location->getContent();
-                $this->objectStateHelper->setStatesForContentAndDescendants($content);
-                $this->reindexHelper->reindexContent($content);
-                if ($access->isProtectChildren()) {
-                    $this->reindexHelper->reindexChildren($content);
-                }
+            $entityManager->persist($access);
+            $entityManager->flush();
+
+            // Invalidate HTTP cache.
+            $responseTagger->addLocationTags([$location->id]);
+            $responseTagger->addParentLocationTags([$location->parentLocationId]);
+            $responseTagger->addContentTags([$location->contentId]);
+
+            // Update object states.
+            $this->objectStateHelper->setStatesForContentAndDescendants($content);
+
+            // Update search indexes.
+            $this->reindexHelper->reindexContent($content);
+
+            if ($access->isProtectChildren()) {
+                $this->reindexHelper->reindexChildren($content);
             }
         }
 
         return new RedirectResponse(
-            $router->generate('ibexa.content.view', ['contentId' => $location->contentId,
+            $router->generate('ibexa.content.view', [
+                'contentId' => $location->contentId,
                 'locationId' => $location->id,
-            ]).
-            '#ibexa-tab-location-view-protect-content#tab'
+            ]) . '#ibexa-tab-location-view-protect-content#tab'
         );
     }
 

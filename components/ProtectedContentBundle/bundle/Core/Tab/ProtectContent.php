@@ -16,37 +16,29 @@ namespace Novactive\Bundle\eZProtectedContentBundle\Core\Tab;
 
 use Ibexa\Contracts\AdminUi\Tab\AbstractTab;
 use Ibexa\Contracts\AdminUi\Tab\OrderedTabInterface;
+use Ibexa\Core\Repository\Permission\PermissionResolver;
 use Novactive\Bundle\eZProtectedContentBundle\Entity\ProtectedAccess;
 use Novactive\Bundle\eZProtectedContentBundle\Form\ProtectedAccessType;
 use Novactive\Bundle\eZProtectedContentBundle\Repository\ProtectedAccessRepository;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class ProtectContent extends AbstractTab implements OrderedTabInterface
 {
-    /**
-     * @var ProtectedAccessRepository
-     */
-    private $protectedAccessRepository;
+    private ProtectedAccessRepository $protectedAccessRepository;
+    private FormFactoryInterface $formFactory;
+    private PermissionResolver $permissionResolver;
 
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
-
-    /**
-     * @required
-     */
-    public function setProtectedAccessRepository(ProtectedAccessRepository $protectedAccessRepository): void
+    #[Required]
+    public function setProtectContentRequirements(
+        ProtectedAccessRepository $protectedAccessRepository,
+        FormFactoryInterface $formFactory,
+        PermissionResolver $permissionResolver,
+    ): void
     {
         $this->protectedAccessRepository = $protectedAccessRepository;
-    }
-
-    /**
-     * @required
-     */
-    public function setFormFactory(FormFactoryInterface $formFactory): void
-    {
         $this->formFactory = $formFactory;
+        $this->permissionResolver = $permissionResolver;
     }
 
     public function getIdentifier(): string
@@ -76,12 +68,15 @@ class ProtectContent extends AbstractTab implements OrderedTabInterface
 
         $items = $this->protectedAccessRepository->findByContent($content);
 
+        $canAddProtection = $this->permissionResolver->canUser('private_content', 'add', $location->getContent());
+
         return $this->twig->render(
             '@ibexadesign/tabs/protected_content.html.twig',
             [
                 'form' => $form->createView(),
                 'items' => $items,
                 'location' => $location,
+                'canAddProtection' => $canAddProtection,
             ]
         );
     }

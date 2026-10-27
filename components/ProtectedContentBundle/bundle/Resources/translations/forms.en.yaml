@@ -1,0 +1,4 @@
+role.policy.private_content: 'Content Protection'
+role.policy.private_content.all_functions: 'Content Protection / All functions'
+role.policy.private_content.read: 'Read protected content'
+role.policy.private_content.add: 'Add protection'
