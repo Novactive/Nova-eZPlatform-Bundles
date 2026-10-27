@@ -34,8 +34,7 @@ class ProtectContent extends AbstractTab implements OrderedTabInterface
         ProtectedAccessRepository $protectedAccessRepository,
         FormFactoryInterface $formFactory,
         PermissionResolver $permissionResolver,
-    ): void
-    {
+    ): void {
         $this->protectedAccessRepository = $protectedAccessRepository;
         $this->formFactory = $formFactory;
         $this->permissionResolver = $permissionResolver;
