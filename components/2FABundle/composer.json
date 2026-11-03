@@ -33,7 +33,7 @@
         "scheb/2fa-google-authenticator": "^6.0",
         "scheb/2fa-totp": "^6.0",
         "scheb/2fa-trusted-device": "^6.0",
-        "scheb/2fa-backup-code":  "^^6.0",
+        "scheb/2fa-backup-code":  "^6.0",
         "scheb/2fa-email": "^6.0",
         "bacon/bacon-qr-code": "^2.0"
     },
