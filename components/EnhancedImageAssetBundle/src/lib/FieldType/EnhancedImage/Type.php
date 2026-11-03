@@ -72,7 +72,7 @@ class Type extends ImageType
             $inputValue = new Value($inputValue);
         }
 
-        if ($inputValue instanceof BaseImageValue) {
+        if (!$inputValue instanceof Value && $inputValue instanceof BaseImageValue) {
             return new Value(
                 [
                     'id' => $inputValue->id,

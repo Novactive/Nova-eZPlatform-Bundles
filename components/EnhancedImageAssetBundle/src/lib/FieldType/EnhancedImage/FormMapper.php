@@ -91,8 +91,8 @@ class FormMapper implements FieldValueFormMapperInterface, FieldDefinitionFormMa
         $fieldDefinition = $data->fieldDefinition;
         $formConfig = $fieldForm->getConfig();
         $fieldType = $this->fieldTypeService->getFieldType($fieldDefinition->fieldTypeIdentifier);
-        $names = $fieldDefinition->getNames();
-        $label = $fieldDefinition->getName($formConfig->getOption('mainLanguageCode')) ?: reset($names);
+        $isAlternativeTextRequired = $fieldDefinition->validatorConfiguration['AlternativeTextValidator']['required'] ??
+                                     false;
 
         $fieldForm
             ->add(
@@ -102,7 +102,8 @@ class FormMapper implements FieldValueFormMapperInterface, FieldDefinitionFormMa
                                EnhancedImageFieldType::class,
                                [
                                    'required' => $fieldDefinition->isRequired,
-                                   'label' => $label,
+                                   'label' => $fieldDefinition->getName(),
+                                   'is_alternative_text_required' => $isAlternativeTextRequired,
                                ]
                            )
                            ->addModelTransformer(new ValueTransformer($fieldType, $data->value, Value::class))
