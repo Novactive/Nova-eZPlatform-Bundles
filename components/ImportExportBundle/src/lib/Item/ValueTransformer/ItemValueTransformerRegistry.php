@@ -8,11 +8,9 @@ use Psr\Container\ContainerInterface;
 
 class ItemValueTransformerRegistry
 {
-    protected ContainerInterface $typeContainer;
-
-    public function __construct(ContainerInterface $typeContainer)
-    {
-        $this->typeContainer = $typeContainer;
+    public function __construct(
+        protected ContainerInterface $typeContainer
+    ) {
     }
 
     public function get(?string $type): callable

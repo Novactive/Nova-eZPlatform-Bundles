@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\Content\Field\ValueTransformer;
 
+use AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\Taxonomy\TaxonomyAccessor;
 use AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\Taxonomy\TaxonomyAccessorBuilder;
 use Ibexa\Contracts\Core\Repository\Values\Content\Field;
 use Ibexa\Contracts\Core\Repository\Values\ContentType\FieldDefinition;
@@ -12,15 +13,13 @@ use Ibexa\Taxonomy\FieldType\TaxonomyEntryAssignment\Value as TaxonomyEntryAssig
 
 class TaxonomyFieldValueTransformer implements FieldValueTransformerInterface
 {
-    protected TaxonomyAccessorBuilder $taxonomyAccessorBuilder;
-
-    public function __construct(TaxonomyAccessorBuilder $taxonomyAccessorBuilder)
-    {
-        $this->taxonomyAccessorBuilder = $taxonomyAccessorBuilder;
+    public function __construct(
+        protected TaxonomyAccessorBuilder $taxonomyAccessorBuilder
+    ) {
     }
 
     /**
-     * @return array<\Ibexa\Contracts\Taxonomy\Value\TaxonomyEntry>
+     * @return array<TaxonomyAccessor>
      */
     public function __invoke(Field $field, FieldDefinition $fieldDefinition): array
     {

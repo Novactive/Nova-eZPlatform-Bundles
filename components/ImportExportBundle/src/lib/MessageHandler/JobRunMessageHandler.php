@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\MessageHandler;
 
-use AlmaviaCX\Bundle\IbexaImportExport\Job\Job;
-use AlmaviaCX\Bundle\IbexaImportExport\Job\JobRepository;
-use AlmaviaCX\Bundle\IbexaImportExport\Job\JobRunnerInterface;
+use AlmaviaCX\Bundle\IbexaImportExport\Execution\Execution;
+use AlmaviaCX\Bundle\IbexaImportExport\Execution\ExecutionRepository;
+use AlmaviaCX\Bundle\IbexaImportExport\Execution\ExecutionRunner;
 use AlmaviaCX\Bundle\IbexaImportExport\Message\JobResumeMessage;
 use AlmaviaCX\Bundle\IbexaImportExport\Message\JobRunMessage;
 use AlmaviaCX\Bundle\IbexaImportExport\Message\JobStartMessage;
@@ -15,21 +15,12 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class JobRunMessageHandler
 {
-    protected JobRepository $jobRepository;
-    protected JobRunnerInterface $jobRunner;
-    protected NotificationSender $notificationSender;
-    protected MessageBusInterface $messageBus;
-
     public function __construct(
-        JobRepository $jobRepository,
-        JobRunnerInterface $jobRunner,
-        NotificationSender $notificationSender,
-        MessageBusInterface $messageBus
+        protected ExecutionRepository $executionRepository,
+        protected ExecutionRunner $executionRunner,
+        protected NotificationSender $notificationSender,
+        protected MessageBusInterface $messageBus
     ) {
-        $this->messageBus = $messageBus;
-        $this->notificationSender = $notificationSender;
-        $this->jobRepository = $jobRepository;
-        $this->jobRunner = $jobRunner;
     }
 
     /**
@@ -37,36 +28,36 @@ class JobRunMessageHandler
      */
     public function __invoke(JobRunMessage $message): void
     {
-        $job = $this->jobRepository->findById($message->getJobId());
-        $status = ($this->jobRunner)($job, $message->getBatchLimit());
+        $execution = $this->executionRepository->findById($message->getExecutionId());
+        $status = ($this->executionRunner)($execution, $message->getBatchLimit());
 
-        if (Job::STATUS_COMPLETED === $status) {
+        if (Execution::STATUS_COMPLETED === $status) {
             ($this->notificationSender)(
-                $job->getCreatorId(),
+                $execution->getCreatorId(),
                 NotificationSender::JOB_DONE_TYPE,
                 [
-                    'job_id' => $job->getId(),
-                    'job_label' => $job->getLabel(),
+                    'job_id' => $execution->getJob()->getId(),
+                    'job_label' => $execution->getJob()->getLabel(),
                     'message' => NotificationSender::MESSAGES[NotificationSender::JOB_DONE_TYPE],
                     'message_parameters' => [
-                        '%job_id%' => $job->getId(),
-                        '%job_label%' => $job->getLabel(),
+                        '%job_id%' => $execution->getJob()->getId(),
+                        '%job_label%' => $execution->getJob()->getLabel(),
                     ],
                 ]
             );
         }
-        if (Job::STATUS_PAUSED === $status) {
-            $this->triggerResume($job, $message->getBatchLimit());
+        if (Execution::STATUS_PAUSED === $status) {
+            $this->triggerResume($execution, $message->getBatchLimit());
         }
     }
 
-    public function triggerStart(Job $job, int $batchLimit = -1): void
+    public function triggerStart(Execution $execution, int $batchLimit = -1): void
     {
-        $this->messageBus->dispatch(new JobStartMessage($job->getId(), $batchLimit));
+        $this->messageBus->dispatch(new JobStartMessage($execution->getId(), $batchLimit));
     }
 
-    public function triggerResume(Job $job, int $batchLimit = -1): void
+    public function triggerResume(Execution $execution, int $batchLimit = -1): void
     {
-        $this->messageBus->dispatch(new JobResumeMessage($job->getId(), $batchLimit));
+        $this->messageBus->dispatch(new JobResumeMessage($execution->getId(), $batchLimit));
     }
 }

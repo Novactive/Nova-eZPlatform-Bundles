@@ -1,12 +1,29 @@
+csv_iterator.form.options.delimiter.label: Delimiter
+csv_iterator.form.options.enclosure.label: Enclosure
+csv_iterator.form.options.escape.label: Escape
+csv_iterator.form.options.headerRowNumber.label: 'Header row number'
+csv_iterator.form.options.source.label: Source
 csv_reader.form.options.delimiter.label: Delimiter
 csv_reader.form.options.enclosure.label: Enclosure
 csv_reader.form.options.escape.label: Escape
 csv_reader.form.options.headerRowNumber.label: 'Header row number'
 file_reader.form.options.file.label: File
+file_reader_input.form.options.file.label: File
 job.label: Label
 job.workflowIdentifier: Workflow
-mdb_reader.form.options.query_string.label: Query string
+mdb_reader.form.options.query_string.label: 'Query string'
 reader.ibexa.content_list.options.parentLocationId.label: 'Parent location id'
+salesforce_api_credentials.form.client_id.label: 'Client ID'
+salesforce_api_credentials.form.client_secret.label: 'Client secret'
+salesforce_api_credentials.form.password.label: Password
+salesforce_api_credentials.form.username.label: Username
+salesforce_soql_reader.form.options.batch_size.labe: 'Batch size'
+salesforce_soql_reader.form.options.count_query_string.label: 'Count query string'
+salesforce_soql_reader.form.options.credentials.label: Credentials
+salesforce_soql_reader.form.options.domain.label: Domain
+salesforce_soql_reader.form.options.query_string.label: 'Query string'
+salesforce_soql_reader.form.options.version.label: Version
+text_reader.form.options.json.label: text_reader.form.options.json.label
 workflow.options: 'Workflow options'
 writer.stream.options.filepath.label: 'File path'
 writer.stream.options.filepath.tokens: 'Tokens: %tokens%'

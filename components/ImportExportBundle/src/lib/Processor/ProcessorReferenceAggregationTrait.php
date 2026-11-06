@@ -9,20 +9,25 @@ use AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentReference;
 trait ProcessorReferenceAggregationTrait
 {
     /**
-     * @var array<ComponentReference>
+     * @var array<string, ComponentReference|ProcessorInterface<ProcessorOptions>>
      */
     protected array $processors = [];
 
-    public function addProcessor(ComponentReference $processor): void
+    public function addProcessor(string $id, ComponentReference $processor): void
     {
-        $this->processors[] = $processor;
+        $this->processors[$id] = $processor;
     }
 
     /**
-     * @return array<ComponentReference>
+     * @return array<string, ComponentReference|ProcessorInterface<ProcessorOptions>>
      */
     public function getProcessors(): array
     {
         return $this->processors ?? [];
+    }
+
+    public function getProcessor(string $id): ?ComponentReference
+    {
+        return $this->processors[$id] ?? null;
     }
 }

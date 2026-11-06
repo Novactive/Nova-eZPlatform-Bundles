@@ -7,6 +7,16 @@ services:
             $jobCreateFlow: '@AlmaviaCX\Bundle\IbexaImportExport\Job\Form\JobCreateFlow'
             $jobService: '@AlmaviaCX\Bundle\IbexaImportExport\Job\JobService'
             $eventDispatcher: '@event_dispatcher'
+            $workflowRegistry: '@AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowRegistry'
+            $executionRepository: '@AlmaviaCX\Bundle\IbexaImportExport\Execution\ExecutionRepository'
+        tags:
+            - controller.service_arguments
+
+    AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\ExecutionController:
+        autowire: true
+        arguments:
+            $formFactory: '@form.factory'
+            $jobService: '@AlmaviaCX\Bundle\IbexaImportExport\Job\JobService'
         tags:
             - controller.service_arguments
 
@@ -18,3 +28,18 @@ services:
             $fileHandler: '@AlmaviaCX\Bundle\IbexaImportExport\File\FileHandler'
         tags:
             - controller.service_arguments
+
+    AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Admin\ReaderController:
+        autowire: true
+        arguments:
+            $workflowRegistry: '@AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowRegistry'
+            $runConfigurationBuilder: '@AlmaviaCX\Bundle\IbexaImportExport\Workflow\RunConfigurationBuilder'
+        tags:
+            - controller.service_arguments
+
+    AlmaviaCX\Bundle\IbexaImportExportBundle\Controller\Rest\:
+        resource: '../../Controller/Rest'
+        parent: Ibexa\Rest\Server\Controller
+        autowire: true
+        autoconfigure: true
+        tags: [ 'controller.service_arguments' ]

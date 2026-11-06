@@ -2,6 +2,12 @@
     "license": [
         "MIT"
     ],
+    "repositories": {
+        "ibexa": {
+            "type": "composer",
+            "url": "https://updates.ibexa.co"
+        }
+    },
     "autoload": {
         "psr-4": {
             "Novactive\\eZPlatform\\Bundles\\": "src/",
@@ -38,14 +44,17 @@
             "Novactive\\Bundle\\eZAlgoliaSearchEngine\\Tests\\": "components/AlgoliaSearchEngine/tests/Tests",
             "Novactive\\Bundle\\eZ2FABundle\\": "components/2FABundle/bundle",
             "AlmaviaCX\\Bundle\\IbexaRichTextExtraBundle\\": "components/RichTextExtraBundle/src/bundle",
-            "AlmaviaCX\\Bundle\\IbexaRichTextExtra\\": "components/RichTextExtraBundle/src/lib"
+            "AlmaviaCX\\Bundle\\IbexaRichTextExtra\\": "components/RichTextExtraBundle/src/lib",
+            "AlmaviaCX\\Bundle\\IbexaImportExportBundle\\": "components/ImportExportBundle/src/bundle",
+            "AlmaviaCX\\Bundle\\IbexaImportExport\\": "components/ImportExportBundle/src/lib"
         }
     },
     "require": {
+        "php": "^7.4 || ^8.0",
         "symfony/console": "^5.2",
         "symfony/process": "^5.2",
         "squizlabs/php_codesniffer": "^3.5",
-        "phpmd/phpmd": "^2.8",
+        "phpmd/phpmd": "^2.12",
         "friendsofphp/php-cs-fixer": "^3",
         "symfony/var-dumper": "^5.2",
         "symfony/finder": "^5.2",
@@ -64,5 +73,23 @@
         "behat/behat": "^3.8",
         "friends-of-behat/mink-extension": "^2.5",
         "ext-pdo": "*"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^2.1",
+        "craue/formflow-bundle": "^3.0",
+        "matthiasnoback/symfony-console-form": "^6.0",
+        "ibexa/oss": "^4.6",
+        "http-interop/http-factory-guzzle": "^1.2",
+        "symfony/uid": "^5.4",
+        "ibexa/taxonomy": "^4.6",
+        "phpoffice/phpspreadsheet": "^5.4",
+        "symfony/messenger": "^5.4"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "symfony/flex": true,
+            "ibexa/post-install": true
+        }
     }
 }

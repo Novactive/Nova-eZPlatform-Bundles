@@ -4,35 +4,14 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer;
 
+use AlmaviaCX\Bundle\IbexaImportExport\Reference\Reference;
+
 /**
- * @template Source of string|\AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\Source
+ * @phpstan-type ElementSourceSingle string|Source|Reference
+ * @phpstan-type ElementSourceArray array<int|string, ElementSourceSingle>
+ * @phpstan-type ElementSource ElementSourceSingle|ElementSourceArray
+ * @extends AbstractTransformationMap<ElementSource>
  */
-class TransformationMap
+class TransformationMap extends AbstractTransformationMap
 {
-    /** @var array<string, Source> */
-    protected array $elements;
-
-    /**
-     * @param array<string, Source> $elements
-     */
-    public function __construct(array $elements)
-    {
-        $this->setElements($elements);
-    }
-
-    /**
-     * @return array<string, Source>
-     */
-    public function getElements(): array
-    {
-        return $this->elements;
-    }
-
-    /**
-     * @param array<string, Source> $elements
-     */
-    public function setElements(array $elements): void
-    {
-        $this->elements = $elements;
-    }
 }

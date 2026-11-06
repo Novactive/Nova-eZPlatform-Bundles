@@ -8,15 +8,10 @@ use Ibexa\Core\IO\Flysystem\PathPrefixer\PathPrefixerInterface;
 
 class PathPrefixer implements PathPrefixerInterface
 {
-    protected string $separator = DIRECTORY_SEPARATOR;
-    protected string $prefix;
-
     public function __construct(
-        string $prefix,
-        string $separator = DIRECTORY_SEPARATOR
+        protected string $prefix,
+        protected string $separator = DIRECTORY_SEPARATOR
     ) {
-        $this->prefix = $prefix;
-        $this->separator = $separator;
     }
 
     protected function getPrefix(): string

@@ -7,35 +7,30 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Taxonomy;
 use AlmaviaCX\Bundle\IbexaImportExport\Accessor\Ibexa\Taxonomy\TaxonomyAccessorBuilder;
 use AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\ItemTransformer;
 use AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\SourceResolver;
-use AlmaviaCX\Bundle\IbexaImportExport\Reference\ReferenceBag;
 use AlmaviaCX\Bundle\IbexaImportExport\Writer\AbstractWriter;
 use Ibexa\Contracts\Core\Repository\Exceptions\ContentFieldValidationException;
 use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\Contracts\Taxonomy\Value\TaxonomyEntry;
 use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Translation\TranslationContainerInterface;
 use Symfony\Component\Translation\TranslatableMessage;
 
+/**
+ * @extends AbstractWriter<IbexaTaxonomyWriterOptions>
+ */
 class IbexaTaxonomyWriter extends AbstractWriter implements TranslationContainerInterface
 {
-    protected Repository $repository;
-    protected IbexaTaxonomyImporter $taxonomyImporter;
-    protected TaxonomyAccessorBuilder $taxonomyAccessorBuilder;
-
     public function __construct(
-        Repository $repository,
-        IbexaTaxonomyImporter $taxonomyImporter,
-        TaxonomyAccessorBuilder $taxonomyAccessorBuilder,
+        protected Repository $repository,
+        protected IbexaTaxonomyImporter $taxonomyImporter,
+        protected TaxonomyAccessorBuilder $taxonomyAccessorBuilder,
         SourceResolver $sourceResolver,
         ItemTransformer $itemTransformer,
-        ReferenceBag $references
     ) {
-        $this->repository = $repository;
-        $this->taxonomyImporter = $taxonomyImporter;
-        $this->taxonomyAccessorBuilder = $taxonomyAccessorBuilder;
-        parent::__construct($sourceResolver, $itemTransformer, $references);
+        parent::__construct($sourceResolver, $itemTransformer);
     }
 
-    protected function getMappedItemInstance()
+    protected function getMappedItemInstance(): IbexaTaxonomyData
     {
         return new IbexaTaxonomyData();
     }
@@ -47,34 +42,39 @@ class IbexaTaxonomyWriter extends AbstractWriter implements TranslationContainer
      */
     protected function writeItem($item, $mappedItem)
     {
-        /** @var \AlmaviaCX\Bundle\IbexaImportExport\Writer\Ibexa\Taxonomy\IbexaTaxonomyWriterOptions $options */
-        $options = $this->getOptions();
-
-        /** @var \Ibexa\Contracts\Taxonomy\Value\TaxonomyEntry $taxonomyEntry */
-        $taxonomyEntry = $this->repository->sudo(function (Repository $repository) use ($options, $mappedItem) {
+        /** @var array{action: string, taxonomyEntry: TaxonomyEntry}|null $taxonomyEntryImportResult */
+        $taxonomyEntryImportResult = $this->repository->sudo(function (Repository $repository) use ($mappedItem) {
             try {
-                return ($this->taxonomyImporter)($mappedItem, $options->allowUpdate);
+                return ($this->taxonomyImporter)($mappedItem);
             } catch (ContentFieldValidationException $exception) {
                 $newException = \Ibexa\Core\Base\Exceptions\ContentFieldValidationException::createNewWithMultiline(
                     $exception->getFieldErrors(),
                     $mappedItem->getContentRemoteId()
                 );
-                $this->logger->notice('----> '.get_class($newException));
-                $this->logger->notice($newException->getMessage());
-                $this->logger->notice(print_r($newException->getFieldErrors(), true));
-                $this->logger->notice(print_r($newException->getTraceAsString(), true));
+                $this->logger->error($newException->getMessage());
 
-                throw $exception;
+                return null;
             }
         });
 
+        if (!$taxonomyEntryImportResult) {
+            return null;
+        }
+
+        $taxonomyEntry = $taxonomyEntryImportResult['taxonomyEntry'];
         $this->logger->info(
             'Imported taxonomy "'.$taxonomyEntry->getName().'" ('.$taxonomyEntry->getIdentifier().')'
         );
 
-        $imported_content_ids = $this->results->getResult('imported_content_ids');
-        $imported_content_ids[] = $taxonomyEntry->getContentId();
-        $this->results->setResult('imported_content_ids', $imported_content_ids);
+        if ($taxonomyEntryImportResult['action']) {
+            $imported_content_ids = $this->results->getResult('imported_content_ids');
+            $imported_content_ids[$taxonomyEntry->getContentId()] = [
+                'name' => $taxonomyEntry->getName(),
+                'contentId' => $taxonomyEntry->getContentId(),
+                'action' => $taxonomyEntryImportResult['action'],
+            ];
+            $this->results->setResult('imported_content_ids', $imported_content_ids);
+        }
 
         return $this->taxonomyAccessorBuilder->buildFromTaxonomyEntry($taxonomyEntry);
     }

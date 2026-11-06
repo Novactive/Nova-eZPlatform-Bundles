@@ -10,6 +10,9 @@ use Craue\FormFlowBundle\Form\FormFlow;
 
 class JobCreateFlow extends FormFlow
 {
+    /**
+     * @return array<array<string, mixed>>
+     */
     protected function loadStepsConfig(): array
     {
         $steps = [

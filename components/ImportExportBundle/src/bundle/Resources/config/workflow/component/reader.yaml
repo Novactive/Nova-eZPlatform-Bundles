@@ -4,6 +4,10 @@ services:
         arguments:
             $fileHandler: '@AlmaviaCX\Bundle\IbexaImportExport\File\FileHandler'
 
+    AlmaviaCX\Bundle\IbexaImportExport\Reader\File\FileReader:
+        parent: AlmaviaCX\Bundle\IbexaImportExport\Reader\File\AbstractFileReader
+        tags:
+            - { name: almaviacx.import_export.component, alias: reader.file}
 
     AlmaviaCX\Bundle\IbexaImportExport\Reader\Ibexa\ContentList\IbexaContentListReader:
         arguments:
@@ -12,26 +16,36 @@ services:
         tags:
             - { name: almaviacx.import_export.component, alias: reader.ibexa.content_list}
 
-    AlmaviaCX\Bundle\IbexaImportExport\Reader\Csv\CsvReader:
+    AlmaviaCX\Bundle\IbexaImportExport\Reader\Csv\CsvFileReader:
         parent: AlmaviaCX\Bundle\IbexaImportExport\Reader\File\AbstractFileReader
         arguments:
             $slugConverter: '@Ibexa\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter'
         tags:
             - { name: almaviacx.import_export.component, alias: reader.csv}
 
-    AlmaviaCX\Bundle\IbexaImportExport\Reader\Xls\XlsReader:
+    AlmaviaCX\Bundle\IbexaImportExport\Reader\Xls\XlsFileReader:
         parent: AlmaviaCX\Bundle\IbexaImportExport\Reader\File\AbstractFileReader
         tags:
             - { name: almaviacx.import_export.component, alias: reader.xls}
 
-    AlmaviaCX\Bundle\IbexaImportExport\Reader\Xml\XmlReader:
+    AlmaviaCX\Bundle\IbexaImportExport\Reader\Xml\XmlFileReader:
         parent: AlmaviaCX\Bundle\IbexaImportExport\Reader\File\AbstractFileReader
         tags:
             - { name: almaviacx.import_export.component, alias: reader.xml}
 
-    AlmaviaCX\Bundle\IbexaImportExport\Reader\Mdb\MdbReader:
+    AlmaviaCX\Bundle\IbexaImportExport\Reader\Mdb\MdbFileReader:
         parent: AlmaviaCX\Bundle\IbexaImportExport\Reader\File\AbstractFileReader
         arguments:
             $converterTimeout: '%import_export.reader.mdb.converter_timeout%'
         tags:
             - { name: almaviacx.import_export.component, alias: reader.mdb}
+
+    AlmaviaCX\Bundle\IbexaImportExport\Reader\SalesforceSoql\SalesforceSoqlReader:
+        arguments:
+            $apiClient: '@AlmaviaCX\Bundle\IbexaImportExport\Salesforce\SalesforceApiClient'
+        tags:
+            - { name: almaviacx.import_export.component, alias: reader.salesforce.soql}
+
+    AlmaviaCX\Bundle\IbexaImportExport\Reader\Json\JsonReader:
+        tags:
+            - { name: almaviacx.import_export.component, alias: reader.json}

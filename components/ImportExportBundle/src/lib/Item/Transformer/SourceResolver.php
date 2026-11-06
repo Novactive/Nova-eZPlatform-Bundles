@@ -17,16 +17,18 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\PropertyAccess\PropertyPath;
 use Throwable;
 
+/**
+ * @phpstan-import-type ElementSource from TransformationMap
+ * @phpstan-import-type ElementSourceSingle from TransformationMap
+ * @phpstan-import-type SourceObjectOrArray from ItemTransformer
+ */
 class SourceResolver
 {
     protected PropertyAccessorInterface $defaultPropertyAccessor;
-    protected ItemValueTransformerRegistry $itemValueTransformerRegistry;
-    protected ReferenceBag $referenceBag;
 
-    public function __construct(ItemValueTransformerRegistry $itemValueTransformerRegistry, ReferenceBag $referenceBag)
-    {
-        $this->referenceBag = $referenceBag;
-        $this->itemValueTransformerRegistry = $itemValueTransformerRegistry;
+    public function __construct(
+        protected ItemValueTransformerRegistry $itemValueTransformerRegistry
+    ) {
         $this->defaultPropertyAccessor = PropertyAccess::createPropertyAccessorBuilder()
                                                        ->getPropertyAccessor();
     }
@@ -37,11 +39,11 @@ class SourceResolver
     }
 
     /**
-     * @param object|array $objectOrArray
+     * @param SourceObjectOrArray $objectOrArray
      *
-     * @return array
+     * @return mixed[]
      */
-    public function getPropertyMultipleValue($objectOrArray, PropertyPath $source)
+    public function getPropertyMultipleValue($objectOrArray, PropertyPath $source): array
     {
         $wildcardPosition = strpos((string) $source, '[*]');
         $pathBeforeWildCard = substr((string) $source, 0, $wildcardPosition);
@@ -64,7 +66,10 @@ class SourceResolver
     }
 
     /**
-     * @param object|array $objectOrArray
+     * @param SourceObjectOrArray $objectOrArray
+     * @param mixed|PropertyPath  $source
+     *
+     * @return mixed
      */
     public function getPropertyValue($objectOrArray, $source)
     {
@@ -86,7 +91,7 @@ class SourceResolver
     }
 
     /**
-     * @param object|array $objectOrArray
+     * @param SourceObjectOrArray $objectOrArray
      */
     private function getPropertyAccessor($objectOrArray): PropertyAccessorInterface
     {
@@ -96,14 +101,18 @@ class SourceResolver
     }
 
     /**
-     * @param              $source
-     * @param object|array $objectOrArray
+     * @param ElementSourceSingle $source
+     * @param SourceObjectOrArray $objectOrArray
+     *
+     * @throws \AlmaviaCX\Bundle\IbexaImportExport\Exception\SourceResolutionException
+     *
+     * @return mixed
      */
-    protected function getSourceValue($source, $objectOrArray)
+    protected function getSourceValue($source, $objectOrArray, ?ReferenceBag $referenceBag = null)
     {
         try {
             if ($source instanceof Reference) {
-                return $this->referenceBag->getReference($source->getName(), null, $source->getScope());
+                return $referenceBag->getReference($source->getName(), null, $source->getScope());
             }
 
             if ($source instanceof Source) {
@@ -132,24 +141,29 @@ class SourceResolver
 
             return $this->getPropertyValue($objectOrArray, $source);
         } catch (Throwable $exception) {
-            throw new SourceResolutionException($source, $exception);
+            throw new SourceResolutionException((string) $source, $exception);
         }
     }
 
     /**
-     * @param object|array $objectOrArray
+     * @param ElementSource       $source
+     * @param SourceObjectOrArray $objectOrArray
+     *
+     * @throws \AlmaviaCX\Bundle\IbexaImportExport\Exception\SourceResolutionException
+     *
+     * @return mixed
      */
-    public function __invoke($source, $objectOrArray)
+    public function __invoke($source, $objectOrArray, ?ReferenceBag $referenceBag = null)
     {
         if (is_array($source)) {
             $value = [];
             foreach ($source as $sourceKey => $sourceItem) {
-                $sourceItemKey = $this->getSourceValue($sourceKey, $objectOrArray);
-                $sourceItemValue = $this->getSourceValue($sourceItem, $objectOrArray);
+                $sourceItemKey = $this->getSourceValue($sourceKey, $objectOrArray, $referenceBag);
+                $sourceItemValue = $this->getSourceValue($sourceItem, $objectOrArray, $referenceBag);
                 $value[$sourceItemKey] = $sourceItemValue;
             }
         } else {
-            $value = $this->getSourceValue($source, $objectOrArray);
+            $value = $this->getSourceValue($source, $objectOrArray, $referenceBag);
         }
 
         return $value;

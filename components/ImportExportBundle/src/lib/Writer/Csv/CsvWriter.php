@@ -10,6 +10,9 @@ use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Translation\TranslationContainerInterface;
 use Symfony\Component\Translation\TranslatableMessage;
 
+/**
+ * @extends AbstractStreamWriter<CsvWriterOptions>
+ */
 class CsvWriter extends AbstractStreamWriter implements TranslationContainerInterface
 {
     private int $row = 0;
@@ -19,9 +22,6 @@ class CsvWriter extends AbstractStreamWriter implements TranslationContainerInte
         parent::prepare();
     }
 
-    /**
-     *  {@inheritDoc}
-     */
     protected function writeItem($item, $mappedItem)
     {
         /** @var CsvWriterOptions $options */
@@ -66,7 +66,7 @@ class CsvWriter extends AbstractStreamWriter implements TranslationContainerInte
         return [(new Message('writer.csv.name', 'import_export'))->setDesc('CSV Writer')];
     }
 
-    public static function getOptionsType(): ?string
+    public static function getOptionsType(): string
     {
         return CsvWriterOptions::class;
     }

@@ -6,37 +6,40 @@ namespace AlmaviaCX\Bundle\IbexaImportExport\Processor\Iterator;
 
 use AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentOptions;
 use AlmaviaCX\Bundle\IbexaImportExport\Component\ComponentReference;
+use AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\Source;
 use AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorInterface;
 use AlmaviaCX\Bundle\IbexaImportExport\Processor\ProcessorOptions;
 
 /**
- * @property $value string|\AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\Source
+ * @property string|Source                                           $value
+ * @property ComponentReference|ProcessorInterface<ProcessorOptions> $processor
  */
 class IteratorProcessorOptions extends ProcessorOptions
 {
+    /**
+     * @var ComponentReference|ProcessorInterface<ProcessorOptions>
+     */
     protected ComponentReference|ProcessorInterface $processor;
 
-    /** @var string|\AlmaviaCX\Bundle\IbexaImportExport\Item\Transformer\Source */
-    protected $value;
+    protected Source|string $value;
 
     public function setProcessor(string $class, ?ComponentOptions $options = null): void
     {
         $this->processor = new ComponentReference($class, $options);
     }
 
-    /**
-     * @param callable                                                                $buildComponentCallback
-     * @param \AlmaviaCX\Bundle\IbexaImportExport\Reader\InputAwareReaderOptions|null $runtimeProcessConfiguration
-     */
     public function replaceComponentReferences(
-        $buildComponentCallback,
+        callable $componentBuilder,
         ?ComponentOptions $runtimeProcessConfiguration = null
     ): void {
-        $options = $runtimeProcessConfiguration->processor ?? null;
-        $this->processor = call_user_func(
-            $buildComponentCallback,
-            $this->processor,
-            $options
-        );
+        if ($this->processor instanceof ComponentReference) {
+            /** @var ComponentReference|null $processorOptions */
+            $processorOptions = $runtimeProcessConfiguration->processor ?? null;
+            $this->processor = call_user_func(
+                $componentBuilder,
+                $this->processor,
+                $processorOptions?->getOptions()
+            );
+        }
     }
 }

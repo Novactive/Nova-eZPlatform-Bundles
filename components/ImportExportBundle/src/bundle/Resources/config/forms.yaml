@@ -19,11 +19,12 @@ services:
         tags:
             - { name: form.type, alias: FileReaderOptionsFormType }
 
-    AlmaviaCX\Bundle\IbexaImportExport\Reader\Xml\XmlReaderOptionsFormType:
+    AlmaviaCX\Bundle\IbexaImportExport\Reader\Xml\XmlFileReaderOptionsFormType:
+        parent: AlmaviaCX\Bundle\IbexaImportExport\Reader\File\FileReaderOptionsFormType
         tags:
             - { name: form.type, alias: XmlReaderOptionsFormType }
 
-    AlmaviaCX\Bundle\IbexaImportExport\Reader\Csv\CsvReaderOptionsFormType:
+    AlmaviaCX\Bundle\IbexaImportExport\Reader\Csv\CsvFileReaderOptionsFormType:
         parent: AlmaviaCX\Bundle\IbexaImportExport\Reader\File\FileReaderOptionsFormType
         tags:
             - { name: form.type, alias: CsvReaderOptionsFormType }
@@ -32,7 +33,7 @@ services:
         tags:
             - { name: form.type, alias: IbexaContentListReaderOptionsFormType }
 
-    AlmaviaCX\Bundle\IbexaImportExport\Reader\Xls\XlsReaderOptionsFormType:
+    AlmaviaCX\Bundle\IbexaImportExport\Reader\Xls\XlsFileReaderOptionsFormType:
         parent: AlmaviaCX\Bundle\IbexaImportExport\Reader\File\FileReaderOptionsFormType
         tags:
             - { name: form.type, alias: XlsReaderOptionsFormType }
@@ -43,7 +44,11 @@ services:
         tags:
             - { name: form.type, alias: StreamWriterOptionsFormType }
 
-    AlmaviaCX\Bundle\IbexaImportExport\Reader\Mdb\MdbReaderOptionsFormType:
+    AlmaviaCX\Bundle\IbexaImportExport\Reader\Mdb\MdbFileReaderOptionsFormType:
         parent: AlmaviaCX\Bundle\IbexaImportExport\Reader\File\FileReaderOptionsFormType
         tags:
             - { name: form.type, alias: MdbReaderOptionsFormType }
+
+    AlmaviaCX\Bundle\IbexaImportExport\Reader\Salesforce\SalesforceApiCredentialsFormType:
+        tags:
+            - { name: form.type, alias: SalesforceApiCredentialsFormType }

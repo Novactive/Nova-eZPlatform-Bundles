@@ -12,6 +12,5 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 class FileReaderOptions extends ReaderOptions
 {
-    /** @var string|File */
-    protected $file;
+    protected string|File $file;
 }

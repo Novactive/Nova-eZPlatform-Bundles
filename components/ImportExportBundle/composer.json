@@ -18,9 +18,11 @@
     "MIT"
   ],
   "require": {
-    "php": "^7.3 || ^8.0",
+    "php": "^8.1",
     "craue/formflow-bundle": "^3.0",
-    "symfony/uid": "^5.4"
+    "erdnaxelaweb/contentadditionalinformations": "^1.0",
+    "symfony/uid": "^5.4",
+    "league/flysystem": "^3.36"
   },
   "autoload": {
     "psr-4": {
@@ -37,5 +39,10 @@
   },
   "bin": [
     "bin/mdb-to-sqlite.bash"
-  ]
+  ],
+  "config": {
+    "allow-plugins": {
+      "php-http/discovery": true
+    }
+  }
 }

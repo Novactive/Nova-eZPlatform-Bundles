@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace AlmaviaCX\Bundle\IbexaImportExport\Reader\Xml;
 
+use XMLParser as NativeXMLParser;
+
 class XmlParser
 {
     public const STATE_SEARCHING_ELEMENT = 0;
@@ -14,13 +16,13 @@ class XmlParser
     protected ?string $currentLineXml = null;
     protected ?int $foundElementStartColumn = 1;
     protected string $tmpElement = '';
+    /**
+     * @var string[]
+     */
     protected array $foundElementStack = [];
 
-    /** @var resource */
-    protected $nativeXmlParser;
+    protected ?NativeXMLParser $nativeXmlParser;
 
-    /** @var resource */
-    protected $stream;
     protected string $elementNameSelector;
     protected bool $debug = false;
 
@@ -32,10 +34,10 @@ class XmlParser
     /**
      * @param resource $stream
      */
-    public function __construct($stream, string $searchedElementName)
-    {
-        $this->searchedElementName = $searchedElementName;
-        $this->stream = $stream;
+    public function __construct(
+        protected $stream,
+        private string $searchedElementName
+    ) {
         $this->createNativeParser();
     }
 
@@ -52,10 +54,10 @@ class XmlParser
         $this->resetNativeParser();
         $this->nativeXmlParser = xml_parser_create('UTF-8');
         xml_set_object($this->nativeXmlParser, $this);
-        xml_set_element_handler($this->nativeXmlParser, 'startElement', 'endElement');
+        xml_set_element_handler($this->nativeXmlParser, [$this, 'startElement'], [$this, 'endElement']);
     }
 
-    public function startElement($parser, $name, $attribs): void
+    public function startElement(NativeXMLParser $parser, string $name): void
     {
         if (self::STATE_SEARCHING_ELEMENT !== $this->state) {
             return;
@@ -71,7 +73,7 @@ class XmlParser
         }
     }
 
-    public function endElement($parser, $name): void
+    public function endElement(NativeXMLParser $parser, string $name): void
     {
         if (self::STATE_PARSING_ELEMENT !== $this->state) {
             return;
@@ -85,8 +87,7 @@ class XmlParser
                     $this->currentLineXml,
                     $this->foundElementStartColumn - 1,
                     $columnNumber - $this->foundElementStartColumn
-                )
-                ;
+                );
                 $this->foundElementStartColumn = $columnNumber;
                 $this->tmpElement = '';
             }

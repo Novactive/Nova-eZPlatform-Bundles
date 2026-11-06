@@ -1,3 +1,6 @@
+{# @var job \AlmaviaCX\Bundle\IbexaImportExport\Job\Job #}
+{# @var workflow \AlmaviaCX\Bundle\IbexaImportExport\Workflow\WorkflowInterface #}
+{# @var execution \AlmaviaCX\Bundle\IbexaImportExport\Execution\Execution #}
 {% extends "@ibexadesign/ui/layout.html.twig" %}
 
 {% from '@ibexadesign/ui/component/macros.html.twig' import results_headline %}
@@ -53,7 +56,8 @@
             'job.status.queued'|trans()|desc('Queued'),
             'job.status.paused'|trans()|desc('Paused'),
             'job.status.canceled'|trans()|desc('Canceled'),
-            'job.status.force_paused'|trans()|desc('Paused')
+            'job.status.force_paused'|trans()|desc('Paused'),
+            'job.status.error'|trans()|desc('Error')
         ] %}
         {% set show_table_notice = false %}
 
@@ -75,9 +79,17 @@
                 content: col_raw,
                 raw: true,
             }]) %}
+            {% set body_row_cols = body_row_cols|merge([
+                { content: job.getExecutionCount },
+            ]) %}
+            {% set body_row_cols = body_row_cols|merge([
+                { content: job.pendingExecutionCount },
+            ]) %}
 
             {% set progress_bar %}
-                {% include '@ibexadesign/import_export/components/progress_bar.html.twig' with {processedCount: job.processedItemsCount, totalCount: job.totalItemsCount} only %}
+                {% if job.lastExecution %}
+                    {% include '@ibexadesign/import_export/components/progress_bar.html.twig' with {processedCount: job.lastExecution.workflowState.offset, totalCount: job.lastExecution.workflowState.totalItemsCount} only %}
+                {% endif %}
             {% endset %}
             {% set body_row_cols = body_row_cols|merge([{
                 content: progress_bar,
@@ -85,8 +97,8 @@
             }]) %}
 
             {% set body_row_cols = body_row_cols|merge([
-                { content: status[job.status]  },
-                { content: job.requestedDate|ibexa_full_datetime  },
+                { content: job.lastExecution ? status[job.lastExecution.status] : null  },
+                { content: job.lastExecution ? job.lastExecution.workflowState.endTime|ibexa_full_datetime : null  },
             ]) %}
 
             {% set body_rows = body_rows|merge([{ cols: body_row_cols }]) %}
@@ -97,9 +109,11 @@
             head_cols: [
                 { content: 'job.property.id'|trans|desc('Id') },
                 { content: 'job.property.label'|trans|desc('Label') },
-                { content: 'job.property.progress'|trans()|desc('Progress') },
-                { content: 'job.property.status'|trans|desc('Status') },
-                { content: 'job.property.requested_date'|trans|desc('Requested date') },
+                { content: 'job.property.execution_count'|trans|desc('Executions count') },
+                { content: 'job.property.pending_execution_count'|trans|desc('Pending executions count') },
+                { content: 'job.property.last_execution.progress'|trans()|desc('Progress') },
+                { content: 'job.property.last_execution.status'|trans|desc('Status') },
+                { content: 'job.property.last_execution.end_time'|trans|desc('End time') },
             ],
             body_rows,
             show_notice: show_table_notice,
