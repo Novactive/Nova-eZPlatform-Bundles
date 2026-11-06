@@ -146,4 +146,9 @@ class FileHandler implements FilesystemAdapter
     {
         return ($this->filepathResolver)($filepath);
     }
+
+    public function directoryExists( string $path ): bool
+    {
+        return $this->innerAdapter->directoryExists($path);
+    }
 }
